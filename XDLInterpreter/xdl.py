@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from io import StringIO
 import re
 
+from utils import convert_time_str_to_seconds, convert_volume_str_to_ml, get_reagent_combinations
 from constants import *
 from chasmwriter import Chasm, Reaction
 from steps_xdl import *
@@ -10,6 +11,7 @@ from steps_generic import *
 from components import *
 from reagents import *
 from steps_chasm import *
+from safety import procedure_is_safe
 
 step_obj_dict = {
     'Step': Step,
@@ -117,16 +119,6 @@ class XDL(object):
                 self.hardware.reactors[i].properties['id']
                 ] = self.graphml_hardware.reactors[i].properties['id']
 
-    def get_reagent_map(self):
-        self.reagent_map = {}
-        for reagent in self.reagents:
-            reagent_id = reagent.properties['id']
-            for flask in self.graphml_hardware.flasks:
-                flask_id = flask.properties['id']
-                if reagent_id in flask_id:
-                    self.reagent_map[reagent_id] = flask_id
-                    break
-
     def map_hardware_to_steps(self):
         self.get_hardware_map()
         for step in self.steps:
@@ -135,16 +127,8 @@ class XDL(object):
                     step.properties[prop] = self.hardware_map[val]
             step.update_steps()
 
-    def map_reagents_to_steps(self):
-        self.get_reagent_map()
-        for step in self.steps:
-            for prop, val in step.properties.items():
-                if val in self.reagent_map:
-                    step.properties[prop] = self.reagent_map[val]
-            step.update_steps()
-
     def check_safety(self):
-        return procedure_is_safe(self.steps)
+        return procedure_is_safe(self.steps, self.reagents)
 
     def as_chasm(self, save_path=None, graphml_file=None):
         if self.xdl_valid():      
@@ -152,9 +136,7 @@ class XDL(object):
             if self.hardware_is_compatible():
             
                 self.map_hardware_to_steps()
-                
-                # self.map_reagents_to_steps() # MAYBE NOT NECESSARY
-                
+                                
                 self.check_safety()
                 
                 chasm = Chasm(self.steps)
@@ -163,7 +145,6 @@ class XDL(object):
                 return chasm.code
 
 # XDL Parsing
-
 def steps_from_xdl(xdl):
     steps = []
     xdl_tree = etree.parse(StringIO(xdl))
@@ -234,28 +215,6 @@ def preprocess_attrib(step, attrib):
         attrib['volume'] = convert_volume_str_to_ml(attrib['volume'])
     return attrib
 
-def convert_time_str_to_seconds(time_str):
-    time_str = time_str.lower()
-    if time_str.endswith(('h', 'hr', 'hrs', 'hour', 'hours', )):
-        multiplier = 3600
-    elif time_str.endswith(('m', 'min', 'mins', 'minute', 'minutes')):
-        multiplier = 60
-    elif time_str.endswith(('s', 'sec', 'secs', 'second', 'seconds',)):
-        multiplier = 1
-    return str(int(float(re.match(r'([0-9]+(.[0-9]+)?)', time_str).group(1)) * multiplier))
-
-def convert_volume_str_to_ml(volume_str):
-    print(f'VOLUME STR: {volume_str}')
-    volume_str = volume_str.lower()
-    if volume_str.endswith(volume_ml_unit_words):
-        multiplier = 1
-    elif volume_str.endswith(volume_l_unit_words):
-        multiplier = 1000
-    elif volume_str.endswith(volume_dl_unit_words):
-        multiplier = 100
-    elif volume_str.endswith(volume_cl_unit_words):
-        multiplier = 10
-    return str(float(re.match(r'([0-9]+(.[0-9]+)?)', volume_str).group(1)) * multiplier)
 
 # Syntax Validation
 
@@ -312,11 +271,6 @@ def hardware_is_compatible(xdl_hardware=None, graphml_hardware=None):
     flasks_ok = True # NEEDS DONE
     waste_ok = True # NEEDS DONE
     return enough_reactors and enough_filters and flasks_ok and waste_ok
-
-# Safety
-
-def procedure_is_safe(steps):
-    return True
 
 def main():
     # from stuff import rufinamide_steps

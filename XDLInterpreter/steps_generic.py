@@ -1,7 +1,16 @@
 import abc
 from lxml import etree
 from chasmwriter import Chasm
-from utils import XDLElement
+
+class XDLElement(object):
+
+    def __init__(self):
+        self.properties = {}
+
+    def load_properties(self, properties):
+        for prop in self.properties:
+            if prop in properties:
+                self.properties[prop] = properties[prop]
 
 class Step(XDLElement):
 
@@ -11,13 +20,9 @@ class Step(XDLElement):
         self.steps = []
 
     def as_chasm(self):
-        print(self.name)
-        print(self.properties)
-        print('---')
         chasm = self.get_chasm_stub()
         for step in self.steps:
             chasm.add_step(step)
-        print(chasm.code)
         return chasm.code
 
     def get_chasm_stub(self):
