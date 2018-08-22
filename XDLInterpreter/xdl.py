@@ -127,6 +127,9 @@ class XDL(object):
                     step.properties[prop] = self.hardware_map[val]
             step.update_steps()
 
+    def close_open_steps(self):
+        self.steps = close_open_steps(self.steps)
+
     def check_safety(self):
         return procedure_is_safe(self.steps, self.reagents)
 
@@ -136,6 +139,7 @@ class XDL(object):
             if self.hardware_is_compatible():
             
                 self.map_hardware_to_steps()
+                self.close_open_steps()
                                 
                 self.check_safety()
                 
@@ -143,6 +147,46 @@ class XDL(object):
                 if save_path:
                     chasm.save(save_path)
                 return chasm.code
+
+def get_close_step(step):
+    return ongoing_steps[type(step)](name=step.properties['name'])
+
+def close_open_steps(steps):
+    open_steps = get_open_steps(steps)
+    for open_step in open_steps:
+        steps.append(get_close_step(open_step))
+    return steps
+
+ongoing_steps = {
+    StartStir: StopStir,
+    StartHeat: StopHeat,
+    SetTempAndStartHeat: StopHeat,
+    StartChiller: StopChiller,
+    StartRotation: StopRotation,
+    StartVac: StopVac,
+    StartVacuum: StopVacuum,
+    StartHeaterBath: StopHeaterBath,
+}
+
+def step_is_closed(open_step, steps):
+    closed = False
+    close_step = ongoing_steps[type(open_step)]
+    after_step = False
+    for step in steps:
+        if after_step:
+            # THIS WILL ONLY WORK FOR ChASM CLASSES AS XDL CLASSES USE vessel INSTEAD OF name
+            if isinstance(step, close_step) and step.properties['name'] == after_step.properties['name']:
+                closed = True
+        if step is open_step:
+            after_step = True
+    return closed
+
+def get_open_steps(steps):
+    open_steps = []
+    for step in steps:
+        if isinstance(step, tuple(ongoing_steps.keys())) and not step_is_closed(step, steps):
+            open_steps.append(step)
+    return open_steps
 
 # XDL Parsing
 def steps_from_xdl(xdl):
