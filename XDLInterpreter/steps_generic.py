@@ -11,9 +11,13 @@ class Step(XDLElement):
         self.steps = []
 
     def as_chasm(self):
+        print(self.name)
+        print(self.properties)
+        print('---')
         chasm = self.get_chasm_stub()
         for step in self.steps:
             chasm.add_step(step)
+        print(chasm.code)
         return chasm.code
 
     def get_chasm_stub(self):
@@ -34,6 +38,16 @@ class Step(XDLElement):
             return etree.dump(step)
         else:
             return step
+
+    def load_properties(self, properties):
+        new_properties = {}
+        for prop, val in properties.items():
+            if prop in self.properties:
+                new_properties[prop] = val
+        self.__init__(**new_properties)
+
+    def update_steps(self):
+        self.__init__(**self.properties)
 
 class Comment(Step):
 
@@ -92,8 +106,9 @@ class Repeat(Step):
         else:
             return root
 
-    def load_properties_dict(self, properties_dict):
+    def load_properties(self, properties):
         for prop in self.properties:
-            if prop in properties_dict:
-                self.properties[prop] = properties_dict[prop]
+            if prop in properties:
+                self.properties[prop] = properties[prop]
+            
             

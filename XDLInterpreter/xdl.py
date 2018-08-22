@@ -1,7 +1,10 @@
 from lxml import etree
 from bs4 import BeautifulSoup
-from chasmwriter import Chasm, Reaction
 from io import StringIO
+import re
+
+from constants import *
+from chasmwriter import Chasm, Reaction
 from steps_xdl import *
 from steps_generic import *
 from components import *
@@ -97,7 +100,6 @@ class XDL(object):
         self.steps = steps_from_xdl(self.xdl)
         self.hardware = hardware_from_xdl(self.xdl)
         self.reagents = reagents_from_xdl(self.xdl)
-        print(self.reagents)
 
     def xdl_valid(self):
         return validate_xdl(self.xdl)
@@ -119,7 +121,6 @@ class XDL(object):
         self.reagent_map = {}
         for reagent in self.reagents:
             reagent_id = reagent.properties['id']
-            print(reagent_id)
             for flask in self.graphml_hardware.flasks:
                 flask_id = flask.properties['id']
                 if reagent_id in flask_id:
@@ -128,20 +129,19 @@ class XDL(object):
 
     def map_hardware_to_steps(self):
         self.get_hardware_map()
-        print(self.hardware.components)
         for step in self.steps:
             for prop, val in step.properties.items():
                 if val in self.hardware_map:
                     step.properties[prop] = self.hardware_map[val]
+            step.update_steps()
 
     def map_reagents_to_steps(self):
         self.get_reagent_map()
-        print(self.reagent_map)
         for step in self.steps:
             for prop, val in step.properties.items():
                 if val in self.reagent_map:
                     step.properties[prop] = self.reagent_map[val]
-            print(step.properties)
+            step.update_steps()
 
     def check_safety(self):
         return procedure_is_safe(self.steps)
@@ -153,10 +153,10 @@ class XDL(object):
             
                 self.map_hardware_to_steps()
                 
-                self.map_reagents_to_steps()
-                return
+                # self.map_reagents_to_steps() # MAYBE NOT NECESSARY
+                
                 self.check_safety()
-
+                
                 chasm = Chasm(self.steps)
                 if save_path:
                     chasm.save(save_path)
@@ -197,7 +197,7 @@ def reagents_from_xdl(xdl):
 def xdl_to_step(step_xdl):
     if step_xdl.tag != 'Repeat':
         step = step_obj_dict[step_xdl.tag]()
-        step.load_properties(step_xdl.attrib)
+        step.load_properties(preprocess_attrib(step, step_xdl.attrib))
     else:
         step = xdl_to_repeat_step(step_xdl)
     return step
@@ -220,6 +220,42 @@ def xdl_to_reagent(reagent_xdl):
     reagent = Reagent()
     reagent.load_properties(reagent_xdl.attrib)
     return reagent
+
+def preprocess_attrib(step, attrib):
+    print(step)
+    print(attrib)
+    print('~~~')
+    if isinstance(step, (StartHeat, StartStir)):
+        attrib['name'] = attrib['vessel']
+        del attrib['vessel']
+    if 'time' in attrib:
+        attrib['time'] = convert_time_str_to_seconds(attrib['time'])
+    if 'volume' in attrib:
+        attrib['volume'] = convert_volume_str_to_ml(attrib['volume'])
+    return attrib
+
+def convert_time_str_to_seconds(time_str):
+    time_str = time_str.lower()
+    if time_str.endswith(('h', 'hr', 'hrs', 'hour', 'hours', )):
+        multiplier = 3600
+    elif time_str.endswith(('m', 'min', 'mins', 'minute', 'minutes')):
+        multiplier = 60
+    elif time_str.endswith(('s', 'sec', 'secs', 'second', 'seconds',)):
+        multiplier = 1
+    return str(int(float(re.match(r'([0-9]+(.[0-9]+)?)', time_str).group(1)) * multiplier))
+
+def convert_volume_str_to_ml(volume_str):
+    print(f'VOLUME STR: {volume_str}')
+    volume_str = volume_str.lower()
+    if volume_str.endswith(volume_ml_unit_words):
+        multiplier = 1
+    elif volume_str.endswith(volume_l_unit_words):
+        multiplier = 1000
+    elif volume_str.endswith(volume_dl_unit_words):
+        multiplier = 100
+    elif volume_str.endswith(volume_cl_unit_words):
+        multiplier = 10
+    return str(float(re.match(r'([0-9]+(.[0-9]+)?)', volume_str).group(1)) * multiplier)
 
 # Syntax Validation
 
@@ -283,18 +319,18 @@ def procedure_is_safe(steps):
     return True
 
 def main():
-    from stuff import rufinamide_steps
+    # from stuff import rufinamide_steps
     
     # xdl_f = '/home/group/ReaxysChemputerInterface/stuff/rufinamide.xdl'
     # reaction = Reaction('')
     # reaction.steps = rufinamide_steps
     # reaction.save_xdl(xdl_f)
 
-    xdl_f = '/home/group/ReaxysChemputerInterface/stuff/xdl_v4.xdl'
-    chasm_f = '/home/group/ReaxysChemputerInterface/stuff/xdl_v4.chasm'
+    xdl_f = '/home/group/XDLInterpreter/stuff/xdl_v4.xdl'
+    chasm_f = '/home/group/XDLInterpreter/stuff/xdl_v4.chasm'
 
     xdl = XDL(xdl_file=xdl_f)
-    xdl.as_chasm(chasm_f, '/home/group/ReaxysChemputerInterface/stuff/rufinamide.graphml')
+    xdl.as_chasm(chasm_f, '/home/group/XDLInterpreter/stuff/rufinamide.graphml')
     
 if __name__ == '__main__':
     main()

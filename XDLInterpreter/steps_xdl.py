@@ -189,6 +189,7 @@ class Add(Step):
         }
 
         self.steps = []
+        print(f'REAGENT: {reagent}')
         if clean_tubing:
             self.steps.append(Move(src=f"flask_{reagent}", dest="waste_aqueous", 
                     volume=DEFAULT_PUMP_PRIME_VOLUME, move_speed=move_speed))
