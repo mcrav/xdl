@@ -3,8 +3,14 @@ from lxml import etree
 
 class Reaction(object):
     
-    def __init__(self, reaxys_obj):
+    def __init__(self, steps):
         self.steps = []
+
+    def as_human_readable(self):
+        s = ''
+        for step in self.steps:
+            s += f'{step.human_readable}\n'
+        return s
 
     def as_chasm(self):
         return Chasm(self.steps).code

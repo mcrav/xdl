@@ -19,6 +19,8 @@ class SetRpmAndStartStir(Step):
             StartStir(name=vessel),
         ]
 
+        self.human_readable = f'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'
+
 class StartVacuum(Step):
 
     def __init__(self, vessel=None, comment=''):
@@ -33,6 +35,9 @@ class StartVacuum(Step):
             SwitchVacuum(flask=vessel, destination='vacuum')
         ]
 
+        self.human_readable = f'Start vacuum for {vessel}.'
+
+
 class StopVacuum(Step):
 
     def __init__(self, vessel=None, comment=''):
@@ -46,6 +51,8 @@ class StopVacuum(Step):
         self.steps = [
             SwitchVacuum(flask=vessel, destination='backbone')
         ]
+
+        self.human_readable = f'Stop vacuum for {vessel}.'
 
 class SetTempAndStartHeat(Step):
 
@@ -62,6 +69,8 @@ class SetTempAndStartHeat(Step):
             SetTemp(name=vessel, temp=temp),
             StartHeat(name=vessel),
         ]
+
+        self.human_readable = f'Heat {vessel} to {temp} °C'
 
 class CleanVessel(Step):
 
@@ -86,6 +95,11 @@ class CleanVessel(Step):
                 Move(src=vessel, dest='waste_reactor', volume='all'),
             ])
 
+        self.human_readable = ''
+        for solvent, volume in zip(solvents, volumes):
+            self.human_readable += f'Clean {vessel} with {solvent}.\n'
+        self.human_readable = self.human_readable[:-1]
+
 class CleanTubing(Step):
 
     def __init__(self, solvent=None, vessel=None, volume=DEFAULT_CLEAN_TUBING_VOLUME, comment=''):
@@ -101,6 +115,8 @@ class CleanTubing(Step):
         self.steps = [
             Repeat(2, Move(src=f'flask_{self.properties["solvent"]}', dest=self.properties['vessel'], volume=self.properties['volume']))
         ]
+
+        self.human_readable = f'Clean tubing to {vessel} with {volume} mL of {solvent}.'
 
 class HeatAndReact(Step):
     
@@ -123,6 +139,8 @@ class HeatAndReact(Step):
             ContinueStirToRT(vessel=vessel),
         ]
 
+        self.human_readable = f'Heat {vessel} to {temp} °C under stirring and wait {float(time) / 3600} hrs.\nThen stop heating and continue stirring until {vessel} reaches room temperature.'
+
 class ContinueStirToRT(Step):
     """
     Assumes stirrer is already on.
@@ -141,6 +159,8 @@ class ContinueStirToRT(Step):
             StopStir(name=vessel),
         ]
 
+        self.human_readable = f'Wait for {vessel} to reach room temperature and then stop stirring.'
+
 class Chill(Step):
 
     def __init__(self, vessel=None, temp=None, comment=''):
@@ -158,6 +178,8 @@ class Chill(Step):
             StopChiller(name=vessel),
         ]
 
+        self.human_readable = f'Chill {vessel} to {temp} °C.'
+
 class ChillBackToRT(Step):
 
     def __init__(self, vessel=None, comment=''):
@@ -174,6 +196,8 @@ class ChillBackToRT(Step):
             StopChiller(name=vessel),
         ]
 
+    self.human_readable = f'Chill {vessel} to room temperature.'
+
 class Add(Step):
 
     def __init__(self, reagent=None, volume=None, vessel=None, move_speed=DEFAULT_MOVE_SPEED, clean_tubing=True, comment=''):
@@ -189,7 +213,6 @@ class Add(Step):
         }
 
         self.steps = []
-        print(f'REAGENT: {reagent}')
         if clean_tubing:
             self.steps.append(Move(src=f"flask_{reagent}", dest="waste_aqueous", 
                     volume=DEFAULT_PUMP_PRIME_VOLUME, move_speed=move_speed))
@@ -197,6 +220,8 @@ class Add(Step):
                             volume=volume, move_speed=move_speed))
         if clean_tubing:
             self.steps.append(CleanTubing(solvent=DEFAULT_CLEAN_TUBING_SOLVENT, vessel=vessel))
+
+        self.human_readable = f'Add {reagent} ({volume} mL) to {vessel}.' # Maybe add in bit for clean tubing
 
 class StirAndTransfer(Step):
 
@@ -217,6 +242,8 @@ class StirAndTransfer(Step):
             StopStir(name=from_vessel)
         ]
 
+        self.human_readable = f'Stir {from_vessel} and transfer {volume} mL to {to_vessel}.'
+
 class Wash(Step):
     """
     Wash vessel.
@@ -236,11 +263,15 @@ class Wash(Step):
         }
 
         self.steps = [
+            StartStir(name=vessel)
             Add(reagent=solvent, volume=volume),
             Wait(time=wait_time),
             Move(src=vessel, dest='waste_solvents', 
                  volume=volume, move_speed=move_speed)
+            StopStir(name=vessel)
         ]
+
+        self.human_readable = f'Wash {vessel} with {solvent} ({volume} mL).'
 
 class ChillReact(Step):
 
@@ -264,3 +295,9 @@ class ChillReact(Step):
             ChillBackToRT(vessel=vessel),
             StopStir(name=vessel),
         ])
+
+        self.human_readable = ''
+        for reagent, volume in zip(reagents, volumes):
+            self.human_readable += f'Add {reagent} ({volume} mL) to {vessel} under stirring.\n'
+        self.human_readable += f'Chill {vessel} to {temp} °C and wait {time / 3600} hrs.\n'
+        self.human_readable += f'Chill {vessel} to room temperature then stop stirring.'

@@ -25,5 +25,3 @@
 ### Validate XDL file syntax
 
 ### Simulate ChASM
-
-### 
