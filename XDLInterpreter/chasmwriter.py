@@ -1,5 +1,7 @@
 import abc
 from lxml import etree
+import tempfile
+import subprocess as sub
 
 class Reaction(object):
     
@@ -101,6 +103,12 @@ class Chasm(object):
         with open(file_path, 'w') as fileobj:
             fileobj.write(self._code)
 
+    # def simulate(self, graphml_file):
+    #     chasm_file = tempfile.TemporaryFile()
+    #     chasm_file.write(self.code)
+    #     chempiler = Chempiler(graphml_file, chasm_file, crash_dump=False, simulation=True)
+    #     chempiler.run_platform()
+    #     chasm_file.close()
 
 
 def main():

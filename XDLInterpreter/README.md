@@ -22,6 +22,6 @@
 
 1. Make system more intelligent. Close command when reactor is empty.
 
-### Validate XDL file syntax
+### Decide on concrete namespace
 
 ### Simulate ChASM
