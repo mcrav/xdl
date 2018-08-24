@@ -12,6 +12,7 @@ from components import *
 from reagents import *
 from steps_chasm import *
 from safety import procedure_is_safe
+from syntax_validation import XDLSyntaxValidator
 
 step_obj_dict = {
     'Step': Step,
@@ -88,13 +89,15 @@ component_obj_dict = {
 class XDL(object):
 
     def __init__(self, xdl_file=None, xdl_str=None):
+        self.steps, self.hardware, self.reagent = [], [], []
         if xdl_file:
             with open(xdl_file, 'r') as fileobj:
                 self.xdl = fileobj.read()
         elif xdl_str:
             self.xdl = xdl_str
         if self.xdl:
-            self.parse_xdl()
+            if self.xdl_valid():
+                self.parse_xdl()
         else:
             print('No XDL given.')
 
@@ -104,7 +107,7 @@ class XDL(object):
         self.reagents = reagents_from_xdl(self.xdl)
 
     def xdl_valid(self):
-        return validate_xdl(self.xdl)
+        return XDLSyntaxValidator(self.xdl).valid
 
     def hardware_is_compatible(self):
         return hardware_is_compatible(
@@ -134,7 +137,7 @@ class XDL(object):
         return procedure_is_safe(self.steps, self.reagents)
 
     def as_chasm(self, save_path=None, graphml_file=None):
-        if self.xdl_valid():      
+        if self.steps: # if XDL is valid
             self.graphml_hardware = graphml_hardware_from_file(graphml_file)
             if self.hardware_is_compatible():
             
@@ -247,9 +250,6 @@ def xdl_to_reagent(reagent_xdl):
     return reagent
 
 def preprocess_attrib(step, attrib):
-    print(step)
-    print(attrib)
-    print('~~~')
     if isinstance(step, (StartHeat, StartStir)):
         attrib['name'] = attrib['vessel']
         del attrib['vessel']
@@ -328,7 +328,7 @@ def main():
     chasm_f = '/home/group/XDLInterpreter/stuff/xdl_v4.chasm'
 
     xdl = XDL(xdl_file=xdl_f)
-    xdl.as_chasm(chasm_f, '/home/group/XDLInterpreter/stuff/rufinamide.graphml')
+    # xdl.as_chasm(chasm_f, '/home/group/XDLInterpreter/stuff/rufinamide.graphml')
     
 if __name__ == '__main__':
     main()

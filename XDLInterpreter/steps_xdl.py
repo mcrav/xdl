@@ -196,7 +196,7 @@ class ChillBackToRT(Step):
             StopChiller(name=vessel),
         ]
 
-    self.human_readable = f'Chill {vessel} to room temperature.'
+        self.human_readable = f'Chill {vessel} to room temperature.'
 
 class Add(Step):
 
@@ -263,11 +263,11 @@ class Wash(Step):
         }
 
         self.steps = [
-            StartStir(name=vessel)
+            StartStir(name=vessel),
             Add(reagent=solvent, volume=volume),
             Wait(time=wait_time),
             Move(src=vessel, dest='waste_solvents', 
-                 volume=volume, move_speed=move_speed)
+                 volume=volume, move_speed=move_speed),
             StopStir(name=vessel)
         ]
 

@@ -55,7 +55,6 @@ class Hardware(object):
         self.wastes = []
         self.filters = []
         for component in self.components:
-            print(component)
             if component.properties['id'].startswith('reactor'):
                 self.reactors.append(component)
             elif component.properties['id'].startswith('flask'):

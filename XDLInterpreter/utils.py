@@ -20,7 +20,6 @@ def convert_time_str_to_seconds(time_str):
     return str(int(float(re.match(float_regex, time_str).group(1)) * multiplier))
 
 def convert_volume_str_to_ml(volume_str):
-    print(f'VOLUME STR: {volume_str}')
     volume_str = volume_str.lower()
     if volume_str.endswith(volume_ml_unit_words):
         multiplier = 1
