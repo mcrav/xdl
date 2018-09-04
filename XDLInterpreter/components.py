@@ -17,6 +17,9 @@ class Reactor(Component):
             'reactor_type': reactor_type,
         }
 
+    def as_xdl(self):
+        xdl = '<Reactor>'
+
 class Filter(Component):
     
     def __init__(self, id_word=None, volume_ml=None,):

@@ -262,36 +262,6 @@ def preprocess_attrib(step, attrib):
     return attrib
 
 
-# Syntax Validation
-
-def validate_xdl(xdl):
-    correct_tags = xdl_has_correct_base_tags(xdl)
-    step_tags = xdl_has_valid_step_tags(xdl)
-    return correct_tags and step_tags
-
-def xdl_has_valid_step_tags(xdl):
-    xdl_tree = etree.parse(StringIO(xdl))
-    valid = True
-    for element in xdl_tree.find('Procedure'):
-        if element.tag not in step_obj_dict:
-            print(f'Invalid step: {element.tag}')
-            valid = False
-    return valid
-
-def xdl_has_correct_base_tags(xdl):
-    xdl_tree = etree.parse(StringIO(xdl))
-    hardware = 0
-    reagents = 0
-    procedure = 0
-    for element in xdl_tree.findall('*'):
-        if element.tag == 'Hardware':
-            hardware += 1
-        elif element.tag == 'Reagents':
-            reagents += 1
-        elif element.tag == 'Procedure':
-            procedure += 1
-    return hardware == 1 and reagents == 1 and procedure == 1
-
 # Hardware compatibility
 
 def graphml_hardware_from_file(graphml_file):
