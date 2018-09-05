@@ -1,7 +1,7 @@
-from chasmwriter import Chasm
-from constants import *
-from steps_generic import Step, Repeat
-from steps_chasm import *
+from .chasmwriter import Chasm
+from .constants import *
+from .steps_generic import Step, Repeat
+from .steps_chasm import *
 
 class SetRpmAndStartStir(Step):
 

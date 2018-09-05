@@ -1,6 +1,6 @@
 import abc
 from lxml import etree
-from chasmwriter import Chasm
+from .chasmwriter import Chasm
 
 class XDLElement(object):
 

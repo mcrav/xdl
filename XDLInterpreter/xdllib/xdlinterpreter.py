@@ -3,16 +3,16 @@ from bs4 import BeautifulSoup
 from io import StringIO
 import re
 
-from utils import convert_time_str_to_seconds, convert_volume_str_to_ml, get_reagent_combinations
-from constants import *
-from chasmwriter import Chasm, Reaction
-from steps_xdl import *
-from steps_generic import *
-from components import *
-from reagents import *
-from steps_chasm import *
-from safety import procedure_is_safe
-from syntax_validation import XDLSyntaxValidator
+from .utils import convert_time_str_to_seconds, convert_volume_str_to_ml, get_reagent_combinations
+from .constants import *
+from .chasmwriter import Chasm, Reaction
+from .steps_xdl import *
+from .steps_generic import *
+from .components import *
+from .reagents import *
+from .steps_chasm import *
+from .safety import procedure_is_safe
+from .syntax_validation import XDLSyntaxValidator
 
 step_obj_dict = {
     'Step': Step,

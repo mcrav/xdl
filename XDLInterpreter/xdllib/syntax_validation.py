@@ -1,11 +1,11 @@
 from lxml import etree
 from io import StringIO
-import steps_chasm
-import steps_xdl
-import components
+import .steps_chasm
+import .steps_xdl
+import .components
 import inspect
 import re
-from utils import float_regex
+from .utils import float_regex
 
 class XDLSyntaxValidator(object):
 

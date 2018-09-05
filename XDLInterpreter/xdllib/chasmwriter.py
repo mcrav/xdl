@@ -1,4 +1,3 @@
-import abc
 from lxml import etree
 import tempfile
 import subprocess as sub

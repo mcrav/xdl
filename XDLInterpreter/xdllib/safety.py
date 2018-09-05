@@ -1,4 +1,4 @@
-from utils import get_reagent_combinations
+from .utils import get_reagent_combinations
 
 dangerous_combinations = {
     frozenset((67641, 16853853)): 'Acetone and LiAlH4 boom fucking boom!',

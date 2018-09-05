@@ -1,6 +1,6 @@
-from chasmwriter import Chasm
-from constants import *
-from steps_generic import Step
+from .chasmwriter import Chasm
+from .constants import *
+from .steps_generic import Step
 
 class Move(Step):
     """
