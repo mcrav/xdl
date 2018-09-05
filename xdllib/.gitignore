@@ -1,0 +1,13 @@
+# Project dirs
+data
+stuff
+
+# Python
+.ipynb_checkpoints
+*.pyc
+*.pyo
+__pycache__/
+
+# Other
+.vscode
+
