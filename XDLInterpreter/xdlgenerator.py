@@ -5,13 +5,13 @@ from steps_xdl import Add
 
 class XDLGenerator(object):   
 
-    def __init__(self, hardware=[], reagents=[], operations=[]):
+    def __init__(self, hardware=[], reagents=[], steps=[]):
 
-        self.hardware, self.reagents, self.operations = hardware, reagents, operations
+        self.hardware, self.reagents, self.steps = hardware, reagents, steps
         self.generate_xdl()
 
     def generate_xdl(self):
-        self.xdlroot = etree.Element('Synthesis')
+        self.xdltree = etree.Element('Synthesis')
         self.append_hardware_tree()
         self.append_reagent_tree()
         self.append_operations_tree()
@@ -19,19 +19,32 @@ class XDLGenerator(object):
     def append_hardware_tree(self):
         hardware_tree = etree.Element('Hardware')
         for component in self.hardware:
-            pass
-        self.xdlroot.append(hardware_tree)
+            component_tree = etree.Element(component.name)
+            for prop, val in component.properties.items():
+                component_tree.attrib[prop] = str(val)
+            hardware_tree.append(component_tree)
+        self.xdltree.append(hardware_tree)
 
     def append_reagent_tree(self):
-        reagent_tree = etree.Element('Reagents')
-        self.xdlroot.append(reagent_tree)
+        reagents_tree = etree.Element('Reagents')
+        for reagent in self.reagents:
+            reagent_tree = etree.Element('Reagent')
+            for prop, val in reagent.properties.items():
+                reagent_tree.attrib[prop] = str(val)
+            reagents_tree.append(reagent_tree)
+        self.xdltree.append(reagents_tree)
 
     def append_operations_tree(self):
         procedure_tree = etree.Element('Procedure')
-        self.xdlroot.append(procedure_tree)
+        for step in self.steps:
+            step_tree = etree.Element(step.name)
+            for prop, val in step.properties.items():
+                step_tree.attrib[prop] = str(val)
+            procedure_tree.append(step_tree)
+        self.xdltree.append(procedure_tree)
 
     def save(self, save_file):
-        etree.ElementTree(self.xdlroot).write(save_file, pretty_print=True)
+        etree.ElementTree(self.xdltree).write(save_file, pretty_print=True)
 
 def main():
     hardware = [Reactor(id_word='reactor1', volume_ml='500ml')]

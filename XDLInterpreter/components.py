@@ -11,14 +11,12 @@ class Reactor(Component):
     
     def __init__(self, id_word=None, volume_ml=None, reactor_type=ROUND_BOTTOM_FLASK):
         
+        self.name = 'Reactor'
         self.properties = {
             'id': id_word,
             'volume_ml': volume_ml,
             'reactor_type': reactor_type,
         }
-
-    def as_xdl(self):
-        xdl = '<Reactor>'
 
 class Filter(Component):
     
