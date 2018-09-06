@@ -200,13 +200,14 @@ class ChillBackToRT(Step):
 
 class Add(Step):
 
-    def __init__(self, reagent=None, volume=None, vessel=None, move_speed=DEFAULT_MOVE_SPEED, clean_tubing=True, comment=''):
-
+    def __init__(self, reagent=None, volume=None, vessel=None, time=None, move_speed=DEFAULT_MOVE_SPEED, clean_tubing=True, comment=''):
+        print(f'TIME     {time}')
         self.name = 'Add'
         self.properties = {
             'reagent': reagent,
             'volume': volume,
             'vessel': vessel,
+            'time': time,
             'move_speed': move_speed,
             'clean_tubing': clean_tubing,
             'comment': comment,
@@ -221,7 +222,10 @@ class Add(Step):
         if clean_tubing:
             self.steps.append(CleanTubing(solvent=DEFAULT_CLEAN_TUBING_SOLVENT, vessel=vessel))
 
-        self.human_readable = f'Add {reagent} ({volume} mL) to {vessel}.' # Maybe add in bit for clean tubing
+        self.human_readable = f'Add {reagent} ({volume} mL) to {vessel}' # Maybe add in bit for clean tubing
+        if time:
+            self.human_readable += f' over {time}'
+        self.human_readable += '.'
 
 class StirAndTransfer(Step):
 
@@ -340,4 +344,60 @@ class Filter(Step):
         self.steps.append(StopVacuum(vessel))
         
 
-        self.human_readable = f'Filter contents of {from_vessel} in {vessel} for {time} s.' 
+        self.human_readable = f'Filter contents of {from_vessel} in {vessel} for {time} s.'
+
+class MakeSolution(Step):
+
+    def __init__(self, solute=None, solvent=None, solute_mass=None, solvent_volume=None, vessel=None):
+
+        self.name = 'MakeSolution'
+        self.properties = {
+            'solute': solute,
+            'solvent': solvent,
+            'solute_mass': solute_mass,
+            'solvent_volume': solvent_volume,
+            'vessel': vessel,
+        }
+
+        self.steps = [
+            AddSolid(reagent=solute, mass=solute_mass, vessel=vessel),
+            Add(reagent=solvent, volume=solvent_volume, vessel=vessel),
+        ]
+
+        self.human_readable = f'Make solution of {solute} ({solute_mass} g) in {solvent} ({solvent_volume} mL).'
+        
+class AddSolid(Step):
+    """UNIMPLEMENTED"""
+    def __init__(self, reagent=None, mass=None, vessel=None):
+
+        self.name = 'AddSolid'
+        self.properties = {
+            'reagent': reagent,
+            'mass': mass,
+            'vessel': vessel,
+        }
+
+        self.steps = []
+
+        self.human_readable = f'UNIMPLEMENTED: Add {reagent} ({mass} g) to {vessel}.'
+
+class Reflux(Step):
+
+    def __init__(self, vessel=None, temp=None, time=None):
+
+        self.name = 'Reflux'
+        self.properties = {
+            'vessel': vessel,
+            'temp': temp,
+            'time': time,
+        }
+
+        self.steps = [
+            SetTempAndStartHeat(vessel=vessel, temp=temp),
+            SetRpmAndStartStir(vessel=vessel),
+            Wait(time=time),
+            StopHeat(name=vessel),
+            StopStir(name=vessel),
+        ]
+
+        self.human_readable = f'Heat {vessel} to {temp} °C and for {time}'
