@@ -75,7 +75,9 @@ step_obj_dict = {
     'Wash': Wash,
     'ChillReact': ChillReact,
     'Stir': StartStir,
-    'Heat': StartHeat
+    'Heat': StartHeat,
+    'MakeSolution': MakeSolution,
+    'AddSolid': AddSolid,
 }
 
 component_obj_dict = {
@@ -259,6 +261,9 @@ def preprocess_attrib(step, attrib):
         attrib['time'] = convert_time_str_to_seconds(attrib['time'])
     if 'volume' in attrib:
         attrib['volume'] = convert_volume_str_to_ml(attrib['volume'])
+    if isinstance(step, MakeSolution):
+        attrib['solute'] = attrib['solute'].split(' ')
+        attrib['solute_mass'] = attrib['solute_mass'].split(' ')
     return attrib
 
 

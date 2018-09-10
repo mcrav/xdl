@@ -9,7 +9,8 @@ def get_xdl_string(xdltree):
             s += f'{indent * indent_level}<{element2.tag}\n'
             indent_level += 1
             for attr, val in element2.attrib.items():
-                s += f'{indent * indent_level}{attr}="{val}"\n'
+                if val:
+                    s += f'{indent * indent_level}{attr}="{val}"\n'
             s = s[:-1] + ' />\n'
             indent_level -= 1
             

@@ -3,6 +3,7 @@ from .components import Reactor
 from .reagents import Reagent
 from .steps_xdl import Add
 from .xdlwriter import get_xdl_string
+
 class XDLGenerator(object):   
 
     def __init__(self, hardware=[], reagents=[], steps=[]):
