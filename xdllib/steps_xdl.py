@@ -408,3 +408,35 @@ class Reflux(Step):
         ]
 
         self.human_readable = f'Heat {vessel} to {temp} °C and for {time}'
+
+class Rotavap(Step):
+
+    def __init__(self, vessel=None, temp=None, pressure=None, time=None):
+
+        self.name = 'Rotavap'
+        self.properties = {
+            'vessel': vessel,
+            'temp': temp,
+            'pressure': pressure,
+            'time': time,
+        }
+
+        # Steps incomplete
+        self.steps = [
+            SwitchCartridge('rotavap', 0),
+            LiftArmDown('rotavap'),
+            SetRotation('rotavap', 'default'),
+            StartRotation('rotavap'),
+            SetVacSp('rotavap', 'default'),
+            StartVacuum('rotavap'),
+            SetBathTemp('rotavap', temp),
+            StartHeaterBath('rotavap'),
+            Wait(300),
+            SetVacSp('rotavap', 'default'),
+            Wait(time),
+            StopVacuum('rotavap'),
+            VentVac('rotavap'),
+            Move('flask_rv_bottom', 'waste_rotary', )
+        ]
+
+        self.human_readable = f'Rotavap contents of {vessel} at {temp} °C for {time}.'

@@ -87,7 +87,6 @@ component_obj_dict = {
     'Waste': Waste,
 }
 
-
 class XDL(object):
 
     def __init__(self, xdl_file=None, xdl_str=None):
