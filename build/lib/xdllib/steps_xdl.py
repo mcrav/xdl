@@ -201,7 +201,7 @@ class ChillBackToRT(Step):
 class Add(Step):
 
     def __init__(self, reagent=None, volume=None, vessel=None, time=None, move_speed=DEFAULT_MOVE_SPEED, clean_tubing=True, comment=''):
-        print(f'TIME     {time}')
+        
         self.name = 'Add'
         self.properties = {
             'reagent': reagent,
