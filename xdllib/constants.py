@@ -29,8 +29,8 @@ ROUND_BOTTOM_FLASK = 'Round Bottom Flask'
 
 ROOM_TEMPERATURE = 25
 
-volume_ml_unit_words = ('ml', 'millilitres', 'milliliters')
-volume_l_unit_words = ('l', 'litres', 'liters')
-volume_dl_unit_words = ('dl', 'decilitres', 'deciliters')
-volume_cl_unit_words = ('cl', 'centilitres', 'centiliters')
+VOLUME_ML_UNIT_WORDS = ('ml', 'millilitres', 'milliliters', 'cc')
+VOLUME_L_UNIT_WORDS = ('l', 'litres', 'liters')
+VOLUME_DL_UNIT_WORDS = ('dl', 'decilitres', 'deciliters')
+VOLUME_CL_UNIT_WORDS = ('cl', 'centilitres', 'centiliters')
 

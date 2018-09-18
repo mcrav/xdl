@@ -1,8 +1,8 @@
 from lxml import etree
 from io import StringIO
-import steps_chasm
-import steps_xdl
-import components
+import xdllib.steps_chasm
+import xdllib.steps_xdl
+import xdllib.components
 import inspect
 import re
 from .utils import float_regex
@@ -129,7 +129,9 @@ class XDLSyntaxValidator(object):
         remainder = quantity_str.lstrip(number)
         if not remainder:
             quantity_valid = True
-        elif remainder not in XDL_ACCEPTABLE_UNITS[quantity_type]:
+            
+        elif remainder.strip() not in XDL_ACCEPTABLE_UNITS[quantity_type]:
+            print(remainder.strip())
             quantity_valid = False
         else:
             quantity_valid = True
@@ -174,17 +176,17 @@ class XDLSyntaxValidator(object):
 def get_class_names_from_module(mod):
     return [item[0] for item in inspect.getmembers(mod, inspect.isclass)]
 
-XDL_STEP_NAMESPACE = get_class_names_from_module(steps_chasm)
-XDL_STEP_NAMESPACE.extend(get_class_names_from_module(steps_xdl))
+XDL_STEP_NAMESPACE = get_class_names_from_module(xdllib.steps_chasm)
+XDL_STEP_NAMESPACE.extend(get_class_names_from_module(xdllib.steps_xdl))
 XDL_STEP_NAMESPACE.extend([
     'Heat',
     'Stir',
 ])
 
-XDL_HARDWARE_NAMESPACE = [item for item in get_class_names_from_module(components) if item not in ['XDLElement', 'Component', 'Hardware']]
+XDL_HARDWARE_NAMESPACE = [item for item in get_class_names_from_module(xdllib.components) if item not in ['XDLElement', 'Component', 'Hardware']]
 
 XDL_ACCEPTABLE_UNITS = {
-    'volume': ['ul', 'ml', 'cl', 'dl', 'l'],
+    'volume': ['ul', 'ml', 'cl', 'dl', 'l', 'cc'],
     'mass': ['ug', 'mg', 'g', 'kg'],
     'mol': ['umol', 'mmol', 'mol'],
     'time': ['s', 'sec', 'secs', 'second', 'seconds', 'm', 'min', 'mins', 'minute', 'minutes', 'h', 'hr', 'hrs', 'hour', 'hours'],

@@ -9,13 +9,14 @@ class Component(XDLElement):
 
 class Reactor(Component):
     
-    def __init__(self, id_word=None, volume_ml=None, reactor_type=ROUND_BOTTOM_FLASK):
+    def __init__(self, id_word=None, volume_ml=None, reactor_type=ROUND_BOTTOM_FLASK, atmosphere=None):
         
         self.name = 'Reactor'
         self.properties = {
             'id': id_word,
             'volume_ml': volume_ml,
             'reactor_type': reactor_type,
+            'atmosphere': atmosphere,
         }
 
 class FilterFlask(Component):

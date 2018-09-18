@@ -42,6 +42,7 @@ class Chasm(object):
         if steps:
             self.add_start_main()
             for step in steps:
+                self.add_comment(step.human_readable)
                 self.add_step(step, blank_line_before=True)
             self.add_end_main()
 
@@ -56,7 +57,7 @@ class Chasm(object):
         self._code += line + ';\n'
 
     def add_comment(self, comment):
-        self._code += '# ' + comment + '\n'
+        self._code += '\n# ' + comment
 
     def add_step(self, step, blank_line_before=False):
         if blank_line_before:

@@ -89,6 +89,10 @@ class Repeat(Step):
             'comment': comment,
         }
 
+        self.human_readable = f'Do the folllowing {repeat_n_times}:\n'
+        for step in steps:
+            self.human_readable += step.human_readable
+
     def as_chasm(self):
         chasm = Chasm()
         chasm.add_for(3, self.properties['steps'])

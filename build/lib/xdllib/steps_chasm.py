@@ -27,6 +27,8 @@ class Move(Step):
             'comment': comment
         }
 
+        self.human_readable = f'Move {src} ({volume}) to {dest}.'
+
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()

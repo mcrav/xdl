@@ -5,8 +5,6 @@ from .steps_xdl import Add
 
 float_regex = r'([0-9]+([.][0-9]+)?)'
 
-
-
 # Attrib preprocessing
 
 def convert_time_str_to_seconds(time_str):
@@ -21,13 +19,13 @@ def convert_time_str_to_seconds(time_str):
 
 def convert_volume_str_to_ml(volume_str):
     volume_str = volume_str.lower()
-    if volume_str.endswith(volume_ml_unit_words):
+    if volume_str.endswith(VOLUME_ML_UNIT_WORDS):
         multiplier = 1
-    elif volume_str.endswith(volume_l_unit_words):
+    elif volume_str.endswith(VOLUME_L_UNIT_WORDS):
         multiplier = 1000
-    elif volume_str.endswith(volume_dl_unit_words):
+    elif volume_str.endswith(VOLUME_DL_UNIT_WORDS):
         multiplier = 100
-    elif volume_str.endswith(volume_cl_unit_words):
+    elif volume_str.endswith(VOLUME_CL_UNIT_WORDS):
         multiplier = 10
     return str(float(re.match(float_regex, volume_str).group(1)) * multiplier)
 
@@ -40,7 +38,10 @@ def find_reagent_obj(reagent_id, reagents):
     return reagent_obj
 
 def cas_str_to_int(cas_str):
-    return int(cas_str.replace('-', ''))
+    if cas_str:
+        return int(cas_str.replace('-', ''))
+    else:
+        return None
 
 # Safety
 
@@ -61,6 +62,6 @@ def get_reagent_combinations(steps, reagents):
         combo = list(combo)
         combo[0] = cas_str_to_int(find_reagent_obj(combo[0], reagents).properties['cas'])
         combo[1] = cas_str_to_int(find_reagent_obj(combo[1], reagents).properties['cas'])
-        cas_combos.append(frozenset(combo))
-        cas_combos.append(frozenset((67641, 16853853)))
+        if combo[0] and combo[1]:
+            cas_combos.append(frozenset(combo))
     return set(cas_combos)

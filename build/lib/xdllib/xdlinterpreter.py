@@ -78,11 +78,12 @@ step_obj_dict = {
     'Heat': StartHeat,
     'MakeSolution': MakeSolution,
     'AddSolid': AddSolid,
+    'Reflux': Reflux,
 }
 
 component_obj_dict = {
     'Reactor': Reactor,
-    'Filter': Filter,
+    'FilterFlask': FilterFlask,
     'Flask': Flask,
     'Waste': Waste,
 }
@@ -127,7 +128,7 @@ class XDL(object):
         self.get_hardware_map()
         for step in self.steps:
             for prop, val in step.properties.items():
-                if val in self.hardware_map:
+                if isinstance(val, str) and val in self.hardware_map:
                     step.properties[prop] = self.hardware_map[val]
             step.update_steps()
 
@@ -253,6 +254,7 @@ def xdl_to_reagent(reagent_xdl):
     return reagent
 
 def preprocess_attrib(step, attrib):
+    attrib = dict(attrib)
     if isinstance(step, (StartHeat, StartStir)):
         attrib['name'] = attrib['vessel']
         del attrib['vessel']
@@ -261,6 +263,7 @@ def preprocess_attrib(step, attrib):
     if 'volume' in attrib:
         attrib['volume'] = convert_volume_str_to_ml(attrib['volume'])
     if isinstance(step, MakeSolution):
+        print(attrib)
         attrib['solute'] = attrib['solute'].split(' ')
         attrib['solute_mass'] = attrib['solute_mass'].split(' ')
     return attrib
@@ -278,7 +281,7 @@ def graphml_hardware_from_file(graphml_file):
             if node_label.startswith('reactor'):
                 components.append(Reactor(id_word=node_label))
             elif node_label.startswith('filter'):
-                components.append(Filter(id_word=node_label))
+                components.append(FilterFlask(id_word=node_label))
             elif node_label.startswith('flask'):
                 components.append(Flask(id_word=node_label))
             elif node_label.startswith('waste'):

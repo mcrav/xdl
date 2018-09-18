@@ -348,7 +348,7 @@ class Filter(Step):
 
 class MakeSolution(Step):
 
-    def __init__(self, solute=None, solvent=None, solute_mass=None, solvent_volume=None, vessel=None):
+    def __init__(self, solute=None, solvent=None, solute_mass=None, solvent_volume=None, vessel=None, comment=''):
 
         self.name = 'MakeSolution'
         self.properties = {
@@ -357,15 +357,17 @@ class MakeSolution(Step):
             'solute_mass': solute_mass,
             'solvent_volume': solvent_volume,
             'vessel': vessel,
+            'comment': comment,
         }
 
         self.steps = []
-        if isinstance(solute, str):
+        if not isinstance(solute, list):
             solute = [solute]
         if not isinstance(solute_mass, list):
             solute_mass = [solute_mass]
+        print(solute)
         for s, m in zip(solute, solute_mass):
-            AddSolid(reagent=s, mass=m, vessel=vessel),
+            self.steps.append(AddSolid(reagent=s, mass=m, vessel=vessel)),
         self.steps.append(Add(reagent=solvent, volume=solvent_volume, vessel=vessel))
         
         self.human_readable = f'Make solution of '
@@ -375,13 +377,14 @@ class MakeSolution(Step):
         
 class AddSolid(Step):
     """UNIMPLEMENTED"""
-    def __init__(self, reagent=None, mass=None, vessel=None):
+    def __init__(self, reagent=None, mass=None, vessel=None, comment=''):
 
         self.name = 'AddSolid'
         self.properties = {
             'reagent': reagent,
             'mass': mass,
             'vessel': vessel,
+            'comment': comment,
         }
 
         self.steps = []
@@ -390,13 +393,14 @@ class AddSolid(Step):
 
 class Reflux(Step):
 
-    def __init__(self, vessel=None, temp=None, time=None):
+    def __init__(self, vessel=None, temp=None, time=None, comment=''):
 
         self.name = 'Reflux'
         self.properties = {
             'vessel': vessel,
             'temp': temp,
             'time': time,
+            'comment': comment,
         }
 
         self.steps = [
