@@ -1,6 +1,6 @@
 from .chasmwriter import Chasm
 from .constants import *
-from .steps_generic import Step, Repeat
+from .steps_generic import Step, Repeat, Comment
 from .steps_chasm import *
 
 class SetRpmAndStartStir(Step):
@@ -220,7 +220,7 @@ class Add(Step):
         self.steps.append(Move(src=f"flask_{reagent}", dest=vessel, 
                             volume=volume, move_speed=move_speed))
         if clean_tubing:
-            self.steps.append(CleanTubing(solvent=DEFAULT_CLEAN_TUBING_SOLVENT, vessel=vessel))
+            self.steps.append(CleanTubing(solvent=DEFAULT_CLEAN_TUBING_SOLVENT, vessel="waste_aqueous"))
 
         self.human_readable = f'Add {reagent} ({volume} mL) to {vessel}' # Maybe add in bit for clean tubing
         if time:
@@ -365,10 +365,10 @@ class MakeSolution(Step):
             solute = [solute]
         if not isinstance(solute_mass, list):
             solute_mass = [solute_mass]
-        print(solute)
-        for s, m in zip(solute, solute_mass):
-            self.steps.append(AddSolid(reagent=s, mass=m, vessel=vessel)),
-        self.steps.append(Add(reagent=solvent, volume=solvent_volume, vessel=vessel))
+        # for s, m in zip(solute, solute_mass):
+        #     self.steps.append(AddSolid(reagent=s, mass=m, vessel=vessel)),
+        # self.steps.append(Add(reagent=solvent, volume=solvent_volume, vessel=vessel))
+        self.steps.append(Comment('WARNING: SOLID HANDLING UNIMPLENTED. MAKE SOLUTION MANUALLY.'))
         
         self.human_readable = f'Make solution of '
         for s, m in zip(solute, solute_mass):
@@ -404,8 +404,8 @@ class Reflux(Step):
         }
 
         self.steps = [
-            SetTempAndStartHeat(vessel=vessel, temp=temp),
             SetRpmAndStartStir(vessel=vessel),
+            SetTempAndStartHeat(vessel=vessel, temp=temp),
             Wait(time=time),
             StopHeat(name=vessel),
             StopStir(name=vessel),
