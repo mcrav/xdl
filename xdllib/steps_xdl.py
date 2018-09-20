@@ -444,3 +444,21 @@ class Rotavap(Step):
         ]
 
         self.human_readable = f'Rotavap contents of {vessel} at {temp} °C for {time}.'
+
+class Extraction(Step):
+
+    def __init__(self, from_vessel=None, separation_vessel=None, solvent=None, solvent_volume=None, n_separations=1):
+
+        self.name = 'Extraction'
+        self.properties = {
+            'from_vessel': from_vessel,
+            'solvent': solvent,
+            'solvent_volume': solvent_volume,
+            'n_separations': n_separations,
+        }
+
+        self.steps = [
+            Move(src=from_vessel, dest=separation_vessel,),
+        ]
+
+        self.human_readable = f'Extract contents of {from_vessel} with {n_separations}x{solvent_volume}'
