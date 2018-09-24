@@ -1,0 +1,8 @@
+# python shite
+.ipynb_checkpoints
+*.pyc
+*.pyo
+__pycache__/
+
+# other shite
+.vscode

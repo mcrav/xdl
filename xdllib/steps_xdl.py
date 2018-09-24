@@ -411,7 +411,7 @@ class Reflux(Step):
             StopStir(name=vessel),
         ]
 
-        self.human_readable = f'Heat {vessel} to {temp} °C and for {time}'
+        self.human_readable = f'Heat {vessel} to {temp} °C and reflux for {time}'
 
 class Rotavap(Step):
 
