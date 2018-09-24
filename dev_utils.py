@@ -41,21 +41,20 @@ def add_getters(steps_file):
         
         if 'self.properties = {' in line:
             read_props = True
-        
-        if not line.strip():
-            getter = False
 
-        if not getter:
-            new_lines.append(line.rstrip())
+
+        if not line.strip():
+            if getter:
+                getter = False
+                continue
 
         if '@property' in line:
             getter = True
-        
-        
 
+        if not getter:
+            new_lines.append(line.rstrip())
         
-
-    with open(save_file, 'w') as fileobj:
+    with open(steps_file, 'w') as fileobj:
         fileobj.write('\n'.join(new_lines))
         
 
@@ -212,7 +211,8 @@ def main():
         print_step_obj_dict()
 
     elif args.getters:
-        add_getters('/home/group/xdllib/steps_chasm_dev.py', '/home/group/xdllib/xdllib/steps_chasm.py')
+        add_getters('/home/group/xdllib/xdllib/steps_chasm.py')
+        add_getters('/home/group/xdllib/xdllib/steps_xdl.py')
 
 if __name__ == '__main__':
     main()

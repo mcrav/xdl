@@ -65,7 +65,7 @@
 * CBreakpoint
 
 ### XDL
-Name - level
+Name - level (how far up tree Step is)
 * StartStir - 1
 * StartHeat - 1
 * StartVacuum - 1
