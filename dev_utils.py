@@ -3,7 +3,6 @@ import re
 import argparse
 from xdllib.constants import *
 
-
 def print_step_obj_dict():
     s = '{\n'
     regex = re.compile(r'class (.*?)\(')
@@ -17,7 +16,7 @@ def print_step_obj_dict():
     s += '}'
     print(s)
     
-def add_getters(steps_file):
+def add_getters(steps_file, save_file):
     with open(steps_file, 'r') as fileobj:
         lines = fileobj.readlines()
     new_lines = []
@@ -37,7 +36,6 @@ def add_getters(steps_file):
             read_props = False
 
         if read_props:
-            print(line)
             props.append(re.search(r': ([a-z_]+)(,)?\n', line).group(1))
         
         if 'self.properties = {' in line:
@@ -45,7 +43,8 @@ def add_getters(steps_file):
         
         new_lines.append(line.rstrip())
 
-    print('\n'.join(new_lines))
+    with open(save_file, 'w') as fileobj:
+        fileobj.write('\n'.join(new_lines))
         
 
 class StepClassCodeGenerator(object):
@@ -201,7 +200,7 @@ def main():
         print_step_obj_dict()
 
     elif args.getters:
-        add_getters('/home/group/xdllib/xdllib/steps_chasm.py')
+        add_getters('/home/group/xdllib/steps_chasm_dev.py', '/home/group/xdllib/xdllib/steps_chasm.py')
 
 if __name__ == '__main__':
     main()
