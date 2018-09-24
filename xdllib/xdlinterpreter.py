@@ -153,6 +153,14 @@ class XDL(object):
                     chasm.save(save_path)
                 return chasm.code
 
+    def as_human_readable(self):
+        """Return human-readable English str of synthesis described by steps."""
+        s = ''
+        for step in self.steps:
+            s += f'{step.human_readable}\n'
+        return s
+
+
     
 
 def get_close_step(step):
