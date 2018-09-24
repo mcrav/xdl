@@ -29,9 +29,6 @@ class Move(Step):
         """
         self.name = 'Move'
 
-        if move_speed == 'default':
-            move_speed = DEFAULT_MOVE_SPEED
-
         self.properties = {
             'from_vessel': from_vessel,
             'to_vessel': to_vessel,
@@ -41,6 +38,7 @@ class Move(Step):
             'dispense_speed': dispense_speed,
             'comment': comment
         }
+        self.get_defaults()
 
         self.human_readable = f'Move {from_vessel} ({volume}) to {to_vessel}.'
 
@@ -115,7 +113,7 @@ class Prime(Step):
     """
     Moves the tube volume of every node with "flask" as class to waste.
     """
-    def __init__(self, aspiration_speed=20, comment=''):
+    def __init__(self, aspiration_speed='default', comment=''):
         """
         aspiration_speed -- Speed in mL/min at which material should be withdrawn.
         """
@@ -124,6 +122,10 @@ class Prime(Step):
             'aspiration_speed': aspiration_speed,
             'comment': comment
         }
+        self.get_defaults()
+
+    def execute(self, chempiler):
+        chempiler.pump.prime_tubes(aspiration_speed)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""

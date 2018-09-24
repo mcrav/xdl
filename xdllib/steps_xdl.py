@@ -5,7 +5,7 @@ from .steps_chasm import *
 
 class SetRpmAndStartStir(Step):
 
-    def __init__(self, vessel=None, stir_rpm=DEFAULT_STIR_RPM, comment=''):
+    def __init__(self, vessel=None, stir_rpm='default', comment=''):
 
         self.name = 'StartStir'
         self.properties = {
@@ -74,7 +74,7 @@ class SetTempAndStartHeat(Step):
 
 class CleanVessel(Step):
 
-    def __init__(self, vessel=None, solvents=None, volumes=None, stir_rpm=DEFAULT_STIR_RPM, stir_time=DEFAULT_CLEAN_STIR_TIME, comment=''):
+    def __init__(self, vessel=None, solvents=None, volumes=None, stir_rpm='default', stir_time=DEFAULT_CLEAN_STIR_TIME, comment=''):
 
         self.name = 'CleanVessel'
         self.properties = {
@@ -102,7 +102,7 @@ class CleanVessel(Step):
 
 class CleanTubing(Step):
 
-    def __init__(self, solvent=None, vessel=None, volume=DEFAULT_CLEAN_TUBING_VOLUME, comment=''):
+    def __init__(self, solvent='default', vessel=None, volume='default', comment=''):
 
         self.name = 'CleanTubing'
         self.properties = {
@@ -120,7 +120,7 @@ class CleanTubing(Step):
 
 class HeatAndReact(Step):
     
-    def __init__(self, vessel=None, time=None, temp=None, stir_rpm=DEFAULT_STIR_RPM, comment=''):
+    def __init__(self, vessel=None, time=None, temp=None, stir_rpm='default', comment=''):
 
         self.name = 'HeatAndReact'
         self.properties = {
@@ -200,7 +200,7 @@ class ChillBackToRT(Step):
 
 class Add(Step):
 
-    def __init__(self, reagent=None, volume=None, vessel=None, time=None, move_speed=DEFAULT_MOVE_SPEED, clean_tubing=True, comment=''):
+    def __init__(self, reagent=None, volume=None, vessel=None, time=None, move_speed='default', clean_tubing='default', comment=''):
         
         self.name = 'Add'
         self.properties = {
@@ -215,12 +215,12 @@ class Add(Step):
 
         self.steps = []
         if clean_tubing:
-            self.steps.append(Move(src=f"flask_{reagent}", dest="waste_aqueous", 
+            self.steps.append(Move(from_vessel=f"flask_{reagent}", to_vessel="waste_aqueous", 
                     volume=DEFAULT_PUMP_PRIME_VOLUME, move_speed=move_speed))
         self.steps.append(Move(src=f"flask_{reagent}", dest=vessel, 
                             volume=volume, move_speed=move_speed))
         if clean_tubing:
-            self.steps.append(CleanTubing(solvent=DEFAULT_CLEAN_TUBING_SOLVENT, vessel="waste_aqueous"))
+            self.steps.append(CleanTubing(solvent='default', vessel="waste_aqueous"))
 
         self.human_readable = f'Add {reagent} ({volume} mL) to {vessel}' # Maybe add in bit for clean tubing
         if time:
@@ -229,7 +229,7 @@ class Add(Step):
 
 class StirAndTransfer(Step):
 
-    def __init__(self, from_vessel=None, to_vessel=None, volume=None, stir_rpm=DEFAULT_STIR_RPM, comment=''):
+    def __init__(self, from_vessel=None, to_vessel=None, volume=None, stir_rpm='default', comment=''):
 
         self.name = 'StirAndTransfer'
         self.properties = {
@@ -253,8 +253,8 @@ class Wash(Step):
     Wash vessel.
     Assumes vessel is being stirred.
     """
-    def __init__(self, solvent=None, vessel=None, volume=None, move_speed=DEFAULT_MOVE_SPEED, 
-                wait_time=600, comment=''):
+    def __init__(self, solvent=None, vessel=None, volume=None, move_speed='default', 
+                wait_time='default', comment=''):
 
         self.name = 'Wash'
         self.properties = {
@@ -308,7 +308,7 @@ class ChillReact(Step):
 
 class Dry(Step):
 
-    def __init__(self, vessel=None, time=DEFAULT_DRY_TIME):
+    def __init__(self, vessel=None, time='default'):
 
         self.name = 'Dry'
         self.properties = {
@@ -326,7 +326,7 @@ class Dry(Step):
 
 class Filter(Step):
 
-    def __init__(self, from_vessel=None, vessel=None, time=DEFAULT_FILTER_TIME):
+    def __init__(self, from_vessel=None, vessel=None, time='default'):
 
         self.name = 'Filter'
         self.properties = {
@@ -445,11 +445,11 @@ class Rotavap(Step):
 
         self.human_readable = f'Rotavap contents of {vessel} at {temp} °C for {time}.'
 
-class Extraction(Step):
+class Extract(Step):
 
     def __init__(self, from_vessel=None, separation_vessel=None, solvent=None, solvent_volume=None, n_separations=1):
 
-        self.name = 'Extraction'
+        self.name = 'Extract'
         self.properties = {
             'from_vessel': from_vessel,
             'solvent': solvent,
@@ -458,7 +458,7 @@ class Extraction(Step):
         }
 
         self.steps = [
-            Move(src=from_vessel, dest=separation_vessel,),
+            Move(from_vessel=from_vessel, to_vessel=separation_vessel,),
         ]
 
         self.human_readable = f'Extract contents of {from_vessel} with {n_separations}x{solvent_volume}'

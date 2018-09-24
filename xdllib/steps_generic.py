@@ -1,6 +1,7 @@
 import abc
 from lxml import etree
 from .chasmwriter import Chasm
+from .constants import *
 
 class XDLElement(object):
 
@@ -18,6 +19,11 @@ class Step(XDLElement):
         self.name = ''
         self.properties = {}
         self.steps = []
+
+    def get_defaults(self):
+        for k in self.properties:
+            if self.properties[k] == 'default':
+                self.properties[k] = DEFAULT_VALS[self.name][k]
 
     def as_chasm(self):
         chasm = self.get_chasm_stub()
