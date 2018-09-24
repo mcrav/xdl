@@ -54,6 +54,10 @@ class Step(XDLElement):
     def update_steps(self):
         self.__init__(**self.properties)
 
+    def execute(self, chempiler):
+        for step in self.steps:
+            step.execute(chempiler)
+
 class Comment(Step):
 
     def __init__(self, comment):

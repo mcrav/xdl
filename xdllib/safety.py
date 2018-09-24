@@ -6,6 +6,10 @@ dangerous_combinations = {
 }
 
 def procedure_is_safe(steps, reagents):
+    """
+    Return True if procedure is safe.
+    Print message for every unsafe feature found.
+    """
     safe = True
     combinations = get_reagent_combinations(steps, reagents)
     for combo in combinations:

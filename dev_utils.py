@@ -1,7 +1,7 @@
 import os
 import re
 import argparse
-from constants import *
+from xdllib.constants import *
 
 
 def print_step_obj_dict():
@@ -17,6 +17,37 @@ def print_step_obj_dict():
     s += '}'
     print(s)
     
+def add_getters(steps_file):
+    with open(steps_file, 'r') as fileobj:
+        lines = fileobj.readlines()
+    new_lines = []
+    props = []
+    read_props = False
+    indent = '    '
+    for line in lines:
+        if line.startswith('class'):
+            if props:
+                for prop in props:
+                    new_lines.append(f'{indent}@property')
+                    new_lines.append(f'{indent}def {prop}(self):')
+                    new_lines.append(f"{indent*2}return self.properties['{prop}']\n")
+                props = []
+
+        if '}' in line:
+            read_props = False
+
+        if read_props:
+            print(line)
+            props.append(re.search(r': ([a-z_]+)(,)?\n', line).group(1))
+        
+        if 'self.properties = {' in line:
+            read_props = True
+        
+        new_lines.append(line.rstrip())
+
+    print('\n'.join(new_lines))
+        
+
 class StepClassCodeGenerator(object):
     """Generate Step class code from ChASM docs markdown.
     """
@@ -160,6 +191,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--step_obj_dict', help='Print step obj dict', action='store_true')
     parser.add_argument('--chasm_classes', help='Write chasm_classes.py', action='store_true')
+    parser.add_argument('--getters', help='Add getters to classes', action='store_true')
     args = parser.parse_args()
 
     if args.chasm_classes:
@@ -167,6 +199,9 @@ def main():
 
     elif args.step_obj_dict:
         print_step_obj_dict()
+
+    elif args.getters:
+        add_getters('/home/group/xdllib/xdllib/steps_chasm.py')
 
 if __name__ == '__main__':
     main()

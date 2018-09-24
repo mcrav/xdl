@@ -7,7 +7,7 @@ class Move(Step):
     Moves a specified volume from one node in the graph to another. Moving from and to
     the same node is supported.
     """
-    def __init__(self, src=None, dest=None, volume=None, move_speed=20, aspiration_speed=20, dispense_speed=20, comment=''):
+    def __init__(self, from_vessel=None, to_vessel=None, volume=None, move_speed='default', aspiration_speed=20, dispense_speed=20, comment=''):
         """
         src -- Name of the source flask
         dest -- Name of the destination flask
@@ -17,9 +17,13 @@ class Move(Step):
         dispense_speed -- Speed at which it aspirates from the source. This argument is optional, if absent, it defaults to {move_speed}. It will only be parsed as {aspiration_speed} if a move speed and aspiration speed is given (argument is positional)
         """
         self.name = 'Move'
+
+        if move_speed == 'default':
+            move_speed = DEFAULT_MOVE_SPEED
+
         self.properties = {
-            'src': src,
-            'dest': dest,
+            'from_vessel': from_vessel,
+            'to_vessel': to_vessel,
             'volume': volume,
             'move_speed': move_speed,
             'aspiration_speed': aspiration_speed,
@@ -27,7 +31,17 @@ class Move(Step):
             'comment': comment
         }
 
-        self.human_readable = f'Move {src} ({volume}) to {dest}.'
+        self.human_readable = f'Move {from_vessel} ({volume}) to {to_vessel}.'
+
+    def execute(self, chempiler):
+        chempiler.pump.move(
+            self.properties['from_vessel'],
+            self.properties['to_vessel'],
+            self.properties['volume'],
+            move_speed=self.properties['move_speed'],
+            aspiration_speed=self.properties['aspiration_speed'],
+            dispense_speed=self.properties['dispense_speed']
+        )
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
@@ -73,6 +87,12 @@ class Separate(Step):
             'upper_phase_target': upper_phase_target,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.pump.separate_phases(
+            self.lower_phase_target,
+            self.upper_phase_target,
+        )
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
