@@ -59,5 +59,5 @@ DEFAULT_VALS = {
     },
     'SetRpmAndStartStir': {
         'stir_rpm': DEFAULT_STIR_RPM,
-    }
+    },
 }

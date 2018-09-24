@@ -7,9 +7,22 @@
 * RotaryEvaporator
 
 ## Steps
+* SetRpmAndStartStir
+* StartVacuum
+* StopVacuum
+* SetTempAndStartHeat
+* CleanVessel
+* CleanTubing
+* HeatAndReact
+* ContinueStirToRT
+* Chill
+* ChillBackToRT
+* StirAndTransfer
+* ChillReact
+
 * Add
 * Reflux
-* Extraction
+* Extract
 * MakeSolution
 * Filter
 * Wash

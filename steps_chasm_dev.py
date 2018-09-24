@@ -18,10 +18,11 @@ class Move(Step):
     Moves a specified volume from one node in the graph to another. Moving from and to
     the same node is supported.
     """
-    def __init__(self, from_vessel=None, to_vessel=None, volume=None, move_speed='default', aspiration_speed=20, dispense_speed=20, comment=''):
+    def __init__(self, from_vessel=None, to_vessel=None, volume=None, move_speed='default', 
+                 aspiration_speed='default', dispense_speed='default', comment=''):
         """
-        src -- Name of the source flask
-        dest -- Name of the destination flask
+        from_vessel -- Name of the source flask
+        to_vessel -- Name of the destination flask
         volume -- Can be a float or "all" in which case it moves the entire current volume
         move_speed -- Speed at which it moves material across the backbone. This argument is optional, if absent, it defaults to 50mL/min
         aspiration_speed -- Speed at which it aspirates from the source. This argument is optional, if absent, it defaults to {move_speed}. It will only be parsed as {aspiration_speed} if a move speed is given (argument is positional)
@@ -62,7 +63,7 @@ class Home(Step):
     """
     Moves a given pump to home.
     """
-    def __init__(self, pump_name=None, move_speed=20, comment=''):
+    def __init__(self, pump_name=None, move_speed='default', comment=''):
         """
         pump_name -- Name of the pump to be homed.
         move_speed -- Requested speed in mL/min.
@@ -73,6 +74,7 @@ class Home(Step):
             'move_speed': move_speed,
             'comment': comment
         }
+        self.get_defaults()
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
@@ -125,7 +127,7 @@ class Prime(Step):
         self.get_defaults()
 
     def execute(self, chempiler):
-        chempiler.pump.prime_tubes(aspiration_speed)
+        chempiler.pump.prime_tubes(self.aspiration_speed)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
@@ -149,6 +151,9 @@ class SwitchVacuum(Step):
             'comment': comment
         }
 
+    def execute(self, chempiler):
+        chempiler.pump.switch_cartridge(self.flask, self.destination)
+
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
@@ -170,6 +175,9 @@ class SwitchCartridge(Step):
             'cartridge': cartridge,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.switch_cartridge(self.flask, self.cartridge)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
@@ -193,6 +201,9 @@ class SwitchColumn(Step):
             'comment': comment
         }
 
+    def execute(self, chempiler):
+        chempiler.pump.switch_column_fraction(self.column, self.destination)
+
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
@@ -203,20 +214,23 @@ class StartStir(Step):
     """
     Starts the stirring operation of a hotplate or overhead stirrer.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, vessel=None, comment=''):
         """
-        name -- Name of the node the device is attached to.
+        vessel -- Name of the node the device is attached to.
         """
         self.name = 'StartStir'
         self.properties = {
-            'name': name,
+            'vessel': vessel,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.stirrer.stir(self.vessel)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S START_STIR({self.name})")
+        chasm.add_line(f"S START_STIR({self.vessel})")
         return chasm.code
 
 class StartHeat(Step):
@@ -224,40 +238,46 @@ class StartHeat(Step):
     Starts the stirring operation of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, vessel=None, comment=''):
         """
-        name -- Name of the node the device is attached to.
+        vessel -- Name of the node the device is attached to.
         """
         self.name = 'StartHeat'
         self.properties = {
-            'name': name,
+            'vessel': vessel,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.stirrer.heat(self.vessel)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S START_HEAT({self.name})")
+        chasm.add_line(f"S START_HEAT({self.vessel})")
         return chasm.code
 
 class StopStir(Step):
     """
     Stops the stirring operation of a hotplate or overhead stirrer.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, vessel=None, comment=''):
         """
-        name -- Name of the node the device is attached to.
+        vessel -- Name of the node the device is attached to.
         """
         self.name = 'StopStir'
         self.properties = {
-            'name': name,
+            'vessel': vessel,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.stirrer.stop_stir(self.vessel)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STOP_STIR({self.name})")
+        chasm.add_line(f"S STOP_STIR({self.vessel})")
         return chasm.code
 
 class StopHeat(Step):
@@ -265,20 +285,23 @@ class StopHeat(Step):
     Starts the stirring operation of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, vessel=None, comment=''):
         """
-        name -- Name of the node the device is attached to.
+        vessel -- Name of the node the device is attached to.
         """
         self.name = 'StopHeat'
         self.properties = {
-            'name': name,
+            'vessel': vessel,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.stop_heat(self.vessel)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STOP_HEAT({self.name})")
+        chasm.add_line(f"S STOP_HEAT({self.vessel})")
         return chasm.code
 
 class SetTemp(Step):
@@ -286,44 +309,50 @@ class SetTemp(Step):
     Sets the temperature setpoint of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
     """
-    def __init__(self, name=None, temp=None, comment=''):
+    def __init__(self, vessel=None, temp=None, comment=''):
         """
-        name -- Name of the node the device is attached to.
+        vessel -- Name of the node the device is attached to.
         temp -- Required temperature in °C
         """
         self.name = 'SetTemp'
         self.properties = {
-            'name': name,
+            'vessel': vessel,
             'temp': temp,
             'comment': comment
         }
 
+    def execute(self, chempiler):
+        chempiler.stirrer.set_temp(self.vessel, self.temp)
+
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_TEMP({self.name}, {self.temp})")
+        chasm.add_line(f"S SET_TEMP({self.vessel}, {self.temp})")
         return chasm.code
 
 class SetStirRpm(Step):
     """
     Sets the stirring speed setpoint of a hotplate or overhead stirrer.
     """
-    def __init__(self, name=None, rpm=None, comment=''):
+    def __init__(self, vessel=None, stir_rpm=None, comment=''):
         """
-        name -- Name of the node the device is attached to.
+        vessel -- Name of the node the device is attached to.
         rpm -- Speed setpoint in rpm.
         """
         self.name = 'SetStirRpm'
         self.properties = {
-            'name': name,
-            'rpm': rpm,
+            'vessel': vessel,
+            'stir_rpm': stir_rpm,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.stirrer.set_stir_rate(self.vessel, self.stir_rpm)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_STIR_RPM({self.name}, {self.rpm})")
+        chasm.add_line(f"S SET_STIR_RPM({self.vessel}, {self.stir_rpm})")
         return chasm.code
 
 class StirrerWaitForTemp(Step):
@@ -331,204 +360,234 @@ class StirrerWaitForTemp(Step):
     Delays the script execution until the current temperature of the hotplate is within
     0.5°C of the setpoint. This command is NOT available for overhead stirrers!
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, vessel=None, comment=''):
         """
-        name -- Name of the node the device is attached to.
+        vessel -- Name of the node the device is attached to.
         """
         self.name = 'StirrerWaitForTemp'
         self.properties = {
-            'name': name,
+            'vessel': vessel,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.stirrer.wait_for_temp(self.vessel)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STIRRER_WAIT_FOR_TEMP({self.name})")
+        chasm.add_line(f"S STIRRER_WAIT_FOR_TEMP({self.vessel})")
         return chasm.code
 
 class StartHeaterBath(Step):
     """
     Starts the heating bath of a rotary evaporator.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, rotavap_name=None, comment=''):
         """
-        name -- Name of the node representing the rotary evaporator.
+        rotavap_name -- Name of the node representing the rotary evaporator.
         """
         self.name = 'StartHeaterBath'
         self.properties = {
-            'name': name,
+            'rotavap_name': rotavap_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.rotavap.start_heater(self.rotavap_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S START_HEATER_BATH({self.name})")
+        chasm.add_line(f"S START_HEATER_BATH({self.rotavap_name})")
         return chasm.code
 
 class StopHeaterBath(Step):
     """
     Stops the heating bath of a rotary evaporator.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, rotavap_name=None, comment=''):
         """
-        name -- Name of the node representing the rotary evaporator.
+        rotavap_name -- Name of the node representing the rotary evaporator.
         """
         self.name = 'StopHeaterBath'
         self.properties = {
-            'name': name,
+            'rotavap_name': rotavap_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.rotavap.stop_heater(self.rotavap_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STOP_HEATER_BATH({self.name})")
+        chasm.add_line(f"S STOP_HEATER_BATH({self.rotavap_name})")
         return chasm.code
 
 class StartRotation(Step):
     """
     Starts the rotation of a rotary evaporator.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, rotavap_name=None, comment=''):
         """
-        name -- Name of the node representing the rotary evaporator.
+        rotavap_name -- Name of the node representing the rotary evaporator.
         """
-        self.name = 'StartRotation'
+        self.vessel = 'StartRotation'
         self.properties = {
-            'name': name,
+            'rotavap_name': rotavap_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.rotavap.start_rotation(self.rotavap_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S START_ROTATION({self.name})")
+        chasm.add_line(f"S START_ROTATION({self.rotavap_name})")
         return chasm.code
 
 class StopRotation(Step):
     """
     Stops the rotation of a rotary evaporator.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, rotavap_name=None, comment=''):
         """
-        name -- Name of the node representing the rotary evaporator.
+        rotavap_name -- Name of the node representing the rotary evaporator.
         """
         self.name = 'StopRotation'
         self.properties = {
-            'name': name,
+            'rotavap_name': rotavap_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.rotavap.stop_rotation(self.rotavap_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STOP_ROTATION({self.name})")
+        chasm.add_line(f"S STOP_ROTATION({self.rotavap_name})")
         return chasm.code
 
 class LiftArmUp(Step):
     """
     Lifts the rotary evaporator up.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, rotavap_name=None, comment=''):
         """
-        name -- Name of the node representing the rotary evaporator.
+        rotavap_name -- Name of the node representing the rotary evaporator.
         """
         self.name = 'LiftArmUp'
         self.properties = {
-            'name': name,
+            'rotavap_name': rotavap_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.rotavap.lift_up(self.rotavap_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S LIFT_ARM_UP({self.name})")
+        chasm.add_line(f"S LIFT_ARM_UP({self.rotavap_name})")
         return chasm.code
 
 class LiftArmDown(Step):
     """
     Lifts the rotary evaporator down.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, rotavap_name=None, comment=''):
         """
         name -- Name of the node representing the rotary evaporator.
         """
         self.name = 'LiftArmDown'
         self.properties = {
-            'name': name,
+            'rotavap_name': rotavap_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.rotavap.lift_down(self.rotavap_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S LIFT_ARM_DOWN({self.name})")
+        chasm.add_line(f"S LIFT_ARM_DOWN({self.rotavap_name})")
         return chasm.code
 
 class ResetRotavap(Step):
     """
     Resets the rotary evaporator.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, rotavap_name=None, comment=''):
         """
-        name -- Name of the node representing the rotary evaporator.
+        rotavap_name -- Name of the node representing the rotary evaporator.
         """
         self.name = 'ResetRotavap'
         self.properties = {
-            'name': name,
+            'rotavap_name': rotavap_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.rotavap.reset(self.rotavap_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S RESET_ROTAVAP({self.name})")
+        chasm.add_line(f"S RESET_ROTAVAP({self.rotavap_name})")
         return chasm.code
 
 class SetBathTemp(Step):
     """
     Sets the temperature setpoint for the heating bath.
     """
-    def __init__(self, name=None, temp=None, comment=''):
+    def __init__(self, rotavap_name=None, temp=None, comment=''):
         """
-        name -- Name of the node representing the rotary evaporator.
+        rotavap_name -- Name of the node representing the rotary evaporator.
         temp -- Temperature setpoint in °C.
         """
         self.name = 'SetBathTemp'
         self.properties = {
-            'name': name,
+            'rotavap_name': rotavap_name,
             'temp': temp,
             'comment': comment
         }
 
+    def execute(self, chempiler):
+        chempiler.rotavap.set_temp(self.rotavap_name, self.temp)
+
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_BATH_TEMP({self.name}, {self.temp})")
+        chasm.add_line(f"S SET_BATH_TEMP({self.rotavap_name}, {self.temp})")
         return chasm.code
 
 class SetRotation(Step):
     """
     Sets the rotation speed setpoint for the rotary evaporator.
     """
-    def __init__(self, name=None, rotation=None, comment=''):
+    def __init__(self, rotavap_name=None, rotation_speed=None, comment=''):
         """
-        name -- Name of the node representing the rotary evaporator.
-        rotation -- Speed setpoint in rpm.
+        rotavap_name -- Name of the node representing the rotary evaporator.
+        rotation_speed -- Speed setpoint in rpm.
         """
         self.name = 'SetRotation'
         self.properties = {
-            'name': name,
-            'rotation': rotation,
+            'rotavap_name': rotavap_name,
+            'rotation_speed': rotation_speed,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.rotavap.set_rotation(self.rotavap_name, self.rotation_speed)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_ROTATION({self.name}, {self.rotation})")
+        chasm.add_line(f"S SET_ROTATION({self.rotavap_name}, {self.rotation_speed})")
         return chasm.code
 
 class RvWaitForTemp(Step):
@@ -536,20 +595,23 @@ class RvWaitForTemp(Step):
     Delays the script execution until the current temperature of the heating bath is
     within 0.5°C of the setpoint.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, rotavap_name=None, comment=''):
         """
-        name -- Name of the node representing the rotary evaporator.
+        rotavap_name -- Name of the node representing the rotary evaporator.
         """
         self.name = 'RvWaitForTemp'
         self.properties = {
-            'name': name,
+            'rotavap_name': rotavap_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.rotavap.wait_for_temp(self.rotavap_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S RV_WAIT_FOR_TEMP({self.name})")
+        chasm.add_line(f"S RV_WAIT_FOR_TEMP({self.rotavap_name})")
         return chasm.code
 
 class SetInterval(Step):
@@ -557,228 +619,265 @@ class SetInterval(Step):
     Sets the interval time for the rotary evaporator, causing it to periodically switch
     direction. Setting this to 0 deactivates interval operation.
     """
-    def __init__(self, name=None, interval=None, comment=''):
+    def __init__(self, rotavap_name=None, interval=None, comment=''):
         """
-        name -- Name of the node representing the rotary evaporator.
+        rotavap_name -- Name of the node representing the rotary evaporator.
         interval -- Interval time in seconds.
         """
         self.name = 'SetInterval'
         self.properties = {
-            'name': name,
+            'rotavap_name': rotavap_name,
             'interval': interval,
             'comment': comment
         }
 
+    def execute(self, chempiler):
+        chempiler.rotavap.set_interval(self.rotavap_name, self.interval)
+
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_INTERVAL({self.name}, {self.interval})")
+        chasm.add_line(f"S SET_INTERVAL({self.rotavap_name}, {self.interval})")
         return chasm.code
+
+### Vacuum Pump ###
 
 class InitVacPump(Step):
     """
     Initialises the vacuum pump controller.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, vacuum_pump_name=None, comment=''):
         """
-        name -- Name of the node the vacuum pump is attached to.
+        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
         """
         self.name = 'InitVacPump'
         self.properties = {
-            'name': name,
+            'vacuum_pump_name': vacuum_pump_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.vacuum.initialise(self.vacuum_pump_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S INIT_VAC_PUMP({self.name})")
+        chasm.add_line(f"S INIT_VAC_PUMP({self.vacuum_pump_name})")
         return chasm.code
 
 class GetVacSp(Step):
     """
     Reads the current vacuum setpoint.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, vacuum_pump_name=None, comment=''):
         """
-        name -- Name of the node the vacuum pump is attached to.
+        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
         """
         self.name = 'GetVacSp'
         self.properties = {
-            'name': name,
+            'vacuum_pump_name': vacuum_pump_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.vacuum.get_vacuum_set_point(self.vacuum_pump_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S GET_VAC_SP({self.name})")
+        chasm.add_line(f"S GET_VAC_SP({self.vacuum_pump_name})")
         return chasm.code
 
 class SetVacSp(Step):
     """
     Sets a new vacuum setpoint.
     """
-    def __init__(self, name=None, set_point=None, comment=''):
+    def __init__(self, vacuum_pump_name=None, set_point=None, comment=''):
         """
-        name -- Name of the node the vacuum pump is attached to.
+        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
         set_point -- Vacuum setpoint in mbar.
         """
         self.name = 'SetVacSp'
         self.properties = {
-            'name': name,
+            'vacuum_pump_name': vacuum_pump_name,
             'set_point': set_point,
             'comment': comment
         }
 
+    def execute(self, chempiler):
+        chempiler.vacuum.set_vacuum_set_point(self.vacuum_pump_name, self.set_point)
+
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_VAC_SP({self.name}, {self.set_point})")
+        chasm.add_line(f"S SET_VAC_SP({self.vacuum_pump_name}, {self.set_point})")
         return chasm.code
 
 class StartVac(Step):
     """
     Starts the vacuum pump.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, vacuum_pump_name=None, comment=''):
         """
-        name -- Name of the node the vacuum pump is attached to.
+        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
         """
         self.name = 'StartVac'
         self.properties = {
-            'name': name,
+            'vacuum_pump_name': vacuum_pump_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.vacuum.start_vacuum(self.vacuum_pump_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S START_VAC({self.name})")
+        chasm.add_line(f"S START_VAC({self.vacuum_pump_name})")
         return chasm.code
 
 class StopVac(Step):
     """
     Stops the vacuum pump.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, vacuum_pump_name=None, comment=''):
         """
-        name -- Name of the node the vacuum pump is attached to.
+        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
         """
         self.name = 'StopVac'
         self.properties = {
-            'name': name,
+            'vacuum_pump_name': vacuum_pump_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.vacuum.stop_vacuum(self.vacuum_pump_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STOP_VAC({self.name})")
+        chasm.add_line(f"S STOP_VAC({self.vacuum_pump_name})")
         return chasm.code
 
 class VentVac(Step):
     """
     Vents the vacuum pump to ambient pressure.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, vacuum_pump_name=None, comment=''):
         """
-        name -- Name of the node the vacuum pump is attached to.
+        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
         """
         self.name = 'VentVac'
         self.properties = {
-            'name': name,
+            'vacuum_pump_name': vacuum_pump_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.vacuum.vent_vacuum(self.vacuum_pump_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S VENT_VAC({self.name})")
+        chasm.add_line(f"S VENT_VAC({self.vacuum_pump_name})")
         return chasm.code
 
 class SetSpeedSp(Step):
     """
     Sets the speed of the vacuum pump (0-100%).
     """
-    def __init__(self, name=None, set_point=None, comment=''):
+    def __init__(self, vacuum_pump_name=None, set_point=None, comment=''):
         """
-        name -- Name of the node the vacuum pump is attached to.
+        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
         set_point -- Vacuum pump speed in percent.
         """
         self.name = 'SetSpeedSp'
         self.properties = {
-            'name': name,
+            'vacuum_pump_name': vacuum_pump_name,
             'set_point': set_point,
             'comment': comment
         }
 
+    def execute(self, chempiler):
+        chempiler.vacuum.set_speed_set_point(self.vacuum_pump_name, self.set_point)
+
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_SPEED_SP({self.name}, {self.set_point})")
+        chasm.add_line(f"S SET_SPEED_SP({self.vacuum_pump_name}, {self.set_point})")
         return chasm.code
+
+### Chiller ###
 
 class StartChiller(Step):
     """
     Starts the recirculation chiller.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, chiller_name=None, comment=''):
         """
-        name -- Name of the node the chiller is attached to.
+        chiller_name -- Name of the node the chiller is attached to.
         """
         self.name = 'StartChiller'
         self.properties = {
-            'name': name,
+            'chiller_name': chiller_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.chiller.start_chiller(self.chiller_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S START_CHILLER({self.name})")
+        chasm.add_line(f"S START_CHILLER({self.chiller_name})")
         return chasm.code
 
 class StopChiller(Step):
     """
     Stops the recirculation chiller.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, chiller_name=None, comment=''):
         """
-        name -- Name of the node the chiller is attached to.
+        chiller_name -- Name of the node the chiller is attached to.
         """
         self.name = 'StopChiller'
         self.properties = {
-            'name': name,
+            'chiller_name': chiller_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.chiller.stop_chiller(self.chiller_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STOP_CHILLER({self.name})")
+        chasm.add_line(f"S STOP_CHILLER({self.chiller_name})")
         return chasm.code
 
 class SetChiller(Step):
     """
     Sets the temperature setpoint.
     """
-    def __init__(self, name=None, setpoint=None, comment=''):
+    def __init__(self, chiller_name=None, temp=None, comment=''):
         """
-        name -- Name of the node the chiller is attached to.
-        setpoint -- Temperature setpoint in °C.
+        chiller_name -- Name of the node the chiller is attached to.
+        temp -- Temperature in °C.
         """
         self.name = 'SetChiller'
         self.properties = {
-            'name': name,
-            'setpoint': setpoint,
+            'chiller_name': chiller_name,
+            'temp': temp,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.chiller.set_temp(self.chiller_name, self.temp)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_CHILLER({self.name}, {self.setpoint})")
+        chasm.add_line(f"S SET_CHILLER({self.chiller_name}, {self.temp})")
         return chasm.code
 
 class ChillerWaitForTemp(Step):
@@ -786,20 +885,23 @@ class ChillerWaitForTemp(Step):
     Delays the script execution until the current temperature of the chiller is within
     0.5°C of the setpoint.
     """
-    def __init__(self, name=None, comment=''):
+    def __init__(self, chiller_name=None, comment=''):
         """
-        name -- Name of the node the chiller is attached to.
+        chiller_name -- Name of the node the chiller is attached to.
         """
         self.name = 'ChillerWaitForTemp'
         self.properties = {
-            'name': name,
+            'chiller_name': chiller_name,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.chiller.wait_for_temp(self.chiller_name)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S CHILLER_WAIT_FOR_TEMP({self.name})")
+        chasm.add_line(f"S CHILLER_WAIT_FOR_TEMP({self.chiller_name})")
         return chasm.code
 
 class RampChiller(Step):
@@ -807,88 +909,102 @@ class RampChiller(Step):
     Causes the chiller to ramp the temperature up or down. Only available for Petite
     Fleur.
     """
-    def __init__(self, name=None, ramp_duration=None, end_temperature=None, comment=''):
+    def __init__(self, chiller_name=None, ramp_duration=None, end_temperature=None, comment=''):
         """
-        name -- Name of the node the chiller is attached to.
+        chiller_name -- Name of the node the chiller is attached to.
         ramp_duration -- Desired duration of the ramp in seconds.
         end_temperature -- Final temperature of the ramp in °C.
         """
         self.name = 'RampChiller'
         self.properties = {
-            'name': name,
+            'chiller_name': chiller_name,
             'ramp_duration': ramp_duration,
             'end_temperature': end_temperature,
             'comment': comment
         }
 
+    def execute(self, chempiler):
+        chempiler.chiller.ramp_chiller(self.chiller_name, self.ramp_duration, self.end_temperature)
+
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S RAMP_CHILLER({self.name}, {self.ramp_duration}, {self.end_temperature})")
+        chasm.add_line(f"S RAMP_CHILLER({self.chiller_name}, {self.ramp_duration}, {self.end_temperature})")
         return chasm.code
 
 class SwitchChiller(Step):
     """
     Switches the solenoid valve.
     """
-    def __init__(self, name=None, state=None, comment=''):
+    def __init__(self, solenoid_valve_name=None, state=None, comment=''):
         """
-        name -- Name of the node the solenoid valve is attached to.
+        solenoid_valve_name -- Name of the node the solenoid valve is attached to.
         state -- Is either "on" or "off"
         """
         self.name = 'SwitchChiller'
         self.properties = {
-            'name': name,
+            'solenoid_valve_name': solenoid_valve_name,
             'state': state,
             'comment': comment
         }
 
+    def execute(self, chempiler):
+        chempiler.chiller.switch_vessel(self.solenoid_valve_name, self.state)
+
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SWITCH_CHILLER({self.name}, {self.state})")
+        chasm.add_line(f"S SWITCH_CHILLER({self.solenoid_valve_name}, {self.state})")
         return chasm.code
 
 class SetCoolingPower(Step):
     """
     Sets the cooling power (0-100%). Only available for CF41.
     """
-    def __init__(self, name=None, cooling_power=None, comment=''):
+    def __init__(self, chiller_name=None, cooling_power=None, comment=''):
         """
         name -- Name of the node the chiller is attached to.
         cooling_power -- Desired cooling power in percent.
         """
         self.name = 'SetCoolingPower'
         self.properties = {
-            'name': name,
+            'chiller_name': chiller_name,
             'cooling_power': cooling_power,
             'comment': comment
         }
 
+    def execute(self, chempiler):
+        chempiler.chiller.cooling_power(self.chiller_name, self.cooling_power)
+
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_COOLING_POWER({self.name}, {self.cooling_power})")
+        chasm.add_line(f"S SET_COOLING_POWER({self.chiller_name}, {self.cooling_power})")
         return chasm.code
+
+### Camera ###
 
 class SetRecordingSpeed(Step):
     """
     Sets the timelapse speed of the camera module.
     """
-    def __init__(self, speed=None, comment=''):
+    def __init__(self, recording_speed=None, comment=''):
         """
         speed -- Factor by which the recording should be sped up, i.e. 2 would mean twice the normal speed. 1 means normal speed.
         """
         self.name = 'SetRecordingSpeed'
         self.properties = {
-            'speed': speed,
+            'recording_speed': recording_speed,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.camera.change_recording_speed(self.recording_speed)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_RECORDING_SPEED({self.speed})")
+        chasm.add_line(f"S SET_RECORDING_SPEED({self.recording_speed})")
         return chasm.code
 
 class Wait(Step):
@@ -906,6 +1022,9 @@ class Wait(Step):
             'time': time,
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.wait(self.time)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
@@ -926,6 +1045,9 @@ class Breakpoint(Step):
         self.properties = {
             'comment': comment
         }
+
+    def execute(self, chempiler):
+        chempiler.breakpoint()
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
