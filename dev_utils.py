@@ -16,13 +16,14 @@ def print_step_obj_dict():
     s += '}'
     print(s)
     
-def add_getters(steps_file, save_file):
+def add_getters(steps_file):
     with open(steps_file, 'r') as fileobj:
         lines = fileobj.readlines()
     new_lines = []
     props = []
     read_props = False
     indent = '    '
+    getter = False
     for line in lines:
         if line.startswith('class'):
             if props:
@@ -41,7 +42,18 @@ def add_getters(steps_file, save_file):
         if 'self.properties = {' in line:
             read_props = True
         
-        new_lines.append(line.rstrip())
+        if not line.strip():
+            getter = False
+
+        if not getter:
+            new_lines.append(line.rstrip())
+
+        if '@property' in line:
+            getter = True
+        
+        
+
+        
 
     with open(save_file, 'w') as fileobj:
         fileobj.write('\n'.join(new_lines))

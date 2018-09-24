@@ -12,8 +12,9 @@ When writing code in this file you can assume all keys of self.properties are me
 the same name.
 """
 
+### Pump ###
 
-class Move(Step):
+class CMove(Step):
     """
     Moves a specified volume from one node in the graph to another. Moving from and to
     the same node is supported.
@@ -87,42 +88,7 @@ class Move(Step):
     def comment(self):
         return self.properties['comment']
 
-class Home(Step):
-    """
-    Moves a given pump to home.
-    """
-    def __init__(self, pump_name=None, move_speed='default', comment=''):
-        """
-        pump_name -- Name of the pump to be homed.
-        move_speed -- Requested speed in mL/min.
-        """
-        self.name = 'Home'
-        self.properties = {
-            'pump_name': pump_name,
-            'move_speed': move_speed,
-            'comment': comment
-        }
-        self.get_defaults()
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S HOME({self.pump_name}, {self.move_speed})")
-        return chasm.code
-
-    @property
-    def pump_name(self):
-        return self.properties['pump_name']
-
-    @property
-    def move_speed(self):
-        return self.properties['move_speed']
-
-    @property
-    def comment(self):
-        return self.properties['comment']
-
-class Separate(Step):
+class CSeparate(Step):
     """
     Launches a phase separation sequence. The name of the separator is currently
     hard-coded!
@@ -163,7 +129,7 @@ class Separate(Step):
     def comment(self):
         return self.properties['comment']
 
-class Prime(Step):
+class CPrime(Step):
     """
     Moves the tube volume of every node with "flask" as class to waste.
     """
@@ -195,7 +161,7 @@ class Prime(Step):
     def comment(self):
         return self.properties['comment']
 
-class SwitchVacuum(Step):
+class CSwitchVacuum(Step):
     """
     Switches a vacuum valve between backbone and vacuum.
     """
@@ -232,7 +198,7 @@ class SwitchVacuum(Step):
     def comment(self):
         return self.properties['comment']
 
-class SwitchCartridge(Step):
+class CSwitchCartridge(Step):
     """
     Switches a cartridge carousel to the specified position.
     """
@@ -249,7 +215,7 @@ class SwitchCartridge(Step):
         }
 
     def execute(self, chempiler):
-        chempiler.switch_cartridge(self.flask, self.cartridge)
+        chempiler.pump.switch_cartridge(self.flask, self.cartridge)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
@@ -269,7 +235,7 @@ class SwitchCartridge(Step):
     def comment(self):
         return self.properties['comment']
 
-class SwitchColumn(Step):
+class CSwitchColumn(Step):
     """
     Switches a fractionating valve attached to a chromatography column.
     """
@@ -294,6 +260,8 @@ class SwitchColumn(Step):
         chasm.add_line(f"S SWITCH_COLUMN({self.column}, {self.destination})")
         return chasm.code
 
+### Stirrer ###
+
     @property
     def column(self):
         return self.properties['column']
@@ -306,7 +274,7 @@ class SwitchColumn(Step):
     def comment(self):
         return self.properties['comment']
 
-class StartStir(Step):
+class CStartStir(Step):
     """
     Starts the stirring operation of a hotplate or overhead stirrer.
     """
@@ -337,7 +305,7 @@ class StartStir(Step):
     def comment(self):
         return self.properties['comment']
 
-class StartHeat(Step):
+class CStartHeat(Step):
     """
     Starts the stirring operation of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
@@ -369,7 +337,7 @@ class StartHeat(Step):
     def comment(self):
         return self.properties['comment']
 
-class StopStir(Step):
+class CStopStir(Step):
     """
     Stops the stirring operation of a hotplate or overhead stirrer.
     """
@@ -400,7 +368,7 @@ class StopStir(Step):
     def comment(self):
         return self.properties['comment']
 
-class StopHeat(Step):
+class CStopHeat(Step):
     """
     Starts the stirring operation of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
@@ -432,7 +400,7 @@ class StopHeat(Step):
     def comment(self):
         return self.properties['comment']
 
-class SetTemp(Step):
+class CSetTemp(Step):
     """
     Sets the temperature setpoint of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
@@ -470,7 +438,7 @@ class SetTemp(Step):
     def comment(self):
         return self.properties['comment']
 
-class SetStirRpm(Step):
+class CSetStirRpm(Step):
     """
     Sets the stirring speed setpoint of a hotplate or overhead stirrer.
     """
@@ -507,7 +475,7 @@ class SetStirRpm(Step):
     def comment(self):
         return self.properties['comment']
 
-class StirrerWaitForTemp(Step):
+class CStirrerWaitForTemp(Step):
     """
     Delays the script execution until the current temperature of the hotplate is within
     0.5°C of the setpoint. This command is NOT available for overhead stirrers!
@@ -539,7 +507,7 @@ class StirrerWaitForTemp(Step):
     def comment(self):
         return self.properties['comment']
 
-class StartHeaterBath(Step):
+class CStartHeaterBath(Step):
     """
     Starts the heating bath of a rotary evaporator.
     """
@@ -570,7 +538,7 @@ class StartHeaterBath(Step):
     def comment(self):
         return self.properties['comment']
 
-class StopHeaterBath(Step):
+class CStopHeaterBath(Step):
     """
     Stops the heating bath of a rotary evaporator.
     """
@@ -601,7 +569,7 @@ class StopHeaterBath(Step):
     def comment(self):
         return self.properties['comment']
 
-class StartRotation(Step):
+class CStartRotation(Step):
     """
     Starts the rotation of a rotary evaporator.
     """
@@ -632,7 +600,7 @@ class StartRotation(Step):
     def comment(self):
         return self.properties['comment']
 
-class StopRotation(Step):
+class CStopRotation(Step):
     """
     Stops the rotation of a rotary evaporator.
     """
@@ -663,7 +631,7 @@ class StopRotation(Step):
     def comment(self):
         return self.properties['comment']
 
-class LiftArmUp(Step):
+class CLiftArmUp(Step):
     """
     Lifts the rotary evaporator up.
     """
@@ -694,7 +662,7 @@ class LiftArmUp(Step):
     def comment(self):
         return self.properties['comment']
 
-class LiftArmDown(Step):
+class CLiftArmDown(Step):
     """
     Lifts the rotary evaporator down.
     """
@@ -725,7 +693,7 @@ class LiftArmDown(Step):
     def comment(self):
         return self.properties['comment']
 
-class ResetRotavap(Step):
+class CResetRotavap(Step):
     """
     Resets the rotary evaporator.
     """
@@ -756,7 +724,7 @@ class ResetRotavap(Step):
     def comment(self):
         return self.properties['comment']
 
-class SetBathTemp(Step):
+class CSetBathTemp(Step):
     """
     Sets the temperature setpoint for the heating bath.
     """
@@ -793,7 +761,7 @@ class SetBathTemp(Step):
     def comment(self):
         return self.properties['comment']
 
-class SetRotation(Step):
+class CSetRvRotationSpeed(Step):
     """
     Sets the rotation speed setpoint for the rotary evaporator.
     """
@@ -802,7 +770,7 @@ class SetRotation(Step):
         rotavap_name -- Name of the node representing the rotary evaporator.
         rotation_speed -- Speed setpoint in rpm.
         """
-        self.name = 'SetRotation'
+        self.name = 'SetRvRotationSpeed'
         self.properties = {
             'rotavap_name': rotavap_name,
             'rotation_speed': rotation_speed,
@@ -830,7 +798,7 @@ class SetRotation(Step):
     def comment(self):
         return self.properties['comment']
 
-class RvWaitForTemp(Step):
+class CRvWaitForTemp(Step):
     """
     Delays the script execution until the current temperature of the heating bath is
     within 0.5°C of the setpoint.
@@ -862,7 +830,7 @@ class RvWaitForTemp(Step):
     def comment(self):
         return self.properties['comment']
 
-class SetInterval(Step):
+class CSetInterval(Step):
     """
     Sets the interval time for the rotary evaporator, causing it to periodically switch
     direction. Setting this to 0 deactivates interval operation.
@@ -902,7 +870,7 @@ class SetInterval(Step):
     def comment(self):
         return self.properties['comment']
 
-class InitVacPump(Step):
+class CInitVacPump(Step):
     """
     Initialises the vacuum pump controller.
     """
@@ -933,7 +901,7 @@ class InitVacPump(Step):
     def comment(self):
         return self.properties['comment']
 
-class GetVacSp(Step):
+class CGetVacSp(Step):
     """
     Reads the current vacuum setpoint.
     """
@@ -964,7 +932,7 @@ class GetVacSp(Step):
     def comment(self):
         return self.properties['comment']
 
-class SetVacSp(Step):
+class CSetVacSp(Step):
     """
     Sets a new vacuum setpoint.
     """
@@ -1001,7 +969,7 @@ class SetVacSp(Step):
     def comment(self):
         return self.properties['comment']
 
-class StartVac(Step):
+class CStartVac(Step):
     """
     Starts the vacuum pump.
     """
@@ -1032,7 +1000,7 @@ class StartVac(Step):
     def comment(self):
         return self.properties['comment']
 
-class StopVac(Step):
+class CStopVac(Step):
     """
     Stops the vacuum pump.
     """
@@ -1063,7 +1031,7 @@ class StopVac(Step):
     def comment(self):
         return self.properties['comment']
 
-class VentVac(Step):
+class CVentVac(Step):
     """
     Vents the vacuum pump to ambient pressure.
     """
@@ -1094,7 +1062,7 @@ class VentVac(Step):
     def comment(self):
         return self.properties['comment']
 
-class SetSpeedSp(Step):
+class CSetSpeedSp(Step):
     """
     Sets the speed of the vacuum pump (0-100%).
     """
@@ -1133,96 +1101,96 @@ class SetSpeedSp(Step):
     def comment(self):
         return self.properties['comment']
 
-class StartChiller(Step):
+class CStartChiller(Step):
     """
     Starts the recirculation chiller.
     """
-    def __init__(self, chiller_name=None, comment=''):
+    def __init__(self, vessel=None, comment=''):
         """
-        chiller_name -- Name of the node the chiller is attached to.
+        vessel -- Name of the node the chiller is attached to.
         """
         self.name = 'StartChiller'
         self.properties = {
-            'chiller_name': chiller_name,
+            'vessel': vessel,
             'comment': comment
         }
 
     def execute(self, chempiler):
-        chempiler.chiller.start_chiller(self.chiller_name)
+        chempiler.chiller.start_chiller(self.vessel)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S START_CHILLER({self.chiller_name})")
+        chasm.add_line(f"S START_CHILLER({self.vessel})")
         return chasm.code
 
     @property
-    def chiller_name(self):
-        return self.properties['chiller_name']
+    def vessel(self):
+        return self.properties['vessel']
 
     @property
     def comment(self):
         return self.properties['comment']
 
-class StopChiller(Step):
+class CStopChiller(Step):
     """
     Stops the recirculation chiller.
     """
-    def __init__(self, chiller_name=None, comment=''):
+    def __init__(self, vessel=None, comment=''):
         """
-        chiller_name -- Name of the node the chiller is attached to.
+        vessel -- Name of the node the chiller is attached to.
         """
         self.name = 'StopChiller'
         self.properties = {
-            'chiller_name': chiller_name,
+            'vessel': vessel,
             'comment': comment
         }
 
     def execute(self, chempiler):
-        chempiler.chiller.stop_chiller(self.chiller_name)
+        chempiler.chiller.stop_chiller(self.vessel)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STOP_CHILLER({self.chiller_name})")
+        chasm.add_line(f"S STOP_CHILLER({self.vessel})")
         return chasm.code
 
     @property
-    def chiller_name(self):
-        return self.properties['chiller_name']
+    def vessel(self):
+        return self.properties['vessel']
 
     @property
     def comment(self):
         return self.properties['comment']
 
-class SetChiller(Step):
+class CSetChiller(Step):
     """
     Sets the temperature setpoint.
     """
-    def __init__(self, chiller_name=None, temp=None, comment=''):
+    def __init__(self, vessel=None, temp=None, comment=''):
         """
-        chiller_name -- Name of the node the chiller is attached to.
+        vessel -- Name of the node the chiller is attached to.
         temp -- Temperature in °C.
         """
         self.name = 'SetChiller'
         self.properties = {
-            'chiller_name': chiller_name,
+            'vessel': vessel,
             'temp': temp,
             'comment': comment
         }
 
     def execute(self, chempiler):
-        chempiler.chiller.set_temp(self.chiller_name, self.temp)
+        chempiler.chiller.set_temp(self.vessel, self.temp)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_CHILLER({self.chiller_name}, {self.temp})")
+        chasm.add_line(f"S SET_CHILLER({self.vessel}, {self.temp})")
         return chasm.code
 
     @property
-    def chiller_name(self):
-        return self.properties['chiller_name']
+    def vessel(self):
+        return self.properties['vessel']
 
     @property
     def temp(self):
@@ -1232,69 +1200,69 @@ class SetChiller(Step):
     def comment(self):
         return self.properties['comment']
 
-class ChillerWaitForTemp(Step):
+class CChillerWaitForTemp(Step):
     """
     Delays the script execution until the current temperature of the chiller is within
     0.5°C of the setpoint.
     """
-    def __init__(self, chiller_name=None, comment=''):
+    def __init__(self, vessel=None, comment=''):
         """
-        chiller_name -- Name of the node the chiller is attached to.
+        vessel -- Name of the node the chiller is attached to.
         """
         self.name = 'ChillerWaitForTemp'
         self.properties = {
-            'chiller_name': chiller_name,
+            'vessel': vessel,
             'comment': comment
         }
 
     def execute(self, chempiler):
-        chempiler.chiller.wait_for_temp(self.chiller_name)
+        chempiler.chiller.wait_for_temp(self.vessel)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S CHILLER_WAIT_FOR_TEMP({self.chiller_name})")
+        chasm.add_line(f"S CHILLER_WAIT_FOR_TEMP({self.vessel})")
         return chasm.code
 
     @property
-    def chiller_name(self):
-        return self.properties['chiller_name']
+    def vessel(self):
+        return self.properties['vessel']
 
     @property
     def comment(self):
         return self.properties['comment']
 
-class RampChiller(Step):
+class CRampChiller(Step):
     """
     Causes the chiller to ramp the temperature up or down. Only available for Petite
     Fleur.
     """
-    def __init__(self, chiller_name=None, ramp_duration=None, end_temperature=None, comment=''):
+    def __init__(self, vessel=None, ramp_duration=None, end_temperature=None, comment=''):
         """
-        chiller_name -- Name of the node the chiller is attached to.
+        vessel -- Name of the node the chiller is attached to.
         ramp_duration -- Desired duration of the ramp in seconds.
         end_temperature -- Final temperature of the ramp in °C.
         """
         self.name = 'RampChiller'
         self.properties = {
-            'chiller_name': chiller_name,
+            'vessel': vessel,
             'ramp_duration': ramp_duration,
             'end_temperature': end_temperature,
             'comment': comment
         }
 
     def execute(self, chempiler):
-        chempiler.chiller.ramp_chiller(self.chiller_name, self.ramp_duration, self.end_temperature)
+        chempiler.chiller.ramp_chiller(self.vessel, self.ramp_duration, self.end_temperature)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S RAMP_CHILLER({self.chiller_name}, {self.ramp_duration}, {self.end_temperature})")
+        chasm.add_line(f"S RAMP_CHILLER({self.vessel}, {self.ramp_duration}, {self.end_temperature})")
         return chasm.code
 
     @property
-    def chiller_name(self):
-        return self.properties['chiller_name']
+    def vessel(self):
+        return self.properties['vessel']
 
     @property
     def ramp_duration(self):
@@ -1308,7 +1276,7 @@ class RampChiller(Step):
     def comment(self):
         return self.properties['comment']
 
-class SwitchChiller(Step):
+class CSwitchChiller(Step):
     """
     Switches the solenoid valve.
     """
@@ -1345,36 +1313,36 @@ class SwitchChiller(Step):
     def comment(self):
         return self.properties['comment']
 
-class SetCoolingPower(Step):
+class CSetCoolingPower(Step):
     """
     Sets the cooling power (0-100%). Only available for CF41.
     """
-    def __init__(self, chiller_name=None, cooling_power=None, comment=''):
+    def __init__(self, vessel=None, cooling_power=None, comment=''):
         """
         name -- Name of the node the chiller is attached to.
         cooling_power -- Desired cooling power in percent.
         """
         self.name = 'SetCoolingPower'
         self.properties = {
-            'chiller_name': chiller_name,
+            'vessel': vessel,
             'cooling_power': cooling_power,
             'comment': comment
         }
 
     def execute(self, chempiler):
-        chempiler.chiller.cooling_power(self.chiller_name, self.cooling_power)
+        chempiler.chiller.cooling_power(self.vessel, self.cooling_power)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_COOLING_POWER({self.chiller_name}, {self.cooling_power})")
+        chasm.add_line(f"S SET_COOLING_POWER({self.vessel}, {self.cooling_power})")
         return chasm.code
 
 ### Camera ###
 
     @property
-    def chiller_name(self):
-        return self.properties['chiller_name']
+    def vessel(self):
+        return self.properties['vessel']
 
     @property
     def cooling_power(self):
@@ -1384,7 +1352,7 @@ class SetCoolingPower(Step):
     def comment(self):
         return self.properties['comment']
 
-class SetRecordingSpeed(Step):
+class CSetRecordingSpeed(Step):
     """
     Sets the timelapse speed of the camera module.
     """
@@ -1415,7 +1383,7 @@ class SetRecordingSpeed(Step):
     def comment(self):
         return self.properties['comment']
 
-class Wait(Step):
+class CWait(Step):
     """
     Delays execution of the script for a set amount of time. This command will
     immediately reply with an estimate of when the waiting will be finished, and also
@@ -1448,7 +1416,7 @@ class Wait(Step):
     def comment(self):
         return self.properties['comment']
 
-class Breakpoint(Step):
+class CBreakpoint(Step):
     """
     Introduces a breakpoint in the script. The execution is halted until the operator
     resumes it.

@@ -12,8 +12,9 @@ When writing code in this file you can assume all keys of self.properties are me
 the same name.
 """
 
+### Pump ###
 
-class Move(Step):
+class CMove(Step):
     """
     Moves a specified volume from one node in the graph to another. Moving from and to
     the same node is supported.
@@ -59,30 +60,7 @@ class Move(Step):
         chasm.add_line(f"S MOVE({self.from_vessel}, {self.to_vessel}, {self.volume}, {self.move_speed}, {self.aspiration_speed}, {self.dispense_speed})")
         return chasm.code
 
-class Home(Step):
-    """
-    Moves a given pump to home.
-    """
-    def __init__(self, pump_name=None, move_speed='default', comment=''):
-        """
-        pump_name -- Name of the pump to be homed.
-        move_speed -- Requested speed in mL/min.
-        """
-        self.name = 'Home'
-        self.properties = {
-            'pump_name': pump_name,
-            'move_speed': move_speed,
-            'comment': comment
-        }
-        self.get_defaults()
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S HOME({self.pump_name}, {self.move_speed})")
-        return chasm.code
-
-class Separate(Step):
+class CSeparate(Step):
     """
     Launches a phase separation sequence. The name of the separator is currently
     hard-coded!
@@ -111,7 +89,7 @@ class Separate(Step):
         chasm.add_line(f"S SEPARATE({self.lower_phase_target}, {self.upper_phase_target})")
         return chasm.code
 
-class Prime(Step):
+class CPrime(Step):
     """
     Moves the tube volume of every node with "flask" as class to waste.
     """
@@ -135,32 +113,32 @@ class Prime(Step):
         chasm.add_line(f"S PRIME({self.aspiration_speed})")
         return chasm.code
 
-class SwitchVacuum(Step):
+class CSwitchVacuum(Step):
     """
     Switches a vacuum valve between backbone and vacuum.
     """
-    def __init__(self, flask=None, destination=None, comment=''):
+    def __init__(self, vessel=None, destination=None, comment=''):
         """
         flask -- Name of the node the vacuum valve is logically attacked to (e.g. "filter_bottom")
         destination -- Either "vacuum" or "backbone"
         """
         self.name = 'SwitchVacuum'
         self.properties = {
-            'flask': flask,
+            'vessel': vessel,
             'destination': destination,
             'comment': comment
         }
 
     def execute(self, chempiler):
-        chempiler.pump.switch_cartridge(self.flask, self.destination)
+        chempiler.pump.switch_cartridge(self.vessel, self.destination)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
         chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SWITCH_VACUUM({self.flask}, {self.destination})")
+        chasm.add_line(f"S SWITCH_VACUUM({self.vessel}, {self.destination})")
         return chasm.code
 
-class SwitchCartridge(Step):
+class CSwitchCartridge(Step):
     """
     Switches a cartridge carousel to the specified position.
     """
@@ -177,7 +155,7 @@ class SwitchCartridge(Step):
         }
 
     def execute(self, chempiler):
-        chempiler.switch_cartridge(self.flask, self.cartridge)
+        chempiler.pump.switch_cartridge(self.flask, self.cartridge)
 
     def as_chasm(self):
         """Return step as ChASM code (str)."""
@@ -185,7 +163,7 @@ class SwitchCartridge(Step):
         chasm.add_line(f"S SWITCH_CARTRIDGE({self.flask}, {self.cartridge})")
         return chasm.code
 
-class SwitchColumn(Step):
+class CSwitchColumn(Step):
     """
     Switches a fractionating valve attached to a chromatography column.
     """
@@ -210,7 +188,9 @@ class SwitchColumn(Step):
         chasm.add_line(f"S SWITCH_COLUMN({self.column}, {self.destination})")
         return chasm.code
 
-class StartStir(Step):
+### Stirrer ###
+
+class CStartStir(Step):
     """
     Starts the stirring operation of a hotplate or overhead stirrer.
     """
@@ -233,7 +213,7 @@ class StartStir(Step):
         chasm.add_line(f"S START_STIR({self.vessel})")
         return chasm.code
 
-class StartHeat(Step):
+class CStartHeat(Step):
     """
     Starts the stirring operation of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
@@ -257,7 +237,7 @@ class StartHeat(Step):
         chasm.add_line(f"S START_HEAT({self.vessel})")
         return chasm.code
 
-class StopStir(Step):
+class CStopStir(Step):
     """
     Stops the stirring operation of a hotplate or overhead stirrer.
     """
@@ -280,7 +260,7 @@ class StopStir(Step):
         chasm.add_line(f"S STOP_STIR({self.vessel})")
         return chasm.code
 
-class StopHeat(Step):
+class CStopHeat(Step):
     """
     Starts the stirring operation of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
@@ -304,7 +284,7 @@ class StopHeat(Step):
         chasm.add_line(f"S STOP_HEAT({self.vessel})")
         return chasm.code
 
-class SetTemp(Step):
+class CSetTemp(Step):
     """
     Sets the temperature setpoint of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
@@ -330,7 +310,7 @@ class SetTemp(Step):
         chasm.add_line(f"S SET_TEMP({self.vessel}, {self.temp})")
         return chasm.code
 
-class SetStirRpm(Step):
+class CSetStirRpm(Step):
     """
     Sets the stirring speed setpoint of a hotplate or overhead stirrer.
     """
@@ -355,7 +335,7 @@ class SetStirRpm(Step):
         chasm.add_line(f"S SET_STIR_RPM({self.vessel}, {self.stir_rpm})")
         return chasm.code
 
-class StirrerWaitForTemp(Step):
+class CStirrerWaitForTemp(Step):
     """
     Delays the script execution until the current temperature of the hotplate is within
     0.5°C of the setpoint. This command is NOT available for overhead stirrers!
@@ -379,7 +359,7 @@ class StirrerWaitForTemp(Step):
         chasm.add_line(f"S STIRRER_WAIT_FOR_TEMP({self.vessel})")
         return chasm.code
 
-class StartHeaterBath(Step):
+class CStartHeaterBath(Step):
     """
     Starts the heating bath of a rotary evaporator.
     """
@@ -402,7 +382,7 @@ class StartHeaterBath(Step):
         chasm.add_line(f"S START_HEATER_BATH({self.rotavap_name})")
         return chasm.code
 
-class StopHeaterBath(Step):
+class CStopHeaterBath(Step):
     """
     Stops the heating bath of a rotary evaporator.
     """
@@ -425,7 +405,7 @@ class StopHeaterBath(Step):
         chasm.add_line(f"S STOP_HEATER_BATH({self.rotavap_name})")
         return chasm.code
 
-class StartRotation(Step):
+class CStartRotation(Step):
     """
     Starts the rotation of a rotary evaporator.
     """
@@ -448,7 +428,7 @@ class StartRotation(Step):
         chasm.add_line(f"S START_ROTATION({self.rotavap_name})")
         return chasm.code
 
-class StopRotation(Step):
+class CStopRotation(Step):
     """
     Stops the rotation of a rotary evaporator.
     """
@@ -471,7 +451,7 @@ class StopRotation(Step):
         chasm.add_line(f"S STOP_ROTATION({self.rotavap_name})")
         return chasm.code
 
-class LiftArmUp(Step):
+class CLiftArmUp(Step):
     """
     Lifts the rotary evaporator up.
     """
@@ -494,7 +474,7 @@ class LiftArmUp(Step):
         chasm.add_line(f"S LIFT_ARM_UP({self.rotavap_name})")
         return chasm.code
 
-class LiftArmDown(Step):
+class CLiftArmDown(Step):
     """
     Lifts the rotary evaporator down.
     """
@@ -517,7 +497,7 @@ class LiftArmDown(Step):
         chasm.add_line(f"S LIFT_ARM_DOWN({self.rotavap_name})")
         return chasm.code
 
-class ResetRotavap(Step):
+class CResetRotavap(Step):
     """
     Resets the rotary evaporator.
     """
@@ -540,7 +520,7 @@ class ResetRotavap(Step):
         chasm.add_line(f"S RESET_ROTAVAP({self.rotavap_name})")
         return chasm.code
 
-class SetBathTemp(Step):
+class CSetBathTemp(Step):
     """
     Sets the temperature setpoint for the heating bath.
     """
@@ -565,7 +545,7 @@ class SetBathTemp(Step):
         chasm.add_line(f"S SET_BATH_TEMP({self.rotavap_name}, {self.temp})")
         return chasm.code
 
-class SetRotation(Step):
+class CSetRvRotationSpeed(Step):
     """
     Sets the rotation speed setpoint for the rotary evaporator.
     """
@@ -574,7 +554,7 @@ class SetRotation(Step):
         rotavap_name -- Name of the node representing the rotary evaporator.
         rotation_speed -- Speed setpoint in rpm.
         """
-        self.name = 'SetRotation'
+        self.name = 'SetRvRotationSpeed'
         self.properties = {
             'rotavap_name': rotavap_name,
             'rotation_speed': rotation_speed,
@@ -590,7 +570,7 @@ class SetRotation(Step):
         chasm.add_line(f"S SET_ROTATION({self.rotavap_name}, {self.rotation_speed})")
         return chasm.code
 
-class RvWaitForTemp(Step):
+class CRvWaitForTemp(Step):
     """
     Delays the script execution until the current temperature of the heating bath is
     within 0.5°C of the setpoint.
@@ -614,7 +594,7 @@ class RvWaitForTemp(Step):
         chasm.add_line(f"S RV_WAIT_FOR_TEMP({self.rotavap_name})")
         return chasm.code
 
-class SetInterval(Step):
+class CSetInterval(Step):
     """
     Sets the interval time for the rotary evaporator, causing it to periodically switch
     direction. Setting this to 0 deactivates interval operation.
@@ -642,7 +622,7 @@ class SetInterval(Step):
 
 ### Vacuum Pump ###
 
-class InitVacPump(Step):
+class CInitVacPump(Step):
     """
     Initialises the vacuum pump controller.
     """
@@ -665,7 +645,7 @@ class InitVacPump(Step):
         chasm.add_line(f"S INIT_VAC_PUMP({self.vacuum_pump_name})")
         return chasm.code
 
-class GetVacSp(Step):
+class CGetVacSp(Step):
     """
     Reads the current vacuum setpoint.
     """
@@ -688,7 +668,7 @@ class GetVacSp(Step):
         chasm.add_line(f"S GET_VAC_SP({self.vacuum_pump_name})")
         return chasm.code
 
-class SetVacSp(Step):
+class CSetVacSp(Step):
     """
     Sets a new vacuum setpoint.
     """
@@ -713,7 +693,7 @@ class SetVacSp(Step):
         chasm.add_line(f"S SET_VAC_SP({self.vacuum_pump_name}, {self.set_point})")
         return chasm.code
 
-class StartVac(Step):
+class CStartVac(Step):
     """
     Starts the vacuum pump.
     """
@@ -736,7 +716,7 @@ class StartVac(Step):
         chasm.add_line(f"S START_VAC({self.vacuum_pump_name})")
         return chasm.code
 
-class StopVac(Step):
+class CStopVac(Step):
     """
     Stops the vacuum pump.
     """
@@ -759,7 +739,7 @@ class StopVac(Step):
         chasm.add_line(f"S STOP_VAC({self.vacuum_pump_name})")
         return chasm.code
 
-class VentVac(Step):
+class CVentVac(Step):
     """
     Vents the vacuum pump to ambient pressure.
     """
@@ -782,7 +762,7 @@ class VentVac(Step):
         chasm.add_line(f"S VENT_VAC({self.vacuum_pump_name})")
         return chasm.code
 
-class SetSpeedSp(Step):
+class CSetSpeedSp(Step):
     """
     Sets the speed of the vacuum pump (0-100%).
     """
@@ -809,7 +789,7 @@ class SetSpeedSp(Step):
 
 ### Chiller ###
 
-class StartChiller(Step):
+class CStartChiller(Step):
     """
     Starts the recirculation chiller.
     """
@@ -832,7 +812,7 @@ class StartChiller(Step):
         chasm.add_line(f"S START_CHILLER({self.chiller_name})")
         return chasm.code
 
-class StopChiller(Step):
+class CStopChiller(Step):
     """
     Stops the recirculation chiller.
     """
@@ -855,7 +835,7 @@ class StopChiller(Step):
         chasm.add_line(f"S STOP_CHILLER({self.chiller_name})")
         return chasm.code
 
-class SetChiller(Step):
+class CSetChiller(Step):
     """
     Sets the temperature setpoint.
     """
@@ -880,7 +860,7 @@ class SetChiller(Step):
         chasm.add_line(f"S SET_CHILLER({self.chiller_name}, {self.temp})")
         return chasm.code
 
-class ChillerWaitForTemp(Step):
+class CChillerWaitForTemp(Step):
     """
     Delays the script execution until the current temperature of the chiller is within
     0.5°C of the setpoint.
@@ -904,7 +884,7 @@ class ChillerWaitForTemp(Step):
         chasm.add_line(f"S CHILLER_WAIT_FOR_TEMP({self.chiller_name})")
         return chasm.code
 
-class RampChiller(Step):
+class CRampChiller(Step):
     """
     Causes the chiller to ramp the temperature up or down. Only available for Petite
     Fleur.
@@ -932,7 +912,7 @@ class RampChiller(Step):
         chasm.add_line(f"S RAMP_CHILLER({self.chiller_name}, {self.ramp_duration}, {self.end_temperature})")
         return chasm.code
 
-class SwitchChiller(Step):
+class CSwitchChiller(Step):
     """
     Switches the solenoid valve.
     """
@@ -957,7 +937,7 @@ class SwitchChiller(Step):
         chasm.add_line(f"S SWITCH_CHILLER({self.solenoid_valve_name}, {self.state})")
         return chasm.code
 
-class SetCoolingPower(Step):
+class CSetCoolingPower(Step):
     """
     Sets the cooling power (0-100%). Only available for CF41.
     """
@@ -984,7 +964,7 @@ class SetCoolingPower(Step):
 
 ### Camera ###
 
-class SetRecordingSpeed(Step):
+class CSetRecordingSpeed(Step):
     """
     Sets the timelapse speed of the camera module.
     """
@@ -1007,7 +987,7 @@ class SetRecordingSpeed(Step):
         chasm.add_line(f"S SET_RECORDING_SPEED({self.recording_speed})")
         return chasm.code
 
-class Wait(Step):
+class CWait(Step):
     """
     Delays execution of the script for a set amount of time. This command will
     immediately reply with an estimate of when the waiting will be finished, and also
@@ -1032,7 +1012,7 @@ class Wait(Step):
         chasm.add_line(f"S WAIT({self.time})")
         return chasm.code
 
-class Breakpoint(Step):
+class CBreakpoint(Step):
     """
     Introduces a breakpoint in the script. The execution is halted until the operator
     resumes it.

@@ -1,9 +1,52 @@
 from .chasmwriter import Chasm
 from .constants import *
 from .steps_generic import Step, Repeat, Comment
-from .steps_chasm import *
+from .steps_chasm import (
+   CMove,
+    CHome (no execute method),
+    CSeparate,
+    CPrime,
+    CSwitchVacuum,
+    CSwitchCartridge,
+    CSwitchColumn,
+    CStartStir,
+    CStartHeat,
+    CStopStir,
+    CStopHeat,
+    CSetTemp,
+    CSetStirRpm,
+    CStirrerWaitForTemp,
+    CStartHeaterBath,
+    CStopHeaterBath,
+    CStartRotation,
+    CStopRotation,
+    CLiftArmUp,
+    CLiftArmDown,
+    CResetRotavap,
+    CSetBathTemp,
+    CSetRvRotationSpeed,
+    CRvWaitForTemp,
+    CSetInterval,
+    CInitVacPump,
+    CGetVacSp,
+    CSetVacSp,
+    CStartVac,
+    CStopVac,
+    CVentVac,
+    CSetSpeedSp,
+    CStartChiller,
+    CStopChiller,
+    CSetChiller,
+    CChillerWaitForTemp,
+    CRampChiller,
+    CSwitchChiller,
+    CSetCoolingPower,
+    CSetRecordingSpeed,
+    CWait,
+    CBreakpoint,
+)
 
-class SetRpmAndStartStir(Step):
+class StartStir(Step):
 
     def __init__(self, vessel=None, stir_rpm='default', comment=''):
 
@@ -13,13 +56,30 @@ class SetRpmAndStartStir(Step):
             'stir_rpm': stir_rpm,
             'comment': comment,
         }
-
         self.steps = [
-            SetStirRpm(name='vessel', rpm='stir_rpm'),
-            StartStir(name=vessel),
+            CSetStirRpm(vessel=vessel, stir_rpm='stir_rpm'),
+            CStartStir(vessel=vessel),
         ]
 
         self.human_readable = f'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'
+
+class StartHeat(Step):
+
+    def __init__(self, vessel=None, temp=None, comment=''):
+        
+        self.name = 'StartHeat'
+        self.properties = {
+            'vessel': vessel,
+            'temp': temp,
+            'comment': comment,
+        }
+
+        self.steps = [
+            CSetTemp(vessel=vessel, temp=temp),
+            CStartHeat(vessel=vessel),
+        ]
+
+        self.human_readable = f'Heat {vessel} to {temp} °C'
 
 class StartVacuum(Step):
 
@@ -32,7 +92,7 @@ class StartVacuum(Step):
         }
 
         self.steps = [
-            SwitchVacuum(flask=vessel, destination='vacuum')
+            CSwitchVacuum(vessel=vessel, destination='vacuum')
         ]
 
         self.human_readable = f'Start vacuum for {vessel}.'
@@ -49,28 +109,10 @@ class StopVacuum(Step):
         }
 
         self.steps = [
-            SwitchVacuum(flask=vessel, destination='backbone')
+            CSwitchVacuum(flask=vessel, destination='backbone')
         ]
 
         self.human_readable = f'Stop vacuum for {vessel}.'
-
-class SetTempAndStartHeat(Step):
-
-    def __init__(self, vessel=None, temp=None, comment=''):
-        
-        self.name = 'StartHeat'
-        self.properties = {
-            'vessel': vessel,
-            'temp': temp,
-            'comment': comment,
-        }
-
-        self.steps = [
-            SetTemp(name=vessel, temp=temp),
-            StartHeat(name=vessel),
-        ]
-
-        self.human_readable = f'Heat {vessel} to {temp} °C'
 
 class CleanVessel(Step):
 
@@ -88,11 +130,11 @@ class CleanVessel(Step):
         self.steps = []
         for solvent, volume in zip(solvents, volumes):
             self.steps.extend([
-                Move(src=f'flask_{solvent}', dest=f"{vessel}", volume=volume),
-                SetRpmAndStartStir(vessel=vessel, stir_rpm=stir_rpm),
-                Wait(time=60),
-                StopStir(name=vessel),
-                Move(src=vessel, dest='waste_reactor', volume='all'),
+                CMove(from_vessel=f'flask_{solvent}', to_vessel=f"{vessel}", volume=volume),
+                StartStir(vessel=vessel, stir_rpm=stir_rpm),
+                CWait(time=60),
+                CStopStir(vessel=vessel),
+                CMove(from_vessel=vessel, to_vessel='waste_reactor', volume='all'),
             ])
 
         self.human_readable = ''
@@ -113,7 +155,8 @@ class CleanTubing(Step):
         }
 
         self.steps = [
-            Repeat(2, Move(src=f'flask_{self.properties["solvent"]}', dest=self.properties['vessel'], volume=self.properties['volume']))
+            Repeat(2, CMove(from_vessel=f'flask_{self.solvent}', to_vessel=self.vessel,
+                   volume=self.volume))
         ]
 
         self.human_readable = f'Clean tubing to {vessel} with {volume} mL of {solvent}.'
@@ -132,10 +175,10 @@ class HeatAndReact(Step):
         }
 
         self.steps = [
-            SetRpmAndStartStir(vessel=vessel, stir_rpm=stir_rpm),
-            SetTempAndStartHeat(vessel=vessel, temp=temp),
-            Wait(time=time),
-            StopHeat(name=vessel),
+            StartStir(vessel=vessel, stir_rpm=stir_rpm),
+            StartHeat(vessel=vessel, temp=temp),
+            CWait(time=time),
+            CStopHeat(vessel=vessel),
             ContinueStirToRT(vessel=vessel),
         ]
 
@@ -154,9 +197,9 @@ class ContinueStirToRT(Step):
         }
 
         self.steps = [
-            SetTemp(name=vessel, temp=ROOM_TEMPERATURE),
-            StirrerWaitForTemp(name=vessel),
-            StopStir(name=vessel),
+            CSetTemp(vessel=vessel, temp=ROOM_TEMPERATURE),
+            CStirrerWaitForTemp(vessel=vessel),
+            CStopStir(vessel=vessel),
         ]
 
         self.human_readable = f'Wait for {vessel} to reach room temperature and then stop stirring.'
@@ -173,9 +216,9 @@ class Chill(Step):
         }
 
         self.steps = [
-            SetChiller(name=vessel, setpoint=temp),
-            ChillerWaitForTemp(name=vessel),
-            StopChiller(name=vessel),
+            CSetChiller(vessel=vessel, temp=temp),
+            CChillerWaitForTemp(vessel=vessel),
+            CStopChiller(vessel=vessel),
         ]
 
         self.human_readable = f'Chill {vessel} to {temp} °C.'
@@ -191,9 +234,9 @@ class ChillBackToRT(Step):
         }
 
         self.steps = [
-            SetChiller(name=vessel, setpoint=ROOM_TEMPERATURE),
-            ChillerWaitForTemp(name=vessel),
-            StopChiller(name=vessel),
+            CSetChiller(vessel=vessel, temp=ROOM_TEMPERATURE),
+            CChillerWaitForTemp(vessel=vessel),
+            CStopChiller(vessel=vessel),
         ]
 
         self.human_readable = f'Chill {vessel} to room temperature.'
@@ -217,7 +260,7 @@ class Add(Step):
         if clean_tubing:
             self.steps.append(Move(from_vessel=f"flask_{reagent}", to_vessel="waste_aqueous", 
                     volume=DEFAULT_PUMP_PRIME_VOLUME, move_speed=move_speed))
-        self.steps.append(Move(src=f"flask_{reagent}", dest=vessel, 
+        self.steps.append(Move(from_vessel=f"flask_{reagent}", to_vessel=vessel, 
                             volume=volume, move_speed=move_speed))
         if clean_tubing:
             self.steps.append(CleanTubing(solvent='default', vessel="waste_aqueous"))
@@ -241,9 +284,9 @@ class StirAndTransfer(Step):
         }
 
         self.steps = [
-            SetRpmAndStartStir(vessel=from_vessel, stir_rpm=stir_rpm),
-            Move(src=from_vessel, dest=to_vessel, volume=volume),
-            StopStir(name=from_vessel)
+            StartStir(vessel=from_vessel, stir_rpm=stir_rpm),
+            CMove(from_vessel=from_vessel, to_vessel=to_vessel, volume=volume),
+            CStopStir(vessel=from_vessel)
         ]
 
         self.human_readable = f'Stir {from_vessel} and transfer {volume} mL to {to_vessel}.'
@@ -267,12 +310,12 @@ class Wash(Step):
         }
 
         self.steps = [
-            StartStir(name=vessel),
+            StartStir(vessel=vessel),
             Add(reagent=solvent, volume=volume),
-            Wait(time=wait_time),
-            Move(src=vessel, dest='waste_solvents', 
+            CWait(time=wait_time),
+            CMove(src=vessel, dest='waste_solvents', 
                  volume=volume, move_speed=move_speed),
-            StopStir(name=vessel)
+            CStopStir(vessel=vessel)
         ]
 
         self.human_readable = f'Wash {vessel} with {solvent} ({volume} mL).'
@@ -290,14 +333,14 @@ class ChillReact(Step):
             'comment': comment,
         }
 
-        self.steps = [StartStir(name=vessel),]
+        self.steps = [StartStir(vessel=vessel),]
         for reagent, volume in zip(reagents, volumes):
             self.steps.append(Add(reagent=reagent, volume=volume, vessel=vessel, clean_tubing=False, comment='Add water to filter flask bottom'))
         self.steps.extend([
             Chill(vessel=vessel, temp=temp),
-            Wait(time=time),
+            CWait(time=time),
             ChillBackToRT(vessel=vessel),
-            StopStir(name=vessel),
+            CStopStir(vessel=vessel),
         ])
 
         self.human_readable = ''
@@ -318,7 +361,7 @@ class Dry(Step):
 
         self.steps = [
             StartVacuum(vessel=vessel),
-            Wait(time=time),
+            CWait(time=time),
             StopVacuum(vessel=vessel)
         ]
 
@@ -340,9 +383,8 @@ class Filter(Step):
         ]
         if from_vessel != vessel:
             self.steps.append(StirAndTransfer(from_vessel=from_vessel, to_vessel=vessel))
-        self.steps.append(Wait(time))
+        self.steps.append(CWait(time))
         self.steps.append(StopVacuum(vessel))
-        
 
         self.human_readable = f'Filter contents of {from_vessel} in {vessel} for {time} s.'
 
@@ -404,11 +446,11 @@ class Reflux(Step):
         }
 
         self.steps = [
-            SetRpmAndStartStir(vessel=vessel),
-            SetTempAndStartHeat(vessel=vessel, temp=temp),
-            Wait(time=time),
-            StopHeat(name=vessel),
-            StopStir(name=vessel),
+            StartStir(vessel=vessel),
+            StartHeat(vessel=vessel, temp=temp),
+            CWait(time=time),
+            CStopHeat(vessel=vessel),
+            CStopStir(vessel=vessel),
         ]
 
         self.human_readable = f'Heat {vessel} to {temp} °C and reflux for {time}'
@@ -458,7 +500,7 @@ class Extract(Step):
         }
 
         self.steps = [
-            Move(from_vessel=from_vessel, to_vessel=separation_vessel,),
+            Move(from_vessel=from_vessel, to_vessel=separation_vessel, ),
         ]
 
         self.human_readable = f'Extract contents of {from_vessel} with {n_separations}x{solvent_volume}'
