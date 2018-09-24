@@ -25,3 +25,7 @@
 ### Decide on concrete namespace
 
 ### Simulate ChASM
+
+### Syntax Validation
+
+1. Complete list of compulsory attributes

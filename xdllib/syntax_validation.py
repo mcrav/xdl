@@ -3,25 +3,39 @@ from io import StringIO
 import xdllib.steps_chasm
 import xdllib.steps_xdl
 import xdllib.components
+from .utils import float_regex
 import inspect
 import re
-from .utils import float_regex
+import traceback
+
 
 class XDLSyntaxValidator(object):
+    """
+    Validate that XDL is syntactically correct.
+    """
 
     def __init__(self, xdl):
-        self.xdl_tree = etree.parse(StringIO(xdl))
-        self.components = self.get_section_children('Hardware')
-        self.reagents = self.get_section_children('Reagents')
-        self.steps = self.get_section_children('Procedure')
+        """
+        Load and validate XDL.
+        """
+        try:
+            self.xdl_tree = etree.parse(StringIO(xdl))
+            self.components = self.get_section_children('Hardware')
+            self.reagents = self.get_section_children('Reagents')
+            self.steps = self.get_section_children('Procedure')
+        except Exception:
+            traceback.print_exc()
+            print('\nFailed to load XDL.')
         self.validate_xdl()
 
     def validate_xdl(self):
+        """Run all validation tests on XDL and store result in self.valid."""
         self.valid = (self.has_three_base_tags() and self.all_reagents_declared() and self.all_vessels_declared() and
                       self.steps_in_namespace() and self.hardware_in_namespace() and self.check_quantities() and
                       self.check_step_attributes())
 
     def get_section_children(self, section):
+        """Get children of given section tag."""
         for element in self.xdl_tree.findall('*'):
             if element.tag == section:
                 return element.findall('*')
@@ -84,6 +98,7 @@ class XDLSyntaxValidator(object):
         return all_vessels_declared
 
     def steps_in_namespace(self):
+        """Check all step tags are in the XDL namespace."""
         steps_recognised = True
         for step in self.steps:
             if step.tag not in XDL_STEP_NAMESPACE:
@@ -92,6 +107,7 @@ class XDLSyntaxValidator(object):
         return steps_recognised
         
     def hardware_in_namespace(self):
+        """Check all the component tags are in the XDL namespace."""
         hardware_recognised = True
         for component in self.components:
             if component.tag not in XDL_HARDWARE_NAMESPACE:
@@ -100,6 +116,7 @@ class XDLSyntaxValidator(object):
         return hardware_recognised
 
     def check_quantities(self):
+        """Check all quantities are in a valid format."""
         quantities_valid = True
         for component in self.components:
             for attr, val in component.attrib.items():
@@ -114,6 +131,17 @@ class XDLSyntaxValidator(object):
         return quantities_valid
 
     def check_quantity_syntax(self, quantity_type, quantity_str, quantity_element):
+        """
+        Check quantity is in valid format.
+        
+        Arguments:
+            quantity_type {str} -- XDL attribute, i.e. 'mass', 'volume', 'time', 'temperature'
+            quantity_str {str} -- XDL value, i.e. '5g', '20 ml', '2hrs', '77'
+            quantity_element {Step} -- Step object containing quantity
+        
+        Returns:
+            bool -- True is quantity is valid, otherwise False
+        """
         quantity_valid = True
         quantity_str = quantity_str.lower()
         number_match = re.match(float_regex, quantity_str)
@@ -129,7 +157,6 @@ class XDLSyntaxValidator(object):
         remainder = quantity_str.lstrip(number)
         if not remainder:
             quantity_valid = True
-            
         elif remainder.strip() not in XDL_ACCEPTABLE_UNITS[quantity_type]:
             print(remainder.strip())
             quantity_valid = False
@@ -141,11 +168,14 @@ class XDLSyntaxValidator(object):
         return quantity_valid
 
     def check_step_attributes(self):
+        """Check that all compulsory Step attributes are present."""
         step_attributes_valid = True
         for step in self.steps:
             if step.tag in XDL_STEP_COMPULSORY_ATTRIBUTES:
                 has_quantity = True
                 for attr in XDL_STEP_COMPULSORY_ATTRIBUTES[step.tag]:
+                    # 'quantity' wildcard used if mass and volume are both acceptable, but
+                    # one of them must be present.
                     if attr == 'quantity':
                         has_quantity = False
                         for quantity_attr in REAGENT_QUANTITY_ATTRIBUTES:
@@ -161,6 +191,14 @@ class XDLSyntaxValidator(object):
         return step_attributes_valid
 
     def print_syntax_error(self, error, element=None):
+        """Print syntax error.
+        
+        Arguments:
+            error {str} -- Error message.
+        
+        Keyword Arguments:
+            element {lxml.etree.Element} -- Element producing error. Used to give an error line number.
+        """
         s = 'XDL Syntax Error'
         if element is not None:
             s += f' (line {element.sourceline}): '
@@ -170,10 +208,10 @@ class XDLSyntaxValidator(object):
         print(s + '\n')
 
 
-
 # Get Namespace
 
 def get_class_names_from_module(mod):
+    """Given module return list of class names in that module."""
     return [item[0] for item in inspect.getmembers(mod, inspect.isclass)]
 
 XDL_STEP_NAMESPACE = get_class_names_from_module(xdllib.steps_chasm)
@@ -192,8 +230,6 @@ XDL_ACCEPTABLE_UNITS = {
     'time': ['s', 'sec', 'secs', 'second', 'seconds', 'm', 'min', 'mins', 'minute', 'minutes', 'h', 'hr', 'hrs', 'hour', 'hours'],
     'temperature': ['c', 'k', 'f'],
 }
-
-step_files = ['steps_chasm.py', 'steps_xdl']
 
 XDL_STEP_COMPULSORY_ATTRIBUTES = {
     'Add': ['reagent', 'vessel', 'quantity'],
