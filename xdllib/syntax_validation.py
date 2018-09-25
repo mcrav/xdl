@@ -8,13 +8,43 @@ import inspect
 import re
 import traceback
 
+# Get Namespace
+
+def get_class_names_from_module(mod):
+    """Given module return list of class names in that module."""
+    return [item[0] for item in inspect.getmembers(mod, inspect.isclass)]
+XDL_STEP_NAMESPACE = []
+XDL_STEP_NAMESPACE.extend(get_class_names_from_module(xdllib.steps_xdl))
+XDL_STEP_NAMESPACE.extend([
+    'Move',
+    'StopHeat',
+    'StopStir',
+    'Wait',
+])
+XDL_HARDWARE_NAMESPACE = [item for item in get_class_names_from_module(xdllib.components) if item not in ['XDLElement', 'Component', 'Hardware']]
+
+XDL_ACCEPTABLE_UNITS = {
+    'volume': ['ul', 'ml', 'cl', 'dl', 'l', 'cc'],
+    'mass': ['ug', 'mg', 'g', 'kg'],
+    'mol': ['umol', 'mmol', 'mol'],
+    'time': ['s', 'sec', 'secs', 'second', 'seconds', 'm', 'min', 'mins', 'minute', 'minutes', 'h', 'hr', 'hrs', 'hour', 'hours'],
+    'temperature': ['c', 'k', 'f'],
+}
+
+XDL_STEP_COMPULSORY_ATTRIBUTES = {
+    'Add': ['reagent', 'vessel', 'quantity'],
+}
+
+REAGENT_QUANTITY_ATTRIBUTES = ['mass', 'mol', 'volume']
+
+REAGENT_ATTRIBS = ['reagent', 'solute', 'solvent'] # step properties that expect a reagent declared in Reagents section
 
 class XDLSyntaxValidator(object):
     """
     Validate that XDL is syntactically correct.
     """
 
-    def __init__(self, xdl):
+    def __init__(self, xdl, validate=True):
         """
         Load and validate XDL.
         """
@@ -23,11 +53,14 @@ class XDLSyntaxValidator(object):
             self.components = self.get_section_children('Hardware')
             self.reagents = self.get_section_children('Reagents')
             self.steps = self.get_section_children('Procedure')
+            if validate:
+                self.validate_xdl()
+
         except Exception:
+            self.valid = False
             traceback.print_exc()
             print('\nFailed to load XDL.')
-        self.validate_xdl()
-
+        
     def validate_xdl(self):
         """Run all validation tests on XDL and store result in self.valid."""
         self.valid = (self.has_three_base_tags() and self.all_reagents_declared() and self.all_vessels_declared() and
@@ -69,13 +102,19 @@ class XDLSyntaxValidator(object):
         Check all reagents used in steps are declared in the Reagents section.
         """
         declared_reagent_ids = [reagent.attrib['id'] for reagent in self.reagents]
-        used_reagent_ids = [step.attrib['reagent'] for step in self.steps if 'reagent' in step.attrib]
-        used_reagent_elements = [step for step in self.steps if 'reagent' in step.attrib] # Could be optimised
         all_reagents_declared = True
-        for reagent_id, reagent_element in zip(used_reagent_ids, used_reagent_elements):
-            if reagent_id not in declared_reagent_ids:
-                all_reagents_declared = False
-                self.print_syntax_error(f'{reagent_id} used in procedure but not declared in <Reagent> section.', reagent_element)
+        for step in self.steps:
+            for reagent_attrib in REAGENT_ATTRIBS:
+                if reagent_attrib in step.attrib:
+                    step_reagents = step.attrib[reagent_attrib]
+                    if ' ' in step_reagents:
+                        step_reagents = step_reagents.split(' ')
+                    else:
+                        step_reagents = [step_reagents]
+                    for reagent in step_reagents:
+                        if reagent not in declared_reagent_ids:
+                            all_reagents_declared = False
+                            self.print_syntax_error(f'{reagent} used in procedure but not declared in <Reagent> section.', step)
         return all_reagents_declared
 
     def all_vessels_declared(self):
@@ -83,18 +122,13 @@ class XDLSyntaxValidator(object):
         Check all vessels used in steps are declared in the Hardware section.
         """
         declared_vessel_ids = [component.attrib['id'] for component in self.components]
-        used_vessel_ids = []
-        used_vessel_elements = []
+        all_vessels_declared = True
         for step in self.steps:
             for attr, val in step.attrib.items():
-                if 'vessel' in attr:
-                    used_vessel_ids.append(val)
-                    used_vessel_elements.append(step)
-        all_vessels_declared = True
-        for vessel_id, vessel_element in zip(used_vessel_ids, used_vessel_elements):
-            if vessel_id not in declared_vessel_ids:
-                all_vessels_declared = False
-                self.print_syntax_error(f'{vessel_id} used in procedure but not declared in <Hardware> section.', vessel_element)
+                if attr == 'vessel':
+                    if not val in declared_vessel_ids:
+                        all_vessels_declared = False
+                        self.print_syntax_error(f'{val} used in procedure but not declared in <Hardware> section.', step)
         return all_vessels_declared
 
     def steps_in_namespace(self):
@@ -207,33 +241,4 @@ class XDLSyntaxValidator(object):
         s += error
         print(s + '\n')
 
-
-# Get Namespace
-
-def get_class_names_from_module(mod):
-    """Given module return list of class names in that module."""
-    return [item[0] for item in inspect.getmembers(mod, inspect.isclass)]
-
-XDL_STEP_NAMESPACE = get_class_names_from_module(xdllib.steps_chasm)
-XDL_STEP_NAMESPACE.extend(get_class_names_from_module(xdllib.steps_xdl))
-XDL_STEP_NAMESPACE.extend([
-    'Heat',
-    'Stir',
-])
-
-XDL_HARDWARE_NAMESPACE = [item for item in get_class_names_from_module(xdllib.components) if item not in ['XDLElement', 'Component', 'Hardware']]
-
-XDL_ACCEPTABLE_UNITS = {
-    'volume': ['ul', 'ml', 'cl', 'dl', 'l', 'cc'],
-    'mass': ['ug', 'mg', 'g', 'kg'],
-    'mol': ['umol', 'mmol', 'mol'],
-    'time': ['s', 'sec', 'secs', 'second', 'seconds', 'm', 'min', 'mins', 'minute', 'minutes', 'h', 'hr', 'hrs', 'hour', 'hours'],
-    'temperature': ['c', 'k', 'f'],
-}
-
-XDL_STEP_COMPULSORY_ATTRIBUTES = {
-    'Add': ['reagent', 'vessel', 'quantity'],
-}
-
-REAGENT_QUANTITY_ATTRIBUTES = ['mass', 'mol', 'volume']
 

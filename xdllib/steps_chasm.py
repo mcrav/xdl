@@ -54,12 +54,6 @@ class CMove(Step):
             dispense_speed=self.dispense_speed,
         )
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S MOVE({self.from_vessel}, {self.to_vessel}, {self.volume}, {self.move_speed}, {self.aspiration_speed}, {self.dispense_speed})")
-        return chasm.code
-
     @property
     def from_vessel(self):
         return self.properties['from_vessel']
@@ -111,12 +105,6 @@ class CSeparate(Step):
             self.upper_phase_target,
         )
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SEPARATE({self.lower_phase_target}, {self.upper_phase_target})")
-        return chasm.code
-
     @property
     def lower_phase_target(self):
         return self.properties['lower_phase_target']
@@ -147,12 +135,6 @@ class CPrime(Step):
     def execute(self, chempiler):
         chempiler.pump.prime_tubes(self.aspiration_speed)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S PRIME({self.aspiration_speed})")
-        return chasm.code
-
     @property
     def aspiration_speed(self):
         return self.properties['aspiration_speed']
@@ -179,12 +161,6 @@ class CSwitchVacuum(Step):
 
     def execute(self, chempiler):
         chempiler.pump.switch_cartridge(self.flask, self.destination)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SWITCH_VACUUM({self.flask}, {self.destination})")
-        return chasm.code
 
     @property
     def flask(self):
@@ -217,12 +193,6 @@ class CSwitchCartridge(Step):
     def execute(self, chempiler):
         chempiler.pump.switch_cartridge(self.flask, self.cartridge)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SWITCH_CARTRIDGE({self.flask}, {self.cartridge})")
-        return chasm.code
-
     @property
     def flask(self):
         return self.properties['flask']
@@ -253,12 +223,6 @@ class CSwitchColumn(Step):
 
     def execute(self, chempiler):
         chempiler.pump.switch_column_fraction(self.column, self.destination)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SWITCH_COLUMN({self.column}, {self.destination})")
-        return chasm.code
 
 ### Stirrer ###
 
@@ -291,12 +255,6 @@ class CStartStir(Step):
     def execute(self, chempiler):
         chempiler.stirrer.stir(self.vessel)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S START_STIR({self.vessel})")
-        return chasm.code
-
     @property
     def vessel(self):
         return self.properties['vessel']
@@ -323,12 +281,6 @@ class CStartHeat(Step):
     def execute(self, chempiler):
         chempiler.stirrer.heat(self.vessel)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S START_HEAT({self.vessel})")
-        return chasm.code
-
     @property
     def vessel(self):
         return self.properties['vessel']
@@ -354,12 +306,6 @@ class CStopStir(Step):
     def execute(self, chempiler):
         chempiler.stirrer.stop_stir(self.vessel)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STOP_STIR({self.vessel})")
-        return chasm.code
-
     @property
     def vessel(self):
         return self.properties['vessel']
@@ -384,13 +330,7 @@ class CStopHeat(Step):
         }
 
     def execute(self, chempiler):
-        chempiler.stop_heat(self.vessel)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STOP_HEAT({self.vessel})")
-        return chasm.code
+        chempiler.stirrer.stop_heat(self.vessel)
 
     @property
     def vessel(self):
@@ -419,12 +359,6 @@ class CSetTemp(Step):
 
     def execute(self, chempiler):
         chempiler.stirrer.set_temp(self.vessel, self.temp)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_TEMP({self.vessel}, {self.temp})")
-        return chasm.code
 
     @property
     def vessel(self):
@@ -457,12 +391,6 @@ class CSetStirRpm(Step):
     def execute(self, chempiler):
         chempiler.stirrer.set_stir_rate(self.vessel, self.stir_rpm)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_STIR_RPM({self.vessel}, {self.stir_rpm})")
-        return chasm.code
-
     @property
     def vessel(self):
         return self.properties['vessel']
@@ -493,12 +421,6 @@ class CStirrerWaitForTemp(Step):
     def execute(self, chempiler):
         chempiler.stirrer.wait_for_temp(self.vessel)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STIRRER_WAIT_FOR_TEMP({self.vessel})")
-        return chasm.code
-
     @property
     def vessel(self):
         return self.properties['vessel']
@@ -523,12 +445,6 @@ class CStartHeaterBath(Step):
 
     def execute(self, chempiler):
         chempiler.rotavap.start_heater(self.rotavap_name)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S START_HEATER_BATH({self.rotavap_name})")
-        return chasm.code
 
     @property
     def rotavap_name(self):
@@ -555,12 +471,6 @@ class CStopHeaterBath(Step):
     def execute(self, chempiler):
         chempiler.rotavap.stop_heater(self.rotavap_name)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STOP_HEATER_BATH({self.rotavap_name})")
-        return chasm.code
-
     @property
     def rotavap_name(self):
         return self.properties['rotavap_name']
@@ -585,12 +495,6 @@ class CStartRotation(Step):
 
     def execute(self, chempiler):
         chempiler.rotavap.start_rotation(self.rotavap_name)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S START_ROTATION({self.rotavap_name})")
-        return chasm.code
 
     @property
     def rotavap_name(self):
@@ -617,12 +521,6 @@ class CStopRotation(Step):
     def execute(self, chempiler):
         chempiler.rotavap.stop_rotation(self.rotavap_name)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STOP_ROTATION({self.rotavap_name})")
-        return chasm.code
-
     @property
     def rotavap_name(self):
         return self.properties['rotavap_name']
@@ -647,12 +545,6 @@ class CLiftArmUp(Step):
 
     def execute(self, chempiler):
         chempiler.rotavap.lift_up(self.rotavap_name)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S LIFT_ARM_UP({self.rotavap_name})")
-        return chasm.code
 
     @property
     def rotavap_name(self):
@@ -679,12 +571,6 @@ class CLiftArmDown(Step):
     def execute(self, chempiler):
         chempiler.rotavap.lift_down(self.rotavap_name)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S LIFT_ARM_DOWN({self.rotavap_name})")
-        return chasm.code
-
     @property
     def rotavap_name(self):
         return self.properties['rotavap_name']
@@ -709,12 +595,6 @@ class CResetRotavap(Step):
 
     def execute(self, chempiler):
         chempiler.rotavap.reset(self.rotavap_name)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S RESET_ROTAVAP({self.rotavap_name})")
-        return chasm.code
 
     @property
     def rotavap_name(self):
@@ -742,12 +622,6 @@ class CSetBathTemp(Step):
 
     def execute(self, chempiler):
         chempiler.rotavap.set_temp(self.rotavap_name, self.temp)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_BATH_TEMP({self.rotavap_name}, {self.temp})")
-        return chasm.code
 
     @property
     def rotavap_name(self):
@@ -780,12 +654,6 @@ class CSetRvRotationSpeed(Step):
     def execute(self, chempiler):
         chempiler.rotavap.set_rotation(self.rotavap_name, self.rotation_speed)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_ROTATION({self.rotavap_name}, {self.rotation_speed})")
-        return chasm.code
-
     @property
     def rotavap_name(self):
         return self.properties['rotavap_name']
@@ -816,12 +684,6 @@ class CRvWaitForTemp(Step):
     def execute(self, chempiler):
         chempiler.rotavap.wait_for_temp(self.rotavap_name)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S RV_WAIT_FOR_TEMP({self.rotavap_name})")
-        return chasm.code
-
     @property
     def rotavap_name(self):
         return self.properties['rotavap_name']
@@ -849,12 +711,6 @@ class CSetInterval(Step):
 
     def execute(self, chempiler):
         chempiler.rotavap.set_interval(self.rotavap_name, self.interval)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_INTERVAL({self.rotavap_name}, {self.interval})")
-        return chasm.code
 
 ### Vacuum Pump ###
 
@@ -887,12 +743,6 @@ class CInitVacPump(Step):
     def execute(self, chempiler):
         chempiler.vacuum.initialise(self.vacuum_pump_name)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S INIT_VAC_PUMP({self.vacuum_pump_name})")
-        return chasm.code
-
     @property
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
@@ -917,12 +767,6 @@ class CGetVacSp(Step):
 
     def execute(self, chempiler):
         chempiler.vacuum.get_vacuum_set_point(self.vacuum_pump_name)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S GET_VAC_SP({self.vacuum_pump_name})")
-        return chasm.code
 
     @property
     def vacuum_pump_name(self):
@@ -950,12 +794,6 @@ class CSetVacSp(Step):
 
     def execute(self, chempiler):
         chempiler.vacuum.set_vacuum_set_point(self.vacuum_pump_name, self.set_point)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_VAC_SP({self.vacuum_pump_name}, {self.set_point})")
-        return chasm.code
 
     @property
     def vacuum_pump_name(self):
@@ -986,12 +824,6 @@ class CStartVac(Step):
     def execute(self, chempiler):
         chempiler.vacuum.start_vacuum(self.vacuum_pump_name)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S START_VAC({self.vacuum_pump_name})")
-        return chasm.code
-
     @property
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
@@ -1017,12 +849,6 @@ class CStopVac(Step):
     def execute(self, chempiler):
         chempiler.vacuum.stop_vacuum(self.vacuum_pump_name)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STOP_VAC({self.vacuum_pump_name})")
-        return chasm.code
-
     @property
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
@@ -1047,12 +873,6 @@ class CVentVac(Step):
 
     def execute(self, chempiler):
         chempiler.vacuum.vent_vacuum(self.vacuum_pump_name)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S VENT_VAC({self.vacuum_pump_name})")
-        return chasm.code
 
     @property
     def vacuum_pump_name(self):
@@ -1080,12 +900,6 @@ class CSetSpeedSp(Step):
 
     def execute(self, chempiler):
         chempiler.vacuum.set_speed_set_point(self.vacuum_pump_name, self.set_point)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_SPEED_SP({self.vacuum_pump_name}, {self.set_point})")
-        return chasm.code
 
 ### Chiller ###
 
@@ -1118,12 +932,6 @@ class CStartChiller(Step):
     def execute(self, chempiler):
         chempiler.chiller.start_chiller(self.vessel)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S START_CHILLER({self.vessel})")
-        return chasm.code
-
     @property
     def vessel(self):
         return self.properties['vessel']
@@ -1148,12 +956,6 @@ class CStopChiller(Step):
 
     def execute(self, chempiler):
         chempiler.chiller.stop_chiller(self.vessel)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S STOP_CHILLER({self.vessel})")
-        return chasm.code
 
     @property
     def vessel(self):
@@ -1181,12 +983,6 @@ class CSetChiller(Step):
 
     def execute(self, chempiler):
         chempiler.chiller.set_temp(self.vessel, self.temp)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_CHILLER({self.vessel}, {self.temp})")
-        return chasm.code
 
     @property
     def vessel(self):
@@ -1218,12 +1014,6 @@ class CChillerWaitForTemp(Step):
     def execute(self, chempiler):
         chempiler.chiller.wait_for_temp(self.vessel)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S CHILLER_WAIT_FOR_TEMP({self.vessel})")
-        return chasm.code
-
     @property
     def vessel(self):
         return self.properties['vessel']
@@ -1253,12 +1043,6 @@ class CRampChiller(Step):
 
     def execute(self, chempiler):
         chempiler.chiller.ramp_chiller(self.vessel, self.ramp_duration, self.end_temperature)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S RAMP_CHILLER({self.vessel}, {self.ramp_duration}, {self.end_temperature})")
-        return chasm.code
 
     @property
     def vessel(self):
@@ -1295,12 +1079,6 @@ class CSwitchChiller(Step):
     def execute(self, chempiler):
         chempiler.chiller.switch_vessel(self.solenoid_valve_name, self.state)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SWITCH_CHILLER({self.solenoid_valve_name}, {self.state})")
-        return chasm.code
-
     @property
     def solenoid_valve_name(self):
         return self.properties['solenoid_valve_name']
@@ -1331,12 +1109,6 @@ class CSetCoolingPower(Step):
 
     def execute(self, chempiler):
         chempiler.chiller.cooling_power(self.vessel, self.cooling_power)
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_COOLING_POWER({self.vessel}, {self.cooling_power})")
-        return chasm.code
 
 ### Camera ###
 
@@ -1369,12 +1141,6 @@ class CSetRecordingSpeed(Step):
     def execute(self, chempiler):
         chempiler.camera.change_recording_speed(self.recording_speed)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S SET_RECORDING_SPEED({self.recording_speed})")
-        return chasm.code
-
     @property
     def recording_speed(self):
         return self.properties['recording_speed']
@@ -1402,12 +1168,6 @@ class CWait(Step):
     def execute(self, chempiler):
         chempiler.wait(self.time)
 
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S WAIT({self.time})")
-        return chasm.code
-
     @property
     def time(self):
         return self.properties['time']
@@ -1432,9 +1192,6 @@ class CBreakpoint(Step):
 
     def execute(self, chempiler):
         chempiler.breakpoint()
-
-    def as_chasm(self):
-        """Return step as ChASM code (str)."""
-        chasm = self.get_chasm_stub()
-        chasm.add_line(f"S BREAKPOINT()")
-        return chasm.code
+    @property
+    def comment(self):
+        return self.properties['comment']

@@ -2,43 +2,16 @@ from lxml import etree
 import tempfile
 import subprocess as sub
 
-class Reaction(object):
-    
-    def __init__(self, steps):
-        self.steps = []
-
-    def as_human_readable(self):
-        s = ''
-        for step in self.steps:
-            s += f'{step.human_readable}\n'
-        return s
-
-    def as_chasm(self):
-        return Chasm(self.steps).code
-        
-    def as_xdl(self, as_str=False):
-        reaction = etree.Element('reaction')
-        for step in self.steps:
-            reaction.append(step.as_xdl())
-        tree = etree.ElementTree(reaction)
-        if as_str:
-            return etree.dump(reaction)
-        else:
-            return tree
-        
-    def save_xdl(self, save_path):
-        tree = self.as_xdl()
-        tree.write(save_path, pretty_print=True)
-
-    def shopping_list(self):
-        pass
-
-
-
 class Chasm(object):
+    """Object for writing ChASM code."""
     
     def __init__(self, steps=[]):
-        self._code = ''
+        """Create ChASM code in self.code.
+        
+        Keyword Arguments:
+            steps {list} -- List of Step objects.
+        """
+        self.code = ''
         if steps:
             self.add_start_main()
             for step in steps:
@@ -48,39 +21,52 @@ class Chasm(object):
             self.add_end_main()
 
     def add_start_main(self):
-        self._code += 'MAIN {\n'
+        """Start main function."""
+        self.code += 'MAIN {\n'
 
     def add_end_main(self):
-        self._code += '\n}'
+        """End main function."""
+        self.code += '\n}'
         self._indent_main()
 
     def add_line(self, line):
-        self._code += line + ';\n'
+        """Add code line."""
+        self.code += line + ';\n'
 
     def add_comment(self, comment):
-        self._code += '\n# ' + comment
+        """Add comment line."""
+        self.code += '\n# ' + comment
 
     def add_inline_comment(self, comment):
-        self._code = self._code.strip() + f' # {comment}\n'
+        """Add comment without starting new line."""
+        self.code = self.code.strip() + f' # {comment}\n'
 
     def add_step(self, step, blank_line_before=False):
+        """Add Step object as ChASM to self.code."""
         if blank_line_before:
-            self._code += '\n'
-        self._code += step.as_chasm()
+            self.code += '\n'
+        self.code += step.as_chasm()
 
     def add_for(self, for_count, steps):
-        self._code += 'FOR(' + str(for_count) + ') {\n'
+        """Add for loop.
+        
+        Arguments:
+            for_count {int} -- Number of iterations of for loops.
+            steps {list} -- list of Step objects to put in for loop.
+        """
+        self.code += 'FOR(' + str(for_count) + ') {\n'
         for step in steps:
             self.add_step(step)
-        self._code += '}\n'
+        self.code += '}\n'
 
     def _indent_main(self, indentation='    '):
+        """Indent main function."""
         indented_chasm = ''
-        if self._code.count('{') == self._code.count('}'):
+        if self.code.count('{') == self.code.count('}'):
             main = False
             open_count = 0
             closed_count = 0
-            for line in self._code.split('\n'):
+            for line in self.code.split('\n'):
                 if '}' in line:
                     closed_count += 1
                     if open_count > 0 and closed_count == open_count:
@@ -94,18 +80,6 @@ class Chasm(object):
                     main = True
                 indented_chasm += line + '\n'
         self.code = indented_chasm
-    
-    @property
-    def code(self):
-        return self._code
-
-    @code.setter
-    def code(self, new_code):
-        self._code = new_code
-
-    def save(self, file_path):
-        with open(file_path, 'w') as fileobj:
-            fileobj.write(self._code)
 
     # def simulate(self, graphml_file):
     #     chasm_file = tempfile.TemporaryFile()
@@ -113,19 +87,3 @@ class Chasm(object):
     #     chempiler = Chempiler(graphml_file, chasm_file, crash_dump=False, simulation=True)
     #     chempiler.run_platform()
     #     chasm_file.close()
-
-
-def main():
-    from stuff import rufinamide_steps
-    reaction = Reaction('')
-    reaction.steps = rufinamide_steps
-    reaction.as_xdl()
-    reaction.save_xdl('/home/group/ReaxysChemputerInterface/stuff/rufinamide.xdl')
-
-    chasm = Chasm(rufinamide_steps)
-    chasm.save('/home/group/ReaxysChemputerInterface/stuff/rufinamide.chasm')
-
-    # print(React(reactor='reactor', time=12*60*60, temp=75, comment='Heat to 75C and wait for 12h').as_xdl())
-
-if __name__ == '__main__':
-    main()

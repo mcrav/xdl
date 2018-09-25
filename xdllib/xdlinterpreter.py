@@ -2,11 +2,12 @@ from lxml import etree
 from bs4 import BeautifulSoup
 from io import StringIO
 import re
-
+import os
+from chempiler import Chempiler
 from .utils import convert_time_str_to_seconds, convert_volume_str_to_ml, get_reagent_combinations
 from .constants import *
-from .chasmwriter import Chasm, Reaction
 from .steps_xdl import *
+from .steps_chasm import *
 from .steps_generic import *
 from .components import *
 from .reagents import *
@@ -14,56 +15,54 @@ from .steps_chasm import *
 from .safety import procedure_is_safe
 from .syntax_validation import XDLSyntaxValidator
 
-step_obj_dict = {
+STEP_OBJ_DICT = {
     'Step': Step,
     'Comment': Comment,
     'Repeat': Repeat,
-    'Move': Move,
-    'Home': Home,
-    'Separate': Separate,
-    'Prime': Prime,
-    'SwitchVacuum': SwitchVacuum,
-    'SwitchCartridge': SwitchCartridge,
-    'SwitchColumn': SwitchColumn,
+    'Move': CMove,
+    'Separate': CSeparate,
+    'Prime': CPrime,
+    'SwitchVacuum': CSwitchVacuum,
+    'SwitchCartridge': CSwitchCartridge,
+    'SwitchColumn': CSwitchColumn,
     'StartStir': StartStir,
     'StartHeat': StartHeat,
-    'StopStir': StopStir,
-    'StopHeat': StopHeat,
-    'SetTemp': SetTemp,
-    'SetStirRpm': SetStirRpm,
-    'StirrerWaitForTemp': StirrerWaitForTemp,
-    'StartHeaterBath': StartHeaterBath,
-    'StopHeaterBath': StopHeaterBath,
-    'StartRotation': StartRotation,
-    'StopRotation': StopRotation,
-    'LiftArmUp': LiftArmUp,
-    'LiftArmDown': LiftArmDown,
-    'ResetRotavap': ResetRotavap,
-    'SetBathTemp': SetBathTemp,
-    'SetRotation': SetRotation,
-    'RvWaitForTemp': RvWaitForTemp,
-    'SetInterval': SetInterval,
-    'InitVacPump': InitVacPump,
-    'GetVacSp': GetVacSp,
-    'SetVacSp': SetVacSp,
-    'StartVac': StartVac,
-    'StopVac': StopVac,
-    'VentVac': VentVac,
-    'SetSpeedSp': SetSpeedSp,
-    'StartChiller': StartChiller,
-    'StopChiller': StopChiller,
-    'SetChiller': SetChiller,
-    'ChillerWaitForTemp': ChillerWaitForTemp,
-    'RampChiller': RampChiller,
-    'SwitchChiller': SwitchChiller,
-    'SetCoolingPower': SetCoolingPower,
-    'SetRecordingSpeed': SetRecordingSpeed,
-    'Wait': Wait,
-    'Breakpoint': Breakpoint,
-    'SetRpmAndStartStir': SetRpmAndStartStir,
+    'StopStir': CStopStir,
+    'StopHeat': CStopHeat,
+    'SetTemp': CSetTemp,
+    'SetStirRpm': CSetStirRpm,
+    'StirrerWaitForTemp': CStirrerWaitForTemp,
+    'StartHeaterBath': CStartHeaterBath,
+    'StopHeaterBath': CStopHeaterBath,
+    'StartRotation': CStartRotation,
+    'StopRotation': CStopRotation,
+    'LiftArmUp': CLiftArmUp,
+    'LiftArmDown': CLiftArmDown,
+    'ResetRotavap': CResetRotavap,
+    'SetBathTemp': CSetBathTemp,
+    'SetRotation': CSetRvRotationSpeed,
+    'RvWaitForTemp': CRvWaitForTemp,
+    'SetInterval': CSetInterval,
+    'InitVacPump': CInitVacPump,
+    'GetVacSp': CGetVacSp,
+    'SetVacSp': CSetVacSp,
+    'StartVac': CStartVac,
+    'StopVac': CStopVac,
+    'VentVac': CVentVac,
+    'SetSpeedSp': CSetSpeedSp,
+    'StartChiller': CStartChiller,
+    'StopChiller': CStopChiller,
+    'SetChiller': CSetChiller,
+    'ChillerWaitForTemp': CChillerWaitForTemp,
+    'RampChiller': CRampChiller,
+    'SwitchChiller': CSwitchChiller,
+    'SetCoolingPower': CSetCoolingPower,
+    'SetRecordingSpeed': CSetRecordingSpeed,
+    'Wait': CWait,
+    'Breakpoint': CBreakpoint,
     'StartVacuum': StartVacuum,
     'StopVacuum': StopVacuum,
-    'SetTempAndStartHeat': SetTempAndStartHeat,
+    'SetTempAndStartHeat': StartHeat,
     'CleanVessel': CleanVessel,
     'CleanTubing': CleanTubing,
     'HeatAndReact': HeatAndReact,
@@ -74,24 +73,25 @@ step_obj_dict = {
     'StirAndTransfer': StirAndTransfer,
     'Wash': Wash,
     'ChillReact': ChillReact,
-    'Stir': StartStir,
-    'Heat': StartHeat,
     'MakeSolution': MakeSolution,
     'AddSolid': AddSolid,
     'Reflux': Reflux,
 }
 
-component_obj_dict = {
+COMPONENT_OBJ_DICT = {
     'Reactor': Reactor,
     'FilterFlask': FilterFlask,
     'Flask': Flask,
     'Waste': Waste,
 }
 
+
 class XDL(object):
 
     def __init__(self, xdl_file=None, xdl_str=None):
         self.steps, self.hardware, self.reagent = [], [], []
+        self.prepared_for_execution = False
+        self.xdl_file = xdl_file
         if xdl_file:
             with open(xdl_file, 'r') as fileobj:
                 self.xdl = fileobj.read()
@@ -130,6 +130,7 @@ class XDL(object):
             for prop, val in step.properties.items():
                 if isinstance(val, str) and val in self.hardware_map:
                     step.properties[prop] = self.hardware_map[val]
+                    print(step.properties)
             step.update_steps()
 
     def close_open_steps(self):
@@ -138,20 +139,29 @@ class XDL(object):
     def check_safety(self):
         return procedure_is_safe(self.steps, self.reagents)
 
-    def as_chasm(self, save_path=None, graphml_file=None):
-        if self.steps: # if XDL is valid
-            self.graphml_hardware = graphml_hardware_from_file(graphml_file)
-            if self.hardware_is_compatible():
-            
-                self.map_hardware_to_steps()
-                self.close_open_steps()
-                                
-                self.check_safety()
-                
-                chasm = Chasm(self.steps)
-                if save_path:
-                    chasm.save(save_path)
-                return chasm.code
+    def prepare_for_execution(self, graphml_file):#
+        if not self.prepared_for_execution:
+            if self.steps: # if XDL is valid
+                self.graphml_hardware = graphml_hardware_from_file(graphml_file)
+                if self.hardware_is_compatible():
+                    self.map_hardware_to_steps()
+                    self.close_open_steps()         
+                    self.check_safety()
+            self.prepared_for_execution = True
+
+    def simulate(self, graphml_file):
+        self.prepare_for_execution(graphml_file)
+        chempiler = Chempiler(self.get_exp_id(default='xdl_simulation'), graphml_file, True)
+        for step in self.steps:
+            step.execute(chempiler)
+
+    def execute(self, graphml_file):
+        self.prepare_for_execution(graphml_file)
+        chempiler = Chempiler(self.get_exp_id(default='xdl_synthesis'), graphml_file, False)
+        for step in self.steps:
+            print(step.human_readable)
+            step.execute(chempiler)
+
 
     def as_human_readable(self):
         """Return human-readable English str of synthesis described by steps."""
@@ -160,11 +170,14 @@ class XDL(object):
             s += f'{step.human_readable}\n'
         return s
 
-
-    
-
+    def get_exp_id(self, default='xdl_exp'):
+        if self.xdl_file:
+            return os.path.splitext(os.path.split(self.xdl_file)[-1])[0]
+        else:
+            return default
+        
 def get_close_step(step):
-    return ongoing_steps[type(step)](name=step.properties['name'])
+    return ongoing_steps[type(step)](vessel=step.vessel)
 
 def close_open_steps(steps):
     open_steps = get_open_steps(steps)
@@ -173,14 +186,14 @@ def close_open_steps(steps):
     return steps
 
 ongoing_steps = {
-    StartStir: StopStir,
-    StartHeat: StopHeat,
-    SetTempAndStartHeat: StopHeat,
-    StartChiller: StopChiller,
-    StartRotation: StopRotation,
-    StartVac: StopVac,
+    StartStir: CStopStir,
+    StartHeat: CStopHeat,
+    StartHeat: CStopHeat,
+    CStartChiller: CStopChiller,
+    CStartRotation: CStopRotation,
+    CStartVac: CStopVac,
     StartVacuum: StopVacuum,
-    StartHeaterBath: StopHeaterBath,
+    CStartHeaterBath: CStopHeaterBath,
 }
 
 def step_is_closed(open_step, steps):
@@ -189,8 +202,7 @@ def step_is_closed(open_step, steps):
     after_step = False
     for step in steps:
         if after_step:
-            # THIS WILL ONLY WORK FOR ChASM CLASSES AS XDL CLASSES USE vessel INSTEAD OF name
-            if isinstance(step, close_step) and step.properties['name'] == after_step.properties['name']:
+            if isinstance(step, close_step) and step.properties['vessel'] == open_step.properties['vessel']:
                 closed = True
         if step is open_step:
             after_step = True
@@ -236,7 +248,7 @@ def reagents_from_xdl(xdl):
 
 def xdl_to_step(step_xdl):
     if step_xdl.tag != 'Repeat':
-        step = step_obj_dict[step_xdl.tag]()
+        step = STEP_OBJ_DICT[step_xdl.tag]()
         step.load_properties(preprocess_attrib(step, step_xdl.attrib))
     else:
         step = xdl_to_repeat_step(step_xdl)
@@ -252,7 +264,7 @@ def xdl_to_repeat_step(repeat_step_xdl):
     return step
 
 def xdl_to_component(component_xdl):
-    component = component_obj_dict[component_xdl.tag]()
+    component = COMPONENT_OBJ_DICT[component_xdl.tag]()
     component.load_properties(component_xdl.attrib)        
     return component
 
@@ -263,15 +275,11 @@ def xdl_to_reagent(reagent_xdl):
 
 def preprocess_attrib(step, attrib):
     attrib = dict(attrib)
-    if isinstance(step, (StartHeat, StartStir)):
-        attrib['name'] = attrib['vessel']
-        del attrib['vessel']
     if 'time' in attrib:
         attrib['time'] = convert_time_str_to_seconds(attrib['time'])
     if 'volume' in attrib:
         attrib['volume'] = convert_volume_str_to_ml(attrib['volume'])
     if isinstance(step, MakeSolution):
-        print(attrib)
         attrib['solute'] = attrib['solute'].split(' ')
         attrib['solute_mass'] = attrib['solute_mass'].split(' ')
     return attrib

@@ -9,7 +9,7 @@ class Component(XDLElement):
 
 class Reactor(Component):
     
-    def __init__(self, id_word=None, volume_ml=None, reactor_type=ROUND_BOTTOM_FLASK, atmosphere=None):
+    def __init__(self, id_word=None, volume_ml=None, reactor_type='default', atmosphere=None):
         
         self.name = 'Reactor'
         self.properties = {
@@ -18,6 +18,7 @@ class Reactor(Component):
             'reactor_type': reactor_type,
             'atmosphere': atmosphere,
         }
+        self.get_defaults()
 
 class FilterFlask(Component):
     

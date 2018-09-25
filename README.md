@@ -29,3 +29,10 @@
 ### Syntax Validation
 
 1. Complete list of compulsory attributes
+
+### Unit Testing
+
+1. Syntax validation
+2. Hardware mapping
+3. Waste mapping
+4. Closing open steps

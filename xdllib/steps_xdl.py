@@ -3,7 +3,6 @@ from .constants import *
 from .steps_generic import Step, Repeat, Comment
 from .steps_chasm import (
    CMove,
-    CHome (no execute method),
     CSeparate,
     CPrime,
     CSwitchVacuum,
@@ -156,7 +155,7 @@ class StopVacuum(Step):
 
 class CleanVessel(Step):
 
-    def __init__(self, vessel=None, solvents=None, volumes=None, stir_rpm='default', stir_time=DEFAULT_CLEAN_STIR_TIME, comment=''):
+    def __init__(self, vessel=None, solvents=None, volumes=None, stir_rpm='default', stir_time='default', comment=''):
 
         self.name = 'CleanVessel'
         self.properties = {
@@ -213,6 +212,7 @@ class CleanTubing(Step):
             'volume': volume,
             'comment': comment,
         }
+        self.get_defaults()
 
         self.steps = [
             Repeat(2, CMove(from_vessel=f'flask_{self.solvent}', to_vessel=self.vessel,
@@ -382,9 +382,9 @@ class Add(Step):
 
         self.steps = []
         if clean_tubing:
-            self.steps.append(Move(from_vessel=f"flask_{reagent}", to_vessel="waste_aqueous",
+            self.steps.append(CMove(from_vessel=f"flask_{reagent}", to_vessel="waste_aqueous",
                     volume=DEFAULT_PUMP_PRIME_VOLUME, move_speed=move_speed))
-        self.steps.append(Move(from_vessel=f"flask_{reagent}", to_vessel=vessel,
+        self.steps.append(CMove(from_vessel=f"flask_{reagent}", to_vessel=vessel,
                             volume=volume, move_speed=move_speed))
         if clean_tubing:
             self.steps.append(CleanTubing(solvent='default', vessel="waste_aqueous"))
@@ -812,3 +812,18 @@ class Extract(Step):
         ]
 
         self.human_readable = f'Extract contents of {from_vessel} with {n_separations}x{solvent_volume}'
+    @property
+    def from_vessel(self):
+        return self.properties['from_vessel']
+
+    @property
+    def solvent(self):
+        return self.properties['solvent']
+
+    @property
+    def solvent_volume(self):
+        return self.properties['solvent_volume']
+
+    @property
+    def n_separations(self):
+        return self.properties['n_separations']

@@ -5,6 +5,11 @@ from .steps_xdl import Add
 
 float_regex = r'([0-9]+([.][0-9]+)?)'
 
+VOLUME_CL_UNIT_WORDS = ('cl', 'cL',)
+VOLUME_ML_UNIT_WORDS = ('cc', 'ml','mL', 'cm3')
+VOLUME_DL_UNIT_WORDS = ('dl', 'dL')
+VOLUME_L_UNIT_WORDS = ('l', 'L')
+
 # Attrib preprocessing
 
 def convert_time_str_to_seconds(time_str):
@@ -14,6 +19,8 @@ def convert_time_str_to_seconds(time_str):
     elif time_str.endswith(('m', 'min', 'mins', 'minute', 'minutes')):
         multiplier = 60
     elif time_str.endswith(('s', 'sec', 'secs', 'second', 'seconds',)):
+        multiplier = 1
+    else:
         multiplier = 1
     return str(int(float(re.match(float_regex, time_str).group(1)) * multiplier))
 

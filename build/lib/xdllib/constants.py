@@ -1,12 +1,3 @@
-# SOLVENTS
-
-WATER = 'water'
-METHANOL = 1
-ETHANOL = 2
-DMSO = 3
-DCM = 4
-ACETONE = 5
-
 # DEFAULT PARAMETERS
 
 DEFAULT_STIR_RPM = 400 # rpm
@@ -16,21 +7,64 @@ DEFAULT_DISPENSE_SPEED = DEFAULT_MOVE_SPEED
 DEFAULT_CLEAN_STIR_TIME = 60 # seconds
 DEFAULT_PUMP_PRIME_VOLUME = 3 # mL
 DEFAULT_CLEAN_TUBING_VOLUME = 2.5 # mL
-DEFAULT_CLEAN_TUBING_SOLVENT = WATER
+DEFAULT_CLEAN_TUBING_SOLVENT = 'water'
 DEFAULT_WASH_QUANTITY = 20
 DEFAULT_DRY_TIME = 60
 DEFAULT_FILTER_TIME = 60
+DEFAULT_EXTRACTION_VOLUME = 30 # mL
+DEFAULT_WASH_WAIT_TIME = 600 # s
 
-# COMPONENTS
+ROUND_BOTTOM_FLASK = 'RoundBottomFlask'
 
-ROUND_BOTTOM_FLASK = 'Round Bottom Flask'
+DEFAULT_VALS = {
+    'Move': {
+        'move_speed': DEFAULT_MOVE_SPEED,
+        'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
+        'dispense_speed': DEFAULT_DISPENSE_SPEED,
+    },
+    'Home': {
+        'move_speed': DEFAULT_MOVE_SPEED, 
+    },
+    'Prime': {
+        'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
+    },
+    'Extract': {
+        'solvent_volume': DEFAULT_EXTRACTION_VOLUME,
+    },
+    'Filter': {
+        'time': DEFAULT_FILTER_TIME,
+    },
+    'Dry': {
+        'time': DEFAULT_DRY_TIME,
+    },
+    'Wash': {
+        'move_speed': DEFAULT_MOVE_SPEED,
+        'wait_time': DEFAULT_WASH_WAIT_TIME,
+    },
+    'StirAndTransfer': {
+        'stir_rpm': DEFAULT_STIR_RPM,
+    },
+    'Add': {
+        'move_speed': DEFAULT_MOVE_SPEED,
+        'clean_tubing': True,
+    },
+    'HeatAndReact': {
+        'stir_rpm': DEFAULT_STIR_RPM,
+    },
+    'CleanTubing': {
+        'volume': DEFAULT_CLEAN_TUBING_VOLUME,
+        'solvent': DEFAULT_CLEAN_TUBING_SOLVENT,
+    },
+    'CleanVessel': {
+        'stir_rpm': DEFAULT_STIR_RPM,
+        'stir_time': DEFAULT_CLEAN_STIR_TIME,
+    },
+    'SetRpmAndStartStir': {
+        'stir_rpm': DEFAULT_STIR_RPM,
+    },
 
-# MISC
-
-ROOM_TEMPERATURE = 25
-
-VOLUME_ML_UNIT_WORDS = ('ml', 'millilitres', 'milliliters', 'cc')
-VOLUME_L_UNIT_WORDS = ('l', 'litres', 'liters')
-VOLUME_DL_UNIT_WORDS = ('dl', 'decilitres', 'deciliters')
-VOLUME_CL_UNIT_WORDS = ('cl', 'centilitres', 'centiliters')
+    'Reactor': {
+        'reactor_type': ROUND_BOTTOM_FLASK,
+    }
+}
 

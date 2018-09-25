@@ -1,4 +1,8 @@
 from distutils.core import setup
+from dev_utils import add_getters
+
+add_getters('xdllib/steps_xdl.py')
+add_getters('xdllib/steps_chasm.py')
 
 setup(name='xdllib',
       version='0.1',

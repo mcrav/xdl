@@ -1,17 +1,23 @@
 import abc
 from lxml import etree
 from .chasmwriter import Chasm
-from .constants import *
+from .constants import DEFAULT_VALS
 
 class XDLElement(object):
 
     def __init__(self):
         self.properties = {}
+        self.name = ''
 
     def load_properties(self, properties):
         for prop in self.properties:
             if prop in properties:
                 self.properties[prop] = properties[prop]
+
+    def get_defaults(self):
+        for k in self.properties:
+            if self.properties[k] == 'default':
+                self.properties[k] = DEFAULT_VALS[self.name][k]
 
 class Step(XDLElement):
 
@@ -19,11 +25,6 @@ class Step(XDLElement):
         self.name = ''
         self.properties = {}
         self.steps = []
-
-    def get_defaults(self):
-        for k in self.properties:
-            if self.properties[k] == 'default':
-                self.properties[k] = DEFAULT_VALS[self.name][k]
 
     def as_chasm(self):
         chasm = self.get_chasm_stub()
@@ -98,6 +99,9 @@ class Repeat(Step):
             'steps': steps,
             'comment': comment,
         }
+        self.steps = []
+        for i in range(repeat_n_times):
+            self.steps.extend(self.properties['steps'])
 
         self.human_readable = f'Do the folllowing {repeat_n_times}:\n'
         for step in steps:

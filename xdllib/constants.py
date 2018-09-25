@@ -14,6 +14,8 @@ DEFAULT_FILTER_TIME = 60
 DEFAULT_EXTRACTION_VOLUME = 30 # mL
 DEFAULT_WASH_WAIT_TIME = 600 # s
 
+ROUND_BOTTOM_FLASK = 'RoundBottomFlask'
+
 DEFAULT_VALS = {
     'Move': {
         'move_speed': DEFAULT_MOVE_SPEED,
@@ -60,4 +62,9 @@ DEFAULT_VALS = {
     'SetRpmAndStartStir': {
         'stir_rpm': DEFAULT_STIR_RPM,
     },
+
+    'Reactor': {
+        'reactor_type': ROUND_BOTTOM_FLASK,
+    }
 }
+

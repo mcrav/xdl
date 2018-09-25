@@ -17,6 +17,10 @@ def print_step_obj_dict():
     print(s)
     
 def add_getters(steps_file):
+    """
+    Add getter methods to given steps_file.
+    Getter will be added for everything in self.properties dict.
+    """
     with open(steps_file, 'r') as fileobj:
         lines = fileobj.readlines()
     new_lines = []
@@ -42,7 +46,6 @@ def add_getters(steps_file):
         if 'self.properties = {' in line:
             read_props = True
 
-
         if not line.strip():
             if getter:
                 getter = False
@@ -53,6 +56,11 @@ def add_getters(steps_file):
 
         if not getter:
             new_lines.append(line.rstrip())
+    
+    for prop in props:
+        new_lines.append(f'{indent}@property')
+        new_lines.append(f'{indent}def {prop}(self):')
+        new_lines.append(f"{indent*2}return self.properties['{prop}']\n")
         
     with open(steps_file, 'w') as fileobj:
         fileobj.write('\n'.join(new_lines))
