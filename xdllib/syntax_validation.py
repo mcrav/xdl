@@ -162,6 +162,10 @@ class XDLSyntaxValidator(object):
                 if attr in ['volume', 'mol', 'mass', 'temperature', 'time']:
                     if not self.check_quantity_syntax(attr, val, step):
                         quantities_valid = False
+                elif attr in ['volumes', 'solute_masses']:
+                    for item in val.split(' '):
+                        if not self.check_quantity_syntax(attr, item, step):
+                            quantities_valid = False
         return quantities_valid
 
     def check_quantity_syntax(self, quantity_type, quantity_str, quantity_element):
@@ -176,6 +180,8 @@ class XDLSyntaxValidator(object):
         Returns:
             bool -- True is quantity is valid, otherwise False
         """
+        if len(quantity_str.split(' ')) > 1:
+            return False
         quantity_valid = True
         quantity_str = quantity_str.lower()
         number_match = re.match(float_regex, quantity_str)
@@ -192,7 +198,6 @@ class XDLSyntaxValidator(object):
         if not remainder:
             quantity_valid = True
         elif remainder.strip() not in XDL_ACCEPTABLE_UNITS[quantity_type]:
-            print(remainder.strip())
             quantity_valid = False
         else:
             quantity_valid = True

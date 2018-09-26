@@ -67,7 +67,7 @@ class Step(XDLElement):
 
 class Comment(Step):
 
-    def __init__(self, comment):
+    def __init__(self, comment=''):
         self.comment = comment
 
         self.name = 'Comment'
@@ -84,7 +84,7 @@ class Repeat(Step):
     """
     Repeat given step given number of times.
     """
-    def __init__(self, repeat_n_times=None, steps=[], comment=''):
+    def __init__(self, repeat_n_times=1, steps=[], comment=''):
         """
         Arguments:
             repeat_n_times {int} -- Number of times to repeat given step.

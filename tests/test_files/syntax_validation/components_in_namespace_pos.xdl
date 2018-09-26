@@ -1,0 +1,17 @@
+<Synthesis>
+    <Hardware>
+        <Reactor />
+        <Flask />
+        <FilterFlask />
+        <Waste />
+    </Hardware>
+
+    <Reagents>
+
+    </Reagents>
+
+    <Procedure>
+
+    </Procedure>
+
+</Synthesis>

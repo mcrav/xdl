@@ -147,24 +147,24 @@ class CSwitchVacuum(Step):
     """
     Switches a vacuum valve between backbone and vacuum.
     """
-    def __init__(self, flask=None, destination=None, comment=''):
+    def __init__(self, vessel=None, destination=None, comment=''):
         """
         flask -- Name of the node the vacuum valve is logically attacked to (e.g. "filter_bottom")
         destination -- Either "vacuum" or "backbone"
         """
         self.name = 'SwitchVacuum'
         self.properties = {
-            'flask': flask,
+            'vessel': vessel,
             'destination': destination,
             'comment': comment
         }
 
     def execute(self, chempiler):
-        chempiler.pump.switch_cartridge(self.flask, self.destination)
+        chempiler.pump.switch_cartridge(self.vessel, self.destination)
 
     @property
-    def flask(self):
-        return self.properties['flask']
+    def vessel(self):
+        return self.properties['vessel']
 
     @property
     def destination(self):

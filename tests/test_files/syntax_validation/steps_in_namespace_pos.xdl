@@ -1,0 +1,75 @@
+<Synthesis>
+    <Hardware>
+
+    </Hardware>
+
+    <Reagents>
+
+    </Reagents>
+
+    <Procedure>
+         <Step />
+<Comment />
+<Repeat />
+<CMove />
+<CSeparate />
+<CPrime />
+<CSwitchVacuum />
+<CSwitchCartridge />
+<CSwitchColumn />
+<StartStir />
+<StartHeat />
+<CStopStir />
+<CStopHeat />
+<CSetTemp />
+<CSetStirRpm />
+<CStirrerWaitForTemp />
+<CStartHeaterBath />
+<CStopHeaterBath />
+<CStartRotation />
+<CStopRotation />
+<CLiftArmUp />
+<CLiftArmDown />
+<CResetRotavap />
+<CSetBathTemp />
+<CSetRvRotationSpeed />
+<CRvWaitForTemp />
+<CSetInterval />
+<CInitVacPump />
+<CGetVacSp />
+<CSetVacSp />
+<CStartVac />
+<CStopVac />
+<CVentVac />
+<CSetSpeedSp />
+<CStartChiller />
+<CStopChiller />
+<CSetChiller />
+<CChillerWaitForTemp />
+<CRampChiller />
+<CSwitchChiller />
+<CSetCoolingPower />
+<CSetRecordingSpeed />
+<CWait />
+<CBreakpoint />
+<StartVacuum />
+<StopVacuum />
+<StartHeat />
+<CleanVessel />
+<CleanTubing />
+<HeatAndReact />
+<ContinueStirToRT />
+<Chill />
+<ChillBackToRT />
+<Add />
+<StirAndTransfer />
+<Wash />
+<ChillReact />
+<MakeSolution />
+<AddSolid />
+<Reflux />
+
+
+    </Procedure>
+
+</Synthesis>

@@ -28,11 +28,11 @@
 
 ### Syntax Validation
 
-1. Complete list of compulsory attributes
+1. Complete list of compulsory attributes and make test files.
+2. Test in MakeSolution length of solute_mass matches length of solute attribute.
 
 ### Unit Testing
 
-1. Syntax validation
-2. Hardware mapping
-3. Waste mapping
-4. Closing open steps
+1. Hardware mapping
+2. Waste mapping
+3. Closing open steps

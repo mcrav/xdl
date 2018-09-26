@@ -45,6 +45,8 @@ from .steps_chasm import (
     CBreakpoint,
 )
 
+
+
 class StartStir(Step):
 
     def __init__(self, vessel=None, stir_rpm='default', comment=''):
@@ -120,7 +122,6 @@ class StartVacuum(Step):
 
         self.human_readable = f'Start vacuum for {vessel}.'
 
-
     @property
     def vessel(self):
         return self.properties['vessel']
@@ -140,7 +141,7 @@ class StopVacuum(Step):
         }
 
         self.steps = [
-            CSwitchVacuum(flask=vessel, destination='backbone')
+            CSwitchVacuum(vessel=vessel, destination='backbone')
         ]
 
         self.human_readable = f'Stop vacuum for {vessel}.'
@@ -167,18 +168,20 @@ class CleanVessel(Step):
         }
 
         self.steps = []
-        for solvent, volume in zip(solvents, volumes):
-            self.steps.extend([
-                CMove(from_vessel=f'flask_{solvent}', to_vessel=f"{vessel}", volume=volume),
-                StartStir(vessel=vessel, stir_rpm=stir_rpm),
-                CWait(time=60),
-                CStopStir(vessel=vessel),
-                CMove(from_vessel=vessel, to_vessel='waste_reactor', volume='all'),
-            ])
+        if solvents and volumes:
+            for solvent, volume in zip(solvents, volumes):
+                self.steps.extend([
+                    CMove(from_vessel=f'flask_{solvent}', to_vessel=f"{vessel}", volume=volume),
+                    StartStir(vessel=vessel, stir_rpm=stir_rpm),
+                    CWait(time=60),
+                    CStopStir(vessel=vessel),
+                    CMove(from_vessel=vessel, to_vessel='waste_reactor', volume='all'),
+                ])
 
         self.human_readable = ''
-        for solvent, volume in zip(solvents, volumes):
-            self.human_readable += f'Clean {vessel} with {solvent}.\n'
+        if solvents and volumes:
+            for solvent, volume in zip(solvents, volumes):
+                self.human_readable += f'Clean {vessel} with {solvent}.\n'
         self.human_readable = self.human_readable[:-1]
 
     @property

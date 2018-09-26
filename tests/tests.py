@@ -1,6 +1,10 @@
 from xdllib.xdlinterpreter import XDL
 import os
 from xdllib.syntax_validation import XDLSyntaxValidator
+from xdllib.namespace import STEP_OBJ_DICT
+from xdllib.xdlgenerator import XDLGenerator
+
+HERE = os.path.dirname(os.path.realpath(__file__))
 
 def run_tests():
     return [
@@ -30,6 +34,10 @@ def simulate_all_files():
             xdlobj.simulate(graphml_file)
 
 def test_syntax_validation():
+    """
+    Test XDLSyntaxValidator works.
+    Return fraction between 0-1 indicating pass rate.
+    """
     files = os.listdir('test_files/syntax_validation')
     passed_count = 0
     for f in files:
@@ -44,10 +52,11 @@ def test_syntax_validation():
             res = validator.all_vessels_declared()
         elif f.startswith('steps_in_namespace'):
             res = validator.steps_in_namespace()
-        elif f.startswith('hardware_in_namespace'):
+        elif f.startswith('components_in_namespace'):
             res = validator.hardware_in_namespace()
         elif f.startswith('check_quantities'):
             res = validator.check_quantities()
+        # Unimplemented cos is unfinished
         elif f.startswith('check_step_attributes'):
             res = validator.check_step_attributes()
             

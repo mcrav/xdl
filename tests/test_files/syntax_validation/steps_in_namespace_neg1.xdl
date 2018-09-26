@@ -1,0 +1,16 @@
+<Synthesis>
+    <Hardware>
+
+    </Hardware>
+
+    <Reagents>
+
+    </Reagents>
+
+    <Procedure>
+         <Decimate />
+         <Dessicate />
+         <Annihilate />
+    </Procedure>
+
+</Synthesis>
