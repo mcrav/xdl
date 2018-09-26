@@ -42,7 +42,7 @@ def add_getters(steps_file):
 
         if read_props:
             props.append(re.search(r': ([a-z_]+)(,)?\n', line).group(1))
-        
+
         if 'self.properties = {' in line:
             read_props = True
 

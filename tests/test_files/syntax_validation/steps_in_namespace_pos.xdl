@@ -9,8 +9,6 @@
 
     <Procedure>
          <Step />
-<Comment />
-<Repeat />
 <CMove />
 <CSeparate />
 <CPrime />

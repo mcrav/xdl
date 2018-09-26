@@ -2,8 +2,6 @@ from .steps import *
 from .components import *
 
 STEP_OBJ_DICT = {
-    'Comment': Comment,
-    'Repeat': Repeat,
     'Move': CMove,
     'Separate': CSeparate,
     'Prime': CPrime,
