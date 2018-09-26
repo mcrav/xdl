@@ -1,5 +1,5 @@
-from .constants import *
-from .steps_generic import XDLElement
+from ..constants import *
+from ..utils import XDLElement
 
 class Reagent(XDLElement):
 

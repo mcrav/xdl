@@ -6,12 +6,9 @@ import os
 from chempiler import Chempiler
 from .utils import convert_time_str_to_seconds, convert_volume_str_to_ml, get_reagent_combinations
 from .constants import *
-from .steps_xdl import *
-from .steps_chasm import *
-from .steps_generic import *
-from .components import *
+from .hardware import *
 from .reagents import *
-from .steps_chasm import *
+from .steps import *
 from .safety import procedure_is_safe
 from .syntax_validation import XDLSyntaxValidator
 from .namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT

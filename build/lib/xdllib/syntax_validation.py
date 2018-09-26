@@ -1,27 +1,10 @@
 from lxml import etree
 from io import StringIO
-import xdllib.steps_chasm
-import xdllib.steps_xdl
-import xdllib.components
+from .namespace import XDL_STEP_NAMESPACE, XDL_HARDWARE_NAMESPACE
 from .utils import float_regex
 import inspect
 import re
 import traceback
-
-# Get Namespace
-
-def get_class_names_from_module(mod):
-    """Given module return list of class names in that module."""
-    return [item[0] for item in inspect.getmembers(mod, inspect.isclass)]
-XDL_STEP_NAMESPACE = []
-XDL_STEP_NAMESPACE.extend(get_class_names_from_module(xdllib.steps_xdl))
-XDL_STEP_NAMESPACE.extend([
-    'Move',
-    'StopHeat',
-    'StopStir',
-    'Wait',
-])
-XDL_HARDWARE_NAMESPACE = [item for item in get_class_names_from_module(xdllib.components) if item not in ['XDLElement', 'Component', 'Hardware']]
 
 XDL_ACCEPTABLE_UNITS = {
     'volume': ['ul', 'ml', 'cl', 'dl', 'l', 'cc'],

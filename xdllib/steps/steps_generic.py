@@ -1,23 +1,8 @@
 import abc
 from lxml import etree
-from .chasmwriter import Chasm
-from .constants import DEFAULT_VALS
+from ..constants import DEFAULT_VALS
+from ..utils import XDLElement
 
-class XDLElement(object):
-
-    def __init__(self):
-        self.properties = {}
-        self.name = ''
-
-    def load_properties(self, properties):
-        for prop in self.properties:
-            if prop in properties:
-                self.properties[prop] = properties[prop]
-
-    def get_defaults(self):
-        for k in self.properties:
-            if self.properties[k] == 'default':
-                self.properties[k] = DEFAULT_VALS[self.name][k]
 
 class Step(XDLElement):
 

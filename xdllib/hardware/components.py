@@ -1,5 +1,5 @@
-from .steps_generic import XDLElement
-from .constants import *
+from ..utils import XDLElement
+from ..constants import *
 
 class Component(XDLElement):
 

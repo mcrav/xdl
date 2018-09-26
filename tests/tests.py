@@ -1,8 +1,8 @@
-from xdllib.xdlinterpreter import XDL
+from xdllib import XDL
 import os
-from xdllib.syntax_validation import XDLSyntaxValidator
+from xdllib import XDLSyntaxValidator
 from xdllib.namespace import STEP_OBJ_DICT
-from xdllib.xdlgenerator import XDLGenerator
+from xdllib import XDLGenerator
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 

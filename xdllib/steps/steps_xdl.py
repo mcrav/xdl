@@ -1,5 +1,4 @@
-from .chasmwriter import Chasm
-from .constants import *
+from ..constants import *
 from .steps_generic import Step, Repeat, Comment
 from .steps_chasm import (
    CMove,

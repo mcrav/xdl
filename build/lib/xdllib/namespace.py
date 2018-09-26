@@ -1,7 +1,5 @@
-from .steps_xdl import *
-from .steps_chasm import *
-from .steps_generic import *
-from .components import *
+from .steps import *
+from .hardware import *
 
 STEP_OBJ_DICT = {
     'Step': Step,
@@ -72,3 +70,6 @@ COMPONENT_OBJ_DICT = {
     'Flask': Flask,
     'Waste': Waste,
 }
+
+XDL_STEP_NAMESPACE = list(STEP_OBJ_DICT.keys())
+XDL_HARDWARE_NAMESPACE = list(COMPONENT_OBJ_DICT.keys())

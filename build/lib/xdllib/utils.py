@@ -1,7 +1,22 @@
 import re
 import itertools
+from .constants import DEFAULT_VALS
 
+class XDLElement(object):
 
+    def __init__(self):
+        self.properties = {}
+        self.name = ''
+
+    def load_properties(self, properties):
+        for prop in self.properties:
+            if prop in properties:
+                self.properties[prop] = properties[prop]
+
+    def get_defaults(self):
+        for k in self.properties:
+            if self.properties[k] == 'default':
+                self.properties[k] = DEFAULT_VALS[self.name][k]
 
 float_regex = r'([0-9]+([.][0-9]+)?)'
 
