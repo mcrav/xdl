@@ -2,13 +2,19 @@
 
 ## Add
 ### Attributes
-* reagent
-* volume
-* vessel
+* reagent (optional)
+* volume (optional)
+* vessel (optional)
 * time (optional)
 * move_speed (optional)
 * clean_tubing (optional)
-* comment (optional)
+
+
+## AddSolid
+### Attributes
+* reagent (optional)
+* mass (optional)
+* vessel (optional)
 
 
 ## Breakpoint
@@ -18,24 +24,21 @@
 
 ## Chill
 ### Attributes
-* vessel
-* temp
-* comment (optional)
+* vessel (optional)
+* temp (optional)
 
 
 ## ChillBackToRT
 ### Attributes
-* vessel
-* comment (optional)
+* vessel (optional)
 
 
 ## ChillReact
 ### Attributes
-* reagents
-* volumes
-* vessel
-* temp
-* comment (optional)
+* reagents (optional)
+* volumes (optional)
+* vessel (optional)
+* temp (optional)
 
 
 ## ChillerWaitForTemp
@@ -46,19 +49,17 @@
 
 ## CleanTubing
 ### Attributes
-* vessel
+* vessel (optional)
 * solvent (optional)
 * volume (optional)
-* comment (optional)
 
 
 ## CleanVessel
 ### Attributes
-* vessel
+* vessel (optional)
 * solvent (optional)
 * volume (optional)
 * stir_rpm (optional)
-* comment (optional)
 
 
 ## Comment
@@ -68,22 +69,22 @@
 
 ## Dry
 ### Attributes
-* vessel
+* vessel (optional)
 * time (optional)
 
 
 ## Extract
 ### Attributes
-* from_vessel
-* solvent
-* solvent_volume
-* n_separations
+* from_vessel (optional)
+* solvent (optional)
+* solvent_volume (optional)
+* n_separations (optional)
 
 
 ## Filter
 ### Attributes
-* from_vessel
-* vessel
+* from_vessel (optional)
+* vessel (optional)
 * time (optional)
 
 
@@ -95,11 +96,10 @@
 
 ## HeatAndReact
 ### Attributes
-* vessel
-* time
-* temp
+* vessel (optional)
+* time (optional)
+* temp (optional)
 * stir_rpm (optional)
-* comment (optional)
 
 
 ## InitVacPump
@@ -122,12 +122,11 @@
 
 ## MakeSolution
 ### Attributes
-* solute
-* solvent
-* solute_mass
-* solvent_volume
-* vessel
-* comment (optional)
+* solute (optional)
+* solvent (optional)
+* solute_mass (optional)
+* solvent_volume (optional)
+* vessel (optional)
 
 
 ## Move
@@ -149,7 +148,7 @@
 
 ## PrimePumpForAdd
 ### Attributes
-* reagent
+* reagent (optional)
 * move_speed (optional)
 
 
@@ -163,10 +162,9 @@
 
 ## Reflux
 ### Attributes
-* vessel
-* temp
-* time
-* comment (optional)
+* vessel (optional)
+* temp (optional)
+* time (optional)
 
 
 ## Repeat
@@ -184,10 +182,10 @@
 
 ## Rotavap
 ### Attributes
-* vessel
-* temp
-* pressure
-* time
+* vessel (optional)
+* temp (optional)
+* pressure (optional)
+* time (optional)
 
 
 ## RvWaitForTemp
@@ -286,9 +284,8 @@
 
 ## StartHeat
 ### Attributes
-* vessel
-* temp
-* comment (optional)
+* vessel (optional)
+* temp (optional)
 
 
 ## StartHeaterBath
@@ -311,9 +308,8 @@
 
 ## StartStir
 ### Attributes
-* vessel
+* vessel (optional)
 * stir_rpm (optional)
-* comment (optional)
 
 
 ## StartVac
@@ -324,23 +320,20 @@
 
 ## StartVacuum
 ### Attributes
-* vessel
-* comment (optional)
+* vessel (optional)
 
 
 ## StirAndTransfer
 ### Attributes
-* from_vessel
-* to_vessel
-* volume
+* from_vessel (optional)
+* to_vessel (optional)
+* volume (optional)
 * stir_rpm (optional)
-* comment (optional)
 
 
 ## StirToRT
 ### Attributes
-* vessel
-* comment (optional)
+* vessel (optional)
 
 
 ## StirrerWaitForTemp
@@ -387,8 +380,7 @@
 
 ## StopVacuum
 ### Attributes
-* vessel
-* comment (optional)
+* vessel (optional)
 
 
 ## SwitchCartridge
@@ -433,11 +425,10 @@
 
 ## Wash
 ### Attributes
-* solvent
-* vessel
+* solvent (optional)
+* vessel (optional)
 * volume (optional)
 * move_speed (optional)
 * wait_time (optional)
-* comment (optional)
 
 

@@ -1,6 +1,7 @@
 import os
 
 def get_steps_info():
+    """Read steps py files and get info about Step subclasses."""
     HERE = os.path.dirname(os.path.realpath(__file__))
     step_folder = os.path.join(HERE, 'xdllib/steps')
     step_files = [os.path.join(step_folder, f) 
@@ -12,6 +13,7 @@ def get_steps_info():
     return sorted(steps_info, key=lambda step: step['name'])
 
 def read_steps_file(file_path):
+    """Read step info from given steps py file."""
     steps_info = []
     with open(file_path, 'r') as fileobj:
         lines = fileobj.readlines()
@@ -40,6 +42,7 @@ def read_steps_file(file_path):
     return steps_info
 
 def make_steps_doc():
+    """Make docs/steps.md."""
     steps = get_steps_info()
     md = '# Steps\n\n'
     for step in steps:
