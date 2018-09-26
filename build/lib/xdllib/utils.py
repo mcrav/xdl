@@ -1,5 +1,6 @@
 import re
 import itertools
+import lxml.etree as etree
 from .constants import DEFAULT_VALS
 
 class XDLElement(object):
@@ -17,6 +18,41 @@ class XDLElement(object):
         for k in self.properties:
             if self.properties[k] == 'default':
                 self.properties[k] = DEFAULT_VALS[self.name][k]
+
+class Step(XDLElement):
+
+    def __init__(self):
+        self.name = ''
+        self.properties = {}
+        self.steps = []
+
+    def as_xdl(self, as_str=False):
+        step = etree.Element('step')
+        step.set('name', self.name)
+        for prop, val in self.properties.items():
+            if val != '':
+                element = etree.SubElement(step, 'property')
+                element.set('name', prop)
+                element.text = str(val)
+        if as_str:
+            return etree.dump(step)
+        else:
+            return step
+
+    def load_properties(self, properties):
+        new_properties = {}
+        for prop, val in properties.items():
+            if prop in self.properties:
+                new_properties[prop] = val
+        self.__init__(**new_properties)
+
+    def update_steps(self):
+        self.__init__(**self.properties)
+
+    def execute(self, chempiler):
+        for step in self.steps:
+            step.execute(chempiler)
+
 
 float_regex = r'([0-9]+([.][0-9]+)?)'
 

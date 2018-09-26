@@ -1,5 +1,5 @@
 from ..constants import *
-from .steps_generic import Step
+from ..utils import Step
 
 """
 IMPORTANT:
@@ -10,8 +10,6 @@ properties can be accessed like step.property instead of step.properties['proper
 When writing code in this file you can assume all keys of self.properties are member variables of
 the same name.
 """
-
-### Pump ###
 
 class CMove(Step):
     """
@@ -31,9 +29,9 @@ class CMove(Step):
         self.name = 'Move'
 
         self.properties = {
-            'from_vessel': from_vessel,
-            'to_vessel': to_vessel,
-            'volume': volume,
+            'from_vessel': from_vessel,  # compulsory
+            'to_vessel': to_vessel,  # compulsory
+            'volume': volume,  # compulsory 
             'move_speed': move_speed,
             'aspiration_speed': aspiration_speed,
             'dispense_speed': dispense_speed,
@@ -93,8 +91,8 @@ class CSeparate(Step):
         """
         self.name = 'Separate'
         self.properties = {
-            'lower_phase_target': lower_phase_target,
-            'upper_phase_target': upper_phase_target,
+            'lower_phase_target': lower_phase_target,  # compulsory
+            'upper_phase_target': upper_phase_target,  # compulsory
             'comment': comment
         }
 
@@ -126,7 +124,7 @@ class CPrime(Step):
         """
         self.name = 'Prime'
         self.properties = {
-            'aspiration_speed': aspiration_speed,
+            'aspiration_speed': aspiration_speed, 
             'comment': comment
         }
         self.get_defaults()
@@ -153,8 +151,8 @@ class CSwitchVacuum(Step):
         """
         self.name = 'SwitchVacuum'
         self.properties = {
-            'vessel': vessel,
-            'destination': destination,
+            'vessel': vessel,  # compulsory
+            'destination': destination,  # compulsory
             'comment': comment
         }
 
@@ -184,8 +182,8 @@ class CSwitchCartridge(Step):
         """
         self.name = 'SwitchCartridge'
         self.properties = {
-            'flask': flask,
-            'cartridge': cartridge,
+            'flask': flask,  # compulsory
+            'cartridge': cartridge,  # compulsory
             'comment': comment
         }
 
@@ -215,15 +213,13 @@ class CSwitchColumn(Step):
         """
         self.name = 'SwitchColumn'
         self.properties = {
-            'column': column,
-            'destination': destination,
+            'column': column,  # compulsory
+            'destination': destination,  # compulsory
             'comment': comment
         }
 
     def execute(self, chempiler):
         chempiler.pump.switch_column_fraction(self.column, self.destination)
-
-### Stirrer ###
 
     @property
     def column(self):
@@ -247,7 +243,7 @@ class CStartStir(Step):
         """
         self.name = 'StartStir'
         self.properties = {
-            'vessel': vessel,
+            'vessel': vessel,  # compulsory
             'comment': comment
         }
 
@@ -273,7 +269,7 @@ class CStartHeat(Step):
         """
         self.name = 'StartHeat'
         self.properties = {
-            'vessel': vessel,
+            'vessel': vessel,  # compulsory
             'comment': comment
         }
 
@@ -298,7 +294,7 @@ class CStopStir(Step):
         """
         self.name = 'StopStir'
         self.properties = {
-            'vessel': vessel,
+            'vessel': vessel,  # compulsory
             'comment': comment
         }
 
@@ -382,8 +378,8 @@ class CSetStirRpm(Step):
         """
         self.name = 'SetStirRpm'
         self.properties = {
-            'vessel': vessel,
-            'stir_rpm': stir_rpm,
+            'vessel': vessel,  # compulsory
+            'stir_rpm': stir_rpm,  # compulsory
             'comment': comment
         }
 
@@ -413,7 +409,7 @@ class CStirrerWaitForTemp(Step):
         """
         self.name = 'StirrerWaitForTemp'
         self.properties = {
-            'vessel': vessel,
+            'vessel': vessel,  # compulsory
             'comment': comment
         }
 
@@ -438,7 +434,7 @@ class CStartHeaterBath(Step):
         """
         self.name = 'StartHeaterBath'
         self.properties = {
-            'rotavap_name': rotavap_name,
+            'rotavap_name': rotavap_name, # compulsory
             'comment': comment
         }
 
@@ -463,7 +459,7 @@ class CStopHeaterBath(Step):
         """
         self.name = 'StopHeaterBath'
         self.properties = {
-            'rotavap_name': rotavap_name,
+            'rotavap_name': rotavap_name, # compulsory
             'comment': comment
         }
 
@@ -486,9 +482,9 @@ class CStartRotation(Step):
         """
         rotavap_name -- Name of the node representing the rotary evaporator.
         """
-        self.vessel = 'StartRotation'
+        self.name = 'StartRotation'
         self.properties = {
-            'rotavap_name': rotavap_name,
+            'rotavap_name': rotavap_name, # compulsory
             'comment': comment
         }
 
@@ -513,7 +509,7 @@ class CStopRotation(Step):
         """
         self.name = 'StopRotation'
         self.properties = {
-            'rotavap_name': rotavap_name,
+            'rotavap_name': rotavap_name, # compulsory
             'comment': comment
         }
 
@@ -538,7 +534,7 @@ class CLiftArmUp(Step):
         """
         self.name = 'LiftArmUp'
         self.properties = {
-            'rotavap_name': rotavap_name,
+            'rotavap_name': rotavap_name, # compulsory
             'comment': comment
         }
 
@@ -563,7 +559,7 @@ class CLiftArmDown(Step):
         """
         self.name = 'LiftArmDown'
         self.properties = {
-            'rotavap_name': rotavap_name,
+            'rotavap_name': rotavap_name, # compulsory
             'comment': comment
         }
 
@@ -588,7 +584,7 @@ class CResetRotavap(Step):
         """
         self.name = 'ResetRotavap'
         self.properties = {
-            'rotavap_name': rotavap_name,
+            'rotavap_name': rotavap_name, # compulsory
             'comment': comment
         }
 
@@ -614,8 +610,8 @@ class CSetBathTemp(Step):
         """
         self.name = 'SetBathTemp'
         self.properties = {
-            'rotavap_name': rotavap_name,
-            'temp': temp,
+            'rotavap_name': rotavap_name, # compulsory
+            'temp': temp, # compulsory
             'comment': comment
         }
 
@@ -645,8 +641,8 @@ class CSetRvRotationSpeed(Step):
         """
         self.name = 'SetRvRotationSpeed'
         self.properties = {
-            'rotavap_name': rotavap_name,
-            'rotation_speed': rotation_speed,
+            'rotavap_name': rotavap_name, # compulsory
+            'rotation_speed': rotation_speed, # compulsory
             'comment': comment
         }
 
@@ -676,7 +672,7 @@ class CRvWaitForTemp(Step):
         """
         self.name = 'RvWaitForTemp'
         self.properties = {
-            'rotavap_name': rotavap_name,
+            'rotavap_name': rotavap_name, # compulsory
             'comment': comment
         }
 
@@ -703,8 +699,8 @@ class CSetInterval(Step):
         """
         self.name = 'SetInterval'
         self.properties = {
-            'rotavap_name': rotavap_name,
-            'interval': interval,
+            'rotavap_name': rotavap_name, # compulsory
+            'interval': interval, # compulsory
             'comment': comment
         }
 
@@ -735,7 +731,7 @@ class CInitVacPump(Step):
         """
         self.name = 'InitVacPump'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
+            'vacuum_pump_name': vacuum_pump_name, # compulsory
             'comment': comment
         }
 
@@ -760,7 +756,7 @@ class CGetVacSp(Step):
         """
         self.name = 'GetVacSp'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
+            'vacuum_pump_name': vacuum_pump_name, # compulsory
             'comment': comment
         }
 
@@ -786,8 +782,8 @@ class CSetVacSp(Step):
         """
         self.name = 'SetVacSp'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
-            'set_point': set_point,
+            'vacuum_pump_name': vacuum_pump_name, # compulsory
+            'set_point': set_point, # compulsory
             'comment': comment
         }
 
@@ -816,7 +812,7 @@ class CStartVac(Step):
         """
         self.name = 'StartVac'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
+            'vacuum_pump_name': vacuum_pump_name, # compulsory
             'comment': comment
         }
 
@@ -841,7 +837,7 @@ class CStopVac(Step):
         """
         self.name = 'StopVac'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
+            'vacuum_pump_name': vacuum_pump_name, # compulsory
             'comment': comment
         }
 
@@ -866,7 +862,7 @@ class CVentVac(Step):
         """
         self.name = 'VentVac'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
+            'vacuum_pump_name': vacuum_pump_name, # compulsory
             'comment': comment
         }
 
@@ -892,8 +888,8 @@ class CSetSpeedSp(Step):
         """
         self.name = 'SetSpeedSp'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
-            'set_point': set_point,
+            'vacuum_pump_name': vacuum_pump_name, # compulsory
+            'set_point': set_point, # compulsory
             'comment': comment
         }
 
@@ -924,7 +920,7 @@ class CStartChiller(Step):
         """
         self.name = 'StartChiller'
         self.properties = {
-            'vessel': vessel,
+            'vessel': vessel, # compulsory
             'comment': comment
         }
 
@@ -949,7 +945,7 @@ class CStopChiller(Step):
         """
         self.name = 'StopChiller'
         self.properties = {
-            'vessel': vessel,
+            'vessel': vessel, # compulsory
             'comment': comment
         }
 
@@ -975,8 +971,8 @@ class CSetChiller(Step):
         """
         self.name = 'SetChiller'
         self.properties = {
-            'vessel': vessel,
-            'temp': temp,
+            'vessel': vessel, # compulsory
+            'temp': temp, # compulsory
             'comment': comment
         }
 
@@ -1006,7 +1002,7 @@ class CChillerWaitForTemp(Step):
         """
         self.name = 'ChillerWaitForTemp'
         self.properties = {
-            'vessel': vessel,
+            'vessel': vessel, # compulsory
             'comment': comment
         }
 
@@ -1034,9 +1030,9 @@ class CRampChiller(Step):
         """
         self.name = 'RampChiller'
         self.properties = {
-            'vessel': vessel,
-            'ramp_duration': ramp_duration,
-            'end_temperature': end_temperature,
+            'vessel': vessel, # compulsory
+            'ramp_duration': ramp_duration, # compulsory
+            'end_temperature': end_temperature, # compulsory
             'comment': comment
         }
 
@@ -1070,8 +1066,8 @@ class CSwitchChiller(Step):
         """
         self.name = 'SwitchChiller'
         self.properties = {
-            'solenoid_valve_name': solenoid_valve_name,
-            'state': state,
+            'solenoid_valve_name': solenoid_valve_name, # compulsory
+            'state': state, # compulsory
             'comment': comment
         }
 
@@ -1101,15 +1097,13 @@ class CSetCoolingPower(Step):
         """
         self.name = 'SetCoolingPower'
         self.properties = {
-            'vessel': vessel,
-            'cooling_power': cooling_power,
+            'vessel': vessel, # compulsory
+            'cooling_power': cooling_power, # compulsory
             'comment': comment
         }
 
     def execute(self, chempiler):
         chempiler.chiller.cooling_power(self.vessel, self.cooling_power)
-
-### Camera ###
 
     @property
     def vessel(self):
@@ -1133,7 +1127,7 @@ class CSetRecordingSpeed(Step):
         """
         self.name = 'SetRecordingSpeed'
         self.properties = {
-            'recording_speed': recording_speed,
+            'recording_speed': recording_speed, # compulsory
             'comment': comment
         }
 
@@ -1160,7 +1154,7 @@ class CWait(Step):
         """
         self.name = 'Wait'
         self.properties = {
-            'time': time,
+            'time': time, # compulsory
             'comment': comment
         }
 

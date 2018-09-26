@@ -6,7 +6,7 @@ import os
 from chempiler import Chempiler
 from .utils import convert_time_str_to_seconds, convert_volume_str_to_ml, get_reagent_combinations
 from .constants import *
-from .hardware import *
+from .components import *
 from .reagents import *
 from .steps import *
 from .safety import procedure_is_safe
@@ -237,20 +237,3 @@ def hardware_is_compatible(xdl_hardware=None, graphml_hardware=None):
     flasks_ok = True # NEEDS DONE
     waste_ok = True # NEEDS DONE
     return enough_reactors and enough_filters and flasks_ok and waste_ok
-
-def main():
-    # from stuff import rufinamide_steps
-    
-    # xdl_f = '/home/group/ReaxysChemputerInterface/stuff/rufinamide.xdl'
-    # reaction = Reaction('')
-    # reaction.steps = rufinamide_steps
-    # reaction.save_xdl(xdl_f)
-
-    xdl_f = '/home/group/XDLInterpreter/stuff/xdl_v4.xdl'
-    chasm_f = '/home/group/XDLInterpreter/stuff/xdl_v4.chasm'
-
-    xdl = XDL(xdl_file=xdl_f)
-    # xdl.as_chasm(chasm_f, '/home/group/XDLInterpreter/stuff/rufinamide.graphml')
-    
-if __name__ == '__main__':
-    main()

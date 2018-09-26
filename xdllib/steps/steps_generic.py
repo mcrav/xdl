@@ -1,69 +1,20 @@
 import abc
 from lxml import etree
 from ..constants import DEFAULT_VALS
-from ..utils import XDLElement
+from ..utils import XDLElement, Step
 
 
-class Step(XDLElement):
-
-    def __init__(self):
-        self.name = ''
-        self.properties = {}
-        self.steps = []
-
-    def as_chasm(self):
-        chasm = self.get_chasm_stub()
-        for step in self.steps:
-            chasm.add_step(step)
-        return chasm.code
-
-    def get_chasm_stub(self):
-        chasm = Chasm()
-        if self.properties['comment']:
-            chasm.add_comment(self.properties['comment'])
-        return chasm
-
-    def as_xdl(self, as_str=False):
-        step = etree.Element('step')
-        step.set('name', self.name)
-        for prop, val in self.properties.items():
-            if val != '':
-                element = etree.SubElement(step, 'property')
-                element.set('name', prop)
-                element.text = str(val)
-        if as_str:
-            return etree.dump(step)
-        else:
-            return step
-
-    def load_properties(self, properties):
-        new_properties = {}
-        for prop, val in properties.items():
-            if prop in self.properties:
-                new_properties[prop] = val
-        self.__init__(**new_properties)
-
-    def update_steps(self):
-        self.__init__(**self.properties)
-
-    def execute(self, chempiler):
-        for step in self.steps:
-            step.execute(chempiler)
 
 class Comment(Step):
 
     def __init__(self, comment=''):
-        self.comment = comment
 
         self.name = 'Comment'
         self.properties = {
-            'comment': self.comment,
+            'comment': comment,
         }
 
-    def as_chasm(self):
-        chasm = Chasm()
-        chasm.add_comment(self.properties['comment'])
-        return chasm.code
+        self.human_readable = f'(Comment: {comment})'
 
 class Repeat(Step):
     """
@@ -80,8 +31,8 @@ class Repeat(Step):
 
         self.name = 'Repeat'
         self.properties = {
-            'repeat_n_times': repeat_n_times,
-            'steps': steps,
+            'repeat_n_times': repeat_n_times, # compulsory
+            'steps': steps, # compulsory
             'comment': comment,
         }
         self.steps = []

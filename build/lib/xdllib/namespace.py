@@ -1,8 +1,7 @@
 from .steps import *
-from .hardware import *
+from .components import *
 
 STEP_OBJ_DICT = {
-    'Step': Step,
     'Comment': Comment,
     'Repeat': Repeat,
     'Move': CMove,
@@ -26,7 +25,7 @@ STEP_OBJ_DICT = {
     'LiftArmDown': CLiftArmDown,
     'ResetRotavap': CResetRotavap,
     'SetBathTemp': CSetBathTemp,
-    'SetRotation': CSetRvRotationSpeed,
+    'SetRvRotationSpeed': CSetRvRotationSpeed,
     'RvWaitForTemp': CRvWaitForTemp,
     'SetInterval': CSetInterval,
     'InitVacPump': CInitVacPump,
@@ -62,6 +61,7 @@ STEP_OBJ_DICT = {
     'MakeSolution': MakeSolution,
     'AddSolid': AddSolid,
     'Reflux': Reflux,
+    'PrimePumpForAdd': PrimePumpForAdd,
 }
 
 COMPONENT_OBJ_DICT = {
