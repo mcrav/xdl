@@ -12,30 +12,28 @@ the same name.
 """
 
 class CMove(Step):
-    """
-    Moves a specified volume from one node in the graph to another. Moving from and to
+    """Moves a specified volume from one node in the graph to another. Moving from and to
     the same node is supported.
+
+    Keyword Arguments:
+        from_vessel {str} -- Vessel name to move from.
+        to_vessel {str} -- Vessel name to move to.
+        volume {float} -- Volume to move in mL. 'all' moves everything.
+        move_speed -- Speed at which liquid is moved in mL / min. (optional)
+        aspiration_speed -- Speed at which liquid aspirates from from_vessel. (optional)
+        dispense_speed -- Speed at which liquid dispenses from from_vessel. (optional)
     """
     def __init__(self, from_vessel=None, to_vessel=None, volume=None, move_speed='default',
-                 aspiration_speed='default', dispense_speed='default', comment=''):
-        """
-        from_vessel -- Name of the source flask
-        to_vessel -- Name of the destination flask
-        volume -- Can be a float or "all" in which case it moves the entire current volume
-        move_speed -- Speed at which it moves material across the backbone. This argument is optional, if absent, it defaults to 50mL/min
-        aspiration_speed -- Speed at which it aspirates from the source. This argument is optional, if absent, it defaults to {move_speed}. It will only be parsed as {aspiration_speed} if a move speed is given (argument is positional)
-        dispense_speed -- Speed at which it aspirates from the source. This argument is optional, if absent, it defaults to {move_speed}. It will only be parsed as {aspiration_speed} if a move speed and aspiration speed is given (argument is positional)
-        """
-        self.name = 'Move'
+                 aspiration_speed='default', dispense_speed='default'):
 
+        self.name = 'Move'
         self.properties = {
-            'from_vessel': from_vessel,  # compulsory
-            'to_vessel': to_vessel,  # compulsory
-            'volume': volume,  # compulsory 
+            'from_vessel': from_vessel,
+            'to_vessel': to_vessel,
+            'volume': volume, 
             'move_speed': move_speed,
             'aspiration_speed': aspiration_speed,
             'dispense_speed': dispense_speed,
-            'comment': comment
         }
         self.get_defaults()
 
@@ -75,57 +73,48 @@ class CMove(Step):
     def dispense_speed(self):
         return self.properties['dispense_speed']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSeparate(Step):
+    """Launches a phase separation sequence. The name of the separator is currently
+    hard-coded in the Chempiler!
+
+    Keywords Arguments:
+        lower_phase_vessel {str} -- Vessel name the lower phase should be transferred to.
+        upper_phase_vessel {str} -- Vessel name the upper phase should be transferred to. 
+                            If "separator_top" is specified, the upper phase is left in the separator.
     """
-    Launches a phase separation sequence. The name of the separator is currently
-    hard-coded!
-    """
-    def __init__(self, lower_phase_target=None, upper_phase_target=None, comment=''):
-        """
-        lower_phase_target -- Name of the flask the lower phase should be transferred to.
-        upper_phase_target -- Name of the flask the upper phase should be transferred to. If "separator_top" is specified, the upper phase is left in the separator.
-        """
+    def __init__(self, lower_phase_vessel=None, upper_phase_vessel=None):
+
         self.name = 'Separate'
         self.properties = {
-            'lower_phase_target': lower_phase_target,  # compulsory
-            'upper_phase_target': upper_phase_target,  # compulsory
-            'comment': comment
+            'lower_phase_vessel': lower_phase_vessel,
+            'upper_phase_vessel': upper_phase_vessel,
         }
 
     def execute(self, chempiler):
         chempiler.pump.separate_phases(
-            self.lower_phase_target,
-            self.upper_phase_target,
+            self.lower_phase_vessel,
+            self.upper_phase_vessel,
         )
 
     @property
-    def lower_phase_target(self):
-        return self.properties['lower_phase_target']
+    def lower_phase_vessel(self):
+        return self.properties['lower_phase_vessel']
 
     @property
-    def upper_phase_target(self):
-        return self.properties['upper_phase_target']
-
-    @property
-    def comment(self):
-        return self.properties['comment']
+    def upper_phase_vessel(self):
+        return self.properties['upper_phase_vessel']
 
 class CPrime(Step):
+    """Moves the tube volume of every node with "flask" as class to waste.
+
+    Keyword Arguments:
+        aspiration_speed {float} -- Speed in mL / min at which material should be withdrawn.
     """
-    Moves the tube volume of every node with "flask" as class to waste.
-    """
-    def __init__(self, aspiration_speed='default', comment=''):
-        """
-        aspiration_speed -- Speed in mL/min at which material should be withdrawn.
-        """
+    def __init__(self, aspiration_speed='default'):
+        
         self.name = 'Prime'
         self.properties = {
             'aspiration_speed': aspiration_speed, 
-            'comment': comment
         }
         self.get_defaults()
 
@@ -136,24 +125,19 @@ class CPrime(Step):
     def aspiration_speed(self):
         return self.properties['aspiration_speed']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSwitchVacuum(Step):
+    """Switches a vacuum valve between backbone and vacuum.
+
+    Keyword Arguments:
+        vessel {str} -- Name of the node the vacuum valve is logically attacked to (e.g. "filter_bottom")
+        destination {str} -- Either "vacuum" or "backbone"
     """
-    Switches a vacuum valve between backbone and vacuum.
-    """
-    def __init__(self, vessel=None, destination=None, comment=''):
-        """
-        flask -- Name of the node the vacuum valve is logically attacked to (e.g. "filter_bottom")
-        destination -- Either "vacuum" or "backbone"
-        """
+    def __init__(self, vessel=None, destination=None):
+
         self.name = 'SwitchVacuum'
         self.properties = {
-            'vessel': vessel,  # compulsory
-            'destination': destination,  # compulsory
-            'comment': comment
+            'vessel': vessel,
+            'destination': destination,
         }
 
     def execute(self, chempiler):
@@ -167,24 +151,18 @@ class CSwitchVacuum(Step):
     def destination(self):
         return self.properties['destination']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSwitchCartridge(Step):
+    """Switches a cartridge carousel to the specified position.
+
+    Keyword Arguments:
+        vessel {str} -- Name of the node the vacuum valve is logically attacked to (e.g. "rotavap")
+        cartridge {int} -- Number of the position the carousel should be switched to (0-5)
     """
-    Switches a cartridge carousel to the specified position.
-    """
-    def __init__(self, flask=None, cartridge=None, comment=''):
-        """
-        flask -- Name of the node the vacuum valve is logically attacked to (e.g. "rotavap")
-        cartridge -- Number of the position the carousel should be switched to (0-5)
-        """
+    def __init__(self, vessel=None, cartridge=None):
         self.name = 'SwitchCartridge'
         self.properties = {
-            'flask': flask,  # compulsory
-            'cartridge': cartridge,  # compulsory
-            'comment': comment
+            'vessel': vessel,
+            'cartridge': cartridge,
         }
 
     def execute(self, chempiler):
@@ -198,24 +176,19 @@ class CSwitchCartridge(Step):
     def cartridge(self):
         return self.properties['cartridge']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSwitchColumn(Step):
+    """Switches a fractionating valve attached to a chromatography column.
+
+    Keyword Arguments:
+        column {str} -- Name of the column in the graph
+        destination {str} -- Either "collect" or "waste"
     """
-    Switches a fractionating valve attached to a chromatography column.
-    """
-    def __init__(self, column=None, destination=None, comment=''):
-        """
-        column -- Name of the column in the graph
-        destination -- Either "collect" or "waste"
-        """
+    def __init__(self, column=None, destination=None):
+
         self.name = 'SwitchColumn'
         self.properties = {
-            'column': column,  # compulsory
-            'destination': destination,  # compulsory
-            'comment': comment
+            'column': column,
+            'destination': destination,
         }
 
     def execute(self, chempiler):
@@ -229,22 +202,17 @@ class CSwitchColumn(Step):
     def destination(self):
         return self.properties['destination']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CStartStir(Step):
+    """Starts the stirring operation of a hotplate or overhead stirrer.
+
+    Keyword Arguments:
+        vessel {str} -- Vessel name to stir.
     """
-    Starts the stirring operation of a hotplate or overhead stirrer.
-    """
-    def __init__(self, vessel=None, comment=''):
-        """
-        vessel -- Name of the node the device is attached to.
-        """
+    def __init__(self, vessel=None):
+
         self.name = 'StartStir'
         self.properties = {
-            'vessel': vessel,  # compulsory
-            'comment': comment
+            'vessel': vessel,
         }
 
     def execute(self, chempiler):
@@ -254,23 +222,17 @@ class CStartStir(Step):
     def vessel(self):
         return self.properties['vessel']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CStartHeat(Step):
+    """Starts the heating operation of a hotplate stirrer.
+
+    Keyword Arguments:
+        vessel {str} -- Vessel name to heat.
     """
-    Starts the stirring operation of a hotplate stirrer. This command is NOT available
-    for overhead stirrers!
-    """
-    def __init__(self, vessel=None, comment=''):
-        """
-        vessel -- Name of the node the device is attached to.
-        """
+    def __init__(self, vessel=None):
+        
         self.name = 'StartHeat'
         self.properties = {
-            'vessel': vessel,  # compulsory
-            'comment': comment
+            'vessel': vessel,
         }
 
     def execute(self, chempiler):
@@ -280,22 +242,17 @@ class CStartHeat(Step):
     def vessel(self):
         return self.properties['vessel']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CStopStir(Step):
+    """Stops the stirring operation of a hotplate or overhead stirrer.
+
+    Keyword Arguments:
+        vessel {str} -- Vessel name to stop stirring.
     """
-    Stops the stirring operation of a hotplate or overhead stirrer.
-    """
-    def __init__(self, vessel=None, comment=''):
-        """
-        vessel -- Name of the node the device is attached to.
-        """
+    def __init__(self, vessel=None):
+        
         self.name = 'StopStir'
         self.properties = {
-            'vessel': vessel,  # compulsory
-            'comment': comment
+            'vessel': vessel,
         }
 
     def execute(self, chempiler):
@@ -305,23 +262,18 @@ class CStopStir(Step):
     def vessel(self):
         return self.properties['vessel']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CStopHeat(Step):
-    """
-    Starts the stirring operation of a hotplate stirrer. This command is NOT available
+    """Starts the stirring operation of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
+
+    Keyword Arguments:
+        vessel {str} -- Vessel name to stop heating.
     """
-    def __init__(self, vessel=None, comment=''):
-        """
-        vessel -- Name of the node the device is attached to.
-        """
+    def __init__(self, vessel=None):
+ 
         self.name = 'StopHeat'
         self.properties = {
             'vessel': vessel,
-            'comment': comment
         }
 
     def execute(self, chempiler):
@@ -331,25 +283,20 @@ class CStopHeat(Step):
     def vessel(self):
         return self.properties['vessel']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSetTemp(Step):
-    """
-    Sets the temperature setpoint of a hotplate stirrer. This command is NOT available
+    """Sets the temperature setpoint of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
+
+    Keyword Arguments:
+        vessel {str} -- Vessel name to set temperature of hotplate stirrer.
+        temp {float} -- Temperature in °C
     """
-    def __init__(self, vessel=None, temp=None, comment=''):
-        """
-        vessel -- Name of the node the device is attached to.
-        temp -- Required temperature in °C
-        """
+    def __init__(self, vessel=None, temp=None):
+ 
         self.name = 'SetTemp'
         self.properties = {
             'vessel': vessel,
             'temp': temp,
-            'comment': comment
         }
 
     def execute(self, chempiler):
@@ -363,24 +310,19 @@ class CSetTemp(Step):
     def temp(self):
         return self.properties['temp']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSetStirRpm(Step):
+    """Sets the stirring speed setpoint of a hotplate or overhead stirrer.
+
+    Keyword Arguments:
+        vessel {str} -- Vessel name to set stir speed.
+        stir_rpm {float} -- Stir speed in RPM.
     """
-    Sets the stirring speed setpoint of a hotplate or overhead stirrer.
-    """
-    def __init__(self, vessel=None, stir_rpm=None, comment=''):
-        """
-        vessel -- Name of the node the device is attached to.
-        rpm -- Speed setpoint in rpm.
-        """
+    def __init__(self, vessel=None, stir_rpm=None):
+
         self.name = 'SetStirRpm'
         self.properties = {
-            'vessel': vessel,  # compulsory
-            'stir_rpm': stir_rpm,  # compulsory
-            'comment': comment
+            'vessel': vessel,
+            'stir_rpm': stir_rpm,
         }
 
     def execute(self, chempiler):
@@ -394,23 +336,18 @@ class CSetStirRpm(Step):
     def stir_rpm(self):
         return self.properties['stir_rpm']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CStirrerWaitForTemp(Step):
+    """Delays the script execution until the current temperature of the hotplate is within
+    0.5 °C of the setpoint. This command is NOT available for overhead stirrers!
+
+    Keyword Arguments:
+        vessel {str} -- Vessel name to wait for temperature.
     """
-    Delays the script execution until the current temperature of the hotplate is within
-    0.5°C of the setpoint. This command is NOT available for overhead stirrers!
-    """
-    def __init__(self, vessel=None, comment=''):
-        """
-        vessel -- Name of the node the device is attached to.
-        """
+    def __init__(self, vessel=None):
+
         self.name = 'StirrerWaitForTemp'
         self.properties = {
-            'vessel': vessel,  # compulsory
-            'comment': comment
+            'vessel': vessel,
         }
 
     def execute(self, chempiler):
@@ -420,22 +357,17 @@ class CStirrerWaitForTemp(Step):
     def vessel(self):
         return self.properties['vessel']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CStartHeaterBath(Step):
+    """Starts the heating bath of a rotary evaporator.
+
+    Keyword Arguments:
+        rotavap_name {str} -- Name of the node representing the rotary evaporator.
     """
-    Starts the heating bath of a rotary evaporator.
-    """
-    def __init__(self, rotavap_name=None, comment=''):
-        """
-        rotavap_name -- Name of the node representing the rotary evaporator.
-        """
+    def __init__(self, rotavap_name=None):
+
         self.name = 'StartHeaterBath'
         self.properties = {
-            'rotavap_name': rotavap_name, # compulsory
-            'comment': comment
+            'rotavap_name': rotavap_name,
         }
 
     def execute(self, chempiler):
@@ -445,22 +377,17 @@ class CStartHeaterBath(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CStopHeaterBath(Step):
+    """Stops the heating bath of a rotary evaporator.
+
+    Keyword Arguments:
+        rotavap_name {str} -- Name of the node representing the rotary evaporator.
     """
-    Stops the heating bath of a rotary evaporator.
-    """
-    def __init__(self, rotavap_name=None, comment=''):
-        """
-        rotavap_name -- Name of the node representing the rotary evaporator.
-        """
+    def __init__(self, rotavap_name=None):
+
         self.name = 'StopHeaterBath'
         self.properties = {
-            'rotavap_name': rotavap_name, # compulsory
-            'comment': comment
+            'rotavap_name': rotavap_name,
         }
 
     def execute(self, chempiler):
@@ -470,22 +397,17 @@ class CStopHeaterBath(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CStartRotation(Step):
+    """Starts the rotation of a rotary evaporator.
+
+    Keyword Arguments:
+        rotavap_name {str} -- Name of the node representing the rotary evaporator.
     """
-    Starts the rotation of a rotary evaporator.
-    """
-    def __init__(self, rotavap_name=None, comment=''):
-        """
-        rotavap_name -- Name of the node representing the rotary evaporator.
-        """
+    def __init__(self, rotavap_name=None):
+        
         self.name = 'StartRotation'
         self.properties = {
-            'rotavap_name': rotavap_name, # compulsory
-            'comment': comment
+            'rotavap_name': rotavap_name,
         }
 
     def execute(self, chempiler):
@@ -495,22 +417,17 @@ class CStartRotation(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CStopRotation(Step):
+    """Stops the rotation of a rotary evaporator.
+
+    Keyword Arguments:
+        rotavap_name {str} -- Name of the node representing the rotary evaporator.
     """
-    Stops the rotation of a rotary evaporator.
-    """
-    def __init__(self, rotavap_name=None, comment=''):
-        """
-        rotavap_name -- Name of the node representing the rotary evaporator.
-        """
+    def __init__(self, rotavap_name=None):
+
         self.name = 'StopRotation'
         self.properties = {
-            'rotavap_name': rotavap_name, # compulsory
-            'comment': comment
+            'rotavap_name': rotavap_name,
         }
 
     def execute(self, chempiler):
@@ -520,22 +437,17 @@ class CStopRotation(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CLiftArmUp(Step):
+    """Lifts the rotary evaporator arm up.
+    
+    Keyword Arguments:
+        rotavap_name {str} -- Name of the node representing the rotary evaporator.
     """
-    Lifts the rotary evaporator up.
-    """
-    def __init__(self, rotavap_name=None, comment=''):
-        """
-        rotavap_name -- Name of the node representing the rotary evaporator.
-        """
+    def __init__(self, rotavap_name=None):
+
         self.name = 'LiftArmUp'
         self.properties = {
-            'rotavap_name': rotavap_name, # compulsory
-            'comment': comment
+            'rotavap_name': rotavap_name,
         }
 
     def execute(self, chempiler):
@@ -545,22 +457,17 @@ class CLiftArmUp(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CLiftArmDown(Step):
+    """Lifts the rotary evaporator down.
+
+    Keyword Arguments:
+        rotavap_name {str} -- Name of the node representing the rotary evaporator.
     """
-    Lifts the rotary evaporator down.
-    """
-    def __init__(self, rotavap_name=None, comment=''):
-        """
-        name -- Name of the node representing the rotary evaporator.
-        """
+    def __init__(self, rotavap_name=None):
+
         self.name = 'LiftArmDown'
         self.properties = {
-            'rotavap_name': rotavap_name, # compulsory
-            'comment': comment
+            'rotavap_name': rotavap_name,
         }
 
     def execute(self, chempiler):
@@ -570,22 +477,18 @@ class CLiftArmDown(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CResetRotavap(Step):
     """
     Resets the rotary evaporator.
+
+    Keyword Arguments:
+        rotavap_name {str} -- Name of the node representing the rotary evaporator.
     """
-    def __init__(self, rotavap_name=None, comment=''):
-        """
-        rotavap_name -- Name of the node representing the rotary evaporator.
-        """
+    def __init__(self, rotavap_name=None):
+
         self.name = 'ResetRotavap'
         self.properties = {
-            'rotavap_name': rotavap_name, # compulsory
-            'comment': comment
+            'rotavap_name': rotavap_name,
         }
 
     def execute(self, chempiler):
@@ -595,24 +498,19 @@ class CResetRotavap(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSetBathTemp(Step):
+    """Sets the temperature setpoint for the heating bath.
+
+    Keyword Arguments:
+        rotavap_name {str} -- Name of the node representing the rotary evaporator.
+        temp {float} -- Temperature in °C.
     """
-    Sets the temperature setpoint for the heating bath.
-    """
-    def __init__(self, rotavap_name=None, temp=None, comment=''):
-        """
-        rotavap_name -- Name of the node representing the rotary evaporator.
-        temp -- Temperature setpoint in °C.
-        """
+    def __init__(self, rotavap_name=None, temp=None):
+
         self.name = 'SetBathTemp'
         self.properties = {
-            'rotavap_name': rotavap_name, # compulsory
-            'temp': temp, # compulsory
-            'comment': comment
+            'rotavap_name': rotavap_name,
+            'temp': temp,
         }
 
     def execute(self, chempiler):
@@ -626,24 +524,19 @@ class CSetBathTemp(Step):
     def temp(self):
         return self.properties['temp']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSetRvRotationSpeed(Step):
+    """Sets the rotation speed setpoint for the rotary evaporator.
+
+    Keyword Arguments:
+        rotavap_name {str} -- Name of the node representing the rotary evaporator.
+        rotation_speed {str} -- Rotation speed setpoint in RPM.
     """
-    Sets the rotation speed setpoint for the rotary evaporator.
-    """
-    def __init__(self, rotavap_name=None, rotation_speed=None, comment=''):
-        """
-        rotavap_name -- Name of the node representing the rotary evaporator.
-        rotation_speed -- Speed setpoint in rpm.
-        """
+    def __init__(self, rotavap_name=None, rotation_speed=None):
+
         self.name = 'SetRvRotationSpeed'
         self.properties = {
-            'rotavap_name': rotavap_name, # compulsory
-            'rotation_speed': rotation_speed, # compulsory
-            'comment': comment
+            'rotavap_name': rotavap_name,
+            'rotation_speed': rotation_speed,
         }
 
     def execute(self, chempiler):
@@ -657,23 +550,18 @@ class CSetRvRotationSpeed(Step):
     def rotation_speed(self):
         return self.properties['rotation_speed']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CRvWaitForTemp(Step):
-    """
-    Delays the script execution until the current temperature of the heating bath is
+    """Delays the script execution until the current temperature of the heating bath is
     within 0.5°C of the setpoint.
+
+    Keyword Arguments:
+        rotavap_name {str} -- Name of the node representing the rotary evaporator.
     """
-    def __init__(self, rotavap_name=None, comment=''):
-        """
-        rotavap_name -- Name of the node representing the rotary evaporator.
-        """
+    def __init__(self, rotavap_name=None):
+
         self.name = 'RvWaitForTemp'
         self.properties = {
-            'rotavap_name': rotavap_name, # compulsory
-            'comment': comment
+            'rotavap_name': rotavap_name,
         }
 
     def execute(self, chempiler):
@@ -683,31 +571,24 @@ class CRvWaitForTemp(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSetInterval(Step):
-    """
-    Sets the interval time for the rotary evaporator, causing it to periodically switch
+    """Sets the interval time for the rotary evaporator, causing it to periodically switch
     direction. Setting this to 0 deactivates interval operation.
+
+    Keyword Arguments:
+        rotavap_name {str} -- Name of the node representing the rotary evaporator.
+        interval {int} -- Interval time in seconds.
     """
-    def __init__(self, rotavap_name=None, interval=None, comment=''):
-        """
-        rotavap_name -- Name of the node representing the rotary evaporator.
-        interval -- Interval time in seconds.
-        """
+    def __init__(self, rotavap_name=None, interval=None):
+
         self.name = 'SetInterval'
         self.properties = {
-            'rotavap_name': rotavap_name, # compulsory
-            'interval': interval, # compulsory
-            'comment': comment
+            'rotavap_name': rotavap_name,
+            'interval': interval,
         }
 
     def execute(self, chempiler):
         chempiler.rotavap.set_interval(self.rotavap_name, self.interval)
-
-### Vacuum Pump ###
 
     @property
     def rotavap_name(self):
@@ -717,22 +598,16 @@ class CSetInterval(Step):
     def interval(self):
         return self.properties['interval']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CInitVacPump(Step):
+    """Initialises the vacuum pump controller.
+
+    Keyword Arguments:
+        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
     """
-    Initialises the vacuum pump controller.
-    """
-    def __init__(self, vacuum_pump_name=None, comment=''):
-        """
-        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
-        """
+    def __init__(self, vacuum_pump_name=None):
         self.name = 'InitVacPump'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name, # compulsory
-            'comment': comment
+            'vacuum_pump_name': vacuum_pump_name,
         }
 
     def execute(self, chempiler):
@@ -742,22 +617,18 @@ class CInitVacPump(Step):
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CGetVacSp(Step):
+    """Reads the current vacuum setpoint.
+
+    Keyword Arguments:
+        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
     """
-    Reads the current vacuum setpoint.
-    """
-    def __init__(self, vacuum_pump_name=None, comment=''):
-        """
-        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
-        """
+    def __init__(self, vacuum_pump_name=None):
+
         self.name = 'GetVacSp'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name, # compulsory
-            'comment': comment
+            'vacuum_pump_name': vacuum_pump_name,
+            
         }
 
     def execute(self, chempiler):
@@ -767,24 +638,19 @@ class CGetVacSp(Step):
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSetVacSp(Step):
+    """Sets a new vacuum setpoint.
+
+    Keyword Arguments:
+        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
+        vacuum_pressure {float} -- Vacuum pressure setpoint in mbar.
     """
-    Sets a new vacuum setpoint.
-    """
-    def __init__(self, vacuum_pump_name=None, set_point=None, comment=''):
-        """
-        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
-        set_point -- Vacuum setpoint in mbar.
-        """
+    def __init__(self, vacuum_pump_name=None, vacuum_pressure=None):
+
         self.name = 'SetVacSp'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name, # compulsory
-            'set_point': set_point, # compulsory
-            'comment': comment
+            'vacuum_pump_name': vacuum_pump_name,
+            'vacuum_pressure': vacuum_pressure,
         }
 
     def execute(self, chempiler):
@@ -798,22 +664,17 @@ class CSetVacSp(Step):
     def set_point(self):
         return self.properties['set_point']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CStartVac(Step):
+    """Starts the vacuum pump.
+
+    Keyword Arguments:
+        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
     """
-    Starts the vacuum pump.
-    """
-    def __init__(self, vacuum_pump_name=None, comment=''):
-        """
-        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
-        """
+    def __init__(self, vacuum_pump_name=None):
+
         self.name = 'StartVac'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name, # compulsory
-            'comment': comment
+            'vacuum_pump_name': vacuum_pump_name,
         }
 
     def execute(self, chempiler):
@@ -823,22 +684,17 @@ class CStartVac(Step):
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CStopVac(Step):
+    """Stops the vacuum pump.
+
+    Keyword Arguments:
+        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
     """
-    Stops the vacuum pump.
-    """
-    def __init__(self, vacuum_pump_name=None, comment=''):
-        """
-        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
-        """
+    def __init__(self, vacuum_pump_name=None):
+
         self.name = 'StopVac'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name, # compulsory
-            'comment': comment
+            'vacuum_pump_name': vacuum_pump_name,
         }
 
     def execute(self, chempiler):
@@ -848,22 +704,17 @@ class CStopVac(Step):
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CVentVac(Step):
+    """Vents the vacuum pump to ambient pressure.
+
+    Keyword Arguments:
+        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
     """
-    Vents the vacuum pump to ambient pressure.
-    """
-    def __init__(self, vacuum_pump_name=None, comment=''):
-        """
-        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
-        """
+    def __init__(self, vacuum_pump_name=None):
+
         self.name = 'VentVac'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name, # compulsory
-            'comment': comment
+            'vacuum_pump_name': vacuum_pump_name,
         }
 
     def execute(self, chempiler):
@@ -873,30 +724,23 @@ class CVentVac(Step):
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSetSpeedSp(Step):
+    """Sets the speed of the vacuum pump (0-100%).
+
+    Keyword Arguments:
+        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
+        vacuum_pump_speed {float} -- Vacuum pump speed in percent.
     """
-    Sets the speed of the vacuum pump (0-100%).
-    """
-    def __init__(self, vacuum_pump_name=None, set_point=None, comment=''):
-        """
-        vacuum_pump_name -- Name of the node the vacuum pump is attached to.
-        set_point -- Vacuum pump speed in percent.
-        """
+    def __init__(self, vacuum_pump_name=None, vacuum_pump_speed=None):
+        
         self.name = 'SetSpeedSp'
         self.properties = {
-            'vacuum_pump_name': vacuum_pump_name, # compulsory
-            'set_point': set_point, # compulsory
-            'comment': comment
+            'vacuum_pump_name': vacuum_pump_name,
+            'vacuum_pump_speed': vacuum_pump_speed,
         }
 
     def execute(self, chempiler):
         chempiler.vacuum.set_speed_set_point(self.vacuum_pump_name, self.set_point)
-
-### Chiller ###
 
     @property
     def vacuum_pump_name(self):
@@ -906,22 +750,17 @@ class CSetSpeedSp(Step):
     def set_point(self):
         return self.properties['set_point']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CStartChiller(Step):
+    """Starts the recirculation chiller.
+
+    Keyword Arguments:
+        vessel {str} -- Vessel to chill. Name of the node the chiller is attached to.
     """
-    Starts the recirculation chiller.
-    """
-    def __init__(self, vessel=None, comment=''):
-        """
-        vessel -- Name of the node the chiller is attached to.
-        """
+    def __init__(self, vessel=None):
+
         self.name = 'StartChiller'
         self.properties = {
-            'vessel': vessel, # compulsory
-            'comment': comment
+            'vessel': vessel,
         }
 
     def execute(self, chempiler):
@@ -931,22 +770,17 @@ class CStartChiller(Step):
     def vessel(self):
         return self.properties['vessel']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CStopChiller(Step):
+    """Stops the recirculation chiller.
+
+    Keyword Arguments:
+        vessel {str} -- Vessel to stop chilling. Name of the node the chiller is attached to.
     """
-    Stops the recirculation chiller.
-    """
-    def __init__(self, vessel=None, comment=''):
-        """
-        vessel -- Name of the node the chiller is attached to.
-        """
+    def __init__(self, vessel=None):
+
         self.name = 'StopChiller'
         self.properties = {
-            'vessel': vessel, # compulsory
-            'comment': comment
+            'vessel': vessel,
         }
 
     def execute(self, chempiler):
@@ -956,24 +790,19 @@ class CStopChiller(Step):
     def vessel(self):
         return self.properties['vessel']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSetChiller(Step):
+    """Sets the temperature setpoint.
+
+    Keyword Arguments:
+        vessel {str} -- Vessel to set chiller temperature. Name of the node the chiller is attached to.
+        temp {float} -- Temperature in °C.
     """
-    Sets the temperature setpoint.
-    """
-    def __init__(self, vessel=None, temp=None, comment=''):
-        """
-        vessel -- Name of the node the chiller is attached to.
-        temp -- Temperature in °C.
-        """
+    def __init__(self, vessel=None, temp=None):
+
         self.name = 'SetChiller'
         self.properties = {
-            'vessel': vessel, # compulsory
-            'temp': temp, # compulsory
-            'comment': comment
+            'vessel': vessel,
+            'temp': temp,
         }
 
     def execute(self, chempiler):
@@ -987,23 +816,18 @@ class CSetChiller(Step):
     def temp(self):
         return self.properties['temp']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CChillerWaitForTemp(Step):
-    """
-    Delays the script execution until the current temperature of the chiller is within
+    """Delays the script execution until the current temperature of the chiller is within
     0.5°C of the setpoint.
+
+    Keyword Arguments:
+        vessel {str} -- Vessel to wait for temperature. Name of the node the chiller is attached to.
     """
-    def __init__(self, vessel=None, comment=''):
-        """
-        vessel -- Name of the node the chiller is attached to.
-        """
+    def __init__(self, vessel=None):
+
         self.name = 'ChillerWaitForTemp'
         self.properties = {
-            'vessel': vessel, # compulsory
-            'comment': comment
+            'vessel': vessel,
         }
 
     def execute(self, chempiler):
@@ -1013,27 +837,22 @@ class CChillerWaitForTemp(Step):
     def vessel(self):
         return self.properties['vessel']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CRampChiller(Step):
-    """
-    Causes the chiller to ramp the temperature up or down. Only available for Petite
+    """Causes the chiller to ramp the temperature up or down. Only available for Petite
     Fleur.
+
+    Keyword Arguments:
+        vessel {str} -- Vessel to ramp chiller on. Name of the node the chiller is attached to.
+        ramp_duration {int} -- Desired duration of the ramp in seconds.
+        end_temperature {float} -- Final temperature of the ramp in °C.
     """
-    def __init__(self, vessel=None, ramp_duration=None, end_temperature=None, comment=''):
-        """
-        vessel -- Name of the node the chiller is attached to.
-        ramp_duration -- Desired duration of the ramp in seconds.
-        end_temperature -- Final temperature of the ramp in °C.
-        """
+    def __init__(self, vessel=None, ramp_duration=None, end_temperature=None):
+
         self.name = 'RampChiller'
         self.properties = {
-            'vessel': vessel, # compulsory
-            'ramp_duration': ramp_duration, # compulsory
-            'end_temperature': end_temperature, # compulsory
-            'comment': comment
+            'vessel': vessel,
+            'ramp_duration': ramp_duration,
+            'end_temperature': end_temperature,
         }
 
     def execute(self, chempiler):
@@ -1051,24 +870,19 @@ class CRampChiller(Step):
     def end_temperature(self):
         return self.properties['end_temperature']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSwitchChiller(Step):
+    """Switches the solenoid valve.
+
+    Keyword Arguments:
+        solenoid_valve_name -- {str} Name of the node the solenoid valve is attached to.
+        state {str} -- Is either "on" or "off"
     """
-    Switches the solenoid valve.
-    """
-    def __init__(self, solenoid_valve_name=None, state=None, comment=''):
-        """
-        solenoid_valve_name -- Name of the node the solenoid valve is attached to.
-        state -- Is either "on" or "off"
-        """
+    def __init__(self, solenoid_valve_name=None, state=None):
+
         self.name = 'SwitchChiller'
         self.properties = {
-            'solenoid_valve_name': solenoid_valve_name, # compulsory
-            'state': state, # compulsory
-            'comment': comment
+            'solenoid_valve_name': solenoid_valve_name,
+            'state': state,
         }
 
     def execute(self, chempiler):
@@ -1082,24 +896,19 @@ class CSwitchChiller(Step):
     def state(self):
         return self.properties['state']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSetCoolingPower(Step):
-    """
-    Sets the cooling power (0-100%). Only available for CF41.
-    """
-    def __init__(self, vessel=None, cooling_power=None, comment=''):
-        """
-        name -- Name of the node the chiller is attached to.
+    """Sets the cooling power (0-100%). Only available for CF41.
+
+    Keyword Arguments:
+        vessel -- Vessel to set cooling power of chiller. Name of the node the chiller is attached to.
         cooling_power -- Desired cooling power in percent.
-        """
+    """
+    def __init__(self, vessel=None, cooling_power=None):
+
         self.name = 'SetCoolingPower'
         self.properties = {
-            'vessel': vessel, # compulsory
-            'cooling_power': cooling_power, # compulsory
-            'comment': comment
+            'vessel': vessel,
+            'cooling_power': cooling_power,
         }
 
     def execute(self, chempiler):
@@ -1113,22 +922,17 @@ class CSetCoolingPower(Step):
     def cooling_power(self):
         return self.properties['cooling_power']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CSetRecordingSpeed(Step):
+    """Sets the timelapse speed of the camera module.
+
+    Keyword Arguments:
+        recording_speed {float} -- Factor by which the recording should be sped up, i.e. 2 would mean twice the normal speed. 1 means normal speed.
     """
-    Sets the timelapse speed of the camera module.
-    """
-    def __init__(self, recording_speed=None, comment=''):
-        """
-        speed -- Factor by which the recording should be sped up, i.e. 2 would mean twice the normal speed. 1 means normal speed.
-        """
+    def __init__(self, recording_speed=None):
+
         self.name = 'SetRecordingSpeed'
         self.properties = {
-            'recording_speed': recording_speed, # compulsory
-            'comment': comment
+            'recording_speed': recording_speed,
         }
 
     def execute(self, chempiler):
@@ -1138,24 +942,19 @@ class CSetRecordingSpeed(Step):
     def recording_speed(self):
         return self.properties['recording_speed']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CWait(Step):
-    """
-    Delays execution of the script for a set amount of time. This command will
+    """Delays execution of the script for a set amount of time. This command will
     immediately reply with an estimate of when the waiting will be finished, and also
     give regular updates indicating that it is still alive.
+
+    Keyword Arguments:
+        time -- Time to wait in seconds.
     """
-    def __init__(self, time=None, comment=''):
-        """
-        time -- Wait time in seconds.
-        """
+    def __init__(self, time=None):
+
         self.name = 'Wait'
         self.properties = {
-            'time': time, # compulsory
-            'comment': comment
+            'time': time,
         }
 
     def execute(self, chempiler):
@@ -1165,26 +964,16 @@ class CWait(Step):
     def time(self):
         return self.properties['time']
 
-    @property
-    def comment(self):
-        return self.properties['comment']
-
 class CBreakpoint(Step):
     """
     Introduces a breakpoint in the script. The execution is halted until the operator
     resumes it.
     """
-    def __init__(self, comment=''):
-        """
-         -- Breakpoints take no arguments.
-        """
+    def __init__(self):
+
         self.name = 'Breakpoint'
         self.properties = {
-            'comment': comment
         }
 
     def execute(self, chempiler):
         chempiler.breakpoint()
-    @property
-    def comment(self):
-        return self.properties['comment']
