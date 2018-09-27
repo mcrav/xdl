@@ -15,10 +15,24 @@ from .namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT, BASE_STEP_OBJ_DICT
 import chembrain as cb
 
 class XDL(object):
-
+    """
+    Interpets XDL (file or str) and provides the following public methods:
+    
+    Public Methods:
+        simulate -- Given a graphML file, simulates the XDL procedure.
+        execute -- Given a graphML file, executes the XDL procedure on a Chemputer.
+        as_human_readable -- Returns human readable description of the XDL procedure.
+        print_human_readable -- Prints human readable description of the XDL procedure.
+        print_full_xdl_tree -- Prints reasonably human readable visualisation of the nested XDL steps.
+    """
     def __init__(self, xdl_file=None, xdl_str=None):
+        """        
+        Keyword Arguments:
+            xdl_file {str} -- File path of XDL file.
+            xdl_str {str} -- str of XDL
+        """
         self.steps, self.hardware, self.reagent = [], [], []
-        self.prepared_for_execution = False
+        self._prepared_for_execution = False
         self.xdl_file = xdl_file
         if xdl_file:
             with open(xdl_file, 'r') as fileobj:
@@ -26,39 +40,50 @@ class XDL(object):
         elif xdl_str:
             self.xdl = xdl_str
         if self.xdl:
-            if self.xdl_valid():
-                self.parse_xdl()
+            if self._xdl_valid():
+                self._parse_xdl()
         else:
             print('No XDL given.')
 
-    def get_full_xdl_tree(self):
+    def _get_full_xdl_tree(self):
+        """
+        Get list of all steps after unpacking nested steps.
+        Root steps are included followed by all their children in order, recursively.
+        """
         tree = []
-        i = 0
         for step in self.steps:
             tree.extend(climb_down_tree(step))
         return tree
-
-    def print_full_xdl_tree(self):
-        print('\n')
-        print('Operation Tree\n--------------\n')
-        for step in self.steps:
-            climb_down_tree(step, verbose=True)
-        print('\n')
         
-    def insert_waste_vessels(self):
-        waste_sound = True
-        for step in self.get_full_xdl_tree():
+    def _insert_waste_vessels(self):
+        """Insert correct waste vessel names into steps.
+        If waste can't be determined for a reagent it will be printed,
+        and this method will return False.
+
+        Returns:
+            waste_ok {bool} -- True if waste vessels all found, otherwise False
+        """
+        waste_ok = True
+        for step in self._get_full_xdl_tree():
             if isinstance(step, (WashFilterCake, CleanVessel)):
-                step.waste_vessel = self.get_waste_vessel(step.solvent)
+                step.waste_vessel = self._get_waste_vessel(step.solvent)
                 print(step.waste_vessel)
             elif isinstance(step, (CleanTubing, PrimePumpForAdd)):
-                step.waste_vessel = self.get_waste_vessel(step.reagent)
+                step.waste_vessel = self._get_waste_vessel(step.reagent)
                 print(step.waste_vessel)
             if 'waste_vessel' in step.properties and not step.waste_vessel:
-                waste_sound = False
-        return waste_sound
+                waste_ok = False
+        return waste_ok
 
-    def get_waste_vessel(self, reagent_id):
+    def _get_waste_vessel(self, reagent_id):
+        """Get waste vessel for given reagent.
+        
+        Arguments:
+            reagent_id {str} -- Name of reagent in XDL file.
+
+        Returns:
+            str -- Name of waste vessel, i.e. waste_aqueous. None if waste vessel not found.
+        """
         for reagent in self.reagents:
             if reagent.id_word == reagent_id:
                 if reagent.waste:
@@ -71,29 +96,42 @@ class XDL(object):
                         return f'waste_{waste_type}'
         return None
 
-    def parse_xdl(self):
+    def _parse_xdl(self):
+        """Parse self.xdl and make self.steps, self.hardware and self.reagents lists."""
         self.steps = steps_from_xdl(self.xdl)
         self.hardware = hardware_from_xdl(self.xdl)
         self.reagents = reagents_from_xdl(self.xdl)
 
-    def xdl_valid(self):
+    def _xdl_valid(self):
+        """Return True is XDL is syntactically valid, otherwise return False."""
         return XDLSyntaxValidator(self.xdl).valid
 
-    def hardware_is_compatible(self):
-        return hardware_is_compatible(
+    def _hardware_is_compatible(self):
+        """
+        Determine if there is sufficient hardware in the graphML file
+        to run the XDL file.
+        """
+        return _hardware_is_compatible(
             xdl_hardware=self.hardware, 
             graphml_hardware=self.graphml_hardware
             )
 
-    def get_hardware_map(self):
+    def _get_hardware_map(self):
+        """
+        Get map of hardware IDs in XDL to hardware IDs in graphML.
+        """
         self.hardware_map = {}
         for i in range(len(self.hardware.reactors)):
             self.hardware_map[
                 self.hardware.reactors[i].properties['id']
                 ] = self.graphml_hardware.reactors[i].properties['id']
 
-    def map_hardware_to_steps(self):
-        self.get_hardware_map()
+    def _map_hardware_to_steps(self):
+        """
+        Go through steps in XDL and replace XDL hardware IDs with IDs
+        from the graphML file.
+        """
+        self._get_hardware_map()
         for step in self.steps:
             for prop, val in step.properties.items():
                 if isinstance(val, str) and val in self.hardware_map:
@@ -101,73 +139,101 @@ class XDL(object):
                     print(step.properties)
             step.update()
 
-    def close_open_steps(self):
-        self.steps = close_open_steps(self.steps)
+    def _close_open_steps(self):
+        """If there are steps like StartStir but no corresponding StopStir,
+        put in the StopStir method automatically.
+        NOTE: Debatable whether XDL interpreter should do this.
+        """
+        self.steps = _close_open_steps(self.steps)
 
-    def check_safety(self):
+    def _check_safety(self):
+        """Check if the procedure is safe.
+        Any issues will be printed.
+
+        Returns:
+            bool -- True if no safety issues are found, False otherwise.
+        """
         return procedure_is_safe(self.steps, self.reagents)
 
-    def prepare_for_execution(self, graphml_file):#
-        if not self.prepared_for_execution:
+    def _prepare_for_execution(self, graphml_file):
+        """Prepare the XDL for execution on a Chemputer corresponding to the given
+        graphML file.
+        
+        Arguments:
+            graphml_file {str} -- Path to graphML file.
+        """
+        if not self._prepared_for_execution:
             if self.steps: # if XDL is valid
                 print('XDL is valid')
                 self.graphml_hardware = graphml_hardware_from_file(graphml_file)
-                if self.hardware_is_compatible():
+                if self._hardware_is_compatible():
                     print('Hardware is compatible')
-                    self.map_hardware_to_steps()
-                    if self.insert_waste_vessels():
+                    self._map_hardware_to_steps()
+                    if self._insert_waste_vessels():
                         print('Waste vessels setup')
-                        self.close_open_steps()         
-                        if self.check_safety():
+                        self._close_open_steps()         
+                        if self._check_safety():
                             print('Procedure raises no safety flags')
-                            self.prepared_for_execution = True
+                            self._prepared_for_execution = True
+
+    def _get_exp_id(self, default='xdl_exp'):
+        """Get experiment ID name to give to the Chempiler."""
+        if self.xdl_file:
+            return os.path.splitext(os.path.split(self.xdl_file)[-1])[0]
+        else:
+            return default
 
     def simulate(self, graphml_file):
-        self.prepare_for_execution(graphml_file)
-        if self.prepared_for_execution:
-            chempiler = Chempiler(self.get_exp_id(default='xdl_simulation'), graphml_file, True)
+        """Simulate XDL procedure using Chempiler and given graphML file."""
+        self._prepare_for_execution(graphml_file)
+        if self._prepared_for_execution:
+            chempiler = Chempiler(self._get_exp_id(default='xdl_simulation'), graphml_file, True)
             self.print_full_xdl_tree()
             self.print_full_human_readable()
             print('Execution\n---------\n')
             for step in self.steps:
-                print(f'\n{step.name}\n{len(step.name)*"-"}')
+                print(f'\n{step.name}\n{len(step.name)*"-"}exit')
                 print(f'{step.human_readable}\n')
                 keep_going = step.execute(chempiler)
                 if not keep_going:
                     return
 
     def execute(self, graphml_file):
-        self.prepare_for_execution(graphml_file)
-        if self.prepared_for_execution:
-            chempiler = Chempiler(self.get_exp_id(default='xdl_simulation'), graphml_file, False)
+        """Execute XDL procedure on a Chemputer corresponding to given graphML file."""
+        self._prepare_for_execution(graphml_file)
+        if self._prepared_for_execution:
+            chempiler = Chempiler(self._get_exp_id(default='xdl_simulation'), graphml_file, False)
             self.print_full_xdl_tree()
             self.print_full_human_readable()
         print('Execution\n---------\n')
         for step in self.steps:
             step.execute(chempiler)
 
-    def print_full_human_readable(self):
-        print('Synthesis Description\n---------------------\n')
-        print(self.as_human_readable())
-        print('\n')
-
     def as_human_readable(self):
-        """Return human-readable English str of synthesis described by steps."""
+        """Return human-readable English description of XDL procedure."""
         s = ''
         for step in self.steps:
             s += f'{step.human_readable}\n'
         return s
 
-    def get_exp_id(self, default='xdl_exp'):
-        if self.xdl_file:
-            return os.path.splitext(os.path.split(self.xdl_file)[-1])[0]
-        else:
-            return default
+    def print_full_human_readable(self):
+        """Print human-readable English description of XDL procedure."""
+        print('Synthesis Description\n---------------------\n')
+        print(self.as_human_readable())
+        print('\n')
+
+    def print_full_xdl_tree(self):
+        """Print nested structure of all steps in XDL procedure."""
+        print('\n')
+        print('Operation Tree\n--------------\n')
+        for step in self.steps:
+            climb_down_tree(step, verbose=True)
+        print('\n')
         
 def get_close_step(step):
     return ongoing_steps[type(step)](vessel=step.vessel)
 
-def close_open_steps(steps):
+def _close_open_steps(steps):
     open_steps = get_open_steps(steps)
     for open_step in open_steps:
         steps.append(get_close_step(open_step))
@@ -265,8 +331,6 @@ def preprocess_attrib(step, attrib):
     if 'solvent_volume' in attrib:
         attrib['solvent_volume'] = convert_volume_str_to_ml(attrib['solvent_volume'])
 
-    
-
     if isinstance(step, MakeSolution):
         attrib['solutes'] = attrib['solutes'].split(' ')
         attrib['solute_masses'] = attrib['solute_masses'].split(' ')
@@ -320,7 +384,7 @@ def graphml_hardware_from_file(graphml_file):
                 components.append(Waste(id_word=node_label))
     return Hardware(components)
 
-def hardware_is_compatible(xdl_hardware=None, graphml_hardware=None):
+def _hardware_is_compatible(xdl_hardware=None, graphml_hardware=None):
     enough_reactors = len(xdl_hardware.reactors) <= len(graphml_hardware.reactors)
     enough_filters = len(xdl_hardware.filters) <= len(graphml_hardware.filters)
     flasks_ok = True # NEEDS DONE
