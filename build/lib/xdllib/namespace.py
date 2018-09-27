@@ -2,8 +2,6 @@ from .steps import *
 from .components import *
 
 STEP_OBJ_DICT = {
-    'Comment': Comment,
-    'Repeat': Repeat,
     'Move': CMove,
     'Separate': CSeparate,
     'Prime': CPrime,
@@ -56,10 +54,9 @@ STEP_OBJ_DICT = {
     'ChillBackToRT': ChillBackToRT,
     'Add': Add,
     'StirAndTransfer': StirAndTransfer,
-    'Wash': Wash,
+    'Wash': WashFilterCake,
     'ChillReact': ChillReact,
     'MakeSolution': MakeSolution,
-    'AddSolid': AddSolid,
     'Reflux': Reflux,
     'PrimePumpForAdd': PrimePumpForAdd,
 }

@@ -54,10 +54,9 @@ STEP_OBJ_DICT = {
     'ChillBackToRT': ChillBackToRT,
     'Add': Add,
     'StirAndTransfer': StirAndTransfer,
-    'Wash': Wash,
+    'Wash': WashFilterCake,
     'ChillReact': ChillReact,
     'MakeSolution': MakeSolution,
-    'AddSolid': AddSolid,
     'Reflux': Reflux,
     'PrimePumpForAdd': PrimePumpForAdd,
 }

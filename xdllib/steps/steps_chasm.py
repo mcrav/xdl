@@ -30,7 +30,7 @@ class CMove(Step):
         self.properties = {
             'from_vessel': from_vessel,
             'to_vessel': to_vessel,
-            'volume': volume, 
+            'volume': volume,
             'move_speed': move_speed,
             'aspiration_speed': aspiration_speed,
             'dispense_speed': dispense_speed,
@@ -79,7 +79,7 @@ class CSeparate(Step):
 
     Keywords Arguments:
         lower_phase_vessel {str} -- Vessel name the lower phase should be transferred to.
-        upper_phase_vessel {str} -- Vessel name the upper phase should be transferred to. 
+        upper_phase_vessel {str} -- Vessel name the upper phase should be transferred to.
                             If "separator_top" is specified, the upper phase is left in the separator.
     """
     def __init__(self, lower_phase_vessel=None, upper_phase_vessel=None):
@@ -111,10 +111,10 @@ class CPrime(Step):
         aspiration_speed {float} -- Speed in mL / min at which material should be withdrawn.
     """
     def __init__(self, aspiration_speed='default'):
-        
+
         self.name = 'Prime'
         self.properties = {
-            'aspiration_speed': aspiration_speed, 
+            'aspiration_speed': aspiration_speed,
         }
         self.get_defaults()
 
@@ -169,8 +169,8 @@ class CSwitchCartridge(Step):
         chempiler.pump.switch_cartridge(self.flask, self.cartridge)
 
     @property
-    def flask(self):
-        return self.properties['flask']
+    def vessel(self):
+        return self.properties['vessel']
 
     @property
     def cartridge(self):
@@ -229,7 +229,7 @@ class CStartHeat(Step):
         vessel {str} -- Vessel name to heat.
     """
     def __init__(self, vessel=None):
-        
+
         self.name = 'StartHeat'
         self.properties = {
             'vessel': vessel,
@@ -249,7 +249,7 @@ class CStopStir(Step):
         vessel {str} -- Vessel name to stop stirring.
     """
     def __init__(self, vessel=None):
-        
+
         self.name = 'StopStir'
         self.properties = {
             'vessel': vessel,
@@ -270,7 +270,7 @@ class CStopHeat(Step):
         vessel {str} -- Vessel name to stop heating.
     """
     def __init__(self, vessel=None):
- 
+
         self.name = 'StopHeat'
         self.properties = {
             'vessel': vessel,
@@ -292,7 +292,7 @@ class CSetTemp(Step):
         temp {float} -- Temperature in °C
     """
     def __init__(self, vessel=None, temp=None):
- 
+
         self.name = 'SetTemp'
         self.properties = {
             'vessel': vessel,
@@ -404,7 +404,7 @@ class CStartRotation(Step):
         rotavap_name {str} -- Name of the node representing the rotary evaporator.
     """
     def __init__(self, rotavap_name=None):
-        
+
         self.name = 'StartRotation'
         self.properties = {
             'rotavap_name': rotavap_name,
@@ -439,7 +439,7 @@ class CStopRotation(Step):
 
 class CLiftArmUp(Step):
     """Lifts the rotary evaporator arm up.
-    
+
     Keyword Arguments:
         rotavap_name {str} -- Name of the node representing the rotary evaporator.
     """
@@ -628,7 +628,6 @@ class CGetVacSp(Step):
         self.name = 'GetVacSp'
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
-            
         }
 
     def execute(self, chempiler):
@@ -661,8 +660,8 @@ class CSetVacSp(Step):
         return self.properties['vacuum_pump_name']
 
     @property
-    def set_point(self):
-        return self.properties['set_point']
+    def vacuum_pressure(self):
+        return self.properties['vacuum_pressure']
 
 class CStartVac(Step):
     """Starts the vacuum pump.
@@ -732,7 +731,7 @@ class CSetSpeedSp(Step):
         vacuum_pump_speed {float} -- Vacuum pump speed in percent.
     """
     def __init__(self, vacuum_pump_name=None, vacuum_pump_speed=None):
-        
+
         self.name = 'SetSpeedSp'
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
@@ -747,8 +746,8 @@ class CSetSpeedSp(Step):
         return self.properties['vacuum_pump_name']
 
     @property
-    def set_point(self):
-        return self.properties['set_point']
+    def vacuum_pump_speed(self):
+        return self.properties['vacuum_pump_speed']
 
 class CStartChiller(Step):
     """Starts the recirculation chiller.
@@ -965,8 +964,7 @@ class CWait(Step):
         return self.properties['time']
 
 class CBreakpoint(Step):
-    """
-    Introduces a breakpoint in the script. The execution is halted until the operator
+    """Introduces a breakpoint in the script. The execution is halted until the operator
     resumes it.
     """
     def __init__(self):

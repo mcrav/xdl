@@ -10,6 +10,9 @@ def get_steps_info():
     steps_info = []                    
     for f in step_files:
         steps_info.extend(read_steps_file(f))
+    for d in steps_info:
+        print(d)
+        print('\n')
     return sorted(steps_info, key=lambda step: step['name'])
 
 def read_steps_file(file_path):
@@ -18,20 +21,32 @@ def read_steps_file(file_path):
     with open(file_path, 'r') as fileobj:
         lines = fileobj.readlines()
     step_info = {}
+    classes_started = False
     properties = False
+    docstring = False
     for line in lines:
         if line.startswith('class'):
+            classes_started = True
             if step_info:
                 steps_info.append(step_info)
                 step_info = {}
             print(line)
             continue
+        elif line.strip().startswith('"""') and classes_started:
+            docstring = not docstring
+            if docstring:
+                step_info['description'] = line.strip().replace('"""', '')
+            continue
+        elif docstring:
+            if 'kwargs' in step_info and line.strip():
+                step_info['kwargs'].append(line.strip())
+            if line.strip().startswith('Keyword'):
+                step_info['kwargs'] = []
+            # Need to get description and args out of docstrings 
+
         elif line.strip().startswith('self.name'):
             step_info['name'] = line.split('=')[1].strip().replace("'",'')
             print(step_info['name'])
-        elif line.strip().startswith('self.properties ='):
-            properties = True
-            continue
         elif properties:
             if line.strip().startswith('}'):
                 properties = False
@@ -47,13 +62,19 @@ def make_steps_doc():
     md = '# Steps\n\n'
     for step in steps:
         md += f"## {step['name']}\n"
-        md += f'### Attributes\n'
-        for prop in step['properties']:
-            md += f'* {prop[0]}'
-            if not prop[1]:
-                md += ' (optional)'
-            md += '\n'
-        md += '\n\n'
+        md += f"{step['description']}\n"
+        
+        if 'kwargs' in step:
+            md += f'### Arguments\n'
+            for prop in step['kwargs']:
+                md += f'* {prop}'
+                # if not prop:
+                #     md += 
+                # ' (optional)'
+                md += '  \n'
+        else:
+            md = md.strip() + '  \n'
+        md += '- - -\n'
 
     with open('docs/steps.md', 'w') as fileobj:
         fileobj.write(md)
