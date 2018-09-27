@@ -3,7 +3,6 @@ import itertools
 import lxml.etree as etree
 from .constants import DEFAULT_VALS
 
-
 class XDLElement(object):
 
     def __init__(self):
@@ -52,8 +51,10 @@ class Step(XDLElement):
 
     def execute(self, chempiler):
         for step in self.steps:
-            step.execute(chempiler)
-
+            keep_going = step.execute(chempiler)
+            if not keep_going:
+                return False
+        return True
 
 float_regex = r'([0-9]+([.][0-9]+)?)'
 
@@ -61,6 +62,11 @@ VOLUME_CL_UNIT_WORDS = ('cl', 'cL',)
 VOLUME_ML_UNIT_WORDS = ('cc', 'ml','mL', 'cm3')
 VOLUME_DL_UNIT_WORDS = ('dl', 'dL')
 VOLUME_L_UNIT_WORDS = ('l', 'L')
+
+MASS_G_UNIT_WORDS = ('g', 'grams')
+MASS_KG_UNIT_WORDS = ('kg', 'kilograms')
+MASS_MG_UNIT_WORDS = ('mg', 'milligrams')
+MASS_UG_UNIT_WORDS = ('ug', 'micrograms')
 
 # Attrib preprocessing
 
@@ -87,6 +93,18 @@ def convert_volume_str_to_ml(volume_str):
     elif volume_str.endswith(VOLUME_CL_UNIT_WORDS):
         multiplier = 10
     return str(float(re.match(float_regex, volume_str).group(1)) * multiplier)
+
+def convert_mass_str_to_g(mass_str):
+    mass_str = mass_str.lower()
+    if mass_str.endswith(MASS_G_UNIT_WORDS):
+        multiplier = 1
+    elif mass_str.endswith(MASS_KG_UNIT_WORDS):
+        multiplier = 1000
+    elif mass_str.endswith(MASS_MG_UNIT_WORDS):
+        multiplier = 1e-3
+    elif mass_str.endswith(MASS_UG_UNIT_WORDS):
+        multiplier = 1e-6
+    return str(float(re.match(float_regex, mass_str).group(1)) * multiplier)
 
 def find_reagent_obj(reagent_id, reagents):
     reagent_obj = None

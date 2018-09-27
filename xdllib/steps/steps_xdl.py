@@ -1,7 +1,7 @@
 from ..constants import *
 from ..utils import Step
 from .steps_chasm import (
-   CMove,
+    CMove,
     CSeparate,
     CPrime,
     CSwitchVacuum,
@@ -936,6 +936,30 @@ class Filter(Step):
         self.properties['time'] = val
         self.update()
 
+class Confirm(Step):
+
+    def __init__(self, msg=None):
+
+        self.name = 'Confirm'
+        self.properties = {
+            'msg': msg,
+        }
+
+    def execute(self, chempiler):
+        keep_going = input(self.msg)
+        if not keep_going or keep_going.lower() in ['y', 'yes']:
+            return True
+        return False
+
+    @property
+    def msg(self):
+        return self.properties['msg']
+
+    @msg.setter
+    def msg(self, val):
+        self.properties['msg'] = val
+        self.update()
+
 class MakeSolution(Step):
     """Make solution in given vessel of given solutes in given solvent.
 
@@ -946,38 +970,41 @@ class MakeSolution(Step):
         solvent_volume {[type]} -- Volume of solvent to use in mL.
         vessel {[type]} -- Vessel name to make solution in.
     """
-    def __init__(self, solute=None, solvent=None, solute_mass=None, solvent_volume=None, vessel=None):
+    def __init__(self, solutes=None, solvent=None, solute_masses=None, solvent_volume=None, vessel=None):
 
         self.name = 'MakeSolution'
         self.properties = {
-            'solute': solute,
+            'solutes': solutes,
             'solvent': solvent,
-            'solute_mass': solute_mass,
+            'solute_masses': solute_masses,
             'solvent_volume': solvent_volume,
             'vessel': vessel,
         }
+        print(self.properties)
 
         self.steps = []
-        if not isinstance(solute, list):
-            solute = [solute]
-        if not isinstance(solute_mass, list):
-            solute_mass = [solute_mass]
-        # for s, m in zip(solute, solute_mass):
-        #     self.steps.append(AddSolid(reagent=s, mass=m, vessel=vessel)),
-        # self.steps.append(Add(reagent=solvent, volume=solvent_volume, vessel=vessel))
+        if not isinstance(solutes, list):
+            solutes = [solutes]
+        if not isinstance(solute_masses, list):
+            solute_masses = [solute_masses]
+        check_str = f'Are the following reagents in {vessel}? (y)/n\n\n'
+        for solute, mass in zip(solutes, solute_masses):
+            check_str += f'{solute} ({mass} g)\n'
+        self.steps.append(Confirm(msg=check_str))
+        self.steps.append(Add(reagent=solvent, volume=solvent_volume, vessel=vessel))
 
         self.human_readable = f'Make solution of '
-        for s, m in zip(solute, solute_mass):
-            self.human_readable += f'{s} ({m}), '
-        self.human_readable = self.human_readable[:-2] + f' in {solvent} ({solvent_volume} mL).'
+        for s, m in zip(solutes, solute_masses):
+            self.human_readable += f'{s} ({m} g), '
+        self.human_readable = self.human_readable[:-2] + f' in {solvent} ({solvent_volume} mL) in {vessel}.'
 
     @property
-    def solute(self):
-        return self.properties['solute']
+    def solutes(self):
+        return self.properties['solutes']
 
-    @solute.setter
-    def solute(self, val):
-        self.properties['solute'] = val
+    @solutes.setter
+    def solutes(self, val):
+        self.properties['solutes'] = val
         self.update()
 
     @property
@@ -990,12 +1017,12 @@ class MakeSolution(Step):
         self.update()
 
     @property
-    def solute_mass(self):
-        return self.properties['solute_mass']
+    def solute_masses(self):
+        return self.properties['solute_masses']
 
-    @solute_mass.setter
-    def solute_mass(self, val):
-        self.properties['solute_mass'] = val
+    @solute_masses.setter
+    def solute_masses(self, val):
+        self.properties['solute_masses'] = val
         self.update()
 
     @property

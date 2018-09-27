@@ -44,6 +44,7 @@ BASE_STEP_OBJ_DICT = {
     'SetRecordingSpeed': CSetRecordingSpeed,
     'Wait': CWait,
     'Breakpoint': CBreakpoint,
+    'Confirm': Confirm,
 }
 
 XDL_STEP_OBJ_DICT = {

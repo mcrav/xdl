@@ -4,7 +4,7 @@ from io import StringIO
 import re
 import os
 from chempiler import Chempiler
-from .utils import convert_time_str_to_seconds, convert_volume_str_to_ml
+from .utils import convert_time_str_to_seconds, convert_volume_str_to_ml, convert_mass_str_to_g
 from .constants import *
 from .components import *
 from .reagents import *
@@ -38,6 +38,13 @@ class XDL(object):
             tree.extend(climb_down_tree(step))
         return tree
 
+    def print_full_xdl_tree(self):
+        print('\n')
+        print('Operation Tree\n--------------\n')
+        for step in self.steps:
+            climb_down_tree(step, verbose=True)
+        print('\n')
+        
     def insert_waste_vessels(self):
         waste_sound = True
         for step in self.get_full_xdl_tree():
@@ -119,16 +126,30 @@ class XDL(object):
         self.prepare_for_execution(graphml_file)
         if self.prepared_for_execution:
             chempiler = Chempiler(self.get_exp_id(default='xdl_simulation'), graphml_file, True)
+            self.print_full_xdl_tree()
+            self.print_full_human_readable()
+            print('Execution\n---------\n')
             for step in self.steps:
-                step.execute(chempiler)
+                print(f'\n{step.name}\n{len(step.name)*"-"}')
+                print(f'{step.human_readable}\n')
+                keep_going = step.execute(chempiler)
+                if not keep_going:
+                    return
 
     def execute(self, graphml_file):
         self.prepare_for_execution(graphml_file)
-        chempiler = Chempiler(self.get_exp_id(default='xdl_synthesis'), graphml_file, False)
+        if self.prepared_for_execution:
+            chempiler = Chempiler(self.get_exp_id(default='xdl_simulation'), graphml_file, False)
+            self.print_full_xdl_tree()
+            self.print_full_human_readable()
+        print('Execution\n---------\n')
         for step in self.steps:
-            print(step.human_readable)
             step.execute(chempiler)
 
+    def print_full_human_readable(self):
+        print('Synthesis Description\n---------------------\n')
+        print(self.as_human_readable())
+        print('\n')
 
     def as_human_readable(self):
         """Return human-readable English str of synthesis described by steps."""
@@ -214,21 +235,10 @@ def reagents_from_xdl(xdl):
     return reagents 
 
 def xdl_to_step(step_xdl):
-    if step_xdl.tag != 'Repeat':
-        step = STEP_OBJ_DICT[step_xdl.tag]()
-        step.load_properties(preprocess_attrib(step, step_xdl.attrib))
-    else:
-        step = xdl_to_repeat_step(step_xdl)
+    step = STEP_OBJ_DICT[step_xdl.tag]()
+    step.load_properties(preprocess_attrib(step, step_xdl.attrib))
     return step
 
-def xdl_to_repeat_step(repeat_step_xdl):
-    properties_dict = repeat_step_xdl.attrib
-    properties_dict['steps'] = []
-    for step_xdl in repeat_step_xdl.findall('*'):
-        properties_dict['steps'].append(xdl_to_step(step_xdl))
-    step = Repeat()
-    step.load_properties(properties_dict)
-    return step
 
 def xdl_to_component(component_xdl):
     component = COMPONENT_OBJ_DICT[component_xdl.tag]()
@@ -242,27 +252,53 @@ def xdl_to_reagent(reagent_xdl):
 
 def preprocess_attrib(step, attrib):
     attrib = dict(attrib)
+    if 'clean_tubing' in attrib:
+        if attrib['clean_tubing'].lower() == 'false':
+            attrib['clean_tubing'] = False
+        else:
+            attrib['clean_tubing'] = True
     if 'time' in attrib:
         attrib['time'] = convert_time_str_to_seconds(attrib['time'])
+    
     if 'volume' in attrib:
         attrib['volume'] = convert_volume_str_to_ml(attrib['volume'])
+    if 'solvent_volume' in attrib:
+        attrib['solvent_volume'] = convert_volume_str_to_ml(attrib['solvent_volume'])
+
+    
+
     if isinstance(step, MakeSolution):
-        attrib['solute'] = attrib['solute'].split(' ')
-        attrib['solute_mass'] = attrib['solute_mass'].split(' ')
+        attrib['solutes'] = attrib['solutes'].split(' ')
+        attrib['solute_masses'] = attrib['solute_masses'].split(' ')
+
+    if 'mass' in attrib:
+        attrib['mass'] = convert_mass_str_to_g(attrib['mass'])
+    if 'solute_masses' in attrib:
+        attrib['solute_masses'] = [convert_mass_str_to_g(item) for item in attrib['solute_masses']]
     return attrib
 
-def climb_down_tree(step):
+def climb_down_tree(step, verbose=False, lvl=0):
+    indent = '  '
     base_steps = list(BASE_STEP_OBJ_DICT.values())
     tree = [step]
+    if verbose:
+        print(f'{indent*lvl}{step.name}' + ' {')
     if type(step) in base_steps:
         return tree
     else:
+        lvl += 1
         for step in step.steps:
+            
+                
             if type(step) in base_steps:
+                if verbose:
+                    print(f'{indent*lvl}{step.name}')
                 tree.append(step)
                 continue
             else:
-                tree.extend(climb_down_tree(step))
+                tree.extend(climb_down_tree(step, verbose=verbose, lvl=lvl))
+        if verbose:
+            print(f'{indent*(lvl-1)}' + '}')
     return tree
 
 # Hardware compatibility

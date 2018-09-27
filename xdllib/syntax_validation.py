@@ -6,12 +6,16 @@ import inspect
 import re
 import traceback
 
+ACCEPTABLE_MASS_UNITS = ['ug', 'mg', 'g', 'kg']
+ACCEPTABLE_VOLUME_UNITS = ['ul', 'ml', 'cl', 'dl', 'l', 'cc']
 XDL_ACCEPTABLE_UNITS = {
-    'volume': ['ul', 'ml', 'cl', 'dl', 'l', 'cc'],
-    'mass': ['ug', 'mg', 'g', 'kg'],
+    'volume': ACCEPTABLE_VOLUME_UNITS,
+    'mass': ACCEPTABLE_MASS_UNITS,
     'mol': ['umol', 'mmol', 'mol'],
     'time': ['s', 'sec', 'secs', 'second', 'seconds', 'm', 'min', 'mins', 'minute', 'minutes', 'h', 'hr', 'hrs', 'hour', 'hours'],
     'temperature': ['c', 'k', 'f'],
+    'solute_masses': ACCEPTABLE_MASS_UNITS,
+    'solvent_volume': ACCEPTABLE_VOLUME_UNITS,
 }
 
 XDL_STEP_COMPULSORY_ATTRIBUTES = {
