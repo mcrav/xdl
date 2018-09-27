@@ -3,6 +3,7 @@ import itertools
 import lxml.etree as etree
 from .constants import DEFAULT_VALS
 
+
 class XDLElement(object):
 
     def __init__(self):
@@ -103,23 +104,3 @@ def cas_str_to_int(cas_str):
 
 # Safety
 
-def get_reagent_combinations(steps, reagents):
-    vessel_contents = {}
-    combos = []
-    for step in steps:
-        if isinstance(step, Add):
-            vessel = step.properties['vessel']
-            reagent = step.properties['reagent']
-            vessel_contents.setdefault(vessel, []).append(reagent)
-            if len(vessel_contents[vessel]) > 1:
-                combos.extend(list(itertools.combinations(vessel_contents[vessel], 2)))
-    
-    combos = set([frozenset(item) for item in combos if len(set(item)) > 1])
-    cas_combos = []
-    for combo in combos:
-        combo = list(combo)
-        combo[0] = cas_str_to_int(find_reagent_obj(combo[0], reagents).properties['cas'])
-        combo[1] = cas_str_to_int(find_reagent_obj(combo[1], reagents).properties['cas'])
-        if combo[0] and combo[1]:
-            cas_combos.append(frozenset(combo))
-    return set(cas_combos)

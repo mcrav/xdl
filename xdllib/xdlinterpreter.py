@@ -4,7 +4,7 @@ from io import StringIO
 import re
 import os
 from chempiler import Chempiler
-from .utils import convert_time_str_to_seconds, convert_volume_str_to_ml, get_reagent_combinations
+from .utils import convert_time_str_to_seconds, convert_volume_str_to_ml
 from .constants import *
 from .components import *
 from .reagents import *
@@ -12,6 +12,7 @@ from .steps import *
 from .safety import procedure_is_safe
 from .syntax_validation import XDLSyntaxValidator
 from .namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT, BASE_STEP_OBJ_DICT
+import chembrain as cb
 
 class XDL(object):
 
@@ -37,11 +38,31 @@ class XDL(object):
             tree.extend(climb_down_tree(step))
         return tree
 
-    def insert_waste_vessels(self, full_tree):
-        for step in full_tree:
-            if isinstance(step, WashFilterCake):
+    def insert_waste_vessels(self):
+        waste_sound = True
+        for step in self.get_full_xdl_tree():
+            if isinstance(step, (WashFilterCake, CleanVessel)):
                 step.waste_vessel = self.get_waste_vessel(step.solvent)
+                print(step.waste_vessel)
+            elif isinstance(step, (CleanTubing, PrimePumpForAdd)):
+                step.waste_vessel = self.get_waste_vessel(step.reagent)
+                print(step.waste_vessel)
+            if 'waste_vessel' in step.properties and not step.waste_vessel:
+                waste_sound = False
+        return waste_sound
 
+    def get_waste_vessel(self, reagent_id):
+        for reagent in self.reagents:
+            if reagent.id_word == reagent_id:
+                if reagent.waste:
+                    return f'waste_{reagent.waste}'
+                else:
+                    waste_type = cb.waste.get_waste_type(reagent_id)
+                    if not waste_type:
+                        print(f'Waste unknown for {reagent_id}, please add waste to Reagents section.')
+                    else:
+                        return f'waste_{waste_type}'
+        return None
 
     def parse_xdl(self):
         self.steps = steps_from_xdl(self.xdl)
@@ -82,18 +103,24 @@ class XDL(object):
     def prepare_for_execution(self, graphml_file):#
         if not self.prepared_for_execution:
             if self.steps: # if XDL is valid
+                print('XDL is valid')
                 self.graphml_hardware = graphml_hardware_from_file(graphml_file)
                 if self.hardware_is_compatible():
+                    print('Hardware is compatible')
                     self.map_hardware_to_steps()
-                    self.close_open_steps()         
-                    self.check_safety()
-            self.prepared_for_execution = True
+                    if self.insert_waste_vessels():
+                        print('Waste vessels setup')
+                        self.close_open_steps()         
+                        if self.check_safety():
+                            print('Procedure raises no safety flags')
+                            self.prepared_for_execution = True
 
     def simulate(self, graphml_file):
         self.prepare_for_execution(graphml_file)
-        chempiler = Chempiler(self.get_exp_id(default='xdl_simulation'), graphml_file, True)
-        for step in self.steps:
-            step.execute(chempiler)
+        if self.prepared_for_execution:
+            chempiler = Chempiler(self.get_exp_id(default='xdl_simulation'), graphml_file, True)
+            for step in self.steps:
+                step.execute(chempiler)
 
     def execute(self, graphml_file):
         self.prepare_for_execution(graphml_file)

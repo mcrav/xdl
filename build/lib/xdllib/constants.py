@@ -1,8 +1,3 @@
-# Step Namespace
-STEP_NAMESPACE = [
-
-]
-
 ROOM_TEMPERATURE = 25
 
 # DEFAULT PARAMETERS

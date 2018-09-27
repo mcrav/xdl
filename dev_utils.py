@@ -30,6 +30,7 @@ def add_getters(steps_file):
     getter = False
     for line in lines:
         if line.startswith('class'):
+            print(line)
             if props:
                 for prop in props:
                     new_lines.append(f'{indent}@property')
@@ -47,7 +48,7 @@ def add_getters(steps_file):
             read_props = False
 
         if read_props:
-            props.append(re.search(r': ([a-z_]+)(,)?\n', line).group(1))
+            props.append(re.search(r': ([a-zA-Z_]+)(,)?\n', line).group(1))
 
         if 'self.properties = {' in line:
             read_props = True
@@ -57,7 +58,7 @@ def add_getters(steps_file):
                 getter = False
                 continue
 
-        if '@property' in line:
+        if '@' in line:
             getter = True
 
         if not getter:

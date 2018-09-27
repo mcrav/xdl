@@ -53,25 +53,55 @@ class CMove(Step):
     def from_vessel(self):
         return self.properties['from_vessel']
 
+    @from_vessel.setter
+    def from_vessel(self, val):
+        self.properties['from_vessel'] = val
+        self.update()
+
     @property
     def to_vessel(self):
         return self.properties['to_vessel']
+
+    @to_vessel.setter
+    def to_vessel(self, val):
+        self.properties['to_vessel'] = val
+        self.update()
 
     @property
     def volume(self):
         return self.properties['volume']
 
+    @volume.setter
+    def volume(self, val):
+        self.properties['volume'] = val
+        self.update()
+
     @property
     def move_speed(self):
         return self.properties['move_speed']
+
+    @move_speed.setter
+    def move_speed(self, val):
+        self.properties['move_speed'] = val
+        self.update()
 
     @property
     def aspiration_speed(self):
         return self.properties['aspiration_speed']
 
+    @aspiration_speed.setter
+    def aspiration_speed(self, val):
+        self.properties['aspiration_speed'] = val
+        self.update()
+
     @property
     def dispense_speed(self):
         return self.properties['dispense_speed']
+
+    @dispense_speed.setter
+    def dispense_speed(self, val):
+        self.properties['dispense_speed'] = val
+        self.update()
 
 class CSeparate(Step):
     """Launches a phase separation sequence. The name of the separator is currently
@@ -100,9 +130,19 @@ class CSeparate(Step):
     def lower_phase_vessel(self):
         return self.properties['lower_phase_vessel']
 
+    @lower_phase_vessel.setter
+    def lower_phase_vessel(self, val):
+        self.properties['lower_phase_vessel'] = val
+        self.update()
+
     @property
     def upper_phase_vessel(self):
         return self.properties['upper_phase_vessel']
+
+    @upper_phase_vessel.setter
+    def upper_phase_vessel(self, val):
+        self.properties['upper_phase_vessel'] = val
+        self.update()
 
 class CPrime(Step):
     """Moves the tube volume of every node with "flask" as class to waste.
@@ -124,6 +164,11 @@ class CPrime(Step):
     @property
     def aspiration_speed(self):
         return self.properties['aspiration_speed']
+
+    @aspiration_speed.setter
+    def aspiration_speed(self, val):
+        self.properties['aspiration_speed'] = val
+        self.update()
 
 class CSwitchVacuum(Step):
     """Switches a vacuum valve between backbone and vacuum.
@@ -147,9 +192,19 @@ class CSwitchVacuum(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def destination(self):
         return self.properties['destination']
+
+    @destination.setter
+    def destination(self, val):
+        self.properties['destination'] = val
+        self.update()
 
 class CSwitchCartridge(Step):
     """Switches a cartridge carousel to the specified position.
@@ -172,9 +227,19 @@ class CSwitchCartridge(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def cartridge(self):
         return self.properties['cartridge']
+
+    @cartridge.setter
+    def cartridge(self, val):
+        self.properties['cartridge'] = val
+        self.update()
 
 class CSwitchColumn(Step):
     """Switches a fractionating valve attached to a chromatography column.
@@ -198,9 +263,19 @@ class CSwitchColumn(Step):
     def column(self):
         return self.properties['column']
 
+    @column.setter
+    def column(self, val):
+        self.properties['column'] = val
+        self.update()
+
     @property
     def destination(self):
         return self.properties['destination']
+
+    @destination.setter
+    def destination(self, val):
+        self.properties['destination'] = val
+        self.update()
 
 class CStartStir(Step):
     """Starts the stirring operation of a hotplate or overhead stirrer.
@@ -222,6 +297,11 @@ class CStartStir(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
 class CStartHeat(Step):
     """Starts the heating operation of a hotplate stirrer.
 
@@ -241,6 +321,11 @@ class CStartHeat(Step):
     @property
     def vessel(self):
         return self.properties['vessel']
+
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
 
 class CStopStir(Step):
     """Stops the stirring operation of a hotplate or overhead stirrer.
@@ -262,6 +347,11 @@ class CStopStir(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
 class CStopHeat(Step):
     """Starts the stirring operation of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
@@ -282,6 +372,11 @@ class CStopHeat(Step):
     @property
     def vessel(self):
         return self.properties['vessel']
+
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
 
 class CSetTemp(Step):
     """Sets the temperature setpoint of a hotplate stirrer. This command is NOT available
@@ -306,9 +401,19 @@ class CSetTemp(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def temp(self):
         return self.properties['temp']
+
+    @temp.setter
+    def temp(self, val):
+        self.properties['temp'] = val
+        self.update()
 
 class CSetStirRpm(Step):
     """Sets the stirring speed setpoint of a hotplate or overhead stirrer.
@@ -332,9 +437,19 @@ class CSetStirRpm(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def stir_rpm(self):
         return self.properties['stir_rpm']
+
+    @stir_rpm.setter
+    def stir_rpm(self, val):
+        self.properties['stir_rpm'] = val
+        self.update()
 
 class CStirrerWaitForTemp(Step):
     """Delays the script execution until the current temperature of the hotplate is within
@@ -357,6 +472,11 @@ class CStirrerWaitForTemp(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
 class CStartHeaterBath(Step):
     """Starts the heating bath of a rotary evaporator.
 
@@ -376,6 +496,11 @@ class CStartHeaterBath(Step):
     @property
     def rotavap_name(self):
         return self.properties['rotavap_name']
+
+    @rotavap_name.setter
+    def rotavap_name(self, val):
+        self.properties['rotavap_name'] = val
+        self.update()
 
 class CStopHeaterBath(Step):
     """Stops the heating bath of a rotary evaporator.
@@ -397,6 +522,11 @@ class CStopHeaterBath(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
+    @rotavap_name.setter
+    def rotavap_name(self, val):
+        self.properties['rotavap_name'] = val
+        self.update()
+
 class CStartRotation(Step):
     """Starts the rotation of a rotary evaporator.
 
@@ -416,6 +546,11 @@ class CStartRotation(Step):
     @property
     def rotavap_name(self):
         return self.properties['rotavap_name']
+
+    @rotavap_name.setter
+    def rotavap_name(self, val):
+        self.properties['rotavap_name'] = val
+        self.update()
 
 class CStopRotation(Step):
     """Stops the rotation of a rotary evaporator.
@@ -437,6 +572,11 @@ class CStopRotation(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
+    @rotavap_name.setter
+    def rotavap_name(self, val):
+        self.properties['rotavap_name'] = val
+        self.update()
+
 class CLiftArmUp(Step):
     """Lifts the rotary evaporator arm up.
 
@@ -456,6 +596,11 @@ class CLiftArmUp(Step):
     @property
     def rotavap_name(self):
         return self.properties['rotavap_name']
+
+    @rotavap_name.setter
+    def rotavap_name(self, val):
+        self.properties['rotavap_name'] = val
+        self.update()
 
 class CLiftArmDown(Step):
     """Lifts the rotary evaporator down.
@@ -477,6 +622,11 @@ class CLiftArmDown(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
+    @rotavap_name.setter
+    def rotavap_name(self, val):
+        self.properties['rotavap_name'] = val
+        self.update()
+
 class CResetRotavap(Step):
     """
     Resets the rotary evaporator.
@@ -497,6 +647,11 @@ class CResetRotavap(Step):
     @property
     def rotavap_name(self):
         return self.properties['rotavap_name']
+
+    @rotavap_name.setter
+    def rotavap_name(self, val):
+        self.properties['rotavap_name'] = val
+        self.update()
 
 class CSetBathTemp(Step):
     """Sets the temperature setpoint for the heating bath.
@@ -520,9 +675,19 @@ class CSetBathTemp(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
+    @rotavap_name.setter
+    def rotavap_name(self, val):
+        self.properties['rotavap_name'] = val
+        self.update()
+
     @property
     def temp(self):
         return self.properties['temp']
+
+    @temp.setter
+    def temp(self, val):
+        self.properties['temp'] = val
+        self.update()
 
 class CSetRvRotationSpeed(Step):
     """Sets the rotation speed setpoint for the rotary evaporator.
@@ -546,9 +711,19 @@ class CSetRvRotationSpeed(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
+    @rotavap_name.setter
+    def rotavap_name(self, val):
+        self.properties['rotavap_name'] = val
+        self.update()
+
     @property
     def rotation_speed(self):
         return self.properties['rotation_speed']
+
+    @rotation_speed.setter
+    def rotation_speed(self, val):
+        self.properties['rotation_speed'] = val
+        self.update()
 
 class CRvWaitForTemp(Step):
     """Delays the script execution until the current temperature of the heating bath is
@@ -570,6 +745,11 @@ class CRvWaitForTemp(Step):
     @property
     def rotavap_name(self):
         return self.properties['rotavap_name']
+
+    @rotavap_name.setter
+    def rotavap_name(self, val):
+        self.properties['rotavap_name'] = val
+        self.update()
 
 class CSetInterval(Step):
     """Sets the interval time for the rotary evaporator, causing it to periodically switch
@@ -594,9 +774,19 @@ class CSetInterval(Step):
     def rotavap_name(self):
         return self.properties['rotavap_name']
 
+    @rotavap_name.setter
+    def rotavap_name(self, val):
+        self.properties['rotavap_name'] = val
+        self.update()
+
     @property
     def interval(self):
         return self.properties['interval']
+
+    @interval.setter
+    def interval(self, val):
+        self.properties['interval'] = val
+        self.update()
 
 class CInitVacPump(Step):
     """Initialises the vacuum pump controller.
@@ -617,6 +807,11 @@ class CInitVacPump(Step):
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
 
+    @vacuum_pump_name.setter
+    def vacuum_pump_name(self, val):
+        self.properties['vacuum_pump_name'] = val
+        self.update()
+
 class CGetVacSp(Step):
     """Reads the current vacuum setpoint.
 
@@ -636,6 +831,11 @@ class CGetVacSp(Step):
     @property
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
+
+    @vacuum_pump_name.setter
+    def vacuum_pump_name(self, val):
+        self.properties['vacuum_pump_name'] = val
+        self.update()
 
 class CSetVacSp(Step):
     """Sets a new vacuum setpoint.
@@ -659,9 +859,19 @@ class CSetVacSp(Step):
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
 
+    @vacuum_pump_name.setter
+    def vacuum_pump_name(self, val):
+        self.properties['vacuum_pump_name'] = val
+        self.update()
+
     @property
     def vacuum_pressure(self):
         return self.properties['vacuum_pressure']
+
+    @vacuum_pressure.setter
+    def vacuum_pressure(self, val):
+        self.properties['vacuum_pressure'] = val
+        self.update()
 
 class CStartVac(Step):
     """Starts the vacuum pump.
@@ -683,6 +893,11 @@ class CStartVac(Step):
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
 
+    @vacuum_pump_name.setter
+    def vacuum_pump_name(self, val):
+        self.properties['vacuum_pump_name'] = val
+        self.update()
+
 class CStopVac(Step):
     """Stops the vacuum pump.
 
@@ -703,6 +918,11 @@ class CStopVac(Step):
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
 
+    @vacuum_pump_name.setter
+    def vacuum_pump_name(self, val):
+        self.properties['vacuum_pump_name'] = val
+        self.update()
+
 class CVentVac(Step):
     """Vents the vacuum pump to ambient pressure.
 
@@ -722,6 +942,11 @@ class CVentVac(Step):
     @property
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
+
+    @vacuum_pump_name.setter
+    def vacuum_pump_name(self, val):
+        self.properties['vacuum_pump_name'] = val
+        self.update()
 
 class CSetSpeedSp(Step):
     """Sets the speed of the vacuum pump (0-100%).
@@ -745,9 +970,19 @@ class CSetSpeedSp(Step):
     def vacuum_pump_name(self):
         return self.properties['vacuum_pump_name']
 
+    @vacuum_pump_name.setter
+    def vacuum_pump_name(self, val):
+        self.properties['vacuum_pump_name'] = val
+        self.update()
+
     @property
     def vacuum_pump_speed(self):
         return self.properties['vacuum_pump_speed']
+
+    @vacuum_pump_speed.setter
+    def vacuum_pump_speed(self, val):
+        self.properties['vacuum_pump_speed'] = val
+        self.update()
 
 class CStartChiller(Step):
     """Starts the recirculation chiller.
@@ -769,6 +1004,11 @@ class CStartChiller(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
 class CStopChiller(Step):
     """Stops the recirculation chiller.
 
@@ -788,6 +1028,11 @@ class CStopChiller(Step):
     @property
     def vessel(self):
         return self.properties['vessel']
+
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
 
 class CSetChiller(Step):
     """Sets the temperature setpoint.
@@ -811,9 +1056,19 @@ class CSetChiller(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def temp(self):
         return self.properties['temp']
+
+    @temp.setter
+    def temp(self, val):
+        self.properties['temp'] = val
+        self.update()
 
 class CChillerWaitForTemp(Step):
     """Delays the script execution until the current temperature of the chiller is within
@@ -835,6 +1090,11 @@ class CChillerWaitForTemp(Step):
     @property
     def vessel(self):
         return self.properties['vessel']
+
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
 
 class CRampChiller(Step):
     """Causes the chiller to ramp the temperature up or down. Only available for Petite
@@ -861,13 +1121,28 @@ class CRampChiller(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def ramp_duration(self):
         return self.properties['ramp_duration']
 
+    @ramp_duration.setter
+    def ramp_duration(self, val):
+        self.properties['ramp_duration'] = val
+        self.update()
+
     @property
     def end_temperature(self):
         return self.properties['end_temperature']
+
+    @end_temperature.setter
+    def end_temperature(self, val):
+        self.properties['end_temperature'] = val
+        self.update()
 
 class CSwitchChiller(Step):
     """Switches the solenoid valve.
@@ -891,9 +1166,19 @@ class CSwitchChiller(Step):
     def solenoid_valve_name(self):
         return self.properties['solenoid_valve_name']
 
+    @solenoid_valve_name.setter
+    def solenoid_valve_name(self, val):
+        self.properties['solenoid_valve_name'] = val
+        self.update()
+
     @property
     def state(self):
         return self.properties['state']
+
+    @state.setter
+    def state(self, val):
+        self.properties['state'] = val
+        self.update()
 
 class CSetCoolingPower(Step):
     """Sets the cooling power (0-100%). Only available for CF41.
@@ -917,9 +1202,19 @@ class CSetCoolingPower(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def cooling_power(self):
         return self.properties['cooling_power']
+
+    @cooling_power.setter
+    def cooling_power(self, val):
+        self.properties['cooling_power'] = val
+        self.update()
 
 class CSetRecordingSpeed(Step):
     """Sets the timelapse speed of the camera module.
@@ -940,6 +1235,11 @@ class CSetRecordingSpeed(Step):
     @property
     def recording_speed(self):
         return self.properties['recording_speed']
+
+    @recording_speed.setter
+    def recording_speed(self, val):
+        self.properties['recording_speed'] = val
+        self.update()
 
 class CWait(Step):
     """Delays execution of the script for a set amount of time. This command will
@@ -962,6 +1262,11 @@ class CWait(Step):
     @property
     def time(self):
         return self.properties['time']
+
+    @time.setter
+    def time(self, val):
+        self.properties['time'] = val
+        self.update()
 
 class CBreakpoint(Step):
     """Introduces a breakpoint in the script. The execution is halted until the operator

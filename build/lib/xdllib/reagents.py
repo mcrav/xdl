@@ -10,3 +10,14 @@ class Reagent(XDLElement):
             'cas': cas,
             'waste': waste,
         }
+    @property
+    def id_word(self):
+        return self.properties['id']
+
+    @property
+    def cas(self):
+        return self.properties['cas']
+
+    @property
+    def waste(self):
+        return self.properties['waste']

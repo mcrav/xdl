@@ -1,0 +1,317 @@
+2018-09-27 12:32:22,569 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:32:22,570 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:32:22,570 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:32:22,570 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:32:22,570 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:32:22,570 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:32:22,671 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:32:22,671 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:32:22,671 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:32:22,672 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:32:22,672 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:32:22,672 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:32:22,672 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:32:22,672 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:32:45,052 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:32:45,052 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:32:45,052 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:32:45,052 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:32:45,053 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:32:45,053 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:32:45,053 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:32:45,053 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:32:45,053 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:32:45,053 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:32:45,053 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:32:45,053 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:32:45,154 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:32:45,154 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:32:45,155 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:32:45,155 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:32:45,155 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:32:45,155 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:32:45,155 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:32:45,155 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:32:45,155 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:32:45,155 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:32:45,155 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:32:45,155 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:32:45,156 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:32:45,156 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:32:45,156 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:32:45,156 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:33:58,879 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:33:58,879 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:33:58,879 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:33:58,880 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:33:58,880 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:33:58,880 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:33:58,880 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:33:58,880 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:33:58,880 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:33:58,880 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:33:58,880 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:33:58,880 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:33:58,881 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:33:58,881 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:33:58,881 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:33:58,881 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:33:58,881 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:33:58,881 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:33:58,982 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:33:58,982 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:33:58,982 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:33:58,983 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:33:58,983 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:33:58,983 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:33:58,983 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:33:58,983 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:33:58,983 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:33:58,983 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:33:58,983 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:33:58,983 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:33:58,983 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:33:58,983 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:33:58,983 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:33:58,984 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:33:58,984 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:33:58,984 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:33:58,984 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:33:58,984 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:33:58,984 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:33:58,984 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:33:58,984 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:33:58,984 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:34:55,307 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:34:55,307 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:34:55,307 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:34:55,307 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:34:55,308 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:34:55,308 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:34:55,308 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:34:55,308 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:34:55,308 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:34:55,308 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:34:55,308 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:34:55,308 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:34:55,309 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:34:55,309 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:34:55,309 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:34:55,309 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:34:55,309 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:34:55,309 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:34:55,309 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:34:55,309 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:34:55,309 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:34:55,309 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:34:55,309 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:34:55,309 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:34:55,410 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:34:55,410 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:34:55,410 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:34:55,410 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:34:55,411 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:34:55,411 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:34:55,411 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:34:55,411 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:34:55,411 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:34:55,411 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:34:55,411 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:34:55,411 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:34:55,412 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:34:55,412 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:34:55,412 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:34:55,412 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:34:55,412 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:34:55,412 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:34:55,412 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:34:55,412 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:34:55,412 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:34:55,412 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:34:55,412 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:34:55,412 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:34:55,413 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:34:55,413 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:34:55,413 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:34:55,413 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:34:55,413 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:34:55,413 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:34:55,413 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:34:55,413 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:36:23,536 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:36:23,536 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:36:23,536 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:36:23,537 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:36:23,537 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:36:23,537 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:36:23,638 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:36:23,638 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:36:23,638 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:36:23,638 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:36:23,638 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:36:23,638 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:36:23,639 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:36:23,639 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:38:15,743 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:38:15,743 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:38:15,743 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:38:15,744 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:38:15,744 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:38:15,744 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:38:15,845 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:38:15,845 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:38:15,845 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:38:15,845 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:38:15,845 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:38:15,845 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:38:15,846 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:38:15,846 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:39:45,854 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:39:45,855 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:39:45,855 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:39:45,855 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:39:45,855 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:39:45,856 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:39:45,956 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:39:45,957 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:39:45,957 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:39:45,957 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:39:45,957 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:39:45,957 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:39:45,957 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:39:45,958 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:48:48,729 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_solvents" Address: 192.168.1.33
+2018-09-27 12:48:48,730 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_solvents" Address: 192.168.1.42
+2018-09-27 12:48:48,730 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_reactor" Address: 192.168.1.35
+2018-09-27 12:48:48,730 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_reactor" Address: 192.168.1.47
+2018-09-27 12:48:48,730 ; INFO ; hardware_sim ; MainThread ; Received Pump "pump_aqueous" Address: 192.168.1.48
+2018-09-27 12:48:48,731 ; INFO ; hardware_sim ; MainThread ; Received Valve "valve_aqueous" Address: 192.168.1.49
+2018-09-27 12:48:48,831 ; INFO ; hardware_sim ; MainThread ; Received Valve "flask_filter_bottom_vacuum_valve" Address: 192.168.1.46
+2018-09-27 12:48:48,831 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to home position.
+2018-09-27 12:48:48,832 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:48:48,832 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Moving to position 3
+2018-09-27 12:48:48,832 ; DEBUG ; hardware_sim ; MainThread ; Valve "flask_filter_bottom_vacuum_valve" - Waiting until ready...
+2018-09-27 12:48:48,832 ; INFO ; hardware_sim ; MainThread ; Received RZR 2052 port: COM1
+2018-09-27 12:48:48,832 ; INFO ; hardware_sim ; MainThread ; Received Julabo CF41 port: COM18
+2018-09-27 12:48:48,832 ; INFO ; hardware_sim ; MainThread ; Received IKARET Port: COM9
+2018-09-27 12:48:49,034 ; INFO ; pump_execution ; MainThread ; Moving 3.0mL from flask_methyl_propiolate to waste_aqueous at 20mL/min. Aspirating at 20mL/min, dispensing at 20mL/min.
+2018-09-27 12:48:49,035 ; DEBUG ; pump_execution ; MainThread ; Following path: ['flask_methyl_propiolate', 'valve_solvents', 'valve_reactor', 'valve_aqueous', 'waste_aqueous']
+2018-09-27 12:48:49,035 ; DEBUG ; pump_execution ; MainThread ; *** TOTAL VOLUME TO MOVE: 3.0 ***
+2018-09-27 12:48:49,035 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Moving to position 2
+2018-09-27 12:48:49,035 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Moving to position 5
+2018-09-27 12:48:49,035 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Moving to position 1
+2018-09-27 12:48:49,035 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Waiting until ready...
+2018-09-27 12:48:49,035 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Waiting until ready...
+2018-09-27 12:48:49,036 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,036 ; INFO ; pump_execution ; MainThread ; 0.0mL left...
+2018-09-27 12:48:49,036 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Moving absolute. Volume: 3.0 Speed: 20
+2018-09-27 12:48:49,036 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Waiting until ready...
+2018-09-27 12:48:49,036 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Waiting until ready...
+2018-09-27 12:48:49,036 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,036 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Moving to position 5
+2018-09-27 12:48:49,037 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Moving to position 1
+2018-09-27 12:48:49,037 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Moving to position 0
+2018-09-27 12:48:49,037 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Waiting until ready...
+2018-09-27 12:48:49,037 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Waiting until ready...
+2018-09-27 12:48:49,037 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,037 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Moving absolute. Volume: 3.0 Speed: 20
+2018-09-27 12:48:49,037 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Moving absolute. Volume: 0 Speed: 20
+2018-09-27 12:48:49,038 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Waiting until ready...
+2018-09-27 12:48:49,038 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Waiting until ready...
+2018-09-27 12:48:49,038 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,038 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Moving to position 2
+2018-09-27 12:48:49,038 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Moving to position 5
+2018-09-27 12:48:49,038 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Moving to position 1
+2018-09-27 12:48:49,038 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Waiting until ready...
+2018-09-27 12:48:49,038 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Waiting until ready...
+2018-09-27 12:48:49,038 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,039 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Moving absolute. Volume: 3.0 Speed: 20
+2018-09-27 12:48:49,039 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Moving absolute. Volume: 0 Speed: 20
+2018-09-27 12:48:49,039 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Waiting until ready...
+2018-09-27 12:48:49,039 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Waiting until ready...
+2018-09-27 12:48:49,039 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,039 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Moving to position 5
+2018-09-27 12:48:49,039 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Moving to position 1
+2018-09-27 12:48:49,039 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Moving to position 0
+2018-09-27 12:48:49,040 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Waiting until ready...
+2018-09-27 12:48:49,040 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Waiting until ready...
+2018-09-27 12:48:49,040 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,040 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Moving absolute. Volume: 0 Speed: 20
+2018-09-27 12:48:49,040 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Waiting until ready...
+2018-09-27 12:48:49,040 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Waiting until ready...
+2018-09-27 12:48:49,040 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,040 ; INFO ; pump_execution ; MainThread ; Done.
+2018-09-27 12:48:49,042 ; DEBUG ; pump_execution ; MainThread ; New volumes are: flask_methyl_propiolate: 97.0mL; waste_aqueous: 3.0mL.
+2018-09-27 12:48:49,042 ; INFO ; pump_execution ; MainThread ; Moving 15.0mL from flask_methyl_propiolate to reactor_reactor at 20mL/min. Aspirating at 20mL/min, dispensing at 20mL/min.
+2018-09-27 12:48:49,043 ; DEBUG ; pump_execution ; MainThread ; Following path: ['flask_methyl_propiolate', 'valve_solvents', 'valve_reactor', 'reactor_reactor']
+2018-09-27 12:48:49,043 ; DEBUG ; pump_execution ; MainThread ; *** TOTAL VOLUME TO MOVE: 15.0 ***
+2018-09-27 12:48:49,043 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Moving to position 2
+2018-09-27 12:48:49,043 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Moving to position 2
+2018-09-27 12:48:49,043 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Waiting until ready...
+2018-09-27 12:48:49,043 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Waiting until ready...
+2018-09-27 12:48:49,043 ; INFO ; pump_execution ; MainThread ; 5.0mL left...
+2018-09-27 12:48:49,044 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Moving absolute. Volume: 10.0 Speed: 20
+2018-09-27 12:48:49,044 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Waiting until ready...
+2018-09-27 12:48:49,044 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Waiting until ready...
+2018-09-27 12:48:49,044 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Moving to position 5
+2018-09-27 12:48:49,044 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Moving to position 1
+2018-09-27 12:48:49,044 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Waiting until ready...
+2018-09-27 12:48:49,044 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Waiting until ready...
+2018-09-27 12:48:49,045 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Moving absolute. Volume: 10.0 Speed: 20
+2018-09-27 12:48:49,045 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Moving absolute. Volume: 0 Speed: 20
+2018-09-27 12:48:49,045 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Waiting until ready...
+2018-09-27 12:48:49,045 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Waiting until ready...
+2018-09-27 12:48:49,045 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Moving to position 2
+2018-09-27 12:48:49,045 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Moving to position 2
+2018-09-27 12:48:49,045 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Waiting until ready...
+2018-09-27 12:48:49,045 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Waiting until ready...
+2018-09-27 12:48:49,046 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Moving absolute. Volume: 0 Speed: 20
+2018-09-27 12:48:49,046 ; INFO ; pump_execution ; MainThread ; 0.0mL left...
+2018-09-27 12:48:49,046 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Moving absolute. Volume: 5.0 Speed: 20
+2018-09-27 12:48:49,046 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Waiting until ready...
+2018-09-27 12:48:49,046 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Waiting until ready...
+2018-09-27 12:48:49,046 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Moving to position 5
+2018-09-27 12:48:49,046 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Moving to position 1
+2018-09-27 12:48:49,046 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Waiting until ready...
+2018-09-27 12:48:49,047 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Waiting until ready...
+2018-09-27 12:48:49,047 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Moving absolute. Volume: 5.0 Speed: 20
+2018-09-27 12:48:49,047 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Moving absolute. Volume: 0 Speed: 20
+2018-09-27 12:48:49,047 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Waiting until ready...
+2018-09-27 12:48:49,047 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Waiting until ready...
+2018-09-27 12:48:49,047 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Moving to position 2
+2018-09-27 12:48:49,047 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Moving to position 2
+2018-09-27 12:48:49,047 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_solvents" - Waiting until ready...
+2018-09-27 12:48:49,048 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_reactor" - Waiting until ready...
+2018-09-27 12:48:49,048 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Moving absolute. Volume: 0 Speed: 20
+2018-09-27 12:48:49,048 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_solvents" - Waiting until ready...
+2018-09-27 12:48:49,048 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_reactor" - Waiting until ready...
+2018-09-27 12:48:49,048 ; INFO ; pump_execution ; MainThread ; Done.
+2018-09-27 12:48:49,049 ; DEBUG ; pump_execution ; MainThread ; New volumes are: flask_methyl_propiolate: 82.0mL; reactor_reactor: 15.0mL.
+2018-09-27 12:48:49,050 ; INFO ; pump_execution ; MainThread ; Moving 2.5mL from flask_water to waste_aqueous at 20mL/min. Aspirating at 20mL/min, dispensing at 20mL/min.
+2018-09-27 12:48:49,050 ; DEBUG ; pump_execution ; MainThread ; Following path: ['flask_water', 'valve_aqueous', 'waste_aqueous']
+2018-09-27 12:48:49,050 ; DEBUG ; pump_execution ; MainThread ; *** VOLUME TO MOVE: 2.5 ***
+2018-09-27 12:48:49,050 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Moving to position 2
+2018-09-27 12:48:49,050 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,051 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Moving absolute. Volume: 2.5 Speed: 20
+2018-09-27 12:48:49,051 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,051 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Moving to position 0
+2018-09-27 12:48:49,051 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,051 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Moving absolute. Volume: 0 Speed: 20
+2018-09-27 12:48:49,051 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,051 ; INFO ; pump_execution ; MainThread ; 0.0mL left...
+2018-09-27 12:48:49,052 ; INFO ; pump_execution ; MainThread ; Done.
+2018-09-27 12:48:49,053 ; DEBUG ; pump_execution ; MainThread ; New volumes are: flask_water: 97.5mL; waste_aqueous: 5.5mL.
+2018-09-27 12:48:49,053 ; INFO ; pump_execution ; MainThread ; Moving 2.5mL from flask_water to waste_aqueous at 20mL/min. Aspirating at 20mL/min, dispensing at 20mL/min.
+2018-09-27 12:48:49,054 ; DEBUG ; pump_execution ; MainThread ; Following path: ['flask_water', 'valve_aqueous', 'waste_aqueous']
+2018-09-27 12:48:49,054 ; DEBUG ; pump_execution ; MainThread ; *** VOLUME TO MOVE: 2.5 ***
+2018-09-27 12:48:49,054 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Moving to position 2
+2018-09-27 12:48:49,054 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,054 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Moving absolute. Volume: 2.5 Speed: 20
+2018-09-27 12:48:49,054 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,055 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Moving to position 0
+2018-09-27 12:48:49,055 ; DEBUG ; hardware_sim ; MainThread ; Valve "valve_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,055 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Moving absolute. Volume: 0 Speed: 20
+2018-09-27 12:48:49,055 ; DEBUG ; hardware_sim ; MainThread ; Pump "pump_aqueous" - Waiting until ready...
+2018-09-27 12:48:49,055 ; INFO ; pump_execution ; MainThread ; 0.0mL left...
+2018-09-27 12:48:49,055 ; INFO ; pump_execution ; MainThread ; Done.
+2018-09-27 12:48:49,056 ; DEBUG ; pump_execution ; MainThread ; New volumes are: flask_water: 95.0mL; waste_aqueous: 8.0mL.

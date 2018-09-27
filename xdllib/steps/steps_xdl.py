@@ -69,9 +69,19 @@ class StartStir(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def stir_rpm(self):
         return self.properties['stir_rpm']
+
+    @stir_rpm.setter
+    def stir_rpm(self, val):
+        self.properties['stir_rpm'] = val
+        self.update()
 
 class StartHeat(Step):
     """Start heating given vessel at given temperature.
@@ -99,9 +109,19 @@ class StartHeat(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def temp(self):
         return self.properties['temp']
+
+    @temp.setter
+    def temp(self, val):
+        self.properties['temp'] = val
+        self.update()
 
 class StartVacuum(Step):
     """Start vacuum pump attached to given vessel.
@@ -126,6 +146,11 @@ class StartVacuum(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
 class StopVacuum(Step):
     """Stop vacuum pump attached to given vessel.
 
@@ -149,6 +174,11 @@ class StopVacuum(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
 class CleanVessel(Step):
     """Clean given vessel.
 
@@ -159,7 +189,8 @@ class CleanVessel(Step):
         stir_rpm {str} -- RPM to stir vessel at during cleaning. (optional)
         stir_time {str} -- Time to stir once solvent has been added. (optional)
     """
-    def __init__(self, vessel=None, solvent='default', volume='default', stir_rpm='default', stir_time='default'):
+    def __init__(self, vessel=None, solvent='default', volume='default', stir_rpm='default',
+                    stir_time='default', waste_vessel=None):
 
         self.name = 'CleanVessel'
         self.properties = {
@@ -167,6 +198,7 @@ class CleanVessel(Step):
             'solvent': solvent,
             'volume': volume,
             'stir_rpm': stir_rpm,
+            'waste_vessel': waste_vessel,
         }
         self.get_defaults()
 
@@ -175,7 +207,7 @@ class CleanVessel(Step):
             StartStir(vessel=vessel, stir_rpm=stir_rpm),
             CWait(time=60),
             CStopStir(vessel=vessel),
-            CMove(from_vessel=vessel, to_vessel='waste', volume='all'),
+            CMove(from_vessel=vessel, to_vessel=waste_vessel, volume='all'),
         ]
 
         self.human_readable = f'Clean {vessel} with {solvent} ({volume}).\n'
@@ -184,17 +216,46 @@ class CleanVessel(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def solvent(self):
         return self.properties['solvent']
+
+    @solvent.setter
+    def solvent(self, val):
+        self.properties['solvent'] = val
+        self.update()
 
     @property
     def volume(self):
         return self.properties['volume']
 
+    @volume.setter
+    def volume(self, val):
+        self.properties['volume'] = val
+        self.update()
+
     @property
     def stir_rpm(self):
         return self.properties['stir_rpm']
+
+    @stir_rpm.setter
+    def stir_rpm(self, val):
+        self.properties['stir_rpm'] = val
+        self.update()
+
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
+        self.update()
 
 class CleanTubing(Step):
     """Clean tubing with given reagent.
@@ -203,17 +264,18 @@ class CleanTubing(Step):
         reagent {str} -- Reagent to clean tubing with.
         volume {float} -- Volume to clean tubing with in mL. (optional)
     """
-    def __init__(self, reagent=None, volume='default'):
+    def __init__(self, reagent=None, volume='default', waste_vessel=None):
 
         self.name = 'CleanTubing'
         self.properties = {
             'reagent': reagent,
             'volume': volume,
+            'waste_vessel': waste_vessel,
         }
         self.get_defaults()
 
         self.steps = [
-            CMove(from_vessel=f'flask_{reagent}', to_vessel='waste',
+            CMove(from_vessel=f'flask_{reagent}', to_vessel=waste_vessel,
                    volume=self.volume)
         ]
         self.steps.append(self.steps[0])
@@ -224,9 +286,28 @@ class CleanTubing(Step):
     def reagent(self):
         return self.properties['reagent']
 
+    @reagent.setter
+    def reagent(self, val):
+        self.properties['reagent'] = val
+        self.update()
+
     @property
     def volume(self):
         return self.properties['volume']
+
+    @volume.setter
+    def volume(self, val):
+        self.properties['volume'] = val
+        self.update()
+
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
+        self.update()
 
 class HeatAndReact(Step):
     """Under stirring, heat given vessel to given temp and wait for given time
@@ -262,17 +343,37 @@ class HeatAndReact(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def time(self):
         return self.properties['time']
+
+    @time.setter
+    def time(self, val):
+        self.properties['time'] = val
+        self.update()
 
     @property
     def temp(self):
         return self.properties['temp']
 
+    @temp.setter
+    def temp(self, val):
+        self.properties['temp'] = val
+        self.update()
+
     @property
     def stir_rpm(self):
         return self.properties['stir_rpm']
+
+    @stir_rpm.setter
+    def stir_rpm(self, val):
+        self.properties['stir_rpm'] = val
+        self.update()
 
 class ContinueStirToRT(Step):
     """Set vessel temperature to room temperature, and continue stirring until
@@ -299,6 +400,11 @@ class ContinueStirToRT(Step):
     @property
     def vessel(self):
         return self.properties['vessel']
+
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
 
 class Chill(Step):
     """Chill vessel to given temperature.
@@ -327,9 +433,19 @@ class Chill(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def temp(self):
         return self.properties['temp']
+
+    @temp.setter
+    def temp(self, val):
+        self.properties['temp'] = val
+        self.update()
 
 class ChillBackToRT(Step):
     """Chill given vessel back to room temperature.
@@ -356,6 +472,11 @@ class ChillBackToRT(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
 class PrimePumpForAdd(Step):
     """Prime pump attached to given reagent flask in anticipation of Add step.
 
@@ -363,16 +484,17 @@ class PrimePumpForAdd(Step):
         reagent {str} -- Reagent to prime pump for addition.
         move_speed {str} -- Speed to move reagent at. (optional)
     """
-    def __init__(self, reagent=None, move_speed='default'):
+    def __init__(self, reagent=None, move_speed='default', waste_vessel=None):
 
         self.name = 'PrimePumpForAdd'
         self.properties = {
             'reagent': reagent,
             'move_speed': move_speed,
+            'waste_vessel': waste_vessel,
         }
 
         self.steps = [
-            CMove(from_vessel=f"flask_{reagent}", to_vessel="waste",
+            CMove(from_vessel=f"flask_{reagent}", to_vessel=waste_vessel,
                     volume=DEFAULT_PUMP_PRIME_VOLUME, move_speed=move_speed)
         ]
 
@@ -380,9 +502,28 @@ class PrimePumpForAdd(Step):
     def reagent(self):
         return self.properties['reagent']
 
+    @reagent.setter
+    def reagent(self, val):
+        self.properties['reagent'] = val
+        self.update()
+
     @property
     def move_speed(self):
         return self.properties['move_speed']
+
+    @move_speed.setter
+    def move_speed(self, val):
+        self.properties['move_speed'] = val
+        self.update()
+
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
+        self.update()
 
 class Add(Step):
     """Add given volume of given reagent to given vessel.
@@ -425,25 +566,55 @@ class Add(Step):
     def reagent(self):
         return self.properties['reagent']
 
+    @reagent.setter
+    def reagent(self, val):
+        self.properties['reagent'] = val
+        self.update()
+
     @property
     def volume(self):
         return self.properties['volume']
+
+    @volume.setter
+    def volume(self, val):
+        self.properties['volume'] = val
+        self.update()
 
     @property
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def time(self):
         return self.properties['time']
+
+    @time.setter
+    def time(self, val):
+        self.properties['time'] = val
+        self.update()
 
     @property
     def move_speed(self):
         return self.properties['move_speed']
 
+    @move_speed.setter
+    def move_speed(self, val):
+        self.properties['move_speed'] = val
+        self.update()
+
     @property
     def clean_tubing(self):
         return self.properties['clean_tubing']
+
+    @clean_tubing.setter
+    def clean_tubing(self, val):
+        self.properties['clean_tubing'] = val
+        self.update()
 
 class StirAndTransfer(Step):
     """Stir vessel while transfering contents to another vessel.
@@ -476,17 +647,37 @@ class StirAndTransfer(Step):
     def from_vessel(self):
         return self.properties['from_vessel']
 
+    @from_vessel.setter
+    def from_vessel(self, val):
+        self.properties['from_vessel'] = val
+        self.update()
+
     @property
     def to_vessel(self):
         return self.properties['to_vessel']
+
+    @to_vessel.setter
+    def to_vessel(self, val):
+        self.properties['to_vessel'] = val
+        self.update()
 
     @property
     def volume(self):
         return self.properties['volume']
 
+    @volume.setter
+    def volume(self, val):
+        self.properties['volume'] = val
+        self.update()
+
     @property
     def stir_rpm(self):
         return self.properties['stir_rpm']
+
+    @stir_rpm.setter
+    def stir_rpm(self, val):
+        self.properties['stir_rpm'] = val
+        self.update()
 
 class WashFilterCake(Step):
     """Wash filter cake with given volume of given solvent.
@@ -499,7 +690,7 @@ class WashFilterCake(Step):
         wait_time {str} -- Time to wait after moving solvent to filter flask. (optional)
     """
     def __init__(self, filter_vessel=None, solvent=None, volume='default', move_speed='default',
-                wait_time='default'):
+                wait_time='default', waste_vessel=None):
 
         self.name = 'Wash'
         self.properties = {
@@ -508,7 +699,7 @@ class WashFilterCake(Step):
             'volume': volume,
             'move_speed': move_speed,
             'wait_time': wait_time,
-            'waste_vessel': 'waste',
+            'waste_vessel': waste_vessel,
         }
         self.get_defaults()
 
@@ -516,32 +707,67 @@ class WashFilterCake(Step):
             StartStir(vessel=filter_vessel),
             Add(reagent=solvent, volume=volume, vessel=filter_vessel + '_top'),
             CWait(time=wait_time),
-            CMove(from_vessel=filter_vessel + '_bottom', to_vessel='waste',
+            CMove(from_vessel=filter_vessel + '_bottom', to_vessel=waste_vessel,
                  volume=volume, move_speed=move_speed),
             CStopStir(vessel=filter_vessel)
         ]
 
         self.human_readable = f'Wash {filter_vessel} with {solvent} ({volume} mL).'
 
+
     @property
     def solvent(self):
         return self.properties['solvent']
+
+    @solvent.setter
+    def solvent(self, val):
+        self.properties['solvent'] = val
+        self.update()
 
     @property
     def filter_vessel(self):
         return self.properties['filter_vessel']
 
+    @filter_vessel.setter
+    def filter_vessel(self, val):
+        self.properties['filter_vessel'] = val
+        self.update()
+
     @property
     def volume(self):
         return self.properties['volume']
+
+    @volume.setter
+    def volume(self, val):
+        self.properties['volume'] = val
+        self.update()
 
     @property
     def move_speed(self):
         return self.properties['move_speed']
 
+    @move_speed.setter
+    def move_speed(self, val):
+        self.properties['move_speed'] = val
+        self.update()
+
     @property
     def wait_time(self):
         return self.properties['wait_time']
+
+    @wait_time.setter
+    def wait_time(self, val):
+        self.properties['wait_time'] = val
+        self.update()
+
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
+        self.update()
 
 class ChillReact(Step):
     """Add given volumes of given reagents to given vessel, chill to given temperature,
@@ -584,17 +810,37 @@ class ChillReact(Step):
     def reagents(self):
         return self.properties['reagents']
 
+    @reagents.setter
+    def reagents(self, val):
+        self.properties['reagents'] = val
+        self.update()
+
     @property
     def volumes(self):
         return self.properties['volumes']
+
+    @volumes.setter
+    def volumes(self, val):
+        self.properties['volumes'] = val
+        self.update()
 
     @property
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def temp(self):
         return self.properties['temp']
+
+    @temp.setter
+    def temp(self, val):
+        self.properties['temp'] = val
+        self.update()
 
 class Dry(Step):
     """Dry given vessel by applying vacuum for given time.
@@ -623,9 +869,19 @@ class Dry(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def time(self):
         return self.properties['time']
+
+    @time.setter
+    def time(self, val):
+        self.properties['time'] = val
+        self.update()
 
 class Filter(Step):
     """Filter contents of from_vessel in filter_vessel. Apply vacuum for given time.
@@ -657,13 +913,28 @@ class Filter(Step):
     def from_vessel(self):
         return self.properties['from_vessel']
 
+    @from_vessel.setter
+    def from_vessel(self, val):
+        self.properties['from_vessel'] = val
+        self.update()
+
     @property
     def filter_vessel(self):
         return self.properties['filter_vessel']
 
+    @filter_vessel.setter
+    def filter_vessel(self, val):
+        self.properties['filter_vessel'] = val
+        self.update()
+
     @property
     def time(self):
         return self.properties['time']
+
+    @time.setter
+    def time(self, val):
+        self.properties['time'] = val
+        self.update()
 
 class MakeSolution(Step):
     """Make solution in given vessel of given solutes in given solvent.
@@ -704,21 +975,46 @@ class MakeSolution(Step):
     def solute(self):
         return self.properties['solute']
 
+    @solute.setter
+    def solute(self, val):
+        self.properties['solute'] = val
+        self.update()
+
     @property
     def solvent(self):
         return self.properties['solvent']
+
+    @solvent.setter
+    def solvent(self, val):
+        self.properties['solvent'] = val
+        self.update()
 
     @property
     def solute_mass(self):
         return self.properties['solute_mass']
 
+    @solute_mass.setter
+    def solute_mass(self, val):
+        self.properties['solute_mass'] = val
+        self.update()
+
     @property
     def solvent_volume(self):
         return self.properties['solvent_volume']
 
+    @solvent_volume.setter
+    def solvent_volume(self, val):
+        self.properties['solvent_volume'] = val
+        self.update()
+
     @property
     def vessel(self):
         return self.properties['vessel']
+
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
 
 class Reflux(Step):
     """Reflux given vessel at given temperature for given time.
@@ -751,13 +1047,28 @@ class Reflux(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def temp(self):
         return self.properties['temp']
 
+    @temp.setter
+    def temp(self, val):
+        self.properties['temp'] = val
+        self.update()
+
     @property
     def time(self):
         return self.properties['time']
+
+    @time.setter
+    def time(self, val):
+        self.properties['time'] = val
+        self.update()
 
 class Rotavap(Step):
     """Rotavap contents of given vessel at given temp and given pressure for given time.
@@ -802,17 +1113,37 @@ class Rotavap(Step):
     def vessel(self):
         return self.properties['vessel']
 
+    @vessel.setter
+    def vessel(self, val):
+        self.properties['vessel'] = val
+        self.update()
+
     @property
     def temp(self):
         return self.properties['temp']
+
+    @temp.setter
+    def temp(self, val):
+        self.properties['temp'] = val
+        self.update()
 
     @property
     def pressure(self):
         return self.properties['pressure']
 
+    @pressure.setter
+    def pressure(self, val):
+        self.properties['pressure'] = val
+        self.update()
+
     @property
     def time(self):
         return self.properties['time']
+
+    @time.setter
+    def time(self, val):
+        self.properties['time'] = val
+        self.update()
 
 class Extract(Step):
     """Extract contents of from_vessel using given amount of given solvent.
