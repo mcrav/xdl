@@ -11,7 +11,7 @@ from .reagents import *
 from .steps import *
 from .safety import procedure_is_safe
 from .syntax_validation import XDLSyntaxValidator
-from .namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT
+from .namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT, BASE_STEP_OBJ_DICT
 
 class XDL(object):
 
@@ -29,6 +29,19 @@ class XDL(object):
                 self.parse_xdl()
         else:
             print('No XDL given.')
+
+    def get_full_xdl_tree(self):
+        tree = []
+        i = 0
+        for step in self.steps:
+            tree.extend(climb_down_tree(step))
+        return tree
+
+    def insert_waste_vessels(self, full_tree):
+        for step in full_tree:
+            if isinstance(step, WashFilterCake):
+                step.waste_vessel = self.get_waste_vessel(step.solvent)
+
 
     def parse_xdl(self):
         self.steps = steps_from_xdl(self.xdl)
@@ -58,7 +71,7 @@ class XDL(object):
                 if isinstance(val, str) and val in self.hardware_map:
                     step.properties[prop] = self.hardware_map[val]
                     print(step.properties)
-            step.update_steps()
+            step.update()
 
     def close_open_steps(self):
         self.steps = close_open_steps(self.steps)
@@ -211,6 +224,19 @@ def preprocess_attrib(step, attrib):
         attrib['solute_mass'] = attrib['solute_mass'].split(' ')
     return attrib
 
+def climb_down_tree(step):
+    base_steps = list(BASE_STEP_OBJ_DICT.values())
+    tree = [step]
+    if type(step) in base_steps:
+        return tree
+    else:
+        for step in step.steps:
+            if type(step) in base_steps:
+                tree.append(step)
+                continue
+            else:
+                tree.extend(climb_down_tree(step))
+    return tree
 
 # Hardware compatibility
 

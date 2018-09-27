@@ -1,7 +1,8 @@
 from .steps import *
 from .components import *
+import copy
 
-STEP_OBJ_DICT = {
+BASE_STEP_OBJ_DICT = {
     'Move': CMove,
     'Separate': CSeparate,
     'Prime': CPrime,
@@ -43,9 +44,12 @@ STEP_OBJ_DICT = {
     'SetRecordingSpeed': CSetRecordingSpeed,
     'Wait': CWait,
     'Breakpoint': CBreakpoint,
+}
+
+XDL_STEP_OBJ_DICT = {
     'StartVacuum': StartVacuum,
     'StopVacuum': StopVacuum,
-    'SetTempAndStartHeat': StartHeat,
+    'StartHeat': StartHeat,
     'CleanVessel': CleanVessel,
     'CleanTubing': CleanTubing,
     'HeatAndReact': HeatAndReact,
@@ -60,6 +64,9 @@ STEP_OBJ_DICT = {
     'Reflux': Reflux,
     'PrimePumpForAdd': PrimePumpForAdd,
 }
+
+STEP_OBJ_DICT = copy.copy(BASE_STEP_OBJ_DICT)
+STEP_OBJ_DICT.update(XDL_STEP_OBJ_DICT)
 
 COMPONENT_OBJ_DICT = {
     'Reactor': Reactor,

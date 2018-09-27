@@ -35,6 +35,12 @@ def add_getters(steps_file):
                     new_lines.append(f'{indent}@property')
                     new_lines.append(f'{indent}def {prop}(self):')
                     new_lines.append(f"{indent*2}return self.properties['{prop}']\n")
+
+                    new_lines.append(f'{indent}@{prop}.setter')
+                    new_lines.append(f'{indent}def {prop}(self, val):')
+                    new_lines.append(f"{indent*2}self.properties['{prop}'] = val")
+                    new_lines.append(f'{indent*2}self.update()\n')
+                    new_lines
                 props = []
 
         if '}' in line:

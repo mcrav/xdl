@@ -11,7 +11,7 @@ from .reagents import *
 from .steps import *
 from .safety import procedure_is_safe
 from .syntax_validation import XDLSyntaxValidator
-from .namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT
+from .namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT, BASE_STEP_OBJ_DICT
 
 class XDL(object):
 
@@ -29,6 +29,13 @@ class XDL(object):
                 self.parse_xdl()
         else:
             print('No XDL given.')
+
+    def get_full_xdl_tree(self):
+        tree = []
+        i = 0
+        for step in self.steps:
+            tree.extend(climb_down_tree(step))
+        return tree
 
     def parse_xdl(self):
         self.steps = steps_from_xdl(self.xdl)
@@ -211,6 +218,22 @@ def preprocess_attrib(step, attrib):
         attrib['solute_mass'] = attrib['solute_mass'].split(' ')
     return attrib
 
+def insert_waste_vessels():
+    pass
+
+def climb_down_tree(step):
+    base_steps = list(BASE_STEP_OBJ_DICT.values())
+    tree = [step]
+    if type(step) in base_steps:
+        return tree
+    else:
+        for step in step.steps:
+            if type(step) in base_steps:
+                tree.append(step)
+                continue
+            else:
+                tree.extend(climb_down_tree(step))
+    return tree
 
 # Hardware compatibility
 

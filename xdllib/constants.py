@@ -64,7 +64,7 @@ DEFAULT_VALS = {
     },
     'CleanTubing': {
         'volume': DEFAULT_CLEAN_TUBING_VOLUME,
-        'solvent': DEFAULT_CLEAN_TUBING_SOLVENT,
+        'reagent': DEFAULT_CLEAN_TUBING_SOLVENT,
     },
     'CleanVessel': {
         'solvent': DEFAULT_CLEAN_VESSEL_SOLVENT,

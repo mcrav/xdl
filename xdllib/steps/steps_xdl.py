@@ -414,7 +414,7 @@ class Add(Step):
         self.steps.append(CMove(from_vessel=f"flask_{reagent}", to_vessel=vessel,
                             volume=volume, move_speed=move_speed))
         if clean_tubing:
-            self.steps.append(CleanTubing(solvent='default', vessel="waste"))
+            self.steps.append(CleanTubing(reagent='default'))
 
         self.human_readable = f'Add {reagent} ({volume} mL) to {vessel}' # Maybe add in bit for clean tubing
         if time:
@@ -508,6 +508,7 @@ class WashFilterCake(Step):
             'volume': volume,
             'move_speed': move_speed,
             'wait_time': wait_time,
+            'waste_vessel': 'waste',
         }
         self.get_defaults()
 
@@ -515,7 +516,7 @@ class WashFilterCake(Step):
             StartStir(vessel=filter_vessel),
             Add(reagent=solvent, volume=volume, vessel=filter_vessel + '_top'),
             CWait(time=wait_time),
-            CMove(src=filter_vessel + '_bottom', dest='waste',
+            CMove(from_vessel=filter_vessel + '_bottom', to_vessel='waste',
                  volume=volume, move_speed=move_speed),
             CStopStir(vessel=filter_vessel)
         ]

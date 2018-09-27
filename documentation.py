@@ -65,12 +65,9 @@ def make_steps_doc():
         md += f"{step['description']}\n"
         
         if 'kwargs' in step:
-            md += f'### Arguments\n'
+            md += f'### Constructor Arguments\n'
             for prop in step['kwargs']:
                 md += f'* {prop}'
-                # if not prop:
-                #     md += 
-                # ' (optional)'
                 md += '  \n'
         else:
             md = md.strip() + '  \n'

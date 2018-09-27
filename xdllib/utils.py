@@ -46,7 +46,7 @@ class Step(XDLElement):
                 new_properties[prop] = val
         self.__init__(**new_properties)
 
-    def update_steps(self):
+    def update(self):
         self.__init__(**self.properties)
 
     def execute(self, chempiler):
