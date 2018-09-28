@@ -23,7 +23,7 @@ XDL_STEP_COMPULSORY_ATTRIBUTES = {
     'Add': ['reagent', 'vessel', 'quantity'],
 }
 
-REAGENT_QUANTITY_ATTRIBUTES = ['mass', 'mol', 'volume']
+REAGENT_QUANTITY_ATTRIBUTES = ['mass', 'mol', 'volume'] # step properties that expect a quantity
 
 REAGENT_ATTRIBS = ['reagent', 'solute', 'solvent'] # step properties that expect a reagent declared in Reagents section
 

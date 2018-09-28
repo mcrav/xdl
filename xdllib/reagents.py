@@ -2,9 +2,15 @@ from .constants import *
 from .utils import XDLElement
 
 class Reagent(XDLElement):
-
+    """Reagent class."""
     def __init__(self, id_word=None, cas=None, waste=None):
-
+        """
+        Keyword Arguments:
+            id_word {str} -- Name of the reagent containing only letters and underscore.
+            cas {int} -- CAS number as int.
+            waste {str} -- Type of waste reagent should go to.
+                           'aqueous', 'organic', 'chlorinated_organic', or 'metal'.
+        """
         self.properties = {
             'id': id_word,
             'cas': cas,
