@@ -144,7 +144,7 @@ class XDL(object):
         put in the StopStir method automatically.
         NOTE: Debatable whether XDL interpreter should do this.
         """
-        self.steps = _close_open_steps(self.steps)
+        self.steps = close_open_steps(self.steps)
 
     def _check_safety(self):
         """Check if the procedure is safe.
@@ -233,7 +233,7 @@ class XDL(object):
 def get_close_step(step):
     return ongoing_steps[type(step)](vessel=step.vessel)
 
-def _close_open_steps(steps):
+def close_open_steps(steps):
     open_steps = get_open_steps(steps)
     for open_step in open_steps:
         steps.append(get_close_step(open_step))
@@ -304,7 +304,6 @@ def xdl_to_step(step_xdl):
     step = STEP_OBJ_DICT[step_xdl.tag]()
     step.load_properties(preprocess_attrib(step, step_xdl.attrib))
     return step
-
 
 def xdl_to_component(component_xdl):
     component = COMPONENT_OBJ_DICT[component_xdl.tag]()

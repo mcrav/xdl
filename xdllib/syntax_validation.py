@@ -197,6 +197,9 @@ class XDLSyntaxValidator(object):
         """Check that all compulsory Step attributes are present."""
         step_attributes_valid = True
         for step in self.steps:
+            if isinstance(step, MakeSolution):
+                if len(step.solutes.split() != len(step.solute_masses.split():
+                    self.print_syntax_error('Length of solutes and solute_masses lists are different.', step)
             if step.tag in XDL_STEP_COMPULSORY_ATTRIBUTES:
                 has_quantity = True
                 for attr in XDL_STEP_COMPULSORY_ATTRIBUTES[step.tag]:
