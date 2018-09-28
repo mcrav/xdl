@@ -56,7 +56,8 @@ class XDL(object):
         return tree
         
     def _insert_waste_vessels(self):
-        """Insert correct waste vessel names into steps.
+        """
+        Insert correct waste vessel names into steps.
         If waste can't be determined for a reagent it will be printed,
         and this method will return False.
 
@@ -76,7 +77,8 @@ class XDL(object):
         return waste_ok
 
     def _get_waste_vessel(self, reagent_id):
-        """Get waste vessel for given reagent.
+        """
+        Get waste vessel for given reagent.
         
         Arguments:
             reagent_id {str} -- Name of reagent in XDL file.
@@ -139,15 +141,9 @@ class XDL(object):
                     print(step.properties)
             step.update()
 
-    def _close_open_steps(self):
-        """If there are steps like StartStir but no corresponding StopStir,
-        put in the StopStir method automatically.
-        NOTE: Debatable whether XDL interpreter should do this.
-        """
-        self.steps = close_open_steps(self.steps)
-
     def _check_safety(self):
-        """Check if the procedure is safe.
+        """
+        Check if the procedure is safe.
         Any issues will be printed.
 
         Returns:
@@ -156,7 +152,8 @@ class XDL(object):
         return procedure_is_safe(self.steps, self.reagents)
 
     def _prepare_for_execution(self, graphml_file):
-        """Prepare the XDL for execution on a Chemputer corresponding to the given
+        """
+        Prepare the XDL for execution on a Chemputer corresponding to the given
         graphML file.
         
         Arguments:
@@ -230,47 +227,9 @@ class XDL(object):
             climb_down_tree(step, verbose=True)
         print('\n')
         
-def get_close_step(step):
-    return ongoing_steps[type(step)](vessel=step.vessel)
-
-def close_open_steps(steps):
-    open_steps = get_open_steps(steps)
-    for open_step in open_steps:
-        steps.append(get_close_step(open_step))
-    return steps
-
-ongoing_steps = {
-    StartStir: CStopStir,
-    StartHeat: CStopHeat,
-    StartHeat: CStopHeat,
-    CStartChiller: CStopChiller,
-    CStartRotation: CStopRotation,
-    CStartVac: CStopVac,
-    StartVacuum: StopVacuum,
-    CStartHeaterBath: CStopHeaterBath,
-}
-
-def step_is_closed(open_step, steps):
-    closed = False
-    close_step = ongoing_steps[type(open_step)]
-    after_step = False
-    for step in steps:
-        if after_step:
-            if isinstance(step, close_step) and step.properties['vessel'] == open_step.properties['vessel']:
-                closed = True
-        if step is open_step:
-            after_step = True
-    return closed
-
-def get_open_steps(steps):
-    open_steps = []
-    for step in steps:
-        if isinstance(step, tuple(ongoing_steps.keys())) and not step_is_closed(step, steps):
-            open_steps.append(step)
-    return open_steps
-
 # XDL Parsing
 def steps_from_xdl(xdl):
+    """Given XDL str get list of steps."""
     steps = []
     xdl_tree = etree.parse(StringIO(xdl))
     for element in xdl_tree.findall('*'):
@@ -280,9 +239,12 @@ def steps_from_xdl(xdl):
     return steps
 
 def hardware_from_xdl(xdl):
+    """Get Hardware object given XDL str."""
+
     return Hardware(components_from_xdl(xdl))
 
 def components_from_xdl(xdl):
+    """Get list of components given XDL str."""
     components = []
     xdl_tree = etree.parse(StringIO(xdl))
     for element in xdl_tree.findall('*'):
@@ -292,6 +254,7 @@ def components_from_xdl(xdl):
     return components
 
 def reagents_from_xdl(xdl):
+    """Get list of reagents given XDL str."""
     reagents = []
     xdl_tree = etree.parse(StringIO(xdl))
     for element in xdl_tree.findall('*'):
@@ -301,21 +264,39 @@ def reagents_from_xdl(xdl):
     return reagents 
 
 def xdl_to_step(step_xdl):
+    """Convert XDL step str to Step object."""
     step = STEP_OBJ_DICT[step_xdl.tag]()
     step.load_properties(preprocess_attrib(step, step_xdl.attrib))
     return step
 
 def xdl_to_component(component_xdl):
+    """Convert XDL component str to Component object."""
     component = COMPONENT_OBJ_DICT[component_xdl.tag]()
     component.load_properties(component_xdl.attrib)        
     return component
 
 def xdl_to_reagent(reagent_xdl):
+    """Convert XDL reagent str to Reagent object."""
     reagent = Reagent()
     reagent.load_properties(reagent_xdl.attrib)
     return reagent
 
 def preprocess_attrib(step, attrib):
+    """
+    1. Convert strs to bools i.e. 'false' -> False
+    2. Convert all time strs to floats with second as unit.
+    3. Convert all volume strs to floats with mL as unit.
+    4. Convert all mass strs to floats with mL as unit.
+    5. Convert MakeSolution solutes and solute_masses attributes to lists.
+
+    Arguments:
+        step {Step} -- Step object to preprocess attributes for.
+        attrib {lxml.etree._Attrib} -- Raw attribute dictionary from XDL
+    
+    Returns:
+        dict -- Dict of processed attributes.
+    """
+    print(type(attrib))
     attrib = dict(attrib)
     if 'clean_tubing' in attrib:
         if attrib['clean_tubing'].lower() == 'false':
@@ -329,18 +310,31 @@ def preprocess_attrib(step, attrib):
         attrib['volume'] = convert_volume_str_to_ml(attrib['volume'])
     if 'solvent_volume' in attrib:
         attrib['solvent_volume'] = convert_volume_str_to_ml(attrib['solvent_volume'])
+    if 'mass' in attrib:
+        attrib['mass'] = convert_mass_str_to_g(attrib['mass'])
 
     if isinstance(step, MakeSolution):
         attrib['solutes'] = attrib['solutes'].split(' ')
         attrib['solute_masses'] = attrib['solute_masses'].split(' ')
-
-    if 'mass' in attrib:
-        attrib['mass'] = convert_mass_str_to_g(attrib['mass'])
-    if 'solute_masses' in attrib:
         attrib['solute_masses'] = [convert_mass_str_to_g(item) for item in attrib['solute_masses']]
+        
     return attrib
 
 def climb_down_tree(step, verbose=False, lvl=0):
+    """
+    Go through given step's sub steps recursively until base steps are reached.
+    Return list containing the step, all sub steps and all base steps.
+    
+    Arguments:
+        step {Step} -- step to find all sub steps for.
+    
+    Keyword Arguments:
+        verbose {bool} -- If True, print tree structure.
+        lvl {int} -- Level of recursion. Used to determine indent level when verbose=True.
+    
+    Returns:
+        list -- List of all Steps involved with given step. Includes given step, and all sub steps all the way down to base steps.
+    """
     indent = '  '
     base_steps = list(BASE_STEP_OBJ_DICT.values())
     tree = [step]
@@ -367,6 +361,7 @@ def climb_down_tree(step, verbose=False, lvl=0):
 # Hardware compatibility
 
 def graphml_hardware_from_file(graphml_file):
+    """Return Hardware object given graphML_file path."""
     components = []
     with open(graphml_file, 'r') as fileobj:
         soup = BeautifulSoup(fileobj, 'lxml')
@@ -384,6 +379,7 @@ def graphml_hardware_from_file(graphml_file):
     return Hardware(components)
 
 def _hardware_is_compatible(xdl_hardware=None, graphml_hardware=None):
+    """Determine if XDL hardware object can be mapped to hardware available in graphML file."""
     enough_reactors = len(xdl_hardware.reactors) <= len(graphml_hardware.reactors)
     enough_filters = len(xdl_hardware.filters) <= len(graphml_hardware.filters)
     flasks_ok = True # NEEDS DONE

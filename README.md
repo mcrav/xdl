@@ -27,7 +27,6 @@
 ### Syntax Validation
 
 1. Complete list of compulsory attributes and make test files.
-2. Test in MakeSolution length of solute_mass matches length of solute attribute.
 
 ### Unit Testing
 
