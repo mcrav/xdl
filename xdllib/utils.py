@@ -29,8 +29,13 @@ class XDLElement(object):
         """Replace 'default' strings with default values from constants.py."""
         for k in self.properties:
             if self.properties[k] == 'default':
-                self.properties[k] = DEFAULT_VALS[self.name][k]
-
+                try:
+                    self.properties[k] = DEFAULT_VALS[self.name][k]
+                except KeyError as e:
+                    print(self.name)
+                    print(self.properties)
+                    raise KeyError
+                    
 class Step(XDLElement):
     """Base class for all step objects."""
     
@@ -97,7 +102,7 @@ def convert_time_str_to_seconds(time_str):
         multiplier = 1
     else:
         multiplier = 1
-    return float(re.match(float_regex, time_str).group(1)) * multiplier)
+    return float(re.match(float_regex, time_str).group(1)) * multiplier
 
 def convert_volume_str_to_ml(volume_str):
     """Convert volume str to float with unit mL i.e. '1l' -> 1000.""" 
@@ -110,7 +115,7 @@ def convert_volume_str_to_ml(volume_str):
         multiplier = 100
     elif volume_str.endswith(VOLUME_CL_UNIT_WORDS):
         multiplier = 10
-    return float(re.match(float_regex, volume_str).group(1)) * multiplier)
+    return float(re.match(float_regex, volume_str).group(1)) * multiplier
 
 def convert_mass_str_to_g(mass_str):
     """Convert mass str to float with unit grams i.e. '20mg' -> 0.02."""
@@ -123,7 +128,7 @@ def convert_mass_str_to_g(mass_str):
         multiplier = 1e-3
     elif mass_str.endswith(MASS_UG_UNIT_WORDS):
         multiplier = 1e-6
-    return float(re.match(float_regex, mass_str).group(1)) * multiplier)
+    return float(re.match(float_regex, mass_str).group(1)) * multiplier
 
 def find_reagent_obj(reagent_id, reagents):
     """Return reagent object, given reagent_id and list of reagents."""

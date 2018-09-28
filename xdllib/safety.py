@@ -1,6 +1,6 @@
 
 from .utils import cas_str_to_int, find_reagent_obj
-from .steps import Add, MakeSolution, Move, StirAndTransfer, Extract, WashFilterCake
+from .steps import Add, MakeSolution, CMove, StirAndTransfer, Extract, WashFilterCake
 import itertools
 import copy
 
@@ -48,7 +48,7 @@ def get_reagent_combinations(steps, reagents):
             vessel_contents.setdefault(vessel, []).extend(solutes)
             vessel_contents[vessel].append(solvent)
 
-        elif isinstance(step, (Move, StirAndTransfer)):
+        elif isinstance(step, (CMove, StirAndTransfer)):
             vessel_contents[step.to_vessel] = copy.copy(vessel_contents[step.from_vessel])
             if step.volume == 'all':
                 vessel_contents[step.from_vessel] = []

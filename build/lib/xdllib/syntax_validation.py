@@ -2,6 +2,7 @@ from lxml import etree
 from io import StringIO
 from .namespace import XDL_STEP_NAMESPACE, XDL_HARDWARE_NAMESPACE
 from .utils import float_regex
+from .steps import MakeSolution
 import inspect
 import re
 import traceback
@@ -22,7 +23,7 @@ XDL_STEP_COMPULSORY_ATTRIBUTES = {
     'Add': ['reagent', 'vessel', 'quantity'],
 }
 
-REAGENT_QUANTITY_ATTRIBUTES = ['mass', 'mol', 'volume']
+REAGENT_QUANTITY_ATTRIBUTES = ['mass', 'mol', 'volume'] # step properties that expect a quantity
 
 REAGENT_ATTRIBS = ['reagent', 'solute', 'solvent'] # step properties that expect a reagent declared in Reagents section
 
@@ -197,6 +198,10 @@ class XDLSyntaxValidator(object):
         """Check that all compulsory Step attributes are present."""
         step_attributes_valid = True
         for step in self.steps:
+            # Check length of solutes and solute_masses lists are the same
+            if isinstance(step, MakeSolution):
+                if len(step.solutes.split()) != len(step.solute_masses.split()):
+                    self.print_syntax_error('Length of solutes and solute_masses lists are different.', step)
             if step.tag in XDL_STEP_COMPULSORY_ATTRIBUTES:
                 has_quantity = True
                 for attr in XDL_STEP_COMPULSORY_ATTRIBUTES[step.tag]:

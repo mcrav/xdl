@@ -10,5 +10,5 @@ setup(name='xdllib',
       description='XDL library',
       author='Matthew Craven',
       author_email='matthew.craven@glasgow.ac.uk',
-      packages=['xdllib', ''],
+      packages=['xdllib', 'xdllib.steps'],
      )
