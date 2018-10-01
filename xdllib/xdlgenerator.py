@@ -91,7 +91,7 @@ def get_xdl_string(xdltree):
             indent_level += 1
             # Element Properties
             for attr, val in element2.attrib.items():
-                if val:
+                if val != None:
                     s += f'{indent * indent_level}{attr}="{val}"\n'
             s = s[:-1] + ' />\n'
             indent_level -= 1

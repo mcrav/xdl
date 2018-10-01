@@ -203,8 +203,8 @@ class CleanVessel(Step):
         self.get_defaults()
 
         self.steps = [
-            CMove(from_vessel=f'flask_{solvent}', to_vessel=f"{vessel}", volume=volume),
-            StartStir(vessel=vessel, stir_rpm=stir_rpm),
+            CMove(from_vessel=f'flask_{solvent}', to_vessel=f"{vessel}", volume=self.volume),
+            StartStir(vessel=vessel, stir_rpm=self.stir_rpm),
             CWait(time=60),
             CStopStir(vessel=vessel),
             CMove(from_vessel=vessel, to_vessel=waste_vessel, volume='all'),
@@ -557,6 +557,8 @@ class Add(Step):
         if clean_tubing:
             self.steps.append(CleanTubing(reagent='default'))
 
+        self.steps.append(CWait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
+
         self.human_readable = f'Add {reagent} ({volume} mL) to {vessel}' # Maybe add in bit for clean tubing
         if time:
             self.human_readable += f' over {time}'
@@ -692,7 +694,7 @@ class WashFilterCake(Step):
     def __init__(self, filter_vessel=None, solvent=None, volume='default', move_speed='default',
                 wait_time='default', waste_vessel=None):
 
-        self.name = 'Wash'
+        self.name = 'WashFilterCake'
         self.properties = {
             'solvent': solvent,
             'filter_vessel': filter_vessel,
@@ -704,12 +706,12 @@ class WashFilterCake(Step):
         self.get_defaults()
 
         self.steps = [
-            StartStir(vessel=filter_vessel),
-            Add(reagent=solvent, volume=volume, vessel=filter_vessel + '_top'),
-            CWait(time=wait_time),
-            CMove(from_vessel=filter_vessel + '_bottom', to_vessel=waste_vessel,
-                 volume=volume, move_speed=move_speed),
-            CStopStir(vessel=filter_vessel)
+            StartStir(vessel=self.filter_vessel),
+            Add(reagent=self.solvent, volume=self.volume, vessel=self.filter_vessel + '_top'),
+            CWait(time=self.wait_time),
+            CMove(from_vessel=self.filter_vessel + '_bottom', to_vessel=self.waste_vessel,
+                 volume=self.volume, move_speed=self.move_speed),
+            CStopStir(vessel=self.filter_vessel)
         ]
 
         self.human_readable = f'Wash {filter_vessel} with {solvent} ({volume} mL).'
@@ -1117,20 +1119,20 @@ class Rotavap(Step):
 
         # Steps incomplete
         self.steps = [
-            SwitchCartridge('rotavap', 0),
-            LiftArmDown('rotavap'),
-            SetRotation('rotavap', 'default'),
-            StartRotation('rotavap'),
-            SetVacSp('rotavap', 'default'),
+            CSwitchCartridge('rotavap', 0),
+            CLiftArmDown('rotavap'),
+            CSetRvRotationSpeed('rotavap', 'default'),
+            CStartRotation('rotavap'),
+            CSetVacSp('rotavap', 'default'),
             StartVacuum('rotavap'),
-            SetBathTemp('rotavap', temp),
-            StartHeaterBath('rotavap'),
-            Wait(300),
-            SetVacSp('rotavap', 'default'),
-            Wait(time),
+            CSetBathTemp('rotavap', temp),
+            CStartHeaterBath('rotavap'),
+            CWait(300),
+            CSetVacSp('rotavap', 'default'),
+            CWait(time),
             StopVacuum('rotavap'),
-            VentVac('rotavap'),
-            Move('flask_rv_bottom', 'waste', )
+            CVentVac('rotavap'),
+            CMove('flask_rv_bottom', 'waste', )
         ]
 
         self.human_readable = f'Rotavap contents of {vessel} at {temp} °C for {time}.'

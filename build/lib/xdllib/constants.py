@@ -19,6 +19,8 @@ DEFAULT_EXTRACTION_VOLUME = 30 # mL
 DEFAULT_WASH_WAIT_TIME = 600 # s
 DEFAULT_WASH_VOLUME = 10 # mL
 
+DEFAULT_AFTER_ADD_WAIT_TIME = 60 # s (time to wait for stirring after addition)
+
 ROUND_BOTTOM_FLASK = 'RoundBottomFlask'
 
 DEFAULT_VALS = {
@@ -42,7 +44,7 @@ DEFAULT_VALS = {
     'Dry': {
         'time': DEFAULT_DRY_TIME,
     },
-    'Wash': {
+    'WashFilterCake': {
         'volume': DEFAULT_WASH_VOLUME,
         'move_speed': DEFAULT_MOVE_SPEED,
         'wait_time': DEFAULT_WASH_WAIT_TIME,
@@ -67,12 +69,15 @@ DEFAULT_VALS = {
         'stir_rpm': DEFAULT_STIR_RPM,
         'stir_time': DEFAULT_CLEAN_STIR_TIME,
     },
-    'SetRpmAndStartStir': {
+    'StartStir': {
         'stir_rpm': DEFAULT_STIR_RPM,
     },
 
     'Reactor': {
         'reactor_type': ROUND_BOTTOM_FLASK,
+    },
+    'PrimePumpForAdd': {
+        'move_speed': DEFAULT_MOVE_SPEED,
     }
 }
 

@@ -33,7 +33,7 @@ class XDLElement(object):
                     self.properties[k] = DEFAULT_VALS[self.name][k]
                 except KeyError as e:
                     print(self.name)
-                    print(self.properties)
+                    print(k)
                     raise KeyError
                     
 class Step(XDLElement):
