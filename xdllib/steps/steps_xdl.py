@@ -1203,6 +1203,66 @@ class Extract(Step):
     def from_vessel(self):
         return self.properties['from_vessel']
 
+    @from_vessel.setter
+    def from_vessel(self, val):
+        self.properties['from_vessel'] = val
+        self.update()
+
+    @property
+    def solvent(self):
+        return self.properties['solvent']
+
+    @solvent.setter
+    def solvent(self, val):
+        self.properties['solvent'] = val
+        self.update()
+
+    @property
+    def solvent_volume(self):
+        return self.properties['solvent_volume']
+
+    @solvent_volume.setter
+    def solvent_volume(self, val):
+        self.properties['solvent_volume'] = val
+        self.update()
+
+    @property
+    def n_separations(self):
+        return self.properties['n_separations']
+
+    @n_separations.setter
+    def n_separations(self, val):
+        self.properties['n_separations'] = val
+        self.update()
+
+class Wash(Step):
+
+    def __init__(self, from_vessel=None, separation_vessel=None,
+                    solvent=None, solvent_volume=None, n_washes=1):
+
+        self.name = 'Wash'
+        self.properties = {
+            'from_vessel': from_vessel,
+            'separation_vessel': separation_vessel,
+            'solvent': solvent,
+            'solvent_volume': solvent_volume,
+            'n_washes': n_washes,
+        }
+
+        self.steps = [
+
+        ]
+
+        self.human_readable = f'Wash contents of {from_vessel} with in {separation_vessel} with {solvent} ({n_washes}x{solvent_volume} mL)'
+
+    @property
+    def from_vessel(self):
+        return self.properties['from_vessel']
+
+    @property
+    def separation_vessel(self):
+        return self.properties['separation_vessel']
+
     @property
     def solvent(self):
         return self.properties['solvent']
@@ -1212,5 +1272,5 @@ class Extract(Step):
         return self.properties['solvent_volume']
 
     @property
-    def n_separations(self):
-        return self.properties['n_separations']
+    def n_washes(self):
+        return self.properties['n_washes']

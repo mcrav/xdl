@@ -89,7 +89,7 @@ class XDLSyntaxValidator(object):
         """
         Check all reagents used in steps are declared in the Reagents section.
         """
-        declared_reagent_ids = [reagent.attrib['id'] for reagent in self.reagents]
+        declared_reagent_ids = [reagent.attrib['rid'] for reagent in self.reagents]
         all_reagents_declared = True
         for step in self.steps:
             for reagent_attrib in REAGENT_ATTRIBS:
@@ -109,7 +109,7 @@ class XDLSyntaxValidator(object):
         """
         Check all vessels used in steps are declared in the Hardware section.
         """
-        declared_vessel_ids = [component.attrib['id'] for component in self.components]
+        declared_vessel_ids = [component.attrib['cid'] for component in self.components]
         all_vessels_declared = True
         for step in self.steps:
             for attr, val in step.attrib.items():

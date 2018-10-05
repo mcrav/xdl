@@ -9,50 +9,170 @@ class Component(XDLElement):
 
 class Reactor(Component):
     """Reactor class."""
-    def __init__(self, id_word=None, volume_ml=None, reactor_type='default', atmosphere=None):
+    def __init__(self, cid=None, volume_ml=None, reactor_type='default', atmosphere=None):
         """
         Keyword Arguments:
-            id_word {str} -- Name of reactor i.e. 'reactor1'
+            cid {str} -- Component ID i.e. 'reactor1'
             volume_ml {float} -- Volume of vessel in mL.
             reactor_type {str} -- i.e. 'RoundBottomFlask'
             atmosphere {str} -- None or 'inert'
         """
         self.name = 'Reactor'
         self.properties = {
-            'id': id_word,
+            'cid': cid,
             'volume_ml': volume_ml,
             'reactor_type': reactor_type,
             'atmosphere': atmosphere,
         }
         self.get_defaults()
 
-class FilterFlask(Component):
-    
-    def __init__(self, id_word=None, volume_ml=None,):
+    @property
+    def cid(self):
+        return self.properties['cid']
 
-        self.name = 'FilterFlask'    
+    @cid.setter
+    def cid(self, val):
+        self.properties['cid'] = val
+        self.update()
+
+    @property
+    def volume_ml(self):
+        return self.properties['volume_ml']
+
+    @volume_ml.setter
+    def volume_ml(self, val):
+        self.properties['volume_ml'] = val
+        self.update()
+
+    @property
+    def reactor_type(self):
+        return self.properties['reactor_type']
+
+    @reactor_type.setter
+    def reactor_type(self, val):
+        self.properties['reactor_type'] = val
+        self.update()
+
+    @property
+    def atmosphere(self):
+        return self.properties['atmosphere']
+
+    @atmosphere.setter
+    def atmosphere(self, val):
+        self.properties['atmosphere'] = val
+        self.update()
+
+class FilterFlask(Component):
+
+    def __init__(self, cid=None, volume_ml=None,):
+
+        self.name = 'FilterFlask'
         self.properties = {
-            'id': id_word,
+            'cid': cid,
             'volume_ml': volume_ml,
         }
+
+    @property
+    def cid(self):
+        return self.properties['cid']
+
+    @cid.setter
+    def cid(self, val):
+        self.properties['cid'] = val
+        self.update()
+
+    @property
+    def volume_ml(self):
+        return self.properties['volume_ml']
+
+    @volume_ml.setter
+    def volume_ml(self, val):
+        self.properties['volume_ml'] = val
+        self.update()
 
 class Flask(Component):
-    
-    def __init__(self, id_word=None, volume_ml=None):
-        
+
+    def __init__(self, cid=None, volume_ml=None):
+
+        self.name = 'Flask'
         self.properties = {
-            'id': id_word,
+            'cid': cid,
             'volume_ml': volume_ml,
         }
 
-class Waste(Component):
-    
-    def __init__(self, id_word=None, volume_ml=None):
-        
+    @property
+    def cid(self):
+        return self.properties['cid']
+
+    @cid.setter
+    def cid(self, val):
+        self.properties['cid'] = val
+        self.update()
+
+    @property
+    def volume_ml(self):
+        return self.properties['volume_ml']
+
+    @volume_ml.setter
+    def volume_ml(self, val):
+        self.properties['volume_ml'] = val
+        self.update()
+
+class SeparatingFunnel(Component):
+
+    def __init__(self, cid=None, volume_ml=None):
+
+        self.name = 'SeparatingFunnel'
         self.properties = {
-            'id': id_word,
+            'cid': cid,
             'volume_ml': volume_ml,
         }
+
+    @property
+    def cid(self):
+        return self.properties['cid']
+
+    @cid.setter
+    def cid(self, val):
+        self.properties['cid'] = val
+        self.update()
+
+    @property
+    def volume_ml(self):
+        return self.properties['volume_ml']
+
+    @volume_ml.setter
+    def volume_ml(self, val):
+        self.properties['volume_ml'] = val
+        self.update()
+
+class Waste(Component):
+
+    def __init__(self, cid=None, volume_ml=None):
+
+        self.name = 'Waste'
+        self.properties = {
+            'cid': cid,
+            'volume_ml': volume_ml,
+        }
+
+    @property
+    def cid(self):
+        return self.properties['cid']
+
+    @cid.setter
+    def cid(self, val):
+        self.properties['cid'] = val
+        self.update()
+
+    @property
+    def volume_ml(self):
+        return self.properties['volume_ml']
+
+    @volume_ml.setter
+    def volume_ml(self, val):
+        self.properties['volume_ml'] = val
+        self.update()
 
 class Hardware(object):
     """
@@ -62,17 +182,17 @@ class Hardware(object):
     def __init__(self, components):
 
         self.components = components
-        self.component_ids = [item.properties['id'] for item in self.components]
+        self.component_ids = [item.cid for item in self.components]
         self.reactors = []
         self.flasks = []
         self.wastes = []
         self.filters = []
         for component in self.components:
-            if component.properties['id'].startswith('reactor'):
+            if component.cid.startswith('reactor'):
                 self.reactors.append(component)
-            elif component.properties['id'].startswith('flask'):
+            elif component.cid.startswith('flask'):
                 self.flasks.append(component)
-            elif component.properties['id'].startswith('waste'):
+            elif component.cid.startswith('waste'):
                 self.wastes.append(component)
-            elif component.properties['id'].startswith('filter'):
+            elif component.cid.startswith('filter'):
                 self.filters.append(component)

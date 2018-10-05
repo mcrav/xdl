@@ -58,6 +58,7 @@ XDL_STEP_OBJ_DICT = {
     'Chill': Chill,
     'ChillBackToRT': ChillBackToRT,
     'Add': Add,
+    'Filter': Filter,
     'StirAndTransfer': StirAndTransfer,
     'Wash': WashFilterCake,
     'ChillReact': ChillReact,

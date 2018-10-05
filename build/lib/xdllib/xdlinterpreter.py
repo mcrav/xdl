@@ -87,7 +87,7 @@ class XDL(object):
             str -- Name of waste vessel, i.e. waste_aqueous. None if waste vessel not found.
         """
         for reagent in self.reagents:
-            if reagent.id_word == reagent_id:
+            if reagent.rid == reagent_id:
                 if reagent.waste:
                     return f'waste_{reagent.waste}'
                 else:
@@ -168,7 +168,6 @@ class XDL(object):
                     self._map_hardware_to_steps()
                     if self._insert_waste_vessels():
                         print('Waste vessels setup')
-                        self._close_open_steps()         
                         if self._check_safety():
                             print('Procedure raises no safety flags')
                             self._prepared_for_execution = True
