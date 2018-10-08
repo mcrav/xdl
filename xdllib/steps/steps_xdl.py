@@ -903,7 +903,7 @@ class Filter(Step):
             'filter_vessel': filter_vessel,
             'time': time,
         }
-
+        self.get_defaults()
         self.steps = [
             StartVacuum(filter_vessel),
             StirAndTransfer(from_vessel=from_vessel, to_vessel=filter_vessel),
@@ -1185,21 +1185,22 @@ class Extract(Step):
         solvent_volume {float} -- Volume of solvent to extract with.
         n_separations {int} -- Number of separations to perform.
     """
-    def __init__(self, from_vessel=None, separation_vessel=None, solvent=None, solvent_volume=None, n_separations=1):
+    def __init__(self, from_vessel=None, separation_vessel=None, solvent=None, solvent_volume=None, n_extractions=1):
 
         self.name = 'Extract'
         self.properties = {
             'from_vessel': from_vessel,
+            'separation_vessel': separation_vessel,
             'solvent': solvent,
             'solvent_volume': solvent_volume,
-            'n_separations': n_separations,
+            'n_extractions': n_extractions,
         }
 
         self.steps = [
             CMove(from_vessel=from_vessel, to_vessel=separation_vessel, ),
         ]
 
-        self.human_readable = f'Extract contents of {from_vessel} with {n_separations}x{solvent_volume}'
+        self.human_readable = f'Extract contents of {from_vessel} with {n_extractions}x{solvent_volume}'
 
     @property
     def from_vessel(self):
@@ -1208,6 +1209,15 @@ class Extract(Step):
     @from_vessel.setter
     def from_vessel(self, val):
         self.properties['from_vessel'] = val
+        self.update()
+
+    @property
+    def separation_vessel(self):
+        return self.properties['separation_vessel']
+
+    @separation_vessel.setter
+    def separation_vessel(self, val):
+        self.properties['separation_vessel'] = val
         self.update()
 
     @property
@@ -1229,12 +1239,12 @@ class Extract(Step):
         self.update()
 
     @property
-    def n_separations(self):
-        return self.properties['n_separations']
+    def n_extractions(self):
+        return self.properties['n_extractions']
 
-    @n_separations.setter
-    def n_separations(self, val):
-        self.properties['n_separations'] = val
+    @n_extractions.setter
+    def n_extractions(self, val):
+        self.properties['n_extractions'] = val
         self.update()
 
 class Wash(Step):
