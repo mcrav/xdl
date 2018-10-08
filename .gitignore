@@ -3,6 +3,9 @@
 *.pyc
 *.pyo
 __pycache__/
+build
+logs
 
 # other shite
 .vscode
+
