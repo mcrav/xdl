@@ -547,6 +547,7 @@ class Add(Step):
             'move_speed': move_speed,
             'clean_tubing': clean_tubing,
         }
+        self.get_defaults()
 
         self.steps = []
         if clean_tubing:
@@ -858,6 +859,7 @@ class Dry(Step):
             'vessel': vessel,
             'time': time,
         }
+        self.get_defaults()
 
         self.steps = [
             StartVacuum(vessel=vessel),
