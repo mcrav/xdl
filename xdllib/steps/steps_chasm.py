@@ -1363,7 +1363,7 @@ class CWait(Step):
     """
     def __init__(self, time=None):
 
-        self.name = 'Wait'
+        self.name = 'CWait'
         self.properties = {
             'time': time,
         }

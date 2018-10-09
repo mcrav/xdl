@@ -310,7 +310,6 @@ def preprocess_attrib(step, attrib):
     Returns:
         dict -- Dict of processed attributes.
     """
-    print(type(attrib))
     attrib = dict(attrib)
     if 'clean_tubing' in attrib:
         if attrib['clean_tubing'].lower() == 'false':
@@ -350,7 +349,9 @@ def climb_down_tree(step, print_tree=False, lvl=0):
     """
     indent = '  '
     base_steps = list(BASE_STEP_OBJ_DICT.values())
-    
+    print(step)
+    print(lvl)
+    print('\n')
     tree = [step]
     if print_tree:
         print(f'{indent*lvl}{step.name}' + ' {')

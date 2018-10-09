@@ -13,15 +13,19 @@ DEFAULT_CLEAN_TUBING_SOLVENT = 'water'
 DEFAULT_CLEAN_VESSEL_SOLVENT = 'water'
 DEFAULT_CLEAN_VESSEL_VOLUME = 10 # mL
 DEFAULT_WASH_QUANTITY = 20
-DEFAULT_DRY_TIME = 60
+DEFAULT_WASHFILTERCAKE_WAIT_TIME = 60*2 # s
+DEFAULT_DRY_TIME = 60*5
 DEFAULT_FILTER_TIME = 60
 DEFAULT_EXTRACTION_VOLUME = 30 # mL
-DEFAULT_WASH_WAIT_TIME = 600 # s
+
 DEFAULT_WASH_VOLUME = 10 # mL
 
 DEFAULT_AFTER_ADD_WAIT_TIME = 60 # s (time to wait for stirring after addition)
 
 ROUND_BOTTOM_FLASK = 'RoundBottomFlask'
+
+DEFAULT_RECORDING_SPEED = 14
+DEFAULT_WAIT_RECORDING_SPEED = 2000
 
 DEFAULT_VALS = {
     'Move': {
@@ -47,7 +51,7 @@ DEFAULT_VALS = {
     'WashFilterCake': {
         'volume': DEFAULT_WASH_VOLUME,
         'move_speed': DEFAULT_MOVE_SPEED,
-        'wait_time': DEFAULT_WASH_WAIT_TIME,
+        'wait_time': DEFAULT_WASHFILTERCAKE_WAIT_TIME,
     },
     'StirAndTransfer': {
         'stir_rpm': DEFAULT_STIR_RPM,
@@ -78,6 +82,10 @@ DEFAULT_VALS = {
     },
     'PrimePumpForAdd': {
         'move_speed': DEFAULT_MOVE_SPEED,
-    }
+    },
+    'Wait': {
+        'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
+        'after_recording_speed': DEFAULT_RECORDING_SPEED,
+    },
 }
 

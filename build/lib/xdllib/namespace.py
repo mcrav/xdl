@@ -42,7 +42,7 @@ BASE_STEP_OBJ_DICT = {
     'SwitchChiller': CSwitchChiller,
     'SetCoolingPower': CSetCoolingPower,
     'SetRecordingSpeed': CSetRecordingSpeed,
-    'Wait': CWait,
+    'CWait': CWait,
     'Breakpoint': CBreakpoint,
     'Confirm': Confirm,
 }
@@ -60,6 +60,7 @@ XDL_STEP_OBJ_DICT = {
     'Add': Add,
     'Filter': Filter,
     'Dry': Dry,
+    'Wait': Wait,
     'Extract': Extract,
     'WashFilterCake': WashFilterCake,
     'StirAndTransfer': StirAndTransfer,

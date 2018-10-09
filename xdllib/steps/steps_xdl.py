@@ -58,9 +58,11 @@ class StartStir(Step):
             'vessel': vessel,
             'stir_rpm': stir_rpm,
         }
+        self.get_defaults()
+
         self.steps = [
-            CSetStirRpm(vessel=vessel, stir_rpm=stir_rpm),
-            CStartStir(vessel=vessel),
+            CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm),
+            CStartStir(vessel=self.vessel),
         ]
 
         self.human_readable = f'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'
@@ -205,7 +207,7 @@ class CleanVessel(Step):
         self.steps = [
             CMove(from_vessel=f'flask_{solvent}', to_vessel=f"{vessel}", volume=self.volume),
             StartStir(vessel=vessel, stir_rpm=self.stir_rpm),
-            CWait(time=60),
+            Wait(time=60),
             CStopStir(vessel=vessel),
             CMove(from_vessel=vessel, to_vessel=waste_vessel, volume='all'),
         ]
@@ -332,7 +334,7 @@ class HeatAndReact(Step):
         self.steps = [
             StartStir(vessel=vessel, stir_rpm=stir_rpm),
             StartHeat(vessel=vessel, temp=temp),
-            CWait(time=time),
+            Wait(time=time),
             CStopHeat(vessel=vessel),
             ContinueStirToRT(vessel=vessel),
         ]
@@ -558,7 +560,7 @@ class Add(Step):
         if clean_tubing:
             self.steps.append(CleanTubing(reagent='default'))
 
-        self.steps.append(CWait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
+        self.steps.append(Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
 
         self.human_readable = f'Add {reagent} ({volume} mL) to {vessel}' # Maybe add in bit for clean tubing
         if time:
@@ -711,7 +713,7 @@ class WashFilterCake(Step):
             StartStir(vessel=self.filter_vessel),
             Add(reagent=self.solvent, volume=self.volume,
                 vessel=f'{self.filter_vessel}_top'),
-            CWait(time=self.wait_time),
+            Wait(time=self.wait_time),
             CMove(from_vessel=f'{self.filter_vessel}_bottom', to_vessel=self.waste_vessel,
                  volume=self.volume, move_speed=self.move_speed),
             CStopStir(vessel=self.filter_vessel)
@@ -800,7 +802,7 @@ class ChillReact(Step):
             self.steps.append(Add(reagent=reagent, volume=volume, vessel=vessel, clean_tubing=False,))
         self.steps.extend([
             Chill(vessel=vessel, temp=temp),
-            CWait(time=time),
+            Wait(time=time),
             ChillBackToRT(vessel=vessel),
             CStopStir(vessel=vessel),
         ])
@@ -864,9 +866,9 @@ class Dry(Step):
         self.get_defaults()
 
         self.steps = [
-            StartVacuum(vessel=vessel),
-            CWait(time=time),
-            StopVacuum(vessel=vessel)
+            StartVacuum(vessel=self.vessel),
+            Wait(time=self.time),
+            StopVacuum(vessel=self.vessel)
         ]
 
         self.human_readable = f'Dry substance in {vessel} for {time} s.'
@@ -906,11 +908,12 @@ class Filter(Step):
             'time': time,
         }
         self.get_defaults()
+
         self.steps = [
-            StartVacuum(filter_vessel),
-            StirAndTransfer(from_vessel=from_vessel, to_vessel=filter_vessel),
-            CWait(time),
-            StopVacuum(filter_vessel),
+            StartVacuum(self.filter_vessel),
+            StirAndTransfer(from_vessel=self.from_vessel, to_vessel=self.filter_vessel, volume='all'),
+            Wait(self.time),
+            StopVacuum(self.filter_vessel),
         ]
 
         self.human_readable = f'Filter contents of {from_vessel} in {filter_vessel} for {time} s.'
@@ -1068,12 +1071,12 @@ class Reflux(Step):
         self.steps = [
             StartStir(vessel=vessel),
             StartHeat(vessel=vessel, temp=temp),
-            CWait(time=time),
+            Wait(time=time),
             CStopHeat(vessel=vessel),
             CStopStir(vessel=vessel),
         ]
 
-        self.human_readable = f'Heat {vessel} to {temp} °C and reflux for {time}'
+        self.human_readable = f'Heat {vessel} to {temp} °C and reflux for {time} s.'
 
     @property
     def vessel(self):
@@ -1131,9 +1134,9 @@ class Rotavap(Step):
             StartVacuum('rotavap'),
             CSetBathTemp('rotavap', temp),
             CStartHeaterBath('rotavap'),
-            CWait(300),
+            Wait(300),
             CSetVacSp('rotavap', 'default'),
-            CWait(time),
+            Wait(time),
             StopVacuum('rotavap'),
             CVentVac('rotavap'),
             CMove('flask_rv_bottom', 'waste', )
@@ -1247,6 +1250,53 @@ class Extract(Step):
     @n_extractions.setter
     def n_extractions(self, val):
         self.properties['n_extractions'] = val
+        self.update()
+
+class Wait(Step):
+
+    def __init__(self, time=None, wait_recording_speed='default', after_recording_speed='default'):
+
+        self.name = 'Wait'
+        self.properties = {
+            'time': time,
+            'wait_recording_speed': wait_recording_speed,
+            'after_recording_speed': after_recording_speed,
+        }
+        self.get_defaults()
+
+        self.steps = [
+            CSetRecordingSpeed(self.wait_recording_speed),
+            CWait(self.time),
+            CSetRecordingSpeed(self.after_recording_speed),
+        ]
+
+        self.human_readable = f'Wait for {time} s.'
+
+    @property
+    def time(self):
+        return self.properties['time']
+
+    @time.setter
+    def time(self, val):
+        self.properties['time'] = val
+        self.update()
+
+    @property
+    def wait_recording_speed(self):
+        return self.properties['wait_recording_speed']
+
+    @wait_recording_speed.setter
+    def wait_recording_speed(self, val):
+        self.properties['wait_recording_speed'] = val
+        self.update()
+
+    @property
+    def after_recording_speed(self):
+        return self.properties['after_recording_speed']
+
+    @after_recording_speed.setter
+    def after_recording_speed(self, val):
+        self.properties['after_recording_speed'] = val
         self.update()
 
 class Wash(Step):
