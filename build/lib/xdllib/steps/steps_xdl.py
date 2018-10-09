@@ -277,7 +277,7 @@ class CleanTubing(Step):
         self.get_defaults()
 
         self.steps = [
-            CMove(from_vessel=f'flask_{reagent}', to_vessel=waste_vessel,
+            CMove(from_vessel=f'flask_{self.reagent}', to_vessel=self.waste_vessel,
                    volume=self.volume)
         ]
         self.steps.append(self.steps[0])
@@ -426,7 +426,6 @@ class Chill(Step):
         self.steps = [
             CSetChiller(vessel=vessel, temp=temp),
             CChillerWaitForTemp(vessel=vessel),
-            CStopChiller(vessel=vessel),
         ]
 
         self.human_readable = f'Chill {vessel} to {temp} °C.'
@@ -538,7 +537,7 @@ class Add(Step):
         move_speed {float} -- Speed in mL / min to move liquid at. (optional)
         clean_tubing {bool} -- Clean tubing before and after addition. (optional)
     """
-    def __init__(self, reagent=None, volume=None, vessel=None, time=None, move_speed='default', clean_tubing='default'):
+    def __init__(self, reagent=None, volume=None, vessel=None, time=None, move_speed='default', clean_tubing='default', stir='default'):
 
         self.name = 'Add'
         self.properties = {
@@ -548,10 +547,11 @@ class Add(Step):
             'time': time,
             'move_speed': move_speed,
             'clean_tubing': clean_tubing,
+            'stir': stir,
         }
         self.get_defaults()
 
-        self.steps = []
+        self.steps = [StartStir(vessel)]
         if clean_tubing:
             self.steps.append(PrimePumpForAdd(reagent=reagent))
 
@@ -561,7 +561,7 @@ class Add(Step):
             self.steps.append(CleanTubing(reagent='default'))
 
         self.steps.append(Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
-
+        self.steps.append(CStopStir(vessel))
         self.human_readable = f'Add {reagent} ({volume} mL) to {vessel}' # Maybe add in bit for clean tubing
         if time:
             self.human_readable += f' over {time}'
@@ -619,6 +619,15 @@ class Add(Step):
     @clean_tubing.setter
     def clean_tubing(self, val):
         self.properties['clean_tubing'] = val
+        self.update()
+
+    @property
+    def stir(self):
+        return self.properties['stir']
+
+    @stir.setter
+    def stir(self, val):
+        self.properties['stir'] = val
         self.update()
 
 class StirAndTransfer(Step):
@@ -710,13 +719,11 @@ class WashFilterCake(Step):
         self.get_defaults()
 
         self.steps = [
-            StartStir(vessel=self.filter_vessel),
             Add(reagent=self.solvent, volume=self.volume,
-                vessel=f'{self.filter_vessel}_top'),
+                vessel=f'{self.filter_vessel}_top', stir=False),
             Wait(time=self.wait_time),
             CMove(from_vessel=f'{self.filter_vessel}_bottom', to_vessel=self.waste_vessel,
-                 volume=self.volume, move_speed=self.move_speed),
-            CStopStir(vessel=self.filter_vessel)
+                 volume='all', move_speed=self.move_speed),
         ]
 
         self.human_readable = f'Wash {filter_vessel} with {solvent} ({volume} mL).'
@@ -911,7 +918,7 @@ class Filter(Step):
 
         self.steps = [
             StartVacuum(self.filter_vessel),
-            StirAndTransfer(from_vessel=self.from_vessel, to_vessel=self.filter_vessel, volume='all'),
+            StirAndTransfer(from_vessel=self.from_vessel, to_vessel=f'{self.filter_vessel}_top', volume='all'),
             Wait(self.time),
             StopVacuum(self.filter_vessel),
         ]
@@ -1202,7 +1209,7 @@ class Extract(Step):
         }
 
         self.steps = [
-            CMove(from_vessel=from_vessel, to_vessel=separation_vessel, ),
+            CSeparate(lower_phase_vessel=self.from_vessel, upper_phase_vessel=f'flask_{solvent}')
         ]
 
         self.human_readable = f'Extract contents of {from_vessel} with {n_extractions}x{solvent_volume}'
@@ -1302,7 +1309,7 @@ class Wait(Step):
 class Wash(Step):
 
     def __init__(self, from_vessel=None, separation_vessel=None,
-                    solvent=None, solvent_volume=None, n_washes=1):
+                    solvent=None, solvent_volume=None, n_washes=1, solvent_waste_vessel=None):
 
         self.name = 'Wash'
         self.properties = {
@@ -1311,11 +1318,32 @@ class Wash(Step):
             'solvent': solvent,
             'solvent_volume': solvent_volume,
             'n_washes': n_washes,
+            'solvent_waste_vessel': solvent_waste_vessel,
         }
-
+        from_vessel_lower = True # CHAAANGE!
+        separator_top = f'{self.separation_vessel}_top'
+        separator_bottom = f'{self.separation_vessel}_bottom'
         self.steps = [
-            # CSeparate(lower_phase_vessel=)
+            StirAndTransfer(from_vessel=self.from_vessel, to_vessel=separator_top, volume='all'),
+            CMove(from_vessel=f'flask_{self.solvent}', to_vessel=separator_top, volume=self.solvent_volume),
+            StartStir(vessel=self.separation_vessel), # top or bottom?
+            Wait(time=DEFAULT_SEPARATION_STIR_TIME),
+            CStopStir(vessel=self.separation_vessel),
+            Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
         ]
+        if from_vessel_lower:
+            lower_phase_vessel = self.from_vessel
+            upper_phase_vessel = self.solvent_waste_vessel
+        else:
+            lower_phase_vessel = self.solvent_waste_vessel
+            upper_phase_vessel = self.from_vessel
+        self.steps.append(CSeparate(
+            lower_phase_vessel=lower_phase_vessel,
+            upper_phase_vessel=upper_phase_vessel,
+        ))
+
+        for i in range(int(n_washes) - 1):
+            self.steps.extend(self.steps)
 
         self.human_readable = f'Wash contents of {from_vessel} with in {separation_vessel} with {solvent} ({n_washes}x{solvent_volume} mL)'
 
@@ -1338,3 +1366,7 @@ class Wash(Step):
     @property
     def n_washes(self):
         return self.properties['n_washes']
+
+    @property
+    def solvent_waste_vessel(self):
+        return self.properties['solvent_waste_vessel']

@@ -36,17 +36,3 @@
 ### Misc
 
 Add in short wait periods after Add operation for stirring to complete
-
-### Lidocaine
-
-#### Steps to check
-
-* Add
-* Filter
-* Dry (done)
-* Reflux
-* ChillBackToRT
-* Wash
-* Extract
-* Chill
-* WashFilterCake

@@ -17,6 +17,8 @@ DEFAULT_WASHFILTERCAKE_WAIT_TIME = 60*2 # s
 DEFAULT_DRY_TIME = 60*5
 DEFAULT_FILTER_TIME = 60
 DEFAULT_EXTRACTION_VOLUME = 30 # mL
+DEFAULT_SEPARATION_STIR_TIME = 60
+DEFAULT_SEPARATION_SETTLE_TIME = 60 * 5
 
 DEFAULT_WASH_VOLUME = 10 # mL
 
@@ -59,6 +61,7 @@ DEFAULT_VALS = {
     'Add': {
         'move_speed': DEFAULT_MOVE_SPEED,
         'clean_tubing': True,
+        'stir': True,
     },
     'HeatAndReact': {
         'stir_rpm': DEFAULT_STIR_RPM,
