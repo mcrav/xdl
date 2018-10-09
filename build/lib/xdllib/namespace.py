@@ -9,8 +9,8 @@ BASE_STEP_OBJ_DICT = {
     'SwitchVacuum': CSwitchVacuum,
     'SwitchCartridge': CSwitchCartridge,
     'SwitchColumn': CSwitchColumn,
-    'StartStir': StartStir,
-    'StartHeat': StartHeat,
+    'StartStir': CStartStir,
+    'StartHeat': CStartHeat,
     'StopStir': CStopStir,
     'StopHeat': CStopHeat,
     'SetTemp': CSetTemp,
@@ -59,8 +59,11 @@ XDL_STEP_OBJ_DICT = {
     'ChillBackToRT': ChillBackToRT,
     'Add': Add,
     'Filter': Filter,
+    'Dry': Dry,
+    'Extract': Extract,
+    'WashFilterCake': WashFilterCake,
     'StirAndTransfer': StirAndTransfer,
-    'Wash': WashFilterCake,
+    'Wash': Wash,
     'ChillReact': ChillReact,
     'MakeSolution': MakeSolution,
     'Reflux': Reflux,
@@ -75,6 +78,7 @@ COMPONENT_OBJ_DICT = {
     'FilterFlask': FilterFlask,
     'Flask': Flask,
     'Waste': Waste,
+    'SeparatingFunnel': SeparatingFunnel,
 }
 
 XDL_STEP_NAMESPACE = list(STEP_OBJ_DICT.keys())

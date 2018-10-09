@@ -637,6 +637,7 @@ class StirAndTransfer(Step):
             'volume': volume,
             'stir_rpm': stir_rpm,
         }
+        self.get_defaults()
 
         self.steps = [
             StartStir(vessel=from_vessel, stir_rpm=stir_rpm),
@@ -708,9 +709,10 @@ class WashFilterCake(Step):
 
         self.steps = [
             StartStir(vessel=self.filter_vessel),
-            Add(reagent=self.solvent, volume=self.volume, vessel=self.filter_vessel + '_top'),
+            Add(reagent=self.solvent, volume=self.volume,
+                vessel=f'{self.filter_vessel}_top'),
             CWait(time=self.wait_time),
-            CMove(from_vessel=self.filter_vessel + '_bottom', to_vessel=self.waste_vessel,
+            CMove(from_vessel=f'{self.filter_vessel}_bottom', to_vessel=self.waste_vessel,
                  volume=self.volume, move_speed=self.move_speed),
             CStopStir(vessel=self.filter_vessel)
         ]
@@ -1262,7 +1264,7 @@ class Wash(Step):
         }
 
         self.steps = [
-
+            # CSeparate(lower_phase_vessel=)
         ]
 
         self.human_readable = f'Wash contents of {from_vessel} with in {separation_vessel} with {solvent} ({n_washes}x{solvent_volume} mL)'

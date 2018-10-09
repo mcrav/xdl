@@ -115,6 +115,8 @@ def convert_volume_str_to_ml(volume_str):
         multiplier = 100
     elif volume_str.endswith(VOLUME_CL_UNIT_WORDS):
         multiplier = 10
+    else:
+        multiplier = 1 
     return float(re.match(float_regex, volume_str).group(1)) * multiplier
 
 def convert_mass_str_to_g(mass_str):
@@ -128,6 +130,8 @@ def convert_mass_str_to_g(mass_str):
         multiplier = 1e-3
     elif mass_str.endswith(MASS_UG_UNIT_WORDS):
         multiplier = 1e-6
+    else:
+        multiplier = 1
     return float(re.match(float_regex, mass_str).group(1)) * multiplier
 
 def find_reagent_obj(reagent_id, reagents):

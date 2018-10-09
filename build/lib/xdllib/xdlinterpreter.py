@@ -205,6 +205,21 @@ class XDL(object):
         for step in self.steps:
             step.execute(chempiler)
 
+    def as_literal_chempiler_code(self):
+        s = 'from chempiler import Chempiler\n\nchempiler = Chempiler()\n\n'
+        full_tree = self._get_full_xdl_tree()
+        base_steps = list(BASE_STEP_OBJ_DICT.values())
+        for step in full_tree:
+            if step in self.steps:
+                s += f'\n# {step.human_readable}\n'
+            if type(step) in base_steps:
+                s += re.sub(r'([a-zA-Z][a-z|A-Z|_|0-9]+)([\,|\)])', r"'\1'\2", step.literal_code) + '\n'
+        return s
+
+    def save_chempiler_script(self, save_path):
+        with open(save_path, 'w') as fileobj:
+            fileobj.write(self.as_literal_chempiler_code())
+
     def as_human_readable(self):
         """Return human-readable English description of XDL procedure."""
         s = ''
@@ -223,7 +238,7 @@ class XDL(object):
         print('\n')
         print('Operation Tree\n--------------\n')
         for step in self.steps:
-            climb_down_tree(step, verbose=True)
+            climb_down_tree(step, print_tree=True)
         print('\n')
         
 # XDL Parsing
@@ -319,7 +334,7 @@ def preprocess_attrib(step, attrib):
         
     return attrib
 
-def climb_down_tree(step, verbose=False, lvl=0):
+def climb_down_tree(step, print_tree=False, lvl=0):
     """
     Go through given step's sub steps recursively until base steps are reached.
     Return list containing the step, all sub steps and all base steps.
@@ -328,32 +343,30 @@ def climb_down_tree(step, verbose=False, lvl=0):
         step {Step} -- step to find all sub steps for.
     
     Keyword Arguments:
-        verbose {bool} -- If True, print tree structure.
-        lvl {int} -- Level of recursion. Used to determine indent level when verbose=True.
+        lvl {int} -- Level of recursion. Used to determine indent level when print_tree=True.
     
     Returns:
         list -- List of all Steps involved with given step. Includes given step, and all sub steps all the way down to base steps.
     """
     indent = '  '
     base_steps = list(BASE_STEP_OBJ_DICT.values())
+    
     tree = [step]
-    if verbose:
+    if print_tree:
         print(f'{indent*lvl}{step.name}' + ' {')
     if type(step) in base_steps:
         return tree
     else:
         lvl += 1
         for step in step.steps:
-            
-                
             if type(step) in base_steps:
-                if verbose:
+                if print_tree:
                     print(f'{indent*lvl}{step.name}')
                 tree.append(step)
                 continue
             else:
-                tree.extend(climb_down_tree(step, verbose=verbose, lvl=lvl))
-        if verbose:
+                tree.extend(climb_down_tree(step, print_tree=print_tree, lvl=lvl))
+        if print_tree:
             print(f'{indent*(lvl-1)}' + '}')
     return tree
 

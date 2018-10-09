@@ -62,6 +62,34 @@ class Reactor(Component):
         self.properties['atmosphere'] = val
         self.update()
 
+class SeparatingFunnel(Component):
+
+    def __init__(self, cid=None, volume_ml=None,):
+
+        self.name = 'SeparatingFunnel'
+        self.properties = {
+            'cid': cid,
+            'volume_ml': volume_ml,
+        }
+
+    @property
+    def cid(self):
+        return self.properties['cid']
+
+    @cid.setter
+    def cid(self, val):
+        self.properties['cid'] = val
+        self.update()
+
+    @property
+    def volume_ml(self):
+        return self.properties['volume_ml']
+
+    @volume_ml.setter
+    def volume_ml(self, val):
+        self.properties['volume_ml'] = val
+        self.update()
+
 class FilterFlask(Component):
 
     def __init__(self, cid=None, volume_ml=None,):

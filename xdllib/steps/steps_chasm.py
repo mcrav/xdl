@@ -34,6 +34,8 @@ class CMove(Step):
 
         self.human_readable = f'Move {from_vessel} ({volume}) to {to_vessel}.'
 
+        self.literal_code = f'chempiler.pump.move( {self.from_vessel}, {self.to_vessel}, {self.volume}, move_speed={self.move_speed}, aspiration_speed={self.aspiration_speed}, dispense_speed={self.dispense_speed}, )'
+
     def execute(self, chempiler):
         chempiler.pump.move(
             self.from_vessel,
@@ -116,6 +118,8 @@ class CSeparate(Step):
             'upper_phase_vessel': upper_phase_vessel,
         }
 
+        self.literal_code = f'chempiler.pump.separate_phases( {self.lower_phase_vessel}, {self.upper_phase_vessel}, )'
+
     def execute(self, chempiler):
         chempiler.pump.separate_phases(
             self.lower_phase_vessel,
@@ -155,6 +159,8 @@ class CPrime(Step):
         }
         self.get_defaults()
 
+        self.literal_code = f'chempiler.pump.prime_tubes({self.aspiration_speed})'
+
     def execute(self, chempiler):
         chempiler.pump.prime_tubes(self.aspiration_speed)
         return True
@@ -182,6 +188,8 @@ class CSwitchVacuum(Step):
             'vessel': vessel,
             'destination': destination,
         }
+
+        self.literal_code = f'chempiler.pump.switch_cartridge({self.vessel}, {self.destination})'
 
     def execute(self, chempiler):
         chempiler.pump.switch_cartridge(self.vessel, self.destination)
@@ -218,6 +226,8 @@ class CSwitchCartridge(Step):
             'vessel': vessel,
             'cartridge': cartridge,
         }
+
+        self.literal_code = f'chempiler.pump.switch_cartridge({self.flask}, {self.cartridge})'
 
     def execute(self, chempiler):
         chempiler.pump.switch_cartridge(self.flask, self.cartridge)
@@ -256,6 +266,8 @@ class CSwitchColumn(Step):
             'destination': destination,
         }
 
+        self.literal_code = f'chempiler.pump.switch_column_fraction({self.column}, {self.destination})'
+
     def execute(self, chempiler):
         chempiler.pump.switch_column_fraction(self.column, self.destination)
         return True
@@ -291,6 +303,8 @@ class CStartStir(Step):
             'vessel': vessel,
         }
 
+        self.literal_code = f'chempiler.stirrer.stir({self.vessel})'
+
     def execute(self, chempiler):
         chempiler.stirrer.stir(self.vessel)
         return True
@@ -316,6 +330,8 @@ class CStartHeat(Step):
         self.properties = {
             'vessel': vessel,
         }
+
+        self.literal_code = f'chempiler.stirrer.heat({self.vessel})'
 
     def execute(self, chempiler):
         chempiler.stirrer.heat(self.vessel)
@@ -343,6 +359,8 @@ class CStopStir(Step):
             'vessel': vessel,
         }
 
+        self.literal_code = f'chempiler.stirrer.stop_stir({self.vessel})'
+
     def execute(self, chempiler):
         chempiler.stirrer.stop_stir(self.vessel)
         return True
@@ -369,6 +387,8 @@ class CStopHeat(Step):
         self.properties = {
             'vessel': vessel,
         }
+
+        self.literal_code = f'chempiler.stirrer.stop_heat({self.vessel})'
 
     def execute(self, chempiler):
         chempiler.stirrer.stop_heat(self.vessel)
@@ -398,6 +418,8 @@ class CSetTemp(Step):
             'vessel': vessel,
             'temp': temp,
         }
+
+        self.literal_code = f'chempiler.stirrer.set_temp({self.vessel}, {self.temp})'
 
     def execute(self, chempiler):
         chempiler.stirrer.set_temp(self.vessel, self.temp)
@@ -436,6 +458,8 @@ class CSetStirRpm(Step):
             'stir_rpm': stir_rpm,
         }
 
+        self.literal_code = f'chempiler.stirrer.set_stir_rate({self.vessel}, {self.stir_rpm})'
+
     def execute(self, chempiler):
         chempiler.stirrer.set_stir_rate(self.vessel, self.stir_rpm)
         return True
@@ -472,6 +496,8 @@ class CStirrerWaitForTemp(Step):
             'vessel': vessel,
         }
 
+        self.literal_code = f'chempiler.stirrer.wait_for_temp({self.vessel})'
+
     def execute(self, chempiler):
         chempiler.stirrer.wait_for_temp(self.vessel)
         return True
@@ -497,6 +523,8 @@ class CStartHeaterBath(Step):
         self.properties = {
             'rotavap_name': rotavap_name,
         }
+
+        self.literal_code = f'chempiler.rotavap.start_heater({self.rotavap_name})'
 
     def execute(self, chempiler):
         chempiler.rotavap.start_heater(self.rotavap_name)
@@ -524,6 +552,8 @@ class CStopHeaterBath(Step):
             'rotavap_name': rotavap_name,
         }
 
+        self.literal_code = f'chempiler.rotavap.stop_heater({self.rotavap_name})'
+
     def execute(self, chempiler):
         chempiler.rotavap.stop_heater(self.rotavap_name)
         return True
@@ -549,6 +579,8 @@ class CStartRotation(Step):
         self.properties = {
             'rotavap_name': rotavap_name,
         }
+
+        self.literal_code = f'chempiler.rotavap.start_rotation({self.rotavap_name})'
 
     def execute(self, chempiler):
         chempiler.rotavap.start_rotation(self.rotavap_name)
@@ -576,6 +608,8 @@ class CStopRotation(Step):
             'rotavap_name': rotavap_name,
         }
 
+        self.literal_code = f'chempiler.rotavap.stop_rotation({self.rotavap_name})'
+
     def execute(self, chempiler):
         chempiler.rotavap.stop_rotation(self.rotavap_name)
         return True
@@ -602,6 +636,8 @@ class CLiftArmUp(Step):
             'rotavap_name': rotavap_name,
         }
 
+        self.literal_code = f'chempiler.rotavap.lift_up({self.rotavap_name})'
+
     def execute(self, chempiler):
         chempiler.rotavap.lift_up(self.rotavap_name)
         return True
@@ -627,6 +663,8 @@ class CLiftArmDown(Step):
         self.properties = {
             'rotavap_name': rotavap_name,
         }
+
+        self.literal_code = f'chempiler.rotavap.lift_down({self.rotavap_name})'
 
     def execute(self, chempiler):
         chempiler.rotavap.lift_down(self.rotavap_name)
@@ -655,6 +693,8 @@ class CResetRotavap(Step):
             'rotavap_name': rotavap_name,
         }
 
+        self.literal_code = f'chempiler.rotavap.reset({self.rotavap_name})'
+
     def execute(self, chempiler):
         chempiler.rotavap.reset(self.rotavap_name)
         return True
@@ -682,6 +722,8 @@ class CSetBathTemp(Step):
             'rotavap_name': rotavap_name,
             'temp': temp,
         }
+
+        self.literal_code = f'chempiler.rotavap.set_temp({self.rotavap_name}, {self.temp})'
 
     def execute(self, chempiler):
         chempiler.rotavap.set_temp(self.rotavap_name, self.temp)
@@ -720,6 +762,8 @@ class CSetRvRotationSpeed(Step):
             'rotation_speed': rotation_speed,
         }
 
+        self.literal_code = f'chempiler.rotavap.set_rotation({self.rotavap_name}, {self.rotation_speed})'
+
     def execute(self, chempiler):
         chempiler.rotavap.set_rotation(self.rotavap_name, self.rotation_speed)
         return True
@@ -756,6 +800,8 @@ class CRvWaitForTemp(Step):
             'rotavap_name': rotavap_name,
         }
 
+        self.literal_code = f'chempiler.rotavap.wait_for_temp({self.rotavap_name})'
+
     def execute(self, chempiler):
         chempiler.rotavap.wait_for_temp(self.rotavap_name)
         return True
@@ -784,6 +830,8 @@ class CSetInterval(Step):
             'rotavap_name': rotavap_name,
             'interval': interval,
         }
+
+        self.literal_code = f'chempiler.rotavap.set_interval({self.rotavap_name}, {self.interval})'
 
     def execute(self, chempiler):
         chempiler.rotavap.set_interval(self.rotavap_name, self.interval)
@@ -819,6 +867,8 @@ class CInitVacPump(Step):
             'vacuum_pump_name': vacuum_pump_name,
         }
 
+        self.literal_code = f'chempiler.vacuum.initialise({self.vacuum_pump_name})'
+
     def execute(self, chempiler):
         chempiler.vacuum.initialise(self.vacuum_pump_name)
         return True
@@ -844,6 +894,8 @@ class CGetVacSp(Step):
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
         }
+
+        self.literal_code = f'chempiler.vacuum.get_vacuum_set_point({self.vacuum_pump_name})'
 
     def execute(self, chempiler):
         chempiler.vacuum.get_vacuum_set_point(self.vacuum_pump_name)
@@ -872,6 +924,8 @@ class CSetVacSp(Step):
             'vacuum_pump_name': vacuum_pump_name,
             'vacuum_pressure': vacuum_pressure,
         }
+
+        self.literal_code = f'chempiler.vacuum.set_vacuum_set_point({self.vacuum_pump_name}, {self.set_point})'
 
     def execute(self, chempiler):
         chempiler.vacuum.set_vacuum_set_point(self.vacuum_pump_name, self.set_point)
@@ -908,6 +962,8 @@ class CStartVac(Step):
             'vacuum_pump_name': vacuum_pump_name,
         }
 
+        self.literal_code = f'chempiler.vacuum.start_vacuum({self.vacuum_pump_name})'
+
     def execute(self, chempiler):
         chempiler.vacuum.start_vacuum(self.vacuum_pump_name)
         return True
@@ -934,6 +990,8 @@ class CStopVac(Step):
             'vacuum_pump_name': vacuum_pump_name,
         }
 
+        self.literal_code = f'chempiler.vacuum.stop_vacuum({self.vacuum_pump_name})'
+
     def execute(self, chempiler):
         chempiler.vacuum.stop_vacuum(self.vacuum_pump_name)
         return True
@@ -959,6 +1017,8 @@ class CVentVac(Step):
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
         }
+
+        self.literal_code = f'chempiler.vacuum.vent_vacuum({self.vacuum_pump_name})'
 
     def execute(self, chempiler):
         chempiler.vacuum.vent_vacuum(self.vacuum_pump_name)
@@ -987,6 +1047,8 @@ class CSetSpeedSp(Step):
             'vacuum_pump_name': vacuum_pump_name,
             'vacuum_pump_speed': vacuum_pump_speed,
         }
+
+        self.literal_code = f'chempiler.vacuum.set_speed_set_point({self.vacuum_pump_name}, {self.set_point})'
 
     def execute(self, chempiler):
         chempiler.vacuum.set_speed_set_point(self.vacuum_pump_name, self.set_point)
@@ -1023,6 +1085,8 @@ class CStartChiller(Step):
             'vessel': vessel,
         }
 
+        self.literal_code = f'chempiler.chiller.start_chiller({self.vessel})'
+
     def execute(self, chempiler):
         chempiler.chiller.start_chiller(self.vessel)
         return True
@@ -1048,6 +1112,8 @@ class CStopChiller(Step):
         self.properties = {
             'vessel': vessel,
         }
+
+        self.literal_code = f'chempiler.chiller.stop_chiller({self.vessel})'
 
     def execute(self, chempiler):
         chempiler.chiller.stop_chiller(self.vessel)
@@ -1076,6 +1142,8 @@ class CSetChiller(Step):
             'vessel': vessel,
             'temp': temp,
         }
+
+        self.literal_code = f'chempiler.chiller.set_temp({self.vessel}, {self.temp})'
 
     def execute(self, chempiler):
         chempiler.chiller.set_temp(self.vessel, self.temp)
@@ -1113,6 +1181,8 @@ class CChillerWaitForTemp(Step):
             'vessel': vessel,
         }
 
+        self.literal_code = f'chempiler.chiller.wait_for_temp({self.vessel})'
+
     def execute(self, chempiler):
         chempiler.chiller.wait_for_temp(self.vessel)
         return True
@@ -1143,6 +1213,8 @@ class CRampChiller(Step):
             'ramp_duration': ramp_duration,
             'end_temperature': end_temperature,
         }
+
+        self.literal_code = f'chempiler.chiller.ramp_chiller({self.vessel}, {self.ramp_duration}, {self.end_temperature})'
 
     def execute(self, chempiler):
         chempiler.chiller.ramp_chiller(self.vessel, self.ramp_duration, self.end_temperature)
@@ -1190,6 +1262,8 @@ class CSwitchChiller(Step):
             'state': state,
         }
 
+        self.literal_code = f'chempiler.chiller.switch_vessel({self.solenoid_valve_name}, {self.state})'
+
     def execute(self, chempiler):
         chempiler.chiller.switch_vessel(self.solenoid_valve_name, self.state)
         return True
@@ -1227,6 +1301,8 @@ class CSetCoolingPower(Step):
             'cooling_power': cooling_power,
         }
 
+        self.literal_code = f'chempiler.chiller.cooling_power({self.vessel}, {self.cooling_power})'
+
     def execute(self, chempiler):
         chempiler.chiller.cooling_power(self.vessel, self.cooling_power)
         return True
@@ -1262,6 +1338,8 @@ class CSetRecordingSpeed(Step):
             'recording_speed': recording_speed,
         }
 
+        self.literal_code = f'chempiler.camera.change_recording_speed({self.recording_speed})'
+
     def execute(self, chempiler):
         chempiler.camera.change_recording_speed(self.recording_speed)
         return True
@@ -1290,6 +1368,8 @@ class CWait(Step):
             'time': time,
         }
 
+        self.literal_code = f'chempiler.wait({self.time})'
+
     def execute(self, chempiler):
         chempiler.wait(self.time)
         return True
@@ -1312,6 +1392,8 @@ class CBreakpoint(Step):
         self.name = 'Breakpoint'
         self.properties = {
         }
+
+        self.literal_code = f'chempiler.breakpoint()'
 
     def execute(self, chempiler):
         chempiler.breakpoint()

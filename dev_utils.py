@@ -16,6 +16,37 @@ def print_step_obj_dict():
     s += '}'
     print(s)
     
+def add_literal_chempiler_code(steps_chasm_file):
+    with open(steps_chasm_file, 'r') as fileobj:
+        lines = fileobj.readlines()
+    new_lines = []
+    execute = False
+    code = []
+    for line in lines:
+        if execute:
+            if not line.strip() or line.strip().startswith('return'):
+                execute = False
+                new_lines.append("        self.literal_code = f'" + ' '.join([
+                    re.sub(r'(self.[a-zA-Z_]+)', '{\g<1>}', line.strip()) for line in code[1:]
+                    ]) + "'")
+                new_lines.append('')
+                new_lines.extend(code)
+                new_lines.append(line.rstrip())
+                code = []
+                continue
+            else:
+                code.append(line.rstrip())
+        if line.strip().startswith('def execute'):
+            execute = True
+            code.append(line.rstrip())
+        if not execute:
+            if line.strip().startswith('self.literal_code'):
+                new_lines.pop()
+            else:
+                new_lines.append(line.rstrip())
+    with open(steps_chasm_file, 'w') as fileobj:
+        fileobj.write('\n'.join(new_lines))
+
 def add_getters(steps_file):
     """
     Add getter methods to given steps_file.
