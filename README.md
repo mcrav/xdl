@@ -32,7 +32,3 @@
 
 1. Hardware mapping
 2. Waste mapping
-
-### Misc
-
-Add in short wait periods after Add operation for stirring to complete

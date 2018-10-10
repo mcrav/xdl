@@ -42,6 +42,7 @@ class XDL(object):
         if self.xdl:
             if self._xdl_valid():
                 self._parse_xdl()
+                self._insert_waste_vessels()
         else:
             print('No XDL given.')
 
@@ -319,7 +320,7 @@ def preprocess_attrib(step, attrib):
     if 'time' in attrib:
         attrib['time'] = convert_time_str_to_seconds(attrib['time'])
     
-    if 'volume' in attrib:
+    if 'volume' in attrib and attrib['volume'] != 'all':
         attrib['volume'] = convert_volume_str_to_ml(attrib['volume'])
     if 'solvent_volume' in attrib:
         attrib['solvent_volume'] = convert_volume_str_to_ml(attrib['solvent_volume'])

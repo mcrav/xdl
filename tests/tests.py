@@ -22,6 +22,7 @@ def full_test():
         res_percent = f'{res*100:.2f} %'
         print(f' |{test_name:<25} | {res_percent:<8} |')
     print(' |' + '–'*37 + '|')
+    print('\n')
 
 def simulate_all_files():
     files = os.listdir('test_files')

@@ -32,7 +32,7 @@ class CMove(Step):
         }
         self.get_defaults()
 
-        self.human_readable = f'Move {from_vessel} ({volume}) to {to_vessel}.'
+        self.human_readable = f'Move {self.from_vessel} ({self.volume}) to {self.to_vessel}.'
 
         self.literal_code = f'chempiler.pump.move( {self.from_vessel}, {self.to_vessel}, {self.volume}, move_speed={self.move_speed}, aspiration_speed={self.aspiration_speed}, dispense_speed={self.dispense_speed}, )'
 
@@ -227,10 +227,10 @@ class CSwitchCartridge(Step):
             'cartridge': cartridge,
         }
 
-        self.literal_code = f'chempiler.pump.switch_cartridge({self.flask}, {self.cartridge})'
+        self.literal_code = f'chempiler.pump.switch_cartridge({self.vessel}, {self.cartridge})'
 
     def execute(self, chempiler):
-        chempiler.pump.switch_cartridge(self.flask, self.cartridge)
+        chempiler.pump.switch_cartridge(self.vessel, self.cartridge)
         return True
 
     @property
@@ -925,10 +925,10 @@ class CSetVacSp(Step):
             'vacuum_pressure': vacuum_pressure,
         }
 
-        self.literal_code = f'chempiler.vacuum.set_vacuum_set_point({self.vacuum_pump_name}, {self.set_point})'
+        self.literal_code = f'chempiler.vacuum.set_vacuum_set_point({self.vacuum_pump_name}, {self.vacuum_pressure})'
 
     def execute(self, chempiler):
-        chempiler.vacuum.set_vacuum_set_point(self.vacuum_pump_name, self.set_point)
+        chempiler.vacuum.set_vacuum_set_point(self.vacuum_pump_name, self.vacuum_pressure)
         return True
 
     @property
@@ -1112,6 +1112,7 @@ class CStopChiller(Step):
         self.properties = {
             'vessel': vessel,
         }
+        self.human_readable = f'Stop chiller for {vessel}.'
 
         self.literal_code = f'chempiler.chiller.stop_chiller({self.vessel})'
 

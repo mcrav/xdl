@@ -43,6 +43,7 @@ class Step(XDLElement):
         self.name = ''
         self.properties = {}
         self.steps = []
+        self.human_readable = ''
 
     def as_xdl(self, as_str=False):
         """

@@ -20,7 +20,10 @@ DEFAULT_EXTRACTION_VOLUME = 30 # mL
 DEFAULT_SEPARATION_STIR_TIME = 60
 DEFAULT_SEPARATION_SETTLE_TIME = 60 * 5
 
-DEFAULT_WASH_VOLUME = 10 # mL
+DEFAULT_ROTAVAP_TIME = 60 * 5
+
+DEFAULT_WASH_VOLUME = 50 # mL
+DEFAULT_WASHFILTERCAKE_VOLUME = 20
 
 DEFAULT_AFTER_ADD_WAIT_TIME = 60 # s (time to wait for stirring after addition)
 
@@ -51,7 +54,7 @@ DEFAULT_VALS = {
         'time': DEFAULT_DRY_TIME,
     },
     'WashFilterCake': {
-        'volume': DEFAULT_WASH_VOLUME,
+        'volume': DEFAULT_WASHFILTERCAKE_VOLUME,
         'move_speed': DEFAULT_MOVE_SPEED,
         'wait_time': DEFAULT_WASHFILTERCAKE_WAIT_TIME,
     },
@@ -90,5 +93,11 @@ DEFAULT_VALS = {
         'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
         'after_recording_speed': DEFAULT_RECORDING_SPEED,
     },
+    'Rotavap': {
+        'time': DEFAULT_ROTAVAP_TIME,
+    },
+    'Wash': {
+        'solvent_volume': DEFAULT_WASH_VOLUME,
+    }
 }
 

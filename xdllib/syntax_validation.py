@@ -168,6 +168,8 @@ class XDLSyntaxValidator(object):
         Returns:
             bool -- True is quantity is valid, otherwise False
         """
+        if quantity_type == 'volume' and quantity_str == 'all':
+            return True
         if len(quantity_str.split(' ')) > 1:
             return False
         quantity_valid = True
