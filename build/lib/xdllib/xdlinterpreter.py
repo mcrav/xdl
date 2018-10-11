@@ -15,6 +15,15 @@ from .syntax_validation import XDLSyntaxValidator
 from .namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT, BASE_STEP_OBJ_DICT
 import chembrain as cb
 
+CLEAN_BACKBONE_AFTER_STEPS = [
+    Add,
+    Wash,
+    Extract,
+    MakeSolution,
+    WashFilterCake,
+    Filter,
+]
+
 class XDL(object):
     """
     Interpets XDL (file or str) and provides the following public methods:
@@ -43,7 +52,6 @@ class XDL(object):
         if self.xdl:
             if self._xdl_valid():
                 self._parse_xdl()
-                self._insert_waste_vessels()
                 self._add_hidden_steps()
         else:
             print('No XDL given.')
@@ -71,12 +79,13 @@ class XDL(object):
         for step in self._get_full_xdl_tree():
             if isinstance(step, (WashFilterCake, CleanVessel)):
                 step.waste_vessel = self._get_waste_vessel(step.solvent)
-                print(step.waste_vessel)
             elif isinstance(step, (CleanTubing, PrimePumpForAdd)):
                 step.waste_vessel = self._get_waste_vessel(step.reagent)
-                print(step.waste_vessel)
             if 'waste_vessel' in step.properties and not step.waste_vessel:
                 waste_ok = False
+        for step in self.steps:
+            if type(step) == CleanBackbone:
+                step.waste_vessels = self.graphml_hardware.waste_cids
         return waste_ok
 
     def _get_waste_vessel(self, reagent_id):
@@ -126,10 +135,15 @@ class XDL(object):
         Get map of hardware IDs in XDL to hardware IDs in graphML.
         """
         self.hardware_map = {}
-        for i in range(len(self.hardware.reactors)):
-            self.hardware_map[
-                self.hardware.reactors[i].properties['id']
-                ] = self.graphml_hardware.reactors[i].properties['id']
+        for xdl_hardware_list, graphml_hardware_list in zip(
+            [self.hardware.reactors, self.hardware.filters, self.hardware.separators,],
+            [self.graphml_hardware.reactors, self.graphml_hardware.filters, self.graphml_hardware.separators,]
+        ):
+            for i in range(len(xdl_hardware_list)):
+                self.hardware_map[
+                    xdl_hardware_list[i].cid
+                ] = graphml_hardware_list[i].cid
+                
 
     def _map_hardware_to_steps(self):
         """
@@ -141,7 +155,6 @@ class XDL(object):
             for prop, val in step.properties.items():
                 if isinstance(val, str) and val in self.hardware_map:
                     step.properties[prop] = self.hardware_map[val]
-                    print(step.properties)
             step.update()
 
     def _check_safety(self):
@@ -154,7 +167,7 @@ class XDL(object):
         """
         return procedure_is_safe(self.steps, self.reagents)
 
-    def _prepare_for_execution(self, graphml_file):
+    def prepare_for_execution(self, graphml_file):
         """
         Prepare the XDL for execution on a Chemputer corresponding to the given
         graphML file.
@@ -183,24 +196,35 @@ class XDL(object):
             return default
 
     def _add_hidden_steps(self):
-        print('HIDDEN STEPSs')
+        self._add_hidden_prepare_filter_steps()
+        self._add_hidden_clean_backbone_steps()
+
+    def _add_hidden_clean_backbone_steps(self):
+        cleans = []
+        for i, step, vessel_contents in self.iter_vessel_contents():
+            if type(step) in CLEAN_BACKBONE_AFTER_STEPS:
+                cleans.append((i+1, step, vessel_contents))
+        for i, step, vessel_contents in reversed(sorted(cleans, key=lambda x: x[0])):
+            solvent = None
+            for vessel, contents in vessel_contents.items():
+                for reagent in contents:
+                    if cb.solvents.density_from_machine_name(reagent):
+                        solvent = DEFAULT_ORGANIC_CLEANING_SOLVENT
+                        break
+                if solvent:
+                    break
+            if not solvent:
+                solvent = 'water'
+            self.steps.insert(i, CleanBackbone(reagent=solvent))
+
+    def _add_hidden_prepare_filter_steps(self):
         prev_vessel_contents = {}
         filters = []
-        for i, step, vessel_contents in self.iter_vessel_contents():
-            
-            print(f'Prev pre set: {prev_vessel_contents}')
-            
+        for i, step, vessel_contents in self.iter_vessel_contents():                
             if type(step) == Filter:
-                filters.append((i, step.filter_vessel, copy.deepcopy(prev_vessel_contents)))
+                filters.append((i, step.filter_vessel, prev_vessel_contents))
+            prev_vessel_contents = vessel_contents
 
-            print(f'Prev pre set: {prev_vessel_contents}')
-            prev_vessel_contents = copy.deepcopy(vessel_contents)
-
-            print(f'Current: {vessel_contents}')
-            print(f'Prev after set: {prev_vessel_contents}')
-            print('\n')
-
-        print(filters)
         aqueous_synonyms = []
         for synonym_list in [synonym_list for synonym_list in [cb.synonyms.CAS_MACHINE_SYNONYMS_DICT[cas] for cas in cb.waste.AQUEOUS_WASTE_REAGENTS]]:
             aqueous_synonyms.extend(synonym_list)
@@ -211,9 +235,7 @@ class XDL(object):
             while j > 0 and type(self.steps[j]) not in [Extract, Wash, Reflux, StirAndTransfer]:
                 j -= 1
             solvent = None
-            print(aqueous_synonyms)
             for reagent in filter_contents[filter_vessel]:
-                print(reagent)
                 if reagent.endswith(aqueous_synonyms):
                     solvent = 'water'
                     break
@@ -247,11 +269,11 @@ class XDL(object):
             elif type(step) == StirAndTransfer:
                 vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
                 vessel_contents[step.from_vessel].clear()
-            yield (i, step, vessel_contents)
+            yield (i, step, copy.deepcopy(vessel_contents))
 
     def simulate(self, graphml_file):
         """Simulate XDL procedure using Chempiler and given graphML file."""
-        self._prepare_for_execution(graphml_file)
+        self.prepare_for_execution(graphml_file)
         if self._prepared_for_execution:
             chempiler = Chempiler(self._get_exp_id(default='xdl_simulation'), graphml_file, True)
             self.print_full_xdl_tree()
@@ -266,7 +288,7 @@ class XDL(object):
 
     def execute(self, graphml_file):
         """Execute XDL procedure on a Chemputer corresponding to given graphML file."""
-        self._prepare_for_execution(graphml_file)
+        self.prepare_for_execution(graphml_file)
         if self._prepared_for_execution:
             chempiler = Chempiler(self._get_exp_id(default='xdl_simulation'), graphml_file, False)
             self.print_full_xdl_tree()
@@ -449,19 +471,23 @@ def graphml_hardware_from_file(graphml_file):
         for node in nodes:
             node_label = node.find("y:nodelabel").text.strip()
             if node_label.startswith('reactor'):
-                components.append(Reactor(id_word=node_label))
+                components.append(Reactor(cid=node_label))
             elif node_label.startswith('filter'):
-                components.append(FilterFlask(id_word=node_label))
+                components.append(FilterFlask(cid=node_label))
+            elif node_label.startswith(('separator', 'flask_separator')):
+                components.append(SeparatingFunnel(cid=node_label))
             elif node_label.startswith('flask'):
-                components.append(Flask(id_word=node_label))
+                components.append(Flask(cid=node_label))
             elif node_label.startswith('waste'):
-                components.append(Waste(id_word=node_label))
+                components.append(Waste(cid=node_label))
+            
     return Hardware(components)
 
 def _hardware_is_compatible(xdl_hardware=None, graphml_hardware=None):
     """Determine if XDL hardware object can be mapped to hardware available in graphML file."""
     enough_reactors = len(xdl_hardware.reactors) <= len(graphml_hardware.reactors)
     enough_filters = len(xdl_hardware.filters) <= len(graphml_hardware.filters)
+    enough_separators = len(xdl_hardware.separators) <= len(graphml_hardware.separators)
     flasks_ok = True # NEEDS DONE
     waste_ok = True # NEEDS DONE
     return enough_reactors and enough_filters and flasks_ok and waste_ok

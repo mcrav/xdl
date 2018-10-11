@@ -215,12 +215,31 @@ class Hardware(object):
         self.flasks = []
         self.wastes = []
         self.filters = []
+        self.separators = []
         for component in self.components:
             if component.cid.startswith('reactor'):
                 self.reactors.append(component)
+            elif component.cid.startswith(('separator', 'flask_separator')):
+                self.separators.append(component)
             elif component.cid.startswith('flask'):
                 self.flasks.append(component)
             elif component.cid.startswith('waste'):
                 self.wastes.append(component)
             elif component.cid.startswith('filter'):
                 self.filters.append(component)
+
+        for component_list in [self.separators, self.filters]:
+            new_list = []
+            ignore = []
+            for component in component_list:
+                if component.cid.startswith(tuple(ignore)):
+                    continue
+                elif component.cid.endswith(('_top', '_bottom')):
+                    component.cid = component.cid.replace('_top','').replace('_bottom', '')
+                    ignore.append(component.cid)
+                new_list.append(component)
+            component_list.clear()
+            for item in new_list:
+                component_list.append(item)
+        print([c.cid for c in self.separators])
+        self.waste_cids = [item.cid for item in self.wastes]

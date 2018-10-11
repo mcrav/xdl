@@ -259,6 +259,38 @@ class CleanVessel(Step):
         self.properties['waste_vessel'] = val
         self.update()
 
+class CleanBackbone(Step):
+
+    def __init__(self, reagent=None, waste_vessels=[]):
+
+        self.properties = {
+            'reagent': reagent,
+            'waste_vessels': waste_vessels,
+        }
+
+        self.steps = []
+        for waste_vessel in self.waste_vessels:
+            self.steps.append(CMove(from_vessel=f'flask_{self.reagent}', to_vessel=waste_vessel, volume=DEFAULT_CLEAN_BACKBONE_VOLUME))
+        self.human_readable = f'Clean backbone with {self.reagent}.'
+
+    @property
+    def reagent(self):
+        return self.properties['reagent']
+
+    @reagent.setter
+    def reagent(self, val):
+        self.properties['reagent'] = val
+        self.update()
+
+    @property
+    def waste_vessels(self):
+        return self.properties['waste_vessels']
+
+    @waste_vessels.setter
+    def waste_vessels(self, val):
+        self.properties['waste_vessels'] = val
+        self.update()
+
 class CleanTubing(Step):
     """Clean tubing with given reagent.
 
