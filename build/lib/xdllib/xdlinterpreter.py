@@ -2,6 +2,7 @@ from lxml import etree
 from bs4 import BeautifulSoup
 from io import StringIO
 import re
+import copy
 import os
 from chempiler import Chempiler
 from .utils import convert_time_str_to_seconds, convert_volume_str_to_ml, convert_mass_str_to_g
@@ -43,6 +44,7 @@ class XDL(object):
             if self._xdl_valid():
                 self._parse_xdl()
                 self._insert_waste_vessels()
+                self._add_hidden_steps()
         else:
             print('No XDL given.')
 
@@ -179,6 +181,73 @@ class XDL(object):
             return os.path.splitext(os.path.split(self.xdl_file)[-1])[0]
         else:
             return default
+
+    def _add_hidden_steps(self):
+        print('HIDDEN STEPSs')
+        prev_vessel_contents = {}
+        filters = []
+        for i, step, vessel_contents in self.iter_vessel_contents():
+            
+            print(f'Prev pre set: {prev_vessel_contents}')
+            
+            if type(step) == Filter:
+                filters.append((i, step.filter_vessel, copy.deepcopy(prev_vessel_contents)))
+
+            print(f'Prev pre set: {prev_vessel_contents}')
+            prev_vessel_contents = copy.deepcopy(vessel_contents)
+
+            print(f'Current: {vessel_contents}')
+            print(f'Prev after set: {prev_vessel_contents}')
+            print('\n')
+
+        print(filters)
+        aqueous_synonyms = []
+        for synonym_list in [synonym_list for synonym_list in [cb.synonyms.CAS_MACHINE_SYNONYMS_DICT[cas] for cas in cb.waste.AQUEOUS_WASTE_REAGENTS]]:
+            aqueous_synonyms.extend(synonym_list)
+        aqueous_synonyms = tuple(aqueous_synonyms)
+
+        for filter_i, filter_vessel, filter_contents in filters:
+            j = filter_i
+            while j > 0 and type(self.steps[j]) not in [Extract, Wash, Reflux, StirAndTransfer]:
+                j -= 1
+            solvent = None
+            print(aqueous_synonyms)
+            for reagent in filter_contents[filter_vessel]:
+                print(reagent)
+                if reagent.endswith(aqueous_synonyms):
+                    solvent = 'water'
+                    break
+                else:
+                    if cb.solvents.density_from_machine_name(reagent):
+                        solvent = reagent
+                        break
+            self.steps.insert(j, PrepareFilter(filter_vessel=filter_vessel, solvent=solvent)) 
+
+    def iter_vessel_contents(self):
+        vessel_contents = {}
+        for i, step in enumerate(self.steps):
+            if type(step) == Add:
+                vessel_contents.setdefault(step.vessel, []).append(step.reagent)
+            elif type(step) == MakeSolution:
+                vessel_contents.setdefault(step.vessel, []).append(step.solvent)
+                for solute in step.solutes:
+                    vessel_contents[step.vessel].append(solute)
+            elif type(step) == Extract:
+                vessel_contents[step.from_vessel].clear()
+                vessel_contents.setdefault(step.to_vessel, []).append(step.solvent)
+            elif type(step) == Wash:
+                vessel_contents[step.to_vessel] = copy.copy(vessel_contents[step.from_vessel])
+                if not step.from_vessel == step.to_vessel:
+                    vessel_contents[step.from_vessel].clear()
+            elif type(step) == Filter:
+                vessel_contents.setdefault(step.filter_vessel, []).clear()
+            elif type(step) == CMove:
+                vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
+                vessel_contents[step.from_vessel].clear()
+            elif type(step) == StirAndTransfer:
+                vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
+                vessel_contents[step.from_vessel].clear()
+            yield (i, step, vessel_contents)
 
     def simulate(self, graphml_file):
         """Simulate XDL procedure using Chempiler and given graphML file."""
