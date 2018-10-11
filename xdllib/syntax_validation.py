@@ -114,7 +114,7 @@ class XDLSyntaxValidator(object):
         for step in self.steps:
             for attr, val in step.attrib.items():
                 if attr == 'vessel':
-                    if not val in declared_vessel_ids:
+                    if not val.replace('_top', '').replace('_bottom', '') in declared_vessel_ids:
                         all_vessels_declared = False
                         self.print_syntax_error(f'{val} used in procedure but not declared in <Hardware> section.', step)
         return all_vessels_declared

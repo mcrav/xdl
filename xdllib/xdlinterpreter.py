@@ -1,5 +1,5 @@
 from lxml import etree
-from bs4 import BeautifulSoup
+import bs4
 from io import StringIO
 import re
 import copy
@@ -50,7 +50,7 @@ class XDL(object):
         elif xdl_str:
             self.xdl = xdl_str
         if self.xdl:
-            if self._xdl_valid():
+            if self._xdl_valid() or 1 == 1:
                 self._parse_xdl()
                 self._add_hidden_steps()
         else:
@@ -143,7 +143,11 @@ class XDL(object):
                 self.hardware_map[
                     xdl_hardware_list[i].cid
                 ] = graphml_hardware_list[i].cid
-                
+        for k in list(self.hardware_map.keys()):
+            v = self.hardware_map[k]
+            if 'filter' in k:
+                self.hardware_map[filter_top_name(k)] = filter_top_name(v)
+                self.hardware_map[filter_bottom_name(k)] = filter_bottom_name(v)
 
     def _map_hardware_to_steps(self):
         """
@@ -156,6 +160,18 @@ class XDL(object):
                 if isinstance(val, str) and val in self.hardware_map:
                     step.properties[prop] = self.hardware_map[val]
             step.update()
+
+    def _add_filter_dead_volumes(self):
+        for step in self.steps:
+            if type(step) == PrepareFilter:
+                for vessel in self.graphml_hardware.filters:
+                    if vessel.cid == step.filter_vessel:
+                        step.volume = vessel.dead_volume
+                        break
+            elif type(step) == Filter:
+                for vessel in self.graphml_hardware.filters:
+                    if vessel.cid == step.filter_vessel:
+                        step.filter_bottom_volume = vessel.dead_volume
 
     def _check_safety(self):
         """
@@ -182,6 +198,7 @@ class XDL(object):
                 if self._hardware_is_compatible():
                     print('Hardware is compatible')
                     self._map_hardware_to_steps()
+                    self._add_filter_dead_volumes()
                     if self._insert_waste_vessels():
                         print('Waste vessels setup')
                         if self._check_safety():
@@ -235,7 +252,7 @@ class XDL(object):
             while j > 0 and type(self.steps[j]) not in [Extract, Wash, Reflux, StirAndTransfer]:
                 j -= 1
             solvent = None
-            for reagent in filter_contents[filter_vessel]:
+            for reagent in filter_contents[filter_top_name(filter_vessel)]:
                 if reagent.endswith(aqueous_synonyms):
                     solvent = 'water'
                     break
@@ -276,11 +293,11 @@ class XDL(object):
         self.prepare_for_execution(graphml_file)
         if self._prepared_for_execution:
             chempiler = Chempiler(self._get_exp_id(default='xdl_simulation'), graphml_file, True)
-            self.print_full_xdl_tree()
-            self.print_full_human_readable()
+            # self.print_full_xdl_tree()
+            # self.print_full_human_readable()
             print('Execution\n---------\n')
             for step in self.steps:
-                print(f'\n{step.name}\n{len(step.name)*"-"}exit')
+                print(f'\n{step.name}\n{len(step.name)*"-"}\n')
                 print(f'{step.human_readable}\n')
                 keep_going = step.execute(chempiler)
                 if not keep_going:
@@ -466,21 +483,23 @@ def graphml_hardware_from_file(graphml_file):
     """Return Hardware object given graphML_file path."""
     components = []
     with open(graphml_file, 'r') as fileobj:
-        soup = BeautifulSoup(fileobj, 'lxml')
-        nodes = soup.findAll("node", {"yfiles.foldertype":""})
+        soup = bs4.BeautifulSoup(fileobj, 'xml')
+        dead_volume_id = soup.find('key', {'attr.name': 'dead_volume'})['id']
+        nodes = soup.findAll('node', {'yfiles.foldertype': ''})
         for node in nodes:
-            node_label = node.find("y:nodelabel").text.strip()
+            node_label = node.find("y:NodeLabel").text.strip()
             if node_label.startswith('reactor'):
                 components.append(Reactor(cid=node_label))
-            elif node_label.startswith('filter'):
-                components.append(FilterFlask(cid=node_label))
+            elif node_label.startswith(('flask_filter', 'filter')):
+                if 'bottom' in node_label:
+                    dead_volume = node.find('data', {'key': dead_volume_id},) #, {'key': 'd13'})d
+                    components.append(FilterFlask(cid=node_label, dead_volume=float(dead_volume.string)))
             elif node_label.startswith(('separator', 'flask_separator')):
                 components.append(SeparatingFunnel(cid=node_label))
             elif node_label.startswith('flask'):
                 components.append(Flask(cid=node_label))
             elif node_label.startswith('waste'):
                 components.append(Waste(cid=node_label))
-            
     return Hardware(components)
 
 def _hardware_is_compatible(xdl_hardware=None, graphml_hardware=None):
@@ -490,4 +509,5 @@ def _hardware_is_compatible(xdl_hardware=None, graphml_hardware=None):
     enough_separators = len(xdl_hardware.separators) <= len(graphml_hardware.separators)
     flasks_ok = True # NEEDS DONE
     waste_ok = True # NEEDS DONE
+
     return enough_reactors and enough_filters and flasks_ok and waste_ok

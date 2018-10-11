@@ -139,7 +139,7 @@ def find_reagent_obj(reagent_id, reagents):
     """Return reagent object, given reagent_id and list of reagents."""
     reagent_obj = None
     for reagent in reagents:
-        if reagent_id == reagent.properties['id']:
+        if reagent_id == reagent.rid:
             reagent_obj = reagent
             break
     return reagent_obj
@@ -150,3 +150,14 @@ def cas_str_to_int(cas_str):
         return int(cas_str.replace('-', ''))
     else:
         return None
+
+def filter_top_name(filter_name):
+    return f'filter_{filter_name}_top'
+
+def filter_bottom_name(filter_name):
+    return f'flask_{filter_name}_bottom'
+
+def is_generic_filter_name(filter_name):
+    return filter_name and 'filter' in filter_name and (not('top' in filter_name or 'bottom' in filter_name))
+
+    
