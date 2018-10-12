@@ -514,19 +514,18 @@ class ChillBackToRT(Step):
             'vessel': vessel,
         }
 
-        # THIS IS NOT OKAY
-        self.steps = [
-            # CSetChiller(vessel=vessel, temp=ROOM_TEMPERATURE),
-            # CChillerWaitForTemp(vessel=vessel),
-            # CStopChiller(vessel=vessel),
+        # This is dodgy. Ideally will track which vessels have chillers.
+        if 'filter' in vessel:
+            self.steps = [
+                CSetChiller(vessel=vessel, temp=ROOM_TEMPERATURE),
+                CChillerWaitForTemp(vessel=vessel),
+                CStopChiller(vessel=vessel),
+            ]
+        else:
+            self.steps = [
             CSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
             CStirrerWaitForTemp(vessel=self.vessel),
-        ]
-
-        # self.no_chiller_steps = [
-        #     CSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
-        #     CStirrerWaitForTemp(vessel=self.vessel),
-        # ]
+            ]
 
         self.human_readable = f'Chill {vessel} to room temperature.'
 
