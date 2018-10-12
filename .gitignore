@@ -1,6 +1,7 @@
 # Project dirs
 data
 stuff
+build
 
 # Python
 .ipynb_checkpoints
