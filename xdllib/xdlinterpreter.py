@@ -198,14 +198,50 @@ class XDL(object):
 
     def _add_hidden_clean_backbone_steps(self):
         cleans = []
-        
+        step_reagent_types = []
+        step_reagent_type = 'organic'
+        for i, step, vessel_contents, additions in self.iter_vessel_contents(additions=True):
+            print(step.human_readable)
+            print(vessel_contents)
+            print(additions)
+            if additions:
+                step_reagent_type = 'organic'
+                for reagent in additions:
+                    for word in ['water', 'aqueous', 'acid', '_m_']:
+                        if word in reagent:
+                            step_reagent_type = 'aqueous'
+                            break
+
+            step_reagent_types.append(step_reagent_type)
+        print(step_reagent_types)
+        clean_backbone_steps = []
         for i, step in enumerate(self.steps):
-
             if type(step) in CLEAN_BACKBONE_AFTER_STEPS:
-                cleans.append(i+1)
+                clean_backbone_steps.append((i, step, step_reagent_types[i]))
+        for j, step_tuple in enumerate(clean_backbone_steps):
+            step_i, step, step_reagent_type = step_tuple
+            if j + 1 < len(clean_backbone_steps):
+                after_type = clean_backbone_steps[j+1][2]
+            else:
+                after_type = 'organic'
+            before_type = clean_backbone_steps[j][2]
 
-        for i in reversed(sorted(cleans)):
-            self.steps.insert(i, CleanBackbone(reagent=DEFAULT_ORGANIC_CLEANING_SOLVENT))
+            if before_type == 'organic' and after_type == 'organic':
+                cleans.append((step_i+1, 'organic'))
+            elif before_type == 'aqueous' and after_type == 'organic':
+                cleans.append((step_i+1, 'water'))
+                cleans.append((step_i+1, 'organic'))
+            elif before_type == 'organic' and after_type == 'aqueous':
+                cleans.append((step_i+1, 'organic'))
+                cleans.append((step_i+1, 'water'))
+            elif before_type == 'aqueous' and after_type == 'aqueous':
+                cleans.append((step_i+1, 'water'))
+
+        for i, clean_type in reversed(cleans):
+            if clean_type == 'organic':
+                self.steps.insert(i, CleanBackbone(reagent=DEFAULT_ORGANIC_CLEANING_SOLVENT))
+            elif clean_type == 'water':
+                self.steps.insert(i, CleanBackbone(reagent='water'))
 
     def _add_hidden_prepare_filter_steps(self):
         prev_vessel_contents = {}
@@ -235,31 +271,45 @@ class XDL(object):
                         break
             self.steps.insert(j, PrepareFilter(filter_vessel=filter_vessel, solvent=solvent)) 
 
-    def iter_vessel_contents(self):
+    def iter_vessel_contents(self, additions=False):
         vessel_contents = {}
         for i, step in enumerate(self.steps):
+            additions_l = []
             if type(step) == Add:
+                additions_l.append(step.reagent)
                 vessel_contents.setdefault(step.vessel, []).append(step.reagent)
             elif type(step) == MakeSolution:
+                additions_l.append(step.solvent)
                 vessel_contents.setdefault(step.vessel, []).append(step.solvent)
                 for solute in step.solutes:
+                    additions_l.append(solute)
                     vessel_contents[step.vessel].append(solute)
             elif type(step) == Extract:
                 vessel_contents[step.from_vessel].clear()
                 vessel_contents.setdefault(step.to_vessel, []).append(step.solvent)
+                additions_l.append(step.solvent)
             elif type(step) == Wash:
+                additions_l.append(vessel_contents[step.from_vessel])
+                additions_l.append(step.solvent)
                 vessel_contents[step.to_vessel] = copy.copy(vessel_contents[step.from_vessel])
                 if not step.from_vessel == step.to_vessel:
                     vessel_contents[step.from_vessel].clear()
+            elif type(step) == WashFilterCake:
+                additions_l.append(step.solvent)
             elif type(step) == Filter:
                 vessel_contents.setdefault(filter_top_name(step.filter_vessel), []).clear()
             elif type(step) == CMove:
+                additions_l.append(vessel_contents[step.from_vessel])
                 vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
                 vessel_contents[step.from_vessel].clear()
             elif type(step) == StirAndTransfer:
+                additions_l.append(vessel_contents[step.from_vessel])
                 vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
                 vessel_contents[step.from_vessel].clear()
-            yield (i, step, copy.deepcopy(vessel_contents))
+            if additions:
+                yield (i, step, copy.deepcopy(vessel_contents), additions_l)
+            else:
+                yield (i, step, copy.deepcopy(vessel_contents))
 
     def simulate(self, graphml_file):
         """Simulate XDL procedure using Chempiler and given graphML file."""
