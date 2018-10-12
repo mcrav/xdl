@@ -53,7 +53,6 @@ XDL_STEP_OBJ_DICT = {
     'StartHeat': StartHeat,
     'StopChiller': StopChiller,
     'CleanVessel': CleanVessel,
-    'CleanTubing': CleanTubing,
     'HeatAndReact': HeatAndReact,
     'ContinueStirToRT': ContinueStirToRT,
     'Chill': Chill,

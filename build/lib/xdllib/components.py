@@ -231,7 +231,7 @@ class Hardware(object):
                 self.reactors.append(component)
             elif component.cid.startswith(('separator', 'flask_separator')):
                 self.separators.append(component)
-            elif component.cid.startswith(('filter', 'flask_filter')):
+            elif component.cid.startswith(('filter')):
                 self.filters.append(component)
             elif component.cid.startswith('flask'):
                 self.flasks.append(component)

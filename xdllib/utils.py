@@ -155,7 +155,7 @@ def filter_top_name(filter_name):
     return f'filter_{filter_name}_top'
 
 def filter_bottom_name(filter_name):
-    return f'flask_{filter_name}_bottom'
+    return f'filter_{filter_name}_bottom'
 
 def is_generic_filter_name(filter_name):
     return filter_name and 'filter' in filter_name and (not('top' in filter_name or 'bottom' in filter_name))

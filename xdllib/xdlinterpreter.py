@@ -13,6 +13,7 @@ from .steps import *
 from .safety import procedure_is_safe
 from .syntax_validation import XDLSyntaxValidator
 from .namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT, BASE_STEP_OBJ_DICT
+from .read_graphml import load_graph
 import chembrain as cb
 
 CLEAN_BACKBONE_AFTER_STEPS = [
@@ -65,51 +66,7 @@ class XDL(object):
         for step in self.steps:
             tree.extend(climb_down_tree(step))
         return tree
-        
-    def _insert_waste_vessels(self):
-        """
-        Insert correct waste vessel names into steps.
-        If waste can't be determined for a reagent it will be printed,
-        and this method will return False.
-
-        Returns:
-            waste_ok {bool} -- True if waste vessels all found, otherwise False
-        """
-        waste_ok = True
-        for step in self._get_full_xdl_tree():
-            if isinstance(step, (WashFilterCake, CleanVessel)):
-                step.waste_vessel = self._get_waste_vessel(step.solvent)
-            elif isinstance(step, (CleanTubing, PrimePumpForAdd)):
-                step.waste_vessel = self._get_waste_vessel(step.reagent)
-            if 'waste_vessel' in step.properties and not step.waste_vessel:
-                waste_ok = False
-        for step in self.steps:
-            if type(step) == CleanBackbone:
-                step.waste_vessels = self.graphml_hardware.waste_cids
-        return waste_ok
-
-    def _get_waste_vessel(self, reagent_id):
-        """
-        Get waste vessel for given reagent.
-        
-        Arguments:
-            reagent_id {str} -- Name of reagent in XDL file.
-
-        Returns:
-            str -- Name of waste vessel, i.e. waste_aqueous. None if waste vessel not found.
-        """
-        for reagent in self.reagents:
-            if reagent.rid == reagent_id:
-                if reagent.waste:
-                    return f'waste_{reagent.waste}'
-                else:
-                    waste_type = cb.waste.get_waste_type(reagent_id)
-                    if not waste_type:
-                        print(f'Waste unknown for {reagent_id}, please add waste to Reagents section.')
-                    else:
-                        return f'waste_{waste_type}'
-        return None
-
+    
     def _parse_xdl(self):
         """Parse self.xdl and make self.steps, self.hardware and self.reagents lists."""
         self.steps = steps_from_xdl(self.xdl)
@@ -149,17 +106,42 @@ class XDL(object):
                 self.hardware_map[filter_top_name(k)] = filter_top_name(v)
                 self.hardware_map[filter_bottom_name(k)] = filter_bottom_name(v)
 
-    def _map_hardware_to_steps(self):
+    def _map_hardware_to_steps(self, graphml_file):
         """
         Go through steps in XDL and replace XDL hardware IDs with IDs
         from the graphML file.
         """
+        self._graph = load_graph(graphml_file) 
         self._get_hardware_map()
         for step in self.steps:
             for prop, val in step.properties.items():
                 if isinstance(val, str) and val in self.hardware_map:
                     step.properties[prop] = self.hardware_map[val]
             step.update()
+            if 'waste_vessel' in step.properties:
+                step.waste_vessel = self._get_waste_vessel(step)
+        for step in self.steps:
+            if type(step) == CleanBackbone:
+                step.waste_vessels = self.graphml_hardware.waste_cids
+
+    def _get_waste_vessel(self, step):
+        nearest_node = None
+        if type(step) == Add:
+            nearest_node = f'flask_{step.reagent}'
+        elif type(step) in [Filter, Dry, WashFilterCake]:
+            nearest_node = filter_bottom_name(step.filter_vessel)
+        elif type(step) in [Wash, Extract]:
+            nearest_node = f'{step.separation_vessel}_bottom'
+        if not nearest_node:
+            return None
+        for node_name in self._graph.nodes():
+            if node_name == nearest_node:
+                for pred in self._graph.pred[node_name]:
+                    if pred.startswith('valve'):
+                        for succ in self._graph.succ[pred]:
+                            if succ.startswith('waste'):
+                                return succ
+        return None
 
     def _add_filter_dead_volumes(self):
         for step in self.steps:
@@ -197,13 +179,11 @@ class XDL(object):
                 self.graphml_hardware = graphml_hardware_from_file(graphml_file)
                 if self._hardware_is_compatible():
                     print('Hardware is compatible')
-                    self._map_hardware_to_steps()
+                    self._map_hardware_to_steps(graphml_file)
                     self._add_filter_dead_volumes()
-                    if self._insert_waste_vessels():
-                        print('Waste vessels setup')
-                        if self._check_safety():
-                            print('Procedure raises no safety flags')
-                            self._prepared_for_execution = True
+                    if self._check_safety():
+                        print('Procedure raises no safety flags')
+                        self._prepared_for_execution = True
 
     def _get_exp_id(self, default='xdl_exp'):
         """Get experiment ID name to give to the Chempiler."""
