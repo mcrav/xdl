@@ -1,8 +1,7 @@
 import os
 import re
 import argparse
-from constants import *
-
+from xdllib.constants import *
 
 def print_step_obj_dict():
     s = '{\n'
@@ -17,6 +16,97 @@ def print_step_obj_dict():
     s += '}'
     print(s)
     
+def add_literal_chempiler_code(steps_chasm_file):
+    with open(steps_chasm_file, 'r') as fileobj:
+        lines = fileobj.readlines()
+    new_lines = []
+    execute = False
+    code = []
+    for line in lines:
+        if execute:
+            if not line.strip() or line.strip().startswith('return'):
+                execute = False
+                new_lines.append("        self.literal_code = f'" + ' '.join([
+                    re.sub(r'(self.[a-zA-Z_]+)', '{\g<1>}', line.strip()) for line in code[1:]
+                    ]) + "'")
+                new_lines.append('')
+                new_lines.extend(code)
+                new_lines.append(line.rstrip())
+                code = []
+                continue
+            else:
+                code.append(line.rstrip())
+        if line.strip().startswith('def execute'):
+            execute = True
+            code.append(line.rstrip())
+        if not execute:
+            if line.strip().startswith('self.literal_code'):
+                new_lines.pop()
+            else:
+                new_lines.append(line.rstrip())
+    with open(steps_chasm_file, 'w') as fileobj:
+        fileobj.write('\n'.join(new_lines))
+
+def add_getters(steps_file):
+    """
+    Add getter methods to given steps_file.
+    Getter will be added for everything in self.properties dict.
+    """
+    with open(steps_file, 'r') as fileobj:
+        lines = fileobj.readlines()
+    new_lines = []
+    props = []
+    read_props = False
+    indent = '    '
+    getter = False
+    for line in lines:
+        if line.startswith('class'):
+            if props:
+                for prop in props:
+                    new_lines.append(f'{indent}@property')
+                    new_lines.append(f'{indent}def {prop}(self):')
+                    new_lines.append(f"{indent*2}return self.properties['{prop}']\n")
+
+                    new_lines.append(f'{indent}@{prop}.setter')
+                    new_lines.append(f'{indent}def {prop}(self, val):')
+                    new_lines.append(f"{indent*2}self.properties['{prop}'] = val")
+                    new_lines.append(f'{indent*2}self.update()\n')
+                props = []
+
+        if '}' in line:
+            read_props = False
+            
+        if read_props:
+            props.append(re.search(r': ([a-zA-Z0-9_]+)(,)?(\n|( #))', line).group(1))
+
+        if 'self.properties = {' in line:
+            read_props = True
+
+        if not line.strip():
+            if getter:
+                getter = False
+                continue
+
+        if '@' in line:
+            getter = True
+
+        if not getter:
+            new_lines.append(line.rstrip())
+    
+    for prop in props:
+        new_lines.append(f'{indent}@property')
+        new_lines.append(f'{indent}def {prop}(self):')
+        new_lines.append(f"{indent*2}return self.properties['{prop}']\n")
+
+        new_lines.append(f'{indent}@{prop}.setter')
+        new_lines.append(f'{indent}def {prop}(self, val):')
+        new_lines.append(f"{indent*2}self.properties['{prop}'] = val")
+        new_lines.append(f'{indent*2}self.update()\n')
+        
+    with open(steps_file, 'w') as fileobj:
+        fileobj.write('\n'.join(new_lines))
+        
+
 class StepClassCodeGenerator(object):
     """Generate Step class code from ChASM docs markdown.
     """
@@ -160,6 +250,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--step_obj_dict', help='Print step obj dict', action='store_true')
     parser.add_argument('--chasm_classes', help='Write chasm_classes.py', action='store_true')
+    parser.add_argument('--getters', help='Add getters to classes', action='store_true')
     args = parser.parse_args()
 
     if args.chasm_classes:
@@ -167,6 +258,10 @@ def main():
 
     elif args.step_obj_dict:
         print_step_obj_dict()
+
+    elif args.getters:
+        add_getters('/home/group/xdllib/xdllib/steps_chasm.py')
+        add_getters('/home/group/xdllib/xdllib/steps_xdl.py')
 
 if __name__ == '__main__':
     main()

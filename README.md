@@ -2,7 +2,7 @@
 
 ## Project Roadmap
 
-### Dangerous reagent combinations
+### Dangerous reagent combinations (ChemBrain)
 
 1. Create system where generics such as alcohol can be used instead of listing the CAS of every alcohol.
 2. Create record of dangerous reagent combinations.
@@ -24,4 +24,11 @@
 
 ### Decide on concrete namespace
 
-### Simulate ChASM
+### Syntax Validation
+
+1. Complete list of compulsory attributes and make test files.
+
+### Unit Testing
+
+1. Hardware mapping
+2. Waste mapping
