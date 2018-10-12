@@ -143,8 +143,9 @@ class XDL(object):
                                 return succ
         return None
 
-    def _add_filter_dead_volumes(self):
-        for step in self.steps:
+    def _add_filter_volumes(self):
+        prev_vessel_contents = {}
+        for i, step, vessel_contents in self.iter_vessel_contents():
             if type(step) == PrepareFilter:
                 for vessel in self.graphml_hardware.filters:
                     if vessel.cid == step.filter_vessel:
@@ -154,6 +155,9 @@ class XDL(object):
                 for vessel in self.graphml_hardware.filters:
                     if vessel.cid == step.filter_vessel:
                         step.filter_bottom_volume = vessel.dead_volume
+                        print(prev_vessel_contents)
+                        step.filter_top_volume = sum([reagent[1] for reagent in prev_vessel_contents[filter_top_name(step.filter_vessel)]])
+            prev_vessel_contents = vessel_contents
 
     def _check_safety(self):
         """
@@ -180,7 +184,7 @@ class XDL(object):
                 if self._hardware_is_compatible():
                     print('Hardware is compatible')
                     self._map_hardware_to_steps(graphml_file)
-                    self._add_filter_dead_volumes()
+                    self._add_filter_volumes()
                     if self._check_safety():
                         print('Procedure raises no safety flags')
                         self._prepared_for_execution = True
@@ -201,19 +205,17 @@ class XDL(object):
         step_reagent_types = []
         step_reagent_type = 'organic'
         for i, step, vessel_contents, additions in self.iter_vessel_contents(additions=True):
-            print(step.human_readable)
-            print(vessel_contents)
-            print(additions)
             if additions:
                 step_reagent_type = 'organic'
                 for reagent in additions:
                     for word in ['water', 'aqueous', 'acid', '_m_']:
-                        if word in reagent:
+                        print(reagent)
+                        if word in reagent[0]:
                             step_reagent_type = 'aqueous'
                             break
 
             step_reagent_types.append(step_reagent_type)
-        print(step_reagent_types)
+
         clean_backbone_steps = []
         for i, step in enumerate(self.steps):
             if type(step) in CLEAN_BACKBONE_AFTER_STEPS:
@@ -262,50 +264,63 @@ class XDL(object):
                 j -= 1
             solvent = None
             for reagent in filter_contents[filter_top_name(filter_vessel)]:
-                if reagent.endswith(aqueous_synonyms):
+                if reagent[0].endswith(aqueous_synonyms):
                     solvent = 'water'
                     break
                 else:
-                    if cb.solvents.density_from_machine_name(reagent):
-                        solvent = reagent
+                    if cb.solvents.density_from_machine_name(reagent[0]):
+                        solvent = reagent[0]
                         break
             self.steps.insert(j, PrepareFilter(filter_vessel=filter_vessel, solvent=solvent)) 
 
     def iter_vessel_contents(self, additions=False):
         vessel_contents = {}
         for i, step in enumerate(self.steps):
+            
             additions_l = []
             if type(step) == Add:
-                additions_l.append(step.reagent)
-                vessel_contents.setdefault(step.vessel, []).append(step.reagent)
+                additions_l.append((step.reagent, step.volume))
+                vessel_contents.setdefault(step.vessel, []).append((step.reagent, step.volume))
+
             elif type(step) == MakeSolution:
-                additions_l.append(step.solvent)
-                vessel_contents.setdefault(step.vessel, []).append(step.solvent)
+                additions_l.append((step.solvent, step.solvent_volume))
+                vessel_contents.setdefault(step.vessel, []).append((step.solvent, step.solvent_volume))
                 for solute in step.solutes:
-                    additions_l.append(solute)
-                    vessel_contents[step.vessel].append(solute)
+                    additions_l.append((solute, 0))
+                    vessel_contents[step.vessel].append((solute, 0))
+
             elif type(step) == Extract:
                 vessel_contents[step.from_vessel].clear()
-                vessel_contents.setdefault(step.to_vessel, []).append(step.solvent)
-                additions_l.append(step.solvent)
+                vessel_contents.setdefault(step.to_vessel, []).append((step.solvent, step.solvent_volume))
+                additions_l.extend(vessel_contents[step.from_vessel])
+                additions_l.append((step.solvent, step.solvent_volume))
+
             elif type(step) == Wash:
-                additions_l.append(vessel_contents[step.from_vessel])
-                additions_l.append(step.solvent)
+                additions_l.extend(vessel_contents[step.from_vessel])
+                additions_l.append((step.solvent, step.solvent_volume))
                 vessel_contents[step.to_vessel] = copy.copy(vessel_contents[step.from_vessel])
                 if not step.from_vessel == step.to_vessel:
                     vessel_contents[step.from_vessel].clear()
+
             elif type(step) == WashFilterCake:
-                additions_l.append(step.solvent)
+                additions_l.append((step.solvent, step.volume))
+
             elif type(step) == Filter:
                 vessel_contents.setdefault(filter_top_name(step.filter_vessel), []).clear()
+
             elif type(step) == CMove:
-                additions_l.append(vessel_contents[step.from_vessel])
+                additions_l.extend(vessel_contents[step.from_vessel])
                 vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
                 vessel_contents[step.from_vessel].clear()
+
             elif type(step) == StirAndTransfer:
-                additions_l.append(vessel_contents[step.from_vessel])
+                additions_l.extend(vessel_contents[step.from_vessel])
                 vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
                 vessel_contents[step.from_vessel].clear()
+
+            for k, v in vessel_contents.items():
+                for item in v:
+                    print(len(item))
             if additions:
                 yield (i, step, copy.deepcopy(vessel_contents), additions_l)
             else:

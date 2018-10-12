@@ -958,12 +958,13 @@ class Filter(Step):
         filter_vessel {str} -- Filter vessel.
         time {str} -- Time to leave vacuum on filter vessel after contents have been moved. (optional)
     """
-    def __init__(self, filter_vessel=None, filter_bottom_volume=None, waste_vessel=None,
+    def __init__(self, filter_vessel=None, filter_top_volume=None, filter_bottom_volume=None, waste_vessel=None,
                         time='default'):
 
         self.name = 'Filter'
         self.properties = {
             'filter_vessel': filter_vessel,
+            'filter_top_volume': filter_top_volume, # Filled in when XDL.prepare_for_execution is called
             'filter_bottom_volume': filter_bottom_volume, # Filled in when XDL.prepare_for_execution is called
             'waste_vessel': waste_vessel,
             'time': time,
@@ -973,6 +974,7 @@ class Filter(Step):
         filter_bottom = filter_bottom_name(self.filter_vessel)
 
         self.steps = [
+            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_top_volume),
             CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_bottom_volume),
             CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=DEFAULT_FILTER_MOVE_VOLUME),
         ]
@@ -986,6 +988,15 @@ class Filter(Step):
     @filter_vessel.setter
     def filter_vessel(self, val):
         self.properties['filter_vessel'] = val
+        self.update()
+
+    @property
+    def filter_top_volume(self):
+        return self.properties['filter_top_volume']
+
+    @filter_top_volume.setter
+    def filter_top_volume(self, val):
+        self.properties['filter_top_volume'] = val
         self.update()
 
     @property
@@ -1540,7 +1551,7 @@ class Wash(Step):
                 CSeparate(lower_phase_vessel=self.waste_vessel, upper_phase_vessel=self.to_vessel),
             )
 
-        self.human_readable = f'Wash contents of {from_vessel} with in {separation_vessel} with {solvent} ({n_washes}x{solvent_volume} mL)'
+        self.human_readable = f'Wash contents of {from_vessel} in {separation_vessel} with {solvent} ({n_washes}x{solvent_volume} mL)'
 
     @property
     def from_vessel(self):
