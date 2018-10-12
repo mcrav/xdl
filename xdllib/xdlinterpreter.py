@@ -218,21 +218,14 @@ class XDL(object):
 
     def _add_hidden_clean_backbone_steps(self):
         cleans = []
-        for i, step, vessel_contents in self.iter_vessel_contents():
+        
+        for i, step in enumerate(self.steps):
+
             if type(step) in CLEAN_BACKBONE_AFTER_STEPS:
-                cleans.append((i+1, step, vessel_contents))
-        for i, step, vessel_contents in reversed(sorted(cleans, key=lambda x: x[0])):
-            solvent = None
-            for vessel, contents in vessel_contents.items():
-                for reagent in contents:
-                    if cb.solvents.density_from_machine_name(reagent):
-                        solvent = DEFAULT_ORGANIC_CLEANING_SOLVENT
-                        break
-                if solvent:
-                    break
-            if not solvent:
-                solvent = 'water'
-            self.steps.insert(i, CleanBackbone(reagent=solvent))
+                cleans.append(i+1)
+
+        for i in reversed(sorted(cleans)):
+            self.steps.insert(i, CleanBackbone(reagent=DEFAULT_ORGANIC_CLEANING_SOLVENT))
 
     def _add_hidden_prepare_filter_steps(self):
         prev_vessel_contents = {}
@@ -279,7 +272,7 @@ class XDL(object):
                 if not step.from_vessel == step.to_vessel:
                     vessel_contents[step.from_vessel].clear()
             elif type(step) == Filter:
-                vessel_contents.setdefault(step.filter_vessel, []).clear()
+                vessel_contents.setdefault(filter_top_name(step.filter_vessel), []).clear()
             elif type(step) == CMove:
                 vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
                 vessel_contents[step.from_vessel].clear()

@@ -442,7 +442,6 @@ class StopChiller(Step):
 
         if is_generic_filter_name(self.vessel):
             self.vessel = filter_top_name(self.vessel)
-        print(f'STOPCHILL {self.vessel}')
 
         self.steps = [
             CStopChiller(self.vessel)
@@ -1346,7 +1345,7 @@ class Extract(Step):
                 CSeparate(lower_phase_vessel=waste_vessel, upper_phase_vessel=to_vessel)
             )
 
-        self.human_readable = f'Extract contents of {from_vessel} with {n_extractions}x{solvent_volume}'
+        self.human_readable = f'Extract contents of {self.from_vessel} with {self.solvent} ({self.n_extractions}x{self.solvent_volume} mL).'
 
     @property
     def from_vessel(self):
@@ -1650,7 +1649,6 @@ class PrepareFilter(Step):
             'solvent': solvent,
             'volume': volume, # This value should be replaced when XDL calls prepare_for_execution.
         }
-        print(f'PFILTER {filter_bottom_name(self.filter_vessel)}')
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
                 vessel=filter_bottom_name(self.filter_vessel), stir=False),
