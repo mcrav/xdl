@@ -118,7 +118,6 @@ class XDL(object):
         """
         self._graph = load_graph(graphml_file) 
         self._get_hardware_map()
-        print(self.hardware_map)
         for step in self.steps:
             for prop, val in step.properties.items():
                 if isinstance(val, str) and val in self.hardware_map:
