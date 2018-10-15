@@ -436,6 +436,7 @@ class Chill(Step):
 
         self.steps = [
             CSetChiller(vessel=vessel, temp=temp),
+            CStartChiller(vessel=vessel),
             CChillerWaitForTemp(vessel=vessel),
         ]
 
