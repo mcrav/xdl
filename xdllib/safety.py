@@ -23,7 +23,9 @@ def procedure_is_safe(steps, reagents):
     return safe
 
 def get_reagent_combinations(steps, reagents):
-    """Get all combinations of reagents in given procedure.
+    """REWRITE USING iter_vessel_contents
+    
+    Get all combinations of reagents in given procedure.
     
     Arguments:
         steps {list} -- list of Step objects.
@@ -32,6 +34,7 @@ def get_reagent_combinations(steps, reagents):
     Returns:
         set -- Set of frozensets of pairs of CAS numbers.
     """
+    return set()
     vessel_contents = {}
     combos = []
     for step in steps:

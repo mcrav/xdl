@@ -1309,12 +1309,15 @@ class Extract(Step):
                 # Move from from_vessel to separation_vessel
                 StirAndTransfer(from_vessel=from_vessel, to_vessel=separator_top, volume='all'),
                 # Move solvent to separation_vessel
-                Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top),
+                Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                 # Stir separation_vessel
                 StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
                 # Wait for phases to separate
                 Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
             ]
+
+        if self.from_vessel == self.separation_vessel:
+            self.steps.pop(0)
 
         # If product in bottom phase
         if self.product_bottom:
@@ -1663,17 +1666,19 @@ class StirAtRT(Step):
 
 class PrepareFilter(Step):
 
-    def __init__(self, filter_vessel=None, solvent=None, volume=10):
+    def __init__(self, filter_vessel=None, solvent=None, volume=10, waste_vessel=None):
 
         self.name = 'PrepareFilter'
         self.properties = {
             'filter_vessel': filter_vessel,
             'solvent': solvent,
             'volume': volume, # This value should be replaced when XDL calls prepare_for_execution.
+            'waste_vessel': waste_vessel,
         }
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
-                vessel=filter_bottom_name(self.filter_vessel), stir=False),
+                vessel=filter_bottom_name(self.filter_vessel), stir=False,
+                waste_vessel=waste_vessel,)
         ]
 
         self.human_readable = f'Fill {filter_bottom_name(self.filter_vessel)} with {solvent} ({volume} mL).'
@@ -1702,4 +1707,13 @@ class PrepareFilter(Step):
     @volume.setter
     def volume(self, val):
         self.properties['volume'] = val
+        self.update()
+
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
         self.update()

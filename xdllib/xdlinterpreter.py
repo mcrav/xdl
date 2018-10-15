@@ -118,7 +118,7 @@ class XDL(object):
                 if isinstance(val, str) and val in self.hardware_map:
                     step.properties[prop] = self.hardware_map[val]
             step.update()
-            if 'waste_vessel' in step.properties:
+            if 'waste_vessel' in step.properties and not step.waste_vessel:
                 step.waste_vessel = self._get_waste_vessel(step)
         for step in self.steps:
             if type(step) == CleanBackbone:
@@ -128,7 +128,7 @@ class XDL(object):
         nearest_node = None
         if type(step) == Add:
             nearest_node = f'flask_{step.reagent}'
-        elif type(step) in [Filter, Dry, WashFilterCake]:
+        elif type(step) in [PrepareFilter, Filter, Dry, WashFilterCake]:
             nearest_node = filter_bottom_name(step.filter_vessel)
         elif type(step) in [Wash, Extract]:
             nearest_node = f'{step.separation_vessel}_bottom'
@@ -290,9 +290,12 @@ class XDL(object):
                     vessel_contents[step.vessel].append((solute, 0))
 
             elif type(step) == Extract:
-                vessel_contents[step.from_vessel].clear()
+                if step.from_vessel != step.separation_vessel:
+                    vessel_contents[step.from_vessel].clear()
+                    additions_l.extend(vessel_contents[step.from_vessel])
                 vessel_contents.setdefault(step.to_vessel, []).append((step.solvent, step.solvent_volume))
-                additions_l.extend(vessel_contents[step.from_vessel])
+                # vessel_contents.setdefault(step.waste_vessel, []).extend(vessel_contents[step.from_vessel])
+                
                 additions_l.append((step.solvent, step.solvent_volume))
 
             elif type(step) == Wash:
