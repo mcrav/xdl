@@ -751,7 +751,7 @@ class WashFilterCake(Step):
 
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
-                vessel=f'{filter_top_name(self.filter_vessel)}', stir=False),
+                vessel=f'{filter_top_name(self.filter_vessel)}', stir=False, waste_vessel=self.waste_vessel),
             CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=self.waste_vessel,
                  volume='all', move_speed=self.move_speed),
 
@@ -1328,7 +1328,7 @@ class Extract(Step):
                         # Move to_vessel to separation_vessel
                         CMove(from_vessel=self.to_vessel, to_vessel=separator_top, volume='all'),
                         # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top),
+                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
                         StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
                         # Wait for phases to separate
@@ -1343,7 +1343,7 @@ class Extract(Step):
                     self.steps.extend([
                         CSeparate(lower_phase_vessel=self.waste_vessel, upper_phase_vessel=separator_top),
                         # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, vessel=separator_top, volume=self.solvent_volume),
+                        Add(reagent=self.solvent, vessel=separator_top, volume=self.solvent_volume, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
                         StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
                         # Wait for phases to separate
@@ -1512,7 +1512,7 @@ class Wash(Step):
             # Move from from_vessel to separation_vessel
             StirAndTransfer(from_vessel=from_vessel, to_vessel=separator_top, volume='all'),
             # Move solvent to separation_vessel
-            Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top),
+            Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
             # Stir separation_vessel
             StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
             # Wait for phases to separate
@@ -1527,7 +1527,7 @@ class Wash(Step):
                         # Move to_vessel to separation_vessel
                         CMove(from_vessel=self.to_vessel, to_vessel=separator_top, volume='all'),
                         # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top),
+                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
                         StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
                         # Wait for phases to separate
@@ -1543,7 +1543,7 @@ class Wash(Step):
                     self.steps.extend([
                         CSeparate(lower_phase_vessel=self.waste_vessel, upper_phase_vessel=separator_top),
                         # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top),
+                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
                         StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
                         # Wait for phases to separate
