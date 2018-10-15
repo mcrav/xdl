@@ -1712,6 +1712,7 @@ class PrepareFilter(Step):
         ]
 
         self.human_readable = f'Fill {filter_bottom_name(self.filter_vessel)} with {solvent} ({volume} mL).'
+
     @property
     def filter_vessel(self):
         return self.properties['filter_vessel']

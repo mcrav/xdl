@@ -3,6 +3,7 @@ import bs4
 from io import StringIO
 import re
 import copy
+import statistics
 import os
 from chempiler import Chempiler
 from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml, convert_mass_str_to_g, 
@@ -124,13 +125,8 @@ class XDL(object):
                     step.properties[prop] = self.hardware_map[val]
             step.update()
             if 'waste_vessel' in step.properties and not step.waste_vessel:
-                
                 step.waste_vessel = self._get_waste_vessel(step)
-                if step.waste_vessel == None:
-                    print('CHANGING WASTE ---')
-                    print(self._get_waste_vessel(step))
-                    print(step.waste_vessel)
-                    print('---')
+
         for step in self.steps:
             if type(step) == CleanBackbone:
                 step.waste_vessels = self.graphml_hardware.waste_cids
@@ -271,20 +267,17 @@ class XDL(object):
             while j > 0 and type(self.steps[j]) not in [Extract, Wash, Reflux, Transfer]:
                 j -= 1
             solvent = None
-            for reagent in filter_contents[filter_top_name(filter_vessel)]:
-                if reagent[0].endswith(aqueous_synonyms):
-                    solvent = 'water'
+            filter_bottom_contents = filter_contents[filter_bottom_name(filter_vessel)]
+            volume_threshold = 0.7 * statistics.mean([item[1] for item in filter_bottom_contents])
+            for reagent in filter_bottom_contents:
+                if reagent[1] > volume_threshold:
+                    solvent = reagent[0]
                     break
-                else:
-                    if cb.solvents.density_from_machine_name(reagent[0]):
-                        solvent = reagent[0]
-                        break
             self.steps.insert(j, PrepareFilter(filter_vessel=filter_vessel, solvent=solvent)) 
 
     def iter_vessel_contents(self, additions=False):
         vessel_contents = {}
         for i, step in enumerate(self.steps):
-
             additions_l = []
             if type(step) == Add:
                 additions_l.append((step.reagent, step.volume))
@@ -317,7 +310,8 @@ class XDL(object):
                 additions_l.append((step.solvent, step.volume))
 
             elif type(step) == Filter:
-                vessel_contents.setdefault(filter_top_name(step.filter_vessel), []).clear()
+                vessel_contents.setdefault(filter_bottom_name(step.filter_vessel), []).clear()
+
 
             elif type(step) == CMove:
                 additions_l.extend(vessel_contents[step.from_vessel])
@@ -329,10 +323,18 @@ class XDL(object):
                 vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
                 vessel_contents[step.from_vessel].clear()
 
-            for vessel in list(vessel_contents.keys()):
-                if 'filter' in vessel and 'top' in vessel:
-                    vessel_contents[vessel.replace('top', 'bottom')] = vessel_contents[vessel]
-                    vessel_contents[vessel] = []
+            if additions_l:
+                for vessel in list(vessel_contents.keys()):
+                    if 'filter' in vessel and 'top' in vessel:
+                        bottom_vessel = vessel.replace('top', 'bottom')
+                        if bottom_vessel in vessel_contents:
+                            vessel_contents[bottom_vessel].extend(vessel_contents[vessel])
+                        else:
+                            vessel_contents[bottom_vessel] = vessel_contents[vessel]
+                        vessel_contents[vessel] = []
+
+            # print(step)
+            # print(vessel_contents)
 
             if additions:
                 yield (i, step, copy.deepcopy(vessel_contents), additions_l)
