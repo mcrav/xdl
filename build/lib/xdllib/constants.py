@@ -26,7 +26,7 @@ DEFAULT_ROTAVAP_TIME = 60 * 5
 DEFAULT_WASH_VOLUME = 50 # mL
 DEFAULT_WASHFILTERCAKE_VOLUME = 20
 
-DEFAULT_FILTER_MOVE_VOLUME = 25 # mL
+DEFAULT_FILTER_MOVE_VOLUME = 5 # mL
 
 DEFAULT_AFTER_ADD_WAIT_TIME = 60 # s (time to wait for stirring after addition)
 
@@ -61,7 +61,7 @@ DEFAULT_VALS = {
         'move_speed': DEFAULT_MOVE_SPEED,
         'wait_time': DEFAULT_WASHFILTERCAKE_WAIT_TIME,
     },
-    'StirAndTransfer': {
+    'Transfer': {
         'stir_rpm': DEFAULT_STIR_RPM,
     },
     'Add': {

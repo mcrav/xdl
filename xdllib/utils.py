@@ -155,9 +155,17 @@ def filter_top_name(filter_name):
     return f'filter_{filter_name}_top'
 
 def filter_bottom_name(filter_name):
-    return f'flask_{filter_name}_bottom'
+    return f'filter_{filter_name}_bottom'
 
 def is_generic_filter_name(filter_name):
     return filter_name and 'filter' in filter_name and (not('top' in filter_name or 'bottom' in filter_name))
 
+def separator_top_name(separator_name):
+    return f'flask_{separator_name}_top'
+
+def separator_bottom_name(separator_name):
+    return f'flask_{separator_name}_bottom'
+
+def is_generic_separator_name(separator_name):
+    return separator_name and 'separator' in separator_name and (not('top' in separator_name or 'bottom' in separator_name))
     

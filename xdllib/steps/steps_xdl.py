@@ -1,5 +1,5 @@
 from ..constants import *
-from ..utils import Step, filter_bottom_name, filter_top_name, is_generic_filter_name
+from ..utils import Step, filter_bottom_name, filter_top_name, is_generic_filter_name, separator_bottom_name, separator_top_name, is_generic_separator_name
 from .steps_chasm import (
     CMove,
     CSeparate,
@@ -192,7 +192,7 @@ class CleanVessel(Step):
         stir_time {str} -- Time to stir once solvent has been added. (optional)
     """
     def __init__(self, vessel=None, solvent='default', volume='default', stir_rpm='default',
-                    stir_time='default',):
+                    stir_time='default', waste_vessel=None):
 
         self.name = 'CleanVessel'
         self.properties = {
@@ -200,15 +200,16 @@ class CleanVessel(Step):
             'solvent': solvent,
             'volume': volume,
             'stir_rpm': stir_rpm,
+            'waste_vessel': waste_vessel,
         }
         self.get_defaults()
-        waste_vessel = 'waste_reactor'
+
         self.steps = [
             CMove(from_vessel=f'flask_{solvent}', to_vessel=f"{vessel}", volume=self.volume),
             StartStir(vessel=vessel, stir_rpm=self.stir_rpm),
             Wait(time=60),
             CStopStir(vessel=vessel),
-            CMove(from_vessel=vessel, to_vessel=waste_vessel, volume='all'),
+            CMove(from_vessel=vessel, to_vessel=self.waste_vessel, volume='all'),
         ]
 
         self.human_readable = f'Clean {vessel} with {solvent} ({volume}).\n'
@@ -249,6 +250,15 @@ class CleanVessel(Step):
         self.properties['stir_rpm'] = val
         self.update()
 
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
+        self.update()
+
 class CleanBackbone(Step):
 
     def __init__(self, reagent=None, waste_vessels=[]):
@@ -280,58 +290,6 @@ class CleanBackbone(Step):
     @waste_vessels.setter
     def waste_vessels(self, val):
         self.properties['waste_vessels'] = val
-        self.update()
-
-class CleanTubing(Step):
-    """Clean tubing with given reagent.
-
-    Keyword Arguments:
-        reagent {str} -- Reagent to clean tubing with.
-        volume {float} -- Volume to clean tubing with in mL. (optional)
-    """
-    def __init__(self, reagent=None, volume='default', waste_vessel=None):
-
-        self.name = 'CleanTubing'
-        self.properties = {
-            'reagent': reagent,
-            'volume': volume,
-            'waste_vessel': waste_vessel,
-        }
-        self.get_defaults()
-
-        self.steps = [
-            CMove(from_vessel=f'flask_{self.reagent}', to_vessel=self.waste_vessel,
-                   volume=self.volume)
-        ]
-        self.steps.append(self.steps[0])
-
-        self.human_readable = f'Clean tubing with {volume} mL of {reagent}.'
-
-    @property
-    def reagent(self):
-        return self.properties['reagent']
-
-    @reagent.setter
-    def reagent(self, val):
-        self.properties['reagent'] = val
-        self.update()
-
-    @property
-    def volume(self):
-        return self.properties['volume']
-
-    @volume.setter
-    def volume(self, val):
-        self.properties['volume'] = val
-        self.update()
-
-    @property
-    def waste_vessel(self):
-        return self.properties['waste_vessel']
-
-    @waste_vessel.setter
-    def waste_vessel(self, val):
-        self.properties['waste_vessel'] = val
         self.update()
 
 class HeatAndReact(Step):
@@ -514,19 +472,18 @@ class ChillBackToRT(Step):
             'vessel': vessel,
         }
 
-        # THIS IS NOT OKAY
-        self.steps = [
-            # CSetChiller(vessel=vessel, temp=ROOM_TEMPERATURE),
-            # CChillerWaitForTemp(vessel=vessel),
-            # CStopChiller(vessel=vessel),
-            CSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
-            CStirrerWaitForTemp(vessel=self.vessel),
-        ]
-
-        # self.no_chiller_steps = [
-        #     CSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
-        #     CStirrerWaitForTemp(vessel=self.vessel),
-        # ]
+        # This is dodgy. Ideally will track which vessels have chillers.
+        if vessel and 'filter' in vessel:
+            self.steps = [
+                CSetChiller(vessel=vessel, temp=ROOM_TEMPERATURE),
+                CChillerWaitForTemp(vessel=vessel),
+                CStopChiller(vessel=vessel),
+            ]
+        else:
+            self.steps = [
+                CSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+                CStirrerWaitForTemp(vessel=self.vessel),
+            ]
 
         self.human_readable = f'Chill {vessel} to room temperature.'
 
@@ -546,18 +503,17 @@ class PrimePumpForAdd(Step):
         reagent {str} -- Reagent to prime pump for addition.
         move_speed {str} -- Speed to move reagent at. (optional)
     """
-    def __init__(self, reagent=None, move_speed='default',):
+    def __init__(self, reagent=None,  waste_vessel=None, move_speed='default',):
 
         self.name = 'PrimePumpForAdd'
         self.properties = {
             'reagent': reagent,
+            'waste_vessel': waste_vessel,
             'move_speed': move_speed,
         }
 
-        waste_vessel = 'waste_solvents'
-
         self.steps = [
-            CMove(from_vessel=f"flask_{reagent}", to_vessel=waste_vessel,
+            CMove(from_vessel=f"flask_{reagent}", to_vessel=self.waste_vessel,
                     volume=DEFAULT_PUMP_PRIME_VOLUME, move_speed=move_speed)
         ]
 
@@ -568,6 +524,15 @@ class PrimePumpForAdd(Step):
     @reagent.setter
     def reagent(self, val):
         self.properties['reagent'] = val
+        self.update()
+
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
         self.update()
 
     @property
@@ -590,7 +555,8 @@ class Add(Step):
         move_speed {float} -- Speed in mL / min to move liquid at. (optional)
         clean_tubing {bool} -- Clean tubing before and after addition. (optional)
     """
-    def __init__(self, reagent=None, volume=None, vessel=None, time=None, move_speed='default', clean_tubing='default', stir='default'):
+    def __init__(self, reagent=None, volume=None, vessel=None, time=None, move_speed='default',
+                stir='default', waste_vessel=None):
 
         self.name = 'Add'
         self.properties = {
@@ -599,8 +565,8 @@ class Add(Step):
             'vessel': vessel,
             'time': time,
             'move_speed': move_speed,
-            'clean_tubing': clean_tubing,
             'stir': stir,
+            'waste_vessel': waste_vessel,
         }
         self.get_defaults()
 
@@ -611,13 +577,10 @@ class Add(Step):
         if self.stir:
             self.steps.append(StartStir(vessel))
 
-        if clean_tubing:
-            self.steps.append(PrimePumpForAdd(reagent=reagent))
+        self.steps.append(PrimePumpForAdd(reagent=reagent, waste_vessel=waste_vessel))
 
         self.steps.append(CMove(from_vessel=f"flask_{reagent}", to_vessel=vessel,
                             volume=volume, move_speed=move_speed))
-        if clean_tubing:
-            self.steps.append(CleanTubing(reagent='default'))
 
         self.steps.append(Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
 
@@ -675,15 +638,6 @@ class Add(Step):
         self.update()
 
     @property
-    def clean_tubing(self):
-        return self.properties['clean_tubing']
-
-    @clean_tubing.setter
-    def clean_tubing(self, val):
-        self.properties['clean_tubing'] = val
-        self.update()
-
-    @property
     def stir(self):
         return self.properties['stir']
 
@@ -692,7 +646,16 @@ class Add(Step):
         self.properties['stir'] = val
         self.update()
 
-class StirAndTransfer(Step):
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
+        self.update()
+
+class Transfer(Step):
     """Stir vessel while transfering contents to another vessel.
 
     Keyword Arguments:
@@ -703,7 +666,7 @@ class StirAndTransfer(Step):
     """
     def __init__(self, from_vessel=None, to_vessel=None, volume=None, stir_rpm='default'):
 
-        self.name = 'StirAndTransfer'
+        self.name = 'Transfer'
         self.properties = {
             'from_vessel': from_vessel,
             'to_vessel': to_vessel,
@@ -716,15 +679,13 @@ class StirAndTransfer(Step):
             self.to_vessel = filter_top_name(self.to_vessel)
 
         if is_generic_filter_name(self.from_vessel):
-            self.from_vessel = filter_top_name(self.from_vessel)
+            self.from_vessel = filter_bottom_name(self.from_vessel)
 
         self.steps = [
-            StartStir(vessel=self.from_vessel, stir_rpm=self.stir_rpm),
             CMove(from_vessel=self.from_vessel, to_vessel=self.to_vessel, volume=self.volume),
-            CStopStir(vessel=self.from_vessel)
         ]
 
-        self.human_readable = f'Stir {self.from_vessel} and transfer {self.volume} mL to {self.to_vessel}.'
+        self.human_readable = f'Transfer {self.volume} mL to {self.to_vessel}.'
 
     @property
     def from_vessel(self):
@@ -772,7 +733,7 @@ class WashFilterCake(Step):
         move_speed {str} -- Speed to move solvent in mL / min. (optional)
         wait_time {str} -- Time to wait after moving solvent to filter flask. (optional)
     """
-    def __init__(self, filter_vessel=None, solvent=None, volume='default', move_speed='default',
+    def __init__(self, filter_vessel=None, solvent=None, volume='default', waste_vessel=None, move_speed='default',
                 wait_time='default'):
 
         self.name = 'WashFilterCake'
@@ -780,20 +741,19 @@ class WashFilterCake(Step):
             'solvent': solvent,
             'filter_vessel': filter_vessel,
             'volume': volume,
+            'waste_vessel': waste_vessel, # should be set in prepare_for_execution
             'move_speed': move_speed,
             'wait_time': wait_time,
         }
         self.get_defaults()
 
-        waste_vessel = 'waste_solvents'
-
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
-                vessel=f'{filter_top_name(self.filter_vessel)}', stir=False),
-            CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=waste_vessel,
+                vessel=f'{filter_top_name(self.filter_vessel)}', stir=False, waste_vessel=self.waste_vessel),
+            CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=self.waste_vessel,
                  volume='all', move_speed=self.move_speed),
 
-            CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=waste_vessel,
+            CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=self.waste_vessel,
                  volume=DEFAULT_WASHFILTERCAKE_WAIT_TIME, move_speed=self.move_speed),
         ]
 
@@ -825,6 +785,15 @@ class WashFilterCake(Step):
     @volume.setter
     def volume(self, val):
         self.properties['volume'] = val
+        self.update()
+
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
         self.update()
 
     @property
@@ -930,20 +899,24 @@ class Dry(Step):
         vessel {str} -- Vessel name to dry.
         time {str} -- Time to dry vessel for in seconds. (optional)
     """
-    def __init__(self, filter_vessel=None, time='default'):
+    def __init__(self, filter_vessel=None, waste_vessel=None, time='default'):
 
         self.name = 'Dry'
         self.properties = {
             'filter_vessel': filter_vessel,
+            'waste_vessel': waste_vessel, # set in prepare_for_execution
             'time': time,
         }
         self.get_defaults()
+
         if is_generic_filter_name(self.filter_vessel):
-            self.filter_vessel = filter_bottom_name(self.filter_vessel)
-        waste_vessel = 'waste_solvents'
+            filter_vessel_bottom = filter_bottom_name(self.filter_vessel)
+        else:
+            filter_vessel_bottom = self.filter_vessel
+
         volume = (float(self.time) / 60) * DEFAULT_MOVE_SPEED
         self.steps = [
-            CMove(from_vessel=self.filter_vessel, to_vessel=waste_vessel, volume=volume),
+            CMove(from_vessel=filter_vessel_bottom, to_vessel=self.waste_vessel, volume=volume),
         ]
 
         self.human_readable = f'Dry substance in {self.filter_vessel} for {self.time} s.'
@@ -955,6 +928,15 @@ class Dry(Step):
     @filter_vessel.setter
     def filter_vessel(self, val):
         self.properties['filter_vessel'] = val
+        self.update()
+
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
         self.update()
 
     @property
@@ -974,20 +956,25 @@ class Filter(Step):
         filter_vessel {str} -- Filter vessel.
         time {str} -- Time to leave vacuum on filter vessel after contents have been moved. (optional)
     """
-    def __init__(self, filter_vessel=None, filter_bottom_volume=None, time='default'):
+    def __init__(self, filter_vessel=None, filter_top_volume=None, filter_bottom_volume=None, waste_vessel=None,
+                        time='default'):
 
         self.name = 'Filter'
         self.properties = {
             'filter_vessel': filter_vessel,
+            'filter_top_volume': filter_top_volume, # Filled in when XDL.prepare_for_execution is called
             'filter_bottom_volume': filter_bottom_volume, # Filled in when XDL.prepare_for_execution is called
+            'waste_vessel': waste_vessel,
             'time': time,
         }
         self.get_defaults()
-        waste_vessel = 'waste_solvents'
+
         filter_bottom = filter_bottom_name(self.filter_vessel)
+
         self.steps = [
-            CMove(from_vessel=filter_bottom, to_vessel=waste_vessel, volume=self.filter_bottom_volume),
-            CMove(from_vessel=filter_bottom, to_vessel=waste_vessel, volume=DEFAULT_FILTER_MOVE_VOLUME),
+            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_top_volume),
+            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_bottom_volume),
+            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=DEFAULT_FILTER_MOVE_VOLUME),
         ]
 
         self.human_readable = f'Filter contents of {filter_vessel} for {time} s.'
@@ -1002,12 +989,30 @@ class Filter(Step):
         self.update()
 
     @property
+    def filter_top_volume(self):
+        return self.properties['filter_top_volume']
+
+    @filter_top_volume.setter
+    def filter_top_volume(self, val):
+        self.properties['filter_top_volume'] = val
+        self.update()
+
+    @property
     def filter_bottom_volume(self):
         return self.properties['filter_bottom_volume']
 
     @filter_bottom_volume.setter
     def filter_bottom_volume(self, val):
         self.properties['filter_bottom_volume'] = val
+        self.update()
+
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
         self.update()
 
     @property
@@ -1266,7 +1271,8 @@ class Extract(Step):
         n_separations {int} -- Number of separations to perform.
     """
     def __init__(self, from_vessel=None, separation_vessel=None, to_vessel=None, solvent=None,
-                    solvent_volume=None, n_extractions=1, product_bottom=True):
+                    solvent_volume=None, n_extractions=1, product_bottom=True, waste_vessel=None,
+                    waste_phase_to_vessel=None,):
 
         self.name = 'Extract'
         self.properties = {
@@ -1277,12 +1283,22 @@ class Extract(Step):
             'solvent_volume': solvent_volume,
             'n_extractions': n_extractions,
             'product_bottom': product_bottom,
+            'waste_phase_to_vessel': waste_phase_to_vessel,
+            'waste_vessel': waste_vessel, # set in prepare_for_execution
         }
         if not to_vessel:
             to_vessel = from_vessel
 
+        if not self.waste_phase_to_vessel and self.waste_vessel:
+            self.waste_phase_to_vessel = self.waste_vessel
+
         if is_generic_filter_name(self.to_vessel):
             self.to_vessel = filter_top_name(self.to_vessel)
+
+        if is_generic_separator_name(self.waste_phase_to_vessel):
+            self.waste_phase_to_vessel = separator_top_name(self.waste_phase_to_vessel)
+        elif is_generic_filter_name(self.waste_phase_to_vessel):
+            self.waste_phase_to_vessel = filter_top_name(self.waste_phase_to_vessel)
 
         if is_generic_filter_name(self.from_vessel):
             self.from_vessel = filter_top_name(self.from_vessel)
@@ -1294,47 +1310,48 @@ class Extract(Step):
         else:
             n_extractions = int(self.n_extractions)
 
-        separator_top = f'{self.separation_vessel}_top'
-        separator_bottom = f'{self.separation_vessel}_bottom'
-
-        waste_vessel = 'waste_workup'
+        separator_top = separator_top_name(self.separation_vessel)
+        separator_bottom = separator_bottom_name(self.separation_vessel)
 
         self.steps = [
                 # Move from from_vessel to separation_vessel
-                StirAndTransfer(from_vessel=from_vessel, to_vessel=separator_top, volume='all'),
+                Transfer(from_vessel=from_vessel, to_vessel=separator_top, volume='all'),
                 # Move solvent to separation_vessel
-                Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top),
+                Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                 # Stir separation_vessel
                 StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
                 # Wait for phases to separate
                 Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
             ]
 
+        if self.from_vessel == self.separation_vessel:
+            self.steps.pop(0)
+
         # If product in bottom phase
         if self.product_bottom:
             if n_extractions > 1:
                 for i in range(n_extractions - 1):
                     self.steps.extend([
-                        CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=waste_vessel),
+                        CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_vessel),
                         # Move to_vessel to separation_vessel
                         CMove(from_vessel=self.to_vessel, to_vessel=separator_top, volume='all'),
                         # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top),
+                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
                         StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
             self.steps.append(
-                CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=waste_vessel)
+                CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_phase_to_vessel)
             )
         else:
             if n_extractions > 1:
                 for i in range(n_extractions - 1):
                     self.steps.extend([
-                        CSeparate(lower_phase_vessel=waste_vessel, upper_phase_vessel=separator_top),
+                        CSeparate(lower_phase_vessel=self.waste_vessel, upper_phase_vessel=separator_top),
                         # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, vessel=separator_top, volume=self.solvent_volume),
+                        Add(reagent=self.solvent, vessel=separator_top, volume=self.solvent_volume, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
                         StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
                         # Wait for phases to separate
@@ -1342,7 +1359,7 @@ class Extract(Step):
                     ])
 
             self.steps.append(
-                CSeparate(lower_phase_vessel=waste_vessel, upper_phase_vessel=to_vessel)
+                CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=to_vessel)
             )
 
         self.human_readable = f'Extract contents of {self.from_vessel} with {self.solvent} ({self.n_extractions}x{self.solvent_volume} mL).'
@@ -1410,6 +1427,24 @@ class Extract(Step):
         self.properties['product_bottom'] = val
         self.update()
 
+    @property
+    def waste_phase_to_vessel(self):
+        return self.properties['waste_phase_to_vessel']
+
+    @waste_phase_to_vessel.setter
+    def waste_phase_to_vessel(self, val):
+        self.properties['waste_phase_to_vessel'] = val
+        self.update()
+
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
+        self.update()
+
 class Wait(Step):
 
     def __init__(self, time=None, wait_recording_speed='default', after_recording_speed='default'):
@@ -1461,7 +1496,7 @@ class Wash(Step):
 
     def __init__(self, from_vessel=None, separation_vessel=None, to_vessel=None,
                     solvent=None, solvent_volume=None, n_washes=1,
-                    product_bottom=True):
+                    product_bottom=True, waste_vessel=None, waste_phase_to_vessel=None,):
 
         self.name = 'Wash'
         self.properties = {
@@ -1472,8 +1507,13 @@ class Wash(Step):
             'solvent_volume': solvent_volume,
             'n_washes': n_washes,
             'product_bottom': product_bottom,
+            'waste_phase_to_vessel': waste_phase_to_vessel,
+            'waste_vessel': waste_vessel,
         }
         self.get_defaults()
+
+        if not self.waste_phase_to_vessel and self.waste_vessel:
+            self.waste_phase_to_vessel = self.waste_vessel
 
         if is_generic_filter_name(self.to_vessel):
             self.to_vessel = filter_top_name(self.to_vessel)
@@ -1485,16 +1525,15 @@ class Wash(Step):
             n_washes = 1
         else:
             n_washes = int(n_washes)
-        separator_top = f'{self.separation_vessel}_top'
-        separator_bottom = f'{self.separation_vessel}_bottom'
 
-        waste_vessel = 'waste_workup'
+        separator_top = separator_top_name(self.separation_vessel)
+        separator_bottom = separator_bottom_name(self.separation_vessel)
 
         self.steps = [
             # Move from from_vessel to separation_vessel
-            StirAndTransfer(from_vessel=from_vessel, to_vessel=separator_top, volume='all'),
+            Transfer(from_vessel=from_vessel, to_vessel=separator_top, volume='all'),
             # Move solvent to separation_vessel
-            Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top),
+            Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
             # Stir separation_vessel
             StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
             # Wait for phases to separate
@@ -1505,11 +1544,11 @@ class Wash(Step):
             if n_washes > 1:
                 for i in range(n_washes - 1):
                     self.steps.extend([
-                        CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=waste_vessel),
+                        CSeparate(lower_phase_vessel=self.waste_vessel, upper_phase_vessel=self.to_vessel),
                         # Move to_vessel to separation_vessel
                         CMove(from_vessel=self.to_vessel, to_vessel=separator_top, volume='all'),
                         # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top),
+                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
                         StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
                         # Wait for phases to separate
@@ -1517,17 +1556,15 @@ class Wash(Step):
                     ])
             self.steps.append(
                 # Do separation
-                CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=waste_vessel),
+                CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_phase_to_vessel),
             )
-
-        # If product in bottom phase
         else:
             if n_washes > 1:
                 for i in range(n_washes - 1):
                     self.steps.extend([
-                        CSeparate(lower_phase_vessel=waste_vessel, upper_phase_vessel=separator_top),
+                        CSeparate(lower_phase_vessel=self.waste_vessel, upper_phase_vessel=separator_top),
                         # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top),
+                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
                         StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
                         # Wait for phases to separate
@@ -1535,10 +1572,10 @@ class Wash(Step):
                     ])
             self.steps.append(
                 # Do separation
-                CSeparate(lower_phase_vessel=waste_vessel, upper_phase_vessel=self.to_vessel),
+                CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=self.to_vessel),
             )
 
-        self.human_readable = f'Wash contents of {from_vessel} with in {separation_vessel} with {solvent} ({n_washes}x{solvent_volume} mL)'
+        self.human_readable = f'Wash contents of {from_vessel} in {separation_vessel} with {solvent} ({n_washes}x{solvent_volume} mL)'
 
     @property
     def from_vessel(self):
@@ -1603,6 +1640,24 @@ class Wash(Step):
         self.properties['product_bottom'] = val
         self.update()
 
+    @property
+    def waste_phase_to_vessel(self):
+        return self.properties['waste_phase_to_vessel']
+
+    @waste_phase_to_vessel.setter
+    def waste_phase_to_vessel(self, val):
+        self.properties['waste_phase_to_vessel'] = val
+        self.update()
+
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
+        self.update()
+
 class StirAtRT(Step):
 
     def __init__(self, vessel=None, time=None):
@@ -1641,20 +1696,23 @@ class StirAtRT(Step):
 
 class PrepareFilter(Step):
 
-    def __init__(self, filter_vessel=None, solvent=None, volume=10):
+    def __init__(self, filter_vessel=None, solvent=None, volume=10, waste_vessel=None):
 
         self.name = 'PrepareFilter'
         self.properties = {
             'filter_vessel': filter_vessel,
             'solvent': solvent,
             'volume': volume, # This value should be replaced when XDL calls prepare_for_execution.
+            'waste_vessel': waste_vessel,
         }
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
-                vessel=filter_bottom_name(self.filter_vessel), stir=False),
+                vessel=filter_bottom_name(self.filter_vessel), stir=False,
+                waste_vessel=waste_vessel,)
         ]
 
         self.human_readable = f'Fill {filter_bottom_name(self.filter_vessel)} with {solvent} ({volume} mL).'
+
     @property
     def filter_vessel(self):
         return self.properties['filter_vessel']
@@ -1680,4 +1738,13 @@ class PrepareFilter(Step):
     @volume.setter
     def volume(self, val):
         self.properties['volume'] = val
+        self.update()
+
+    @property
+    def waste_vessel(self):
+        return self.properties['waste_vessel']
+
+    @waste_vessel.setter
+    def waste_vessel(self, val):
+        self.properties['waste_vessel'] = val
         self.update()

@@ -231,7 +231,7 @@ class Hardware(object):
                 self.reactors.append(component)
             elif component.cid.startswith(('separator', 'flask_separator')):
                 self.separators.append(component)
-            elif component.cid.startswith(('filter', 'flask_filter')):
+            elif component.cid.startswith(('filter')):
                 self.filters.append(component)
             elif component.cid.startswith('flask'):
                 self.flasks.append(component)
@@ -240,27 +240,12 @@ class Hardware(object):
 
 
         self.waste_cids = [item.cid for item in self.wastes]
-
-        for i in reversed(range(len(self.filters))):
-            component = self.filters[i]
-            if '_' in component.cid:
-                print(component.cid)
-                new_id = component.cid.split('_')[1]
-                if 'bottom' in component.cid:
-                    component.cid = new_id
-                else:
-                    self.filters.pop(i)
-
-        for component_list in [self.separators]: # scalable to do multiple lists, filters needs to be handled separately
-            new_list = []
-            ignore = []
-            for component in component_list:
-                if component.cid.startswith(tuple(ignore)):
-                    continue
-                elif component.cid.endswith(('_top', '_bottom')):
-                    component.cid = component.cid.replace('_top','').replace('_bottom', '')
-                    ignore.append(component.cid)
-                new_list.append(component)
-            component_list.clear()
-            for item in new_list:
-                component_list.append(item)
+        for component_list in [self.filters, self.separators]:
+            for i in reversed(range(len(component_list))):
+                component = component_list[i]
+                if '_' in component.cid:
+                    new_id = component.cid.split('_')[1]
+                    if 'bottom' in component.cid:
+                        component.cid = new_id
+                    else:
+                        component_list.pop(i)

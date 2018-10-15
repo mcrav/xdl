@@ -3,9 +3,11 @@ import bs4
 from io import StringIO
 import re
 import copy
+import statistics
 import os
 from chempiler import Chempiler
-from .utils import convert_time_str_to_seconds, convert_volume_str_to_ml, convert_mass_str_to_g
+from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml, convert_mass_str_to_g, 
+    filter_bottom_name, filter_top_name, separator_top_name, separator_bottom_name)
 from .constants import *
 from .components import *
 from .reagents import *
@@ -13,6 +15,7 @@ from .steps import *
 from .safety import procedure_is_safe
 from .syntax_validation import XDLSyntaxValidator
 from .namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT, BASE_STEP_OBJ_DICT
+from .read_graphml import load_graph
 import chembrain as cb
 
 CLEAN_BACKBONE_AFTER_STEPS = [
@@ -65,51 +68,7 @@ class XDL(object):
         for step in self.steps:
             tree.extend(climb_down_tree(step))
         return tree
-        
-    def _insert_waste_vessels(self):
-        """
-        Insert correct waste vessel names into steps.
-        If waste can't be determined for a reagent it will be printed,
-        and this method will return False.
-
-        Returns:
-            waste_ok {bool} -- True if waste vessels all found, otherwise False
-        """
-        waste_ok = True
-        for step in self._get_full_xdl_tree():
-            if isinstance(step, (WashFilterCake, CleanVessel)):
-                step.waste_vessel = self._get_waste_vessel(step.solvent)
-            elif isinstance(step, (CleanTubing, PrimePumpForAdd)):
-                step.waste_vessel = self._get_waste_vessel(step.reagent)
-            if 'waste_vessel' in step.properties and not step.waste_vessel:
-                waste_ok = False
-        for step in self.steps:
-            if type(step) == CleanBackbone:
-                step.waste_vessels = self.graphml_hardware.waste_cids
-        return waste_ok
-
-    def _get_waste_vessel(self, reagent_id):
-        """
-        Get waste vessel for given reagent.
-        
-        Arguments:
-            reagent_id {str} -- Name of reagent in XDL file.
-
-        Returns:
-            str -- Name of waste vessel, i.e. waste_aqueous. None if waste vessel not found.
-        """
-        for reagent in self.reagents:
-            if reagent.rid == reagent_id:
-                if reagent.waste:
-                    return f'waste_{reagent.waste}'
-                else:
-                    waste_type = cb.waste.get_waste_type(reagent_id)
-                    if not waste_type:
-                        print(f'Waste unknown for {reagent_id}, please add waste to Reagents section.')
-                    else:
-                        return f'waste_{waste_type}'
-        return None
-
+    
     def _parse_xdl(self):
         """Parse self.xdl and make self.steps, self.hardware and self.reagents lists."""
         self.steps = steps_from_xdl(self.xdl)
@@ -148,21 +107,51 @@ class XDL(object):
             if 'filter' in k:
                 self.hardware_map[filter_top_name(k)] = filter_top_name(v)
                 self.hardware_map[filter_bottom_name(k)] = filter_bottom_name(v)
+            elif 'separator' in k and is_generic_separator_name(k):
+                self.hardware_map[separator_top_name(k)] = separator_top_name(v)
+                self.hardware_map[separator_bottom_name(k)] = separator_bottom_name(v)
 
-    def _map_hardware_to_steps(self):
+    def _map_hardware_to_steps(self, graphml_file):
         """
         Go through steps in XDL and replace XDL hardware IDs with IDs
         from the graphML file.
         """
+        self._graph = load_graph(graphml_file) 
         self._get_hardware_map()
         for step in self.steps:
             for prop, val in step.properties.items():
                 if isinstance(val, str) and val in self.hardware_map:
                     step.properties[prop] = self.hardware_map[val]
             step.update()
+            if 'waste_vessel' in step.properties and not step.waste_vessel:
+                step.waste_vessel = self._get_waste_vessel(step)
 
-    def _add_filter_dead_volumes(self):
         for step in self.steps:
+            if type(step) == CleanBackbone:
+                step.waste_vessels = self.graphml_hardware.waste_cids
+
+    def _get_waste_vessel(self, step):
+        nearest_node = None
+        if type(step) == Add:
+            nearest_node = f'flask_{step.reagent}'
+        elif type(step) in [PrepareFilter, Filter, Dry, WashFilterCake]:
+            nearest_node = filter_bottom_name(step.filter_vessel)
+        elif type(step) in [Wash, Extract]:
+            nearest_node = separator_bottom_name(step.separation_vessel)
+        if not nearest_node:
+            return None
+        for node_name in self._graph.nodes():
+            if node_name == nearest_node:
+                for pred in self._graph.pred[node_name]:
+                    if pred.startswith('valve'):
+                        for succ in self._graph.succ[pred]:
+                            if succ.startswith('waste'):
+                                return succ
+        return None
+
+    def _add_filter_volumes(self):
+        prev_vessel_contents = {}
+        for i, step, vessel_contents in self.iter_vessel_contents():
             if type(step) == PrepareFilter:
                 for vessel in self.graphml_hardware.filters:
                     if vessel.cid == step.filter_vessel:
@@ -172,6 +161,8 @@ class XDL(object):
                 for vessel in self.graphml_hardware.filters:
                     if vessel.cid == step.filter_vessel:
                         step.filter_bottom_volume = vessel.dead_volume
+                        step.filter_top_volume = sum([reagent[1] for reagent in prev_vessel_contents[filter_top_name(step.filter_vessel)]])
+            prev_vessel_contents = vessel_contents
 
     def _check_safety(self):
         """
@@ -197,13 +188,11 @@ class XDL(object):
                 self.graphml_hardware = graphml_hardware_from_file(graphml_file)
                 if self._hardware_is_compatible():
                     print('Hardware is compatible')
-                    self._map_hardware_to_steps()
-                    self._add_filter_dead_volumes()
-                    if self._insert_waste_vessels():
-                        print('Waste vessels setup')
-                        if self._check_safety():
-                            print('Procedure raises no safety flags')
-                            self._prepared_for_execution = True
+                    self._map_hardware_to_steps(graphml_file)
+                    self._add_filter_volumes()
+                    if self._check_safety():
+                        print('Procedure raises no safety flags')
+                        self._prepared_for_execution = True
 
     def _get_exp_id(self, default='xdl_exp'):
         """Get experiment ID name to give to the Chempiler."""
@@ -218,14 +207,46 @@ class XDL(object):
 
     def _add_hidden_clean_backbone_steps(self):
         cleans = []
-        
+        step_reagent_types = []
+        step_reagent_type = 'organic'
+        for i, step, vessel_contents, additions in self.iter_vessel_contents(additions=True):
+            if additions:
+                step_reagent_type = 'organic'
+                for reagent in additions:
+                    for word in ['water', 'aqueous', 'acid', '_m_']:
+                        if word in reagent[0]:
+                            step_reagent_type = 'aqueous'
+                            break
+            step_reagent_types.append(step_reagent_type)
+
+        clean_backbone_steps = []
         for i, step in enumerate(self.steps):
-
             if type(step) in CLEAN_BACKBONE_AFTER_STEPS:
-                cleans.append(i+1)
+                clean_backbone_steps.append((i, step, step_reagent_types[i]))
+        for j, step_tuple in enumerate(clean_backbone_steps):
+            step_i, step, step_reagent_type = step_tuple
+            if j + 1 < len(clean_backbone_steps):
+                after_type = clean_backbone_steps[j+1][2]
+            else:
+                after_type = 'organic'
+            before_type = clean_backbone_steps[j][2]
 
-        for i in reversed(sorted(cleans)):
-            self.steps.insert(i, CleanBackbone(reagent=DEFAULT_ORGANIC_CLEANING_SOLVENT))
+            if before_type == 'organic' and after_type == 'organic':
+                cleans.append((step_i+1, 'organic'))
+            elif before_type == 'aqueous' and after_type == 'organic':
+                cleans.append((step_i+1, 'water'))
+                cleans.append((step_i+1, 'organic'))
+            elif before_type == 'organic' and after_type == 'aqueous':
+                cleans.append((step_i+1, 'organic'))
+                cleans.append((step_i+1, 'water'))
+            elif before_type == 'aqueous' and after_type == 'aqueous':
+                cleans.append((step_i+1, 'water'))
+
+        for i, clean_type in reversed(cleans):
+            if clean_type == 'organic':
+                self.steps.insert(i, CleanBackbone(reagent=DEFAULT_ORGANIC_CLEANING_SOLVENT))
+            elif clean_type == 'water':
+                self.steps.insert(i, CleanBackbone(reagent='water'))
 
     def _add_hidden_prepare_filter_steps(self):
         prev_vessel_contents = {}
@@ -242,44 +263,82 @@ class XDL(object):
 
         for filter_i, filter_vessel, filter_contents in filters:
             j = filter_i
-            while j > 0 and type(self.steps[j]) not in [Extract, Wash, Reflux, StirAndTransfer]:
+            while j > 0 and type(self.steps[j]) not in [Extract, Wash, Reflux, Transfer]:
                 j -= 1
             solvent = None
-            for reagent in filter_contents[filter_top_name(filter_vessel)]:
-                if reagent.endswith(aqueous_synonyms):
-                    solvent = 'water'
+            filter_bottom_contents = filter_contents[filter_bottom_name(filter_vessel)]
+            volume_threshold = 0.7 * statistics.mean([item[1] for item in filter_bottom_contents]) # Find first thing that could be considered a solvent. 0.7 is arbitrary.
+            for reagent in filter_bottom_contents:
+                if reagent[1] > volume_threshold:
+                    solvent = reagent[0]
                     break
-                else:
-                    if cb.solvents.density_from_machine_name(reagent):
-                        solvent = reagent
-                        break
             self.steps.insert(j, PrepareFilter(filter_vessel=filter_vessel, solvent=solvent)) 
 
-    def iter_vessel_contents(self):
+    def iter_vessel_contents(self, additions=False):
         vessel_contents = {}
         for i, step in enumerate(self.steps):
+            additions_l = []
             if type(step) == Add:
-                vessel_contents.setdefault(step.vessel, []).append(step.reagent)
+                additions_l.append((step.reagent, step.volume))
+                vessel_contents.setdefault(step.vessel, []).append((step.reagent, step.volume))
+
             elif type(step) == MakeSolution:
-                vessel_contents.setdefault(step.vessel, []).append(step.solvent)
+                additions_l.append((step.solvent, step.solvent_volume))
+                vessel_contents.setdefault(step.vessel, []).append((step.solvent, step.solvent_volume))
                 for solute in step.solutes:
-                    vessel_contents[step.vessel].append(solute)
+                    additions_l.append((solute, 0))
+                    vessel_contents[step.vessel].append((solute, 0))
+
             elif type(step) == Extract:
-                vessel_contents[step.from_vessel].clear()
-                vessel_contents.setdefault(step.to_vessel, []).append(step.solvent)
+                if step.from_vessel != step.separation_vessel:
+                    vessel_contents[step.from_vessel].clear()
+                    additions_l.extend(vessel_contents[step.from_vessel])
+                vessel_contents.setdefault(step.to_vessel, []).append((step.solvent, step.solvent_volume))
+                # vessel_contents.setdefault(step.waste_vessel, []).extend(vessel_contents[step.from_vessel])
+                
+                additions_l.append((step.solvent, step.solvent_volume))
+
             elif type(step) == Wash:
+                additions_l.extend(vessel_contents[step.from_vessel])
+                additions_l.append((step.solvent, step.solvent_volume))
                 vessel_contents[step.to_vessel] = copy.copy(vessel_contents[step.from_vessel])
                 if not step.from_vessel == step.to_vessel:
                     vessel_contents[step.from_vessel].clear()
+
+            elif type(step) == WashFilterCake:
+                additions_l.append((step.solvent, step.volume))
+
             elif type(step) == Filter:
-                vessel_contents.setdefault(filter_top_name(step.filter_vessel), []).clear()
+                vessel_contents.setdefault(filter_bottom_name(step.filter_vessel), []).clear()
+
+
             elif type(step) == CMove:
+                additions_l.extend(vessel_contents[step.from_vessel])
                 vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
                 vessel_contents[step.from_vessel].clear()
-            elif type(step) == StirAndTransfer:
+
+            elif type(step) == Transfer:
+                additions_l.extend(vessel_contents[step.from_vessel])
                 vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
                 vessel_contents[step.from_vessel].clear()
-            yield (i, step, copy.deepcopy(vessel_contents))
+
+            if additions_l:
+                for vessel in list(vessel_contents.keys()):
+                    if 'filter' in vessel and 'top' in vessel:
+                        bottom_vessel = vessel.replace('top', 'bottom')
+                        if bottom_vessel in vessel_contents:
+                            vessel_contents[bottom_vessel].extend(vessel_contents[vessel])
+                        else:
+                            vessel_contents[bottom_vessel] = vessel_contents[vessel]
+                        vessel_contents[vessel] = []
+
+            # print(step)
+            # print(vessel_contents)
+
+            if additions:
+                yield (i, step, copy.deepcopy(vessel_contents), additions_l)
+            else:
+                yield (i, step, copy.deepcopy(vessel_contents))
 
     def simulate(self, graphml_file):
         """Simulate XDL procedure using Chempiler and given graphML file."""
@@ -483,7 +542,7 @@ def graphml_hardware_from_file(graphml_file):
             node_label = node.find("y:NodeLabel").text.strip()
             if node_label.startswith('reactor'):
                 components.append(Reactor(cid=node_label))
-            elif node_label.startswith(('flask_filter', 'filter')):
+            elif node_label.startswith(('filter')):
                 if 'bottom' in node_label:
                     dead_volume = node.find('data', {'key': dead_volume_id},) #, {'key': 'd13'})d
                     components.append(FilterFlask(cid=node_label, dead_volume=float(dead_volume.string)))
