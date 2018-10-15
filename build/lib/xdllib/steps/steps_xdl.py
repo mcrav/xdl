@@ -436,6 +436,7 @@ class Chill(Step):
 
         self.steps = [
             CSetChiller(vessel=vessel, temp=temp),
+            CStartChiller(vessel=vessel),
             CChillerWaitForTemp(vessel=vessel),
         ]
 
@@ -1707,7 +1708,7 @@ class PrepareFilter(Step):
         }
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
-                vessel=filter_bottom_name(self.filter_vessel), stir=False,
+                vessel=filter_top_name(self.filter_vessel), stir=False,
                 waste_vessel=waste_vessel,)
         ]
 

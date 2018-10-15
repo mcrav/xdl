@@ -161,7 +161,7 @@ class XDL(object):
                 for vessel in self.graphml_hardware.filters:
                     if vessel.cid == step.filter_vessel:
                         step.filter_bottom_volume = vessel.dead_volume
-                        step.filter_top_volume = sum([reagent[1] for reagent in prev_vessel_contents[filter_top_name(step.filter_vessel)]])
+                        step.filter_top_volume = sum([reagent[1] for reagent in prev_vessel_contents[filter_bottom_name(step.filter_vessel)]])
             prev_vessel_contents = vessel_contents
 
     def _check_safety(self):
