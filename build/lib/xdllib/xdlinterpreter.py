@@ -133,7 +133,7 @@ class XDL(object):
     def _get_waste_vessel(self, step):
         nearest_node = None
         if type(step) == Add:
-            nearest_node = f'flask_{step.reagent}'
+            nearest_node = step.vessel
         elif type(step) in [PrepareFilter, Filter, Dry, WashFilterCake]:
             nearest_node = filter_bottom_name(step.filter_vessel)
         elif type(step) in [Wash, Extract]:
@@ -182,6 +182,7 @@ class XDL(object):
         Arguments:
             graphml_file {str} -- Path to graphML file.
         """
+        self.graphml_file = graphml_file
         if not self._prepared_for_execution:
             if self.steps: # if XDL is valid
                 print('XDL is valid')
@@ -364,20 +365,28 @@ class XDL(object):
             self.print_full_human_readable()
         print('Execution\n---------\n')
         for step in self.steps:
-            step.execute(chempiler)
+            print(f'\n{step.name}\n{len(step.name)*"-"}\n')
+            print(f'{step.human_readable}\n')
+            keep_going = step.execute(chempiler)
+            if not keep_going:
+                return
 
-    def as_literal_chempiler_code(self):
-        s = 'from chempiler import Chempiler\n\nchempiler = Chempiler()\n\n'
+    def as_literal_chempiler_code(self, dry_run=False):
+        s = f'from chempiler import Chempiler\n\nchempiler = Chempiler(r"{self._get_exp_id(default="xdl_simulation")}", "{self.graphml_file}", False)\n\n'
         full_tree = self._get_full_xdl_tree()
         base_steps = list(BASE_STEP_OBJ_DICT.values())
         for step in full_tree:
             if step in self.steps:
                 s += f'\n# {step.human_readable}\n'
             if type(step) in base_steps:
+                if type(step) == CWait:
+                    new_step = copy.deepcopy(step)
+                    new_step.time = 2
+                    step = new_step
                 s += re.sub(r'([a-zA-Z][a-z|A-Z|_|0-9]+)([\,|\)])', r"'\1'\2", step.literal_code) + '\n'
         return s
 
-    def save_chempiler_script(self, save_path):
+    def save_chempiler_script(self, save_path, dry_run=False):
         with open(save_path, 'w') as fileobj:
             fileobj.write(self.as_literal_chempiler_code())
 
