@@ -1288,7 +1288,7 @@ class Extract(Step):
         }
         if not to_vessel:
             to_vessel = from_vessel
-        print(f'GGG {self.waste_phase_to_vessel}')
+
         if not self.waste_phase_to_vessel and self.waste_vessel:
             self.waste_phase_to_vessel = self.waste_vessel
 
@@ -1511,7 +1511,7 @@ class Wash(Step):
             'waste_vessel': waste_vessel,
         }
         self.get_defaults()
-        print(f'HHH {self.waste_vessel}')
+
         if not self.waste_phase_to_vessel and self.waste_vessel:
             self.waste_phase_to_vessel = self.waste_vessel
 

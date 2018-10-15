@@ -1511,7 +1511,7 @@ class Wash(Step):
             'waste_vessel': waste_vessel,
         }
         self.get_defaults()
-        
+
         if not self.waste_phase_to_vessel and self.waste_vessel:
             self.waste_phase_to_vessel = self.waste_vessel
 

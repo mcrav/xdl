@@ -118,7 +118,6 @@ class XDL(object):
         """
         self._graph = load_graph(graphml_file) 
         self._get_hardware_map()
-        print(self.hardware_map)
         for step in self.steps:
             for prop, val in step.properties.items():
                 if isinstance(val, str) and val in self.hardware_map:
@@ -268,7 +267,7 @@ class XDL(object):
                 j -= 1
             solvent = None
             filter_bottom_contents = filter_contents[filter_bottom_name(filter_vessel)]
-            volume_threshold = 0.7 * statistics.mean([item[1] for item in filter_bottom_contents])
+            volume_threshold = 0.7 * statistics.mean([item[1] for item in filter_bottom_contents]) # Find first thing that could be considered a solvent. 0.7 is arbitrary.
             for reagent in filter_bottom_contents:
                 if reagent[1] > volume_threshold:
                     solvent = reagent[0]
