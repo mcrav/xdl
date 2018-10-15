@@ -5,7 +5,8 @@ import re
 import copy
 import os
 from chempiler import Chempiler
-from .utils import convert_time_str_to_seconds, convert_volume_str_to_ml, convert_mass_str_to_g
+from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml, convert_mass_str_to_g, 
+    filter_bottom_name, filter_top_name, separator_top_name, separator_bottom_name)
 from .constants import *
 from .components import *
 from .reagents import *
@@ -105,6 +106,9 @@ class XDL(object):
             if 'filter' in k:
                 self.hardware_map[filter_top_name(k)] = filter_top_name(v)
                 self.hardware_map[filter_bottom_name(k)] = filter_bottom_name(v)
+            elif 'separator' in k and is_generic_separator_name(k):
+                self.hardware_map[separator_top_name(k)] = separator_top_name(v)
+                self.hardware_map[separator_bottom_name(k)] = separator_bottom_name(v)
 
     def _map_hardware_to_steps(self, graphml_file):
         """
@@ -113,13 +117,20 @@ class XDL(object):
         """
         self._graph = load_graph(graphml_file) 
         self._get_hardware_map()
+        print(self.hardware_map)
         for step in self.steps:
             for prop, val in step.properties.items():
                 if isinstance(val, str) and val in self.hardware_map:
                     step.properties[prop] = self.hardware_map[val]
             step.update()
             if 'waste_vessel' in step.properties and not step.waste_vessel:
+                
                 step.waste_vessel = self._get_waste_vessel(step)
+                if step.waste_vessel == None:
+                    print('CHANGING WASTE ---')
+                    print(self._get_waste_vessel(step))
+                    print(step.waste_vessel)
+                    print('---')
         for step in self.steps:
             if type(step) == CleanBackbone:
                 step.waste_vessels = self.graphml_hardware.waste_cids
@@ -131,7 +142,7 @@ class XDL(object):
         elif type(step) in [PrepareFilter, Filter, Dry, WashFilterCake]:
             nearest_node = filter_bottom_name(step.filter_vessel)
         elif type(step) in [Wash, Extract]:
-            nearest_node = f'{step.separation_vessel}_bottom'
+            nearest_node = separator_bottom_name(step.separation_vessel)
         if not nearest_node:
             return None
         for node_name in self._graph.nodes():
@@ -155,7 +166,6 @@ class XDL(object):
                 for vessel in self.graphml_hardware.filters:
                     if vessel.cid == step.filter_vessel:
                         step.filter_bottom_volume = vessel.dead_volume
-                        print(prev_vessel_contents)
                         step.filter_top_volume = sum([reagent[1] for reagent in prev_vessel_contents[filter_top_name(step.filter_vessel)]])
             prev_vessel_contents = vessel_contents
 
@@ -209,11 +219,9 @@ class XDL(object):
                 step_reagent_type = 'organic'
                 for reagent in additions:
                     for word in ['water', 'aqueous', 'acid', '_m_']:
-                        print(reagent)
                         if word in reagent[0]:
                             step_reagent_type = 'aqueous'
                             break
-
             step_reagent_types.append(step_reagent_type)
 
         clean_backbone_steps = []
@@ -260,7 +268,7 @@ class XDL(object):
 
         for filter_i, filter_vessel, filter_contents in filters:
             j = filter_i
-            while j > 0 and type(self.steps[j]) not in [Extract, Wash, Reflux, StirAndTransfer]:
+            while j > 0 and type(self.steps[j]) not in [Extract, Wash, Reflux, Transfer]:
                 j -= 1
             solvent = None
             for reagent in filter_contents[filter_top_name(filter_vessel)]:
@@ -276,7 +284,7 @@ class XDL(object):
     def iter_vessel_contents(self, additions=False):
         vessel_contents = {}
         for i, step in enumerate(self.steps):
-            
+
             additions_l = []
             if type(step) == Add:
                 additions_l.append((step.reagent, step.volume))
@@ -316,14 +324,16 @@ class XDL(object):
                 vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
                 vessel_contents[step.from_vessel].clear()
 
-            elif type(step) == StirAndTransfer:
+            elif type(step) == Transfer:
                 additions_l.extend(vessel_contents[step.from_vessel])
                 vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
                 vessel_contents[step.from_vessel].clear()
 
-            for k, v in vessel_contents.items():
-                for item in v:
-                    print(len(item))
+            for vessel in list(vessel_contents.keys()):
+                if 'filter' in vessel and 'top' in vessel:
+                    vessel_contents[vessel.replace('top', 'bottom')] = vessel_contents[vessel]
+                    vessel_contents[vessel] = []
+
             if additions:
                 yield (i, step, copy.deepcopy(vessel_contents), additions_l)
             else:
@@ -531,7 +541,7 @@ def graphml_hardware_from_file(graphml_file):
             node_label = node.find("y:NodeLabel").text.strip()
             if node_label.startswith('reactor'):
                 components.append(Reactor(cid=node_label))
-            elif node_label.startswith(('flask_filter', 'filter')):
+            elif node_label.startswith(('filter')):
                 if 'bottom' in node_label:
                     dead_volume = node.find('data', {'key': dead_volume_id},) #, {'key': 'd13'})d
                     components.append(FilterFlask(cid=node_label, dead_volume=float(dead_volume.string)))

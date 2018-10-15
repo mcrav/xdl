@@ -61,7 +61,7 @@ DEFAULT_VALS = {
         'move_speed': DEFAULT_MOVE_SPEED,
         'wait_time': DEFAULT_WASHFILTERCAKE_WAIT_TIME,
     },
-    'StirAndTransfer': {
+    'Transfer': {
         'stir_rpm': DEFAULT_STIR_RPM,
     },
     'Add': {
