@@ -1,13 +1,9 @@
-<<<<<<< HEAD:.gitignore
 # Project dirs
 data
 stuff
 build
 
 # Python
-=======
-# python shite
->>>>>>> dev:.gitignore
 .ipynb_checkpoints
 *.pyc
 *.pyo
