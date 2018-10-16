@@ -1744,7 +1744,7 @@ class PrepareFilter(Step):
         }
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
-                vessel=filter_top_name(self.filter_vessel), stir=False,
+                vessel=filter_bottom_name(self.filter_vessel), stir=False,
                 waste_vessel=waste_vessel,)
         ]
 

@@ -138,7 +138,10 @@ class XDL(object):
         """
         nearest_node = None
         if type(step) == Add:
-            nearest_node = step.vessel
+            vessel = step.vessel
+            if 'filter' in step.vessel and is_generic_filter_name(step.vessel):
+                vessel = filter_top_name(vessel)
+            nearest_node = vessel
         elif type(step) in [PrepareFilter, Filter, Dry, WashFilterCake]:
             nearest_node = filter_bottom_name(step.filter_vessel)
         elif type(step) in [Wash, Extract]:
@@ -179,7 +182,7 @@ class XDL(object):
                 for vessel in self.graphml_hardware.filters:
                     if vessel.cid == step.filter_vessel:
                         step.filter_bottom_volume = vessel.dead_volume
-                        step.filter_top_volume = sum([reagent[1] for reagent in prev_vessel_contents[filter_bottom_name(step.filter_vessel)]])
+                        step.filter_top_volume = sum([reagent[1] for reagent in prev_vessel_contents[step.filter_vessel]])
             prev_vessel_contents = vessel_contents
 
     def _check_safety(self):
@@ -283,7 +286,7 @@ class XDL(object):
         """
         prev_vessel_contents = {}
         filters = []
-        for i, step, vessel_contents in self.iter_vessel_contents():                
+        for i, step, vessel_contents in self.iter_vessel_contents():
             if type(step) == Filter:
                 filters.append((i, step.filter_vessel, prev_vessel_contents))
             prev_vessel_contents = vessel_contents
@@ -298,7 +301,7 @@ class XDL(object):
             while j > 0 and type(self.steps[j]) not in [Extract, Wash, Reflux, Transfer]:
                 j -= 1
             solvent = None
-            filter_bottom_contents = filter_contents[filter_bottom_name(filter_vessel)]
+            filter_bottom_contents = filter_contents[filter_vessel]
             volume_threshold = 0.7 * statistics.mean([item[1] for item in filter_bottom_contents]) # Find first thing that could be considered a solvent. 0.7 is arbitrary.
             for reagent in filter_bottom_contents:
                 if reagent[1] > volume_threshold:
@@ -324,6 +327,7 @@ class XDL(object):
         """
         vessel_contents = {}
         for i, step in enumerate(self.steps):
+            
             additions_l = []
             if type(step) == Add:
                 additions_l.append((step.reagent, step.volume))
@@ -355,7 +359,7 @@ class XDL(object):
                 additions_l.append((step.solvent, step.volume))
 
             elif type(step) == Filter:
-                vessel_contents.setdefault(filter_bottom_name(step.filter_vessel), []).clear()
+                vessel_contents.setdefault(step.filter_vessel, []).clear()
 
             elif type(step) == CMove:
                 additions_l.extend(vessel_contents[step.from_vessel])
@@ -363,14 +367,17 @@ class XDL(object):
                 vessel_contents[step.from_vessel].clear()
 
             elif type(step) == Transfer:
-                additions_l.extend(vessel_contents[step.from_vessel])
-                vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[step.from_vessel])
-                vessel_contents[step.from_vessel].clear()
+                from_vessel = step.from_vessel
+                if 'filter' in from_vessel and ('top' in from_vessel or 'bottom' in from_vessel):
+                    from_vessel = from_vessel.split('_')[1]
+                additions_l.extend(vessel_contents[from_vessel])
+                vessel_contents.setdefault(step.to_vessel, []).extend(vessel_contents[from_vessel])
+                vessel_contents[from_vessel].clear()
 
             if additions_l:
                 for vessel in list(vessel_contents.keys()):
                     if 'filter' in vessel and 'top' in vessel:
-                        bottom_vessel = vessel.replace('top', 'bottom')
+                        bottom_vessel = vessel.split('_')[1]
                         if bottom_vessel in vessel_contents:
                             vessel_contents[bottom_vessel].extend(vessel_contents[vessel])
                         else:
