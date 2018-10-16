@@ -7,7 +7,7 @@ import statistics
 import os
 from chempiler import Chempiler
 from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml, convert_mass_str_to_g, 
-    filter_bottom_name, filter_top_name, separator_top_name, separator_bottom_name)
+    filter_bottom_name, filter_top_name, separator_top_name, separator_bottom_name, parse_bool)
 from .constants import *
 from .components import *
 from .reagents import *
@@ -88,7 +88,7 @@ class XDL(object):
         return _hardware_is_compatible(
             xdl_hardware=self.hardware, 
             graphml_hardware=self.graphml_hardware
-            )
+        )
 
     def _get_hardware_map(self):
         """
@@ -154,6 +154,14 @@ class XDL(object):
                                 return succ
         return None
 
+    def _add_all_volumes(self):
+        base_steps = BASE_STEP_OBJ_DICT.values()
+        for step in self.steps:
+            for sub_step in climb_down_tree(step):
+                if type(sub_step) == CMove and sub_step.volume == 'all':
+                    sub_step.volume = self.graphml_hardware[sub_step.from_vessel].max_volume
+
+
     def _add_filter_volumes(self):
         """
         Add volume of filter bottom (aka dead_volume) to PrepareFilter steps.
@@ -201,6 +209,7 @@ class XDL(object):
                     print('Hardware is compatible')
                     self._map_hardware_to_steps(graphml_file)
                     self._add_filter_volumes()
+                    self._add_all_volumes()
                     if self._check_safety():
                         print('Procedure raises no safety flags')
                         self._prepared_for_execution = True
@@ -295,6 +304,8 @@ class XDL(object):
                 if reagent[1] > volume_threshold:
                     solvent = reagent[0]
                     break
+            if '_m_' in solvent:
+                solvent = 'water'
             self.steps.insert(j, PrepareFilter(filter_vessel=filter_vessel, solvent=solvent)) 
 
     def iter_vessel_contents(self, additions=False):
@@ -402,8 +413,10 @@ class XDL(object):
                 return
 
     def as_literal_chempiler_code(self, dry_run=False):
-        """Returns string of literal chempiler code built from steps."""
-        s = f'from chempiler import Chempiler\n\nchempiler = Chempiler(r"{self._get_exp_id(default="xdl_simulation")}", "{self.graphml_file}", False)\n\nchempiler.start_recording()\n'
+        """
+        Returns string of literal chempiler code built from steps.
+        """
+        s = f'from chempiler import Chempiler\n\nchempiler = Chempiler(r"{self._get_exp_id(default="xdl_simulation")}", "{self.graphml_file}", False)\n\nchempiler.start_recording()\nchempiler.change_recording_speed(14)\n'
         full_tree = self._get_full_xdl_tree()
         base_steps = list(BASE_STEP_OBJ_DICT.values())
         for step in full_tree:
@@ -527,6 +540,8 @@ def preprocess_attrib(step, attrib):
         attrib['solvent_volume'] = convert_volume_str_to_ml(attrib['solvent_volume'])
     if 'mass' in attrib:
         attrib['mass'] = convert_mass_str_to_g(attrib['mass'])
+    if 'product_bottom' in attrib:
+        attrib['product_bottom'] = parse_bool(attrib['product_bottom'])
 
     if isinstance(step, MakeSolution):
         attrib['solutes'] = attrib['solutes'].split(' ')
@@ -577,22 +592,31 @@ def graphml_hardware_from_file(graphml_file):
     components = []
     with open(graphml_file, 'r') as fileobj:
         soup = bs4.BeautifulSoup(fileobj, 'xml')
-        dead_volume_id = soup.find('key', {'attr.name': 'dead_volume'})['id']
-        nodes = soup.findAll('node', {'yfiles.foldertype': ''})
-        for node in nodes:
-            node_label = node.find("y:NodeLabel").text.strip()
-            if node_label.startswith('reactor'):
-                components.append(Reactor(cid=node_label))
-            elif node_label.startswith(('filter')):
-                if 'bottom' in node_label:
-                    dead_volume = node.find('data', {'key': dead_volume_id},) #, {'key': 'd13'})d
-                    components.append(FilterFlask(cid=node_label, dead_volume=float(dead_volume.string)))
-            elif node_label.startswith(('separator', 'flask_separator')):
-                components.append(SeparatingFunnel(cid=node_label))
-            elif node_label.startswith('flask'):
-                components.append(Flask(cid=node_label))
-            elif node_label.startswith('waste'):
-                components.append(Waste(cid=node_label))
+    dead_volume_id = soup.find('key', {'attr.name': 'dead_volume'})['id']
+    max_volume_id = soup.find('key', {'attr.name': 'max_volume'})['id']
+    nodes = soup.findAll('node', {'yfiles.foldertype': ''})
+    for node in nodes:
+        component = None
+        node_label = node.find("y:NodeLabel").text.strip()
+        if node_label.startswith('reactor'):
+            component = Reactor(cid=node_label)
+
+        elif node_label.startswith(('filter')):
+            if 'bottom' in node_label:
+                dead_volume = node.find('data', {'key': dead_volume_id},) #, {'key': 'd13'})d
+                component = FilterFlask(cid=node_label, dead_volume=float(dead_volume.string))
+
+        elif node_label.startswith(('separator', 'flask_separator')):
+            component = SeparatingFunnel(cid=node_label)
+
+        elif node_label.startswith('flask'):
+            component = Flask(cid=node_label)
+
+        elif node_label.startswith('waste'):
+            component = Waste(cid=node_label)
+        if component:
+            component.max_volume = float(node.find('data', {'key': max_volume_id}).string)
+            components.append(component)
     return Hardware(components)
 
 def _hardware_is_compatible(xdl_hardware=None, graphml_hardware=None):

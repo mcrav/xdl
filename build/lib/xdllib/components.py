@@ -249,3 +249,12 @@ class Hardware(object):
                         component.cid = new_id
                     else:
                         component_list.pop(i)
+
+    def __getitem__(self, item):
+        if 'filter' in item and ('top' in item or 'bottom' in item):
+            item = item.split('_')[1] # get 'filter' from 'filter_filter_bottom'
+        for component in self.components:
+            print(component.cid)
+            if component.cid == item:
+                return component
+        return None

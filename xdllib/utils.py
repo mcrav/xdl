@@ -151,6 +151,13 @@ def cas_str_to_int(cas_str):
     else:
         return None
 
+def parse_bool(s):
+    if s.strip().lower() in ['true', '1']:
+        return True
+    elif s.strip().lower() in ['false', '0']:
+        return False
+    return None
+
 def filter_top_name(filter_name):
     return f'filter_{filter_name}_top'
 

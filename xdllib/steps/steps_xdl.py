@@ -1560,14 +1560,13 @@ class Wash(Step):
             # Wait for phases to separate
             Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
         ]
-
         if self.product_bottom:
             if n_washes > 1:
                 for i in range(n_washes - 1):
                     self.steps.extend([
-                        CSeparate(lower_phase_vessel=self.waste_vessel, upper_phase_vessel=self.to_vessel),
+                        CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_phase_to_vessel),
                         # Move to_vessel to separation_vessel
-                        CMove(from_vessel=self.to_vessel, to_vessel=separator_top, volume='all'),
+                        Transfer(from_vessel=self.to_vessel, to_vessel=separator_top, volume='all'),
                         # Move solvent to separation_vessel
                         Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
@@ -1587,7 +1586,7 @@ class Wash(Step):
             if n_washes > 1:
                 for i in range(n_washes - 1):
                     self.steps.extend([
-                        CSeparate(lower_phase_vessel=self.waste_vessel, upper_phase_vessel=separator_top),
+                        CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=separator_top),
                         # Move solvent to separation_vessel
                         Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
