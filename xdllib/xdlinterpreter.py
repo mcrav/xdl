@@ -18,6 +18,7 @@ from .namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT, BASE_STEP_OBJ_DICT
 from .read_graphml import load_graph
 import chembrain as cb
 
+# Steps after which backbone should be cleaned
 CLEAN_BACKBONE_AFTER_STEPS = [
     Add,
     Wash,
@@ -131,6 +132,10 @@ class XDL(object):
                 step.waste_vessels = self.graphml_hardware.waste_cids
 
     def _get_waste_vessel(self, step):
+        """
+        Get nearest waste node to given step. 
+        Assumes self._map_hardware_to_steps has already been executed.
+        """
         nearest_node = None
         if type(step) == Add:
             nearest_node = step.vessel
@@ -150,6 +155,11 @@ class XDL(object):
         return None
 
     def _add_filter_volumes(self):
+        """
+        Add volume of filter bottom (aka dead_volume) to PrepareFilter steps.
+        Add volume of filter bottom (aka dead_volume) and volume of material
+        added to filter top to Filter steps.
+        """
         prev_vessel_contents = {}
         for i, step, vessel_contents in self.iter_vessel_contents():
             if type(step) == PrepareFilter:
@@ -203,10 +213,18 @@ class XDL(object):
             return default
 
     def _add_hidden_steps(self):
+        """
+        Add extra steps implied by explicit XDL steps.
+        """
         self._add_hidden_prepare_filter_steps()
         self._add_hidden_clean_backbone_steps()
 
     def _add_hidden_clean_backbone_steps(self):
+        """
+        Add steps to clean the backbone, after certain steps which will contaminate the backbone.
+        Takes into account when organic and aqueous reagents have been used to determine what
+        solvents to clean the backbone with.
+        """
         cleans = []
         step_reagent_types = []
         step_reagent_type = 'organic'
@@ -250,6 +268,10 @@ class XDL(object):
                 self.steps.insert(i, CleanBackbone(reagent='water'))
 
     def _add_hidden_prepare_filter_steps(self):
+        """
+        Add PrepareFilter steps if filter top is being used, to fill up the bottom of the filter with solvent,
+        so material added to the top doesn't drip through.
+        """
         prev_vessel_contents = {}
         filters = []
         for i, step, vessel_contents in self.iter_vessel_contents():                
@@ -276,6 +298,19 @@ class XDL(object):
             self.steps.insert(j, PrepareFilter(filter_vessel=filter_vessel, solvent=solvent)) 
 
     def iter_vessel_contents(self, additions=False):
+        """
+        Iterator. Allows you to track vessel contents as they change throughout the steps.
+
+        Keyword Arguments:
+            additions {bool} -- If True, list of what contents were added that step is yielded also.
+        
+        Yields:
+            (i, step, contents, {additions})
+            i -- index of step
+            step -- Step object of step
+            contents -- Dictionary of contents of all vessels after step.
+            additions (optional) -- List of contents added during the step.
+        """
         vessel_contents = {}
         for i, step in enumerate(self.steps):
             additions_l = []
@@ -331,9 +366,6 @@ class XDL(object):
                             vessel_contents[bottom_vessel] = vessel_contents[vessel]
                         vessel_contents[vessel] = []
 
-            # print(step)
-            # print(vessel_contents)
-
             if additions:
                 yield (i, step, copy.deepcopy(vessel_contents), additions_l)
             else:
@@ -370,6 +402,7 @@ class XDL(object):
                 return
 
     def as_literal_chempiler_code(self, dry_run=False):
+        """Returns string of literal chempiler code built from steps."""
         s = f'from chempiler import Chempiler\n\nchempiler = Chempiler(r"{self._get_exp_id(default="xdl_simulation")}", "{self.graphml_file}", False)\n\n'
         full_tree = self._get_full_xdl_tree()
         base_steps = list(BASE_STEP_OBJ_DICT.values())
@@ -385,6 +418,7 @@ class XDL(object):
         return s
 
     def save_chempiler_script(self, save_path, dry_run=False):
+        """Save a chempiler script from the given steps."""
         with open(save_path, 'w') as fileobj:
             fileobj.write(self.as_literal_chempiler_code(dry_run=dry_run))
 
