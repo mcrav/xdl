@@ -296,7 +296,6 @@ class XDL(object):
                     additions_l.extend(vessel_contents[step.from_vessel])
                 vessel_contents.setdefault(step.to_vessel, []).append((step.solvent, step.solvent_volume))
                 # vessel_contents.setdefault(step.waste_vessel, []).extend(vessel_contents[step.from_vessel])
-                
                 additions_l.append((step.solvent, step.solvent_volume))
 
             elif type(step) == Wash:
@@ -311,7 +310,6 @@ class XDL(object):
 
             elif type(step) == Filter:
                 vessel_contents.setdefault(filter_bottom_name(step.filter_vessel), []).clear()
-
 
             elif type(step) == CMove:
                 additions_l.extend(vessel_contents[step.from_vessel])
@@ -379,7 +377,7 @@ class XDL(object):
             if step in self.steps:
                 s += f'\n# {step.human_readable}\n'
             if type(step) in base_steps:
-                if type(step) == CWait:
+                if dry_run and type(step) == CWait:
                     new_step = copy.deepcopy(step)
                     new_step.time = 2
                     step = new_step
@@ -388,7 +386,7 @@ class XDL(object):
 
     def save_chempiler_script(self, save_path, dry_run=False):
         with open(save_path, 'w') as fileobj:
-            fileobj.write(self.as_literal_chempiler_code())
+            fileobj.write(self.as_literal_chempiler_code(dry_run=dry_run))
 
     def as_human_readable(self):
         """Return human-readable English description of XDL procedure."""
