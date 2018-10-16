@@ -576,7 +576,7 @@ class Add(Step):
         self.get_defaults()
 
         if is_generic_filter_name(self.vessel):
-            self.vessel = filter_top_name(self.vessel)
+            vessel = filter_top_name(self.vessel)
 
         self.steps = []
         if self.stir:

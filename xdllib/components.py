@@ -156,34 +156,6 @@ class Flask(Component):
         self.properties['volume_ml'] = val
         self.update()
 
-class SeparatingFunnel(Component):
-
-    def __init__(self, cid=None, volume_ml=None):
-
-        self.name = 'SeparatingFunnel'
-        self.properties = {
-            'cid': cid,
-            'volume_ml': volume_ml,
-        }
-
-    @property
-    def cid(self):
-        return self.properties['cid']
-
-    @cid.setter
-    def cid(self, val):
-        self.properties['cid'] = val
-        self.update()
-
-    @property
-    def volume_ml(self):
-        return self.properties['volume_ml']
-
-    @volume_ml.setter
-    def volume_ml(self, val):
-        self.properties['volume_ml'] = val
-        self.update()
-
 class Waste(Component):
 
     def __init__(self, cid=None, volume_ml=None):
@@ -251,10 +223,12 @@ class Hardware(object):
                         component_list.pop(i)
 
     def __getitem__(self, item):
+        """
+        Get components like graphml_hardware['filter'].
+        """
         if 'filter' in item and ('top' in item or 'bottom' in item):
             item = item.split('_')[1] # get 'filter' from 'filter_filter_bottom'
         for component in self.components:
-            print(component.cid)
             if component.cid == item:
                 return component
         return None
