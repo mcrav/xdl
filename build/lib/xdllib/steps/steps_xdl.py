@@ -390,7 +390,11 @@ class ContinueStirToRT(Step):
         self.update()
 
 class StopChiller(Step):
+    """Stop the chiller.
 
+    Keyword Arguments:
+        vessel {str} -- Vessel to stop chiller for.
+    """
     def __init__(self, vessel=None):
 
         self.name = 'StopChiller'
@@ -657,22 +661,20 @@ class Add(Step):
         self.update()
 
 class Transfer(Step):
-    """Stir vessel while transfering contents to another vessel.
+    """Transfer contents of one vessel to another.
 
     Keyword Arguments:
         from_vessel {str} -- Vessel name to transfer from.
         to_vessel {str} -- Vessel name to transfer to.
         volume {float} -- Volume to transfer in mL.
-        stir_rpm {str} -- Speed to stir from_vessel at in RPM.
     """
-    def __init__(self, from_vessel=None, to_vessel=None, volume=None, stir_rpm='default'):
+    def __init__(self, from_vessel=None, to_vessel=None, volume=None):
 
         self.name = 'Transfer'
         self.properties = {
             'from_vessel': from_vessel,
             'to_vessel': to_vessel,
             'volume': volume,
-            'stir_rpm': stir_rpm,
         }
         self.get_defaults()
 
@@ -715,15 +717,6 @@ class Transfer(Step):
         self.properties['volume'] = val
         self.update()
 
-    @property
-    def stir_rpm(self):
-        return self.properties['stir_rpm']
-
-    @stir_rpm.setter
-    def stir_rpm(self, val):
-        self.properties['stir_rpm'] = val
-        self.update()
-
 class WashFilterCake(Step):
     """Wash filter cake with given volume of given solvent.
 
@@ -731,10 +724,9 @@ class WashFilterCake(Step):
         filter_vessel {str} -- Filter vessel name to wash.
         solvent {str} -- Solvent to wash with.
         volume {float} -- Volume of solvent to wash with. (optional)
-        move_speed {str} -- Speed to move solvent in mL / min. (optional)
         wait_time {str} -- Time to wait after moving solvent to filter flask. (optional)
     """
-    def __init__(self, filter_vessel=None, solvent=None, volume='default', waste_vessel=None, move_speed='default',
+    def __init__(self, filter_vessel=None, solvent=None, volume='default', waste_vessel=None,
                 wait_time='default'):
 
         self.name = 'WashFilterCake'
@@ -743,7 +735,6 @@ class WashFilterCake(Step):
             'filter_vessel': filter_vessel,
             'volume': volume,
             'waste_vessel': waste_vessel, # should be set in prepare_for_execution
-            'move_speed': move_speed,
             'wait_time': wait_time,
         }
         self.get_defaults()
@@ -752,14 +743,13 @@ class WashFilterCake(Step):
             Add(reagent=self.solvent, volume=self.volume,
                 vessel=f'{filter_top_name(self.filter_vessel)}', stir=False, waste_vessel=self.waste_vessel),
             CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=self.waste_vessel,
-                 volume='all', move_speed=self.move_speed),
+                 volume='all'),
 
             CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=self.waste_vessel,
-                 volume=DEFAULT_WASHFILTERCAKE_WAIT_TIME, move_speed=self.move_speed),
+                 volume=DEFAULT_WASHFILTERCAKE_WAIT_TIME),
         ]
 
         self.human_readable = f'Wash {filter_vessel} with {solvent} ({volume} mL).'
-
 
     @property
     def solvent(self):
@@ -798,15 +788,6 @@ class WashFilterCake(Step):
         self.update()
 
     @property
-    def move_speed(self):
-        return self.properties['move_speed']
-
-    @move_speed.setter
-    def move_speed(self, val):
-        self.properties['move_speed'] = val
-        self.update()
-
-    @property
     def wait_time(self):
         return self.properties['wait_time']
 
@@ -828,14 +809,13 @@ class ChillReact(Step):
     """
     def __init__(self, reagents=[], volumes=[], vessel=None, temp=None, time=None):
 
-
-
         self.name = 'ChillReact'
         self.properties = {
             'reagents': reagents,
             'volumes': volumes,
             'vessel': vessel,
             'temp': temp,
+            'time': time,
         }
 
         if is_generic_filter_name(self.vessel):
@@ -891,6 +871,15 @@ class ChillReact(Step):
     @temp.setter
     def temp(self, val):
         self.properties['temp'] = val
+        self.update()
+
+    @property
+    def time(self):
+        return self.properties['time']
+
+    @time.setter
+    def time(self, val):
+        self.properties['time'] = val
         self.update()
 
 class Dry(Step):
@@ -955,6 +944,9 @@ class Filter(Step):
 
     Keyword Arguments:
         filter_vessel {str} -- Filter vessel.
+        filter_top_volume {float} -- Volume (mL) of contents of filter top.
+        filter_bottom_volume {float} -- Volume (mL) of the filter bottom.
+        waste_vessel {float} -- Node to move waste material to.
         time {str} -- Time to leave vacuum on filter vessel after contents have been moved. (optional)
     """
     def __init__(self, filter_vessel=None, filter_top_volume=None, filter_bottom_volume=None, waste_vessel=None,
@@ -1026,6 +1018,11 @@ class Filter(Step):
         self.update()
 
 class Confirm(Step):
+    """Get the user to confirm something before execution continues.
+
+    Keyword Arguments:
+        msg {str} -- Message to get user to confirm experiment should continue.
+    """
 
     def __init__(self, msg=None):
 
@@ -1056,8 +1053,8 @@ class MakeSolution(Step):
         solute {str or list} -- Solute(s).
         solvent {str} -- Solvent.
         solute_mass {str or list} -- Mass(es) corresponding to solute(s)
-        solvent_volume {[type]} -- Volume of solvent to use in mL.
-        vessel {[type]} -- Vessel name to make solution in.
+        solvent_volume {float} -- Volume of solvent to use in mL.
+        vessel {str} -- Vessel name to make solution in.
     """
     def __init__(self, solutes=None, solvent=None, solute_masses=None, solvent_volume=None, vessel=None):
 
@@ -1505,7 +1502,19 @@ class Wait(Step):
         self.update()
 
 class Wash(Step):
+    """Wash contents of from_vessel with given solvent.
 
+    Keyword Arguments:
+        from_vessel {str} -- Vessel with contents to be washed.
+        separation_vessel {str} -- Separating funnel name.
+        to_vessel {str} -- Vessel to put washed product after separation.
+        solvent {str} -- Solvent to wash with.
+        solvent_volume {float} -- Volume of solvent to wash with.
+        n_washes {int} -- Number of washes to perform.
+        product_bottom {bool} -- True if product is in bottom phase.
+        waste_vessel {str} -- Vessel to put waste material.
+        waste_phase_to_vessel {str} -- Vessel to put the phase that doesn't have the product.
+    """
     def __init__(self, from_vessel=None, separation_vessel=None, to_vessel=None,
                     solvent=None, solvent_volume=None, n_washes=1,
                     product_bottom=True, waste_vessel=None, waste_phase_to_vessel=None,):
@@ -1676,7 +1685,12 @@ class Wash(Step):
         self.update()
 
 class StirAtRT(Step):
+    """Stir given vessel for given time at room temperature.
 
+    Keyword Arguments:
+        vessel {str} -- Vessel to stir.
+        time {float} -- Time to stir for.
+    """
     def __init__(self, vessel=None, time=None):
 
         self.name = 'StirAtRT'
@@ -1712,7 +1726,14 @@ class StirAtRT(Step):
         self.update()
 
 class PrepareFilter(Step):
+    """Fill bottom of filter vessel with solvent in anticipation of the filter top being used.
 
+    Keyword Arguments:
+        filter_vessel {str} -- Filter vessel name to prepare (generic name 'filter' not 'filter_filter_bottom').
+        solvent {str} -- Solvent to fill filter bottom with.
+        volume {int} -- Volume of filter bottom.
+        waste_vessel {str} -- Vessel to put waste material.
+    """
     def __init__(self, filter_vessel=None, solvent=None, volume=10, waste_vessel=None):
 
         self.name = 'PrepareFilter'

@@ -717,15 +717,6 @@ class Transfer(Step):
         self.properties['volume'] = val
         self.update()
 
-    @property
-    def stir_rpm(self):
-        return self.properties['stir_rpm']
-
-    @stir_rpm.setter
-    def stir_rpm(self, val):
-        self.properties['stir_rpm'] = val
-        self.update()
-
 class WashFilterCake(Step):
     """Wash filter cake with given volume of given solvent.
 
@@ -794,15 +785,6 @@ class WashFilterCake(Step):
     @waste_vessel.setter
     def waste_vessel(self, val):
         self.properties['waste_vessel'] = val
-        self.update()
-
-    @property
-    def move_speed(self):
-        return self.properties['move_speed']
-
-    @move_speed.setter
-    def move_speed(self, val):
-        self.properties['move_speed'] = val
         self.update()
 
     @property
@@ -889,6 +871,15 @@ class ChillReact(Step):
     @temp.setter
     def temp(self, val):
         self.properties['temp'] = val
+        self.update()
+
+    @property
+    def time(self):
+        return self.properties['time']
+
+    @time.setter
+    def time(self, val):
+        self.properties['time'] = val
         self.update()
 
 class Dry(Step):
@@ -1028,7 +1019,7 @@ class Filter(Step):
 
 class Confirm(Step):
     """Get the user to confirm something before execution continues.
-    
+
     Keyword Arguments:
         msg {str} -- Message to get user to confirm experiment should continue.
     """
@@ -1521,7 +1512,7 @@ class Wash(Step):
         solvent_volume {float} -- Volume of solvent to wash with.
         n_washes {int} -- Number of washes to perform.
         product_bottom {bool} -- True if product is in bottom phase.
-        waste_vessel {str} -- Vessel to put waste material. 
+        waste_vessel {str} -- Vessel to put waste material.
         waste_phase_to_vessel {str} -- Vessel to put the phase that doesn't have the product.
     """
     def __init__(self, from_vessel=None, separation_vessel=None, to_vessel=None,

@@ -403,7 +403,7 @@ class XDL(object):
 
     def as_literal_chempiler_code(self, dry_run=False):
         """Returns string of literal chempiler code built from steps."""
-        s = f'from chempiler import Chempiler\n\nchempiler = Chempiler(r"{self._get_exp_id(default="xdl_simulation")}", "{self.graphml_file}", False)\n\n'
+        s = f'from chempiler import Chempiler\n\nchempiler = Chempiler(r"{self._get_exp_id(default="xdl_simulation")}", "{self.graphml_file}", False)\n\nchempiler.start_recording()\n'
         full_tree = self._get_full_xdl_tree()
         base_steps = list(BASE_STEP_OBJ_DICT.values())
         for step in full_tree:
