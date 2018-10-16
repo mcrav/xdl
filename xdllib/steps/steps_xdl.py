@@ -61,8 +61,8 @@ class StartStir(Step):
         self.get_defaults()
 
         self.steps = [
-            CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm),
             CStartStir(vessel=self.vessel),
+            CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm),
         ]
 
         self.human_readable = f'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'
@@ -1343,9 +1343,13 @@ class Extract(Step):
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
-            self.steps.append(
-                CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_phase_to_vessel)
-            )
+            remove_volume = 2
+            if type(self.solvent_volume) == float:
+                remove_volume = self.solvent_volume * 0.8
+            self.steps.extend([
+                Transfer(from_vessel=separator_bottom, to_vessel=self.to_vessel, volume=remove_volume),
+                CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_phase_to_vessel),
+            ])
         else:
             if n_extractions > 1:
                 for i in range(n_extractions - 1):
@@ -1359,9 +1363,10 @@ class Extract(Step):
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
 
-            self.steps.append(
-                CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=to_vessel)
-            )
+            self.steps.extend([
+                Transfer(from_vessel=separator_bottom, to_vessel=self.waste_phase_to_vessel, volume=2),
+                CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=to_vessel),
+            ])
 
         self.human_readable = f'Extract contents of {self.from_vessel} with {self.solvent} ({self.n_extractions}x{self.solvent_volume} mL).'
 
@@ -1447,7 +1452,13 @@ class Extract(Step):
         self.update()
 
 class Wait(Step):
+    """Wait for given time.
 
+    Keyword Arguments:
+        time {int} -- Time in seconds
+        wait_recording_speed {int} -- Recording speed during wait (faster) ~2000
+        after_recording_speed {int} -- Recording speed after wait (slower) ~14
+    """
     def __init__(self, time=None, wait_recording_speed='default', after_recording_speed='default'):
 
         self.name = 'Wait'
@@ -1555,10 +1566,14 @@ class Wash(Step):
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
-            self.steps.append(
+            remove_volume = 2
+            if type(self.solvent_volume) == float:
+                remove_volume = self.solvent_volume * 0.8
+            self.steps.extend([
+                Transfer(from_vessel=separator_bottom, to_vessel=self.to_vessel, volume=remove_volume),
                 # Do separation
                 CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_phase_to_vessel),
-            )
+            ])
         else:
             if n_washes > 1:
                 for i in range(n_washes - 1):
@@ -1571,10 +1586,11 @@ class Wash(Step):
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
-            self.steps.append(
+            self.steps.extend([
+                Transfer(from_vessel=separator_bottom, to_vessel=self.waste_phase_to_vessel, volume=2),
                 # Do separation
                 CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=self.to_vessel),
-            )
+            ])
 
         self.human_readable = f'Wash contents of {from_vessel} in {separation_vessel} with {solvent} ({n_washes}x{solvent_volume} mL)'
 

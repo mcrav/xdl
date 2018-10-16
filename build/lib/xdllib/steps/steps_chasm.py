@@ -1,5 +1,6 @@
 from ..constants import *
 from ..utils import Step
+from chempiler.tools.vlogging import VlogHandler, RecordingSpeedFilter, recording_worker
 
 """
 IMPORTANT:
@@ -1399,3 +1400,50 @@ class CBreakpoint(Step):
     def execute(self, chempiler):
         chempiler.breakpoint()
         return True
+
+# class StartRecordingVideo(Step):
+
+#     def __init__(self):
+
+#         self.name = 'StartRecordingVideo'
+#         self.properties = {
+#         }
+
+#         self.literal_code = f'# spawn queues message_queue = multiprocessing.Queue() recording_speed_queue = multiprocessing.Queue()'
+
+#     def execute(self, chempiler):
+#         # spawn queues
+#         message_queue = multiprocessing.Queue()
+#         recording_speed_queue = multiprocessing.Queue()
+
+#         # create logging message handlers
+#         video_handler = VlogHandler(message_queue)
+#         recording_speed_handler = VlogHandler(recording_speed_queue)
+
+#         # set logging levels
+#         video_handler.setLevel(logging.INFO)
+#         recording_speed_handler.setLevel(5)  # set a logging level below DEBUG
+
+#         # only allow dedicated messages for the recording speed handler
+#         speed_filter = RecordingSpeedFilter()
+#         recording_speed_handler.addFilter(speed_filter)
+
+#         # attach the handlers
+#         logger.addHandler(video_handler)
+#         logger.addHandler(recording_speed_handler)
+
+#         # work out video name and path
+#         i = 0
+#         video_path = os.path.join(HERE, "log_videos", "{0}_{1}.avi".format(EXPERIMENT_CODE, i))
+
+#         while True:
+#             # keep incrementing the file counter until you hit one that doesn't yet exist
+#             if os.path.isfile(video_path):
+#                 i += 1
+#                 video_path = os.path.join(HERE, "log_videos", "{0}_{1}.avi".format(EXPERIMENT_CODE, i))
+#             else:
+#                 break
+#         # launch recording process
+#         recording_process = multiprocessing.Process(target=recording_worker, args=(message_queue, recording_speed_queue, video_path))
+#         recording_process.start()
+#         time.sleep(5)  # wait for the video feed to stabilise
