@@ -581,13 +581,13 @@ class Add(Step):
             vessel = filter_top_name(self.vessel)
 
         self.steps = []
-        if self.stir:
-            self.steps.append(StartStir(vessel))
 
         self.steps.append(PrimePumpForAdd(reagent=reagent, waste_vessel=waste_vessel))
 
         self.steps.append(CMove(from_vessel=f"flask_{reagent}", to_vessel=vessel,
                             volume=volume, move_speed=move_speed))
+        if self.stir:
+            self.steps.append(StartStir(vessel))
 
         self.steps.append(Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
 

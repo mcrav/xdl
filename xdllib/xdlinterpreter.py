@@ -214,6 +214,7 @@ class XDL(object):
                     self._map_hardware_to_steps(graphml_file)
                     self._add_filter_volumes()
                     self._add_all_volumes()
+                    self._tidy_up_procedure()
                     if self._check_safety():
                         print('Procedure raises no safety flags')
                         self._prepared_for_execution = True
@@ -463,7 +464,38 @@ class XDL(object):
         for step in self.steps:
             climb_down_tree(step, print_tree=True)
         print('\n')
+
+    def _tidy_up_procedure(self):
+        self._remove_pointless_pump_priming()
+        self._keep_stirring_when_possible()
         
+    def _remove_pointless_pump_priming(self):
+        i = len(self.steps) - 1
+        while i > 0:
+            step = self.steps[i]
+            if type(step) == CleanBackbone:
+                reagents = []
+                if i > 0 and i < len(self.steps) - 1:
+                    before_step = self.steps[i - 1]
+                    after_step = self.steps[i + 1]
+                    # Don't clean between filter and subsequent dry.
+                    if type(before_step) == Filter and type(after_step) == Dry:
+                        self.steps.pop(i)
+                    # If adding same thing twice in a row don't clean in between.
+                    else:
+                        for other_step in [before_step, after_step]:
+                            if type(other_step) == Add:
+                                reagents.append(other_step.reagent)
+                            elif type(other_step) == PrepareFilter:
+                                reagents.append(other_step.solvent)
+                            
+                        if len(reagents) == 2 and len(set(reagents)) == 1:
+                            self.steps.pop(i)
+            i -= 1
+
+    def _keep_stirring_when_possible(self):
+        pass
+
 # XDL Parsing
 def steps_from_xdl(xdl):
     """Given XDL str get list of steps."""
