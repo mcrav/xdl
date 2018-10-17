@@ -965,7 +965,7 @@ class Filter(Step):
         filter_bottom = filter_bottom_name(self.filter_vessel)
 
         self.steps = [
-            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_top_volume),
+            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_top_volume, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
             CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_bottom_volume),
             CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=DEFAULT_FILTER_MOVE_VOLUME),
         ]
