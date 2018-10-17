@@ -1284,8 +1284,8 @@ class Extract(Step):
             'waste_phase_to_vessel': waste_phase_to_vessel,
             'waste_vessel': waste_vessel, # set in prepare_for_execution
         }
-        if not to_vessel:
-            to_vessel = from_vessel
+        if not to_vessel and from_vessel:
+            self.to_vessel = from_vessel
 
         if not self.waste_phase_to_vessel and self.waste_vessel:
             self.waste_phase_to_vessel = self.waste_vessel
@@ -1322,7 +1322,7 @@ class Extract(Step):
                 Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
             ]
 
-        if self.from_vessel == self.separation_vessel:
+        if self.from_vessel in [self.separation_vessel, separator_top, separator_bottom]:
             self.steps.pop(0)
 
         # If product in bottom phase
@@ -1362,7 +1362,7 @@ class Extract(Step):
 
             self.steps.extend([
                 Transfer(from_vessel=separator_bottom, to_vessel=self.waste_phase_to_vessel, volume=2),
-                CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=to_vessel),
+                CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=self.to_vessel),
             ])
 
         self.human_readable = f'Extract contents of {self.from_vessel} with {self.solvent} ({self.n_extractions}x{self.solvent_volume} mL).'
@@ -1560,6 +1560,10 @@ class Wash(Step):
             # Wait for phases to separate
             Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
         ]
+
+        if self.from_vessel in [self.separation_vessel, separator_top, separator_bottom]:
+            self.steps.pop(0)
+
         if self.product_bottom:
             if n_washes > 1:
                 for i in range(n_washes - 1):
