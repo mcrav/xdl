@@ -26,6 +26,7 @@ CLEAN_BACKBONE_AFTER_STEPS = [
     MakeSolution,
     WashFilterCake,
     Filter,
+    Dry,
 ]
 
 class XDL(object):

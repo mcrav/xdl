@@ -406,6 +406,8 @@ class StopChiller(Step):
             self.vessel = filter_top_name(self.vessel)
 
         self.steps = [
+            CSetChiller(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+            CChillerWaitForTemp(vessel=self.vessel),
             CStopChiller(self.vessel)
         ]
 
