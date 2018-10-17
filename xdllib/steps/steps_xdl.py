@@ -563,7 +563,7 @@ class Add(Step):
         clean_tubing {bool} -- Clean tubing before and after addition. (optional)
     """
     def __init__(self, reagent=None, volume=None, vessel=None, time=None, move_speed='default',
-                stir='default', waste_vessel=None):
+                start_stir='default', stop_stir='default', waste_vessel=None):
 
         self.name = 'Add'
         self.properties = {
@@ -572,7 +572,8 @@ class Add(Step):
             'vessel': vessel,
             'time': time,
             'move_speed': move_speed,
-            'stir': stir,
+            'start_stir': start_stir,
+            'stop_stir': stop_stir,
             'waste_vessel': waste_vessel,
         }
         self.get_defaults()
@@ -586,12 +587,12 @@ class Add(Step):
 
         self.steps.append(CMove(from_vessel=f"flask_{reagent}", to_vessel=vessel,
                             volume=volume, move_speed=move_speed))
-        if self.stir:
+        if self.start_stir:
             self.steps.append(StartStir(vessel))
 
         self.steps.append(Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
 
-        if self.stir:
+        if self.stop_stir:
             self.steps.append(CStopStir(vessel))
 
         self.human_readable = f'Add {reagent} ({volume} mL) to {vessel}' # Maybe add in bit for clean tubing
@@ -645,12 +646,21 @@ class Add(Step):
         self.update()
 
     @property
-    def stir(self):
-        return self.properties['stir']
+    def start_stir(self):
+        return self.properties['start_stir']
 
-    @stir.setter
-    def stir(self, val):
-        self.properties['stir'] = val
+    @start_stir.setter
+    def start_stir(self, val):
+        self.properties['start_stir'] = val
+        self.update()
+
+    @property
+    def stop_stir(self):
+        return self.properties['stop_stir']
+
+    @stop_stir.setter
+    def stop_stir(self, val):
+        self.properties['stop_stir'] = val
         self.update()
 
     @property
@@ -743,7 +753,7 @@ class WashFilterCake(Step):
 
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
-                vessel=f'{filter_top_name(self.filter_vessel)}', stir=False, waste_vessel=self.waste_vessel),
+                vessel=f'{filter_top_name(self.filter_vessel)}', start_stir=False, waste_vessel=self.waste_vessel),
             CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=self.waste_vessel,
                  volume='all'),
 
@@ -1750,8 +1760,7 @@ class PrepareFilter(Step):
         }
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
-                vessel=filter_bottom_name(self.filter_vessel), stir=False,
-                waste_vessel=waste_vessel,)
+                vessel=filter_bottom_name(self.filter_vessel), start_stir=False, waste_vessel=waste_vessel,)
         ]
 
         self.human_readable = f'Fill {filter_bottom_name(self.filter_vessel)} with {solvent} ({volume} mL).'

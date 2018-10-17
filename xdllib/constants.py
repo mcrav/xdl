@@ -70,7 +70,8 @@ DEFAULT_VALS = {
     'Add': {
         'move_speed': DEFAULT_MOVE_SPEED,
         'clean_tubing': True,
-        'stir': True,
+        'start_stir': True,
+        'stop_stir': True,
     },
     'HeatAndReact': {
         'stir_rpm': DEFAULT_STIR_RPM,

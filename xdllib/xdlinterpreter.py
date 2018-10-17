@@ -494,7 +494,20 @@ class XDL(object):
             i -= 1
 
     def _keep_stirring_when_possible(self):
-        pass
+        steps = [step for step in self.steps if type(step) != CleanBackbone]
+        for i in range(len(steps)):
+            step = steps[i]
+            if type(step) == Add:
+                before_step, after_step = None, None
+                if i > 0:
+                    before_step = steps[i - 1]
+                if i < len(steps) - 1:
+                    after_step = steps[i + 1]
+                if before_step and type(before_step) == Add:
+                    step.start_stir = False
+                if after_step and type(after_step) == Add:
+                    step.stop_stir = False
+            
 
 # XDL Parsing
 def steps_from_xdl(xdl):
