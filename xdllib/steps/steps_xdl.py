@@ -1398,7 +1398,8 @@ class Extract(Step):
                 # Move solvent to separation_vessel
                 Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                 # Stir separation_vessel
-                StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
+                StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_FAST_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+                StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_SLOW_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
                 # Wait for phases to separate
                 Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
             ]
@@ -1417,7 +1418,8 @@ class Extract(Step):
                         # Move solvent to separation_vessel
                         Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
-                        StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
+                        StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_FAST_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+                        StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_SLOW_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
@@ -1436,7 +1438,8 @@ class Extract(Step):
                         # Move solvent to separation_vessel
                         Add(reagent=self.solvent, vessel=separator_top, volume=self.solvent_volume, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
-                        StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
+                        StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_FAST_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+                        StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_SLOW_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
@@ -1637,7 +1640,8 @@ class Wash(Step):
             # Move solvent to separation_vessel
             Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
             # Stir separation_vessel
-            StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
+            StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_FAST_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+            StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_SLOW_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
             # Wait for phases to separate
             Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
         ]
@@ -1655,7 +1659,8 @@ class Wash(Step):
                         # Move solvent to separation_vessel
                         Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
-                        StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
+                        StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_FAST_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+                        StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_SLOW_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
@@ -1675,7 +1680,8 @@ class Wash(Step):
                         # Move solvent to separation_vessel
                         Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
-                        StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_STIR_TIME),
+                        StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_FAST_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+                        StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_SLOW_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
@@ -1775,16 +1781,19 @@ class StirAtRT(Step):
         vessel {str} -- Vessel to stir.
         time {float} -- Time to stir for.
     """
-    def __init__(self, vessel=None, time=None):
+    def __init__(self, vessel=None, time=None, stir_rpm='default'):
 
         self.name = 'StirAtRT'
         self.properties = {
             'vessel': vessel,
             'time': time,
+            'stir_rpm': stir_rpm,
         }
 
+        self.get_defaults()
+
         self.steps = [
-            StartStir(vessel=self.vessel),
+            StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm),
             Wait(time=self.time),
             CStopStir(vessel=self.vessel),
         ]
@@ -1807,6 +1816,15 @@ class StirAtRT(Step):
     @time.setter
     def time(self, val):
         self.properties['time'] = val
+        self.update()
+
+    @property
+    def stir_rpm(self):
+        return self.properties['stir_rpm']
+
+    @stir_rpm.setter
+    def stir_rpm(self, val):
+        self.properties['stir_rpm'] = val
         self.update()
 
 class PrepareFilter(Step):
