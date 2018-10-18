@@ -382,6 +382,8 @@ class CStopStir(Step):
             'vessel': vessel,
         }
 
+        self.human_readable = f'Stop stirring {self.vessel}.'
+
         self.literal_code = f'chempiler.stirrer.stop_stir({self.vessel})'
 
     def execute(self, chempiler):

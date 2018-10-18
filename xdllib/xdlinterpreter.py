@@ -498,24 +498,56 @@ class XDL(object):
             i -= 1
 
     def _keep_stirring_when_possible(self):
-        stir_steps = [Add, Chill, StopChiller]
-        steps = [step for step in self.steps if type(step) != CleanBackbone]
-        for i in range(len(steps)):
-            step = steps[i]
-            if type(step) in stir_steps:
-                before_step, after_step = None, None
-                if i > 0:
-                    before_step = steps[i - 1]
-                if i < len(steps) - 1:
-                    after_step = steps[i + 1]
-                if before_step and type(before_step) in stir_steps:
-                    step.start_stir = False
+        stirring = {}
+        insertions = []
+        stir_steps = [Add, Chill, StopChiller, Reflux, ChillBackToRT, StirAtRT, HeatAndReact, ContinueStirToRT]
+
+        for i, step in enumerate(self.steps):
+            if type(step) != CleanBackbone:
+                if type(step) in stir_steps:
+                    vessel = step.vessel
+                    if is_generic_filter_name(vessel):
+                        vessel = filter_top_name(vessel)
+                    if is_generic_separator_name(vessel):
+                        vessel = separator_top_name(vessel)
+                    if not vessel in stirring or not stirring[vessel]:
+                        stirring[vessel] = True
+                        insertions.append((i, StartStir(vessel)))
                 else:
-                    step.start_stir = True
-                if after_step and type(after_step) in stir_steps:
-                    step.stop_stir = False
-                else:
-                    step.stop_stir = True
+                    for vessel in list(stirring.keys()):
+                        if stirring[vessel]:
+                            insertions.append((i, CStopStir(vessel)))
+                            stirring[vessel] = False
+
+        for i, step in reversed(insertions):
+            self.steps.insert(i, step)
+
+        for i in reversed(range(len(self.steps))):
+            step = self.steps[i]
+            if type(step) != CleanBackbone:
+                if type(step) == CStopStir:
+                    return
+                elif type(step) == StartStir:
+                    self.steps.pop(i)
+                    return
+
+        # steps = [step for step in self.steps if type(step) != CleanBackbone]
+        # for i in range(len(steps)):
+        #     step = steps[i]
+        #     if type(step) in stir_steps:
+        #         before_step, after_step = None, None
+        #         if i > 0:
+        #             before_step = steps[i - 1]
+        #         if i < len(steps) - 1:
+        #             after_step = steps[i + 1]
+        #         if before_step and type(before_step) in stir_steps:
+        #             step.start_stir = False
+        #         else:
+        #             step.start_stir = True
+        #         if after_step and type(after_step) in stir_steps:
+        #             step.stop_stir = False
+        #         else:
+        #             step.stop_stir = True
             
 # XDL Parsing
 def steps_from_xdl(xdl):

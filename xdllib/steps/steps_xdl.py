@@ -206,9 +206,7 @@ class CleanVessel(Step):
 
         self.steps = [
             CMove(from_vessel=f'flask_{solvent}', to_vessel=f"{vessel}", volume=self.volume),
-            StartStir(vessel=vessel, stir_rpm=self.stir_rpm),
             Wait(time=60),
-            CStopStir(vessel=vessel),
             CMove(from_vessel=vessel, to_vessel=self.waste_vessel, volume='all'),
         ]
 
@@ -313,11 +311,9 @@ class HeatAndReact(Step):
         }
 
         self.steps = [
-            StartStir(vessel=vessel, stir_rpm=stir_rpm),
             StartHeat(vessel=vessel, temp=temp),
             Wait(time=time),
             CStopHeat(vessel=vessel),
-            ContinueStirToRT(vessel=vessel),
         ]
 
         self.human_readable = f'Heat {vessel} to {temp} °C under stirring and wait {float(time) / 3600} hrs.\nThen stop heating and continue stirring until {vessel} reaches room temperature.'
@@ -395,31 +391,21 @@ class StopChiller(Step):
     Keyword Arguments:
         vessel {str} -- Vessel to stop chiller for.
     """
-    def __init__(self, vessel=None, start_stir=False, stop_stir=False):
+    def __init__(self, vessel=None,):
 
         self.name = 'StopChiller'
         self.properties = {
             'vessel': vessel,
-            'start_stir': start_stir,
-            'stop_stir': stop_stir,
         }
 
         if is_generic_filter_name(self.vessel):
             self.vessel = filter_top_name(self.vessel)
 
-        self.steps = []
-
-        if self.start_stir:
-            self.steps.append(StartStir(self.vessel))
-
-        self.steps.extend([
+        self.steps = [
             CSetChiller(vessel=self.vessel, temp=ROOM_TEMPERATURE),
             CChillerWaitForTemp(vessel=self.vessel),
             CStopChiller(self.vessel)
-        ])
-
-        if self.stop_stir:
-            self.steps.append(CStopStir(self.vessel))
+        ]
 
         self.human_readable = f'Stop chiller for {self.vessel}'
 
@@ -432,24 +418,6 @@ class StopChiller(Step):
         self.properties['vessel'] = val
         self.update()
 
-    @property
-    def start_stir(self):
-        return self.properties['start_stir']
-
-    @start_stir.setter
-    def start_stir(self, val):
-        self.properties['start_stir'] = val
-        self.update()
-
-    @property
-    def stop_stir(self):
-        return self.properties['stop_stir']
-
-    @stop_stir.setter
-    def stop_stir(self, val):
-        self.properties['stop_stir'] = val
-        self.update()
-
 class Chill(Step):
     """Chill vessel to given temperature.
 
@@ -457,29 +425,25 @@ class Chill(Step):
         vessel {str} -- Vessel name to chill.
         temp {float} -- Temperature in °C to chill to.
     """
-    def __init__(self, vessel=None, temp=None, start_stir=True, stop_stir=True):
+    def __init__(self, vessel=None, temp=None):
 
         self.name = 'Chill'
         self.properties = {
             'vessel': vessel,
             'temp': temp,
-            'start_stir': start_stir,
-            'stop_stir': stop_stir,
         }
 
         if is_generic_filter_name(self.vessel):
             self.vessel = filter_top_name(self.vessel)
 
         self.steps = []
-        if start_stir:
-            self.steps.append(StartStir(vessel=self.vessel))
+
         self.steps.extend([
             CSetChiller(vessel=vessel, temp=temp),
             CStartChiller(vessel=vessel),
             CChillerWaitForTemp(vessel=vessel),
         ])
-        if stop_stir:
-            self.steps.append(CStopStir(vessel=self.vessel))
+
 
         self.human_readable = f'Chill {vessel} to {temp} °C.'
 
@@ -499,24 +463,6 @@ class Chill(Step):
     @temp.setter
     def temp(self, val):
         self.properties['temp'] = val
-        self.update()
-
-    @property
-    def start_stir(self):
-        return self.properties['start_stir']
-
-    @start_stir.setter
-    def start_stir(self, val):
-        self.properties['start_stir'] = val
-        self.update()
-
-    @property
-    def stop_stir(self):
-        return self.properties['stop_stir']
-
-    @stop_stir.setter
-    def stop_stir(self, val):
-        self.properties['stop_stir'] = val
         self.update()
 
 class ChillBackToRT(Step):
@@ -618,8 +564,7 @@ class Add(Step):
         move_speed {float} -- Speed in mL / min to move liquid at. (optional)
         clean_tubing {bool} -- Clean tubing before and after addition. (optional)
     """
-    def __init__(self, reagent=None, volume=None, vessel=None, time=None, move_speed='default',
-                start_stir='default', stop_stir='default', waste_vessel=None):
+    def __init__(self, reagent=None, volume=None, vessel=None, time=None, move_speed='default', waste_vessel=None):
 
         self.name = 'Add'
         self.properties = {
@@ -628,8 +573,6 @@ class Add(Step):
             'vessel': vessel,
             'time': time,
             'move_speed': move_speed,
-            'start_stir': start_stir,
-            'stop_stir': stop_stir,
             'waste_vessel': waste_vessel,
         }
         self.get_defaults()
@@ -643,13 +586,8 @@ class Add(Step):
 
         self.steps.append(CMove(from_vessel=f"flask_{reagent}", to_vessel=vessel,
                             volume=volume, move_speed=move_speed))
-        if self.start_stir:
-            self.steps.append(StartStir(vessel))
 
         self.steps.append(Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
-
-        if self.stop_stir:
-            self.steps.append(CStopStir(vessel))
 
         self.human_readable = f'Add {reagent} ({volume} mL) to {vessel}' # Maybe add in bit for clean tubing
         if time:
@@ -699,24 +637,6 @@ class Add(Step):
     @move_speed.setter
     def move_speed(self, val):
         self.properties['move_speed'] = val
-        self.update()
-
-    @property
-    def start_stir(self):
-        return self.properties['start_stir']
-
-    @start_stir.setter
-    def start_stir(self, val):
-        self.properties['start_stir'] = val
-        self.update()
-
-    @property
-    def stop_stir(self):
-        return self.properties['stop_stir']
-
-    @stop_stir.setter
-    def stop_stir(self, val):
-        self.properties['stop_stir'] = val
         self.update()
 
     @property
@@ -809,7 +729,7 @@ class WashFilterCake(Step):
 
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
-                vessel=f'{filter_top_name(self.filter_vessel)}', start_stir=False, waste_vessel=self.waste_vessel),
+                vessel=f'{filter_top_name(self.filter_vessel)}', waste_vessel=self.waste_vessel),
             CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=self.waste_vessel,
                  volume='all'),
 
@@ -889,14 +809,12 @@ class ChillReact(Step):
         if is_generic_filter_name(self.vessel):
             self.vessel = filter_top_name(self.vessel)
 
-        self.steps = [StartStir(vessel=vessel),]
         for reagent, volume in zip(reagents, volumes):
             self.steps.append(Add(reagent=reagent, volume=volume, vessel=vessel, clean_tubing=False,))
         self.steps.extend([
             Chill(vessel=vessel, temp=temp),
             Wait(time=time),
             ChillBackToRT(vessel=vessel),
-            CStopStir(vessel=vessel),
         ])
 
         self.human_readable = ''
@@ -1034,8 +952,8 @@ class Filter(Step):
 
         self.steps = [
             CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_top_volume, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
-            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_bottom_volume),
-            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=DEFAULT_FILTER_MOVE_VOLUME),
+            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_bottom_volume, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
+            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=DEFAULT_FILTER_MOVE_VOLUME, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
         ]
 
         self.human_readable = f'Filter contents of {filter_vessel} for {time} s.'
@@ -1217,11 +1135,10 @@ class Reflux(Step):
         if is_generic_filter_name(vessel):
             vessel = filter_top_name(vessel)
 
-        self.steps = [
-            StartStir(vessel=vessel),
-        ]
+        self.steps = []
+
         if filter_vessel:
-            self.steps.append(Chill(vessel=vessel, temp=temp, start_stir=False, stop_stir=False))
+            self.steps.append(Chill(vessel=vessel, temp=temp,))
         else:
             self.steps.append(StartHeat(vessel=vessel, temp=temp),)
 
@@ -1230,9 +1147,6 @@ class Reflux(Step):
             self.steps.append(StopChiller(vessel=vessel))
         else:
             self.steps.append(CStopHeat(vessel=vessel),)
-
-        self.steps.append(CStopStir(vessel=vessel),)
-
 
         self.human_readable = f'Heat {vessel} to {temp} °C and reflux for {time} s.'
 
@@ -1805,9 +1719,7 @@ class StirAtRT(Step):
         self.get_defaults()
 
         self.steps = [
-            StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm),
             Wait(time=self.time),
-            CStopStir(vessel=self.vessel),
         ]
 
         self.human_readable = f'Stir {vessel} for {time} s.'
@@ -1859,7 +1771,7 @@ class PrepareFilter(Step):
         }
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
-                vessel=filter_bottom_name(self.filter_vessel), start_stir=False, stop_stir=False, waste_vessel=waste_vessel,)
+                vessel=filter_bottom_name(self.filter_vessel), waste_vessel=waste_vessel,)
         ]
 
         self.human_readable = f'Fill {filter_bottom_name(self.filter_vessel)} with {solvent} ({volume} mL).'
