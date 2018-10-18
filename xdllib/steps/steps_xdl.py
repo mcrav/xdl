@@ -731,10 +731,10 @@ class WashFilterCake(Step):
             Add(reagent=self.solvent, volume=self.volume,
                 vessel=f'{filter_top_name(self.filter_vessel)}', waste_vessel=self.waste_vessel),
             CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=self.waste_vessel,
-                 volume='all'),
+                 volume='all', aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
 
             CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=self.waste_vessel,
-                 volume=DEFAULT_WASHFILTERCAKE_WAIT_TIME),
+                 volume=DEFAULT_WASHFILTERCAKE_WAIT_TIME, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
         ]
 
         self.human_readable = f'Wash {filter_vessel} with {solvent} ({volume} mL).'
