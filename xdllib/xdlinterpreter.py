@@ -506,10 +506,13 @@ class XDL(object):
                     after_step = steps[i + 1]
                 if before_step and type(before_step) in stir_steps:
                     step.start_stir = False
+                else:
+                    step.start_stir = True
                 if after_step and type(after_step) in stir_steps:
                     step.stop_stir = False
+                else:
+                    step.stop_stir = True
             
-
 # XDL Parsing
 def steps_from_xdl(xdl):
     """Given XDL str get list of steps."""

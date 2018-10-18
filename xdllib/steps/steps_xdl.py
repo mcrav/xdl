@@ -532,6 +532,9 @@ class ChillBackToRT(Step):
             'vessel': vessel,
         }
 
+        if is_generic_filter_name(vessel):
+            vessel = filter_top_name(vessel)
+
         # This is dodgy. Ideally will track which vessels have chillers.
         if vessel and 'filter' in vessel:
             self.steps = [
@@ -1210,13 +1213,26 @@ class Reflux(Step):
             'time': time,
         }
 
+        filter_vessel = vessel and 'filter' in vessel
+        if is_generic_filter_name(vessel):
+            vessel = filter_top_name(vessel)
+
         self.steps = [
             StartStir(vessel=vessel),
-            StartHeat(vessel=vessel, temp=temp),
-            Wait(time=time),
-            CStopHeat(vessel=vessel),
-            CStopStir(vessel=vessel),
         ]
+        if filter_vessel:
+            self.steps.append(Chill(vessel=vessel, temp=temp, start_stir=False, stop_stir=False))
+        else:
+            self.steps.append(StartHeat(vessel=vessel, temp=temp),)
+
+        self.steps.append(Wait(time=time),)
+        if filter_vessel:
+            self.steps.append(StopChiller(vessel=vessel))
+        else:
+            self.steps.append(CStopHeat(vessel=vessel),)
+
+        self.steps.append(CStopStir(vessel=vessel),)
+
 
         self.human_readable = f'Heat {vessel} to {temp} °C and reflux for {time} s.'
 
@@ -1601,11 +1617,11 @@ class Wash(Step):
         if not self.waste_phase_to_vessel and self.waste_vessel:
             self.waste_phase_to_vessel = self.waste_vessel
 
-        if is_generic_filter_name(self.to_vessel):
-            self.to_vessel = filter_top_name(self.to_vessel)
+        if is_generic_filter_name(to_vessel):
+            to_vessel = filter_top_name(to_vessel)
 
-        if is_generic_filter_name(self.from_vessel):
-            self.from_vessel = filter_top_name(self.from_vessel)
+        if is_generic_filter_name(from_vessel):
+            from_vessel = filter_top_name(from_vessel)
 
         if not n_washes:
             n_washes = 1
@@ -1633,9 +1649,9 @@ class Wash(Step):
             if n_washes > 1:
                 for i in range(n_washes - 1):
                     self.steps.extend([
-                        CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_phase_to_vessel),
+                        CSeparate(lower_phase_vessel=to_vessel, upper_phase_vessel=self.waste_phase_to_vessel),
                         # Move to_vessel to separation_vessel
-                        Transfer(from_vessel=self.to_vessel, to_vessel=separator_top, volume='all'),
+                        Transfer(from_vessel=to_vessel, to_vessel=separator_top, volume='all'),
                         # Move solvent to separation_vessel
                         Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
@@ -1647,9 +1663,9 @@ class Wash(Step):
             if type(self.solvent_volume) == float:
                 remove_volume = self.solvent_volume * 0.8
             self.steps.extend([
-                Transfer(from_vessel=separator_bottom, to_vessel=self.to_vessel, volume=remove_volume),
+                Transfer(from_vessel=separator_bottom, to_vessel=to_vessel, volume=remove_volume),
                 # Do separation
-                CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_phase_to_vessel),
+                CSeparate(lower_phase_vessel=to_vessel, upper_phase_vessel=self.waste_phase_to_vessel),
             ])
         else:
             if n_washes > 1:
@@ -1666,7 +1682,7 @@ class Wash(Step):
             self.steps.extend([
                 Transfer(from_vessel=separator_bottom, to_vessel=self.waste_phase_to_vessel, volume=2),
                 # Do separation
-                CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=self.to_vessel),
+                CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=to_vessel),
             ])
 
         self.human_readable = f'Wash contents of {from_vessel} in {separation_vessel} with {solvent} ({n_washes}x{solvent_volume} mL)'
