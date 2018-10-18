@@ -494,18 +494,19 @@ class XDL(object):
             i -= 1
 
     def _keep_stirring_when_possible(self):
+        stir_steps = [Add, Chill, StopChiller]
         steps = [step for step in self.steps if type(step) != CleanBackbone]
         for i in range(len(steps)):
             step = steps[i]
-            if type(step) == Add:
+            if type(step) in stir_steps:
                 before_step, after_step = None, None
                 if i > 0:
                     before_step = steps[i - 1]
                 if i < len(steps) - 1:
                     after_step = steps[i + 1]
-                if before_step and type(before_step) == Add:
+                if before_step and type(before_step) in stir_steps:
                     step.start_stir = False
-                if after_step and type(after_step) == Add:
+                if after_step and type(after_step) in stir_steps:
                     step.stop_stir = False
             
 
