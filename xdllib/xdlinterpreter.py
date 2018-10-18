@@ -149,6 +149,7 @@ class XDL(object):
             nearest_node = separator_bottom_name(step.separation_vessel)
         if not nearest_node:
             return None
+
         for node_name in self._graph.nodes():
             if node_name == nearest_node:
                 for pred in self._graph.pred[node_name]:
@@ -300,7 +301,7 @@ class XDL(object):
 
         for filter_i, filter_vessel, filter_contents in filters:
             j = filter_i
-            while j > 0 and type(self.steps[j]) not in [Extract, Wash, Reflux, Transfer]:
+            while j > 0 and type(self.steps[j]) not in [Extract, Wash, Transfer]:
                 j -= 1
             solvent = None
             filter_bottom_contents = filter_contents[filter_vessel]

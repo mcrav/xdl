@@ -974,7 +974,7 @@ class Dry(Step):
 
         volume = (float(self.time) / 60) * DEFAULT_MOVE_SPEED
         self.steps = [
-            CMove(from_vessel=filter_vessel_bottom, to_vessel=self.waste_vessel, volume=volume),
+            CMove(from_vessel=filter_vessel_bottom, to_vessel=self.waste_vessel, volume=volume, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
         ]
 
         self.human_readable = f'Dry substance in {self.filter_vessel} for {self.time} s.'
@@ -1407,6 +1407,8 @@ class Extract(Step):
         if self.from_vessel in [self.separation_vessel, separator_top, separator_bottom]:
             self.steps.pop(0)
 
+        remove_volume = 2
+
         # If product in bottom phase
         if self.product_bottom:
             if n_extractions > 1:
@@ -1423,9 +1425,8 @@ class Extract(Step):
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
-            remove_volume = 2
-            if type(self.solvent_volume) == float:
-                remove_volume = self.solvent_volume * 0.8
+
+
             self.steps.extend([
                 Transfer(from_vessel=separator_bottom, to_vessel=self.to_vessel, volume=remove_volume),
                 CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_phase_to_vessel),
@@ -1631,6 +1632,8 @@ class Wash(Step):
         else:
             n_washes = int(n_washes)
 
+        remove_volume = 2
+
         separator_top = separator_top_name(self.separation_vessel)
         separator_bottom = separator_bottom_name(self.separation_vessel)
 
@@ -1665,8 +1668,6 @@ class Wash(Step):
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
             remove_volume = 2
-            if type(self.solvent_volume) == float:
-                remove_volume = self.solvent_volume * 0.8
             self.steps.extend([
                 Transfer(from_vessel=separator_bottom, to_vessel=to_vessel, volume=remove_volume),
                 # Do separation
@@ -1686,7 +1687,7 @@ class Wash(Step):
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
             self.steps.extend([
-                Transfer(from_vessel=separator_bottom, to_vessel=self.waste_phase_to_vessel, volume=2),
+                Transfer(from_vessel=separator_bottom, to_vessel=self.waste_phase_to_vessel, volume=remove_volume),
                 # Do separation
                 CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=to_vessel),
             ])
