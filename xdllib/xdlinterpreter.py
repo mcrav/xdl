@@ -287,21 +287,24 @@ class XDL(object):
         Add PrepareFilter steps if filter top is being used, to fill up the bottom of the filter with solvent,
         so material added to the top doesn't drip through.
         """
-        prev_vessel_contents = {}
         filters = []
+        full_vessel_contents = []
+        prev_vessel_contents = {}
         for i, step, vessel_contents in self.iter_vessel_contents():
-            if type(step) == Filter:
-                filters.append((i, step.filter_vessel, prev_vessel_contents))
+            full_vessel_contents.append(vessel_contents)
+            print(step)
+            print(vessel_contents)
+            print('\n\n')
+            for vessel, contents in vessel_contents.items():
+                if 'filter' in vessel and vessel in prev_vessel_contents:
+                    if not contents and prev_vessel_contents[vessel]:
+                        filters.append((i, vessel, prev_vessel_contents))
+                        break
             prev_vessel_contents = vessel_contents
-
-        aqueous_synonyms = []
-        for synonym_list in [synonym_list for synonym_list in [cb.synonyms.CAS_MACHINE_SYNONYMS_DICT[cas] for cas in cb.waste.AQUEOUS_WASTE_REAGENTS]]:
-            aqueous_synonyms.extend(synonym_list)
-        aqueous_synonyms = tuple(aqueous_synonyms)
-
-        for filter_i, filter_vessel, filter_contents in filters:
-            j = filter_i
-            while j > 0 and type(self.steps[j]) not in [Extract, Wash, Transfer]:
+    
+        for filter_i, filter_vessel, filter_contents in reversed(filters):
+            j = filter_i - 1
+            while j > 0 and full_vessel_contents[j-1][filter_vessel]:
                 j -= 1
             solvent = None
             filter_bottom_contents = filter_contents[filter_vessel]
