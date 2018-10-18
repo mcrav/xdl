@@ -1414,6 +1414,7 @@ class Extract(Step):
             if n_extractions > 1:
                 for i in range(n_extractions - 1):
                     self.steps.extend([
+                        Transfer(from_vessel=separator_bottom, to_vessel=self.waste_vessel, volume=remove_volume),
                         CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_vessel),
                         # Move to_vessel to separation_vessel
                         CMove(from_vessel=self.to_vessel, to_vessel=separator_top, volume='all'),
@@ -1656,6 +1657,8 @@ class Wash(Step):
             if n_washes > 1:
                 for i in range(n_washes - 1):
                     self.steps.extend([
+                        # Move first 2 mL of product phase to waste just in case of contamination.
+                        Transfer(from_vessel=separator_bottom, to_vessel=self.waste_vessel, volume=remove_volume),
                         CSeparate(lower_phase_vessel=to_vessel, upper_phase_vessel=self.waste_phase_to_vessel),
                         # Move to_vessel to separation_vessel
                         Transfer(from_vessel=to_vessel, to_vessel=separator_top, volume='all'),
@@ -1669,7 +1672,7 @@ class Wash(Step):
                     ])
             remove_volume = 2
             self.steps.extend([
-                Transfer(from_vessel=separator_bottom, to_vessel=to_vessel, volume=remove_volume),
+                Transfer(from_vessel=separator_bottom, to_vessel=self.waste_vessel, volume=remove_volume),
                 # Do separation
                 CSeparate(lower_phase_vessel=to_vessel, upper_phase_vessel=self.waste_phase_to_vessel),
             ])
