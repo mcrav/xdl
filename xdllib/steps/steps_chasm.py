@@ -111,20 +111,24 @@ class CSeparate(Step):
         upper_phase_vessel {str} -- Vessel name the upper phase should be transferred to.
                             If "separator_top" is specified, the upper phase is left in the separator.
     """
-    def __init__(self, lower_phase_vessel=None, upper_phase_vessel=None):
+    def __init__(self, lower_phase_vessel=None, upper_phase_vessel=None, separator_top='flask_separator_top', separator_bottom='flask_separator_bottom'):
 
         self.name = 'Separate'
         self.properties = {
             'lower_phase_vessel': lower_phase_vessel,
             'upper_phase_vessel': upper_phase_vessel,
+            'separator_top': separator_top,
+            'separator_bottom': separator_bottom,
         }
 
-        self.literal_code = f'chempiler.pump.separate_phases( {self.lower_phase_vessel}, {self.upper_phase_vessel}, )'
+        self.literal_code = f'chempiler.pump.separate_phases( {self.lower_phase_vessel}, {self.upper_phase_vessel}, {self.separator_top}, {self.separator_bottom}, )'
 
     def execute(self, chempiler):
         chempiler.pump.separate_phases(
             self.lower_phase_vessel,
             self.upper_phase_vessel,
+            self.separator_top,
+            self.separator_bottom,
         )
         return True
 
@@ -144,6 +148,24 @@ class CSeparate(Step):
     @upper_phase_vessel.setter
     def upper_phase_vessel(self, val):
         self.properties['upper_phase_vessel'] = val
+        self.update()
+
+    @property
+    def separator_top(self):
+        return self.properties['separator_top']
+
+    @separator_top.setter
+    def separator_top(self, val):
+        self.properties['separator_top'] = val
+        self.update()
+
+    @property
+    def separator_bottom(self):
+        return self.properties['separator_bottom']
+
+    @separator_bottom.setter
+    def separator_bottom(self, val):
+        self.properties['separator_bottom'] = val
         self.update()
 
 class CPrime(Step):
