@@ -787,89 +787,6 @@ class WashFilterCake(Step):
         self.properties['wait_time'] = val
         self.update()
 
-class ChillReact(Step):
-    """Add given volumes of given reagents to given vessel, chill to given temperature,
-    and leave to react for given time.
-
-    Keyword Arguments:
-        reagents {list} -- List of reagents to add to vessel.
-        volumes {list} -- List of volumes corresponding to list of reagents.
-        vessel {str} -- Vessel name to add reagents to and chill.
-        temp {float} -- Temperature to chill vessel to in °C.
-        time {int} -- Time to leave reagents for in seconds.
-    """
-    def __init__(self, reagents=[], volumes=[], vessel=None, temp=None, time=None):
-
-        self.name = 'ChillReact'
-        self.properties = {
-            'reagents': reagents,
-            'volumes': volumes,
-            'vessel': vessel,
-            'temp': temp,
-            'time': time,
-        }
-
-        if is_generic_filter_name(self.vessel):
-            self.vessel = filter_top_name(self.vessel)
-
-        for reagent, volume in zip(reagents, volumes):
-            self.steps.append(Add(reagent=reagent, volume=volume, vessel=vessel, clean_tubing=False,))
-        self.steps.extend([
-            Chill(vessel=vessel, temp=temp),
-            Wait(time=time),
-            ChillBackToRT(vessel=vessel),
-        ])
-
-        self.human_readable = ''
-        for reagent, volume in zip(reagents, volumes):
-            self.human_readable += f'Add {reagent} ({volume} mL) to {vessel} under stirring.\n'
-        self.human_readable += f'Chill {vessel} to {temp} °C and wait {time / 3600} hrs.\n'
-        self.human_readable += f'Chill {vessel} to room temperature then stop stirring.'
-
-    @property
-    def reagents(self):
-        return self.properties['reagents']
-
-    @reagents.setter
-    def reagents(self, val):
-        self.properties['reagents'] = val
-        self.update()
-
-    @property
-    def volumes(self):
-        return self.properties['volumes']
-
-    @volumes.setter
-    def volumes(self, val):
-        self.properties['volumes'] = val
-        self.update()
-
-    @property
-    def vessel(self):
-        return self.properties['vessel']
-
-    @vessel.setter
-    def vessel(self, val):
-        self.properties['vessel'] = val
-        self.update()
-
-    @property
-    def temp(self):
-        return self.properties['temp']
-
-    @temp.setter
-    def temp(self, val):
-        self.properties['temp'] = val
-        self.update()
-
-    @property
-    def time(self):
-        return self.properties['time']
-
-    @time.setter
-    def time(self, val):
-        self.properties['time'] = val
-        self.update()
 
 class Dry(Step):
     """Dry given vessel by applying vacuum for given time.
@@ -1256,6 +1173,60 @@ class Rotavap(Step):
         self.properties['time'] = val
         self.update()
 
+class Wait(Step):
+    """Wait for given time.
+
+    Keyword Arguments:
+        time {int} -- Time in seconds
+        wait_recording_speed {int} -- Recording speed during wait (faster) ~2000
+        after_recording_speed {int} -- Recording speed after wait (slower) ~14
+    """
+    def __init__(self, time=None, wait_recording_speed='default', after_recording_speed='default'):
+
+        self.name = 'Wait'
+        self.properties = {
+            'time': time,
+            'wait_recording_speed': wait_recording_speed,
+            'after_recording_speed': after_recording_speed,
+        }
+        self.get_defaults()
+
+        self.steps = [
+            CSetRecordingSpeed(self.wait_recording_speed),
+            CWait(self.time),
+            CSetRecordingSpeed(self.after_recording_speed),
+        ]
+
+        self.human_readable = f'Wait for {self.time} s.'
+
+    @property
+    def time(self):
+        return self.properties['time']
+
+    @time.setter
+    def time(self, val):
+        self.properties['time'] = val
+        self.update()
+
+    @property
+    def wait_recording_speed(self):
+        return self.properties['wait_recording_speed']
+
+    @wait_recording_speed.setter
+    def wait_recording_speed(self, val):
+        self.properties['wait_recording_speed'] = val
+        self.update()
+
+    @property
+    def after_recording_speed(self):
+        return self.properties['after_recording_speed']
+
+    @after_recording_speed.setter
+    def after_recording_speed(self, val):
+        self.properties['after_recording_speed'] = val
+        self.update()
+
+
 class Extract(Step):
     """Extract contents of from_vessel using given amount of given solvent.
 
@@ -1332,7 +1303,7 @@ class Extract(Step):
                 for i in range(n_extractions - 1):
                     self.steps.extend([
                         Transfer(from_vessel=separator_bottom, to_vessel=self.waste_vessel, volume=remove_volume),
-                        CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_vessel,
+                        CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_phase_to_vessel,
                             separator_top=separator_top, separator_bottom=separator_bottom, dead_volume_target=self.waste_vessel),
                         # Move to_vessel to separation_vessel
                         CMove(from_vessel=self.to_vessel, to_vessel=separator_top, volume='all'),
@@ -1456,58 +1427,6 @@ class Extract(Step):
         self.properties['waste_vessel'] = val
         self.update()
 
-class Wait(Step):
-    """Wait for given time.
-
-    Keyword Arguments:
-        time {int} -- Time in seconds
-        wait_recording_speed {int} -- Recording speed during wait (faster) ~2000
-        after_recording_speed {int} -- Recording speed after wait (slower) ~14
-    """
-    def __init__(self, time=None, wait_recording_speed='default', after_recording_speed='default'):
-
-        self.name = 'Wait'
-        self.properties = {
-            'time': time,
-            'wait_recording_speed': wait_recording_speed,
-            'after_recording_speed': after_recording_speed,
-        }
-        self.get_defaults()
-
-        self.steps = [
-            CSetRecordingSpeed(self.wait_recording_speed),
-            CWait(self.time),
-            CSetRecordingSpeed(self.after_recording_speed),
-        ]
-
-        self.human_readable = f'Wait for {self.time} s.'
-
-    @property
-    def time(self):
-        return self.properties['time']
-
-    @time.setter
-    def time(self, val):
-        self.properties['time'] = val
-        self.update()
-
-    @property
-    def wait_recording_speed(self):
-        return self.properties['wait_recording_speed']
-
-    @wait_recording_speed.setter
-    def wait_recording_speed(self, val):
-        self.properties['wait_recording_speed'] = val
-        self.update()
-
-    @property
-    def after_recording_speed(self):
-        return self.properties['after_recording_speed']
-
-    @after_recording_speed.setter
-    def after_recording_speed(self, val):
-        self.properties['after_recording_speed'] = val
-        self.update()
 
 class Wash(Step):
     """Wash contents of from_vessel with given solvent.
