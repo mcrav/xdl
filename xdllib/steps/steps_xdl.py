@@ -890,7 +890,7 @@ class Dry(Step):
         else:
             filter_vessel_bottom = self.filter_vessel
 
-        volume = (float(self.time) / 60) * DEFAULT_MOVE_SPEED
+        volume = (float(self.time) / 60) * DEFAULT_FILTER_ASPIRATION_SPEED
         self.steps = [
             CMove(from_vessel=filter_vessel_bottom, to_vessel=self.waste_vessel, volume=volume, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
         ]
