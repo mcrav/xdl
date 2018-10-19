@@ -399,7 +399,7 @@ class XDL(object):
         """Simulate XDL procedure using Chempiler and given graphML file."""
         self.prepare_for_execution(graphml_file)
         if self._prepared_for_execution:
-            chempiler = Chempiler(self._get_exp_id(default='xdl_simulation'), graphml_file, True)
+            chempiler = Chempiler(self._get_exp_id(default='xdl_simulation'), graphml_file, self._get_exp_id(default='xdl_simulation'), True)
             # self.print_full_xdl_tree()
             # self.print_full_human_readable()
             print('Execution\n---------\n')
@@ -429,7 +429,7 @@ class XDL(object):
         """
         Returns string of literal chempiler code built from steps.
         """
-        s = f'from chempiler import Chempiler\n\nchempiler = Chempiler(r"{self._get_exp_id(default="xdl_simulation")}", "{self.graphml_file}", False)\n\nchempiler.start_recording()\nchempiler.camera.change_recording_speed(14)\n'
+        s = f'from chempiler import Chempiler\n\nchempiler = Chempiler(r"{self._get_exp_id(default="xdl_simulation")}", "{self.graphml_file}", "output_dir", False)\n\nchempiler.start_recording()\nchempiler.camera.change_recording_speed(14)\n'
         full_tree = self._get_full_xdl_tree()
         base_steps = list(BASE_STEP_OBJ_DICT.values())
         for step in full_tree:

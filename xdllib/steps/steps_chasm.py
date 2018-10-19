@@ -111,7 +111,8 @@ class CSeparate(Step):
         upper_phase_vessel {str} -- Vessel name the upper phase should be transferred to.
                             If "separator_top" is specified, the upper phase is left in the separator.
     """
-    def __init__(self, lower_phase_vessel=None, upper_phase_vessel=None, separator_top='flask_separator_top', separator_bottom='flask_separator_bottom'):
+    def __init__(self, lower_phase_vessel=None, upper_phase_vessel=None, separator_top='flask_separator_top',
+                    separator_bottom='flask_separator_bottom', dead_volume_target=None):
 
         self.name = 'Separate'
         self.properties = {
@@ -119,16 +120,18 @@ class CSeparate(Step):
             'upper_phase_vessel': upper_phase_vessel,
             'separator_top': separator_top,
             'separator_bottom': separator_bottom,
+            'dead_volume_target': dead_volume_target,
         }
 
-        self.literal_code = f'chempiler.pump.separate_phases( {self.lower_phase_vessel}, {self.upper_phase_vessel}, {self.separator_top}, {self.separator_bottom}, )'
+        self.literal_code = f'chempiler.pump.separate_phases( lower_phase_target={self.lower_phase_vessel}, upper_phase_target={self.upper_phase_vessel}, separator_top={self.separator_top}, separator_bottom={self.separator_bottom}, dead_volume_target={self.dead_volume_target}, )'
 
     def execute(self, chempiler):
         chempiler.pump.separate_phases(
-            self.lower_phase_vessel,
-            self.upper_phase_vessel,
-            self.separator_top,
-            self.separator_bottom,
+            lower_phase_target=self.lower_phase_vessel,
+            upper_phase_target=self.upper_phase_vessel,
+            separator_top=self.separator_top,
+            separator_bottom=self.separator_bottom,
+            dead_volume_target=self.dead_volume_target,
         )
         return True
 
@@ -166,6 +169,15 @@ class CSeparate(Step):
     @separator_bottom.setter
     def separator_bottom(self, val):
         self.properties['separator_bottom'] = val
+        self.update()
+
+    @property
+    def dead_volume_target(self):
+        return self.properties['dead_volume_target']
+
+    @dead_volume_target.setter
+    def dead_volume_target(self, val):
+        self.properties['dead_volume_target'] = val
         self.update()
 
 class CPrime(Step):

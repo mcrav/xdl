@@ -727,10 +727,13 @@ class WashFilterCake(Step):
         }
         self.get_defaults()
 
+        filter_top = filter_top_name(self.filter_vessel)
+
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
-                vessel=f'{filter_top_name(self.filter_vessel)}', waste_vessel=self.waste_vessel),
-            CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=self.waste_vessel,
+                vessel=filter_top, waste_vessel=self.waste_vessel),
+            StirAtRT(vessel=filter_top, time=60),
+            CMove(from_vessel=filter_bottom_name(self.filter_vessel), to_vessel=self.waste_vessel,
                  volume='all', aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
 
             CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=self.waste_vessel,
@@ -1330,7 +1333,7 @@ class Extract(Step):
                     self.steps.extend([
                         Transfer(from_vessel=separator_bottom, to_vessel=self.waste_vessel, volume=remove_volume),
                         CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_vessel,
-                            separator_top=separator_top, separator_bottom=separator_bottom),
+                            separator_top=separator_top, separator_bottom=separator_bottom, dead_volume_target=self.waste_vessel),
                         # Move to_vessel to separation_vessel
                         CMove(from_vessel=self.to_vessel, to_vessel=separator_top, volume='all'),
                         # Move solvent to separation_vessel
@@ -1344,16 +1347,17 @@ class Extract(Step):
 
 
             self.steps.extend([
-                Transfer(from_vessel=separator_bottom, to_vessel=self.to_vessel, volume=remove_volume),
+                Transfer(from_vessel=separator_bottom, to_vessel=self.waste_vessel, volume=remove_volume),
                 CSeparate(lower_phase_vessel=self.to_vessel, upper_phase_vessel=self.waste_phase_to_vessel,
-                            separator_top=separator_top, separator_bottom=separator_bottom),
+                            separator_top=separator_top, separator_bottom=separator_bottom, dead_volume_target=self.waste_vessel),
             ])
         else:
             if n_extractions > 1:
                 for i in range(n_extractions - 1):
                     self.steps.extend([
+                        Transfer(from_vessel=separator_bottom, to_vessel=self.waste_vessel, volume=remove_volume),
                         CSeparate(lower_phase_vessel=self.waste_vessel, upper_phase_vessel=separator_top,
-                            separator_top=separator_top, separator_bottom=separator_bottom),
+                            separator_top=separator_top, separator_bottom=separator_bottom, dead_volume_target=self.waste_vessel),
                         # Move solvent to separation_vessel
                         Add(reagent=self.solvent, vessel=separator_top, volume=self.solvent_volume, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
@@ -1364,9 +1368,9 @@ class Extract(Step):
                     ])
 
             self.steps.extend([
-                Transfer(from_vessel=separator_bottom, to_vessel=self.waste_phase_to_vessel, volume=2),
+                Transfer(from_vessel=separator_bottom, to_vessel=self.waste_vessel, volume=remove_volume),
                 CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=self.to_vessel,
-                            separator_top=separator_top, separator_bottom=separator_bottom),
+                            separator_top=separator_top, separator_bottom=separator_bottom, dead_volume_target=self.waste_vessel),
             ])
 
         self.human_readable = f'Extract contents of {self.from_vessel} with {self.solvent} ({self.n_extractions}x{self.solvent_volume} mL).'
@@ -1578,7 +1582,7 @@ class Wash(Step):
                         # Move first 2 mL of product phase to waste just in case of contamination.
                         Transfer(from_vessel=separator_bottom, to_vessel=self.waste_vessel, volume=remove_volume),
                         CSeparate(lower_phase_vessel=to_vessel, upper_phase_vessel=self.waste_phase_to_vessel,
-                            separator_top=separator_top, separator_bottom=separator_bottom),
+                            separator_top=separator_top, separator_bottom=separator_bottom, dead_volume_target=self.waste_vessel),
                         # Move to_vessel to separation_vessel
                         Transfer(from_vessel=to_vessel, to_vessel=separator_top, volume='all'),
                         # Move solvent to separation_vessel
@@ -1600,8 +1604,9 @@ class Wash(Step):
             if n_washes > 1:
                 for i in range(n_washes - 1):
                     self.steps.extend([
+                        Transfer(from_vessel=separator_bottom, to_vessel=self.waste_vessel, volume=remove_volume),
                         CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=separator_top,
-                            separator_top=separator_top, separator_bottom=separator_bottom),
+                            separator_top=separator_top, separator_bottom=separator_bottom, dead_volume_target=self.waste_vessel),
                         # Move solvent to separation_vessel
                         Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
@@ -1611,10 +1616,10 @@ class Wash(Step):
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
             self.steps.extend([
-                Transfer(from_vessel=separator_bottom, to_vessel=self.waste_phase_to_vessel, volume=remove_volume),
+                Transfer(from_vessel=separator_bottom, to_vessel=self.waste_vessel, volume=remove_volume),
                 # Do separation
                 CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, upper_phase_vessel=to_vessel,
-                            separator_top=separator_top, separator_bottom=separator_bottom),
+                            separator_top=separator_top, separator_bottom=separator_bottom, dead_volume_target=self.waste_vessel),
             ])
 
         self.human_readable = f'Wash contents of {from_vessel} in {separation_vessel} with {solvent} ({n_washes}x{solvent_volume} mL)'
