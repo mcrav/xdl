@@ -1719,7 +1719,9 @@ class StirAtRT(Step):
         self.get_defaults()
 
         self.steps = [
+            StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm),
             Wait(time=self.time),
+            CStopStir(vessel=self.vessel),
         ]
 
         self.human_readable = f'Stir {vessel} for {time} s.'

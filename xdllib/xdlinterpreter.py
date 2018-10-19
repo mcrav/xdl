@@ -500,7 +500,7 @@ class XDL(object):
     def _keep_stirring_when_possible(self):
         stirring = {}
         insertions = []
-        stir_steps = [Add, Chill, StopChiller, Reflux, ChillBackToRT, StirAtRT, HeatAndReact, ContinueStirToRT]
+        stir_steps = [Add, Chill, StopChiller, Reflux, ChillBackToRT, HeatAndReact, ContinueStirToRT]
 
         for i, step in enumerate(self.steps):
             if type(step) != CleanBackbone:
