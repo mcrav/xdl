@@ -10,6 +10,7 @@ build
 __pycache__/
 build
 logs
+lidocaine
 
 # other shite
 .vscode

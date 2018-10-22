@@ -139,10 +139,9 @@ class XDL(object):
         """
         nearest_node = None
         if type(step) == Add:
-            vessel = step.vessel
-            if 'filter' in step.vessel and is_generic_filter_name(step.vessel):
-                vessel = filter_top_name(vessel)
-            nearest_node = vessel
+            nearest_node = step.vessel
+            if 'filter' in nearest_node and is_generic_filter_name(nearest_node):
+                nearest_node = filter_top_name(nearest_node)
         elif type(step) in [PrepareFilter, Filter, Dry, WashFilterCake]:
             nearest_node = filter_bottom_name(step.filter_vessel)
         elif type(step) in [Wash, Extract]:
@@ -176,16 +175,20 @@ class XDL(object):
         prev_vessel_contents = {}
         for i, step, vessel_contents in self.iter_vessel_contents():
             if type(step) == PrepareFilter:
-                for vessel in self.graphml_hardware.filters:
-                    if vessel.cid == step.filter_vessel:
-                        step.volume = vessel.dead_volume
-                        break
+                step.volume = self._get_filter_dead_volume(step.filter_vessel)
             elif type(step) == Filter:
-                for vessel in self.graphml_hardware.filters:
-                    if vessel.cid == step.filter_vessel:
-                        step.filter_bottom_volume = vessel.dead_volume
-                        step.filter_top_volume = sum([reagent[1] for reagent in prev_vessel_contents[step.filter_vessel]])
+                step.filter_bottom_volume = self._get_filter_dead_volume(step.filter_vessel)
+                step.filter_top_volume = sum([reagent[1] for reagent in prev_vessel_contents[step.filter_vessel]])
+            elif type(step) in [Wash, Extract]:
+                if 'filter' in step.from_vessel:
+                    step.filter_dead_volume = self._get_filter_dead_volume(step.from_vessel)
             prev_vessel_contents = vessel_contents
+
+    def _get_filter_dead_volume(self, filter_vessel):
+        for vessel in self.graphml_hardware.filters:
+            if vessel.cid == filter_vessel:
+                return vessel.dead_volume
+        return 0
 
     def _check_safety(self):
         """
@@ -292,9 +295,6 @@ class XDL(object):
         prev_vessel_contents = {}
         for i, step, vessel_contents in self.iter_vessel_contents():
             full_vessel_contents.append(vessel_contents)
-            print(step)
-            print(vessel_contents)
-            print('\n\n')
             for vessel, contents in vessel_contents.items():
                 if 'filter' in vessel and vessel in prev_vessel_contents:
                     if not contents and prev_vessel_contents[vessel]:
