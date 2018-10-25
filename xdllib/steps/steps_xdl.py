@@ -269,7 +269,7 @@ class CleanBackbone(Step):
 
         self.steps = []
         for waste_vessel in self.waste_vessels:
-            self.steps.append(CMove(from_vessel=f'flask_{self.reagent}', to_vessel=waste_vessel, volume=DEFAULT_CLEAN_BACKBONE_VOLUME))
+            self.steps.append(CMove(from_vessel=f'flask_{self.reagent}', to_vessel=waste_vessel, volume=DEFAULT_CLEAN_BACKBONE_VOLUME, aspiration_speed=30))
         self.human_readable = f'Clean backbone with {self.reagent}.'
 
     @property
@@ -1287,8 +1287,8 @@ class Extract(Step):
         self.steps.extend([
                 # Move from from_vessel to separation_vessel
                 Transfer(from_vessel=from_vessel, to_vessel=separator_top, volume='all'),
-                # Move solvent to separation_vessel
-                Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
+                # Move solvent to separation_vessel.
+                Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_bottom, waste_vessel=self.waste_vessel),
                 # Stir separation_vessel
                 StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_FAST_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
                 StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_SLOW_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
@@ -1311,8 +1311,8 @@ class Extract(Step):
                             separator_top=separator_top, separator_bottom=separator_bottom, dead_volume_target=self.waste_vessel),
                         # Move to_vessel to separation_vessel
                         CMove(from_vessel=to_vessel, to_vessel=separator_top, volume='all'),
-                        # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
+                        # Move solvent to separation_vessel. Bottom as washes any reagent from previous separation back into funnel.
+                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_bottom, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
                         StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_FAST_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
                         StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_SLOW_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
@@ -1504,7 +1504,7 @@ class Wash(Step):
             # Move from from_vessel to separation_vessel
             Transfer(from_vessel=from_vessel, to_vessel=separator_top, volume='all'),
             # Move solvent to separation_vessel
-            Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
+            Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_bottom, waste_vessel=self.waste_vessel),
             # Stir separation_vessel
             StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_FAST_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
             StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_SLOW_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
@@ -1525,8 +1525,8 @@ class Wash(Step):
                             separator_top=separator_top, separator_bottom=separator_bottom, dead_volume_target=self.waste_vessel),
                         # Move to_vessel to separation_vessel
                         Transfer(from_vessel=to_vessel, to_vessel=separator_top, volume='all'),
-                        # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_top, waste_vessel=self.waste_vessel),
+                        # Move solvent to separation_vessel. Bottom as washes any reagent from previous separation back into funnel.
+                        Add(reagent=self.solvent, volume=self.solvent_volume, vessel=separator_bottom, waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
                         StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_FAST_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
                         StirAtRT(vessel=separator_top, time=DEFAULT_SEPARATION_SLOW_STIR_TIME, stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
