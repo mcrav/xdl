@@ -232,3 +232,6 @@ class Hardware(object):
             if component.cid == item:
                 return component
         return None
+
+    def __iter__(self):
+        return self.components

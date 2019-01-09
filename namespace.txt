@@ -12,6 +12,7 @@ Dry
 
 Extract
 WashSolution
+RunColumn
 
 Reflux
 Heat

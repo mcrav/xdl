@@ -1,7 +1,7 @@
 import os
 import re
 import argparse
-from xdllib.constants import *
+from xdl.constants import *
 
 def print_step_obj_dict():
     s = '{\n'
@@ -260,8 +260,8 @@ def main():
         print_step_obj_dict()
 
     elif args.getters:
-        add_getters('/home/group/xdllib/xdllib/steps_chasm.py')
-        add_getters('/home/group/xdllib/xdllib/steps_xdl.py')
+        add_getters('/home/group/xdllib/xdl/steps_chasm.py')
+        add_getters('/home/group/xdllib/xdl/steps_xdl.py')
 
 if __name__ == '__main__':
     main()

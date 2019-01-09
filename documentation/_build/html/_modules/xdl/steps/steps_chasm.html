@@ -1,0 +1,1562 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>xdl.steps.steps_chasm &#8212; xdl 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for xdl.steps.steps_chasm</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..constants</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">Step</span>
+<span class="kn">from</span> <span class="nn">chempiler.tools.vlogging</span> <span class="k">import</span> <span class="n">VlogHandler</span><span class="p">,</span> <span class="n">RecordingSpeedFilter</span><span class="p">,</span> <span class="n">recording_worker</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">IMPORTANT:</span>
+<span class="sd">All getters and setters are generated when setup.py is run. Don&#39;t bother writing them here.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CMove"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CMove">[docs]</a><span class="k">class</span> <span class="nc">CMove</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Moves a specified volume from one node in the graph to another. Moving from and to</span>
+<span class="sd">    the same node is supported.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        from_vessel {str} -- Vessel name to move from.</span>
+<span class="sd">        to_vessel {str} -- Vessel name to move to.</span>
+<span class="sd">        volume {float} -- Volume to move in mL. &#39;all&#39; moves everything.</span>
+<span class="sd">        move_speed -- Speed at which liquid is moved in mL / min. (optional)</span>
+<span class="sd">        aspiration_speed -- Speed at which liquid aspirates from from_vessel. (optional)</span>
+<span class="sd">        dispense_speed -- Speed at which liquid dispenses from from_vessel. (optional)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">from_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">move_speed</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span>
+                 <span class="n">aspiration_speed</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">dispense_speed</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Move&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;from_vessel&#39;</span><span class="p">:</span> <span class="n">from_vessel</span><span class="p">,</span>
+            <span class="s1">&#39;to_vessel&#39;</span><span class="p">:</span> <span class="n">to_vessel</span><span class="p">,</span>
+            <span class="s1">&#39;volume&#39;</span><span class="p">:</span> <span class="n">volume</span><span class="p">,</span>
+            <span class="s1">&#39;move_speed&#39;</span><span class="p">:</span> <span class="n">move_speed</span><span class="p">,</span>
+            <span class="s1">&#39;aspiration_speed&#39;</span><span class="p">:</span> <span class="n">aspiration_speed</span><span class="p">,</span>
+            <span class="s1">&#39;dispense_speed&#39;</span><span class="p">:</span> <span class="n">dispense_speed</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_defaults</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Move </span><span class="si">{self.from_vessel}</span><span class="s1"> (</span><span class="si">{self.volume}</span><span class="s1">) to </span><span class="si">{self.to_vessel}</span><span class="s1">.&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.pump.move( </span><span class="si">{self.from_vessel}</span><span class="s1">, </span><span class="si">{self.to_vessel}</span><span class="s1">, </span><span class="si">{self.volume}</span><span class="s1">, move_speed=</span><span class="si">{self.move_speed}</span><span class="s1">, aspiration_speed=</span><span class="si">{self.aspiration_speed}</span><span class="s1">, dispense_speed=</span><span class="si">{self.dispense_speed}</span><span class="s1">, )&#39;</span>
+
+<div class="viewcode-block" id="CMove.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CMove.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">pump</span><span class="o">.</span><span class="n">move</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">from_vessel</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">to_vessel</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="p">,</span>
+            <span class="n">move_speed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span><span class="p">,</span>
+            <span class="n">aspiration_speed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">aspiration_speed</span><span class="p">,</span>
+            <span class="n">dispense_speed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dispense_speed</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">from_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;from_vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@from_vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">from_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;from_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">to_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;to_vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@to_vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">to_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;to_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span>
+
+    <span class="nd">@volume</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">move_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;move_speed&#39;</span><span class="p">]</span>
+
+    <span class="nd">@move_speed</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">move_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;move_speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">aspiration_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;aspiration_speed&#39;</span><span class="p">]</span>
+
+    <span class="nd">@aspiration_speed</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">aspiration_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;aspiration_speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dispense_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;dispense_speed&#39;</span><span class="p">]</span>
+
+    <span class="nd">@dispense_speed</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">dispense_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;dispense_speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSeparate"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSeparate">[docs]</a><span class="k">class</span> <span class="nc">CSeparate</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Launches a phase separation sequence. The name of the separator is currently</span>
+<span class="sd">    hard-coded in the Chempiler!</span>
+
+<span class="sd">    Keywords Arguments:</span>
+<span class="sd">        lower_phase_vessel {str} -- Vessel name the lower phase should be transferred to.</span>
+<span class="sd">        upper_phase_vessel {str} -- Vessel name the upper phase should be transferred to.</span>
+<span class="sd">                            If &quot;separator_top&quot; is specified, the upper phase is left in the separator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower_phase_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">upper_phase_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">separator_top</span><span class="o">=</span><span class="s1">&#39;flask_separator_top&#39;</span><span class="p">,</span>
+                    <span class="n">separator_bottom</span><span class="o">=</span><span class="s1">&#39;flask_separator_bottom&#39;</span><span class="p">,</span> <span class="n">dead_volume_target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Separate&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;lower_phase_vessel&#39;</span><span class="p">:</span> <span class="n">lower_phase_vessel</span><span class="p">,</span>
+            <span class="s1">&#39;upper_phase_vessel&#39;</span><span class="p">:</span> <span class="n">upper_phase_vessel</span><span class="p">,</span>
+            <span class="s1">&#39;separator_top&#39;</span><span class="p">:</span> <span class="n">separator_top</span><span class="p">,</span>
+            <span class="s1">&#39;separator_bottom&#39;</span><span class="p">:</span> <span class="n">separator_bottom</span><span class="p">,</span>
+            <span class="s1">&#39;dead_volume_target&#39;</span><span class="p">:</span> <span class="n">dead_volume_target</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.pump.separate_phases( lower_phase_target=</span><span class="si">{self.lower_phase_vessel}</span><span class="s1">, upper_phase_target=</span><span class="si">{self.upper_phase_vessel}</span><span class="s1">, separator_top=</span><span class="si">{self.separator_top}</span><span class="s1">, separator_bottom=</span><span class="si">{self.separator_bottom}</span><span class="s1">, dead_volume_target=</span><span class="si">{self.dead_volume_target}</span><span class="s1">, )&#39;</span>
+
+<div class="viewcode-block" id="CSeparate.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSeparate.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">pump</span><span class="o">.</span><span class="n">separate_phases</span><span class="p">(</span>
+            <span class="n">lower_phase_target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lower_phase_vessel</span><span class="p">,</span>
+            <span class="n">upper_phase_target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">upper_phase_vessel</span><span class="p">,</span>
+            <span class="n">separator_top</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separator_top</span><span class="p">,</span>
+            <span class="n">separator_bottom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separator_bottom</span><span class="p">,</span>
+            <span class="n">dead_volume_target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dead_volume_target</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lower_phase_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;lower_phase_vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@lower_phase_vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">lower_phase_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;lower_phase_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">upper_phase_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;upper_phase_vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@upper_phase_vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">upper_phase_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;upper_phase_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">separator_top</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;separator_top&#39;</span><span class="p">]</span>
+
+    <span class="nd">@separator_top</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">separator_top</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;separator_top&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">separator_bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;separator_bottom&#39;</span><span class="p">]</span>
+
+    <span class="nd">@separator_bottom</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">separator_bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;separator_bottom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dead_volume_target</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;dead_volume_target&#39;</span><span class="p">]</span>
+
+    <span class="nd">@dead_volume_target</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">dead_volume_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;dead_volume_target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CPrime"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CPrime">[docs]</a><span class="k">class</span> <span class="nc">CPrime</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Moves the tube volume of every node with &quot;flask&quot; as class to waste.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        aspiration_speed {float} -- Speed in mL / min at which material should be withdrawn.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aspiration_speed</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Prime&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;aspiration_speed&#39;</span><span class="p">:</span> <span class="n">aspiration_speed</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_defaults</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.pump.prime_tubes(</span><span class="si">{self.aspiration_speed}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CPrime.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CPrime.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">pump</span><span class="o">.</span><span class="n">prime_tubes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aspiration_speed</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">aspiration_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;aspiration_speed&#39;</span><span class="p">]</span>
+
+    <span class="nd">@aspiration_speed</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">aspiration_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;aspiration_speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSwitchVacuum"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSwitchVacuum">[docs]</a><span class="k">class</span> <span class="nc">CSwitchVacuum</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Switches a vacuum valve between backbone and vacuum.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Name of the node the vacuum valve is logically attacked to (e.g. &quot;filter_bottom&quot;)</span>
+<span class="sd">        destination {str} -- Either &quot;vacuum&quot; or &quot;backbone&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SwitchVacuum&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+            <span class="s1">&#39;destination&#39;</span><span class="p">:</span> <span class="n">destination</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.pump.switch_cartridge(</span><span class="si">{self.vessel}</span><span class="s1">, </span><span class="si">{self.destination}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSwitchVacuum.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSwitchVacuum.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">pump</span><span class="o">.</span><span class="n">switch_cartridge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">destination</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;destination&#39;</span><span class="p">]</span>
+
+    <span class="nd">@destination</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">destination</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;destination&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSwitchCartridge"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSwitchCartridge">[docs]</a><span class="k">class</span> <span class="nc">CSwitchCartridge</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Switches a cartridge carousel to the specified position.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Name of the node the vacuum valve is logically attacked to (e.g. &quot;rotavap&quot;)</span>
+<span class="sd">        cartridge {int} -- Number of the position the carousel should be switched to (0-5)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cartridge</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SwitchCartridge&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+            <span class="s1">&#39;cartridge&#39;</span><span class="p">:</span> <span class="n">cartridge</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.pump.switch_cartridge(</span><span class="si">{self.vessel}</span><span class="s1">, </span><span class="si">{self.cartridge}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSwitchCartridge.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSwitchCartridge.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">pump</span><span class="o">.</span><span class="n">switch_cartridge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cartridge</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cartridge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;cartridge&#39;</span><span class="p">]</span>
+
+    <span class="nd">@cartridge</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">cartridge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;cartridge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSwitchColumn"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSwitchColumn">[docs]</a><span class="k">class</span> <span class="nc">CSwitchColumn</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Switches a fractionating valve attached to a chromatography column.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        column {str} -- Name of the column in the graph</span>
+<span class="sd">        destination {str} -- Either &quot;collect&quot; or &quot;waste&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SwitchColumn&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;column&#39;</span><span class="p">:</span> <span class="n">column</span><span class="p">,</span>
+            <span class="s1">&#39;destination&#39;</span><span class="p">:</span> <span class="n">destination</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.pump.switch_column_fraction(</span><span class="si">{self.column}</span><span class="s1">, </span><span class="si">{self.destination}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSwitchColumn.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSwitchColumn.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">pump</span><span class="o">.</span><span class="n">switch_column_fraction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">column</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;column&#39;</span><span class="p">]</span>
+
+    <span class="nd">@column</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;column&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">destination</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;destination&#39;</span><span class="p">]</span>
+
+    <span class="nd">@destination</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">destination</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;destination&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CStartStir"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStartStir">[docs]</a><span class="k">class</span> <span class="nc">CStartStir</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Starts the stirring operation of a hotplate or overhead stirrer.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Vessel name to stir.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StartStir&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.stirrer.stir(</span><span class="si">{self.vessel}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CStartStir.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStartStir.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">stirrer</span><span class="o">.</span><span class="n">stir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CStartHeat"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStartHeat">[docs]</a><span class="k">class</span> <span class="nc">CStartHeat</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Starts the heating operation of a hotplate stirrer.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Vessel name to heat.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StartHeat&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.stirrer.heat(</span><span class="si">{self.vessel}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CStartHeat.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStartHeat.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">stirrer</span><span class="o">.</span><span class="n">heat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CStopStir"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStopStir">[docs]</a><span class="k">class</span> <span class="nc">CStopStir</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Stops the stirring operation of a hotplate or overhead stirrer.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Vessel name to stop stirring.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StopStir&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Stop stirring </span><span class="si">{self.vessel}</span><span class="s1">.&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.stirrer.stop_stir(</span><span class="si">{self.vessel}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CStopStir.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStopStir.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">stirrer</span><span class="o">.</span><span class="n">stop_stir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CStopHeat"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStopHeat">[docs]</a><span class="k">class</span> <span class="nc">CStopHeat</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Starts the stirring operation of a hotplate stirrer. This command is NOT available</span>
+<span class="sd">    for overhead stirrers!</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Vessel name to stop heating.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StopHeat&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.stirrer.stop_heat(</span><span class="si">{self.vessel}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CStopHeat.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStopHeat.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">stirrer</span><span class="o">.</span><span class="n">stop_heat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSetTemp"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetTemp">[docs]</a><span class="k">class</span> <span class="nc">CSetTemp</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sets the temperature setpoint of a hotplate stirrer. This command is NOT available</span>
+<span class="sd">    for overhead stirrers!</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Vessel name to set temperature of hotplate stirrer.</span>
+<span class="sd">        temp {float} -- Temperature in °C</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SetTemp&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+            <span class="s1">&#39;temp&#39;</span><span class="p">:</span> <span class="n">temp</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.stirrer.set_temp(</span><span class="si">{self.vessel}</span><span class="s1">, </span><span class="si">{self.temp}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSetTemp.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetTemp.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">stirrer</span><span class="o">.</span><span class="n">set_temp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span>
+
+    <span class="nd">@temp</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSetStirRpm"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetStirRpm">[docs]</a><span class="k">class</span> <span class="nc">CSetStirRpm</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sets the stirring speed setpoint of a hotplate or overhead stirrer.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Vessel name to set stir speed.</span>
+<span class="sd">        stir_rpm {float} -- Stir speed in RPM.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stir_rpm</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SetStirRpm&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+            <span class="s1">&#39;stir_rpm&#39;</span><span class="p">:</span> <span class="n">stir_rpm</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.stirrer.set_stir_rate(</span><span class="si">{self.vessel}</span><span class="s1">, </span><span class="si">{self.stir_rpm}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSetStirRpm.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetStirRpm.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">stirrer</span><span class="o">.</span><span class="n">set_stir_rate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stir_rpm</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">stir_rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;stir_rpm&#39;</span><span class="p">]</span>
+
+    <span class="nd">@stir_rpm</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">stir_rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;stir_rpm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CStirrerWaitForTemp"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStirrerWaitForTemp">[docs]</a><span class="k">class</span> <span class="nc">CStirrerWaitForTemp</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Delays the script execution until the current temperature of the hotplate is within</span>
+<span class="sd">    0.5 °C of the setpoint. This command is NOT available for overhead stirrers!</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Vessel name to wait for temperature.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StirrerWaitForTemp&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.stirrer.wait_for_temp(</span><span class="si">{self.vessel}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CStirrerWaitForTemp.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStirrerWaitForTemp.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">stirrer</span><span class="o">.</span><span class="n">wait_for_temp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CStartHeaterBath"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStartHeaterBath">[docs]</a><span class="k">class</span> <span class="nc">CStartHeaterBath</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Starts the heating bath of a rotary evaporator.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        rotavap_name {str} -- Name of the node representing the rotary evaporator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotavap_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StartHeaterBath&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rotavap_name&#39;</span><span class="p">:</span> <span class="n">rotavap_name</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.rotavap.start_heater(</span><span class="si">{self.rotavap_name}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CStartHeaterBath.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStartHeaterBath.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">rotavap</span><span class="o">.</span><span class="n">start_heater</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@rotavap_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CStopHeaterBath"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStopHeaterBath">[docs]</a><span class="k">class</span> <span class="nc">CStopHeaterBath</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Stops the heating bath of a rotary evaporator.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        rotavap_name {str} -- Name of the node representing the rotary evaporator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotavap_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StopHeaterBath&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rotavap_name&#39;</span><span class="p">:</span> <span class="n">rotavap_name</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.rotavap.stop_heater(</span><span class="si">{self.rotavap_name}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CStopHeaterBath.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStopHeaterBath.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">rotavap</span><span class="o">.</span><span class="n">stop_heater</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@rotavap_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CStartRotation"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStartRotation">[docs]</a><span class="k">class</span> <span class="nc">CStartRotation</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Starts the rotation of a rotary evaporator.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        rotavap_name {str} -- Name of the node representing the rotary evaporator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotavap_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StartRotation&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rotavap_name&#39;</span><span class="p">:</span> <span class="n">rotavap_name</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.rotavap.start_rotation(</span><span class="si">{self.rotavap_name}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CStartRotation.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStartRotation.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">rotavap</span><span class="o">.</span><span class="n">start_rotation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@rotavap_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CStopRotation"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStopRotation">[docs]</a><span class="k">class</span> <span class="nc">CStopRotation</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Stops the rotation of a rotary evaporator.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        rotavap_name {str} -- Name of the node representing the rotary evaporator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotavap_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StopRotation&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rotavap_name&#39;</span><span class="p">:</span> <span class="n">rotavap_name</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.rotavap.stop_rotation(</span><span class="si">{self.rotavap_name}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CStopRotation.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStopRotation.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">rotavap</span><span class="o">.</span><span class="n">stop_rotation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@rotavap_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CLiftArmUp"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CLiftArmUp">[docs]</a><span class="k">class</span> <span class="nc">CLiftArmUp</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Lifts the rotary evaporator arm up.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        rotavap_name {str} -- Name of the node representing the rotary evaporator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotavap_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;LiftArmUp&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rotavap_name&#39;</span><span class="p">:</span> <span class="n">rotavap_name</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.rotavap.lift_up(</span><span class="si">{self.rotavap_name}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CLiftArmUp.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CLiftArmUp.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">rotavap</span><span class="o">.</span><span class="n">lift_up</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@rotavap_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CLiftArmDown"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CLiftArmDown">[docs]</a><span class="k">class</span> <span class="nc">CLiftArmDown</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Lifts the rotary evaporator down.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        rotavap_name {str} -- Name of the node representing the rotary evaporator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotavap_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;LiftArmDown&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rotavap_name&#39;</span><span class="p">:</span> <span class="n">rotavap_name</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.rotavap.lift_down(</span><span class="si">{self.rotavap_name}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CLiftArmDown.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CLiftArmDown.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">rotavap</span><span class="o">.</span><span class="n">lift_down</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@rotavap_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CResetRotavap"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CResetRotavap">[docs]</a><span class="k">class</span> <span class="nc">CResetRotavap</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Resets the rotary evaporator.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        rotavap_name {str} -- Name of the node representing the rotary evaporator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotavap_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ResetRotavap&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rotavap_name&#39;</span><span class="p">:</span> <span class="n">rotavap_name</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.rotavap.reset(</span><span class="si">{self.rotavap_name}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CResetRotavap.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CResetRotavap.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">rotavap</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@rotavap_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSetBathTemp"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetBathTemp">[docs]</a><span class="k">class</span> <span class="nc">CSetBathTemp</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sets the temperature setpoint for the heating bath.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        rotavap_name {str} -- Name of the node representing the rotary evaporator.</span>
+<span class="sd">        temp {float} -- Temperature in °C.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotavap_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SetBathTemp&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rotavap_name&#39;</span><span class="p">:</span> <span class="n">rotavap_name</span><span class="p">,</span>
+            <span class="s1">&#39;temp&#39;</span><span class="p">:</span> <span class="n">temp</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.rotavap.set_temp(</span><span class="si">{self.rotavap_name}</span><span class="s1">, </span><span class="si">{self.temp}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSetBathTemp.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetBathTemp.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">rotavap</span><span class="o">.</span><span class="n">set_temp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@rotavap_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span>
+
+    <span class="nd">@temp</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSetRvRotationSpeed"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetRvRotationSpeed">[docs]</a><span class="k">class</span> <span class="nc">CSetRvRotationSpeed</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sets the rotation speed setpoint for the rotary evaporator.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        rotavap_name {str} -- Name of the node representing the rotary evaporator.</span>
+<span class="sd">        rotation_speed {str} -- Rotation speed setpoint in RPM.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotavap_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rotation_speed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SetRvRotationSpeed&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rotavap_name&#39;</span><span class="p">:</span> <span class="n">rotavap_name</span><span class="p">,</span>
+            <span class="s1">&#39;rotation_speed&#39;</span><span class="p">:</span> <span class="n">rotation_speed</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.rotavap.set_rotation(</span><span class="si">{self.rotavap_name}</span><span class="s1">, </span><span class="si">{self.rotation_speed}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSetRvRotationSpeed.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetRvRotationSpeed.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">rotavap</span><span class="o">.</span><span class="n">set_rotation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation_speed</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@rotavap_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotation_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotation_speed&#39;</span><span class="p">]</span>
+
+    <span class="nd">@rotation_speed</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotation_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotation_speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CRvWaitForTemp"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CRvWaitForTemp">[docs]</a><span class="k">class</span> <span class="nc">CRvWaitForTemp</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Delays the script execution until the current temperature of the heating bath is</span>
+<span class="sd">    within 0.5°C of the setpoint.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        rotavap_name {str} -- Name of the node representing the rotary evaporator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotavap_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;RvWaitForTemp&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rotavap_name&#39;</span><span class="p">:</span> <span class="n">rotavap_name</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.rotavap.wait_for_temp(</span><span class="si">{self.rotavap_name}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CRvWaitForTemp.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CRvWaitForTemp.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">rotavap</span><span class="o">.</span><span class="n">wait_for_temp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@rotavap_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSetInterval"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetInterval">[docs]</a><span class="k">class</span> <span class="nc">CSetInterval</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sets the interval time for the rotary evaporator, causing it to periodically switch</span>
+<span class="sd">    direction. Setting this to 0 deactivates interval operation.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        rotavap_name {str} -- Name of the node representing the rotary evaporator.</span>
+<span class="sd">        interval {int} -- Interval time in seconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotavap_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SetInterval&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rotavap_name&#39;</span><span class="p">:</span> <span class="n">rotavap_name</span><span class="p">,</span>
+            <span class="s1">&#39;interval&#39;</span><span class="p">:</span> <span class="n">interval</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.rotavap.set_interval(</span><span class="si">{self.rotavap_name}</span><span class="s1">, </span><span class="si">{self.interval}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSetInterval.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetInterval.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">rotavap</span><span class="o">.</span><span class="n">set_interval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@rotavap_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotavap_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;rotavap_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">interval</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;interval&#39;</span><span class="p">]</span>
+
+    <span class="nd">@interval</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;interval&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CInitVacPump"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CInitVacPump">[docs]</a><span class="k">class</span> <span class="nc">CInitVacPump</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Initialises the vacuum pump controller.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vacuum_pump_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;InitVacPump&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">:</span> <span class="n">vacuum_pump_name</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.vacuum.initialise(</span><span class="si">{self.vacuum_pump_name}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CInitVacPump.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CInitVacPump.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">vacuum</span><span class="o">.</span><span class="n">initialise</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vacuum_pump_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vacuum_pump_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CGetVacSp"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CGetVacSp">[docs]</a><span class="k">class</span> <span class="nc">CGetVacSp</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Reads the current vacuum setpoint.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vacuum_pump_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;GetVacSp&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">:</span> <span class="n">vacuum_pump_name</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.vacuum.get_vacuum_set_point(</span><span class="si">{self.vacuum_pump_name}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CGetVacSp.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CGetVacSp.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">vacuum</span><span class="o">.</span><span class="n">get_vacuum_set_point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vacuum_pump_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vacuum_pump_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSetVacSp"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetVacSp">[docs]</a><span class="k">class</span> <span class="nc">CSetVacSp</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sets a new vacuum setpoint.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.</span>
+<span class="sd">        vacuum_pressure {float} -- Vacuum pressure setpoint in mbar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vacuum_pump_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vacuum_pressure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SetVacSp&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">:</span> <span class="n">vacuum_pump_name</span><span class="p">,</span>
+            <span class="s1">&#39;vacuum_pressure&#39;</span><span class="p">:</span> <span class="n">vacuum_pressure</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.vacuum.set_vacuum_set_point(</span><span class="si">{self.vacuum_pump_name}</span><span class="s1">, </span><span class="si">{self.vacuum_pressure}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSetVacSp.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetVacSp.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">vacuum</span><span class="o">.</span><span class="n">set_vacuum_set_point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vacuum_pump_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vacuum_pressure</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vacuum_pump_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vacuum_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pressure&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vacuum_pressure</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vacuum_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pressure&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CStartVac"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStartVac">[docs]</a><span class="k">class</span> <span class="nc">CStartVac</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Starts the vacuum pump.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vacuum_pump_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StartVac&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">:</span> <span class="n">vacuum_pump_name</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.vacuum.start_vacuum(</span><span class="si">{self.vacuum_pump_name}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CStartVac.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStartVac.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">vacuum</span><span class="o">.</span><span class="n">start_vacuum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vacuum_pump_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vacuum_pump_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CStopVac"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStopVac">[docs]</a><span class="k">class</span> <span class="nc">CStopVac</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Stops the vacuum pump.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vacuum_pump_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StopVac&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">:</span> <span class="n">vacuum_pump_name</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.vacuum.stop_vacuum(</span><span class="si">{self.vacuum_pump_name}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CStopVac.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStopVac.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">vacuum</span><span class="o">.</span><span class="n">stop_vacuum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vacuum_pump_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vacuum_pump_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CVentVac"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CVentVac">[docs]</a><span class="k">class</span> <span class="nc">CVentVac</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Vents the vacuum pump to ambient pressure.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vacuum_pump_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;VentVac&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">:</span> <span class="n">vacuum_pump_name</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.vacuum.vent_vacuum(</span><span class="si">{self.vacuum_pump_name}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CVentVac.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CVentVac.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">vacuum</span><span class="o">.</span><span class="n">vent_vacuum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vacuum_pump_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vacuum_pump_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSetSpeedSp"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetSpeedSp">[docs]</a><span class="k">class</span> <span class="nc">CSetSpeedSp</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sets the speed of the vacuum pump (0-100%).</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.</span>
+<span class="sd">        vacuum_pump_speed {float} -- Vacuum pump speed in percent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vacuum_pump_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vacuum_pump_speed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SetSpeedSp&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">:</span> <span class="n">vacuum_pump_name</span><span class="p">,</span>
+            <span class="s1">&#39;vacuum_pump_speed&#39;</span><span class="p">:</span> <span class="n">vacuum_pump_speed</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.vacuum.set_speed_set_point(</span><span class="si">{self.vacuum_pump_name}</span><span class="s1">, </span><span class="si">{self.set_point}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSetSpeedSp.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetSpeedSp.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">vacuum</span><span class="o">.</span><span class="n">set_speed_set_point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vacuum_pump_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_point</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vacuum_pump_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_speed&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vacuum_pump_speed</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vacuum_pump_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vacuum_pump_speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CStartChiller"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStartChiller">[docs]</a><span class="k">class</span> <span class="nc">CStartChiller</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Starts the recirculation chiller.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Vessel to chill. Name of the node the chiller is attached to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StartChiller&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.chiller.start_chiller(</span><span class="si">{self.vessel}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CStartChiller.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStartChiller.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">chiller</span><span class="o">.</span><span class="n">start_chiller</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CStopChiller"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStopChiller">[docs]</a><span class="k">class</span> <span class="nc">CStopChiller</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Stops the recirculation chiller.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Vessel to stop chilling. Name of the node the chiller is attached to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StopChiller&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Stop chiller for </span><span class="si">{vessel}</span><span class="s1">.&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.chiller.stop_chiller(</span><span class="si">{self.vessel}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CStopChiller.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CStopChiller.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">chiller</span><span class="o">.</span><span class="n">stop_chiller</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSetChiller"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetChiller">[docs]</a><span class="k">class</span> <span class="nc">CSetChiller</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sets the temperature setpoint.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Vessel to set chiller temperature. Name of the node the chiller is attached to.</span>
+<span class="sd">        temp {float} -- Temperature in °C.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SetChiller&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+            <span class="s1">&#39;temp&#39;</span><span class="p">:</span> <span class="n">temp</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.chiller.set_temp(</span><span class="si">{self.vessel}</span><span class="s1">, </span><span class="si">{self.temp}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSetChiller.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetChiller.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">chiller</span><span class="o">.</span><span class="n">set_temp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span>
+
+    <span class="nd">@temp</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CChillerWaitForTemp"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CChillerWaitForTemp">[docs]</a><span class="k">class</span> <span class="nc">CChillerWaitForTemp</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Delays the script execution until the current temperature of the chiller is within</span>
+<span class="sd">    0.5°C of the setpoint.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Vessel to wait for temperature. Name of the node the chiller is attached to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ChillerWaitForTemp&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.chiller.wait_for_temp(</span><span class="si">{self.vessel}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CChillerWaitForTemp.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CChillerWaitForTemp.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">chiller</span><span class="o">.</span><span class="n">wait_for_temp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CRampChiller"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CRampChiller">[docs]</a><span class="k">class</span> <span class="nc">CRampChiller</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Causes the chiller to ramp the temperature up or down. Only available for Petite</span>
+<span class="sd">    Fleur.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel {str} -- Vessel to ramp chiller on. Name of the node the chiller is attached to.</span>
+<span class="sd">        ramp_duration {int} -- Desired duration of the ramp in seconds.</span>
+<span class="sd">        end_temperature {float} -- Final temperature of the ramp in °C.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ramp_duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end_temperature</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;RampChiller&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+            <span class="s1">&#39;ramp_duration&#39;</span><span class="p">:</span> <span class="n">ramp_duration</span><span class="p">,</span>
+            <span class="s1">&#39;end_temperature&#39;</span><span class="p">:</span> <span class="n">end_temperature</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.chiller.ramp_chiller(</span><span class="si">{self.vessel}</span><span class="s1">, </span><span class="si">{self.ramp_duration}</span><span class="s1">, </span><span class="si">{self.end_temperature}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CRampChiller.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CRampChiller.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">chiller</span><span class="o">.</span><span class="n">ramp_chiller</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ramp_duration</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_temperature</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ramp_duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;ramp_duration&#39;</span><span class="p">]</span>
+
+    <span class="nd">@ramp_duration</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">ramp_duration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;ramp_duration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">end_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;end_temperature&#39;</span><span class="p">]</span>
+
+    <span class="nd">@end_temperature</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">end_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;end_temperature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSwitchChiller"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSwitchChiller">[docs]</a><span class="k">class</span> <span class="nc">CSwitchChiller</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Switches the solenoid valve.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        solenoid_valve_name -- {str} Name of the node the solenoid valve is attached to.</span>
+<span class="sd">        state {str} -- Is either &quot;on&quot; or &quot;off&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solenoid_valve_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SwitchChiller&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;solenoid_valve_name&#39;</span><span class="p">:</span> <span class="n">solenoid_valve_name</span><span class="p">,</span>
+            <span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="n">state</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.chiller.switch_vessel(</span><span class="si">{self.solenoid_valve_name}</span><span class="s1">, </span><span class="si">{self.state}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSwitchChiller.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSwitchChiller.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">chiller</span><span class="o">.</span><span class="n">switch_vessel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solenoid_valve_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">solenoid_valve_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solenoid_valve_name&#39;</span><span class="p">]</span>
+
+    <span class="nd">@solenoid_valve_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">solenoid_valve_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solenoid_valve_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span>
+
+    <span class="nd">@state</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSetCoolingPower"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetCoolingPower">[docs]</a><span class="k">class</span> <span class="nc">CSetCoolingPower</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sets the cooling power (0-100%). Only available for CF41.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        vessel -- Vessel to set cooling power of chiller. Name of the node the chiller is attached to.</span>
+<span class="sd">        cooling_power -- Desired cooling power in percent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cooling_power</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SetCoolingPower&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+            <span class="s1">&#39;cooling_power&#39;</span><span class="p">:</span> <span class="n">cooling_power</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.chiller.cooling_power(</span><span class="si">{self.vessel}</span><span class="s1">, </span><span class="si">{self.cooling_power}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSetCoolingPower.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetCoolingPower.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">chiller</span><span class="o">.</span><span class="n">cooling_power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling_power</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
+
+    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cooling_power</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;cooling_power&#39;</span><span class="p">]</span>
+
+    <span class="nd">@cooling_power</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">cooling_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;cooling_power&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CSetRecordingSpeed"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetRecordingSpeed">[docs]</a><span class="k">class</span> <span class="nc">CSetRecordingSpeed</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sets the timelapse speed of the camera module.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        recording_speed {float} -- Factor by which the recording should be sped up, i.e. 2 would mean twice the normal speed. 1 means normal speed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recording_speed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SetRecordingSpeed&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;recording_speed&#39;</span><span class="p">:</span> <span class="n">recording_speed</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.camera.change_recording_speed(</span><span class="si">{self.recording_speed}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CSetRecordingSpeed.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CSetRecordingSpeed.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">change_recording_speed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recording_speed</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">recording_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;recording_speed&#39;</span><span class="p">]</span>
+
+    <span class="nd">@recording_speed</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">recording_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;recording_speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CWait"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CWait">[docs]</a><span class="k">class</span> <span class="nc">CWait</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Delays execution of the script for a set amount of time. This command will</span>
+<span class="sd">    immediately reply with an estimate of when the waiting will be finished, and also</span>
+<span class="sd">    give regular updates indicating that it is still alive.</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        time -- Time to wait in seconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;CWait&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.wait(</span><span class="si">{self.time}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="CWait.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CWait.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
+
+    <span class="nd">@time</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CBreakpoint"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CBreakpoint">[docs]</a><span class="k">class</span> <span class="nc">CBreakpoint</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Introduces a breakpoint in the script. The execution is halted until the operator</span>
+<span class="sd">    resumes it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Breakpoint&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_code</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;chempiler.breakpoint()&#39;</span>
+
+<div class="viewcode-block" id="CBreakpoint.execute"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CBreakpoint.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chempiler</span><span class="p">):</span>
+        <span class="n">chempiler</span><span class="o">.</span><span class="n">breakpoint</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+
+<span class="c1"># class StartRecordingVideo(Step):</span>
+
+<span class="c1">#     def __init__(self):</span>
+
+<span class="c1">#         self.name = &#39;StartRecordingVideo&#39;</span>
+<span class="c1">#         self.properties = {</span>
+<span class="c1">#         }</span>
+
+<span class="c1">#         self.literal_code = f&#39;# spawn queues message_queue = multiprocessing.Queue() recording_speed_queue = multiprocessing.Queue()&#39;</span>
+
+<span class="c1">#     def execute(self, chempiler):</span>
+<span class="c1">#         # spawn queues</span>
+<span class="c1">#         message_queue = multiprocessing.Queue()</span>
+<span class="c1">#         recording_speed_queue = multiprocessing.Queue()</span>
+
+<span class="c1">#         # create logging message handlers</span>
+<span class="c1">#         video_handler = VlogHandler(message_queue)</span>
+<span class="c1">#         recording_speed_handler = VlogHandler(recording_speed_queue)</span>
+
+<span class="c1">#         # set logging levels</span>
+<span class="c1">#         video_handler.setLevel(logging.INFO)</span>
+<span class="c1">#         recording_speed_handler.setLevel(5)  # set a logging level below DEBUG</span>
+
+<span class="c1">#         # only allow dedicated messages for the recording speed handler</span>
+<span class="c1">#         speed_filter = RecordingSpeedFilter()</span>
+<span class="c1">#         recording_speed_handler.addFilter(speed_filter)</span>
+
+<span class="c1">#         # attach the handlers</span>
+<span class="c1">#         logger.addHandler(video_handler)</span>
+<span class="c1">#         logger.addHandler(recording_speed_handler)</span>
+
+<span class="c1">#         # work out video name and path</span>
+<span class="c1">#         i = 0</span>
+<span class="c1">#         video_path = os.path.join(HERE, &quot;log_videos&quot;, &quot;{0}_{1}.avi&quot;.format(EXPERIMENT_CODE, i))</span>
+
+<span class="c1">#         while True:</span>
+<span class="c1">#             # keep incrementing the file counter until you hit one that doesn&#39;t yet exist</span>
+<span class="c1">#             if os.path.isfile(video_path):</span>
+<span class="c1">#                 i += 1</span>
+<span class="c1">#                 video_path = os.path.join(HERE, &quot;log_videos&quot;, &quot;{0}_{1}.avi&quot;.format(EXPERIMENT_CODE, i))</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 break</span>
+<span class="c1">#         # launch recording process</span>
+<span class="c1">#         recording_process = multiprocessing.Process(target=recording_worker, args=(message_queue, recording_speed_queue, video_path))</span>
+<span class="c1">#         recording_process.start()</span>
+<span class="c1">#         time.sleep(5)  # wait for the video feed to stabilise</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Matthew Craven.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
