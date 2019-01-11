@@ -1,34 +1,148 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Steps &#8212; xdl 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Steps &mdash; xdl 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Welcome to xdl’s documentation!" href="index.html" />
+    <link rel="prev" title="Welcome to xdl’s documentation!" href="index.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
    
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  <div class="wy-grid-for-nav">
 
-  </head><body>
-  
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+          
+            <a href="index.html" class="icon icon-home"> xdl
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Steps</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">xdl</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Steps</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/steps.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="module-xdl.steps">
 <span id="steps"></span><h1>Steps<a class="headerlink" href="#module-xdl.steps" title="Permalink to this headline">¶</a></h1>
@@ -36,15 +150,23 @@
 <dt id="xdl.steps.Add">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">Add</code><span class="sig-paren">(</span><em>reagent=None</em>, <em>volume=None</em>, <em>vessel=None</em>, <em>time=None</em>, <em>move_speed='default'</em>, <em>waste_vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#Add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.Add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add given volume of given reagent to given vessel.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>reagent {str} – Reagent to add.
-volume {float} – Volume of reagent to add.
-vessel {str} – Vessel name to add reagent to.
-time {float} – Time to spend doing addition in seconds. (optional)
-move_speed {float} – Speed in mL / min to move liquid at. (optional)
-clean_tubing {bool} – Clean tubing before and after addition. (optional)</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Reagent to add.</strong> (<em>reagent</em>) – </li>
+<li><strong>{float} -- Volume of reagent to add.</strong> (<em>volume</em>) – </li>
+<li><strong>{str} -- Vessel name to add reagent to.</strong> (<em>vessel</em>) – </li>
+<li><strong>{float} -- Time to spend doing addition in seconds.</strong> (<em>time</em>) – </li>
+<li><strong>{float} -- Speed in mL / min to move liquid at.</strong> (<em>move_speed</em>) – </li>
+<li><strong>{bool} -- Clean tubing before and after addition.</strong> (<em>clean_tubing</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -56,10 +178,14 @@ resumes it.</p>
 <dt id="xdl.steps.CBreakpoint.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CBreakpoint.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CBreakpoint.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -69,18 +195,27 @@ resumes it.</p>
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CChillerWaitForTemp</code><span class="sig-paren">(</span><em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CChillerWaitForTemp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CChillerWaitForTemp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delays the script execution until the current temperature of the chiller is within
 0.5°C of the setpoint.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel to wait for temperature. Name of the node the chiller is attached to.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Vessel to wait for temperature. Name of the node the chiller is attached to.</strong> (<em>vessel</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CChillerWaitForTemp.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CChillerWaitForTemp.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CChillerWaitForTemp.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -89,18 +224,27 @@ resumes it.</p>
 <dt id="xdl.steps.CGetVacSp">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CGetVacSp</code><span class="sig-paren">(</span><em>vacuum_pump_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CGetVacSp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CGetVacSp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads the current vacuum setpoint.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vacuum_pump_name {str} – Name of the node the vacuum pump is attached to.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Name of the node the vacuum pump is attached to.</strong> (<em>vacuum_pump_name</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CGetVacSp.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CGetVacSp.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CGetVacSp.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -109,18 +253,27 @@ resumes it.</p>
 <dt id="xdl.steps.CInitVacPump">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CInitVacPump</code><span class="sig-paren">(</span><em>vacuum_pump_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CInitVacPump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CInitVacPump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialises the vacuum pump controller.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vacuum_pump_name {str} – Name of the node the vacuum pump is attached to.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Name of the node the vacuum pump is attached to.</strong> (<em>vacuum_pump_name</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CInitVacPump.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CInitVacPump.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CInitVacPump.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -129,18 +282,27 @@ resumes it.</p>
 <dt id="xdl.steps.CLiftArmDown">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CLiftArmDown</code><span class="sig-paren">(</span><em>rotavap_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CLiftArmDown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CLiftArmDown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lifts the rotary evaporator down.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>rotavap_name {str} – Name of the node representing the rotary evaporator.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Name of the node representing the rotary evaporator.</strong> (<em>rotavap_name</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CLiftArmDown.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CLiftArmDown.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CLiftArmDown.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -149,18 +311,27 @@ resumes it.</p>
 <dt id="xdl.steps.CLiftArmUp">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CLiftArmUp</code><span class="sig-paren">(</span><em>rotavap_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CLiftArmUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CLiftArmUp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lifts the rotary evaporator arm up.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>rotavap_name {str} – Name of the node representing the rotary evaporator.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Name of the node representing the rotary evaporator.</strong> (<em>rotavap_name</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CLiftArmUp.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CLiftArmUp.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CLiftArmUp.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -170,23 +341,35 @@ resumes it.</p>
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CMove</code><span class="sig-paren">(</span><em>from_vessel=None</em>, <em>to_vessel=None</em>, <em>volume=None</em>, <em>move_speed='default'</em>, <em>aspiration_speed='default'</em>, <em>dispense_speed='default'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CMove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CMove" title="Permalink to this definition">¶</a></dt>
 <dd><p>Moves a specified volume from one node in the graph to another. Moving from and to
 the same node is supported.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>from_vessel {str} – Vessel name to move from.
-to_vessel {str} – Vessel name to move to.
-volume {float} – Volume to move in mL. ‘all’ moves everything.
-move_speed – Speed at which liquid is moved in mL / min. (optional)
-aspiration_speed – Speed at which liquid aspirates from from_vessel. (optional)
-dispense_speed – Speed at which liquid dispenses from from_vessel. (optional)</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel name to move from.</strong> (<em>from_vessel</em>) – </li>
+<li><strong>{str} -- Vessel name to move to.</strong> (<em>to_vessel</em>) – </li>
+<li><strong>{float} -- Volume to move in mL. 'all' moves everything.</strong> (<em>volume</em>) – </li>
+<li><strong>-- Speed at which liquid is moved in mL / min.</strong> (<em>move_speed</em>) – </li>
+<li><strong>-- Speed at which liquid aspirates from from_vessel.</strong> (<em>aspiration_speed</em>) – </li>
+<li><strong>-- Speed at which liquid dispenses from from_vessel.</strong> (<em>dispense_speed</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CMove.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CMove.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CMove.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -195,18 +378,27 @@ dispense_speed – Speed at which liquid dispenses from from_vessel. (optional)<
 <dt id="xdl.steps.CPrime">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CPrime</code><span class="sig-paren">(</span><em>aspiration_speed='default'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CPrime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CPrime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Moves the tube volume of every node with “flask” as class to waste.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>aspiration_speed {float} – Speed in mL / min at which material should be withdrawn.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{float} -- Speed in mL / min at which material should be withdrawn.</strong> (<em>aspiration_speed</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CPrime.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CPrime.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CPrime.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -216,20 +408,32 @@ dispense_speed – Speed at which liquid dispenses from from_vessel. (optional)<
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CRampChiller</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>ramp_duration=None</em>, <em>end_temperature=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CRampChiller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CRampChiller" title="Permalink to this definition">¶</a></dt>
 <dd><p>Causes the chiller to ramp the temperature up or down. Only available for Petite
 Fleur.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel to ramp chiller on. Name of the node the chiller is attached to.
-ramp_duration {int} – Desired duration of the ramp in seconds.
-end_temperature {float} – Final temperature of the ramp in °C.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel to ramp chiller on. Name of the node the chiller is attached to.</strong> (<em>vessel</em>) – </li>
+<li><strong>{int} -- Desired duration of the ramp in seconds.</strong> (<em>ramp_duration</em>) – </li>
+<li><strong>{float} -- Final temperature of the ramp in °C.</strong> (<em>end_temperature</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CRampChiller.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CRampChiller.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CRampChiller.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -238,18 +442,27 @@ end_temperature {float} – Final temperature of the ramp in °C.</dd>
 <dt id="xdl.steps.CResetRotavap">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CResetRotavap</code><span class="sig-paren">(</span><em>rotavap_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CResetRotavap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CResetRotavap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the rotary evaporator.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>rotavap_name {str} – Name of the node representing the rotary evaporator.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Name of the node representing the rotary evaporator.</strong> (<em>rotavap_name</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CResetRotavap.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CResetRotavap.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CResetRotavap.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -259,18 +472,27 @@ end_temperature {float} – Final temperature of the ramp in °C.</dd>
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CRvWaitForTemp</code><span class="sig-paren">(</span><em>rotavap_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CRvWaitForTemp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CRvWaitForTemp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delays the script execution until the current temperature of the heating bath is
 within 0.5°C of the setpoint.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>rotavap_name {str} – Name of the node representing the rotary evaporator.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Name of the node representing the rotary evaporator.</strong> (<em>rotavap_name</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CRvWaitForTemp.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CRvWaitForTemp.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CRvWaitForTemp.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -292,10 +514,14 @@ upper_phase_vessel {str} – Vessel name the upper phase should be transferred t
 <dt id="xdl.steps.CSeparate.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSeparate.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSeparate.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -304,19 +530,31 @@ upper_phase_vessel {str} – Vessel name the upper phase should be transferred t
 <dt id="xdl.steps.CSetBathTemp">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSetBathTemp</code><span class="sig-paren">(</span><em>rotavap_name=None</em>, <em>temp=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetBathTemp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetBathTemp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the temperature setpoint for the heating bath.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>rotavap_name {str} – Name of the node representing the rotary evaporator.
-temp {float} – Temperature in °C.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Name of the node representing the rotary evaporator.</strong> (<em>rotavap_name</em>) – </li>
+<li><strong>{float} -- Temperature in °C.</strong> (<em>temp</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSetBathTemp.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetBathTemp.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetBathTemp.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -325,19 +563,31 @@ temp {float} – Temperature in °C.</dd>
 <dt id="xdl.steps.CSetChiller">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSetChiller</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>temp=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetChiller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetChiller" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the temperature setpoint.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel to set chiller temperature. Name of the node the chiller is attached to.
-temp {float} – Temperature in °C.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel to set chiller temperature. Name of the node the chiller is attached to.</strong> (<em>vessel</em>) – </li>
+<li><strong>{float} -- Temperature in °C.</strong> (<em>temp</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSetChiller.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetChiller.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetChiller.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -346,19 +596,31 @@ temp {float} – Temperature in °C.</dd>
 <dt id="xdl.steps.CSetCoolingPower">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSetCoolingPower</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>cooling_power=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetCoolingPower"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetCoolingPower" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the cooling power (0-100%). Only available for CF41.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel – Vessel to set cooling power of chiller. Name of the node the chiller is attached to.
-cooling_power – Desired cooling power in percent.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>-- Vessel to set cooling power of chiller. Name of the node the chiller is attached to.</strong> (<em>vessel</em>) – </li>
+<li><strong>-- Desired cooling power in percent.</strong> (<em>cooling_power</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSetCoolingPower.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetCoolingPower.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetCoolingPower.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -368,19 +630,31 @@ cooling_power – Desired cooling power in percent.</dd>
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSetInterval</code><span class="sig-paren">(</span><em>rotavap_name=None</em>, <em>interval=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetInterval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetInterval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the interval time for the rotary evaporator, causing it to periodically switch
 direction. Setting this to 0 deactivates interval operation.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>rotavap_name {str} – Name of the node representing the rotary evaporator.
-interval {int} – Interval time in seconds.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Name of the node representing the rotary evaporator.</strong> (<em>rotavap_name</em>) – </li>
+<li><strong>{int} -- Interval time in seconds.</strong> (<em>interval</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSetInterval.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetInterval.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetInterval.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -389,18 +663,27 @@ interval {int} – Interval time in seconds.</dd>
 <dt id="xdl.steps.CSetRecordingSpeed">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSetRecordingSpeed</code><span class="sig-paren">(</span><em>recording_speed=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetRecordingSpeed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetRecordingSpeed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the timelapse speed of the camera module.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>recording_speed {float} – Factor by which the recording should be sped up, i.e. 2 would mean twice the normal speed. 1 means normal speed.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{float} -- Factor by which the recording should be sped up</strong><strong>, </strong><strong>i.e. 2 would mean twice the normal speed. 1 means normal speed.</strong> (<em>recording_speed</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSetRecordingSpeed.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetRecordingSpeed.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetRecordingSpeed.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -409,19 +692,31 @@ interval {int} – Interval time in seconds.</dd>
 <dt id="xdl.steps.CSetRvRotationSpeed">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSetRvRotationSpeed</code><span class="sig-paren">(</span><em>rotavap_name=None</em>, <em>rotation_speed=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetRvRotationSpeed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetRvRotationSpeed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the rotation speed setpoint for the rotary evaporator.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>rotavap_name {str} – Name of the node representing the rotary evaporator.
-rotation_speed {str} – Rotation speed setpoint in RPM.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Name of the node representing the rotary evaporator.</strong> (<em>rotavap_name</em>) – </li>
+<li><strong>{str} -- Rotation speed setpoint in RPM.</strong> (<em>rotation_speed</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSetRvRotationSpeed.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetRvRotationSpeed.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetRvRotationSpeed.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -430,19 +725,31 @@ rotation_speed {str} – Rotation speed setpoint in RPM.</dd>
 <dt id="xdl.steps.CSetSpeedSp">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSetSpeedSp</code><span class="sig-paren">(</span><em>vacuum_pump_name=None</em>, <em>vacuum_pump_speed=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetSpeedSp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetSpeedSp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the speed of the vacuum pump (0-100%).</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vacuum_pump_name {str} – Name of the node the vacuum pump is attached to.
-vacuum_pump_speed {float} – Vacuum pump speed in percent.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Name of the node the vacuum pump is attached to.</strong> (<em>vacuum_pump_name</em>) – </li>
+<li><strong>{float} -- Vacuum pump speed in percent.</strong> (<em>vacuum_pump_speed</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSetSpeedSp.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetSpeedSp.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetSpeedSp.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -451,19 +758,31 @@ vacuum_pump_speed {float} – Vacuum pump speed in percent.</dd>
 <dt id="xdl.steps.CSetStirRpm">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSetStirRpm</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>stir_rpm=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetStirRpm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetStirRpm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the stirring speed setpoint of a hotplate or overhead stirrer.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to set stir speed.
-stir_rpm {float} – Stir speed in RPM.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel name to set stir speed.</strong> (<em>vessel</em>) – </li>
+<li><strong>{float} -- Stir speed in RPM.</strong> (<em>stir_rpm</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSetStirRpm.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetStirRpm.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetStirRpm.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -473,19 +792,31 @@ stir_rpm {float} – Stir speed in RPM.</dd>
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSetTemp</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>temp=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetTemp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetTemp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the temperature setpoint of a hotplate stirrer. This command is NOT available
 for overhead stirrers!</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to set temperature of hotplate stirrer.
-temp {float} – Temperature in °C</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel name to set temperature of hotplate stirrer.</strong> (<em>vessel</em>) – </li>
+<li><strong>{float} -- Temperature in °C</strong> (<em>temp</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSetTemp.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetTemp.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetTemp.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -494,19 +825,31 @@ temp {float} – Temperature in °C</dd>
 <dt id="xdl.steps.CSetVacSp">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSetVacSp</code><span class="sig-paren">(</span><em>vacuum_pump_name=None</em>, <em>vacuum_pressure=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetVacSp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetVacSp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets a new vacuum setpoint.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vacuum_pump_name {str} – Name of the node the vacuum pump is attached to.
-vacuum_pressure {float} – Vacuum pressure setpoint in mbar.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Name of the node the vacuum pump is attached to.</strong> (<em>vacuum_pump_name</em>) – </li>
+<li><strong>{float} -- Vacuum pressure setpoint in mbar.</strong> (<em>vacuum_pressure</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSetVacSp.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSetVacSp.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSetVacSp.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -515,18 +858,27 @@ vacuum_pressure {float} – Vacuum pressure setpoint in mbar.</dd>
 <dt id="xdl.steps.CStartChiller">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CStartChiller</code><span class="sig-paren">(</span><em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStartChiller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStartChiller" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the recirculation chiller.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel to chill. Name of the node the chiller is attached to.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Vessel to chill. Name of the node the chiller is attached to.</strong> (<em>vessel</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CStartChiller.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStartChiller.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStartChiller.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -535,18 +887,27 @@ vacuum_pressure {float} – Vacuum pressure setpoint in mbar.</dd>
 <dt id="xdl.steps.CStartHeat">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CStartHeat</code><span class="sig-paren">(</span><em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStartHeat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStartHeat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the heating operation of a hotplate stirrer.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to heat.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Vessel name to heat.</strong> (<em>vessel</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CStartHeat.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStartHeat.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStartHeat.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -555,18 +916,27 @@ vacuum_pressure {float} – Vacuum pressure setpoint in mbar.</dd>
 <dt id="xdl.steps.CStartHeaterBath">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CStartHeaterBath</code><span class="sig-paren">(</span><em>rotavap_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStartHeaterBath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStartHeaterBath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the heating bath of a rotary evaporator.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>rotavap_name {str} – Name of the node representing the rotary evaporator.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Name of the node representing the rotary evaporator.</strong> (<em>rotavap_name</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CStartHeaterBath.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStartHeaterBath.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStartHeaterBath.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -575,18 +945,27 @@ vacuum_pressure {float} – Vacuum pressure setpoint in mbar.</dd>
 <dt id="xdl.steps.CStartRotation">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CStartRotation</code><span class="sig-paren">(</span><em>rotavap_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStartRotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStartRotation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the rotation of a rotary evaporator.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>rotavap_name {str} – Name of the node representing the rotary evaporator.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Name of the node representing the rotary evaporator.</strong> (<em>rotavap_name</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CStartRotation.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStartRotation.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStartRotation.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -595,18 +974,27 @@ vacuum_pressure {float} – Vacuum pressure setpoint in mbar.</dd>
 <dt id="xdl.steps.CStartStir">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CStartStir</code><span class="sig-paren">(</span><em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStartStir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStartStir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the stirring operation of a hotplate or overhead stirrer.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to stir.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Vessel name to stir.</strong> (<em>vessel</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CStartStir.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStartStir.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStartStir.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -615,18 +1003,27 @@ vacuum_pressure {float} – Vacuum pressure setpoint in mbar.</dd>
 <dt id="xdl.steps.CStartVac">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CStartVac</code><span class="sig-paren">(</span><em>vacuum_pump_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStartVac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStartVac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the vacuum pump.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vacuum_pump_name {str} – Name of the node the vacuum pump is attached to.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Name of the node the vacuum pump is attached to.</strong> (<em>vacuum_pump_name</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CStartVac.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStartVac.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStartVac.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -636,18 +1033,27 @@ vacuum_pressure {float} – Vacuum pressure setpoint in mbar.</dd>
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CStirrerWaitForTemp</code><span class="sig-paren">(</span><em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStirrerWaitForTemp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStirrerWaitForTemp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delays the script execution until the current temperature of the hotplate is within
 0.5 °C of the setpoint. This command is NOT available for overhead stirrers!</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to wait for temperature.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Vessel name to wait for temperature.</strong> (<em>vessel</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CStirrerWaitForTemp.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStirrerWaitForTemp.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStirrerWaitForTemp.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -656,18 +1062,27 @@ vacuum_pressure {float} – Vacuum pressure setpoint in mbar.</dd>
 <dt id="xdl.steps.CStopChiller">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CStopChiller</code><span class="sig-paren">(</span><em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStopChiller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStopChiller" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stops the recirculation chiller.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel to stop chilling. Name of the node the chiller is attached to.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Vessel to stop chilling. Name of the node the chiller is attached to.</strong> (<em>vessel</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CStopChiller.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStopChiller.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStopChiller.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -677,18 +1092,27 @@ vacuum_pressure {float} – Vacuum pressure setpoint in mbar.</dd>
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CStopHeat</code><span class="sig-paren">(</span><em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStopHeat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStopHeat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the stirring operation of a hotplate stirrer. This command is NOT available
 for overhead stirrers!</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to stop heating.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Vessel name to stop heating.</strong> (<em>vessel</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CStopHeat.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStopHeat.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStopHeat.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -697,18 +1121,27 @@ for overhead stirrers!</p>
 <dt id="xdl.steps.CStopHeaterBath">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CStopHeaterBath</code><span class="sig-paren">(</span><em>rotavap_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStopHeaterBath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStopHeaterBath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stops the heating bath of a rotary evaporator.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>rotavap_name {str} – Name of the node representing the rotary evaporator.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Name of the node representing the rotary evaporator.</strong> (<em>rotavap_name</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CStopHeaterBath.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStopHeaterBath.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStopHeaterBath.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -717,18 +1150,27 @@ for overhead stirrers!</p>
 <dt id="xdl.steps.CStopRotation">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CStopRotation</code><span class="sig-paren">(</span><em>rotavap_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStopRotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStopRotation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stops the rotation of a rotary evaporator.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>rotavap_name {str} – Name of the node representing the rotary evaporator.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Name of the node representing the rotary evaporator.</strong> (<em>rotavap_name</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CStopRotation.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStopRotation.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStopRotation.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -737,18 +1179,27 @@ for overhead stirrers!</p>
 <dt id="xdl.steps.CStopStir">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CStopStir</code><span class="sig-paren">(</span><em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStopStir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStopStir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stops the stirring operation of a hotplate or overhead stirrer.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to stop stirring.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Vessel name to stop stirring.</strong> (<em>vessel</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CStopStir.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStopStir.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStopStir.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -757,18 +1208,27 @@ for overhead stirrers!</p>
 <dt id="xdl.steps.CStopVac">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CStopVac</code><span class="sig-paren">(</span><em>vacuum_pump_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStopVac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStopVac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stops the vacuum pump.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vacuum_pump_name {str} – Name of the node the vacuum pump is attached to.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Name of the node the vacuum pump is attached to.</strong> (<em>vacuum_pump_name</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CStopVac.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CStopVac.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CStopVac.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -777,19 +1237,31 @@ for overhead stirrers!</p>
 <dt id="xdl.steps.CSwitchCartridge">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSwitchCartridge</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>cartridge=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSwitchCartridge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSwitchCartridge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Switches a cartridge carousel to the specified position.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Name of the node the vacuum valve is logically attacked to (e.g. “rotavap”)
-cartridge {int} – Number of the position the carousel should be switched to (0-5)</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Name of the node the vacuum valve is logically attacked to</strong> (<em>vessel</em>) – </li>
+<li><strong>{int} -- Number of the position the carousel should be switched to</strong> (<em>cartridge</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSwitchCartridge.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSwitchCartridge.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSwitchCartridge.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -798,19 +1270,31 @@ cartridge {int} – Number of the position the carousel should be switched to (0
 <dt id="xdl.steps.CSwitchChiller">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSwitchChiller</code><span class="sig-paren">(</span><em>solenoid_valve_name=None</em>, <em>state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSwitchChiller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSwitchChiller" title="Permalink to this definition">¶</a></dt>
 <dd><p>Switches the solenoid valve.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>solenoid_valve_name – {str} Name of the node the solenoid valve is attached to.
-state {str} – Is either “on” or “off”</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>-- {str} Name of the node the solenoid valve is attached to.</strong> (<em>solenoid_valve_name</em>) – </li>
+<li><strong>{str} -- Is either &quot;on&quot;</strong><strong> or </strong><strong>&quot;off&quot;</strong> (<em>state</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSwitchChiller.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSwitchChiller.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSwitchChiller.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -819,19 +1303,31 @@ state {str} – Is either “on” or “off”</dd>
 <dt id="xdl.steps.CSwitchColumn">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSwitchColumn</code><span class="sig-paren">(</span><em>column=None</em>, <em>destination=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSwitchColumn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSwitchColumn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Switches a fractionating valve attached to a chromatography column.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>column {str} – Name of the column in the graph
-destination {str} – Either “collect” or “waste”</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Name of the column in the graph</strong> (<em>column</em>) – </li>
+<li><strong>{str} -- Either &quot;collect&quot;</strong><strong> or </strong><strong>&quot;waste&quot;</strong> (<em>destination</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSwitchColumn.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSwitchColumn.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSwitchColumn.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -840,19 +1336,31 @@ destination {str} – Either “collect” or “waste”</dd>
 <dt id="xdl.steps.CSwitchVacuum">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CSwitchVacuum</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>destination=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSwitchVacuum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSwitchVacuum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Switches a vacuum valve between backbone and vacuum.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Name of the node the vacuum valve is logically attacked to (e.g. “filter_bottom”)
-destination {str} – Either “vacuum” or “backbone”</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Name of the node the vacuum valve is logically attacked to</strong> (<em>vessel</em>) – </li>
+<li><strong>{str} -- Either &quot;vacuum&quot;</strong><strong> or </strong><strong>&quot;backbone&quot;</strong> (<em>destination</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CSwitchVacuum.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CSwitchVacuum.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CSwitchVacuum.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -861,18 +1369,27 @@ destination {str} – Either “vacuum” or “backbone”</dd>
 <dt id="xdl.steps.CVentVac">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CVentVac</code><span class="sig-paren">(</span><em>vacuum_pump_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CVentVac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CVentVac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Vents the vacuum pump to ambient pressure.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vacuum_pump_name {str} – Name of the node the vacuum pump is attached to.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Name of the node the vacuum pump is attached to.</strong> (<em>vacuum_pump_name</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CVentVac.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CVentVac.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CVentVac.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -883,18 +1400,27 @@ destination {str} – Either “vacuum” or “backbone”</dd>
 <dd><p>Delays execution of the script for a set amount of time. This command will
 immediately reply with an estimate of when the waiting will be finished, and also
 give regular updates indicating that it is still alive.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>time – Time to wait in seconds.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>-- Time to wait in seconds.</strong> (<em>time</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.CWait.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_chasm.html#CWait.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CWait.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -903,21 +1429,34 @@ give regular updates indicating that it is still alive.</p>
 <dt id="xdl.steps.Chill">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">Chill</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>temp=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#Chill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.Chill" title="Permalink to this definition">¶</a></dt>
 <dd><p>Chill vessel to given temperature.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to chill.
-temp {float} – Temperature in °C to chill to.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel name to chill.</strong> (<em>vessel</em>) – </li>
+<li><strong>{float} -- Temperature in °C to chill to.</strong> (<em>temp</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.ChillBackToRT">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">ChillBackToRT</code><span class="sig-paren">(</span><em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#ChillBackToRT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.ChillBackToRT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Chill given vessel back to room temperature.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to chill.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Vessel name to chill.</strong> (<em>vessel</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -929,32 +1468,49 @@ temp {float} – Temperature in °C to chill to.</dd>
 <dt id="xdl.steps.CleanVessel">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">CleanVessel</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>solvent='default'</em>, <em>volume='default'</em>, <em>stir_rpm='default'</em>, <em>stir_time='default'</em>, <em>waste_vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#CleanVessel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.CleanVessel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clean given vessel.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel to clean.
-solvent {str} – Solvent to clean with. (optional)
-volume {str} – Volume of solvent to clean with in mL. (optional)
-stir_rpm {str} – RPM to stir vessel at during cleaning. (optional)
-stir_time {str} – Time to stir once solvent has been added. (optional)</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel to clean.</strong> (<em>vessel</em>) – </li>
+<li><strong>{str} -- Solvent to clean with.</strong> (<em>solvent</em>) – </li>
+<li><strong>{str} -- Volume of solvent to clean with in mL.</strong> (<em>volume</em>) – </li>
+<li><strong>{str} -- RPM to stir vessel at during cleaning.</strong> (<em>stir_rpm</em>) – </li>
+<li><strong>{str} -- Time to stir once solvent has been added.</strong> (<em>stir_time</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.Confirm">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">Confirm</code><span class="sig-paren">(</span><em>msg=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#Confirm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.Confirm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the user to confirm something before execution continues.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>msg {str} – Message to get user to confirm experiment should continue.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Message to get user to confirm experiment should continue.</strong> (<em>msg</em>) – </td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="xdl.steps.Confirm.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#Confirm.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.Confirm.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -964,35 +1520,56 @@ stir_time {str} – Time to stir once solvent has been added. (optional)</dd>
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">ContinueStirToRT</code><span class="sig-paren">(</span><em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#ContinueStirToRT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.ContinueStirToRT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set vessel temperature to room temperature, and continue stirring until
 this temperature is reached, then stop stirring. Assumes stirrer is already on.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel to continue stirring until room temperature is reached.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Vessel to continue stirring until room temperature is reached.</strong> (<em>vessel</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.Dry">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">Dry</code><span class="sig-paren">(</span><em>filter_vessel=None</em>, <em>waste_vessel=None</em>, <em>time='default'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#Dry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.Dry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dry given vessel by applying vacuum for given time.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to dry.
-time {str} – Time to dry vessel for in seconds. (optional)</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel name to dry.</strong> (<em>vessel</em>) – </li>
+<li><strong>{str} -- Time to dry vessel for in seconds.</strong> (<em>time</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.Extract">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">Extract</code><span class="sig-paren">(</span><em>from_vessel=None</em>, <em>separation_vessel=None</em>, <em>to_vessel=None</em>, <em>solvent=None</em>, <em>solvent_volume=None</em>, <em>n_extractions=1</em>, <em>product_bottom=True</em>, <em>waste_vessel=None</em>, <em>waste_phase_to_vessel=None</em>, <em>filter_dead_volume=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#Extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.Extract" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract contents of from_vessel using given amount of given solvent.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>from_vessel {str} – Vessel name with contents to be extracted.
-separation_vessel {str} – Separation vessel name.
-solvent {str} – Solvent to extract with.
-solvent_volume {float} – Volume of solvent to extract with.
-n_separations {int} – Number of separations to perform.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel name with contents to be extracted.</strong> (<em>from_vessel</em>) – </li>
+<li><strong>{str} -- Separation vessel name.</strong> (<em>separation_vessel</em>) – </li>
+<li><strong>{str} -- Solvent to extract with.</strong> (<em>solvent</em>) – </li>
+<li><strong>{float} -- Volume of solvent to extract with.</strong> (<em>solvent_volume</em>) – </li>
+<li><strong>{int} -- Number of separations to perform.</strong> (<em>n_separations</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -1000,14 +1577,22 @@ n_separations {int} – Number of separations to perform.</dd>
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">Filter</code><span class="sig-paren">(</span><em>filter_vessel=None</em>, <em>filter_top_volume=None</em>, <em>filter_bottom_volume=None</em>, <em>waste_vessel=None</em>, <em>time='default'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#Filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.Filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter contents of filter_vessel_top. Apply vacuum for given time.
 Assumes filter_filter_bottom already filled with solvent and stuff already in filter_vessel_top.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>filter_vessel {str} – Filter vessel.
-filter_top_volume {float} – Volume (mL) of contents of filter top.
-filter_bottom_volume {float} – Volume (mL) of the filter bottom.
-waste_vessel {float} – Node to move waste material to.
-time {str} – Time to leave vacuum on filter vessel after contents have been moved. (optional)</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Filter vessel.</strong> (<em>filter_vessel</em>) – </li>
+<li><strong>{float} -- Volume</strong> (<em>filter_bottom_volume</em>) – </li>
+<li><strong>{float} -- Volume</strong> – </li>
+<li><strong>{float} -- Node to move waste material to.</strong> (<em>waste_vessel</em>) – </li>
+<li><strong>{str} -- Time to leave vacuum on filter vessel after contents have been moved.</strong> (<em>time</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -1016,107 +1601,178 @@ time {str} – Time to leave vacuum on filter vessel after contents have been mo
 <dd><dl class="docutils">
 <dt>Under stirring, heat given vessel to given temp and wait for given time</dt>
 <dd>then stop heat and stirring.</dd>
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel to heat.
-time {float} – Time to leave vessel under heating/stirring in seconds.
-temp {float} – Temperature to heat to in °C.
-stir_rpm {int} – RPM to stir at. (optional)</dd>
 </dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel to heat.</strong> (<em>vessel</em>) – </li>
+<li><strong>{float} -- Time to leave vessel under heating/stirring in seconds.</strong> (<em>time</em>) – </li>
+<li><strong>{float} -- Temperature to heat to in °C.</strong> (<em>temp</em>) – </li>
+<li><strong>{int} -- RPM to stir at.</strong> (<em>stir_rpm</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.MakeSolution">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">MakeSolution</code><span class="sig-paren">(</span><em>solutes=None</em>, <em>solvent=None</em>, <em>solute_masses=None</em>, <em>solvent_volume=None</em>, <em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#MakeSolution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.MakeSolution" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make solution in given vessel of given solutes in given solvent.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>solute {str or list} – Solute(s).
-solvent {str} – Solvent.
-solute_mass {str or list} – Mass(es) corresponding to solute(s)
-solvent_volume {float} – Volume of solvent to use in mL.
-vessel {str} – Vessel name to make solution in.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str</strong><strong> or </strong><strong>list} -- Solute</strong> (<em>solute</em>) – </li>
+<li><strong>{str} -- Solvent.</strong> (<em>solvent</em>) – </li>
+<li><strong>{str</strong><strong> or </strong><strong>list} -- Mass</strong> (<em>solute_mass</em>) – </li>
+<li><strong>{float} -- Volume of solvent to use in mL.</strong> (<em>solvent_volume</em>) – </li>
+<li><strong>{str} -- Vessel name to make solution in.</strong> (<em>vessel</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.PrepareFilter">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">PrepareFilter</code><span class="sig-paren">(</span><em>filter_vessel=None</em>, <em>solvent=None</em>, <em>volume=10</em>, <em>waste_vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#PrepareFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.PrepareFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill bottom of filter vessel with solvent in anticipation of the filter top being used.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>filter_vessel {str} – Filter vessel name to prepare (generic name ‘filter’ not ‘filter_filter_bottom’).
-solvent {str} – Solvent to fill filter bottom with.
-volume {int} – Volume of filter bottom.
-waste_vessel {str} – Vessel to put waste material.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Filter vessel name to prepare</strong> (<em>filter_vessel</em>) – </li>
+<li><strong>{str} -- Solvent to fill filter bottom with.</strong> (<em>solvent</em>) – </li>
+<li><strong>{int} -- Volume of filter bottom.</strong> (<em>volume</em>) – </li>
+<li><strong>{str} -- Vessel to put waste material.</strong> (<em>waste_vessel</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.PrimePumpForAdd">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">PrimePumpForAdd</code><span class="sig-paren">(</span><em>reagent=None</em>, <em>waste_vessel=None</em>, <em>move_speed='default'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#PrimePumpForAdd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.PrimePumpForAdd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prime pump attached to given reagent flask in anticipation of Add step.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>reagent {str} – Reagent to prime pump for addition.
-move_speed {str} – Speed to move reagent at. (optional)</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Reagent to prime pump for addition.</strong> (<em>reagent</em>) – </li>
+<li><strong>{str} -- Speed to move reagent at.</strong> (<em>move_speed</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.Reflux">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">Reflux</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>temp=None</em>, <em>time=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#Reflux"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.Reflux" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reflux given vessel at given temperature for given time.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel to heat to reflux.
-temp {float} – Temperature to heat vessel to in °C.
-time {int} – Time to reflux vessel for in seconds.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel to heat to reflux.</strong> (<em>vessel</em>) – </li>
+<li><strong>{float} -- Temperature to heat vessel to in °C.</strong> (<em>temp</em>) – </li>
+<li><strong>{int} -- Time to reflux vessel for in seconds.</strong> (<em>time</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.Rotavap">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">Rotavap</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>temp=None</em>, <em>pressure=None</em>, <em>time='default'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#Rotavap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.Rotavap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rotavap contents of given vessel at given temp and given pressure for given time.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel with contents to be rotavapped.
-temp {float} – Temperature to set rotary evaporator water bath to in °C.
-pressure {float} – Pressure to set rotary evaporator vacuum to in mbar.
-time {int} – Time to rotavap for in seconds.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel with contents to be rotavapped.</strong> (<em>vessel</em>) – </li>
+<li><strong>{float} -- Temperature to set rotary evaporator water bath to in °C.</strong> (<em>temp</em>) – </li>
+<li><strong>{float} -- Pressure to set rotary evaporator vacuum to in mbar.</strong> (<em>pressure</em>) – </li>
+<li><strong>{int} -- Time to rotavap for in seconds.</strong> (<em>time</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.StartHeat">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">StartHeat</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>temp=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#StartHeat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.StartHeat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start heating given vessel at given temperature.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to heat.
-temp {float} – Temperature to heat to in °C.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel name to heat.</strong> (<em>vessel</em>) – </li>
+<li><strong>{float} -- Temperature to heat to in °C.</strong> (<em>temp</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.StartStir">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">StartStir</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>stir_rpm='default'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#StartStir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.StartStir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start stirring given vessel.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to stir.
-stir_rpm {int} – Speed in RPM to stir at. (optional)</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel name to stir.</strong> (<em>vessel</em>) – </li>
+<li><strong>{int} -- Speed in RPM to stir at.</strong> (<em>stir_rpm</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.StartVacuum">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">StartVacuum</code><span class="sig-paren">(</span><em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#StartVacuum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.StartVacuum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start vacuum pump attached to given vessel.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to start vacuum on.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Vessel name to start vacuum on.</strong> (<em>vessel</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -1134,10 +1790,14 @@ or if as_str=True as a XDL str.</p>
 <dt id="xdl.steps.Step.execute">
 <code class="descname">execute</code><span class="sig-paren">(</span><em>chempiler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/utils.html#Step.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.Step.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute self with given Chempiler object.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>chempiler {chempiler.Chempiler} – Initialised Chempiler object.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>{chempiler.Chempiler} -- Initialised Chempiler object.</strong> (<em>chempiler</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -1146,140 +1806,204 @@ or if as_str=True as a XDL str.</p>
 <dt id="xdl.steps.StirAtRT">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">StirAtRT</code><span class="sig-paren">(</span><em>vessel=None</em>, <em>time=None</em>, <em>stir_rpm='default'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#StirAtRT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.StirAtRT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stir given vessel for given time at room temperature.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel to stir.
-time {float} – Time to stir for.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel to stir.</strong> (<em>vessel</em>) – </li>
+<li><strong>{float} -- Time to stir for.</strong> (<em>time</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.StopChiller">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">StopChiller</code><span class="sig-paren">(</span><em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#StopChiller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.StopChiller" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stop the chiller.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel to stop chiller for.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Vessel to stop chiller for.</strong> (<em>vessel</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.StopVacuum">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">StopVacuum</code><span class="sig-paren">(</span><em>vessel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#StopVacuum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.StopVacuum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stop vacuum pump attached to given vessel.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>vessel {str} – Vessel name to stop vacuum on.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><strong>{str} -- Vessel name to stop vacuum on.</strong> (<em>vessel</em>) – </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.Transfer">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">Transfer</code><span class="sig-paren">(</span><em>from_vessel=None</em>, <em>to_vessel=None</em>, <em>volume=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#Transfer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.Transfer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transfer contents of one vessel to another.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>from_vessel {str} – Vessel name to transfer from.
-to_vessel {str} – Vessel name to transfer to.
-volume {float} – Volume to transfer in mL.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel name to transfer from.</strong> (<em>from_vessel</em>) – </li>
+<li><strong>{str} -- Vessel name to transfer to.</strong> (<em>to_vessel</em>) – </li>
+<li><strong>{float} -- Volume to transfer in mL.</strong> (<em>volume</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.Wait">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">Wait</code><span class="sig-paren">(</span><em>time=None</em>, <em>wait_recording_speed='default'</em>, <em>after_recording_speed='default'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#Wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.Wait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait for given time.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>time {int} – Time in seconds
-wait_recording_speed {int} – Recording speed during wait (faster) ~2000
-after_recording_speed {int} – Recording speed after wait (slower) ~14</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{int} -- Time in seconds</strong> (<em>time</em>) – </li>
+<li><strong>{int} -- Recording speed during wait</strong> (<em>wait_recording_speed</em>) – </li>
+<li><strong>{int} -- Recording speed after wait</strong> (<em>after_recording_speed</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.Wash">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">Wash</code><span class="sig-paren">(</span><em>from_vessel=None</em>, <em>separation_vessel=None</em>, <em>to_vessel=None</em>, <em>solvent=None</em>, <em>solvent_volume=None</em>, <em>n_washes=1</em>, <em>product_bottom=True</em>, <em>waste_vessel=None</em>, <em>waste_phase_to_vessel=None</em>, <em>filter_dead_volume=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#Wash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.Wash" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wash contents of from_vessel with given solvent.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>from_vessel {str} – Vessel with contents to be washed.
-separation_vessel {str} – Separating funnel name.
-to_vessel {str} – Vessel to put washed product after separation.
-solvent {str} – Solvent to wash with.
-solvent_volume {float} – Volume of solvent to wash with.
-n_washes {int} – Number of washes to perform.
-product_bottom {bool} – True if product is in bottom phase.
-waste_vessel {str} – Vessel to put waste material.
-waste_phase_to_vessel {str} – Vessel to put the phase that doesn’t have the product.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Vessel with contents to be washed.</strong> (<em>from_vessel</em>) – </li>
+<li><strong>{str} -- Separating funnel name.</strong> (<em>separation_vessel</em>) – </li>
+<li><strong>{str} -- Vessel to put washed product after separation.</strong> (<em>to_vessel</em>) – </li>
+<li><strong>{str} -- Solvent to wash with.</strong> (<em>solvent</em>) – </li>
+<li><strong>{float} -- Volume of solvent to wash with.</strong> (<em>solvent_volume</em>) – </li>
+<li><strong>{int} -- Number of washes to perform.</strong> (<em>n_washes</em>) – </li>
+<li><strong>{bool} -- True if product is in bottom phase.</strong> (<em>product_bottom</em>) – </li>
+<li><strong>{str} -- Vessel to put waste material.</strong> (<em>waste_vessel</em>) – </li>
+<li><strong>{str} -- Vessel to put the phase that doesn't have the product.</strong> (<em>waste_phase_to_vessel</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="xdl.steps.WashFilterCake">
 <em class="property">class </em><code class="descclassname">xdl.steps.</code><code class="descname">WashFilterCake</code><span class="sig-paren">(</span><em>filter_vessel=None</em>, <em>solvent=None</em>, <em>volume='default'</em>, <em>waste_vessel=None</em>, <em>wait_time='default'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xdl/steps/steps_xdl.html#WashFilterCake"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdl.steps.WashFilterCake" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wash filter cake with given volume of given solvent.</p>
-<dl class="docutils">
-<dt>Keyword Arguments:</dt>
-<dd>filter_vessel {str} – Filter vessel name to wash.
-solvent {str} – Solvent to wash with.
-volume {float} – Volume of solvent to wash with. (optional)
-wait_time {str} – Time to wait after moving solvent to filter flask. (optional)</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>{str} -- Filter vessel name to wash.</strong> (<em>filter_vessel</em>) – </li>
+<li><strong>{str} -- Solvent to wash with.</strong> (<em>solvent</em>) – </li>
+<li><strong>{float} -- Volume of solvent to wash with.</strong> (<em>volume</em>) – </li>
+<li><strong>{str} -- Time to wait after moving solvent to filter flask.</strong> (<em>wait_time</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
 
 
+           </div>
+           
           </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to xdl’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Matthew Craven
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Welcome to xdl’s documentation!</a></li>
-  </ul></li>
-</ul>
-</div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/steps.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2019, Matthew Craven.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
-      
-      |
-      <a href="_sources/steps.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
 
     
-
     
-  </body>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'0.1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

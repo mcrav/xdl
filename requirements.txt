@@ -1,6 +1,6 @@
 lxml==4.2.1
 beautifulsoup4==4.6.0
-
+sphinx-rtd-theme==0.4.2
 # Chempiler
 git+http://datalore.chem.gla.ac.uk/Chemputer/Chempiler.git
 git+http://datalore.chem.gla.ac.uk/Chemputer/ChemputerAPI.git

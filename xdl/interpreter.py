@@ -5,7 +5,6 @@ import re
 import copy
 import statistics
 import os
-from chempiler import Chempiler
 from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml, convert_mass_str_to_g, 
     filter_bottom_name, filter_top_name, separator_top_name, separator_bottom_name, parse_bool)
 from .constants import *
@@ -395,11 +394,10 @@ class XDL(object):
             else:
                 yield (i, step, copy.deepcopy(vessel_contents))
 
-    def simulate(self, graphml_file):
+    def simulate(self, graphml_file, chempiler):
         """Simulate XDL procedure using Chempiler and given graphML file."""
         self.prepare_for_execution(graphml_file)
         if self._prepared_for_execution:
-            chempiler = Chempiler(self._get_exp_id(default='xdl_simulation'), graphml_file, self._get_exp_id(default='xdl_simulation'), True)
             # self.print_full_xdl_tree()
             # self.print_full_human_readable()
             print('Execution\n---------\n')
@@ -410,11 +408,10 @@ class XDL(object):
                 if not keep_going:
                     return
 
-    def execute(self, graphml_file):
+    def execute(self, graphml_file, chempiler):
         """Execute XDL procedure on a Chemputer corresponding to given graphML file."""
         self.prepare_for_execution(graphml_file)
         if self._prepared_for_execution:
-            chempiler = Chempiler(self._get_exp_id(default='xdl_simulation'), graphml_file, False)
             self.print_full_xdl_tree()
             self.print_full_human_readable()
         print('Execution\n---------\n')

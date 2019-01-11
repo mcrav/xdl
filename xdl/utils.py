@@ -35,6 +35,12 @@ class XDLElement(object):
                     print(self.name)
                     print(k)
                     raise KeyError
+
+def property_getter(prop):
+    @property
+    def f(self):
+        return self.properties[prop]
+    return f
                     
 class Step(XDLElement):
     """Base class for all step objects."""
@@ -44,6 +50,34 @@ class Step(XDLElement):
         self.properties = {}
         self.steps = []
         self.human_readable = ''
+
+    def __setattr__(self, name, value):
+        """
+        If name is in self.properties do self.properties[name] = value
+        Otherwise set attribute as normal.
+        """
+        if 'properties' in self.__dict__:
+            if name in self.properties:
+                self.properties[name] = value
+                self.update()
+            else:
+                object.__setattr__(self, name, value)
+        else:
+            object.__setattr__(self, name, value)
+
+    def __getattr__(self, name):
+        """
+        If name is in self.properties return self.properties[name].
+        Otherwise return attribute as normal.
+        """
+
+        if 'properties' in self.__dict__:
+            if name in self.properties:
+                return self.properties[name]
+            else:
+                return object.__getattribute__(self, name)
+        else:
+            return object.__getattribute__(self, name)
 
     def as_xdl(self, as_str=False):
         """
