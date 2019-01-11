@@ -79,6 +79,10 @@ class Step(XDLElement):
         else:
             return object.__getattribute__(self, name)
 
+    @property
+    def name(self):
+        return type(self).__name__
+
     def as_xdl(self, as_str=False):
         """
         Return self as a XDL lxml.etree._Element,

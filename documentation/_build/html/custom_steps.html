@@ -146,6 +146,30 @@
   <div class="section" id="making-custom-step-classes">
 <h1>Making custom step classes<a class="headerlink" href="#making-custom-step-classes" title="Permalink to this headline">¶</a></h1>
 <p>All step classes inherit the class <code class="xref py py-class docutils literal notranslate"><span class="pre">xdl.utils.Step</span></code>.</p>
+<p>Three member variables must be set in the <cite>__init__</cite> function: <cite>properties</cite>, <cite>steps</cite> and <cite>human_readable</cite>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xdl</span> <span class="kn">import</span> <span class="n">Step</span>
+<span class="kn">from</span> <span class="nn">xdl.steps</span> <span class="kn">import</span> <span class="n">Add</span><span class="p">,</span> <span class="n">StirAtRT</span>
+
+<span class="k">class</span> <span class="nc">AddAndStir</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;volume&#39;</span><span class="p">:</span> <span class="n">volume</span><span class="p">,</span>
+            <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
+            <span class="s1">&#39;reagent&#39;</span><span class="p">:</span> <span class="n">reagent</span><span class="p">,</span>
+            <span class="s1">&#39;stir_time&#39;</span><span class="p">:</span> <span class="n">stir_time</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Add</span><span class="p">(</span><span class="n">reagent</span><span class="o">=</span><span class="n">reagent</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="n">vessel</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="n">volume</span><span class="p">),</span>
+            <span class="n">StirAtRT</span><span class="p">(</span><span class="n">vessel</span><span class="o">=</span><span class="n">vessel</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">stir_time</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="s1">&#39;Add {0} ({1} mL) to {2} and stir for {3} minutes.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">add_vessel</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">stir_vessel</span><span class="p">,</span> <span class="n">stir_time</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 
 

@@ -22,7 +22,6 @@ class CMove(Step):
     def __init__(self, from_vessel=None, to_vessel=None, volume=None, move_speed='default',
                  aspiration_speed='default', dispense_speed='default'):
 
-        self.name = 'Move'
         self.properties = {
             'from_vessel': from_vessel,
             'to_vessel': to_vessel,
@@ -60,7 +59,6 @@ class CSeparate(Step):
     def __init__(self, lower_phase_vessel=None, upper_phase_vessel=None, separator_top='flask_separator_top',
                     separator_bottom='flask_separator_bottom', dead_volume_target=None):
 
-        self.name = 'Separate'
         self.properties = {
             'lower_phase_vessel': lower_phase_vessel,
             'upper_phase_vessel': upper_phase_vessel,
@@ -89,7 +87,6 @@ class CPrime(Step):
     """
     def __init__(self, aspiration_speed='default'):
 
-        self.name = 'Prime'
         self.properties = {
             'aspiration_speed': aspiration_speed,
         }
@@ -110,7 +107,6 @@ class CSwitchVacuum(Step):
     """
     def __init__(self, vessel=None, destination=None):
 
-        self.name = 'SwitchVacuum'
         self.properties = {
             'vessel': vessel,
             'destination': destination,
@@ -130,7 +126,6 @@ class CSwitchCartridge(Step):
         cartridge {int} -- Number of the position the carousel should be switched to (0-5)
     """
     def __init__(self, vessel=None, cartridge=None):
-        self.name = 'SwitchCartridge'
         self.properties = {
             'vessel': vessel,
             'cartridge': cartridge,
@@ -151,7 +146,6 @@ class CSwitchColumn(Step):
     """
     def __init__(self, column=None, destination=None):
 
-        self.name = 'SwitchColumn'
         self.properties = {
             'column': column,
             'destination': destination,
@@ -171,7 +165,6 @@ class CStartStir(Step):
     """
     def __init__(self, vessel=None):
 
-        self.name = 'StartStir'
         self.properties = {
             'vessel': vessel,
         }
@@ -190,7 +183,6 @@ class CStartHeat(Step):
     """
     def __init__(self, vessel=None):
 
-        self.name = 'StartHeat'
         self.properties = {
             'vessel': vessel,
         }
@@ -209,7 +201,6 @@ class CStopStir(Step):
     """
     def __init__(self, vessel=None):
 
-        self.name = 'StopStir'
         self.properties = {
             'vessel': vessel,
         }
@@ -231,7 +222,6 @@ class CStopHeat(Step):
     """
     def __init__(self, vessel=None):
 
-        self.name = 'StopHeat'
         self.properties = {
             'vessel': vessel,
         }
@@ -252,7 +242,6 @@ class CSetTemp(Step):
     """
     def __init__(self, vessel=None, temp=None):
 
-        self.name = 'SetTemp'
         self.properties = {
             'vessel': vessel,
             'temp': temp,
@@ -273,7 +262,6 @@ class CSetStirRpm(Step):
     """
     def __init__(self, vessel=None, stir_rpm=None):
 
-        self.name = 'SetStirRpm'
         self.properties = {
             'vessel': vessel,
             'stir_rpm': stir_rpm,
@@ -294,7 +282,6 @@ class CStirrerWaitForTemp(Step):
     """
     def __init__(self, vessel=None):
 
-        self.name = 'StirrerWaitForTemp'
         self.properties = {
             'vessel': vessel,
         }
@@ -313,7 +300,6 @@ class CStartHeaterBath(Step):
     """
     def __init__(self, rotavap_name=None):
 
-        self.name = 'StartHeaterBath'
         self.properties = {
             'rotavap_name': rotavap_name,
         }
@@ -332,7 +318,6 @@ class CStopHeaterBath(Step):
     """
     def __init__(self, rotavap_name=None):
 
-        self.name = 'StopHeaterBath'
         self.properties = {
             'rotavap_name': rotavap_name,
         }
@@ -351,7 +336,6 @@ class CStartRotation(Step):
     """
     def __init__(self, rotavap_name=None):
 
-        self.name = 'StartRotation'
         self.properties = {
             'rotavap_name': rotavap_name,
         }
@@ -370,7 +354,6 @@ class CStopRotation(Step):
     """
     def __init__(self, rotavap_name=None):
 
-        self.name = 'StopRotation'
         self.properties = {
             'rotavap_name': rotavap_name,
         }
@@ -389,7 +372,6 @@ class CLiftArmUp(Step):
     """
     def __init__(self, rotavap_name=None):
 
-        self.name = 'LiftArmUp'
         self.properties = {
             'rotavap_name': rotavap_name,
         }
@@ -408,7 +390,6 @@ class CLiftArmDown(Step):
     """
     def __init__(self, rotavap_name=None):
 
-        self.name = 'LiftArmDown'
         self.properties = {
             'rotavap_name': rotavap_name,
         }
@@ -428,7 +409,6 @@ class CResetRotavap(Step):
     """
     def __init__(self, rotavap_name=None):
 
-        self.name = 'ResetRotavap'
         self.properties = {
             'rotavap_name': rotavap_name,
         }
@@ -448,7 +428,6 @@ class CSetBathTemp(Step):
     """
     def __init__(self, rotavap_name=None, temp=None):
 
-        self.name = 'SetBathTemp'
         self.properties = {
             'rotavap_name': rotavap_name,
             'temp': temp,
@@ -469,7 +448,6 @@ class CSetRvRotationSpeed(Step):
     """
     def __init__(self, rotavap_name=None, rotation_speed=None):
 
-        self.name = 'SetRvRotationSpeed'
         self.properties = {
             'rotavap_name': rotavap_name,
             'rotation_speed': rotation_speed,
@@ -490,7 +468,6 @@ class CRvWaitForTemp(Step):
     """
     def __init__(self, rotavap_name=None):
 
-        self.name = 'RvWaitForTemp'
         self.properties = {
             'rotavap_name': rotavap_name,
         }
@@ -511,7 +488,6 @@ class CSetInterval(Step):
     """
     def __init__(self, rotavap_name=None, interval=None):
 
-        self.name = 'SetInterval'
         self.properties = {
             'rotavap_name': rotavap_name,
             'interval': interval,
@@ -530,7 +506,6 @@ class CInitVacPump(Step):
         vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
     """
     def __init__(self, vacuum_pump_name=None):
-        self.name = 'InitVacPump'
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
         }
@@ -549,7 +524,6 @@ class CGetVacSp(Step):
     """
     def __init__(self, vacuum_pump_name=None):
 
-        self.name = 'GetVacSp'
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
         }
@@ -569,7 +543,6 @@ class CSetVacSp(Step):
     """
     def __init__(self, vacuum_pump_name=None, vacuum_pressure=None):
 
-        self.name = 'SetVacSp'
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
             'vacuum_pressure': vacuum_pressure,
@@ -589,7 +562,6 @@ class CStartVac(Step):
     """
     def __init__(self, vacuum_pump_name=None):
 
-        self.name = 'StartVac'
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
         }
@@ -608,7 +580,6 @@ class CStopVac(Step):
     """
     def __init__(self, vacuum_pump_name=None):
 
-        self.name = 'StopVac'
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
         }
@@ -627,7 +598,6 @@ class CVentVac(Step):
     """
     def __init__(self, vacuum_pump_name=None):
 
-        self.name = 'VentVac'
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
         }
@@ -647,7 +617,6 @@ class CSetSpeedSp(Step):
     """
     def __init__(self, vacuum_pump_name=None, vacuum_pump_speed=None):
 
-        self.name = 'SetSpeedSp'
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
             'vacuum_pump_speed': vacuum_pump_speed,
@@ -667,7 +636,6 @@ class CStartChiller(Step):
     """
     def __init__(self, vessel=None):
 
-        self.name = 'StartChiller'
         self.properties = {
             'vessel': vessel,
         }
@@ -686,7 +654,6 @@ class CStopChiller(Step):
     """
     def __init__(self, vessel=None):
 
-        self.name = 'StopChiller'
         self.properties = {
             'vessel': vessel,
         }
@@ -707,7 +674,6 @@ class CSetChiller(Step):
     """
     def __init__(self, vessel=None, temp=None):
 
-        self.name = 'SetChiller'
         self.properties = {
             'vessel': vessel,
             'temp': temp,
@@ -728,7 +694,6 @@ class CChillerWaitForTemp(Step):
     """
     def __init__(self, vessel=None):
 
-        self.name = 'ChillerWaitForTemp'
         self.properties = {
             'vessel': vessel,
         }
@@ -750,7 +715,6 @@ class CRampChiller(Step):
     """
     def __init__(self, vessel=None, ramp_duration=None, end_temperature=None):
 
-        self.name = 'RampChiller'
         self.properties = {
             'vessel': vessel,
             'ramp_duration': ramp_duration,
@@ -772,7 +736,6 @@ class CSwitchChiller(Step):
     """
     def __init__(self, solenoid_valve_name=None, state=None):
 
-        self.name = 'SwitchChiller'
         self.properties = {
             'solenoid_valve_name': solenoid_valve_name,
             'state': state,
@@ -793,7 +756,6 @@ class CSetCoolingPower(Step):
     """
     def __init__(self, vessel=None, cooling_power=None):
 
-        self.name = 'SetCoolingPower'
         self.properties = {
             'vessel': vessel,
             'cooling_power': cooling_power,
@@ -813,7 +775,6 @@ class CSetRecordingSpeed(Step):
     """
     def __init__(self, recording_speed=None):
 
-        self.name = 'SetRecordingSpeed'
         self.properties = {
             'recording_speed': recording_speed,
         }
@@ -834,7 +795,6 @@ class CWait(Step):
     """
     def __init__(self, time=None):
 
-        self.name = 'CWait'
         self.properties = {
             'time': time,
         }
@@ -851,7 +811,6 @@ class CBreakpoint(Step):
     """
     def __init__(self):
 
-        self.name = 'Breakpoint'
         self.properties = {
         }
 
@@ -865,7 +824,6 @@ class CBreakpoint(Step):
 
 #     def __init__(self):
 
-#         self.name = 'StartRecordingVideo'
 #         self.properties = {
 #         }
 

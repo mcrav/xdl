@@ -53,7 +53,6 @@ class StartStir(Step):
     """
     def __init__(self, vessel=None, stir_rpm='default'):
 
-        self.name = 'StartStir'
         self.properties = {
             'vessel': vessel,
             'stir_rpm': stir_rpm,
@@ -76,7 +75,6 @@ class StartHeat(Step):
     """
     def __init__(self, vessel=None, temp=None):
 
-        self.name = 'StartHeat'
         self.properties = {
             'vessel': vessel,
             'temp': temp,
@@ -97,7 +95,6 @@ class StartVacuum(Step):
     """
     def __init__(self, vessel=None):
 
-        self.name = 'StartVacuum'
         self.properties = {
             'vessel': vessel,
         }
@@ -116,7 +113,6 @@ class StopVacuum(Step):
     """
     def __init__(self, vessel=None):
 
-        self.name = 'StopVacuum'
         self.properties = {
             'vessel': vessel,
         }
@@ -140,7 +136,6 @@ class CleanVessel(Step):
     def __init__(self, vessel=None, solvent='default', volume='default', stir_rpm='default',
                     stir_time='default', waste_vessel=None):
 
-        self.name = 'CleanVessel'
         self.properties = {
             'vessel': vessel,
             'solvent': solvent,
@@ -162,7 +157,6 @@ class CleanBackbone(Step):
 
     def __init__(self, reagent=None, waste_vessels=[]):
 
-        self.name = 'CleanBackbone'
         self.properties = {
             'reagent': reagent,
             'waste_vessels': waste_vessels,
@@ -185,7 +179,6 @@ class HeatAndReact(Step):
     """
     def __init__(self, vessel=None, time=None, temp=None, stir_rpm='default'):
 
-        self.name = 'HeatAndReact'
         self.properties = {
             'vessel': vessel,
             'time': time,
@@ -210,7 +203,6 @@ class ContinueStirToRT(Step):
     """
     def __init__(self, vessel=None):
 
-        self.name = 'StirToRT'
         self.properties = {
             'vessel': vessel,
         }
@@ -231,7 +223,6 @@ class StopChiller(Step):
     """
     def __init__(self, vessel=None,):
 
-        self.name = 'StopChiller'
         self.properties = {
             'vessel': vessel,
         }
@@ -256,7 +247,6 @@ class Chill(Step):
     """
     def __init__(self, vessel=None, temp=None):
 
-        self.name = 'Chill'
         self.properties = {
             'vessel': vessel,
             'temp': temp,
@@ -284,7 +274,6 @@ class ChillBackToRT(Step):
     """
     def __init__(self, vessel=None):
 
-        self.name = 'ChillBackToRT'
         self.properties = {
             'vessel': vessel,
         }
@@ -316,7 +305,6 @@ class PrimePumpForAdd(Step):
     """
     def __init__(self, reagent=None,  waste_vessel=None, move_speed='default',):
 
-        self.name = 'PrimePumpForAdd'
         self.properties = {
             'reagent': reagent,
             'waste_vessel': waste_vessel,
@@ -341,7 +329,6 @@ class Add(Step):
     """
     def __init__(self, reagent=None, volume=None, vessel=None, time=None, move_speed='default', waste_vessel=None):
 
-        self.name = 'Add'
         self.properties = {
             'reagent': reagent,
             'volume': volume,
@@ -379,7 +366,6 @@ class Transfer(Step):
     """
     def __init__(self, from_vessel=None, to_vessel=None, volume=None):
 
-        self.name = 'Transfer'
         self.properties = {
             'from_vessel': from_vessel,
             'to_vessel': to_vessel,
@@ -412,7 +398,6 @@ class WashFilterCake(Step):
     def __init__(self, filter_vessel=None, solvent=None, volume='default', waste_vessel=None,
                 wait_time='default'):
 
-        self.name = 'WashFilterCake'
         self.properties = {
             'solvent': solvent,
             'filter_vessel': filter_vessel,
@@ -446,7 +431,6 @@ class Dry(Step):
     """
     def __init__(self, filter_vessel=None, waste_vessel=None, time='default'):
 
-        self.name = 'Dry'
         self.properties = {
             'filter_vessel': filter_vessel,
             'waste_vessel': waste_vessel, # set in prepare_for_execution
@@ -480,7 +464,6 @@ class Filter(Step):
     def __init__(self, filter_vessel=None, filter_top_volume=None, filter_bottom_volume=None, waste_vessel=None,
                         time='default'):
 
-        self.name = 'Filter'
         self.properties = {
             'filter_vessel': filter_vessel,
             'filter_top_volume': filter_top_volume, # Filled in when XDL.prepare_for_execution is called
@@ -509,7 +492,6 @@ class Confirm(Step):
 
     def __init__(self, msg=None):
 
-        self.name = 'Confirm'
         self.properties = {
             'msg': msg,
         }
@@ -541,7 +523,6 @@ class MakeSolution(Step):
     """
     def __init__(self, solutes=None, solvent=None, solute_masses=None, solvent_volume=None, vessel=None):
 
-        self.name = 'MakeSolution'
         self.properties = {
             'solutes': solutes,
             'solvent': solvent,
@@ -576,7 +557,6 @@ class Reflux(Step):
     """
     def __init__(self, vessel=None, temp=None, time=None):
 
-        self.name = 'Reflux'
         self.properties = {
             'vessel': vessel,
             'temp': temp,
@@ -613,7 +593,6 @@ class Rotavap(Step):
     """
     def __init__(self, vessel=None, temp=None, pressure=None, time='default'):
 
-        self.name = 'Rotavap'
         self.properties = {
             'vessel': vessel,
             'temp': temp,
@@ -652,7 +631,6 @@ class Wait(Step):
     """
     def __init__(self, time=None, wait_recording_speed='default', after_recording_speed='default'):
 
-        self.name = 'Wait'
         self.properties = {
             'time': time,
             'wait_recording_speed': wait_recording_speed,
@@ -682,7 +660,6 @@ class Extract(Step):
                     solvent_volume=None, n_extractions=1, product_bottom=True, waste_vessel=None,
                     waste_phase_to_vessel=None, filter_dead_volume=None):
 
-        self.name = 'Extract'
         self.properties = {
             'from_vessel': from_vessel,
             'separation_vessel': separation_vessel,
@@ -808,7 +785,6 @@ class Wash(Step):
                     solvent=None, solvent_volume=None, n_washes=1, product_bottom=True,
                     waste_vessel=None, waste_phase_to_vessel=None, filter_dead_volume=None):
 
-        self.name = 'Wash'
         self.properties = {
             'from_vessel': from_vessel,
             'to_vessel': to_vessel,
@@ -922,7 +898,6 @@ class StirAtRT(Step):
     """
     def __init__(self, vessel=None, time=None, stir_rpm='default'):
 
-        self.name = 'StirAtRT'
         self.properties = {
             'vessel': vessel,
             'time': time,
@@ -950,7 +925,6 @@ class PrepareFilter(Step):
     """
     def __init__(self, filter_vessel=None, solvent=None, volume=10, waste_vessel=None):
 
-        self.name = 'PrepareFilter'
         self.properties = {
             'filter_vessel': filter_vessel,
             'solvent': solvent,
