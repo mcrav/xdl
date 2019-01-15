@@ -1,6 +1,4 @@
 import re
-import itertools
-import lxml.etree as etree
 from .constants import DEFAULT_VALS
 
 class XDLElement(object):
@@ -82,23 +80,6 @@ class Step(XDLElement):
     @property
     def name(self):
         return type(self).__name__
-
-    def as_xdl(self, as_str=False):
-        """
-        Return self as a XDL lxml.etree._Element,
-        or if as_str=True as a XDL str.
-        """
-        step = etree.Element('step')
-        step.set('name', self.name)
-        for prop, val in self.properties.items():
-            if val != '':
-                element = etree.SubElement(step, 'property')
-                element.set('name', prop)
-                element.text = str(val)
-        if as_str:
-            return etree.dump(step)
-        else:
-            return step
 
     def execute(self, chempiler):
         """

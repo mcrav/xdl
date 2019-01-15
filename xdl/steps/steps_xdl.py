@@ -767,7 +767,7 @@ class Extract(Step):
 
         self.human_readable = f'Extract contents of {self.from_vessel} with {self.solvent} ({self.n_extractions}x{self.solvent_volume} mL).'
 
-class Wash(Step):
+class WashSolution(Step):
     """Wash contents of from_vessel with given solvent.
 
     Keyword Arguments:

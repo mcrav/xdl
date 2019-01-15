@@ -63,7 +63,7 @@ XDL_STEP_OBJ_DICT = {
     'Extract': Extract,
     'WashFilterCake': WashFilterCake,
     'Transfer': Transfer,
-    'Wash': Wash,
+    'Wash': WashSolution,
     'MakeSolution': MakeSolution,
     'Reflux': Reflux,
     'PrimePumpForAdd': PrimePumpForAdd,

@@ -1,7 +1,5 @@
 ROOM_TEMPERATURE = 25
 
-
-
 # DEFAULT PARAMETERS
 
 DEFAULT_STIR_RPM = 400 # rpm
@@ -115,4 +113,3 @@ DEFAULT_VALS = {
         'stir_rpm': DEFAULT_STIR_RPM,
     },
 }
-

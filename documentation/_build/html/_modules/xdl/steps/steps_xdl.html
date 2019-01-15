@@ -197,7 +197,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stir_rpm</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StartStir&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
             <span class="s1">&#39;stir_rpm&#39;</span><span class="p">:</span> <span class="n">stir_rpm</span><span class="p">,</span>
@@ -209,25 +208,7 @@
             <span class="n">CSetStirRpm</span><span class="p">(</span><span class="n">vessel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">,</span> <span class="n">stir_rpm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stir_rpm</span><span class="p">),</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Set stir rate to </span><span class="si">{stir_rpm}</span><span class="s1"> RPM and start stirring </span><span class="si">{vessel}</span><span class="s1">.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">stir_rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;stir_rpm&#39;</span><span class="p">]</span>
-
-    <span class="nd">@stir_rpm</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">stir_rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;stir_rpm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Set stir rate to </span><span class="si">{stir_rpm}</span><span class="s1"> RPM and start stirring </span><span class="si">{vessel}</span><span class="s1">.&#39;</span></div>
 
 <div class="viewcode-block" id="StartHeat"><a class="viewcode-back" href="../../../steps.html#xdl.steps.StartHeat">[docs]</a><span class="k">class</span> <span class="nc">StartHeat</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Start heating given vessel at given temperature.</span>
@@ -238,7 +219,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StartHeat&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
             <span class="s1">&#39;temp&#39;</span><span class="p">:</span> <span class="n">temp</span><span class="p">,</span>
@@ -249,25 +229,7 @@
             <span class="n">CStartHeat</span><span class="p">(</span><span class="n">vessel</span><span class="o">=</span><span class="n">vessel</span><span class="p">),</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Heat </span><span class="si">{vessel}</span><span class="s1"> to </span><span class="si">{temp}</span><span class="s1"> °C&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span>
-
-    <span class="nd">@temp</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Heat </span><span class="si">{vessel}</span><span class="s1"> to </span><span class="si">{temp}</span><span class="s1"> °C&#39;</span></div>
 
 <div class="viewcode-block" id="StartVacuum"><a class="viewcode-back" href="../../../steps.html#xdl.steps.StartVacuum">[docs]</a><span class="k">class</span> <span class="nc">StartVacuum</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Start vacuum pump attached to given vessel.</span>
@@ -277,7 +239,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StartVacuum&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
         <span class="p">}</span>
@@ -286,16 +247,7 @@
             <span class="n">CSwitchVacuum</span><span class="p">(</span><span class="n">vessel</span><span class="o">=</span><span class="n">vessel</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">&#39;vacuum&#39;</span><span class="p">)</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Start vacuum for </span><span class="si">{vessel}</span><span class="s1">.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Start vacuum for </span><span class="si">{vessel}</span><span class="s1">.&#39;</span></div>
 
 <div class="viewcode-block" id="StopVacuum"><a class="viewcode-back" href="../../../steps.html#xdl.steps.StopVacuum">[docs]</a><span class="k">class</span> <span class="nc">StopVacuum</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Stop vacuum pump attached to given vessel.</span>
@@ -305,7 +257,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StopVacuum&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
         <span class="p">}</span>
@@ -314,16 +265,7 @@
             <span class="n">CSwitchVacuum</span><span class="p">(</span><span class="n">vessel</span><span class="o">=</span><span class="n">vessel</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">&#39;backbone&#39;</span><span class="p">)</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Stop vacuum for </span><span class="si">{vessel}</span><span class="s1">.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Stop vacuum for </span><span class="si">{vessel}</span><span class="s1">.&#39;</span></div>
 
 <div class="viewcode-block" id="CleanVessel"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CleanVessel">[docs]</a><span class="k">class</span> <span class="nc">CleanVessel</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Clean given vessel.</span>
@@ -338,7 +280,6 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solvent</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">stir_rpm</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span>
                     <span class="n">stir_time</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">waste_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;CleanVessel&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
             <span class="s1">&#39;solvent&#39;</span><span class="p">:</span> <span class="n">solvent</span><span class="p">,</span>
@@ -354,58 +295,12 @@
             <span class="n">CMove</span><span class="p">(</span><span class="n">from_vessel</span><span class="o">=</span><span class="n">vessel</span><span class="p">,</span> <span class="n">to_vessel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">waste_vessel</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">),</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Clean </span><span class="si">{vessel}</span><span class="s1"> with </span><span class="si">{solvent}</span><span class="s1"> (</span><span class="si">{volume}</span><span class="s1">).</span><span class="se">\n</span><span class="s1">&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent&#39;</span><span class="p">]</span>
-
-    <span class="nd">@solvent</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span>
-
-    <span class="nd">@volume</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">stir_rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;stir_rpm&#39;</span><span class="p">]</span>
-
-    <span class="nd">@stir_rpm</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">stir_rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;stir_rpm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@waste_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Clean </span><span class="si">{vessel}</span><span class="s1"> with </span><span class="si">{solvent}</span><span class="s1"> (</span><span class="si">{volume}</span><span class="s1">).</span><span class="se">\n</span><span class="s1">&#39;</span></div>
 
 <div class="viewcode-block" id="CleanBackbone"><a class="viewcode-back" href="../../../steps.html#xdl.steps.CleanBackbone">[docs]</a><span class="k">class</span> <span class="nc">CleanBackbone</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reagent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">waste_vessels</span><span class="o">=</span><span class="p">[]):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;CleanBackbone&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;reagent&#39;</span><span class="p">:</span> <span class="n">reagent</span><span class="p">,</span>
             <span class="s1">&#39;waste_vessels&#39;</span><span class="p">:</span> <span class="n">waste_vessels</span><span class="p">,</span>
@@ -414,25 +309,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">waste_vessel</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">waste_vessels</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CMove</span><span class="p">(</span><span class="n">from_vessel</span><span class="o">=</span><span class="n">f</span><span class="s1">&#39;flask_</span><span class="si">{self.reagent}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">to_vessel</span><span class="o">=</span><span class="n">waste_vessel</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="n">DEFAULT_CLEAN_BACKBONE_VOLUME</span><span class="p">,</span> <span class="n">aspiration_speed</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Clean backbone with </span><span class="si">{self.reagent}</span><span class="s1">.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">reagent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;reagent&#39;</span><span class="p">]</span>
-
-    <span class="nd">@reagent</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">reagent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;reagent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">waste_vessels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessels&#39;</span><span class="p">]</span>
-
-    <span class="nd">@waste_vessels</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">waste_vessels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Clean backbone with </span><span class="si">{self.reagent}</span><span class="s1">.&#39;</span></div>
 
 <div class="viewcode-block" id="HeatAndReact"><a class="viewcode-back" href="../../../steps.html#xdl.steps.HeatAndReact">[docs]</a><span class="k">class</span> <span class="nc">HeatAndReact</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Under stirring, heat given vessel to given temp and wait for given time</span>
@@ -446,7 +323,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stir_rpm</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;HeatAndReact&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
             <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
@@ -460,43 +336,7 @@
             <span class="n">CStopHeat</span><span class="p">(</span><span class="n">vessel</span><span class="o">=</span><span class="n">vessel</span><span class="p">),</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Heat </span><span class="si">{vessel}</span><span class="s1"> to </span><span class="si">{temp}</span><span class="s1"> °C under stirring and wait {float(time) / 3600} hrs.</span><span class="se">\n</span><span class="s1">Then stop heating and continue stirring until </span><span class="si">{vessel}</span><span class="s1"> reaches room temperature.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-
-    <span class="nd">@time</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span>
-
-    <span class="nd">@temp</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">stir_rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;stir_rpm&#39;</span><span class="p">]</span>
-
-    <span class="nd">@stir_rpm</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">stir_rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;stir_rpm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Heat </span><span class="si">{vessel}</span><span class="s1"> to </span><span class="si">{temp}</span><span class="s1"> °C under stirring and wait {float(time) / 3600} hrs.</span><span class="se">\n</span><span class="s1">Then stop heating and continue stirring until </span><span class="si">{vessel}</span><span class="s1"> reaches room temperature.&#39;</span></div>
 
 <div class="viewcode-block" id="ContinueStirToRT"><a class="viewcode-back" href="../../../steps.html#xdl.steps.ContinueStirToRT">[docs]</a><span class="k">class</span> <span class="nc">ContinueStirToRT</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Set vessel temperature to room temperature, and continue stirring until</span>
@@ -507,7 +347,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StirToRT&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
         <span class="p">}</span>
@@ -518,16 +357,7 @@
             <span class="n">CStopStir</span><span class="p">(</span><span class="n">vessel</span><span class="o">=</span><span class="n">vessel</span><span class="p">),</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Wait for </span><span class="si">{vessel}</span><span class="s1"> to reach room temperature and then stop stirring.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Wait for </span><span class="si">{vessel}</span><span class="s1"> to reach room temperature and then stop stirring.&#39;</span></div>
 
 <div class="viewcode-block" id="StopChiller"><a class="viewcode-back" href="../../../steps.html#xdl.steps.StopChiller">[docs]</a><span class="k">class</span> <span class="nc">StopChiller</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Stop the chiller.</span>
@@ -537,7 +367,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StopChiller&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
         <span class="p">}</span>
@@ -551,16 +380,7 @@
             <span class="n">CStopChiller</span><span class="p">(</span><span class="n">vessel</span><span class="p">)</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Stop chiller for </span><span class="si">{self.vessel}</span><span class="s1">&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Stop chiller for </span><span class="si">{self.vessel}</span><span class="s1">&#39;</span></div>
 
 <div class="viewcode-block" id="Chill"><a class="viewcode-back" href="../../../steps.html#xdl.steps.Chill">[docs]</a><span class="k">class</span> <span class="nc">Chill</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Chill vessel to given temperature.</span>
@@ -571,7 +391,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Chill&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
             <span class="s1">&#39;temp&#39;</span><span class="p">:</span> <span class="n">temp</span><span class="p">,</span>
@@ -589,25 +408,7 @@
         <span class="p">])</span>
 
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Chill </span><span class="si">{vessel}</span><span class="s1"> to </span><span class="si">{temp}</span><span class="s1"> °C.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span>
-
-    <span class="nd">@temp</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Chill </span><span class="si">{vessel}</span><span class="s1"> to </span><span class="si">{temp}</span><span class="s1"> °C.&#39;</span></div>
 
 <div class="viewcode-block" id="ChillBackToRT"><a class="viewcode-back" href="../../../steps.html#xdl.steps.ChillBackToRT">[docs]</a><span class="k">class</span> <span class="nc">ChillBackToRT</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Chill given vessel back to room temperature.</span>
@@ -617,7 +418,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ChillBackToRT&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
         <span class="p">}</span>
@@ -638,16 +438,7 @@
                 <span class="n">CStirrerWaitForTemp</span><span class="p">(</span><span class="n">vessel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">),</span>
             <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Chill </span><span class="si">{vessel}</span><span class="s1"> to room temperature.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Chill </span><span class="si">{vessel}</span><span class="s1"> to room temperature.&#39;</span></div>
 
 <div class="viewcode-block" id="PrimePumpForAdd"><a class="viewcode-back" href="../../../steps.html#xdl.steps.PrimePumpForAdd">[docs]</a><span class="k">class</span> <span class="nc">PrimePumpForAdd</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Prime pump attached to given reagent flask in anticipation of Add step.</span>
@@ -658,7 +449,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reagent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="n">waste_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">move_speed</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;PrimePumpForAdd&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;reagent&#39;</span><span class="p">:</span> <span class="n">reagent</span><span class="p">,</span>
             <span class="s1">&#39;waste_vessel&#39;</span><span class="p">:</span> <span class="n">waste_vessel</span><span class="p">,</span>
@@ -668,34 +458,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">CMove</span><span class="p">(</span><span class="n">from_vessel</span><span class="o">=</span><span class="n">f</span><span class="s2">&quot;flask_</span><span class="si">{reagent}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">to_vessel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">waste_vessel</span><span class="p">,</span>
                     <span class="n">volume</span><span class="o">=</span><span class="n">DEFAULT_PUMP_PRIME_VOLUME</span><span class="p">,</span> <span class="n">move_speed</span><span class="o">=</span><span class="n">move_speed</span><span class="p">)</span>
-        <span class="p">]</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">reagent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;reagent&#39;</span><span class="p">]</span>
-
-    <span class="nd">@reagent</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">reagent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;reagent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@waste_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">move_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;move_speed&#39;</span><span class="p">]</span>
-
-    <span class="nd">@move_speed</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">move_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;move_speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="p">]</span></div>
 
 <div class="viewcode-block" id="Add"><a class="viewcode-back" href="../../../steps.html#xdl.steps.Add">[docs]</a><span class="k">class</span> <span class="nc">Add</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Add given volume of given reagent to given vessel.</span>
@@ -710,7 +473,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reagent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">move_speed</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">waste_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Add&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;reagent&#39;</span><span class="p">:</span> <span class="n">reagent</span><span class="p">,</span>
             <span class="s1">&#39;volume&#39;</span><span class="p">:</span> <span class="n">volume</span><span class="p">,</span>
@@ -736,61 +498,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Add </span><span class="si">{reagent}</span><span class="s1"> (</span><span class="si">{volume}</span><span class="s1"> mL) to </span><span class="si">{vessel}</span><span class="s1">&#39;</span> <span class="c1"># Maybe add in bit for clean tubing</span>
         <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">+=</span> <span class="n">f</span><span class="s1">&#39; over </span><span class="si">{time}</span><span class="s1">&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">+=</span> <span class="s1">&#39;.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">reagent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;reagent&#39;</span><span class="p">]</span>
-
-    <span class="nd">@reagent</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">reagent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;reagent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span>
-
-    <span class="nd">@volume</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-
-    <span class="nd">@time</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">move_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;move_speed&#39;</span><span class="p">]</span>
-
-    <span class="nd">@move_speed</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">move_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;move_speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@waste_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">+=</span> <span class="s1">&#39;.&#39;</span></div>
 
 <div class="viewcode-block" id="Transfer"><a class="viewcode-back" href="../../../steps.html#xdl.steps.Transfer">[docs]</a><span class="k">class</span> <span class="nc">Transfer</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Transfer contents of one vessel to another.</span>
@@ -802,7 +510,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">from_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Transfer&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;from_vessel&#39;</span><span class="p">:</span> <span class="n">from_vessel</span><span class="p">,</span>
             <span class="s1">&#39;to_vessel&#39;</span><span class="p">:</span> <span class="n">to_vessel</span><span class="p">,</span>
@@ -821,34 +528,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CMove</span><span class="p">(</span><span class="n">from_vessel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">from_vessel</span><span class="p">,</span> <span class="n">to_vessel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">to_vessel</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Transfer </span><span class="si">{self.volume}</span><span class="s1"> mL to </span><span class="si">{self.to_vessel}</span><span class="s1">.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">from_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;from_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@from_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">from_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;from_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">to_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;to_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@to_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">to_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;to_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span>
-
-    <span class="nd">@volume</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Transfer </span><span class="si">{self.volume}</span><span class="s1"> mL to </span><span class="si">{self.to_vessel}</span><span class="s1">.&#39;</span></div>
 
 <div class="viewcode-block" id="WashFilterCake"><a class="viewcode-back" href="../../../steps.html#xdl.steps.WashFilterCake">[docs]</a><span class="k">class</span> <span class="nc">WashFilterCake</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Wash filter cake with given volume of given solvent.</span>
@@ -862,7 +542,6 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solvent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">waste_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">wait_time</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;WashFilterCake&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;solvent&#39;</span><span class="p">:</span> <span class="n">solvent</span><span class="p">,</span>
             <span class="s1">&#39;filter_vessel&#39;</span><span class="p">:</span> <span class="n">filter_vessel</span><span class="p">,</span>
@@ -885,53 +564,7 @@
                  <span class="n">volume</span><span class="o">=</span><span class="n">DEFAULT_WASHFILTERCAKE_WAIT_TIME</span><span class="p">,</span> <span class="n">aspiration_speed</span><span class="o">=</span><span class="n">DEFAULT_FILTER_ASPIRATION_SPEED</span><span class="p">),</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Wash </span><span class="si">{filter_vessel}</span><span class="s1"> with </span><span class="si">{solvent}</span><span class="s1"> (</span><span class="si">{volume}</span><span class="s1"> mL).&#39;</span>
-
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent&#39;</span><span class="p">]</span>
-
-    <span class="nd">@solvent</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">filter_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@filter_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">filter_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span>
-
-    <span class="nd">@volume</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@waste_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">wait_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;wait_time&#39;</span><span class="p">]</span>
-
-    <span class="nd">@wait_time</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">wait_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;wait_time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Wash </span><span class="si">{filter_vessel}</span><span class="s1"> with </span><span class="si">{solvent}</span><span class="s1"> (</span><span class="si">{volume}</span><span class="s1"> mL).&#39;</span></div>
 
 <div class="viewcode-block" id="Dry"><a class="viewcode-back" href="../../../steps.html#xdl.steps.Dry">[docs]</a><span class="k">class</span> <span class="nc">Dry</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Dry given vessel by applying vacuum for given time.</span>
@@ -942,7 +575,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">waste_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Dry&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;filter_vessel&#39;</span><span class="p">:</span> <span class="n">filter_vessel</span><span class="p">,</span>
             <span class="s1">&#39;waste_vessel&#39;</span><span class="p">:</span> <span class="n">waste_vessel</span><span class="p">,</span> <span class="c1"># set in prepare_for_execution</span>
@@ -960,34 +592,7 @@
             <span class="n">CMove</span><span class="p">(</span><span class="n">from_vessel</span><span class="o">=</span><span class="n">filter_vessel_bottom</span><span class="p">,</span> <span class="n">to_vessel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">waste_vessel</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="n">volume</span><span class="p">,</span> <span class="n">aspiration_speed</span><span class="o">=</span><span class="n">DEFAULT_FILTER_ASPIRATION_SPEED</span><span class="p">),</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Dry substance in </span><span class="si">{self.filter_vessel}</span><span class="s1"> for </span><span class="si">{self.time}</span><span class="s1"> s.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">filter_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@filter_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">filter_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@waste_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-
-    <span class="nd">@time</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Dry substance in </span><span class="si">{self.filter_vessel}</span><span class="s1"> for </span><span class="si">{self.time}</span><span class="s1"> s.&#39;</span></div>
 
 <div class="viewcode-block" id="Filter"><a class="viewcode-back" href="../../../steps.html#xdl.steps.Filter">[docs]</a><span class="k">class</span> <span class="nc">Filter</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Filter contents of filter_vessel_top. Apply vacuum for given time.</span>
@@ -1003,7 +608,6 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_top_volume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_bottom_volume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">waste_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">time</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Filter&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;filter_vessel&#39;</span><span class="p">:</span> <span class="n">filter_vessel</span><span class="p">,</span>
             <span class="s1">&#39;filter_top_volume&#39;</span><span class="p">:</span> <span class="n">filter_top_volume</span><span class="p">,</span> <span class="c1"># Filled in when XDL.prepare_for_execution is called</span>
@@ -1021,52 +625,7 @@
             <span class="n">CMove</span><span class="p">(</span><span class="n">from_vessel</span><span class="o">=</span><span class="n">filter_bottom</span><span class="p">,</span> <span class="n">to_vessel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">waste_vessel</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="n">DEFAULT_FILTER_MOVE_VOLUME</span><span class="p">,</span> <span class="n">aspiration_speed</span><span class="o">=</span><span class="n">DEFAULT_FILTER_ASPIRATION_SPEED</span><span class="p">),</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Filter contents of </span><span class="si">{filter_vessel}</span><span class="s1"> for </span><span class="si">{time}</span><span class="s1"> s.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">filter_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@filter_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">filter_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">filter_top_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_top_volume&#39;</span><span class="p">]</span>
-
-    <span class="nd">@filter_top_volume</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">filter_top_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_top_volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">filter_bottom_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_bottom_volume&#39;</span><span class="p">]</span>
-
-    <span class="nd">@filter_bottom_volume</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">filter_bottom_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_bottom_volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@waste_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-
-    <span class="nd">@time</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Filter contents of </span><span class="si">{filter_vessel}</span><span class="s1"> for </span><span class="si">{time}</span><span class="s1"> s.&#39;</span></div>
 
 <div class="viewcode-block" id="Confirm"><a class="viewcode-back" href="../../../steps.html#xdl.steps.Confirm">[docs]</a><span class="k">class</span> <span class="nc">Confirm</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Get the user to confirm something before execution continues.</span>
@@ -1077,7 +636,6 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Confirm&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;msg&#39;</span><span class="p">:</span> <span class="n">msg</span><span class="p">,</span>
         <span class="p">}</span>
@@ -1109,7 +667,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solutes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solvent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solute_masses</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solvent_volume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;MakeSolution&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;solutes&#39;</span><span class="p">:</span> <span class="n">solutes</span><span class="p">,</span>
             <span class="s1">&#39;solvent&#39;</span><span class="p">:</span> <span class="n">solvent</span><span class="p">,</span>
@@ -1132,52 +689,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Make solution of &#39;</span>
         <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">solutes</span><span class="p">,</span> <span class="n">solute_masses</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">+=</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{s}</span><span class="s1"> (</span><span class="si">{m}</span><span class="s1"> g), &#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="s1">&#39; in </span><span class="si">{solvent}</span><span class="s1"> (</span><span class="si">{solvent_volume}</span><span class="s1"> mL) in </span><span class="si">{vessel}</span><span class="s1">.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">solutes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solutes&#39;</span><span class="p">]</span>
-
-    <span class="nd">@solutes</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">solutes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solutes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent&#39;</span><span class="p">]</span>
-
-    <span class="nd">@solvent</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">solute_masses</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solute_masses&#39;</span><span class="p">]</span>
-
-    <span class="nd">@solute_masses</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">solute_masses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solute_masses&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">solvent_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent_volume&#39;</span><span class="p">]</span>
-
-    <span class="nd">@solvent_volume</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">solvent_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent_volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="s1">&#39; in </span><span class="si">{solvent}</span><span class="s1"> (</span><span class="si">{solvent_volume}</span><span class="s1"> mL) in </span><span class="si">{vessel}</span><span class="s1">.&#39;</span></div>
 
 <div class="viewcode-block" id="Reflux"><a class="viewcode-back" href="../../../steps.html#xdl.steps.Reflux">[docs]</a><span class="k">class</span> <span class="nc">Reflux</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Reflux given vessel at given temperature for given time.</span>
@@ -1189,7 +701,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Reflux&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
             <span class="s1">&#39;temp&#39;</span><span class="p">:</span> <span class="n">temp</span><span class="p">,</span>
@@ -1213,34 +724,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CStopHeat</span><span class="p">(</span><span class="n">vessel</span><span class="o">=</span><span class="n">vessel</span><span class="p">),)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Heat </span><span class="si">{vessel}</span><span class="s1"> to </span><span class="si">{temp}</span><span class="s1"> °C and reflux for </span><span class="si">{time}</span><span class="s1"> s.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span>
-
-    <span class="nd">@temp</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-
-    <span class="nd">@time</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Heat </span><span class="si">{vessel}</span><span class="s1"> to </span><span class="si">{temp}</span><span class="s1"> °C and reflux for </span><span class="si">{time}</span><span class="s1"> s.&#39;</span></div>
 
 <div class="viewcode-block" id="Rotavap"><a class="viewcode-back" href="../../../steps.html#xdl.steps.Rotavap">[docs]</a><span class="k">class</span> <span class="nc">Rotavap</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Rotavap contents of given vessel at given temp and given pressure for given time.</span>
@@ -1253,7 +737,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pressure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Rotavap&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
             <span class="s1">&#39;temp&#39;</span><span class="p">:</span> <span class="n">temp</span><span class="p">,</span>
@@ -1280,43 +763,7 @@
             <span class="n">CMove</span><span class="p">(</span><span class="s1">&#39;flask_rv_bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;waste&#39;</span><span class="p">,</span> <span class="p">)</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Rotavap contents of </span><span class="si">{vessel}</span><span class="s1"> at </span><span class="si">{temp}</span><span class="s1"> °C for </span><span class="si">{time}</span><span class="s1">.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span>
-
-    <span class="nd">@temp</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;pressure&#39;</span><span class="p">]</span>
-
-    <span class="nd">@pressure</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;pressure&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-
-    <span class="nd">@time</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Rotavap contents of </span><span class="si">{vessel}</span><span class="s1"> at </span><span class="si">{temp}</span><span class="s1"> °C for </span><span class="si">{time}</span><span class="s1">.&#39;</span></div>
 
 <div class="viewcode-block" id="Wait"><a class="viewcode-back" href="../../../steps.html#xdl.steps.Wait">[docs]</a><span class="k">class</span> <span class="nc">Wait</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Wait for given time.</span>
@@ -1328,7 +775,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wait_recording_speed</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">after_recording_speed</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Wait&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
             <span class="s1">&#39;wait_recording_speed&#39;</span><span class="p">:</span> <span class="n">wait_recording_speed</span><span class="p">,</span>
@@ -1342,35 +788,7 @@
             <span class="n">CSetRecordingSpeed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">after_recording_speed</span><span class="p">),</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Wait for </span><span class="si">{self.time}</span><span class="s1"> s.&#39;</span>
-
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-
-    <span class="nd">@time</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">wait_recording_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;wait_recording_speed&#39;</span><span class="p">]</span>
-
-    <span class="nd">@wait_recording_speed</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">wait_recording_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;wait_recording_speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">after_recording_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;after_recording_speed&#39;</span><span class="p">]</span>
-
-    <span class="nd">@after_recording_speed</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">after_recording_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;after_recording_speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Wait for </span><span class="si">{self.time}</span><span class="s1"> s.&#39;</span></div>
 
 <div class="viewcode-block" id="Extract"><a class="viewcode-back" href="../../../steps.html#xdl.steps.Extract">[docs]</a><span class="k">class</span> <span class="nc">Extract</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extract contents of from_vessel using given amount of given solvent.</span>
@@ -1386,7 +804,6 @@
                     <span class="n">solvent_volume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_extractions</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">product_bottom</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">waste_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">waste_phase_to_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_dead_volume</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Extract&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;from_vessel&#39;</span><span class="p">:</span> <span class="n">from_vessel</span><span class="p">,</span>
             <span class="s1">&#39;separation_vessel&#39;</span><span class="p">:</span> <span class="n">separation_vessel</span><span class="p">,</span>
@@ -1492,98 +909,7 @@
                             <span class="n">separator_top</span><span class="o">=</span><span class="n">separator_top</span><span class="p">,</span> <span class="n">separator_bottom</span><span class="o">=</span><span class="n">separator_bottom</span><span class="p">,</span> <span class="n">dead_volume_target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">waste_vessel</span><span class="p">),</span>
             <span class="p">])</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Extract contents of </span><span class="si">{self.from_vessel}</span><span class="s1"> with </span><span class="si">{self.solvent}</span><span class="s1"> (</span><span class="si">{self.n_extractions}</span><span class="s1">x</span><span class="si">{self.solvent_volume}</span><span class="s1"> mL).&#39;</span>
-
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">from_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;from_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@from_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">from_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;from_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">separation_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;separation_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@separation_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">separation_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;separation_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">to_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;to_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@to_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">to_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;to_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent&#39;</span><span class="p">]</span>
-
-    <span class="nd">@solvent</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">solvent_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent_volume&#39;</span><span class="p">]</span>
-
-    <span class="nd">@solvent_volume</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">solvent_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent_volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">n_extractions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;n_extractions&#39;</span><span class="p">]</span>
-
-    <span class="nd">@n_extractions</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">n_extractions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;n_extractions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">product_bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;product_bottom&#39;</span><span class="p">]</span>
-
-    <span class="nd">@product_bottom</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">product_bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;product_bottom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">waste_phase_to_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_phase_to_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@waste_phase_to_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">waste_phase_to_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_phase_to_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@waste_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">filter_dead_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_dead_volume&#39;</span><span class="p">]</span>
-
-    <span class="nd">@filter_dead_volume</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">filter_dead_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_dead_volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Extract contents of </span><span class="si">{self.from_vessel}</span><span class="s1"> with </span><span class="si">{self.solvent}</span><span class="s1"> (</span><span class="si">{self.n_extractions}</span><span class="s1">x</span><span class="si">{self.solvent_volume}</span><span class="s1"> mL).&#39;</span></div>
 
 <div class="viewcode-block" id="Wash"><a class="viewcode-back" href="../../../steps.html#xdl.steps.Wash">[docs]</a><span class="k">class</span> <span class="nc">Wash</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Wash contents of from_vessel with given solvent.</span>
@@ -1603,7 +929,6 @@
                     <span class="n">solvent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solvent_volume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_washes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">product_bottom</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="n">waste_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">waste_phase_to_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_dead_volume</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Wash&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;from_vessel&#39;</span><span class="p">:</span> <span class="n">from_vessel</span><span class="p">,</span>
             <span class="s1">&#39;to_vessel&#39;</span><span class="p">:</span> <span class="n">to_vessel</span><span class="p">,</span>
@@ -1706,97 +1031,7 @@
                             <span class="n">separator_top</span><span class="o">=</span><span class="n">separator_top</span><span class="p">,</span> <span class="n">separator_bottom</span><span class="o">=</span><span class="n">separator_bottom</span><span class="p">,</span> <span class="n">dead_volume_target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">waste_vessel</span><span class="p">),</span>
             <span class="p">])</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Wash contents of </span><span class="si">{from_vessel}</span><span class="s1"> in </span><span class="si">{separation_vessel}</span><span class="s1"> with </span><span class="si">{solvent}</span><span class="s1"> (</span><span class="si">{n_washes}</span><span class="s1">x</span><span class="si">{solvent_volume}</span><span class="s1"> mL)&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">from_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;from_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@from_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">from_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;from_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">to_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;to_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@to_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">to_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;to_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">separation_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;separation_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@separation_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">separation_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;separation_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent&#39;</span><span class="p">]</span>
-
-    <span class="nd">@solvent</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">solvent_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent_volume&#39;</span><span class="p">]</span>
-
-    <span class="nd">@solvent_volume</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">solvent_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent_volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">n_washes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;n_washes&#39;</span><span class="p">]</span>
-
-    <span class="nd">@n_washes</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">n_washes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;n_washes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">product_bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;product_bottom&#39;</span><span class="p">]</span>
-
-    <span class="nd">@product_bottom</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">product_bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;product_bottom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">waste_phase_to_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_phase_to_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@waste_phase_to_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">waste_phase_to_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_phase_to_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@waste_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">filter_dead_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_dead_volume&#39;</span><span class="p">]</span>
-
-    <span class="nd">@filter_dead_volume</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">filter_dead_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_dead_volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Wash contents of </span><span class="si">{from_vessel}</span><span class="s1"> in </span><span class="si">{separation_vessel}</span><span class="s1"> with </span><span class="si">{solvent}</span><span class="s1"> (</span><span class="si">{n_washes}</span><span class="s1">x</span><span class="si">{solvent_volume}</span><span class="s1"> mL)&#39;</span></div>
 
 <div class="viewcode-block" id="StirAtRT"><a class="viewcode-back" href="../../../steps.html#xdl.steps.StirAtRT">[docs]</a><span class="k">class</span> <span class="nc">StirAtRT</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Stir given vessel for given time at room temperature.</span>
@@ -1807,7 +1042,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stir_rpm</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;StirAtRT&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;vessel&#39;</span><span class="p">:</span> <span class="n">vessel</span><span class="p">,</span>
             <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
@@ -1822,34 +1056,7 @@
             <span class="n">CStopStir</span><span class="p">(</span><span class="n">vessel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="p">),</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Stir </span><span class="si">{vessel}</span><span class="s1"> for </span><span class="si">{time}</span><span class="s1"> s.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-
-    <span class="nd">@time</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">stir_rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;stir_rpm&#39;</span><span class="p">]</span>
-
-    <span class="nd">@stir_rpm</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">stir_rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;stir_rpm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Stir </span><span class="si">{vessel}</span><span class="s1"> for </span><span class="si">{time}</span><span class="s1"> s.&#39;</span></div>
 
 <div class="viewcode-block" id="PrepareFilter"><a class="viewcode-back" href="../../../steps.html#xdl.steps.PrepareFilter">[docs]</a><span class="k">class</span> <span class="nc">PrepareFilter</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Fill bottom of filter vessel with solvent in anticipation of the filter top being used.</span>
@@ -1862,7 +1069,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solvent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">waste_vessel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;PrepareFilter&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;filter_vessel&#39;</span><span class="p">:</span> <span class="n">filter_vessel</span><span class="p">,</span>
             <span class="s1">&#39;solvent&#39;</span><span class="p">:</span> <span class="n">solvent</span><span class="p">,</span>
@@ -1874,43 +1080,7 @@
                 <span class="n">vessel</span><span class="o">=</span><span class="n">filter_bottom_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter_vessel</span><span class="p">),</span> <span class="n">waste_vessel</span><span class="o">=</span><span class="n">waste_vessel</span><span class="p">,)</span>
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Fill {filter_bottom_name(self.filter_vessel)} with </span><span class="si">{solvent}</span><span class="s1"> (</span><span class="si">{volume}</span><span class="s1"> mL).&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">filter_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@filter_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">filter_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;filter_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent&#39;</span><span class="p">]</span>
-
-    <span class="nd">@solvent</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;solvent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span>
-
-    <span class="nd">@volume</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span>
-
-    <span class="nd">@waste_vessel</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">waste_vessel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;waste_vessel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Fill {filter_bottom_name(self.filter_vessel)} with </span><span class="si">{solvent}</span><span class="s1"> (</span><span class="si">{volume}</span><span class="s1"> mL).&#39;</span></div>
 </pre></div>
 
            </div>
