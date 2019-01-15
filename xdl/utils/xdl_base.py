@@ -60,3 +60,7 @@ class XDLBase(object):
                 return object.__getattribute__(self, name)
         else:
             return object.__getattribute__(self, name)
+
+    @property
+    def name(self):
+        return type(self).__name__

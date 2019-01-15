@@ -8,181 +8,71 @@ class Component(XDLBase):
 
 
 class Reactor(Component):
-    """Reactor class."""
-    def __init__(self, cid=None, volume_ml=None, reactor_type='default', atmosphere=None):
+
+    def __init__(self, xid, volume):
+        """        
+        Args:
+            xid (str): Unique identifier for reactor i.e. 'reactor1'
+            volume_ml (float): Reactor volume in mL.
         """
-        Keyword Arguments:
-            cid {str} -- Component ID i.e. 'reactor1'
-            volume_ml {float} -- Volume of vessel in mL.
-            reactor_type {str} -- i.e. 'RoundBottomFlask'
-            atmosphere {str} -- None or 'inert'
-        """
-        self.name = 'Reactor'
         self.properties = {
-            'cid': cid,
-            'volume_ml': volume_ml,
-            'reactor_type': reactor_type,
-            'atmosphere': atmosphere,
+            'xid': xid,
+            'volume': volume,
         }
-        self.get_defaults()
-
-    @property
-    def cid(self):
-        return self.properties['cid']
-
-    @cid.setter
-    def cid(self, val):
-        self.properties['cid'] = val
-        self.update()
-
-    @property
-    def volume_ml(self):
-        return self.properties['volume_ml']
-
-    @volume_ml.setter
-    def volume_ml(self, val):
-        self.properties['volume_ml'] = val
-        self.update()
-
-    @property
-    def reactor_type(self):
-        return self.properties['reactor_type']
-
-    @reactor_type.setter
-    def reactor_type(self, val):
-        self.properties['reactor_type'] = val
-        self.update()
-
-    @property
-    def atmosphere(self):
-        return self.properties['atmosphere']
-
-    @atmosphere.setter
-    def atmosphere(self, val):
-        self.properties['atmosphere'] = val
-        self.update()
 
 class SeparatingFunnel(Component):
 
-    def __init__(self, cid=None, volume_ml=None,):
-
-        self.name = 'SeparatingFunnel'
+    def __init__(self, xid, volume):
+        """        
+        Args:
+            xid (str): Unique identifier for vessel i.e. 'separator1'
+            volume_ml (float): Vesesel volume in mL.
+        """
         self.properties = {
-            'cid': cid,
-            'volume_ml': volume_ml,
+            'xid': xid,
+            'volume': volume,
         }
-
-    @property
-    def cid(self):
-        return self.properties['cid']
-
-    @cid.setter
-    def cid(self, val):
-        self.properties['cid'] = val
-        self.update()
-
-    @property
-    def volume_ml(self):
-        return self.properties['volume_ml']
-
-    @volume_ml.setter
-    def volume_ml(self, val):
-        self.properties['volume_ml'] = val
-        self.update()
 
 class FilterFlask(Component):
 
-    def __init__(self, cid=None, volume_ml=None, dead_volume=None):
-
-        self.name = 'FilterFlask'
+    def __init__(self, xid, volume, dead_volume):
+        """        
+        Args:
+            xid (str): Unique identifier for vessel i.e. 'filter1'
+            volume (float): Vessel volume in mL.
+            dead_volume (float): Volume of space below filter in mL.
+        """
         self.properties = {
-            'cid': cid,
-            'volume_ml': volume_ml,
+            'xid': xid,
+            'volume': volume,
             'dead_volume': dead_volume,
         }
 
-    @property
-    def cid(self):
-        return self.properties['cid']
-
-    @cid.setter
-    def cid(self, val):
-        self.properties['cid'] = val
-        self.update()
-
-    @property
-    def volume_ml(self):
-        return self.properties['volume_ml']
-
-    @volume_ml.setter
-    def volume_ml(self, val):
-        self.properties['volume_ml'] = val
-        self.update()
-
-    @property
-    def dead_volume(self):
-        return self.properties['dead_volume']
-
-    @dead_volume.setter
-    def dead_volume(self, val):
-        self.properties['dead_volume'] = val
-        self.update()
-
 class Flask(Component):
 
-    def __init__(self, cid=None, volume_ml=None):
-
-        self.name = 'Flask'
+    def __init__(self, xid, volume):
+        """        
+        Args:
+            xid (str): Unique identifier for vessel i.e. 'flask1'
+            volume (float): Vessel volume in mL.
+        """
         self.properties = {
-            'cid': cid,
-            'volume_ml': volume_ml,
+            'xid': xid,
+            'volume': volume,
         }
-
-    @property
-    def cid(self):
-        return self.properties['cid']
-
-    @cid.setter
-    def cid(self, val):
-        self.properties['cid'] = val
-        self.update()
-
-    @property
-    def volume_ml(self):
-        return self.properties['volume_ml']
-
-    @volume_ml.setter
-    def volume_ml(self, val):
-        self.properties['volume_ml'] = val
-        self.update()
 
 class Waste(Component):
 
-    def __init__(self, cid=None, volume_ml=None):
-
-        self.name = 'Waste'
+    def __init__(self, xid, volume):
+        """        
+        Args:
+            xid (str): Unique identifier for vessel i.e. 'waste1'
+            volume (float): Vessel volume in mL.
+        """
         self.properties = {
-            'cid': cid,
-            'volume_ml': volume_ml,
+            'xid': xid,
+            'volume': volume,
         }
-
-    @property
-    def cid(self):
-        return self.properties['cid']
-
-    @cid.setter
-    def cid(self, val):
-        self.properties['cid'] = val
-        self.update()
-
-    @property
-    def volume_ml(self):
-        return self.properties['volume_ml']
-
-    @volume_ml.setter
-    def volume_ml(self, val):
-        self.properties['volume_ml'] = val
-        self.update()
 
 class Hardware(object):
     """
@@ -190,35 +80,38 @@ class Hardware(object):
     of reactors, flasks, filters, wastes etc.
     """
     def __init__(self, components):
-
+        """Sort components into categories.
+        
+        Args:
+            components (List[Component]): List of Component objects.
+        """
         self.components = components
-        self.component_ids = [item.cid for item in self.components]
+        self.component_ids = [item.xid for item in self.components]
         self.reactors = []
         self.flasks = []
         self.wastes = []
         self.filters = []
         self.separators = []
         for component in self.components:
-            if component.cid.startswith('reactor'):
+            if type(component) == Reactor:
                 self.reactors.append(component)
-            elif component.cid.startswith(('separator', 'flask_separator')):
+            elif type(component) == SeparatingFunnel:
                 self.separators.append(component)
-            elif component.cid.startswith(('filter')):
+            elif type(component) == FilterFlask:
                 self.filters.append(component)
-            elif component.cid.startswith('flask'):
+            elif type(component) == Flask:
                 self.flasks.append(component)
-            elif component.cid.startswith('waste'):
+            elif type(component) == Waste:
                 self.wastes.append(component)
 
-
-        self.waste_cids = [item.cid for item in self.wastes]
+        self.waste_xids = [item.xid for item in self.wastes]
         for component_list in [self.filters, self.separators]:
             for i in reversed(range(len(component_list))):
                 component = component_list[i]
-                if '_' in component.cid:
-                    new_id = component.cid.split('_')[1]
-                    if 'bottom' in component.cid:
-                        component.cid = new_id
+                if '_' in component.xid:
+                    new_id = component.xid.split('_')[1]
+                    if 'bottom' in component.xid:
+                        component.xid = new_id
                     else:
                         component_list.pop(i)
 
@@ -229,7 +122,7 @@ class Hardware(object):
         if 'filter' in item and ('top' in item or 'bottom' in item):
             item = item.split('_')[1] # get 'filter' from 'filter_filter_bottom'
         for component in self.components:
-            if component.cid == item:
+            if component.xid == item:
                 return component
         return None
 

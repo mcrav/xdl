@@ -12,7 +12,15 @@ Welcome to xdl's documentation!
 
    steps
 
+Execution
+*********
+.. automodule:: xdl.execution
+    :members:
 
+Hardware
+*********
+.. automodule:: xdl.hardware
+    :members:
 
 Indices and tables
 ==================

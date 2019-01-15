@@ -10,9 +10,18 @@ Welcome to xdl's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   custom_steps
    steps
 
+Execution
+*********
+.. automodule:: xdl.execution
+    :members:
 
+Hardware
+*********
+.. automodule:: xdl.hardware
+    :members:
 
 Indices and tables
 ==================

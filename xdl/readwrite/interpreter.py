@@ -1,13 +1,12 @@
 from lxml import etree
-from .utils import (
-    convert_time_str_to_seconds, convert_volume_str_to_ml, 
-    convert_mass_str_to_g, parse_bool
-)
+from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml, 
+                    convert_mass_str_to_g, parse_bool)
 from ..steps import MakeSolution
 from ..reagents import Reagent
 from ..hardware import Hardware
 from .syntax_validation import XDLSyntaxValidator
-from ..utils.namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT, BASE_STEP_OBJ_DICT
+from ..utils.namespace import (STEP_OBJ_DICT, COMPONENT_OBJ_DICT, 
+                               BASE_STEP_OBJ_DICT)
 
 def xdl_file_to_objs(xdl_file):
     """Given XDL file return steps, hardware and reagents.
@@ -181,27 +180,31 @@ def preprocess_attrib(step, attrib):
     Returns:
         dict -- Dict of processed attributes.
     """
-    attrib = dict(attrib)
-    if 'clean_tubing' in attrib:
-        if attrib['clean_tubing'].lower() == 'false':
-            attrib['clean_tubing'] = False
+    attr = dict(attrib)
+    if 'clean_tubing' in attr:
+        if attr['clean_tubing'].lower() == 'false':
+            attr['clean_tubing'] = False
         else:
-            attrib['clean_tubing'] = True
-    if 'time' in attrib:
-        attrib['time'] = convert_time_str_to_seconds(attrib['time'])
+            attr['clean_tubing'] = True
+
+    if 'time' in attr:
+        attr['time'] = convert_time_str_to_seconds(attr['time'])
     
-    if 'volume' in attrib and attrib['volume'] != 'all':
-        attrib['volume'] = convert_volume_str_to_ml(attrib['volume'])
-    if 'solvent_volume' in attrib:
-        attrib['solvent_volume'] = convert_volume_str_to_ml(attrib['solvent_volume'])
-    if 'mass' in attrib:
-        attrib['mass'] = convert_mass_str_to_g(attrib['mass'])
-    if 'product_bottom' in attrib:
-        attrib['product_bottom'] = parse_bool(attrib['product_bottom'])
+    if 'volume' in attr and attr['volume'] != 'all':
+        attr['volume'] = convert_volume_str_to_ml(attr['volume'])
+
+    if 'solvent_volume' in attr:
+        attr['solvent_volume'] = convert_volume_str_to_ml(attr['solvent_volume'])
+
+    if 'mass' in attr:
+        attr['mass'] = convert_mass_str_to_g(attr['mass'])
+
+    if 'product_bottom' in attr:
+        attr['product_bottom'] = parse_bool(attr['product_bottom'])
 
     if isinstance(step, MakeSolution):
-        attrib['solutes'] = attrib['solutes'].split(' ')
-        attrib['solute_masses'] = attrib['solute_masses'].split(' ')
-        attrib['solute_masses'] = [convert_mass_str_to_g(item) for item in attrib['solute_masses']]
-        
-    return attrib
+        attr['solutes'] = attr['solutes'].split(' ')
+        attr['solute_masses'] = attr['solute_masses'].split(' ')
+        attr['solute_masses'] = [convert_mass_str_to_g(item) 
+                                 for item in attr['solute_masses']]
+    return attr

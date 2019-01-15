@@ -7,26 +7,27 @@ class XDLGenerator(object):
     """
     Class for generating XDL from lists of hardware, reagents and steps.
     """
-    def __init__(self, hardware=[], reagents=[], steps=[]):
+
+    def __init__(self, steps, hardware, reagents):
         """
-        Generate XDL etree.
+        Generate XDL from steps, hardware and reagents.
         
-        Keyword Arguments:
-            hardware {list} -- List of Component objects
-            reagents {list} -- List of Reagent objects
-            steps {list} -- List of Step objects
+        Args:
+            steps {List[Step]} -- List of Step objects
+            hardware {Hardware} -- Hardware object.
+            reagents {List[Reagent]} -- List of Reagent objects
         """
         self.hardware, self.reagents, self.steps = hardware, reagents, steps
-        self.generate_xdl()
+        self._generate_xdl()
 
-    def generate_xdl(self):
+    def _generate_xdl(self):
         """Generate XDL tree."""
         self.xdltree = etree.Element('Synthesis')
-        self.append_hardware_tree()
-        self.append_reagents_tree()
-        self.append_procedure_tree()
+        self._append_hardware_tree()
+        self._append_reagents_tree()
+        self._append_procedure_tree()
 
-    def append_hardware_tree(self):
+    def _append_hardware_tree(self):
         """Create and add Hardware section to XDL tree."""
         hardware_tree = etree.Element('Hardware')
         for component in self.hardware:
@@ -37,7 +38,7 @@ class XDLGenerator(object):
             hardware_tree.append(component_tree)
         self.xdltree.append(hardware_tree)
 
-    def append_reagents_tree(self):
+    def _append_reagents_tree(self):
         """Create and add Reagents section to XDL tree."""
         reagents_tree = etree.Element('Reagents')
         for reagent in self.reagents:
@@ -48,7 +49,7 @@ class XDLGenerator(object):
             reagents_tree.append(reagent_tree)
         self.xdltree.append(reagents_tree)
 
-    def append_procedure_tree(self):
+    def _append_procedure_tree(self):
         """Create and add Procedure section to XDL tree."""
         procedure_tree = etree.Element('Procedure')
         for step in self.steps:
@@ -62,7 +63,7 @@ class XDLGenerator(object):
     def save(self, save_file):
         """Save XDL tree to given file path."""
         with open(save_file, 'w') as fileobj:
-            fileobj.write(get_xdl_string(self.xdltree))
+            fileobj.write(self.as_string())
 
     def as_string(self):
         """Return XDL tree as XML string."""
@@ -71,7 +72,7 @@ class XDLGenerator(object):
 def get_xdl_string(xdltree):
     """Convert XDL etree to pretty XML string.
     
-    Arguments:
+    Args:
         xdltree {lxml.etree.ElementTree} -- etree of XDL
 
     Returns:
