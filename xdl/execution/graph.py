@@ -1,4 +1,5 @@
-import networkx
+import networkx as nx
+from ..hardware.components import *
 
 def graphml_hardware_from_file(graphml_file):
     """Return Hardware object given graphML_file path."""

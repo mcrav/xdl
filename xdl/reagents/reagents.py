@@ -1,7 +1,7 @@
-from .constants import *
-from .utils import XDLElement
+from ..constants import *
+from ..utils.xdl_base import XDLBase
 
-class Reagent(XDLElement):
+class Reagent(XDLBase):
     """Reagent class."""
     def __init__(self, rid=None, cas=None, waste=None):
         """

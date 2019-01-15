@@ -1,8 +1,8 @@
 from lxml import etree
 from io import StringIO
-from .namespace import XDL_STEP_NAMESPACE, XDL_HARDWARE_NAMESPACE
+from ..utils.namespace import XDL_STEP_NAMESPACE, XDL_HARDWARE_NAMESPACE
 from .utils import float_regex
-from .steps import MakeSolution
+from ..steps import MakeSolution
 import inspect
 import re
 import traceback

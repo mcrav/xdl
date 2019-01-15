@@ -1,6 +1,6 @@
 import statistics
-from .constants import *
-from .steps import *
+from ..constants import *
+from ..steps import *
 
 # Steps after which backbone should be cleaned
 CLEAN_BACKBONE_AFTER_STEPS = [

@@ -1,8 +1,8 @@
-from .utils import XDLElement
-from .constants import *
+from ..utils.xdl_base import XDLBase 
+from ..constants import *
 
-class Component(XDLElement):
-    """Base component class. At moment does nothing more than XDLElement."""
+class Component(XDLBase):
+    """Base component class. At moment does nothing more than XDLBase."""
     def __init__(self):
         super().__init__()
 

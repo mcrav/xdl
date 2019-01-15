@@ -1,7 +1,7 @@
 from lxml import etree
-from .components import Reactor
-from .reagents import Reagent
-from .steps import Add
+from ..hardware.components import Reactor
+from ..reagents import Reagent
+from ..steps import Add
 
 class XDLGenerator(object):   
     """

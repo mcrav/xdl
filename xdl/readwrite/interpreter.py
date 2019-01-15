@@ -1,14 +1,13 @@
 from lxml import etree
 from .utils import (
     convert_time_str_to_seconds, convert_volume_str_to_ml, 
-    convert_mass_str_to_g, filter_bottom_name, filter_top_name, 
-    separator_top_name, separator_bottom_name, parse_bool
+    convert_mass_str_to_g, parse_bool
 )
-from .steps import MakeSolution
-from .reagents import Reagent
-from .components import Hardware
+from ..steps import MakeSolution
+from ..reagents import Reagent
+from ..hardware import Hardware
 from .syntax_validation import XDLSyntaxValidator
-from .namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT, BASE_STEP_OBJ_DICT
+from ..utils.namespace import STEP_OBJ_DICT, COMPONENT_OBJ_DICT, BASE_STEP_OBJ_DICT
 
 def xdl_file_to_objs(xdl_file):
     """Given XDL file return steps, hardware and reagents.
@@ -22,7 +21,6 @@ def xdl_file_to_objs(xdl_file):
                   hardware -- Hardware object.
                   reagents -- List of Reagent objects.
     """
-
     with open(xdl_file) as fileobj:
         return xdl_str_to_objs(fileobj.read())
 

@@ -1,5 +1,5 @@
-from .steps import *
-from .components import *
+from ..steps import *
+from ..hardware.components import *
 import copy
 
 BASE_STEP_OBJ_DICT = {

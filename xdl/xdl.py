@@ -1,6 +1,6 @@
 from .constants import *
 from .steps import *
-from .interpreter import xdl_file_to_objs, xdl_str_to_objs
+from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 
 class XDL(object):
     """

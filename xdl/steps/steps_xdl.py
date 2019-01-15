@@ -1,5 +1,5 @@
 from ..constants import *
-from ..utils import Step, filter_bottom_name, filter_top_name, is_generic_filter_name, separator_bottom_name, separator_top_name, is_generic_separator_name
+from .base_step import Step
 from .steps_chasm import (
     CMove,
     CSeparate,
