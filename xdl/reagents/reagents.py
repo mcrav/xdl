@@ -2,28 +2,14 @@ from ..constants import *
 from ..utils.xdl_base import XDLBase
 
 class Reagent(XDLBase):
-    """Reagent class."""
-    def __init__(self, rid=None, cas=None, waste=None):
+    
+    def __init__(self, xid, cas=None):
         """
-        Keyword Arguments:
-            rid {str} -- Reagent ID (containing only letters and underscore).
-            cas {int} -- CAS number as int.
-            waste {str} -- Type of waste reagent should go to.
-                           'aqueous', 'organic', 'chlorinated_organic', or 'metal'.
+        Args:
+            xid (str): Unique identifier containing only letters, numbers and _
+            cas (int, optional): Defaults to None. CAS number of reagent as int.
         """
         self.properties = {
-            'rid': rid,
+            'xid': xid,
             'cas': cas,
-            'waste': waste,
         }
-    @property
-    def rid(self):
-        return self.properties['rid']
-
-    @property
-    def cas(self):
-        return self.properties['cas']
-
-    @property
-    def waste(self):
-        return self.properties['waste']

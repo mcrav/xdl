@@ -1,11 +1,6 @@
 from ..constants import *
 from .base_step import Step
 
-"""
-IMPORTANT:
-All getters and setters are generated when setup.py is run. Don't bother writing them here.
-"""
-
 class CMove(Step):
     """Moves a specified volume from one node in the graph to another. Moving from and to
     the same node is supported.
@@ -47,17 +42,18 @@ class CMove(Step):
         return True
 
 class CSeparate(Step):
-    """Launches a phase separation sequence. The name of the separator is currently
-    hard-coded in the Chempiler!
 
-    Keywords Arguments:
-        lower_phase_vessel {str} -- Vessel name the lower phase should be transferred to.
-        upper_phase_vessel {str} -- Vessel name the upper phase should be transferred to.
-                            If "separator_top" is specified, the upper phase is left in the separator.
-    """
-    def __init__(self, lower_phase_vessel=None, upper_phase_vessel=None, separator_top='flask_separator_top',
-                    separator_bottom='flask_separator_bottom', dead_volume_target=None):
-
+    def __init__(self, lower_phase_vessel, upper_phase_vessel, separator_top, 
+                       separator_bottom, dead_volume_target):
+        """        
+        Args:
+            lower_phase_vessel (str): Name of vessel to transfer lower phase to.
+            upper_phase_vessel (str): Name of vessel to transfer upper phase to.
+            separator_top (str): Name of separator top node in graph.
+            separator_bottom (str): Name of separator bottom node in graph.
+            dead_volume_target (str): Name of waste vessel to transfer dead 
+                                      volume between phases to.
+        """
         self.properties = {
             'lower_phase_vessel': lower_phase_vessel,
             'upper_phase_vessel': upper_phase_vessel,
@@ -82,7 +78,8 @@ class CPrime(Step):
     """Moves the tube volume of every node with "flask" as class to waste.
 
     Keyword Arguments:
-        aspiration_speed {float} -- Speed in mL / min at which material should be withdrawn.
+        aspiration_speed {float} -- Speed in mL / min at which material should 
+                                    be withdrawn.
     """
     def __init__(self, aspiration_speed='default'):
 

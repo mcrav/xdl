@@ -10,15 +10,11 @@ class Step(XDLBase):
         self.steps = []
         self.human_readable = ''
 
-    @property
-    def name(self):
-        return type(self).__name__
-
     def execute(self, chempiler):
         """
         Execute self with given Chempiler object.
         
-        Arguments:
+        Args:
             chempiler {chempiler.Chempiler} -- Initialised Chempiler object.
         """
         for step in self.steps:
