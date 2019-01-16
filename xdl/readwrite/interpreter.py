@@ -3,7 +3,7 @@ from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml,
                     convert_mass_str_to_g, parse_bool)
 from ..steps import MakeSolution
 from ..reagents import Reagent
-from ..hardware import Hardware
+from ..hardware import Hardware, Component
 from .syntax_validation import XDLSyntaxValidator
 from ..utils.namespace import (STEP_OBJ_DICT, BASE_STEP_OBJ_DICT)
 
@@ -132,7 +132,7 @@ def xdl_to_step(xdl_step_element):
         Step -- Step object corresponding to step in xdl_step_element.
     """
     step = STEP_OBJ_DICT[xdl_step_element.tag]()
-    step.load_properties(preprocess_attrib(step, xdl_step_element.attrib))
+    step.load_properties(preprocess_step_attrib(step, xdl_step_element.attrib))
     return step
 
 def xdl_to_component(xdl_component_element):
@@ -146,8 +146,8 @@ def xdl_to_component(xdl_component_element):
         Component -- Component object corresponding to component in 
                      xdl_component_element.
     """
-    component = COMPONENT_OBJ_DICT[xdl_component_element.tag]()
-    component.load_properties(xdl_component_element.attrib)        
+    component = Component()
+    component.load_properties(preprocess_attrib(xdl_component_element.attrib))        
     return component
 
 def xdl_to_reagent(xdl_reagent_element):
@@ -160,11 +160,11 @@ def xdl_to_reagent(xdl_reagent_element):
         Reagent -- Reagent object corresponding to reagent in 
                    xdl_reagent_element.
     """
-    reagent = Reagent(xdl_reagent_element)
-    reagent.load_properties(xdl_reagent_element.attrib)
+    reagent = Reagent()
+    reagent.load_properties(preprocess_attrib(xdl_reagent_element.attrib))
     return reagent
 
-def preprocess_attrib(step, attrib):
+def preprocess_step_attrib(step, attrib):
     """Process:
     1. Convert strs to bools i.e. 'false' -> False
     2. Convert all time strs to floats with second as unit.
@@ -179,7 +179,7 @@ def preprocess_attrib(step, attrib):
     Returns:
         dict -- Dict of processed attributes.
     """
-    attr = dict(attrib)
+    attr = preprocess_attrib(attrib)
     if 'clean_tubing' in attr:
         if attr['clean_tubing'].lower() == 'false':
             attr['clean_tubing'] = False
@@ -206,4 +206,18 @@ def preprocess_attrib(step, attrib):
         attr['solute_masses'] = attr['solute_masses'].split(' ')
         attr['solute_masses'] = [convert_mass_str_to_g(item) 
                                  for item in attr['solute_masses']]
+    return attr
+
+def preprocess_attrib(attrib):
+    """Change id key to xid.
+    
+    Args:
+        attrib (lxml.etree._Attrib): Raw attribute dictionary from XDL
+    
+    Returns:
+        dict: Dict of processed attributes.
+    """
+    attr = dict(attrib)
+    attr['xid'] = attr['id']
+    del attr['id']
     return attr

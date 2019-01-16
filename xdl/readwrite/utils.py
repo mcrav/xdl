@@ -1,8 +1,24 @@
 import re
 
-float_regex = r'([0-9]+([.][0-9]+)?)' # Should match, '1', '11', '1.1', '1.01', '13.12' etc.
+############
+### MISC ###
+############
 
-### Unit Words ###
+# Should match, '1', '11', '1.1', '1.01', '13.12' etc.
+float_regex = r'([0-9]+([.][0-9]+)?)'
+
+def parse_bool(s):
+    """Parse string for bool."""
+    if s.strip().lower() in ['true', '1']:
+        return True
+    elif s.strip().lower() in ['false', '0']:
+        return False
+    return None
+
+
+##################
+### UNIT WORDS ###
+##################
 
 VOLUME_CL_UNIT_WORDS = ('cl', 'cL',)
 VOLUME_ML_UNIT_WORDS = ('cc', 'ml','mL', 'cm3')
@@ -15,7 +31,9 @@ MASS_MG_UNIT_WORDS = ('mg', 'milligrams')
 MASS_UG_UNIT_WORDS = ('ug', 'micrograms')
 
 
-### Convert quantity strs to floats with standard units ###
+#########################################
+### CONVERT VALUES TO STANDARDS UNITS ###
+#########################################
 
 def convert_time_str_to_seconds(time_str):
     """Convert time str to float with unit seconds i.e. '2hrs' -> 7200."""
@@ -60,9 +78,3 @@ def convert_mass_str_to_g(mass_str):
         multiplier = 1
     return float(re.match(float_regex, mass_str).group(1)) * multiplier
 
-def parse_bool(s):
-    if s.strip().lower() in ['true', '1']:
-        return True
-    elif s.strip().lower() in ['false', '0']:
-        return False
-    return None

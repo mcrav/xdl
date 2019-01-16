@@ -93,8 +93,8 @@ class XDLExecutor(object):
         ):
             for i in range(len(xdl_hardware_list)):
                 self._xdl.hardware_map[
-                    xdl_hardware_list[i].cid
-                ] = graphml_hardware_list[i].cid
+                    xdl_hardware_list[i].xid
+                ] = graphml_hardware_list[i].xid
 
     def _map_hardware_to_steps(self):
         """

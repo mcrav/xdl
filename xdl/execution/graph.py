@@ -19,10 +19,12 @@ def get_graph(graphml_file=None, json_file=None, json_data=None):
     graph = None
     if graphml_file != None:
         graph = MultiDiGraph(read_graphml(graphml_file))
+
     elif json_file:
         with open(json_file) as fileobj:
             json_data = json.load(fileobj)
             graph = json_graph.node_link_graph(json_data, directed=True)
+            
     elif json_data:
         graph = json_graph.node_link_graph(json_data, directed=True)
     return graph
@@ -54,8 +56,8 @@ def make_waste_map(graph):
         Dict[str, str]: dict with nodes as keys and nearest waste vessels as
                         values.
     """
-
     waste_map = {}
+    # Get all waste nodes.
     wastes = [
         node for node in graph.nodes() 
         if (graph.node[node]['properties']['node_type'] 
@@ -63,8 +65,8 @@ def make_waste_map(graph):
     ]
     for node in graph.nodes():
         node_info = graph.node[node]['properties']
-        print(node_info)
         if node_info['node_type'] != CHEMPUTER_WASTE_CLASS_NAME:
+            # Find out which waste has shortest path through graph from node.
             shortest_path_found = 100000
             closest_waste_vessel = None
             for waste in wastes:

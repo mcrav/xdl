@@ -3,15 +3,14 @@ from ..constants import *
 
 class Component(XDLBase):
     """Base component class. At moment does nothing more than XDLBase."""
-    def __init__(self, xid, properties):
+    def __init__(self, xid=None, properties=None):
         self.properties = {'xid': xid}
         self.properties.update(properties)
 
 class Hardware(object):
     """
     Object describing entire setup. The purpose is easily accessible lists
-    of reactors, flasks, filters, wastes etc, and map of nearest waste vessels
-    to all nodes.
+    of reactors, flasks, filters, wastes etc.
     """
     def __init__(self, components):
         """Sort components into categories.
@@ -41,7 +40,7 @@ class Hardware(object):
 
     def __getitem__(self, item):
         """
-        Get components like graphml_hardware['filter'].
+        Get components like this: graph_hardware['filter'].
         """
         for component in self.components:
             if component.xid == item:

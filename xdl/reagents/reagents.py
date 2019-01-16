@@ -3,7 +3,7 @@ from ..utils.xdl_base import XDLBase
 
 class Reagent(XDLBase):
     
-    def __init__(self, xid, cas=None):
+    def __init__(self, xid=None, cas=None):
         """
         Args:
             xid (str): Unique identifier containing only letters, numbers and _
