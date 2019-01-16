@@ -327,33 +327,33 @@ class Add(Step):
         move_speed {float} -- Speed in mL / min to move liquid at. (optional)
         clean_tubing {bool} -- Clean tubing before and after addition. (optional)
     """
-    def __init__(self, reagent=None, volume=None, vessel=None, time=None, move_speed='default', waste_vessel=None):
+    def __init__(self, reagent=None, volume=None, vessel=None, port=None,
+                       time=None, move_speed='default', waste_vessel=None):
 
         self.properties = {
             'reagent': reagent,
             'volume': volume,
             'vessel': vessel,
+            'port': port,
             'time': time,
             'move_speed': move_speed,
             'waste_vessel': waste_vessel,
         }
         self.get_defaults()
 
-        if is_generic_filter_name(self.vessel):
-            vessel = filter_top_name(self.vessel)
-
         self.steps = []
-
         self.steps.append(PrimePumpForAdd(reagent=reagent, waste_vessel=waste_vessel))
-
-        self.steps.append(CMove(from_vessel=f"flask_{reagent}", to_vessel=vessel,
-                            volume=volume, move_speed=move_speed))
-
+        self.steps.append(
+            CMove(from_vessel=f"flask_{reagent}", to_vessel=vessel, 
+                  to_port=self.port, volume=volume, move_speed=move_speed))
         self.steps.append(Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
 
-        self.human_readable = f'Add {reagent} ({volume} mL) to {vessel}' # Maybe add in bit for clean tubing
+        if port:
+            self.human_readable = 'Add {reagent} ({volume} mL) to {reagent} of {vessel}'.format(**self.properties)
+        else:
+            self.human_readable = 'Add {reagent} ({volume} mL) to {vessel}'.format(**self.properties)
         if time:
-            self.human_readable += f' over {time}'
+            self.human_readable += ' over {0}'.format(self.time)
         self.human_readable += '.'
 
 class Transfer(Step):
@@ -931,10 +931,10 @@ class PrepareFilter(Step):
         }
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
-                vessel=filter_bottom_name(self.filter_vessel), waste_vessel=waste_vessel,)
+                vessel=self.filter_vessel, port="bottom", waste_vessel=waste_vessel,)
         ]
 
-        self.human_readable = f'Fill {filter_bottom_name(self.filter_vessel)} with {solvent} ({volume} mL).'
+        self.human_readable = f'Fill bottom of {self.filter_vessel} with {solvent} ({volume} mL).'
 
 class RemoveFilterDeadVolume(Step):
     """Remove dead volume (volume below filter) from filter vessel.
