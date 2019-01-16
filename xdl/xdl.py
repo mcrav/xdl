@@ -58,27 +58,6 @@ class XDL(object):
             tree.extend(climb_down_tree(step))
         return tree
 
-    def _add_filter_volumes(self):
-        """
-        Add volume of filter bottom (aka dead_volume) to PrepareFilter steps.
-        Add volume of filter bottom (aka dead_volume) and volume of material
-        added to filter top to Filter steps.
-        """
-        prev_vessel_contents = {}
-        for i, step, vessel_contents in self.iter_vessel_contents():
-            if type(step) == PrepareFilter:
-                step.volume = self._get_filter_dead_volume(step.filter_vessel)
-            elif type(step) == Filter:
-                step.filter_bottom_volume = self._get_filter_dead_volume(
-                    step.filter_vessel)
-                step.filter_top_volume = sum(
-                    [reagent[1] 
-                     for reagent in prev_vessel_contents[step.filter_vessel]])
-            elif type(step) in [WashSolution, Extract]:
-                if 'filter' in step.from_vessel:
-                    step.filter_dead_volume = self._get_filter_dead_volume(
-                        step.from_vessel)
-            prev_vessel_contents = vessel_contents
 
     def _get_filter_dead_volume(self, filter_vessel):
         for vessel in self.graphml_hardware.filters:

@@ -127,3 +127,5 @@ CHEMPUTER_WASTE_CLASS_NAME = 'chemputer_waste'
 CHEMPUTER_VACUUM_CLASS_NAME = 'chemputer_vacuum'
 CHEMPUTER_PUMP_CLASS_NAME = 'chemputer_pump'
 CHEMPUTER_VALVE_CLASS_NAME = 'chemputer_valve'
+
+AQUEOUS_KEYWORDS = ['water', 'aqueous', 'acid', '_m_']
