@@ -14,14 +14,29 @@ CLEAN_BACKBONE_AFTER_STEPS = [
     Dry,
 ]
 
+# Steps that should be stirred.
+STIR_STEPS = [Add, Chill, StopChiller, Reflux, ChillBackToRT, HeatAndReact, 
+              ContinueStirToRT]
+
 class XDLExecutor(object):
+ 
+    """Class to execute XDL objects. To execute first call prepare_for_execution
+    then execute.
+
+    Public methods:
+        prepare_for_execution(graphml_file=None, json_data=None, json_file=None)
+        execute(chempiler)
+    """
 
     def __init__(self, xdl):
+        """XDLExecutor init method.
+        
+        Args:
+            xdl (XDL): XDL object to execute.
+        """
         self._xdl = xdl
         self._warnings = []
         self._prepared_for_execution = False
-
-
 
     ####################################
     ### CHECK HARDWARE COMPATIBILITY ###
@@ -133,6 +148,7 @@ class XDLExecutor(object):
         self._add_implied_prepare_filter_steps()
         self._add_implied_clean_backbone_steps()
         self._add_implied_remove_dead_volume_steps()
+        self._add_implied_stirring_steps()
 
     def _get_step_reagent_types(self):
         """Get the reagent type, 'organic' or 'aqueous' involved in every step.
@@ -302,6 +318,28 @@ class XDLExecutor(object):
                     i, filter_vessel=filter_vessel, 
                     volume=self._get_filter_dead_volume(filter_vessel)))
 
+    def _add_implied_stirring_steps(self):
+        """Add in stirring to appropriate steps."""
+        stirring = {}
+        insertions = []
+        for i, step in enumerate(self._xdl.steps):
+            if type(step) != CleanBackbone:
+                if type(step) in STIR_STEPS:
+                    vessel = step.vessel
+                    # If vessel not stirring, add StartStir(vessel)
+                    if not vessel in stirring or not stirring[vessel]:
+                        stirring[vessel] = True
+                        insertions.append((i, StartStir(vessel)))
+                else:
+                    # If vessel is stirring add StopStir(vessel)
+                    for vessel in stirring:
+                        if stirring[vessel]:
+                            insertions.append((i, StopStir(vessel)))
+                            stirring[vessel] = False
+
+        for i, step in reversed(insertions):
+            self._xdl.steps.insert(i, step)
+
 
     ###################################
     ### SOLIDIFY IMPLIED PROPERTIES ###
@@ -344,9 +382,7 @@ class XDLExecutor(object):
     def _tidy_up_procedure(self):
         """Remove steps that are pointless.
         """
-
         self._remove_pointless_backbone_cleaning()
-        self._keep_stirring_when_possible()
         
     def _remove_pointless_backbone_cleaning(self):
         """Remove pointless CleanBackbone steps.
@@ -370,57 +406,13 @@ class XDLExecutor(object):
             i -= 1
 
 
-    def _keep_stirring_when_possible(self):
-        stirring = {}
-        insertions = []
-        stir_steps = [Add, Chill, StopChiller, Reflux, ChillBackToRT, HeatAndReact, ContinueStirToRT]
+    ############
+    ### MISC ###
+    ############
 
-        for i, step in enumerate(self._xdl.steps):
-            if type(step) != CleanBackbone:
-                if type(step) in stir_steps:
-                    vessel = step.vessel
-                    if is_generic_filter_name(vessel):
-                        vessel = filter_top_name(vessel)
-                    if is_generic_separator_name(vessel):
-                        vessel = separator_top_name(vessel)
-                    if not vessel in stirring or not stirring[vessel]:
-                        stirring[vessel] = True
-                        insertions.append((i, StartStir(vessel)))
-                else:
-                    for vessel in list(stirring.keys()):
-                        if stirring[vessel]:
-                            insertions.append((i, CStopStir(vessel)))
-                            stirring[vessel] = False
-
-        for i, step in reversed(insertions):
-            self._xdl.steps.insert(i, step)
-
-        for i in reversed(range(len(self._xdl.steps))):
-            step = self._xdl.steps[i]
-            if type(step) != CleanBackbone:
-                if type(step) == CStopStir:
-                    return
-                elif type(step) == StartStir:
-                    self._xdl.steps.pop(i)
-                    return
-
-        # steps = [step for step in self._xdl.steps if type(step) != CleanBackbone]
-        # for i in range(len(steps)):
-        #     step = steps[i]
-        #     if type(step) in stir_steps:
-        #         before_step, after_step = None, None
-        #         if i > 0:
-        #             before_step = steps[i - 1]
-        #         if i < len(steps) - 1:
-        #             after_step = steps[i + 1]
-        #         if before_step and type(before_step) in stir_steps:
-        #             step.start_stir = False
-        #         else:
-        #             step.start_stir = True
-        #         if after_step and type(after_step) in stir_steps:
-        #             step.stop_stir = False
-        #         else:
-        #             step.stop_stir = True
+    def _print_warnings(self):
+        for warning in self._warnings:
+            print(warning)
 
 
     ######################
@@ -448,7 +440,7 @@ class XDLExecutor(object):
                 # waste vessels to every node.
                 self._graph = get_graph(
                     graphml_file=graphml_file, json_data=json_data,
-                    json_file=json_file)                )
+                    json_file=json_file)
                 self._graph_hardware = hardware_from_graph(self._graph)
                 self._waste_map = make_waste_map(self._graph)
 
@@ -471,9 +463,10 @@ class XDLExecutor(object):
                     self._tidy_up_procedure()
 
                     # Check safety of procedure
-                    if self._check_safety():
-                        print('Procedure raises no safety flags')
-                        self._prepared_for_execution = True
+                    self._check_safety():
+
+                    self._print_warnings()
+                    self._prepared_for_execution = True
 
     def execute(self, chempiler):
         """Execute XDL procedure with given chempiler. The same graph must be
