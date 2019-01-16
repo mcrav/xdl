@@ -26,7 +26,7 @@ class XDLExecutor(object):
         Prepare the XDL for execution on a Chemputer corresponding to the given
         graph. Any one of graphml_file, json_data, or json_file must be given.
         
-        Arguments:
+        Args:
             graphml_file (str, optional): Path to graphML file.
             json_data (str, optional): Graph in node link JSON format.
             json_file (str, optional): Path to file containing node link JSON 
@@ -98,14 +98,16 @@ class XDLExecutor(object):
 
         for i, clean_type in reversed(cleans):
             if clean_type == 'organic':
-                self.xdl.steps.insert(i, CleanBackbone(reagent=DEFAULT_ORGANIC_CLEANING_SOLVENT))
+                self.xdl.steps.insert(i, CleanBackbone(
+                    reagent=DEFAULT_ORGANIC_CLEANING_SOLVENT))
             elif clean_type == 'water':
                 self.xdl.steps.insert(i, CleanBackbone(reagent='water'))
 
     def _add_hidden_prepare_filter_steps(self):
         """
-        Add PrepareFilter steps if filter top is being used, to fill up the bottom of the filter with solvent,
-        so material added to the top doesn't drip through.
+        Add PrepareFilter steps if filter top is being used, to fill up the 
+        bottom of the filter with solvent, so material added to the top doesn't 
+        drip through.
         """
         filters = []
         full_vessel_contents = []
@@ -282,8 +284,10 @@ class XDLExecutor(object):
                 
         elif type(step) in [PrepareFilter, Filter, Dry, WashFilterCake]:
             nearest_node = step.filter_vessel
+
         elif type(step) in [WashSolution, Extract]:
             nearest_node = step.separation_vessel
+            
         if not nearest_node:
             return None
 

@@ -9,8 +9,9 @@ class Component(XDLBase):
 
 class Hardware(object):
     """
-    Object describing entire setup. The only purpose is easily accessible lists
-    of reactors, flasks, filters, wastes etc.
+    Object describing entire setup. The purpose is easily accessible lists
+    of reactors, flasks, filters, wastes etc, and map of nearest waste vessels
+    to all nodes.
     """
     def __init__(self, components):
         """Sort components into categories.
