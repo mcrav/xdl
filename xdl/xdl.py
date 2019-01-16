@@ -59,11 +59,6 @@ class XDL(object):
         return tree
 
 
-    def _get_filter_dead_volume(self, filter_vessel):
-        for vessel in self.graphml_hardware.filters:
-            if vessel.cid == filter_vessel:
-                return vessel.dead_volume
-        return 0
 
     def _check_safety(self):
         """
