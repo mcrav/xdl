@@ -73,13 +73,5 @@ XDL_STEP_OBJ_DICT = {
 STEP_OBJ_DICT = copy.copy(BASE_STEP_OBJ_DICT)
 STEP_OBJ_DICT.update(XDL_STEP_OBJ_DICT)
 
-COMPONENT_OBJ_DICT = {
-    'Reactor': Reactor,
-    'FilterFlask': FilterFlask,
-    'Flask': Flask,
-    'Waste': Waste,
-    'SeparatingFunnel': SeparatingFunnel,
-}
-
 XDL_STEP_NAMESPACE = list(STEP_OBJ_DICT.keys())
-XDL_HARDWARE_NAMESPACE = list(COMPONENT_OBJ_DICT.keys())
+XDL_HARDWARE_NAMESPACE = ['Reactor', 'Filter', 'Flask', 'Separator', 'Rotavap'] 

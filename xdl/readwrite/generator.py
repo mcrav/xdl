@@ -1,5 +1,4 @@
 from lxml import etree
-from ..hardware.components import Reactor
 from ..reagents import Reagent
 from ..steps import Add
 

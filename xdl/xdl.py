@@ -2,6 +2,7 @@ from .constants import *
 from .steps import *
 from .utils.namespace import BASE_STEP_OBJ_DICT
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
+from .readwrite import XDLGenerator
 import os
 import re
 import copy
@@ -39,6 +40,9 @@ class XDL(object):
             self.steps, self.hardware, self.reagents = steps, hardware, reagents
         else:
             print("Can't create XDL object. Insufficient args given to __init__ method.")
+        if self.steps:
+            self._xdlgenerator = XDLGenerator(
+                steps=self.steps, hardware=self.hardware, reagents=self.reagents)
 
     def _get_full_xdl_tree(self):
         """
@@ -241,6 +245,12 @@ class XDL(object):
         for step in self.steps:
             climb_down_tree(step, print_tree=True)
         print('\n')
+
+    def save(self, save_file):
+        self._xdlgenerator.save(save_file)
+
+    def as_string(self):
+        return self._xdlgenerator.as_string()
 
 def climb_down_tree(step, print_tree=False, lvl=0):
     """Go through given step's sub steps recursively until base steps are reached.

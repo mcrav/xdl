@@ -5,8 +5,7 @@ from ..steps import MakeSolution
 from ..reagents import Reagent
 from ..hardware import Hardware
 from .syntax_validation import XDLSyntaxValidator
-from ..utils.namespace import (STEP_OBJ_DICT, COMPONENT_OBJ_DICT, 
-                               BASE_STEP_OBJ_DICT)
+from ..utils.namespace import (STEP_OBJ_DICT, BASE_STEP_OBJ_DICT)
 
 def xdl_file_to_objs(xdl_file):
     """Given XDL file return steps, hardware and reagents.
@@ -161,7 +160,7 @@ def xdl_to_reagent(xdl_reagent_element):
         Reagent -- Reagent object corresponding to reagent in 
                    xdl_reagent_element.
     """
-    reagent = Reagent()
+    reagent = Reagent(xdl_reagent_element)
     reagent.load_properties(xdl_reagent_element.attrib)
     return reagent
 

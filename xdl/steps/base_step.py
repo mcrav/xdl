@@ -1,5 +1,4 @@
-
-from ..utils.xdl_base import XDLBase
+from ..utils import XDLBase
 
 class Step(XDLBase):
     """Base class for all step objects."""

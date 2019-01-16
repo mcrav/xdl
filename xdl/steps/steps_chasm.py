@@ -43,15 +43,15 @@ class CMove(Step):
 
 class CSeparate(Step):
 
-    def __init__(self, lower_phase_vessel, upper_phase_vessel, separator_top, 
+    def __init__(self, lower_phase_vessel, upper_phase_vessel, separator_top,
                        separator_bottom, dead_volume_target):
-        """        
+        """
         Args:
             lower_phase_vessel (str): Name of vessel to transfer lower phase to.
             upper_phase_vessel (str): Name of vessel to transfer upper phase to.
             separator_top (str): Name of separator top node in graph.
             separator_bottom (str): Name of separator bottom node in graph.
-            dead_volume_target (str): Name of waste vessel to transfer dead 
+            dead_volume_target (str): Name of waste vessel to transfer dead
                                       volume between phases to.
         """
         self.properties = {
@@ -78,7 +78,7 @@ class CPrime(Step):
     """Moves the tube volume of every node with "flask" as class to waste.
 
     Keyword Arguments:
-        aspiration_speed {float} -- Speed in mL / min at which material should 
+        aspiration_speed {float} -- Speed in mL / min at which material should
                                     be withdrawn.
     """
     def __init__(self, aspiration_speed='default'):

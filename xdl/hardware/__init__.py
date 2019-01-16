@@ -1,1 +1,1 @@
-from .components import Hardware
+from .components import Component, Hardware

@@ -4,7 +4,6 @@ class XDLBase(object):
     """Base object for Step, Component and Reagent objects."""
 
     def __init__(self):
-        self.name = ''
         self.properties = {}
 
     def load_properties(self, properties):

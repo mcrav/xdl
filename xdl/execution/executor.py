@@ -1,6 +1,7 @@
 import statistics
 from ..constants import *
 from ..steps import *
+from .graph import hardware_from_graph, get_graph
 
 # Steps after which backbone should be cleaned
 CLEAN_BACKBONE_AFTER_STEPS = [
@@ -19,25 +20,36 @@ class XDLExecutor(object):
         self.xdl = xdl
         self._prepared_for_execution = False
 
-    def prepare_for_execution(self, graphml_file):
+    def prepare_for_execution(
+        self, graphml_file=None, json_data=None, json_file=None):
         """
         Prepare the XDL for execution on a Chemputer corresponding to the given
-        graphML file.
+        graph. Any one of graphml_file, json_data, or json_file must be given.
         
         Arguments:
-            graphml_file {str} -- Path to graphML file.
+            graphml_file (str, optional): Path to graphML file.
+            json_data (str, optional): Graph in node link JSON format.
+            json_file (str, optional): Path to file containing node link JSON 
+                                       graph.
         """
-        self.graphml_file = graphml_file
         if not self._prepared_for_execution:
             if self.xdl.steps: # if XDL is valid
                 print('XDL is valid')
-                self.graphml_hardware = graphml_hardware_from_file(graphml_file)
+                self._graph = get_graph(
+                    graphml_file=graphml_file, json_data=json_data,
+                    json_file=json_file)                )
+                self._graph_hardware = hardware_from_graph(
+                    graphml_file=graphml_file, json_data=json_data, 
+                    json_file=json_file)
+
                 if self._hardware_is_compatible():
                     print('Hardware is compatible')
+
                     self._map_hardware_to_steps(graphml_file)
                     self._add_filter_volumes()
                     self._add_all_volumes()
                     self._tidy_up_procedure()
+
                     if self._check_safety():
                         print('Procedure raises no safety flags')
                         self._prepared_for_execution = True
@@ -51,7 +63,7 @@ class XDLExecutor(object):
         cleans = []
         step_reagent_types = []
         step_reagent_type = 'organic'
-        for i, step, vessel_contents, additions in self.iter_vessel_contents(additions=True):
+        for i, step, vessel_contents, additions in self.xdl.iter_vessel_contents(additions=True):
             if additions:
                 step_reagent_type = 'organic'
                 for reagent in additions:
@@ -209,12 +221,14 @@ class XDLExecutor(object):
         self._add_hidden_prepare_filter_steps()
         self._add_hidden_clean_backbone_steps()
 
-    def simulate(self, graphml_file, chempiler):
-        """Simulate XDL procedure using Chempiler and given graphML file."""
-        self.prepare_for_execution(graphml_file)
+    def execute(self, graphml_file=None, json_graph=None, json_graph_file=None, chempiler=None):
+        """Execute XDL procedure on a Chemputer corresponding to given graphML file."""
+        self.prepare_for_execution(
+            graphml_file=graphml_file, json_data=json_graph, json_file=json_graph_file,)
+
         if self._prepared_for_execution:
-            # self.print_full_xdl_tree()
-            # self.print_full_human_readable()
+            self.xdl.print_full_xdl_tree()
+            self.xdl.print_full_human_readable()
             print('Execution\n---------\n')
             for step in self.xdl.steps:
                 print(f'\n{step.name}\n{len(step.name)*"-"}\n')
@@ -222,62 +236,40 @@ class XDLExecutor(object):
                 keep_going = step.execute(chempiler)
                 if not keep_going:
                     return
-
-    def execute(self, graphml_file=None, json_graph=None, json_graph_file=None, chempiler=None):
-        """Execute XDL procedure on a Chemputer corresponding to given graphML file."""
-        self.prepare_for_execution(
-            graphml_file=graphml_file, json_graph=json_graph, json_graph_file=json_graph_file,)
-        if self._prepared_for_execution:
-            self.xdl.print_full_xdl_tree()
-            self.xdl.print_full_human_readable()
-        print('Execution\n---------\n')
-        for step in self.xdl.steps:
-            print(f'\n{step.name}\n{len(step.name)*"-"}\n')
-            print(f'{step.human_readable}\n')
-            keep_going = step.execute(chempiler)
-            if not keep_going:
-                return
                 
     def _get_hardware_map(self):
         """
         Get map of hardware IDs in XDL to hardware IDs in graphML.
         """
-        self.hardware_map = {}
+        self.xdl.hardware_map = {}
         for xdl_hardware_list, graphml_hardware_list in zip(
-            [self.hardware.reactors, self.hardware.filters, self.hardware.separators,],
-            [self.graphml_hardware.reactors, self.graphml_hardware.filters, self.graphml_hardware.separators,]
+            [self.xdl.hardware.reactors, self.xdl.hardware.filters, 
+             self.xdl.hardware.separators],
+            [self._graph_hardware.reactors, self._graph_hardware.filters, 
+             self._graph_hardware.separators]
         ):
             for i in range(len(xdl_hardware_list)):
-                self.hardware_map[
+                self.xdl.hardware_map[
                     xdl_hardware_list[i].cid
                 ] = graphml_hardware_list[i].cid
-        for k in list(self.hardware_map.keys()):
-            v = self.hardware_map[k]
-            if 'filter' in k:
-                self.hardware_map[filter_top_name(k)] = filter_top_name(v)
-                self.hardware_map[filter_bottom_name(k)] = filter_bottom_name(v)
-            elif 'separator' in k and is_generic_separator_name(k):
-                self.hardware_map[separator_top_name(k)] = separator_top_name(v)
-                self.hardware_map[separator_bottom_name(k)] = separator_bottom_name(v)
 
-    def _map_hardware_to_steps(self, graphml_file):
+    def _map_hardware_to_steps(self):
         """
         Go through steps in XDL and replace XDL hardware IDs with IDs
         from the graphML file.
         """
-        self._graph = load_graph(graphml_file) 
         self._get_hardware_map()
         for step in self.xdl.steps:
             for prop, val in step.properties.items():
-                if isinstance(val, str) and val in self.hardware_map:
-                    step.properties[prop] = self.hardware_map[val]
+                if isinstance(val, str) and val in self.xdl.hardware_map:
+                    step.properties[prop] = self.xdl.hardware_map[val]
             step.update()
             if 'waste_vessel' in step.properties and not step.waste_vessel:
                 step.waste_vessel = self._get_waste_vessel(step)
 
         for step in self.xdl.steps:
             if type(step) == CleanBackbone:
-                step.waste_vessels = self.graphml_hardware.waste_cids
+                step.waste_vessels = self._graph_hardware.waste_xids
 
     def _get_waste_vessel(self, step):
         """
@@ -287,14 +279,14 @@ class XDLExecutor(object):
         nearest_node = None
         if type(step) == Add:
             nearest_node = step.vessel
-            if 'filter' in nearest_node and is_generic_filter_name(nearest_node):
-                nearest_node = filter_top_name(nearest_node)
+                
         elif type(step) in [PrepareFilter, Filter, Dry, WashFilterCake]:
-            nearest_node = filter_bottom_name(step.filter_vessel)
+            nearest_node = step.filter_vessel
         elif type(step) in [WashSolution, Extract]:
-            nearest_node = separator_bottom_name(step.separation_vessel)
+            nearest_node = step.separation_vessel
         if not nearest_node:
             return None
+
         for node_name in self._graph.nodes():
             if node_name == nearest_node:
                 for pred in self._graph.pred[node_name]:
@@ -309,7 +301,7 @@ class XDLExecutor(object):
         for step in self.steps:
             for sub_step in climb_down_tree(step):
                 if type(sub_step) == CMove and sub_step.volume == 'all':
-                    sub_step.volume = self.graphml_hardware[sub_step.from_vessel].max_volume
+                    sub_step.volume = self._graph_hardware[sub_step.from_vessel].max_volume
 
 def _hardware_is_compatible(xdl_hardware=None, graphml_hardware=None):
     """Determine if XDL hardware object can be mapped to hardware available in graphML file."""
