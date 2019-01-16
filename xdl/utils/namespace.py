@@ -68,6 +68,7 @@ XDL_STEP_OBJ_DICT = {
     'Reflux': Reflux,
     'PrimePumpForAdd': PrimePumpForAdd,
     'PrepareFilter': PrepareFilter,
+    'RemoveFilterDeadVolume': RemoveFilterDeadVolume,
 }
 
 STEP_OBJ_DICT = copy.copy(BASE_STEP_OBJ_DICT)

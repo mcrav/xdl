@@ -3,19 +3,25 @@ from .steps import *
 from .utils.namespace import BASE_STEP_OBJ_DICT
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 from .readwrite import XDLGenerator
+from .safety import procedure_is_safe
 import os
 import re
 import copy
 
 class XDL(object):
     """
-    Interpets XDL (file or str) and provides the following public methods:
+    Interpets XDL (file or str) and provides the following public methods:.
     
     Public Methods:
         as_human_readable -- Returns human readable description of the procedure.
         print_human_readable -- Prints human readable description of the procedure.
         print_full_xdl_tree -- Prints reasonably human readable visualisation of 
                                the nested XDL steps.
+        as_string -- Return XDL as XML string.
+        save -- Save XDL as XML.
+        save_chempiler_script -- Save XDL base steps as Python chempiler script.
+        as_literal_chempiler_code -- Return XDL base steps as Python chempiler script.
+        iter_vessel_contents -- Return iterator of vessel_contents at each step.
     """
     def __init__(
         self, xdl_file=None, xdl_str=None, steps=[], hardware=None, reagents=[]):
@@ -23,16 +29,16 @@ class XDL(object):
         One of xdl_file, xdl_str or (steps, hardware and reagents) must be given.
         
         Args:
-            xdl_file(str, optional): Path to XDL file. Defaults to None.
-            xdl_str(str, optional): XDL str. Defaults to None. 
-            steps (List[Step], optional): Defaults to []. 
-                List of Step objects.
-            hardware (Hardware, optional): Defaults to None.
-                Hardware object containing all components in XDL.
-            reagents (List[Reagent], optional): Defaults to None.
-                List of Reagent objects.
+            xdl_file(str, optional): Path to XDL file.
+            xdl_str(str, optional): XDL str. 
+            steps (List[Step], optional): List of Step objects.
+            hardware (Hardware, optional): Hardware object containing all 
+                components in XDL.
+            reagents (List[Reagent], optional): List of Reagent objects.
         """
+        self._xdl_file = None
         if xdl_file:
+            self._xdl_file = xdl_file
             self.steps, self.hardware, self.reagents = xdl_file_to_objs(xdl_file)
         elif xdl_str:
             self.steps, self.hardware, self.reagents = xdl_str_to_objs(xdl_str)
@@ -44,37 +50,10 @@ class XDL(object):
             self._xdlgenerator = XDLGenerator(
                 steps=self.steps, hardware=self.hardware, reagents=self.reagents)
 
-    def _get_full_xdl_tree(self):
-        """
-        Return list of all steps after unpacking nested steps.
-        Root steps are included followed by all their children in order, 
-        recursively.
-
-        Returns:
-            List[Step]
-        """
-        tree = []
-        for step in self.steps:
-            tree.extend(climb_down_tree(step))
-        return tree
-
-
-
-    def _check_safety(self):
-        """
-        Check if the procedure is safe.
-        Any issues will be printed.
-
-        Returns:
-            bool: True if no safety issues are found, False otherwise.
-        """
-        return procedure_is_safe(self.steps, self.reagents)
-
-
     def _get_exp_id(self, default='xdl_exp'):
         """Get experiment ID name to give to the Chempiler."""
-        if self.xdl_file:
-            return os.path.splitext(os.path.split(self.xdl_file)[-1])[0]
+        if self._xdl_file:
+            return os.path.splitext(os.path.split(self._xdl_file)[-1])[0]
         else:
             return default
 
@@ -93,7 +72,6 @@ class XDL(object):
                     contents -- Dict of contents of all vessels after step.
                     additions (optional) -- List of contents added during step.
         """
-
         vessel_contents = {}
         for i, step in enumerate(self.steps):
             additions_l = []
@@ -166,6 +144,28 @@ class XDL(object):
             else:
                 yield (i, step, copy.deepcopy(vessel_contents))
 
+    def _get_full_xdl_tree(self):
+        """
+        Return list of all steps after unpacking nested steps.
+        Root steps are included followed by all their children in order, 
+        recursively.
+
+        Returns:
+            List[Step]
+        """
+        tree = []
+        for step in self.steps:
+            tree.extend(climb_down_tree(step))
+        return tree
+
+    def print_full_xdl_tree(self):
+        """Print nested structure of all steps in XDL procedure."""
+        print('\n')
+        print('Operation Tree\n--------------\n')
+        for step in self.steps:
+            climb_down_tree(step, print_tree=True)
+        print('\n')
+
     def as_literal_chempiler_code(self, dry_run=False):
         """
         Returns string of literal chempiler code built from steps.
@@ -212,19 +212,12 @@ class XDL(object):
         print(self.as_human_readable())
         print('\n')
 
-    def print_full_xdl_tree(self):
-        """Print nested structure of all steps in XDL procedure."""
-        print('\n')
-        print('Operation Tree\n--------------\n')
-        for step in self.steps:
-            climb_down_tree(step, print_tree=True)
-        print('\n')
+    def as_string(self):
+        return self._xdlgenerator.as_string()
 
     def save(self, save_file):
         self._xdlgenerator.save(save_file)
 
-    def as_string(self):
-        return self._xdlgenerator.as_string()
 
 def climb_down_tree(step, print_tree=False, lvl=0):
     """Go through given step's sub steps recursively until base steps are reached.

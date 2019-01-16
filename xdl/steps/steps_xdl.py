@@ -937,10 +937,11 @@ class PrepareFilter(Step):
         self.human_readable = f'Fill {filter_bottom_name(self.filter_vessel)} with {solvent} ({volume} mL).'
 
 class RemoveFilterDeadVolume(Step):
-    """Remove dead volume from filter vessel.
+    """Remove dead volume (volume below filter) from filter vessel.
     
     Args:
-        Step ([type]): [description]
+        filter_vessel (str): Filter vessel ID to remove dead volume from.
+        dead_volume (float): Volume in mL to remove from bottom of filter vessel.
     """
     def __init__(self, filter_vessel=None, dead_volume=0, waste_vessel=None):
 

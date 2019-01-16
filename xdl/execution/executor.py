@@ -2,6 +2,7 @@ import statistics
 from ..constants import *
 from ..steps import *
 from .graph import hardware_from_graph, get_graph, make_waste_map
+from ..safety import procedure_is_safe
 
 # Steps after which backbone should be cleaned
 CLEAN_BACKBONE_AFTER_STEPS = [
@@ -415,6 +416,21 @@ class XDLExecutor(object):
             print(warning)
 
 
+    ####################
+    ### CHECK SAFETY ###
+    ####################
+
+    def _check_safety(self):
+        """
+        Check if the procedure is safe.
+        Any issues will be printed.
+
+        Returns:
+            bool: True if no safety issues are found, False otherwise.
+        """
+        return procedure_is_safe(self._xdl.steps, self._xdl.reagents)
+
+
     ######################
     ### PUBLIC METHODS ###
     ######################
@@ -463,7 +479,7 @@ class XDLExecutor(object):
                     self._tidy_up_procedure()
 
                     # Check safety of procedure
-                    self._check_safety():
+                    self._check_safety()
 
                     self._print_warnings()
                     self._prepared_for_execution = True

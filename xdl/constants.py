@@ -1,6 +1,6 @@
-ROOM_TEMPERATURE = 25
-
-# DEFAULT PARAMETERS
+##########################
+### DEFAULT PARAMETERS ###
+##########################
 
 DEFAULT_STIR_RPM = 400 # rpm
 DEFAULT_MOVE_SPEED = 40 # mL/min
@@ -37,21 +37,19 @@ DEFAULT_FILTER_ASPIRATION_SPEED = 5 # mL / min
 
 DEFAULT_AFTER_ADD_WAIT_TIME = 10 # s (time to wait for stirring after addition)
 
-ROUND_BOTTOM_FLASK = 'RoundBottomFlask'
-
 DEFAULT_RECORDING_SPEED = 14
 DEFAULT_WAIT_RECORDING_SPEED = 2000
 
 DEFAULT_VALS = {
-    'Move': {
+    'CMove': {
         'move_speed': DEFAULT_MOVE_SPEED,
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
         'dispense_speed': DEFAULT_DISPENSE_SPEED,
     },
-    'Home': {
+    'CHome': {
         'move_speed': DEFAULT_MOVE_SPEED, 
     },
-    'Prime': {
+    'CPrime': {
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
     },
     'Extract': {
@@ -90,12 +88,8 @@ DEFAULT_VALS = {
         'stir_rpm': DEFAULT_STIR_RPM,
         'stir_time': DEFAULT_CLEAN_STIR_TIME,
     },
-    'StartStir': {
+    'CStartStir': {
         'stir_rpm': DEFAULT_STIR_RPM,
-    },
-
-    'Reactor': {
-        'reactor_type': ROUND_BOTTOM_FLASK,
     },
     'PrimePumpForAdd': {
         'move_speed': DEFAULT_MOVE_SPEED,
@@ -107,13 +101,14 @@ DEFAULT_VALS = {
     'Rotavap': {
         'time': DEFAULT_ROTAVAP_TIME,
     },
-    'Wash': {
+    'WashFilterCake': {
         'solvent_volume': DEFAULT_WASH_VOLUME,
     },
     'StirAtRT': {
         'stir_rpm': DEFAULT_STIR_RPM,
     },
 }
+
 
 ####################################
 ### CHEMPUTER DEVICE CLASS NAMES ###
@@ -127,5 +122,12 @@ CHEMPUTER_WASTE_CLASS_NAME = 'chemputer_waste'
 CHEMPUTER_VACUUM_CLASS_NAME = 'chemputer_vacuum'
 CHEMPUTER_PUMP_CLASS_NAME = 'chemputer_pump'
 CHEMPUTER_VALVE_CLASS_NAME = 'chemputer_valve'
+
+
+############
+### MISC ###
+############
+
+ROOM_TEMPERATURE = 25
 
 AQUEOUS_KEYWORDS = ['water', 'aqueous', 'acid', '_m_']
