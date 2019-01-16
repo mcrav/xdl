@@ -13,31 +13,36 @@ class CMove(Step):
         aspiration_speed -- Speed at which liquid aspirates from from_vessel. (optional)
         dispense_speed -- Speed at which liquid dispenses from from_vessel. (optional)
     """
-    def __init__(self, from_vessel=None, to_vessel=None, volume=None, move_speed='default',
-                 aspiration_speed='default', dispense_speed='default'):
+    def __init__(self, from_vessel=None, to_vessel=None, volume=None, 
+                       move_speed='default', from_port=None, to_port=None, 
+                       unique=True):
 
         self.properties = {
             'from_vessel': from_vessel,
             'to_vessel': to_vessel,
             'volume': volume,
             'move_speed': move_speed,
-            'aspiration_speed': aspiration_speed,
-            'dispense_speed': dispense_speed,
+            'from_port': from_port,
+            'to_port': to_port,
         }
         self.get_defaults()
+        
+        if from_port and to_port:
+            self.human_readable = f'Move {self.volume} mL from {self.from_port} port of {self.from_vessel} to {self.to_port} of {self.to_vessel}.'
+        else:
+            self.human_readable = f'Move {self.volume} mL from {self.from_vessel} to {self.to_vessel}.'
 
-        self.human_readable = f'Move {self.from_vessel} ({self.volume}) to {self.to_vessel}.'
-
-        self.literal_code = f'chempiler.pump.move( {self.from_vessel}, {self.to_vessel}, {self.volume}, move_speed={self.move_speed}, aspiration_speed={self.aspiration_speed}, dispense_speed={self.dispense_speed}, )'
+        self.literal_code = f'chempiler.move( src_node={self.from_vessel}, dst_node={self.to_vessel}, volume={self.volume}, speed={self.move_speed}, src_port={self.from_port}, dst_port={self.to_port}, unique={self.unique} )'
 
     def execute(self, chempiler):
-        chempiler.pump.move(
-            self.from_vessel,
-            self.to_vessel,
-            self.volume,
-            move_speed=self.move_speed,
-            aspiration_speed=self.aspiration_speed,
-            dispense_speed=self.dispense_speed,
+        chempiler.move(
+            src_node=self.from_vessel,
+            dst_node=self.to_vessel,
+            volume=self.volume,
+            speed=self.move_speed,
+            src_port=self.from_port,
+            dst_port=self.to_port,
+            unique=self.unique,
         )
         return True
 

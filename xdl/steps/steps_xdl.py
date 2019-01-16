@@ -658,7 +658,7 @@ class Extract(Step):
     """
     def __init__(self, from_vessel=None, separation_vessel=None, to_vessel=None, solvent=None,
                     solvent_volume=None, n_extractions=1, product_bottom=True, waste_vessel=None,
-                    waste_phase_to_vessel=None, filter_dead_volume=None):
+                    waste_phase_to_vessel=None):
 
         self.properties = {
             'from_vessel': from_vessel,
@@ -670,7 +670,6 @@ class Extract(Step):
             'product_bottom': product_bottom,
             'waste_phase_to_vessel': waste_phase_to_vessel,
             'waste_vessel': waste_vessel, # set in prepare_for_execution
-            'filter_dead_volume': filter_dead_volume,
         }
         if not to_vessel and from_vessel:
             self.to_vessel = from_vessel # is necessary to set self.to_vessel here not just to_vessel
@@ -783,7 +782,7 @@ class WashSolution(Step):
     """
     def __init__(self, from_vessel=None, separation_vessel=None, to_vessel=None,
                     solvent=None, solvent_volume=None, n_washes=1, product_bottom=True,
-                    waste_vessel=None, waste_phase_to_vessel=None, filter_dead_volume=None):
+                    waste_vessel=None, waste_phase_to_vessel=None):
 
         self.properties = {
             'from_vessel': from_vessel,
@@ -795,7 +794,6 @@ class WashSolution(Step):
             'product_bottom': product_bottom,
             'waste_phase_to_vessel': waste_phase_to_vessel,
             'waste_vessel': waste_vessel,
-            'filter_dead_volume': filter_dead_volume,
         }
         self.get_defaults()
 
@@ -937,3 +935,24 @@ class PrepareFilter(Step):
         ]
 
         self.human_readable = f'Fill {filter_bottom_name(self.filter_vessel)} with {solvent} ({volume} mL).'
+
+class RemoveFilterDeadVolume(Step):
+    """Remove dead volume from filter vessel.
+    
+    Args:
+        Step ([type]): [description]
+    """
+    def __init__(self, filter_vessel=None, dead_volume=0, waste_vessel=None):
+
+        self.properties = {
+            'filter_vessel': filter_vessel,
+            'dead_volume': dead_volume,
+            'waste_vessel': waste_vessel,
+        }
+
+        self.steps = [
+            Transfer(from_vessel=self.filter_vessel, to_vessel=self.waste_vessel, 
+                     volume=self.dead_volume)
+        ]
+
+        self.human_readable = 'Remove dead volume ({0} mL) from bottom of {1}'.format(filter_vessel, dead_volume)
