@@ -177,10 +177,9 @@ class XDLExecutor(object):
             if additions:
                 step_reagent_type = 'organic'
                 for reagent in additions:
-                    for word in AQUEOUS_KEYWORDS:
-                        if word in reagent[0]:
-                            step_reagent_type = 'aqueous'
-                            break
+                    if is_aqueous(reagent[0]):
+                        step_reagent_type = 'aqueous'
+                        break
             step_reagent_types.append(step_reagent_type)
         return step_reagent_types
 
@@ -246,11 +245,15 @@ class XDLExecutor(object):
                 reagent = 'water'
             self._xdl.steps.insert(i, CleanBackbone(reagent=reagent))
 
-    def _add_implied_prepare_filter_steps(self):
-        """
-        Add PrepareFilter steps if filter top is being used, to fill up the 
-        bottom of the filter with solvent, so material added to the top doesn't 
-        drip through.
+    def _get_filter_emptying_steps(self):
+        """Get steps at which a filter vessel is emptied. Also return full
+        list of vessel contents dict at every step.
+        
+        Returns:
+            Tuple[List, List]: filters and full_vessel_contents in tuple.
+                filters -- List of tuples [(step_i, vessel, contents_when_emptied),]
+                full_vessel_contents -- List of vessel_contents dicts from every 
+                                        step
         """
         filters = []
         full_vessel_contents = []
@@ -258,26 +261,44 @@ class XDLExecutor(object):
         for i, step, vessel_contents in self._xdl.iter_vessel_contents():
             full_vessel_contents.append(vessel_contents)
             for vessel, contents in vessel_contents.items():
-                if 'filter' in vessel and vessel in prev_vessel_contents:
+                if (vessel['type'] == CHEMPUTER_FILTER_CLASS_NAME
+                    and vessel in prev_vessel_contents):
+                    # If filter vessel has just been emptied, append to filters.
                     if not contents and prev_vessel_contents[vessel]:
                         filters.append((i, vessel, prev_vessel_contents))
                         break
             prev_vessel_contents = vessel_contents
-    
+        return (filters, full_vessel_contents)
+
+    def _add_implied_prepare_filter_steps(self):
+        """
+        Add PrepareFilter steps if filter top is being used, to fill up the 
+        bottom of the filter with solvent, so material added to the top doesn't 
+        drip through.
+        """
+        # Find steps at which a filter vessel is emptied. Can't just look for
+        # Filter steps as liquid may be transferred to filter flask for other
+        # reasons i.e. using the chiller.
+        filters, full_vessel_contents = self._get_filter_emptying_steps()
+
+        # Find appropriate reagents to add to filter bottom and add
+        # PrepareFilter steps
         for filter_i, filter_vessel, filter_contents in reversed(filters):
             j = filter_i - 1
+
+            # Find point at which first reagent is added to filter vessel.
+            # This is the point at which to insert the PrepareFilter step.
             while j > 0 and full_vessel_contents[j-1][filter_vessel]:
                 j -= 1
-            solvent = None
-            filter_bottom_contents = filter_contents[filter_vessel]
-            volume_threshold = 0.7 * statistics.mean([item[1] for item in filter_bottom_contents]) # Find first thing that could be considered a solvent. 0.7 is arbitrary.
-            for reagent in filter_bottom_contents:
-                if reagent[1] > volume_threshold:
-                    solvent = reagent[0]
-                    break
-            if '_m_' in solvent:
+
+            # Find first thing that could be considered a solvent.
+            solvent = max(filter_contents[filter_vessel], key=lambda x: x[1])[0] 
+            if is_aqueous(solvent):
                 solvent = 'water'
-            self._xdl.steps.insert(j, PrepareFilter(filter_vessel=filter_vessel, solvent=solvent)) 
+            
+            # Insert PrepareFilter step into self._xdl.steps.
+            self._xdl.steps.insert(j, PrepareFilter(
+                filter_vessel=filter_vessel, solvent=solvent)) 
 
 
     ###################################
@@ -431,3 +452,16 @@ class XDLExecutor(object):
                     xdl_hardware_list[i].cid
                 ] = graphml_hardware_list[i].cid
 
+def is_aqueous(reagent_name):
+    """Return True if reagent_name is an aqueous reagent, otherwise False.
+    
+    Args:
+        reagent_name (str): Name of reagent.
+    
+    Returns:
+        bool: True if reagent_name is aqueous, otherwise False.
+    """
+    for word in AQUEOUS_KEYWORDS:
+        if word in reagent_name:
+            return True
+    return False
