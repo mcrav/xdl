@@ -46,13 +46,15 @@ class CMove(Step):
         )
         return True
 
-class CSeparate(Step):
+class CSeparatePhases(Step):
 
-    def __init__(self, lower_phase_vessel, upper_phase_vessel, separator_top,
-                       separator_bottom, dead_volume_target):
+    def __init__(self, lower_phase_vessel,  upper_phase_vessel, 
+                       separation_vessel, dead_volume_target, 
+                       lower_phase_port=None, upper_phase_port=None):
         """
         Args:
             lower_phase_vessel (str): Name of vessel to transfer lower phase to.
+            lower_phase_port (str): Name of port to transfer lower phase to
             upper_phase_vessel (str): Name of vessel to transfer upper phase to.
             separator_top (str): Name of separator top node in graph.
             separator_bottom (str): Name of separator bottom node in graph.
@@ -61,20 +63,22 @@ class CSeparate(Step):
         """
         self.properties = {
             'lower_phase_vessel': lower_phase_vessel,
+            'lower_phase_port': lower_phase_port,
             'upper_phase_vessel': upper_phase_vessel,
-            'separator_top': separator_top,
-            'separator_bottom': separator_bottom,
+            'upper_phase_port': upper_phase_port,
+            'separation_vessel': separation_vessel,
             'dead_volume_target': dead_volume_target,
         }
 
-        self.literal_code = f'chempiler.pump.separate_phases( lower_phase_target={self.lower_phase_vessel}, upper_phase_target={self.upper_phase_vessel}, separator_top={self.separator_top}, separator_bottom={self.separator_bottom}, dead_volume_target={self.dead_volume_target}, )'
+        self.literal_code = f'chempiler.pump.separate_phases( lower_phase_target={self.lower_phase_vessel}, lower_phase_port={self.lower_phase_port}, upper_phase_target={self.upper_phase_vessel}, upper_phase_port={self.upper_phase_port}, separation_vessel={self.separation_vessel}, dead_volume_target={self.dead_volume_target}, )'
 
     def execute(self, chempiler):
         chempiler.pump.separate_phases(
             lower_phase_target=self.lower_phase_vessel,
+            lower_phase_port=self.lower_phase_port,
             upper_phase_target=self.upper_phase_vessel,
-            separator_top=self.separator_top,
-            separator_bottom=self.separator_bottom,
+            upper_phase_port=self.upper_phase_port,
+            separation_vessel=self.separation_vessel,
             dead_volume_target=self.dead_volume_target,
         )
         return True
