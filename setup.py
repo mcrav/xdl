@@ -1,11 +1,8 @@
 from distutils.core import setup
-from dev_utils import add_getters, add_literal_chempiler_code
-
-add_literal_chempiler_code('xdl/steps/steps_chasm.py')
 
 setup(name='xdl',
-      version='0.2',
-      description='XDL library',
+      version='0.1.0',
+      description='Package for working with XDL (chemical descriptive language).',
       author='Matthew Craven',
       author_email='matthew.craven@glasgow.ac.uk',
       packages=[
