@@ -15,8 +15,7 @@ CLEAN_BACKBONE_AFTER_STEPS = [
 ]
 
 # Steps that should be stirred.
-STIR_STEPS = [Add, Chill, StopChiller, Reflux, ChillBackToRT, HeatAndReact, 
-              ContinueStirToRT]
+STIR_STEPS = [Add, Chill, StopChiller, Reflux]
 
 class XDLExecutor(object):
  
@@ -114,10 +113,29 @@ class XDLExecutor(object):
             if 'waste_vessel' in step.properties and not step.waste_vessel:
                 step.waste_vessel = self._get_waste_vessel(step)
 
+            elif 'solvent_vessel' in step.properties and not step.solvent_vessel:
+                step.solvent_vessel = self._get_reagent_vessel(step.solvent)
+
+            elif 'reagent_vessel' in step.properties and not step.reagent_vessel:
+                step.reagent_vessel = self._get_reagent_vessel(step.solvent)
+
         # Give IDs of all waste vessels to clean backbone steps.
         for step in self._xdl.steps:
             if type(step) == CleanBackbone:
                 step.waste_vessels = self._graph_hardware.waste_xids
+
+    def _get_reagent_vessel(self, reagent):
+        """Get vessel containing given reagent.
+        
+        Args:
+            reagent (str): Name of reagent to find vessel for.
+        
+        Returns:
+            str: ID of vessel containing given reagent.
+        """
+        for flask in self._graph_hardware.flasks:
+            if flask.chemical == reagent:
+                return flask.xid
 
     def _get_waste_vessel(self, step):
         """
@@ -482,6 +500,9 @@ class XDLExecutor(object):
 
                     self._print_warnings()
                     self._prepared_for_execution = True
+                
+                else:
+                    print("Hardware is not compatible. Can't execute.")
 
     def execute(self, chempiler):
         """Execute XDL procedure with given chempiler. The same graph must be

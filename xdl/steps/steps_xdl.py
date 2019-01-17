@@ -150,9 +150,9 @@ class RemoveFilterDeadVolume(Step):
 class StartStir(Step):
     """Start stirring given vessel.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel name to stir.
-        stir_rpm {int} -- Speed in RPM to stir at. (optional)
+    Args:
+        vessel (str): Vessel name to stir.
+        stir_rpm (int, optional): Speed in RPM to stir at.
     """
     def __init__(self, vessel=None, stir_rpm='default'):
 
@@ -167,7 +167,8 @@ class StartStir(Step):
             CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm),
         ]
 
-        self.human_readable = f'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'
+        self.human_readable = 'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'.format(
+            **self.properties)
 
 class StopStir(Step):
     pass
@@ -175,9 +176,9 @@ class StopStir(Step):
 class StartHeat(Step):
     """Start heating given vessel at given temperature.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel name to heat.
-        temp {float} -- Temperature to heat to in °C.
+    Args:
+        vessel (str): Vessel name to heat.
+        temp (float): Temperature to heat to in °C.
     """
     def __init__(self, vessel=None, temp=None):
 
@@ -199,8 +200,8 @@ class StopHeat(Step):
 class StartVacuum(Step):
     """Start vacuum pump attached to given vessel.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel name to start vacuum on.
+    Args:
+        vessel (str): Vessel name to start vacuum on.
     """
     def __init__(self, vessel=None):
 
@@ -217,8 +218,8 @@ class StartVacuum(Step):
 class StopVacuum(Step):
     """Stop vacuum pump attached to given vessel.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel name to stop vacuum on.
+    Args:
+        vessel (str): Vessel name to stop vacuum on.
     """
     def __init__(self, vessel=None):
 
@@ -232,14 +233,11 @@ class StopVacuum(Step):
 
         self.human_readable = f'Stop vacuum for {self.vessel}.'
 
-class StartChiller(Step):
-    pass
-
-class StopChiller(Step):
+class ChillerReturnToRT(Step):
     """Stop the chiller.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel to stop chiller for.
+    Args:
+        vessel (str): Vessel to stop chiller for.
     """
     def __init__(self, vessel=None,):
 
@@ -263,15 +261,19 @@ class StopChiller(Step):
 class CleanVessel(Step):
     """Clean given vessel.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel to clean.
-        solvent {str} -- Solvent to clean with. (optional)
-        volume {str} -- Volume of solvent to clean with in mL. (optional)
-        stir_rpm {str} -- RPM to stir vessel at during cleaning. (optional)
-        stir_time {str} -- Time to stir once solvent has been added. (optional)
+    Args:
+        vessel (str): Vessel to clean.
+        solvent (str, optional): Solvent to clean with.
+        volume (str, optional): Volume of solvent to clean with in mL.
+        stir_rpm (str, optional): RPM to stir vessel at during cleaning.
+        stir_time (str, optional): Time to stir once solvent has been added.
+        waste_vessel (str, optional): Vessel to send waste to. 
+            Passed automatically by executor.
+        solvent_vessel (str, optional): Vessel containing solvent.
+            Passed automatically by executor.
     """
     def __init__(self, vessel=None, solvent='default', volume='default', stir_rpm='default',
-                    stir_time='default', waste_vessel=None):
+                    stir_time='default', waste_vessel=None, solvent_vessel=None):
 
         self.properties = {
             'vessel': vessel,
@@ -484,7 +486,7 @@ class Dry(Step):
         volume = ((self.time) / 60) * DEFAULT_FILTER_ASPIRATION_SPEED
         self.steps = [
             CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT,
-                  to_vessel=self.waste_vessel, volume=self.volume,
+                  to_vessel=self.waste_vessel, volume=volume,
                   aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
         ]
 
