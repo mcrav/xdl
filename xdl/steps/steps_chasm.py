@@ -97,7 +97,6 @@ class CPrime(Step):
             'aspiration_speed': aspiration_speed,
         }
         self.get_defaults()
-            aspiration_speed)
 
         self.literal_code = f'chempiler.pump.prime_tubes({self.aspiration_speed})'
 

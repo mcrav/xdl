@@ -8,7 +8,6 @@
     </Reagents>
 
     <Procedure>
-         <Step />
 <CMove />
 <CSeparate />
 <CPrime />
@@ -50,21 +49,14 @@
 <CSetRecordingSpeed />
 <CWait />
 <CBreakpoint />
+
 <StartVacuum />
 <StopVacuum />
 <StartHeat />
 <CleanVessel />
-<CleanTubing />
-<HeatAndReact />
-<ContinueStirToRT />
 <Chill />
-<ChillBackToRT />
 <Add />
-<StirAndTransfer />
-<Wash />
-<ChillReact />
 <MakeSolution />
-<AddSolid />
 <Reflux />
 
 

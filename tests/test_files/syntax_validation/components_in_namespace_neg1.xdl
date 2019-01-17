@@ -1,6 +1,6 @@
 <Synthesis>
     <Hardware>
-        <Bucket />
+        <Bucket id="bucket"/>
     </Hardware>
 
     <Reagents>

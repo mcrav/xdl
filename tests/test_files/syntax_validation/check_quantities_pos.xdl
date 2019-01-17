@@ -1,10 +1,13 @@
 <Synthesis>
     <Hardware>
-        
+        <Reactor id="reactor2" />
     </Hardware>
 
     <Reagents>
-        
+        <Reagent id="ammonia" />
+        <Reagent id="koh" />
+        <Reagent id="naoh" />
+        <Reagent id="ethanol" />
     </Reagents>
 
     <Procedure>
@@ -15,6 +18,7 @@
             solute_mass="5g 10g"
             solvent_volume="30mL"
             vessel="reactor2" />
+
         <Add
             reagent="ammonia"
             volume="15ml"

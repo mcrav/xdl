@@ -1,7 +1,7 @@
 <Synthesis>
     <Hardware>
         <Reactor
-            vessel="reactor1" />
+            id="reactor1" />
     </Hardware>
 
     <Reagents>

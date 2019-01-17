@@ -1,9 +1,8 @@
 <Synthesis>
     <Hardware>
-        <Reactor />
-        <Flask />
-        <FilterFlask />
-        <Waste />
+        <Reactor id="reactor1"/>
+        <Flask id="flask1"/>
+        <Filter id="filter1"/>
     </Hardware>
 
     <Reagents>
