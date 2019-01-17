@@ -1,9 +1,9 @@
 from ..constants import *
+from ..utils.misc import get_port_str
 from .base_step import Step
 from .steps_chasm import (
     CMove,
-    CSeparate,
-    CPrime,
+    CSeparatePhases,
     CSwitchVacuum,
     CSwitchCartridge,
     CSwitchColumn,
@@ -44,6 +44,109 @@ from .steps_chasm import (
     CBreakpoint,
 )
 
+######################
+### INTERNAL STEPS ###
+######################
+
+class StirAtRT(Step):
+    """Stir given vessel for given time at room temperature.
+
+    Keyword Arguments:
+        vessel {str} -- Vessel to stir.
+        time {float} -- Time to stir for.
+    """
+    def __init__(self, vessel, time, stir_rpm='default'):
+
+        self.properties = {
+            'vessel': vessel,
+            'time': time,
+            'stir_rpm': stir_rpm,
+        }
+        self.get_defaults()
+
+        self.steps = [
+            StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm),
+            Wait(time=self.time),
+            CStopStir(vessel=self.vessel),
+        ]
+
+        self.human_readable = 'Stir {vessel} for {time} s.'.format(
+            **self.properties)
+
+class PrimePumpForAdd(Step):
+    """Prime pump attached to given reagent flask in anticipation of Add step.
+
+    Keyword Arguments:
+        reagent {str} -- Reagent to prime pump for addition.
+        move_speed {str} -- Speed to move reagent at. (optional)
+    """
+    def __init__(self, reagent, reagent_vessel=None, waste_vessel=None, move_speed='default',):
+
+        self.properties = {
+            'reagent': reagent,
+            'reagent_vessel': reagent_vessel,
+            'waste_vessel': waste_vessel,
+            'move_speed': move_speed,
+        }
+
+        self.steps = [
+            CMove(from_vessel=self.reagent_vessel, to_vessel=self.waste_vessel,
+                    volume=DEFAULT_PUMP_PRIME_VOLUME, move_speed=move_speed)
+        ]
+
+class PrepareFilter(Step):
+    """Fill bottom of filter vessel with solvent in anticipation of the filter top being used.
+
+    Keyword Arguments:
+        filter_vessel {str} -- Filter vessel name to prepare (generic name 'filter' not 'filter_filter_bottom').
+        solvent {str} -- Solvent to fill filter bottom with.
+        volume {int} -- Volume of filter bottom.
+        waste_vessel {str} -- Vessel to put waste material.
+    """
+    def __init__(self, filter_vessel=None, solvent=None, volume=10, waste_vessel=None):
+
+        self.properties = {
+            'filter_vessel': filter_vessel,
+            'solvent': solvent,            'volume': volume, # This value should be replaced when XDL calls prepare_for_execution.
+            'waste_vessel': waste_vessel,
+        }
+        self.steps = [
+            Add(reagent=self.solvent, volume=self.volume,
+                vessel=self.filter_vessel, port=BOTTOM_PORT, 
+                waste_vessel=waste_vessel)
+        ]
+
+        self.human_readable = 'Fill bottom of {filter_vessel} with {solvent} ({volume} mL).'.format(
+            **self.properties)
+
+class RemoveFilterDeadVolume(Step):
+    """Remove dead volume (volume below filter) from filter vessel.
+    
+    Args:
+        filter_vessel (str): Filter vessel ID to remove dead volume from.
+        dead_volume (float): Volume in mL to remove from bottom of filter vessel.
+    """
+    def __init__(self, filter_vessel=None, dead_volume=0, waste_vessel=None):
+
+        self.properties = {
+            'filter_vessel': filter_vessel,
+            'dead_volume': dead_volume,
+            'waste_vessel': waste_vessel,
+        }
+
+        self.steps = [
+            Transfer(from_vessel=self.filter_vessel, to_vessel=self.waste_vessel, 
+                     volume=self.dead_volume)
+        ]
+
+        self.human_readable = 'Remove dead volume ({volume} mL) from bottom of {filter_vessel}'.format(
+            **self.properties)
+
+
+########################
+### START/STOP STEPS ###
+########################
+
 class StartStir(Step):
     """Start stirring given vessel.
 
@@ -66,6 +169,9 @@ class StartStir(Step):
 
         self.human_readable = f'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'
 
+class StopStir(Step):
+    pass
+
 class StartHeat(Step):
     """Start heating given vessel at given temperature.
 
@@ -81,11 +187,14 @@ class StartHeat(Step):
         }
 
         self.steps = [
-            CSetTemp(vessel=vessel, temp=temp),
-            CStartHeat(vessel=vessel),
+            CSetTemp(vessel=self.vessel, temp=self.temp),
+            CStartHeat(vessel=self.vessel),
         ]
 
-        self.human_readable = f'Heat {vessel} to {temp} °C'
+        self.human_readable = f'Heat {self.vessel} to {self.temp} °C'
+
+class StopHeat(Step):
+    pass
 
 class StartVacuum(Step):
     """Start vacuum pump attached to given vessel.
@@ -100,10 +209,10 @@ class StartVacuum(Step):
         }
 
         self.steps = [
-            CSwitchVacuum(vessel=vessel, destination='vacuum')
+            CSwitchVacuum(vessel=self.vessel, destination='vacuum')
         ]
 
-        self.human_readable = f'Start vacuum for {vessel}.'
+        self.human_readable = f'Start vacuum for {self.vessel}.'
 
 class StopVacuum(Step):
     """Stop vacuum pump attached to given vessel.
@@ -118,10 +227,38 @@ class StopVacuum(Step):
         }
 
         self.steps = [
-            CSwitchVacuum(vessel=vessel, destination='backbone')
+            CSwitchVacuum(vessel=self.vessel, destination='backbone')
         ]
 
-        self.human_readable = f'Stop vacuum for {vessel}.'
+        self.human_readable = f'Stop vacuum for {self.vessel}.'
+
+class StartChiller(Step):
+    pass
+
+class StopChiller(Step):
+    """Stop the chiller.
+
+    Keyword Arguments:
+        vessel {str} -- Vessel to stop chiller for.
+    """
+    def __init__(self, vessel=None,):
+
+        self.properties = {
+            'vessel': vessel,
+        }
+
+        self.steps = [
+            CSetChiller(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+            CChillerWaitForTemp(vessel=self.vessel),
+            CStopChiller(vessel)
+        ]
+
+        self.human_readable = 'Stop chiller for {0}'.format(self.vessel)
+
+
+######################
+### CLEANING STEPS ###
+######################
 
 class CleanVessel(Step):
     """Clean given vessel.
@@ -139,6 +276,7 @@ class CleanVessel(Step):
         self.properties = {
             'vessel': vessel,
             'solvent': solvent,
+            'solvent_vessel': solvent_vessel,
             'volume': volume,
             'stir_rpm': stir_rpm,
             'waste_vessel': waste_vessel,
@@ -146,175 +284,39 @@ class CleanVessel(Step):
         self.get_defaults()
 
         self.steps = [
-            CMove(from_vessel=f'flask_{solvent}', to_vessel=f"{vessel}", volume=self.volume),
+            CMove(from_vessel=self.solvent_flask, 
+                  to_vessel=self.vessel, volume=self.volume),
             Wait(time=60),
-            CMove(from_vessel=vessel, to_vessel=self.waste_vessel, volume='all'),
+            CMove(from_vessel=self.vessel, to_vessel=self.waste_vessel,
+                  volume='all'),
         ]
 
-        self.human_readable = f'Clean {vessel} with {solvent} ({volume}).\n'
+        self.human_readable = 'Clean {0} with {1} ({2}).'.format(
+            self.vessel, self.solvent, self.volume)
 
 class CleanBackbone(Step):
 
-    def __init__(self, reagent=None, waste_vessels=[]):
+    def __init__(self, solvent, waste_vessels=[], solvent_vessel=None):
 
         self.properties = {
-            'reagent': reagent,
+            'solvent': solvent,
+            'solvent_vessel': solvent_vessel,
             'waste_vessels': waste_vessels,
         }
 
         self.steps = []
         for waste_vessel in self.waste_vessels:
-            self.steps.append(CMove(from_vessel=f'flask_{self.reagent}', to_vessel=waste_vessel, volume=DEFAULT_CLEAN_BACKBONE_VOLUME, aspiration_speed=30))
-        self.human_readable = f'Clean backbone with {self.reagent}.'
+            self.steps.append(CMove(
+                from_vessel=self.solvent_vessel, to_vessel=waste_vessel,
+                volume=DEFAULT_CLEAN_BACKBONE_VOLUME,
+                aspiration_speed=DEFAULT_CLEAN_BACKBONE_ASPIRATION_SPEED))
 
-class HeatAndReact(Step):
-    """Under stirring, heat given vessel to given temp and wait for given time
-     then stop heat and stirring.
-
-    Keyword Arguments:
-        vessel {str} -- Vessel to heat.
-        time {float} -- Time to leave vessel under heating/stirring in seconds.
-        temp {float} -- Temperature to heat to in °C.
-        stir_rpm {int} -- RPM to stir at. (optional)
-    """
-    def __init__(self, vessel=None, time=None, temp=None, stir_rpm='default'):
-
-        self.properties = {
-            'vessel': vessel,
-            'time': time,
-            'temp': temp,
-            'stir_rpm': stir_rpm,
-        }
-
-        self.steps = [
-            StartHeat(vessel=vessel, temp=temp),
-            Wait(time=time),
-            CStopHeat(vessel=vessel),
-        ]
-
-        self.human_readable = f'Heat {vessel} to {temp} °C under stirring and wait {float(time) / 3600} hrs.\nThen stop heating and continue stirring until {vessel} reaches room temperature.'
-
-class ContinueStirToRT(Step):
-    """Set vessel temperature to room temperature, and continue stirring until
-    this temperature is reached, then stop stirring. Assumes stirrer is already on.
-
-    Keyword Arguments:
-        vessel {str} -- Vessel to continue stirring until room temperature is reached.
-    """
-    def __init__(self, vessel=None):
-
-        self.properties = {
-            'vessel': vessel,
-        }
-
-        self.steps = [
-            CSetTemp(vessel=vessel, temp=ROOM_TEMPERATURE),
-            CStirrerWaitForTemp(vessel=vessel),
-            CStopStir(vessel=vessel),
-        ]
-
-        self.human_readable = f'Wait for {vessel} to reach room temperature and then stop stirring.'
-
-class StopChiller(Step):
-    """Stop the chiller.
-
-    Keyword Arguments:
-        vessel {str} -- Vessel to stop chiller for.
-    """
-    def __init__(self, vessel=None,):
-
-        self.properties = {
-            'vessel': vessel,
-        }
-
-        if is_generic_filter_name(vessel):
-            vessel = filter_top_name(vessel)
-
-        self.steps = [
-            CSetChiller(vessel=vessel, temp=ROOM_TEMPERATURE),
-            CChillerWaitForTemp(vessel=vessel),
-            CStopChiller(vessel)
-        ]
-
-        self.human_readable = f'Stop chiller for {self.vessel}'
-
-class Chill(Step):
-    """Chill vessel to given temperature.
-
-    Keyword Arguments:
-        vessel {str} -- Vessel name to chill.
-        temp {float} -- Temperature in °C to chill to.
-    """
-    def __init__(self, vessel=None, temp=None):
-
-        self.properties = {
-            'vessel': vessel,
-            'temp': temp,
-        }
-
-        if is_generic_filter_name(vessel):
-            vessel = filter_top_name(vessel)
-
-        self.steps = []
-
-        self.steps.extend([
-            CSetChiller(vessel=vessel, temp=temp),
-            CStartChiller(vessel=vessel),
-            CChillerWaitForTemp(vessel=vessel),
-        ])
+        self.human_readable = 'Clean backbone with {0}.'.format(self.solvent)
 
 
-        self.human_readable = f'Chill {vessel} to {temp} °C.'
-
-class ChillBackToRT(Step):
-    """Chill given vessel back to room temperature.
-
-    Keyword Arguments:
-        vessel {str} -- Vessel name to chill.
-    """
-    def __init__(self, vessel=None):
-
-        self.properties = {
-            'vessel': vessel,
-        }
-
-        if is_generic_filter_name(vessel):
-            vessel = filter_top_name(vessel)
-
-        # This is dodgy. Ideally will track which vessels have chillers.
-        if vessel and 'filter' in vessel:
-            self.steps = [
-                CSetChiller(vessel=vessel, temp=ROOM_TEMPERATURE),
-                CChillerWaitForTemp(vessel=vessel),
-                CStopChiller(vessel=vessel),
-            ]
-        else:
-            self.steps = [
-                CSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
-                CStirrerWaitForTemp(vessel=self.vessel),
-            ]
-
-        self.human_readable = f'Chill {vessel} to room temperature.'
-
-class PrimePumpForAdd(Step):
-    """Prime pump attached to given reagent flask in anticipation of Add step.
-
-    Keyword Arguments:
-        reagent {str} -- Reagent to prime pump for addition.
-        move_speed {str} -- Speed to move reagent at. (optional)
-    """
-    def __init__(self, reagent=None,  waste_vessel=None, move_speed='default',):
-
-        self.properties = {
-            'reagent': reagent,
-            'waste_vessel': waste_vessel,
-            'move_speed': move_speed,
-        }
-
-        self.steps = [
-            CMove(from_vessel=f"flask_{reagent}", to_vessel=self.waste_vessel,
-                    volume=DEFAULT_PUMP_PRIME_VOLUME, move_speed=move_speed)
-        ]
+##################
+### MOVE STEPS ###
+##################
 
 class Add(Step):
     """Add given volume of given reagent to given vessel.
@@ -327,11 +329,13 @@ class Add(Step):
         move_speed {float} -- Speed in mL / min to move liquid at. (optional)
         clean_tubing {bool} -- Clean tubing before and after addition. (optional)
     """
-    def __init__(self, reagent=None, volume=None, vessel=None, port=None,
-                       time=None, move_speed='default', waste_vessel=None):
+    def __init__(self, reagent, volume, vessel, port=None, time=None,
+                       move_speed='default', reagent_vessel=None, 
+                       waste_vessel=None):
 
         self.properties = {
             'reagent': reagent,
+            'reagent_vessel': reagent_vessel,
             'volume': volume,
             'vessel': vessel,
             'port': port,
@@ -344,14 +348,12 @@ class Add(Step):
         self.steps = []
         self.steps.append(PrimePumpForAdd(reagent=reagent, waste_vessel=waste_vessel))
         self.steps.append(
-            CMove(from_vessel='flask_{0}'.format(reagent), to_vessel=vessel, 
-                  to_port=self.port, volume=volume, move_speed=move_speed))
+            CMove(from_vessel=self.reagent_vessel, to_vessel=self.vessel, 
+                  to_port=self.port, volume=self.volume, move_speed=self.move_speed))
         self.steps.append(Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
 
-        if port:
-            self.human_readable = 'Add {reagent} ({volume} mL) to {reagent} of {vessel}'.format(**self.properties)
-        else:
-            self.human_readable = 'Add {reagent} ({volume} mL) to {vessel}'.format(**self.properties)
+        self.human_readable = 'Add {0} ({1} mL) to {2} {3}'.format(
+            self.reagent, self.volume, self.vessel, get_port_str(self.port))
         if time:
             self.human_readable += ' over {0}'.format(self.time)
         self.human_readable += '.'
@@ -382,139 +384,9 @@ class Transfer(Step):
                   to_vessel=self.to_vessel, to_port=self.to_port, 
                   volume=self.volume))
         
-        from_port_s, to_port_s = '', ''
-        if self.from_port:
-            from_port_s = '({0} port)'.format(self.from_port)
-        if self.to_port:
-            to_port_s = '({0} port)'.format(self.to_port)
         self.human_readable = 'Transfer {0} mL from {1} {2} to {3} {4}.'.format(
-            self.volume, self.from_vessel, from_port_s, self.to_vessel, 
-            to_port_s)
-
-class WashFilterCake(Step):
-    """Wash filter cake with given volume of given solvent.
-
-    Keyword Arguments:
-        filter_vessel {str} -- Filter vessel name to wash.
-        solvent {str} -- Solvent to wash with.
-        volume {float} -- Volume of solvent to wash with. (optional)
-        wait_time {str} -- Time to wait after moving solvent to filter flask. (optional)
-    """
-    def __init__(self, filter_vessel=None, solvent=None, volume='default', waste_vessel=None,
-                wait_time='default'):
-
-        self.properties = {
-            'solvent': solvent,
-            'filter_vessel': filter_vessel,
-            'volume': volume,
-            'waste_vessel': waste_vessel, # should be set in prepare_for_execution
-            'wait_time': wait_time,
-        }
-        self.get_defaults()
-
-        filter_top = filter_top_name(self.filter_vessel)
-
-        self.steps = [
-            Add(reagent=self.solvent, volume=self.volume,
-                vessel=filter_top, waste_vessel=self.waste_vessel),
-            StirAtRT(vessel=filter_top, time=60),
-            CMove(from_vessel=filter_bottom_name(self.filter_vessel), to_vessel=self.waste_vessel,
-                 volume='all', aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
-
-            CMove(from_vessel=f'{filter_bottom_name(self.filter_vessel)}', to_vessel=self.waste_vessel,
-                 volume=DEFAULT_WASHFILTERCAKE_WAIT_TIME, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
-        ]
-
-        self.human_readable = f'Wash {filter_vessel} with {solvent} ({volume} mL).'
-
-class Dry(Step):
-    """Dry given vessel by applying vacuum for given time.
-
-    Keyword Arguments:
-        vessel {str} -- Vessel name to dry.
-        time {str} -- Time to dry vessel for in seconds. (optional)
-    """
-    def __init__(self, filter_vessel=None, waste_vessel=None, time='default'):
-
-        self.properties = {
-            'filter_vessel': filter_vessel,
-            'waste_vessel': waste_vessel, # set in prepare_for_execution
-            'time': time,
-        }
-        self.get_defaults()
-
-        if is_generic_filter_name(self.filter_vessel):
-            filter_vessel_bottom = filter_bottom_name(self.filter_vessel)
-        else:
-            filter_vessel_bottom = self.filter_vessel
-
-        volume = (float(self.time) / 60) * DEFAULT_FILTER_ASPIRATION_SPEED
-        self.steps = [
-            CMove(from_vessel=filter_vessel_bottom, to_vessel=self.waste_vessel, volume=volume, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
-        ]
-
-        self.human_readable = f'Dry substance in {self.filter_vessel} for {self.time} s.'
-
-class Filter(Step):
-    """Filter contents of filter_vessel_top. Apply vacuum for given time.
-    Assumes filter_filter_bottom already filled with solvent and stuff already in filter_vessel_top.
-
-    Keyword Arguments:
-        filter_vessel {str} -- Filter vessel.
-        filter_top_volume {float} -- Volume (mL) of contents of filter top.
-        filter_bottom_volume {float} -- Volume (mL) of the filter bottom.
-        waste_vessel {float} -- Node to move waste material to.
-        time {str} -- Time to leave vacuum on filter vessel after contents have been moved. (optional)
-    """
-    def __init__(self, filter_vessel=None, filter_top_volume=None, filter_bottom_volume=None, waste_vessel=None,
-                        time='default'):
-
-        self.properties = {
-            'filter_vessel': filter_vessel,
-            'filter_top_volume': filter_top_volume, # Filled in when XDL.prepare_for_execution is called
-            'filter_bottom_volume': filter_bottom_volume, # Filled in when XDL.prepare_for_execution is called
-            'waste_vessel': waste_vessel,
-            'time': time,
-        }
-        self.get_defaults()
-
-        filter_bottom = filter_bottom_name(self.filter_vessel)
-
-        self.steps = [
-            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_top_volume, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
-            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_bottom_volume, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
-            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=DEFAULT_FILTER_MOVE_VOLUME, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
-        ]
-
-        self.human_readable = f'Filter contents of {filter_vessel} for {time} s.'
-
-class Confirm(Step):
-    """Get the user to confirm something before execution continues.
-
-    Keyword Arguments:
-        msg {str} -- Message to get user to confirm experiment should continue.
-    """
-
-    def __init__(self, msg=None):
-
-        self.properties = {
-            'msg': msg,
-        }
-
-    def execute(self, chempiler):
-        keep_going = input(self.msg)
-        if not keep_going or keep_going.lower() in ['y', 'yes']:
-            return True
-        return False
-
-    @property
-    def msg(self):
-        return self.properties['msg']
-
-    @msg.setter
-    def msg(self, val):
-        self.properties['msg'] = val
-        self.update()
+            self.volume, self.from_vessel, get_port_str(self.from_port),
+            self.to_vessel, get_port_str(self.to_port))
 
 class MakeSolution(Step):
     """Make solution in given vessel of given solutes in given solvent.
@@ -541,16 +413,286 @@ class MakeSolution(Step):
             solutes = [solutes]
         if not isinstance(solute_masses, list):
             solute_masses = [solute_masses]
-        check_str = f'Are the following reagents in {vessel}? (y)/n\n\n'
-        for solute, mass in zip(solutes, solute_masses):
-            check_str += f'{solute} ({mass} g)\n'
-        self.steps.append(Confirm(msg=check_str))
         self.steps.append(Add(reagent=solvent, volume=solvent_volume, vessel=vessel))
 
         self.human_readable = f'Make solution of '
         for s, m in zip(solutes, solute_masses):
-            self.human_readable += f'{s} ({m} g), '
-        self.human_readable = self.human_readable[:-2] + f' in {solvent} ({solvent_volume} mL) in {vessel}.'
+            self.human_readable += '{0} ({1} g), '.format(s, m)
+        self.human_readable = self.human_readable[:-2] + ' in {solvent} ({solvent_volume} mL) in {vessel}.'.format(
+            **self.properties)
+
+
+####################
+### FILTER STEPS ###
+####################
+
+class WashFilterCake(Step):
+    """Wash filter cake with given volume of given solvent.
+
+    Keyword Arguments:
+        filter_vessel {str} -- Filter vessel name to wash.
+        solvent {str} -- Solvent to wash with.
+        volume {float} -- Volume of solvent to wash with. (optional)
+        wait_time {str} -- Time to wait after moving solvent to filter flask. (optional)
+    """
+    def __init__(self, filter_vessel=None, solvent=None, volume='default', waste_vessel=None,
+                       wait_time='default'):
+
+        self.properties = {
+            'solvent': solvent,
+            'filter_vessel': filter_vessel,
+            'volume': volume,
+            'waste_vessel': waste_vessel, # should be set in prepare_for_execution
+            'wait_time': wait_time,
+        }
+        self.get_defaults()
+
+        self.steps = [
+            Add(reagent=self.solvent, volume=self.volume,
+                vessel=self.filter_vessel, port=TOP_PORT, 
+                waste_vessel=self.waste_vessel),
+            StirAtRT(vessel=self.filter_vessel, time=60),
+            CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT,
+                  to_vessel=self.waste_vessel, volume='all',
+                  aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
+
+            CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT, 
+                  to_vessel=self.waste_vessel, 
+                  volume=DEFAULT_WASHFILTERCAKE_WAIT_TIME, 
+                  aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
+        ]
+
+        self.human_readable = 'Wash {0} with {1} ({2} mL).'.format(
+            **self.properties)
+
+class Dry(Step):
+    """Dry given vessel by applying vacuum for given time.
+
+    Keyword Arguments:
+        vessel {str} -- Vessel name to dry.
+        time {str} -- Time to dry vessel for in seconds. (optional)
+    """
+    def __init__(self, filter_vessel=None, waste_vessel=None, time='default'):
+
+        self.properties = {
+            'filter_vessel': filter_vessel,
+            'waste_vessel': waste_vessel, # set in prepare_for_execution
+            'time': time,
+        }
+        self.get_defaults()
+
+        volume = ((self.time) / 60) * DEFAULT_FILTER_ASPIRATION_SPEED
+        self.steps = [
+            CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT,
+                  to_vessel=self.waste_vessel, volume=self.volume,
+                  aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
+        ]
+
+        self.human_readable = 'Dry substance in {filter_vessel} for {time} s.'.format(
+            **self.properties)
+
+class Filter(Step):
+    """Filter contents of filter_vessel_top. Apply vacuum for given time.
+    Assumes filter_filter_bottom already filled with solvent and stuff already in filter_vessel_top.
+
+    Keyword Arguments:
+        filter_vessel {str} -- Filter vessel.
+        filter_top_volume {float} -- Volume (mL) of contents of filter top.
+        filter_bottom_volume {float} -- Volume (mL) of the filter bottom.
+        waste_vessel {float} -- Node to move waste material to.
+        time {str} -- Time to leave vacuum on filter vessel after contents have been moved. (optional)
+    """
+    def __init__(self, filter_vessel=None, filter_top_volume=None, filter_bottom_volume=None, waste_vessel=None,
+                        time='default'):
+
+        self.properties = {
+            'filter_vessel': filter_vessel,
+            'filter_top_volume': filter_top_volume, # Filled in when XDL.prepare_for_execution is called
+            'filter_bottom_volume': filter_bottom_volume, # Filled in when XDL.prepare_for_execution is called
+            'waste_vessel': waste_vessel,
+            'time': time,
+        }
+        self.get_defaults()
+
+        self.steps = [
+            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_top_volume, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
+            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_bottom_volume, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
+            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=DEFAULT_FILTER_MOVE_VOLUME, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
+        ]
+
+        self.human_readable = f'Filter contents of {filter_vessel} for {time} s.'
+
+
+########################
+### SEPARATION STEPS ###
+########################
+
+class Separate(Step):
+    """Extract contents of from_vessel using given amount of given solvent.
+
+    NOTE: If n_separations > 1, to_vessel/to_port must be capable of giving
+          and receiving material.
+    Keyword Arguments:
+        from_vessel {str} -- Vessel name with contents to be extracted.
+        separation_vessel {str} -- Separation vessel name.
+        solvent {str} -- Solvent to extract with.
+        solvent_volume {float} -- Volume of solvent to extract with.
+        n_separations {int} -- Number of separations to perform.
+    """
+    def __init__(self, from_vessel=None, from_port=None, separation_vessel=None, 
+                       to_vessel=None, to_port=None, solvent=None, 
+                       solvent_volume=None, n_separations=1, product_bottom=True,
+                       waste_vessel=None, waste_phase_to_vessel=None,
+                       waste_phase_to_port=None):
+
+        self.properties = {
+            'from_vessel': from_vessel,
+            'from_port': from_port,
+            'separation_vessel': separation_vessel,
+            'to_vessel': to_vessel,
+            'to_port': to_port,
+            'solvent': solvent,
+            'solvent_volume': solvent_volume,
+            'n_separations': n_separations,
+            'product_bottom': product_bottom,
+            'waste_phase_to_vessel': waste_phase_to_vessel,
+            'waste_phase_to_port': waste_phase_to_port,
+            'waste_vessel': waste_vessel, # set in prepare_for_execution
+        }
+        self.get_defaults()
+
+        if not waste_phase_to_vessel and waste_vessel:
+            self.waste_phase_to_vessel = waste_vessel
+
+        if not self.n_separations:
+            n_separations = 1
+        else:
+            n_separations = int(self.n_separations)
+
+        self.steps = []
+        self.steps.extend([
+            # Move from from_vessel to separation_vessel
+            Transfer(
+                from_vessel=self.from_vessel, from_port=self.from_port, 
+                to_vessel=self.separation_vessel, to_port=TOP_PORT, 
+                volume='all'),
+            # Move solvent to separation_vessel.
+            Add(reagent=self.solvent, volume=self.solvent_volume, 
+                vessel=self.separation_vessel, port=BOTTOM_PORT, 
+                waste_vessel=self.waste_vessel),
+            # Stir separation_vessel
+            StirAtRT(vessel=self.separation_vessel, 
+                     time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
+                     stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+            StirAtRT(vessel=self.separation_vessel, 
+                     time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
+                     stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
+            # Wait for phases to separate
+            Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
+        ])
+
+        if self.from_vessel == self.separation_vessel:
+            self.steps.pop(0)
+
+        remove_volume = 2
+
+        # If product in bottom phase
+        if self.product_bottom:
+            if n_separations > 1:
+                for _ in range(n_separations - 1):
+                    self.steps.extend([
+                        Transfer(from_vessel=self.separation_vessel, 
+                                 from_port=BOTTOM_PORT, 
+                                 to_vessel=self.waste_vessel, 
+                                 volume=remove_volume),
+                        CSeparatePhases(lower_phase_vessel=self.to_vessel, 
+                                  lower_phase_port=self.to_port,
+                                  upper_phase_vessel=self.waste_phase_to_vessel,
+                                  upper_phase_port=self.waste_phase_to_port,
+                                  separation_vessel=self.separation_vessel, 
+                                  dead_volume_target=self.waste_vessel),
+                        # Move to_vessel to separation_vessel
+                        CMove(from_vessel=to_vessel, 
+                              to_vessel=self.separation_vessel, volume='all'),
+                        # Move solvent to separation_vessel. 
+                        # Bottom port as washes any reagent from previous 
+                        # separation back into funnel.
+                        Add(reagent=self.solvent, volume=self.solvent_volume, 
+                            vessel=self.separation_vessel, port=BOTTOM_PORT, 
+                            waste_vessel=self.waste_vessel),
+                        # Stir separation_vessel
+                        StirAtRT(vessel=self.separation_vessel, 
+                                 time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
+                                 stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+                        StirAtRT(vessel=self.separation_vessel, 
+                                 time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
+                                 stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
+                        # Wait for phases to separate
+                        Wait(time=DEFAULT_SEPARATION_SETTLE_TIME)
+                    ])
+
+
+            self.steps.extend([
+                Transfer(from_vessel=self.separation_vessel, 
+                         from_port=BOTTOM_PORT, to_vessel=self.waste_vessel, 
+                         volume=remove_volume),
+                CSeparatePhases(lower_phase_vessel=self.to_vessel,
+                          lower_phase_port=self.to_port,
+                          upper_phase_vessel=self.waste_phase_to_vessel,
+                          upper_phase_port=self.waste_phase_to_port,
+                          separation_vessel=self.separation_vessel,
+                          dead_volume_target=self.waste_vessel),
+            ])
+        else:
+            if n_separations > 1:
+                for _ in range(n_separations - 1):
+                    self.steps.extend([
+                        Transfer(from_vessel=self.separation_vessel, 
+                                 from_port=BOTTOM_PORT, 
+                                 to_vessel=self.waste_vessel,
+                                 volume=remove_volume),
+                        CSeparatePhases(
+                            lower_phase_vessel=self.waste_phase_to_vessel,
+                            lower_phase_port=self.waste_phase_to_port,
+                            upper_phase_vessel=self.separation_vessel,
+                            separation_vessel=self.separation_vessel,
+                            dead_volume_target=self.waste_vessel),
+                        # Move solvent to separation_vessel
+                        Add(reagent=self.solvent, vessel=self.separation_vessel, 
+                            port=BOTTOM_PORT, volume=self.solvent_volume, 
+                            waste_vessel=self.waste_vessel),
+                        # Stir separation_vessel
+                        StirAtRT(vessel=self.separation_vessel, 
+                                 time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
+                                 stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+                        StirAtRT(vessel=self.separation_vessel, 
+                                 time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
+                                 stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
+                        # Wait for phases to separate
+                        Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
+                    ])
+
+            self.steps.extend([
+                Transfer(from_vessel=self.separation_vessel, 
+                         from_port=BOTTOM_PORT, to_vessel=self.waste_vessel, 
+                         volume=remove_volume),
+                CSeparatePhases(lower_phase_vessel=self.waste_phase_to_vessel, 
+                          lower_phase_port=self.waste_phase_to_port, 
+                          upper_phase_vessel=self.to_vessel,
+                          upper_phase_port=self.to_port,
+                          separation_vessel=self.separation_vessel,
+                          dead_volume_target=self.waste_vessel),
+            ])
+
+        self.human_readable = 'Separate contents of {0} {1} with {2} ({3}x{4} mL). Transfer waste phase to {5} {6} and product phase to {7} {8}.'.format(
+            self.from_vessel, get_port_str(self.from_port), self.solvent,
+            self.n_separations, self.solvent_volume, self.waste_phase_to_vessel,
+            get_port_str(self.waste_phase_to_port), self.to_vessel, self.to_port)
+
+
+########################
+### HEAT/CHILL STEPS ###
+########################
 
 class Reflux(Step):
     """Reflux given vessel at given temperature for given time.
@@ -568,24 +710,42 @@ class Reflux(Step):
             'time': time,
         }
 
-        filter_vessel = vessel and 'filter' in vessel
-        if is_generic_filter_name(vessel):
-            vessel = filter_top_name(vessel)
+        self.steps = [
+            StartHeat(vessel=self.vessel, temp=self.temp),
+            Wait(time=self.time),
+            StopHeat(vessel=self.vessel),
+        ]
+        self.human_readable = 'Heat {vessel} to {temp} °C and reflux for {time} s.'.format(
+            **self.properties)
+
+class Chill(Step):
+    """Chill vessel to given temperature.
+
+    Keyword Arguments:
+        vessel {str} -- Vessel name to chill.
+        temp {float} -- Temperature in °C to chill to.
+    """
+    def __init__(self, vessel=None, temp=None):
+
+        self.properties = {
+            'vessel': vessel,
+            'temp': temp,
+        }
 
         self.steps = []
+        self.steps.extend([
+            CSetChiller(vessel=self.vessel, temp=self.temp),
+            CStartChiller(vessel=self.vessel),
+            CChillerWaitForTemp(vessel=self.vessel),
+        ])
 
-        if filter_vessel:
-            self.steps.append(Chill(vessel=vessel, temp=temp,))
-        else:
-            self.steps.append(StartHeat(vessel=vessel, temp=temp),)
 
-        self.steps.append(Wait(time=time),)
-        if filter_vessel:
-            self.steps.append(StopChiller(vessel=vessel))
-        else:
-            self.steps.append(CStopHeat(vessel=vessel),)
+        self.human_readable = 'Chill {vessel} to {temp} °C.'.format(
+            **self.properties)
 
-        self.human_readable = f'Heat {vessel} to {temp} °C and reflux for {time} s.'
+#####################
+### ROTAVAP STEPS ###
+#####################
 
 class Rotavap(Step):
     """Rotavap contents of given vessel at given temp and given pressure for given time.
@@ -624,7 +784,8 @@ class Rotavap(Step):
             CMove('flask_rv_bottom', 'waste', )
         ]
 
-        self.human_readable = f'Rotavap contents of {vessel} at {temp} °C for {time}.'
+        self.human_readable = 'Rotavap contents of {vessel} at {temp} °C for {time}.'.format(
+            **self.properties)
 
 class Wait(Step):
     """Wait for given time.
@@ -649,410 +810,23 @@ class Wait(Step):
             CSetRecordingSpeed(self.after_recording_speed),
         ]
 
-        self.human_readable = f'Wait for {self.time} s.'
+        self.human_readable = 'Wait for {0} s.'.format(self.time)
 
-class Extract(Step):
-    """Extract contents of from_vessel using given amount of given solvent.
-
-    NOTE: If n_extractions > 1, to_vessel/to_port must be capable of giving
-          and receiving material.
-    Keyword Arguments:
-        from_vessel {str} -- Vessel name with contents to be extracted.
-        separation_vessel {str} -- Separation vessel name.
-        solvent {str} -- Solvent to extract with.
-        solvent_volume {float} -- Volume of solvent to extract with.
-        n_separations {int} -- Number of separations to perform.
-    """
-    def __init__(self, from_vessel=None, from_port=None, separation_vessel=None, 
-                       to_vessel=None, to_port=None, solvent=None, 
-                       solvent_volume=None, n_extractions=1, product_bottom=True,
-                       waste_vessel=None, waste_phase_to_vessel=None,
-                       waste_phase_to_port=None):
-
-        self.properties = {
-            'from_vessel': from_vessel,
-            'from_port': from_port,
-            'separation_vessel': separation_vessel,
-            'to_vessel': to_vessel,
-            'to_port': to_port,
-            'solvent': solvent,
-            'solvent_volume': solvent_volume,
-            'n_extractions': n_extractions,
-            'product_bottom': product_bottom,
-            'waste_phase_to_vessel': waste_phase_to_vessel,
-            'waste_phase_to_port': waste_phase_to_port,
-            'waste_vessel': waste_vessel, # set in prepare_for_execution
-        }
-        self.get_defaults()
-
-        if not waste_phase_to_vessel and waste_vessel:
-            self.waste_phase_to_vessel = waste_vessel
-
-        if not self.n_extractions:
-            n_extractions = 1
-        else:
-            n_extractions = int(self.n_extractions)
-
-        self.steps = []
-        self.steps.extend([
-            # Move from from_vessel to separation_vessel
-            Transfer(
-                from_vessel=self.from_vessel, from_port=self.from_port, 
-                to_vessel=self.separation_vessel, to_port=TOP_PORT, 
-                volume='all'),
-            # Move solvent to separation_vessel.
-            Add(reagent=self.solvent, volume=self.solvent_volume, 
-                vessel=self.separation_vessel, port=BOTTOM_PORT, 
-                waste_vessel=self.waste_vessel),
-            # Stir separation_vessel
-            StirAtRT(vessel=self.separation_vessel, 
-                     time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
-                     stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
-            StirAtRT(vessel=self.separation_vessel, 
-                     time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
-                     stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
-            # Wait for phases to separate
-            Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
-        ])
-
-        if self.from_vessel in [self.separation_vessel]:
-            self.steps.pop(0)
-
-        remove_volume = 2
-
-        # If product in bottom phase
-        if self.product_bottom:
-            if n_extractions > 1:
-                for _ in range(n_extractions):
-                    self.steps.extend([
-                        Transfer(from_vessel=self.separation_vessel, 
-                                 from_port=BOTTOM_PORT, 
-                                 to_vessel=self.waste_vessel, 
-                                 volume=remove_volume),
-                        CSeparate(lower_phase_vessel=self.to_vessel, 
-                                  lower_phase_port=self.to_port,
-                                  upper_phase_vessel=self.waste_phase_to_vessel,
-                                  upper_phase_port=self.waste_phase_to_port,
-                                  separation_vessel=self.separation_vessel, 
-                                  dead_volume_target=self.waste_vessel),
-                        # Move to_vessel to separation_vessel
-                        CMove(from_vessel=to_vessel, 
-                              to_vessel=self.separation_vessel, volume='all'),
-                        # Move solvent to separation_vessel. 
-                        # Bottom port as washes any reagent from previous 
-                        # separation back into funnel.
-                        Add(reagent=self.solvent, volume=self.solvent_volume, 
-                            vessel=self.separation_vessel, port=BOTTOM_PORT, 
-                            waste_vessel=self.waste_vessel),
-                        # Stir separation_vessel
-                        StirAtRT(vessel=self.separation_vessel, 
-                                 time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
-                                 stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
-                        StirAtRT(vessel=self.separation_vessel, 
-                                 time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
-                                 stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
-                        # Wait for phases to separate
-                        Wait(time=DEFAULT_SEPARATION_SETTLE_TIME)
-                    ])
-
-
-            self.steps.extend([
-                Transfer(from_vessel=self.separation_vessel, 
-                         from_port=BOTTOM_PORT, to_vessel=self.waste_vessel, 
-                         volume=remove_volume),
-                CSeparate(lower_phase_vessel=self.to_vessel,
-                          lower_phase_port=self.to_port,
-                          upper_phase_vessel=self.waste_phase_to_vessel,
-                          upper_phase_port=self.waste_phase_to_port,
-                          separation_vessel=self.separation_vessel,
-                          dead_volume_target=self.waste_vessel),
-            ])
-        else:
-            if n_extractions > 1:
-                for _ in range(n_extractions - 1):
-                    self.steps.extend([
-                        Transfer(from_vessel=self.separation_vessel, 
-                                 from_port=BOTTOM_PORT, 
-                                 to_vessel=self.waste_vessel,
-                                 volume=remove_volume),
-                        CSeparate(lower_phase_vessel=self.waste_phase_to_vessel,
-                                  lower_phase_port=self.waste_phase_to_port,
-                                  upper_phase_vessel=self.separation_vessel,
-                                  separation_vessel=self.separation_vessel,
-                                  dead_volume_target=self.waste_vessel),
-                        # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, vessel=self.separation_vessel, 
-                            port=BOTTOM_PORT, volume=self.solvent_volume, 
-                            waste_vessel=self.waste_vessel),
-                        # Stir separation_vessel
-                        StirAtRT(vessel=self.separation_vessel, 
-                                 time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
-                                 stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
-                        StirAtRT(vessel=self.separation_vessel, 
-                                 time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
-                                 stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
-                        # Wait for phases to separate
-                        Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
-                    ])
-
-            self.steps.extend([
-                Transfer(from_vessel=self.separation_vessel, 
-                         from_port=BOTTOM_PORT, to_vessel=self.waste_vessel, 
-                         volume=remove_volume),
-                CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, 
-                          lower_phase_port=self.waste_phase_to_port, 
-                          upper_phase_vessel=self.to_vessel,
-                          upper_phase_port=self.to_port,
-                          separation_vessel=self.separation_vessel,
-                          dead_volume_target=self.waste_vessel),
-            ])
-
-        self.human_readable = 'Extract contents of {0} {1} with {2} ({3}x{4} mL). Transfer waste phase to {5} {6} and product phase to {7} {8}.'.format(
-            self.from_vessel, get_port_str(self.from_port), self.solvent,
-            self.n_extractions, self.solvent_volume, self.waste_phase_to_vessel,
-            get_port_str(self.waste_phase_to_port), self.to_vessel, self.to_port)
-
-class WashSolution(Step):
-    """Wash contents of from_vessel with given solvent.
+class Confirm(Step):
+    """Get the user to confirm something before execution continues.
 
     Keyword Arguments:
-        from_vessel {str} -- Vessel with contents to be washed.
-        separation_vessel {str} -- Separating funnel name.
-        to_vessel {str} -- Vessel to put washed product after separation.
-        solvent {str} -- Solvent to wash with.
-        solvent_volume {float} -- Volume of solvent to wash with.
-        n_washes {int} -- Number of washes to perform.
-        product_bottom {bool} -- True if product is in bottom phase.
-        waste_vessel {str} -- Vessel to put waste material.
-        waste_phase_to_vessel {str} -- Vessel to put the phase that doesn't have the product.
+        msg {str} -- Message to get user to confirm experiment should continue.
     """
-    def __init__(self, from_vessel=None, from_port=None, separation_vessel=None,
-                       to_vessel=None, to_port=None, solvent=None,
-                       solvent_volume=None, n_washes=1, product_bottom=True,
-                       waste_vessel=None, waste_phase_to_vessel=None, 
-                       waste_phase_to_port=None):
+
+    def __init__(self, msg=None):
 
         self.properties = {
-            'from_vessel': from_vessel,
-            'from_port': from_port,
-            'to_vessel': to_vessel,
-            'to_port': to_port,
-            'separation_vessel': separation_vessel,
-            'solvent': solvent,
-            'solvent_volume': solvent_volume,
-            'n_washes': n_washes,
-            'product_bottom': product_bottom,
-            'waste_phase_to_vessel': waste_phase_to_vessel,
-            'waste_phase_to_port': waste_phase_to_port,
-            'waste_vessel': waste_vessel,
-        }
-        self.get_defaults()
-
-        if not waste_phase_to_vessel and waste_vessel:
-            self.waste_phase_to_vessel = waste_vessel
-
-        if not n_washes:
-            n_washes = 1
-        else:
-            n_washes = int(n_washes)
-
-        remove_volume = 2
-
-        self.steps = []
-        self.steps.extend([
-            # Move from from_vessel to separation_vessel
-            Transfer(from_vessel=self.from_vessel, from_vessel=self.from_port,
-                     to_vessel=self.separation_vessel, to_port=TOP_PORT, 
-                     volume='all'),
-            # Move solvent to separation_vessel
-            Add(reagent=self.solvent, volume=self.solvent_volume,
-                vessel=self.separation_vessel, port=BOTTOM_PORT,
-                waste_vessel=self.waste_vessel),
-            # Stir separation_vessel
-            StirAtRT(vessel=self.separation_vessel, 
-                     time=DEFAULT_SEPARATION_FAST_STIR_TIME,
-                     stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
-            StirAtRT(vessel=self.separation_vessel,
-                     time=DEFAULT_SEPARATION_SLOW_STIR_TIME,
-                     stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
-            # Wait for phases to separate
-            Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
-        ])
-
-        if self.from_vessel in [self.separation_vessel]:
-            self.steps.pop(0)
-
-        if self.product_bottom:
-            if n_washes > 1:
-                for i in range(n_washes - 1):
-                    self.steps.extend([
-                        # Move first 2 mL of product phase to waste just in case 
-                        # of contamination.
-                        Transfer(from_vessel=self.separation_vessel,
-                                 from_port=BOTTOM_PORT,
-                                 to_vessel=self.waste_vessel,
-                                 volume=remove_volume),
-                        CSeparate(lower_phase_vessel=self.to_vessel,
-                                  lower_phase_port=self.to_port,
-                                  upper_phase_vessel=self.waste_phase_to_vessel,
-                                  upper_phase_port=self.waste_phase_to_port,
-                                  separation_vessel=self.separation_vessel,
-                                  dead_volume_target=self.waste_vessel),
-                        # Move to_vessel to separation_vessel
-                        Transfer(from_vessel=self.to_vessel, 
-                                 to_vessel=self.separation_vessel, 
-                                 to_port=TOP_PORT, volume='all'),
-                        # Move solvent to separation_vessel. Bottom as washes any reagent from previous separation back into funnel.
-                        Add(reagent=self.solvent, volume=self.solvent_volume,
-                            vessel=self.separation_vessel, port=BOTTOM_PORT,
-                            waste_vessel=self.waste_vessel),
-                        # Stir separation_vessel
-                        StirAtRT(vessel=self.separation_vessel, 
-                                 time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
-                                 stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
-                        StirAtRT(vessel=self.separation_vessel, 
-                                 time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
-                                 stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
-                        # Wait for phases to separate
-                        Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
-                    ])
-            remove_volume = 2
-            self.steps.extend([
-                Transfer(from_vessel=self.separation_vessel, 
-                         from_port=BOTTOM_PORT,
-                         to_vessel=self.waste_vessel,
-                         volume=remove_volume),
-                # Do separation
-                CSeparate(lower_phase_vessel=self.to_vessel,
-                          lower_phase_port=self.to_port,
-                          upper_phase_vessel=self.waste_phase_to_vessel,
-                          upper_phase_port=self.waste_phase_to_port,
-                          separation_vessel=self.separation_vessel,
-                          dead_volume_target=self.waste_vessel),
-            ])
-        else:
-            if n_washes > 1:
-                for i in range(n_washes - 1):
-                    self.steps.extend([
-                        Transfer(from_vessel=separator_bottom,
-                                 to_vessel=self.waste_vessel,
-                                 volume=remove_volume),
-                        CSeparate(lower_phase_vessel=self.waste_phase_to_vessel,
-                                  lower_phase_port=self.waste_phase_to_port,
-                                  upper_phase_vessel=self.separation_vessel,
-                                  separation_vessel=self.separator_vessel,
-                                  dead_volume_target=self.waste_vessel),
-                        # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, volume=self.solvent_volume, 
-                            vessel=self.separation_vessel, port=BOTTOM_PORT, 
-                            waste_vessel=self.waste_vessel),
-                        # Stir separation_vessel
-                        StirAtRT(vessel=self.separation_vessel,
-                                 time=DEFAULT_SEPARATION_FAST_STIR_TIME,
-                                 stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
-                        StirAtRT(vessel=self.separation_vessel,
-                                 time=DEFAULT_SEPARATION_SLOW_STIR_TIME,
-                                 stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
-                        # Wait for phases to separate
-                        Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
-                    ])
-            self.steps.extend([
-                Transfer(from_vessel=separator_bottom, 
-                         to_vessel=self.waste_vessel, volume=remove_volume),
-                # Do separation
-                CSeparate(lower_phase_vessel=self.waste_phase_to_vessel, 
-                          lower_phase_port=self.waste_phase_to_port,
-                          upper_phase_vessel=self.to_vessel,
-                          upper_phase_port=self.to_port,
-                          separation_vessel=self.separation_vessel,
-                          dead_volume_target=self.waste_vessel),
-            ])
-
-        self.human_readable = 'Wash contents of {0} {1} with {2} ({3}x{4} mL). Transfer waste phase to {5} {6} and product phase to {7} {8}.'.format(
-            self.from_vessel, get_port_str(self.from_port), self.solvent,
-            self.n_washes, self.solvent_volume, self.waste_phase_to_vessel,
-            get_port_str(self.waste_phase_to_port), self.to_vessel, self.to_port)
-
-class StirAtRT(Step):
-    """Stir given vessel for given time at room temperature.
-
-    Keyword Arguments:
-        vessel {str} -- Vessel to stir.
-        time {float} -- Time to stir for.
-    """
-    def __init__(self, vessel=None, time=None, stir_rpm='default'):
-
-        self.properties = {
-            'vessel': vessel,
-            'time': time,
-            'stir_rpm': stir_rpm,
+            'msg': msg,
         }
 
-        self.get_defaults()
-
-        self.steps = [
-            StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm),
-            Wait(time=self.time),
-            CStopStir(vessel=self.vessel),
-        ]
-
-        self.human_readable = f'Stir {vessel} for {time} s.'
-
-class PrepareFilter(Step):
-    """Fill bottom of filter vessel with solvent in anticipation of the filter top being used.
-
-    Keyword Arguments:
-        filter_vessel {str} -- Filter vessel name to prepare (generic name 'filter' not 'filter_filter_bottom').
-        solvent {str} -- Solvent to fill filter bottom with.
-        volume {int} -- Volume of filter bottom.
-        waste_vessel {str} -- Vessel to put waste material.
-    """
-    def __init__(self, filter_vessel=None, solvent=None, volume=10, waste_vessel=None):
-
-        self.properties = {
-            'filter_vessel': filter_vessel,
-            'solvent': solvent,
-            'volume': volume, # This value should be replaced when XDL calls prepare_for_execution.
-            'waste_vessel': waste_vessel,
-        }
-        self.steps = [
-            Add(reagent=self.solvent, volume=self.volume,
-                vessel=self.filter_vessel, port="bottom", waste_vessel=waste_vessel,)
-        ]
-
-        self.human_readable = f'Fill bottom of {self.filter_vessel} with {solvent} ({volume} mL).'
-
-class RemoveFilterDeadVolume(Step):
-    """Remove dead volume (volume below filter) from filter vessel.
-    
-    Args:
-        filter_vessel (str): Filter vessel ID to remove dead volume from.
-        dead_volume (float): Volume in mL to remove from bottom of filter vessel.
-    """
-    def __init__(self, filter_vessel=None, dead_volume=0, waste_vessel=None):
-
-        self.properties = {
-            'filter_vessel': filter_vessel,
-            'dead_volume': dead_volume,
-            'waste_vessel': waste_vessel,
-        }
-
-        self.steps = [
-            Transfer(from_vessel=self.filter_vessel, to_vessel=self.waste_vessel, 
-                     volume=self.dead_volume)
-        ]
-
-        self.human_readable = 'Remove dead volume ({0} mL) from bottom of {1}'.format(filter_vessel, dead_volume)
-
-def get_port_str(port):
-    """Get str representing port for using in human_readable strings.
-    
-    Args:
-        port (str): Port name
-    
-    Returns:
-        str: if port is 'top' return '(port top)' if port is None return ''
-    """
-    if port:
-        return '(port {0})'.format(port)
-    return ''
+    def execute(self, chempiler):
+        keep_going = input(self.msg)
+        if not keep_going or keep_going.lower() in ['y', 'yes']:
+            return True
+        return False

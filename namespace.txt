@@ -10,16 +10,18 @@ Filter
 WashFilterCake
 Dry
 
-Extract
-WashSolution
+Separate
+
 RunColumn
 
 Reflux
-Heat
-Chill
 
 CleanBackbone
 CleanVessel
+
+Reflux
+
+Rotavap
 
 Wait
 Confirm
@@ -32,6 +34,8 @@ Confirm
 PrepareFilter
 RemoveFilterDeadVoolume
 
+PrimePumpForAdd
+
 StartVacuum
 StopVacuum
 
@@ -41,6 +45,7 @@ StopHeat
 StartChiller
 StopChiller
 
+StirAtRT
 
 ##############
 # Base Steps #

@@ -7,8 +7,7 @@ from ..safety import procedure_is_safe
 # Steps after which backbone should be cleaned
 CLEAN_BACKBONE_AFTER_STEPS = [
     Add,
-    WashSolution,
-    Extract,
+    Separate,
     MakeSolution,
     WashFilterCake,
     Filter,
@@ -131,7 +130,7 @@ class XDLExecutor(object):
         elif type(step) in [PrepareFilter, Filter, Dry, WashFilterCake]:
             nearest_node = step.filter_vessel
 
-        elif type(step) in [WashSolution, Extract]:
+        elif type(step) == Separation:
             nearest_node = step.separation_vessel
 
         if not nearest_node:

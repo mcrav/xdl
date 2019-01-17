@@ -4,7 +4,7 @@ import copy
 
 BASE_STEP_OBJ_DICT = {
     'Move': CMove,
-    'Separate': CSeparate,
+    'Separate': CSeparatePhases,
     'Prime': CPrime,
     'SwitchVacuum': CSwitchVacuum,
     'SwitchCartridge': CSwitchCartridge,
@@ -44,7 +44,6 @@ BASE_STEP_OBJ_DICT = {
     'SetRecordingSpeed': CSetRecordingSpeed,
     'CWait': CWait,
     'Breakpoint': CBreakpoint,
-    'Confirm': Confirm,
 }
 
 XDL_STEP_OBJ_DICT = {
@@ -53,22 +52,20 @@ XDL_STEP_OBJ_DICT = {
     'StartHeat': StartHeat,
     'StopChiller': StopChiller,
     'CleanVessel': CleanVessel,
-    'ContinueStirToRT': ContinueStirToRT,
     'Chill': Chill,
-    'ChillBackToRT': ChillBackToRT,
     'Add': Add,
     'Filter': Filter,
     'Dry': Dry,
     'Wait': Wait,
-    'Extract': Extract,
     'WashFilterCake': WashFilterCake,
+    'Separate': Separate,
     'Transfer': Transfer,
-    'Wash': WashSolution,
     'MakeSolution': MakeSolution,
     'Reflux': Reflux,
     'PrimePumpForAdd': PrimePumpForAdd,
     'PrepareFilter': PrepareFilter,
     'RemoveFilterDeadVolume': RemoveFilterDeadVolume,
+    'Confirm': Confirm,
 }
 
 STEP_OBJ_DICT = copy.copy(BASE_STEP_OBJ_DICT)

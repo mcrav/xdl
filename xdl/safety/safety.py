@@ -1,6 +1,6 @@
 
 from .utils import cas_str_to_int, find_reagent_obj
-from ..steps import Add, MakeSolution, CMove, Transfer, Extract, WashFilterCake
+from ..steps import Add, MakeSolution, CMove, Transfer, Separate, WashFilterCake
 import itertools
 import copy
 

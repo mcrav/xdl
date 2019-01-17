@@ -1,4 +1,5 @@
 from ..constants import *
+from ..utils.misc import get_port_str
 from .base_step import Step
 
 class CMove(Step):
@@ -14,7 +15,8 @@ class CMove(Step):
         dispense_speed -- Speed at which liquid dispenses from from_vessel. (optional)
     """
     def __init__(self, from_vessel=None, to_vessel=None, volume=None,
-                       move_speed='default', from_port=None, to_port=None,
+                       move_speed='default', aspiration_speed='default',
+                       dispense_speed='default', from_port=None, to_port=None,
                        unique=True):
 
         self.properties = {
@@ -27,19 +29,18 @@ class CMove(Step):
         }
         self.get_defaults()
 
-        if from_port and to_port:
-            self.human_readable = f'Move {self.volume} mL from {self.from_port} port of {self.from_vessel} to {self.to_port} of {self.to_vessel}.'
-        else:
-            self.human_readable = f'Move {self.volume} mL from {self.from_vessel} to {self.to_vessel}.'
+        self.human_readable = 'Move {0} mL from {1} {2} to {3} {4}.'.format(
+            self.volume, self.from_vessel, get_port_str(self.from_port),
+            self.to_vessel, get_port_str(self.to_port))
 
-        self.literal_code = f'chempiler.move( src_node={self.from_vessel}, dst_node={self.to_vessel}, volume={self.volume}, speed={self.move_speed}, src_port={self.from_port}, dst_port={self.to_port}, unique={self.unique}, )'
+        self.literal_code = f'chempiler.move( src_node={self.from_vessel}, dst_node={self.to_vessel}, volume={self.volume}, speed=({self.aspiration_speed}, {self.move_speed}, {self.dispense_speed}), src_port={self.from_port}, dst_port={self.to_port}, unique={self.unique}, )'
 
     def execute(self, chempiler):
         chempiler.move(
             src_node=self.from_vessel,
             dst_node=self.to_vessel,
             volume=self.volume,
-            speed=self.move_speed,
+            speed=(self.aspiration_speed, self.move_speed, self.dispense_speed),
             src_port=self.from_port,
             dst_port=self.to_port,
             unique=self.unique,
@@ -48,8 +49,8 @@ class CMove(Step):
 
 class CSeparatePhases(Step):
 
-    def __init__(self, lower_phase_vessel,  upper_phase_vessel, 
-                       separation_vessel, dead_volume_target, 
+    def __init__(self, lower_phase_vessel,  upper_phase_vessel,
+                       separation_vessel, dead_volume_target,
                        lower_phase_port=None, upper_phase_port=None):
         """
         Args:
@@ -96,6 +97,7 @@ class CPrime(Step):
             'aspiration_speed': aspiration_speed,
         }
         self.get_defaults()
+            aspiration_speed)
 
         self.literal_code = f'chempiler.pump.prime_tubes({self.aspiration_speed})'
 

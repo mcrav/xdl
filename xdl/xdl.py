@@ -88,23 +88,16 @@ class XDL(object):
                     additions_l.append((solute, 0))
                     vessel_contents[step.vessel].append((solute, 0))
 
-            elif type(step) == Extract:
+            elif type(step) == Separate:
                 if step.from_vessel != step.separation_vessel:
-                    vessel_contents[step.from_vessel].clear()
                     additions_l.extend(vessel_contents[step.from_vessel])
                 vessel_contents.setdefault(step.to_vessel, []).append(
                     (step.solvent, step.solvent_volume))
+                vessel_contents[step.to_vessel].extend(vessel_contents[step.from_vessel])
+                vessel_contents[step.from_vessel].clear()
                 # vessel_contents.setdefault(step.waste_vessel, []).extend(
                 #   vessel_contents[step.from_vessel])
                 additions_l.append((step.solvent, step.solvent_volume))
-
-            elif type(step) == WashSolution:
-                additions_l.extend(vessel_contents[step.from_vessel])
-                additions_l.append((step.solvent, step.solvent_volume))
-                vessel_contents[step.to_vessel] = copy.copy(
-                    vessel_contents[step.from_vessel])
-                if not step.from_vessel == step.to_vessel:
-                    vessel_contents[step.from_vessel].clear()
 
             elif type(step) == WashFilterCake:
                 additions_l.append((step.solvent, step.volume))
@@ -174,7 +167,7 @@ class XDL(object):
             dry_run (bool, optional): Defaults to False. 
                 Don't include Wait steps in dry run.
         """
-        s = f'from chempiler import Chempiler\n\nchempiler = Chempiler(r"{self._get_exp_id(default="xdl_simulation")}", "{self.graphml_file}", "output_dir", False)\n\nchempiler.start_recording()\nchempiler.camera.change_recording_speed(14)\n'
+        s = 'from chempiler import Chempiler\n\nchempiler = Chempiler(r"{self._get_exp_id(default="xdl_simulation")}", "{self.graphml_file}", "output_dir", False)\n\nchempiler.start_recording()\nchempiler.camera.change_recording_speed(14)\n'
         full_tree = self._get_full_xdl_tree()
         base_steps = list(BASE_STEP_OBJ_DICT.values())
         for step in full_tree:
