@@ -123,6 +123,9 @@ CHEMPUTER_VACUUM_CLASS_NAME = 'chemputer_vacuum'
 CHEMPUTER_PUMP_CLASS_NAME = 'chemputer_pump'
 CHEMPUTER_VALVE_CLASS_NAME = 'chemputer_valve'
 
+BOTTOM_PORT = 'bottom'
+TOP_PORT = 'top'
+
 
 ############
 ### MISC ###
