@@ -5,29 +5,31 @@ import json
 from ..hardware.components import Component, Hardware
 from ..constants import CHEMPUTER_WASTE_CLASS_NAME
 
-def get_graph(graphml_file=None, json_graph_file=None, json_graph_dict=None):
+def get_graph(graph_file):
     """Given one of the args available, return a networkx Graph object.
 
     Args:
-        graphml_file (str, optional): Path to graphML file.
-        json_graph_file (str, optional): Path to file containing node link JSON 
-                                         graph.
-        json_graph_str (str, optional): Graph in node link JSON format.
+        graph_file (str, optional): Path to graph file. May be GraphML file,
+            JSON file with graph in node link format, or dict containing graph
+            in same format as JSON file.
     
     Returns:
         networkx.classes.multidigraph: MultiDiGraph object.
     """
     graph = None
-    if graphml_file != None:
-        graph = MultiDiGraph(read_graphml(graphml_file))
+    if type(graph_file) == str:
+        if graph_file.lower().endswith('.graphml'):
+            graph = MultiDiGraph(read_graphml(graph_file))
 
-    elif json_graph_file:
-        with open(json_graph_file) as fileobj:
-            json_data = json.load(fileobj)
-            graph = json_graph.node_link_graph(json_data, directed=True)
-            
-    elif json_graph_dict:
-        graph = json_graph.node_link_graph(json_graph_dict, directed=True)
+        elif graph_file.lower().endswith('.json'):
+            with open(graph_file) as fileobj:
+                json_data = json.load(fileobj)
+                graph = json_graph.node_link_graph(
+                    json_data, directed=True, multigraph=True)
+
+    elif type(graph_file) == dict:
+        graph = json_graph.node_link_graph(
+            graph_file, directed=True, multigraph=True)
     return graph
 
 def hardware_from_graph(graph):

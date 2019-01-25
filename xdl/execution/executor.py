@@ -461,25 +461,23 @@ class XDLExecutor(object):
     ######################
 
     def prepare_for_execution(
-        self, graphml_file=None, json_graph_dict=None, json_graph_file=None):
+        self, graph_file):
         """
         Prepare the XDL for execution on a Chemputer corresponding to the given
         graph. Any one of graphml_file, json_data, or json_file must be given.
         
         Args:
-            graphml_file (str, optional): Path to graphML file.
-            json_graph_dict (dict, optional): Graph in node link JSON format.
-            json_graph_file (str, optional): Path to file containing node link JSON 
-                                       graph.
+            graph_file (str, optional): Path to graph file. May be GraphML file,
+                                        JSON file with graph in node link format,
+                                        or dict containing graph in same format
+                                        as JSON file.
         """
         if not self._prepared_for_execution:
             # Check XDL is not empty.
             if self._xdl.steps:
                 print('XDL is valid')
 
-                self._graph = get_graph(
-                    graphml_file=graphml_file, json_graph_file=json_graph_file, 
-                    json_graph_dict=json_graph_dict)
+                self._graph = get_graph(graph_file)
                 # Load graph, make Hardware object from graph, and map nearest
                 # waste vessels to every node.
                 self._graph_hardware = hardware_from_graph(self._graph)

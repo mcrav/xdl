@@ -25,24 +25,24 @@ class XDL(object):
         iter_vessel_contents -- Return iterator of vessel_contents at each step.
     """
     def __init__(
-        self, xdl_file=None, xdl_str=None, steps=[], hardware=None, reagents=[]):
+        self, xdl=None, steps=[], hardware=None, reagents=[]):
         """Init method for XDL object.
-        One of xdl_file, xdl_str or (steps, hardware and reagents) must be given.
+        One of xdl or (steps, hardware and reagents) must be given.
         
         Args:
-            xdl_file(str, optional): Path to XDL file.
-            xdl_str(str, optional): XDL str. 
+            xdl(str, optional): Path to XDL file or XDL str.
             steps (List[Step], optional): List of Step objects.
             hardware (Hardware, optional): Hardware object containing all 
                 components in XDL.
             reagents (List[Reagent], optional): List of Reagent objects.
         """
         self._xdl_file = None
-        if xdl_file:
-            self._xdl_file = xdl_file
-            self.steps, self.hardware, self.reagents = xdl_file_to_objs(xdl_file)
-        elif xdl_str:
-            self.steps, self.hardware, self.reagents = xdl_str_to_objs(xdl_str)
+        if xdl:
+            if os.path.exists(xdl):
+                self._xdl_file = xdl
+                self.steps, self.hardware, self.reagents = xdl_file_to_objs(xdl)
+            else:
+                self.steps, self.hardware, self.reagents = xdl_str_to_objs(xdl)
         elif steps and hardware and reagents:
             self.steps, self.hardware, self.reagents = steps, hardware, reagents
         else:
@@ -236,11 +236,10 @@ class XDL(object):
     def save(self, save_file):
         self._xdlgenerator.save(save_file)
 
-    def execute(self, chempiler, json_graph_dict=None, json_graph_file=None, 
-                      graphml_file=None):
-        xdl_executor = XDLExecutor(self)
-        xdl_executor.prepare_for_execution(
-            json_graph_dict=json_graph_dict, json_graph_file=json_graph_file, 
-            graphml_file=graphml_file)
-        xdl_executor.execute(chempiler)
+    def prepare_for_execution(self, graph_file):
+        self._xdl_executor = XDLExecutor(self)
+        self._xdl_executor.prepare_for_execution(graph_file)
+
+    def execute(self, chempiler):
+        self._xdl_executor.execute(chempiler)
 
