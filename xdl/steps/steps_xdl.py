@@ -80,15 +80,13 @@ class PrimePumpForAdd(Step):
         reagent {str} -- Reagent to prime pump for addition.
         move_speed {str} -- Speed to move reagent at. (optional)
     """
-    def __init__(self, reagent, reagent_vessel=None, waste_vessel=None, move_speed='default',):
+    def __init__(self, reagent_vessel=None, waste_vessel=None, move_speed='default',):
 
         self.properties = {
-            'reagent': reagent,
             'reagent_vessel': reagent_vessel,
             'waste_vessel': waste_vessel,
             'move_speed': move_speed,
         }
-
         self.steps = [
             CMove(from_vessel=self.reagent_vessel, to_vessel=self.waste_vessel,
                     volume=DEFAULT_PUMP_PRIME_VOLUME, move_speed=move_speed)
@@ -348,7 +346,8 @@ class Add(Step):
         self.get_defaults()
 
         self.steps = []
-        self.steps.append(PrimePumpForAdd(reagent=reagent, waste_vessel=waste_vessel))
+        self.steps.append(PrimePumpForAdd(
+            reagent_vessel=self.reagent_vessel, waste_vessel=self.waste_vessel))
         self.steps.append(
             CMove(from_vessel=self.reagent_vessel, to_vessel=self.vessel, 
                   to_port=self.port, volume=self.volume, move_speed=self.move_speed))

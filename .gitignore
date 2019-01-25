@@ -9,9 +9,11 @@ build
 *.pyo
 __pycache__/
 build
+xdl.egg-info
+
 logs
 lidocaine
+tests/chempiler_output/
 
 # other shite
 .vscode
-

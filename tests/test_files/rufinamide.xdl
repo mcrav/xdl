@@ -1,8 +1,6 @@
 <!-- Tests unclosed steps, Add, StartStir, StartHeat, Wait and defaults -->
 <Synthesis>
     <Hardware>
-        <Flask
-            id="flask_ammonia" />
         <Reactor
             id="reactor1" />
     </Hardware>

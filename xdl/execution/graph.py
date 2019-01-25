@@ -5,13 +5,14 @@ import json
 from ..hardware.components import Component, Hardware
 from ..constants import CHEMPUTER_WASTE_CLASS_NAME
 
-def get_graph(graphml_file=None, json_file=None, json_data=None):
+def get_graph(graphml_file=None, json_graph_file=None, json_graph_dict=None):
     """Given one of the args available, return a networkx Graph object.
 
     Args:
         graphml_file (str, optional): Path to graphML file.
-        json_data (str, optional): Graph in node link JSON format.
-        json_file (str, optional): Path to file containing node link JSON graph.
+        json_graph_file (str, optional): Path to file containing node link JSON 
+                                         graph.
+        json_graph_str (str, optional): Graph in node link JSON format.
     
     Returns:
         networkx.classes.multidigraph: MultiDiGraph object.
@@ -20,13 +21,13 @@ def get_graph(graphml_file=None, json_file=None, json_data=None):
     if graphml_file != None:
         graph = MultiDiGraph(read_graphml(graphml_file))
 
-    elif json_file:
-        with open(json_file) as fileobj:
+    elif json_graph_file:
+        with open(json_graph_file) as fileobj:
             json_data = json.load(fileobj)
             graph = json_graph.node_link_graph(json_data, directed=True)
             
-    elif json_data:
-        graph = json_graph.node_link_graph(json_data, directed=True)
+    elif json_graph_dict:
+        graph = json_graph.node_link_graph(json_graph_dict, directed=True)
     return graph
 
 def hardware_from_graph(graph):
@@ -41,8 +42,10 @@ def hardware_from_graph(graph):
     """
     components = []
     for node in graph.nodes():
-        node_info = graph.node[node]
-        components.append(Component(node, node_info['properties']))
+        print('NODE', graph.node[node])
+        props = graph.node[node]
+        props['type'] = props['class']
+        components.append(Component(node, props))
     return Hardware(components)
 
 def make_waste_map(graph):
@@ -60,12 +63,12 @@ def make_waste_map(graph):
     # Get all waste nodes.
     wastes = [
         node for node in graph.nodes() 
-        if (graph.node[node]['properties']['node_type'] 
+        if (graph.node[node]['type'] 
             == CHEMPUTER_WASTE_CLASS_NAME)
     ]
     for node in graph.nodes():
-        node_info = graph.node[node]['properties']
-        if node_info['node_type'] != CHEMPUTER_WASTE_CLASS_NAME:
+        node_info = graph.node[node]
+        if node_info['type'] != CHEMPUTER_WASTE_CLASS_NAME:
             # Find out which waste has shortest path through graph from node.
             shortest_path_found = 100000
             closest_waste_vessel = None

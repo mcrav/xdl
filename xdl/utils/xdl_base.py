@@ -28,9 +28,7 @@ class XDLBase(object):
                 try:
                     self.properties[k] = DEFAULT_VALS[self.name][k]
                 except KeyError as e:
-                    print(self.name)
-                    print(k)
-                    raise KeyError
+                    raise e 
 
     def __setattr__(self, name, value):
         """

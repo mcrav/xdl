@@ -1,12 +1,14 @@
 from xdl import XDL
 import os
 from syntax_validation_tests import test_syntax_validation
+from executor_tests import test_xdl_executor
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 
 def run_tests():
     return [
-        ('Syntax Validation', test_syntax_validation()),
+        # ('Syntax Validation', test_syntax_validation()),
+        ('XDLExecutor', test_xdl_executor())
     ]
 
 def full_test():

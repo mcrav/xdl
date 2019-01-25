@@ -108,6 +108,9 @@ DEFAULT_VALS = {
     'StirAtRT': {
         'stir_rpm': DEFAULT_STIR_RPM,
     },
+    'StartStir': {
+        'stir_rpm': DEFAULT_STIR_RPM,
+    }
 }
 
 
@@ -115,17 +118,28 @@ DEFAULT_VALS = {
 ### CHEMPUTER DEVICE CLASS NAMES ###
 ####################################
 
-CHEMPUTER_REACTOR_CLASS_NAME = 'chemputer_reactor'
-CHEMPUTER_SEPARATOR_CLASS_NAME = 'chemputer_separator'
-CHEMPUTER_FILTER_CLASS_NAME = 'chemputer_filter'
-CHEMPUTER_FLASK_CLASS_NAME = 'chemputer_flask'
-CHEMPUTER_WASTE_CLASS_NAME = 'chemputer_waste'
-CHEMPUTER_VACUUM_CLASS_NAME = 'chemputer_vacuum'
-CHEMPUTER_PUMP_CLASS_NAME = 'chemputer_pump'
-CHEMPUTER_VALVE_CLASS_NAME = 'chemputer_valve'
+CHEMPUTER_REACTOR_CLASS_NAME = 'ChemputerReactor'
+CHEMPUTER_SEPARATOR_CLASS_NAME = 'ChemputerSeparator'
+CHEMPUTER_FILTER_CLASS_NAME = 'ChemputerFilter'
+CHEMPUTER_FLASK_CLASS_NAME = 'ChemputerFlask'
+CHEMPUTER_WASTE_CLASS_NAME = 'ChemputerWaste'
+CHEMPUTER_VACUUM_CLASS_NAME = 'ChemputerVacuum'
+CHEMPUTER_PUMP_CLASS_NAME = 'ChemputerPump'
+CHEMPUTER_VALVE_CLASS_NAME = 'ChemputerValve'
 
 BOTTOM_PORT = 'bottom'
 TOP_PORT = 'top'
+
+XDL_HARDWARE_CHEMPUTER_CLASS_MAP = {
+    'Filter': CHEMPUTER_FILTER_CLASS_NAME,
+    'Reactor': CHEMPUTER_REACTOR_CLASS_NAME,
+    'Separator': CHEMPUTER_SEPARATOR_CLASS_NAME,
+    'Flask': CHEMPUTER_FLASK_CLASS_NAME,
+    'Waste': CHEMPUTER_WASTE_CLASS_NAME,
+    'Vacuum': CHEMPUTER_VACUUM_CLASS_NAME,
+    'Pump': CHEMPUTER_PUMP_CLASS_NAME,
+    'Valve': CHEMPUTER_VALVE_CLASS_NAME
+}
 
 
 ############

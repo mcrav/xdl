@@ -1,34 +1,42 @@
-# XDL Interpreter
+# XDL
 
-## Project Roadmap
+This package provides code relevant to the chemical description language (XDL) standard. It provides a XDL object which can be instantiated from a XDL file or from appropriate objects, then execute itself or write itself to a file.
 
-### Dangerous reagent combinations (ChemBrain)
+## Usage
 
-1. Create system where generics such as alcohol can be used instead of listing the CAS of every alcohol.
-2. Create record of dangerous reagent combinations.
+### Install package from terminal (Linux)
 
-### Waste
+`git clone http://datalore.chem.gla.ac.uk/Chemputer/XDL`
 
-1. Create database of where different reagents should be added to waste.
-2. Ask user if unsure where to waste reagent.
-3. Prompt user if insufficient waste vessels available in graphML
+`cd /home/user/XDL`
 
-### Documentation
+`pip install -e .`
 
-1. Formal XDL documentation
-2. Formal GraphML documentation
+### Use in Python script
 
-### Close Open Commands
+`from xdl import XDL`
 
-1. Make system more intelligent. Close command when reactor is empty.
+`from chempiler import Chempiler`
 
-### Decide on concrete namespace
+`import SerialLabware`
 
-### Syntax Validation
+`import ChemputerAPI`
 
-1. Complete list of compulsory attributes and make test files.
+`xdl = XDL('/path/to/file.xdl')`
 
-### Unit Testing
+`graph_file = '/path/to/graph_file.json'`
 
-1. Hardware mapping
-2. Waste mapping
+`xdl.prepare_for_execution(graph_file=graph_file)`
+
+`
+chempiler = Chempiler(
+    experiment_code='exp',  
+    output_dir='/path/to/exp_dir',  
+    simulation=True,  
+    graph_file=graph_file,  
+    device_modules=[  
+        SerialLabware, ChemputerAPI  
+    ])
+`
+
+`xdl.execute(chempiler)`

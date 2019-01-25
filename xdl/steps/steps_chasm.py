@@ -24,8 +24,11 @@ class CMove(Step):
             'to_vessel': to_vessel,
             'volume': volume,
             'move_speed': move_speed,
+            'aspiration_speed': aspiration_speed,
+            'dispense_speed': dispense_speed,
             'from_port': from_port,
             'to_port': to_port,
+            'unique': unique,
         }
         self.get_defaults()
 

@@ -4,6 +4,7 @@ from .utils.namespace import BASE_STEP_OBJ_DICT
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 from .readwrite import XDLGenerator
 from .safety import procedure_is_safe
+from .execution import XDLExecutor
 import os
 import re
 import copy
@@ -113,29 +114,53 @@ class XDL(object):
 
             elif type(step) == Transfer:
                 from_vessel = step.from_vessel
-                if ('filter' in from_vessel and ('top' in from_vessel or 
-                    'bottom' in from_vessel)):
-                    from_vessel = from_vessel.split('_')[1]
                 additions_l.extend(vessel_contents[from_vessel])
                 vessel_contents.setdefault(step.to_vessel, []).extend(
                     vessel_contents[from_vessel])
                 vessel_contents[from_vessel].clear()
 
-            if additions_l:
-                for vessel in list(vessel_contents.keys()):
-                    if 'filter' in vessel and 'top' in vessel:
-                        bottom_vessel = vessel.split('_')[1]
-                        if bottom_vessel in vessel_contents:
-                            vessel_contents[bottom_vessel].extend(
-                                vessel_contents[vessel])
-                        else:
-                            vessel_contents[bottom_vessel] = vessel_contents[vessel]
-                        vessel_contents[vessel] = []
-
             if additions:
                 yield (i, step, copy.deepcopy(vessel_contents), additions_l)
             else:
                 yield (i, step, copy.deepcopy(vessel_contents))
+
+    def climb_down_tree(self, step, print_tree=False, lvl=0):
+        """Go through given step's sub steps recursively until base steps are reached.
+        Return list containing the step, all sub steps and all base steps.
+        
+        Args:
+            step (Step): step to find all sub steps for.
+            print_tree (bool, optional): Defaults to False.
+                Print tree as well as returning it.
+            lvl (int, optional): Level of recursion. Defaults to 0. 
+                Used to determine indent level when print_tree=True.
+        
+        Returns:
+            List[Step]: List of all Steps involved with given step. 
+                        Includes given step, and all sub steps all the way down to 
+                        base steps.
+        """
+        indent = '  '
+        base_steps = list(BASE_STEP_OBJ_DICT.values())
+        tree = [step]
+        if print_tree:
+            print(f'{indent*lvl}{step.name}' + ' {')
+        if type(step) in base_steps:
+            return tree
+        else:
+            lvl += 1
+            for step in step.steps:
+                if type(step) in base_steps:
+                    if print_tree:
+                        print(f'{indent*lvl}{step.name}')
+                    tree.append(step)
+                    continue
+                else:
+                    tree.extend(
+                        self.climb_down_tree(step, print_tree=print_tree, lvl=lvl))
+            if print_tree:
+                print(f'{indent*(lvl-1)}' + '}')
+        return tree
 
     def _get_full_xdl_tree(self):
         """
@@ -148,7 +173,7 @@ class XDL(object):
         """
         tree = []
         for step in self.steps:
-            tree.extend(climb_down_tree(step))
+            tree.extend(self.climb_down_tree(step))
         return tree
 
     def print_full_xdl_tree(self):
@@ -156,7 +181,7 @@ class XDL(object):
         print('\n')
         print('Operation Tree\n--------------\n')
         for step in self.steps:
-            climb_down_tree(step, print_tree=True)
+            self.climb_down_tree(step, print_tree=True)
         print('\n')
 
     def as_literal_chempiler_code(self, dry_run=False):
@@ -211,41 +236,11 @@ class XDL(object):
     def save(self, save_file):
         self._xdlgenerator.save(save_file)
 
+    def execute(self, chempiler, json_graph_dict=None, json_graph_file=None, 
+                      graphml_file=None):
+        xdl_executor = XDLExecutor(self)
+        xdl_executor.prepare_for_execution(
+            json_graph_dict=json_graph_dict, json_graph_file=json_graph_file, 
+            graphml_file=graphml_file)
+        xdl_executor.execute(chempiler)
 
-def climb_down_tree(step, print_tree=False, lvl=0):
-    """Go through given step's sub steps recursively until base steps are reached.
-    Return list containing the step, all sub steps and all base steps.
-    
-    Args:
-        step (Step): step to find all sub steps for.
-        print_tree (bool, optional): Defaults to False.
-            Print tree as well as returning it.
-        lvl (int, optional): Level of recursion. Defaults to 0. 
-            Used to determine indent level when print_tree=True.
-    
-    Returns:
-        List[Step]: List of all Steps involved with given step. 
-                    Includes given step, and all sub steps all the way down to 
-                    base steps.
-    """
-    indent = '  '
-    base_steps = list(BASE_STEP_OBJ_DICT.values())
-    tree = [step]
-    if print_tree:
-        print(f'{indent*lvl}{step.name}' + ' {')
-    if type(step) in base_steps:
-        return tree
-    else:
-        lvl += 1
-        for step in step.steps:
-            if type(step) in base_steps:
-                if print_tree:
-                    print(f'{indent*lvl}{step.name}')
-                tree.append(step)
-                continue
-            else:
-                tree.extend(
-                    climb_down_tree(step, print_tree=print_tree, lvl=lvl))
-        if print_tree:
-            print(f'{indent*(lvl-1)}' + '}')
-    return tree

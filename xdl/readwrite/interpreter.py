@@ -6,6 +6,7 @@ from ..reagents import Reagent
 from ..hardware import Hardware, Component
 from .syntax_validation import XDLSyntaxValidator
 from ..utils.namespace import (STEP_OBJ_DICT, BASE_STEP_OBJ_DICT)
+from ..constants import XDL_HARDWARE_CHEMPUTER_CLASS_MAP
 
 def xdl_file_to_objs(xdl_file):
     """Given XDL file return steps, hardware and reagents.
@@ -131,9 +132,10 @@ def xdl_to_step(xdl_step_element):
     Returns:
         Step -- Step object corresponding to step in xdl_step_element.
     """
-    step = STEP_OBJ_DICT[xdl_step_element.tag]()
-    step.load_properties(preprocess_step_attrib(step, xdl_step_element.attrib))
-    return step
+    step_type = STEP_OBJ_DICT[xdl_step_element.tag]
+    return step_type(
+        **preprocess_step_attrib(step_type, xdl_step_element.attrib)
+    )
 
 def xdl_to_component(xdl_component_element):
     """Given XDL component element return corresponding Component object.
@@ -146,8 +148,10 @@ def xdl_to_component(xdl_component_element):
         Component -- Component object corresponding to component in 
                      xdl_component_element.
     """
-    component = Component()
-    component.load_properties(preprocess_attrib(xdl_component_element.attrib))        
+    attr = preprocess_attrib(xdl_component_element.attrib)
+    attr['type'] = XDL_HARDWARE_CHEMPUTER_CLASS_MAP[
+        xdl_component_element.tag]
+    component = Component(attr['xid'], attr)  
     return component
 
 def xdl_to_reagent(xdl_reagent_element):
@@ -164,7 +168,7 @@ def xdl_to_reagent(xdl_reagent_element):
     reagent.load_properties(preprocess_attrib(xdl_reagent_element.attrib))
     return reagent
 
-def preprocess_step_attrib(step, attrib):
+def preprocess_step_attrib(step_type, attrib):
     """Process:
     1. Convert strs to bools i.e. 'false' -> False
     2. Convert all time strs to floats with second as unit.
@@ -201,7 +205,7 @@ def preprocess_step_attrib(step, attrib):
     if 'product_bottom' in attr:
         attr['product_bottom'] = parse_bool(attr['product_bottom'])
 
-    if isinstance(step, MakeSolution):
+    if step_type == MakeSolution:
         attr['solutes'] = attr['solutes'].split(' ')
         attr['solute_masses'] = attr['solute_masses'].split(' ')
         attr['solute_masses'] = [convert_mass_str_to_g(item) 
@@ -218,6 +222,7 @@ def preprocess_attrib(attrib):
         dict: Dict of processed attributes.
     """
     attr = dict(attrib)
-    attr['xid'] = attr['id']
-    del attr['id']
+    if 'id' in attr:
+        attr['xid'] = attr['id']
+        del attr['id']
     return attr

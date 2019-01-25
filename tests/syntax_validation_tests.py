@@ -16,7 +16,8 @@ def test_syntax_validation():
         with open(os.path.join(folder, f), 'r') as fileobj:
             validator = XDLSyntaxValidator(fileobj.read())
             
-        if (validator.valid and 'pos' in f) or (not validator.valid and 'neg' in f):
+        if ((validator.valid and 'pos' in f) 
+            or (not validator.valid and 'neg' in f)):
             passed_count += 1
         else:
             print(f'SYNTAX VALIDATION FAILED: {f}\n\n')
