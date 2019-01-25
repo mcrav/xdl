@@ -178,8 +178,7 @@ class XDL(object):
 
     def print_full_xdl_tree(self):
         """Print nested structure of all steps in XDL procedure."""
-        print('\n')
-        print('Operation Tree\n--------------\n')
+        print('\nOperation Tree\n--------------\n')
         for step in self.steps:
             self.climb_down_tree(step, print_tree=True)
         print('\n')
@@ -231,15 +230,41 @@ class XDL(object):
         print('\n')
 
     def as_string(self):
+        """Return XDL str of procedure."""
         return self._xdlgenerator.as_string()
 
     def save(self, save_file):
+        """Save as XDL file.
+        
+        Args:
+            save_file (str): File path to save XDL to.
+        """
         self._xdlgenerator.save(save_file)
 
     def prepare_for_execution(self, graph_file):
+        """Check hardware compatibility and prepare XDL for execution on given 
+        setup.
+        
+        Args:
+            graph_file (str, optional): Path to graph file. May be GraphML file,
+                                        JSON file with graph in node link format,
+                                        or dict containing graph in same format
+                                        as JSON file.
+        """
+
         self._xdl_executor = XDLExecutor(self)
         self._xdl_executor.prepare_for_execution(graph_file)
 
     def execute(self, chempiler):
-        self._xdl_executor.execute(chempiler)
+        """Execute XDL using given Chempiler object. self.prepare_for_execution
+        must have been called before calling thie method.
+        
+        Args:
+            chempiler (chempiler.Chempiler): Chempiler object instantiated with
+                modules and graph to run XDL on.
+        """
+        if self._xdl_executor:
+            self._xdl_executor.execute(chempiler)
+        else:
+            print('XDL executor not available. Call prepare_for_execution before trying to execute.')
 
