@@ -516,9 +516,23 @@ class Filter(Step):
         self.get_defaults()
 
         self.steps = [
-            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_top_volume, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
-            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=self.filter_bottom_volume, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
-            CMove(from_vessel=filter_bottom, to_vessel=self.waste_vessel, volume=DEFAULT_FILTER_MOVE_VOLUME, aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
+            # Remove dead volume from bottom of filter vessel.
+            CMove(
+                from_vessel=self.filter_vessel, to_vessel=self.waste_vessel,
+                volume=self.filter_bottom_volume,
+                aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
+            # Remove a little extra just to make sure.
+            CMove(
+                from_vessel=self.filter_vessel, to_vessel=self.waste_vessel,
+                volume=DEFAULT_FILTER_MOVE_VOLUME,
+                aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
+            # Connect the vacuum.
+            CConnect(from_port=self.vacuum, to_port=self.filter_vessel,
+                     from_port="bottom"),
+            # Move the filter top volume from the bottom to the waste.
+            CMove(
+                from_vessel=self.filter_vessel, to_vessel=self.waste_vessel,
+                from_port="bottom", volume=self.filter_top_volume),
         ]
 
         self.human_readable = f'Filter contents of {filter_vessel} for {time} s.'

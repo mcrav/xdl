@@ -24,8 +24,7 @@ class XDL(object):
         as_literal_chempiler_code -- Return XDL base steps as Python chempiler script.
         iter_vessel_contents -- Return iterator of vessel_contents at each step.
     """
-    def __init__(
-        self, xdl=None, steps=[], hardware=None, reagents=[]):
+    def __init__(self, xdl=None, steps=[], hardware=None, reagents=[]):
         """Init method for XDL object.
         One of xdl or (steps, hardware and reagents) must be given.
         

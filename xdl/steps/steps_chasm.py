@@ -50,6 +50,46 @@ class CMove(Step):
         )
         return True
 
+class CConnect(Step):
+    """Connect two nodes together.
+    
+    Args:
+        from_vessel (str): Node name to connect from.
+        to_vessel (str): Node name to connect to.
+        from_port (str): Port name to connect from.
+        to_port (str): Port name to connect to.
+        unique (bool): Must use unique route.
+    """
+    def __init__(self, from_vessel=None, to_vessel=None, from_port=None,
+                       to_port=None, unique=True):
+        
+        self.properties = {
+            'from_vessel': from_vessel,
+            'to_vessel': to_vessel,
+            'from_port': from_port,
+            'to_port': to_port,
+            'unique': unique,
+        }
+
+        self.human_readable = 'Connect {0} {1} to {2} {3}.'.format(
+            self.from_vessel, get_port_str(self.from_port), self.to_vessel, 
+            get_port_str(self.to_port))
+
+        self.literal_code = 'chempiler.connect( src_node={0}, dst_node={1}, src_port={2}, dst_port={3}, unique={4}'.format(
+            self.from_vessel, self.to_vessel, self.from_port, self.to_port,
+            self.unique)
+
+    def execute(self, chempiler):
+        chempiler.connect(
+            src_node=self.from_vessel,
+            dst_node=self.to_vessel,
+            src_port=self.from_port,
+            dst_port=self.to_port,
+            unique=self.unique,
+        )
+        return True
+
+
 class CSeparatePhases(Step):
 
     def __init__(self, lower_phase_vessel,  upper_phase_vessel,
