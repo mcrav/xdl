@@ -4,6 +4,7 @@ import copy
 
 BASE_STEP_OBJ_DICT = {
     'CMove': CMove,
+    'CConnect': CConnect,
     'CSeparate': CSeparatePhases,
     'CPrime': CPrime,
     'CSwitchVacuum': CSwitchVacuum,

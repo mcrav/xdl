@@ -7,6 +7,7 @@ from .safety import procedure_is_safe
 from .execution import XDLExecutor
 import os
 import re
+import logging
 import copy
 
 class XDL(object):
@@ -143,7 +144,7 @@ class XDL(object):
         base_steps = list(BASE_STEP_OBJ_DICT.values())
         tree = [step]
         if print_tree:
-            print(f'{indent*lvl}{step.name}' + ' {')
+            print(f'{indent*lvl}{step.name}')
         if type(step) in base_steps:
             return tree
         else:
@@ -157,8 +158,6 @@ class XDL(object):
                 else:
                     tree.extend(
                         self.climb_down_tree(step, print_tree=print_tree, lvl=lvl))
-            if print_tree:
-                print(f'{indent*(lvl-1)}' + '}')
         return tree
 
     def _get_full_xdl_tree(self):
@@ -254,7 +253,7 @@ class XDL(object):
         self._xdl_executor = XDLExecutor(self)
         self._xdl_executor.prepare_for_execution(graph_file)
 
-    def execute(self, chempiler):
+    def execute(self, chempiler, logger=None):
         """Execute XDL using given Chempiler object. self.prepare_for_execution
         must have been called before calling thie method.
         
@@ -262,8 +261,10 @@ class XDL(object):
             chempiler (chempiler.Chempiler): Chempiler object instantiated with
                 modules and graph to run XDL on.
         """
+        if not logger:
+            logger = logging.getLogger()
         if self._xdl_executor:
-            self._xdl_executor.execute(chempiler)
+            self._xdl_executor.execute(chempiler, logger=logger)
         else:
-            print('XDL executor not available. Call prepare_for_execution before trying to execute.')
+            logger.exception('XDL executor not available. Call prepare_for_execution before trying to execute.')
 

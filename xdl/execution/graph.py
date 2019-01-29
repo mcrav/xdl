@@ -50,7 +50,7 @@ def hardware_from_graph(graph):
         components.append(Component(node, props))
     return Hardware(components)
 
-def make_waste_map(graph):
+def make_vessel_map(graph, target_vessel_class):
     """Given graph, make dict with nodes as keys and nearest waste vessels to 
     each node as values, i.e. {node: nearest_waste_vessel}.
     
@@ -61,27 +61,27 @@ def make_waste_map(graph):
         Dict[str, str]: dict with nodes as keys and nearest waste vessels as
                         values.
     """
-    waste_map = {}
-    # Get all waste nodes.
-    wastes = [
+    vessel_map = {}
+    target_vessels = [
         node for node in graph.nodes() 
         if (graph.node[node]['type'] 
-            == CHEMPUTER_WASTE_CLASS_NAME)
+            == target_vessel_class)
     ]
     for node in graph.nodes():
         node_info = graph.node[node]
-        if node_info['type'] != CHEMPUTER_WASTE_CLASS_NAME:
-            # Find out which waste has shortest path through graph from node.
+        if node_info['type'] != target_vessel_class:
+
             shortest_path_found = 100000
-            closest_waste_vessel = None
-            for waste in wastes:
+            closest_target_vessel = None
+            for target_vessel in target_vessels:
                 try:
-                    shortest_path_to_waste = shortest_path_length(
-                        graph, source=node, target=waste)
-                    if shortest_path_to_waste < shortest_path_found:
-                        shortest_path_found = shortest_path_to_waste
-                        closest_waste_vessel = waste
+                    shortest_path_to_target_vessel = shortest_path_length(
+                        graph, source=node, target=target_vessel)
+                    if shortest_path_to_target_vessel < shortest_path_found:
+                        shortest_path_found = shortest_path_to_target_vessel
+                        closest_target_vessel = target_vessel
                 except NetworkXNoPath:
                     pass
-            waste_map[node] = closest_waste_vessel
-    return waste_map
+
+            vessel_map[node] = closest_target_vessel
+    return vessel_map

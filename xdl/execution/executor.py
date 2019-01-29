@@ -2,8 +2,9 @@ import statistics
 from ..constants import *
 from ..utils.namespace import BASE_STEP_OBJ_DICT
 from ..steps import *
-from .graph import hardware_from_graph, get_graph, make_waste_map
+from .graph import hardware_from_graph, get_graph, make_vessel_map
 from ..safety import procedure_is_safe
+import logging
 
 # Steps after which backbone should be cleaned
 CLEAN_BACKBONE_AFTER_STEPS = [
@@ -100,13 +101,8 @@ class XDLExecutor(object):
                     xdl_hardware_list[i].xid
                 ] = graphml_hardware_list[i].xid
 
-    def _map_hardware_to_steps(self):
-        """
-        Go through steps in XDL and replace XDL hardware IDs with IDs
-        from the graph.
-        """
-        self._get_hardware_map()
-        for step in self._xdl.steps:
+    def _map_hardware_to_step_list(self, step_list):
+        for step in step_list:
             # Change all vessel IDs in steps to corresponding ones in graph.
             for prop, val in step.properties.items():
                 if type(val) == str and val in self._xdl.hardware_map:
@@ -115,20 +111,35 @@ class XDLExecutor(object):
 
             # Set step.waste_vessel to nearest waste_vessel to vessel involved 
             # in step.
-            print('STEP', step)
             if 'waste_vessel' in step.properties and not step.waste_vessel:
                 step.waste_vessel = self._get_waste_vessel(step)
-                print(f'WASTE VESSEL {step.waste_vessel}')
+
             if 'solvent_vessel' in step.properties and not step.solvent_vessel:
                 step.solvent_vessel = self._get_reagent_vessel(step.solvent)
 
             if 'reagent_vessel' in step.properties and not step.reagent_vessel:
                 step.reagent_vessel = self._get_reagent_vessel(step.reagent)
-                print(f'REAGENT VESSEL {step.reagent_vessel}')
+
+            if 'vacuum' in step.properties and not step.vacuum:
+                step.vacuum = self._get_vacuum(step.filter_vessel)
+
+            if step.name not in BASE_STEP_OBJ_DICT:
+                self._map_hardware_to_step_list(step.steps)
+
+    def _map_hardware_to_steps(self):
+        """
+        Go through steps in XDL and replace XDL hardware IDs with IDs
+        from the graph.
+        """
+        self._map_hardware_to_step_list(self._xdl.steps)
+
         # Give IDs of all waste vessels to clean backbone steps.
         for step in self._xdl.steps:
-            if type(step) == CleanBackbone:
+            if type(step) == CleanBackbone and not step.waste_vessels:
                 step.waste_vessels = self._graph_hardware.waste_xids
+
+    def _get_vacuum(self, filter_vessel):
+        return self._vacuum_map[filter_vessel]
 
     def _get_reagent_vessel(self, reagent):
         """Get vessel containing given reagent.
@@ -142,6 +153,7 @@ class XDLExecutor(object):
         for flask in self._graph_hardware.flasks:
             if flask.chemical == reagent:
                 return flask.xid
+        return None
 
     def _get_waste_vessel(self, step):
         """
@@ -270,7 +282,7 @@ class XDLExecutor(object):
         filters = []
         full_vessel_contents = []
         prev_vessel_contents = {}
-        for i, step, vessel_contents in self._xdl.iter_vessel_contents():
+        for i, _, vessel_contents in self._xdl.iter_vessel_contents():
             full_vessel_contents.append(vessel_contents)
             for vessel, contents in vessel_contents.items():
                 print(vessel)
@@ -316,7 +328,7 @@ class XDLExecutor(object):
 
             # Find point at which first reagent is added to filter vessel.
             # This is the point at which to insert the PrepareFilter step.
-            while j > 0 and full_vessel_contents[j-1][filter_vessel]:
+            while j > 0 and filter_vessel in full_vessel_contents[j-1] and full_vessel_contents[j-1][filter_vessel]:
                 j -= 1
 
             # Find first thing that could be considered a solvent.
@@ -325,6 +337,7 @@ class XDLExecutor(object):
                 solvent = 'water'
             
             # Insert PrepareFilter step into self._xdl.steps.
+            print('PREP FILTER', solvent)
             self._xdl.steps.insert(j, PrepareFilter(
                 filter_vessel=filter_vessel, solvent=solvent, 
                 volume=self._get_filter_dead_volume(filter_vessel)))
@@ -376,7 +389,6 @@ class XDLExecutor(object):
         """When volumes in CMove commands are specified by 'all', change
         these to max_volume of vessel.
         """
-        base_steps = BASE_STEP_OBJ_DICT.values()
         for step in self._xdl.steps:
             for base_step in self._xdl.climb_down_tree(step):
                 if type(base_step) == CMove and base_step.volume == 'all':
@@ -390,7 +402,7 @@ class XDLExecutor(object):
         added to filter top to Filter steps.
         """
         prev_vessel_contents = {}
-        for i, step, vessel_contents in self._xdl.iter_vessel_contents():
+        for _, step, vessel_contents in self._xdl.iter_vessel_contents():
 
             if type(step) == Filter:
                 step.filter_bottom_volume = self._get_filter_dead_volume(
@@ -481,7 +493,10 @@ class XDLExecutor(object):
                 # Load graph, make Hardware object from graph, and map nearest
                 # waste vessels to every node.
                 self._graph_hardware = hardware_from_graph(self._graph)
-                self._waste_map = make_waste_map(self._graph)
+                self._waste_map = make_vessel_map(
+                    self._graph, CHEMPUTER_WASTE_CLASS_NAME)
+                self._vacuum_map = make_vessel_map(
+                    self._graph, CHEMPUTER_VACUUM_CLASS_NAME)
 
                 # Check hardware compatibility
                 if self._hardware_is_compatible():
@@ -489,10 +504,12 @@ class XDLExecutor(object):
                     self._check_all_flasks_present()
 
                     # Map graph hardware to steps.
+                    self._get_hardware_map()
                     self._map_hardware_to_steps()
 
                     # Add in steps implied by explicit steps.
                     self._add_implied_steps()
+                    self._map_hardware_to_steps()
 
                     # Convert implied properties to concrete values.
                     self._add_all_volumes()
@@ -510,19 +527,19 @@ class XDLExecutor(object):
                 else:
                     print("Hardware is not compatible. Can't execute.")
 
-    def execute(self, chempiler):
+    def execute(self, chempiler, logger=None):
         """Execute XDL procedure with given chempiler. The same graph must be
         passed to the chempiler and to prepare_for_execution.
         """
+        if not logger:
+            logger = logging.getLogger()
         if self._prepared_for_execution:
             self._xdl.print_full_xdl_tree()
             self._xdl.print_full_human_readable()
-            print('Execution\n---------\n')
             for step in self._xdl.steps:
-                print(f'\n{step.name}\n{len(step.name)*"-"}\n')
-                print('{0}\n'.format(step.properties))
-                print(f'{step.human_readable}\n')
-                keep_going = step.execute(chempiler)
+                if logger:
+                    logger.info('\n*' + step.name)
+                keep_going = step.execute(chempiler, logger)
                 if not keep_going:
                     return
         else:

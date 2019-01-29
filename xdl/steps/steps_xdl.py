@@ -3,6 +3,7 @@ from ..utils.misc import get_port_str
 from .base_step import Step
 from .steps_chasm import (
     CMove,
+    CConnect,
     CSeparatePhases,
     CSwitchVacuum,
     CSwitchCartridge,
@@ -101,11 +102,13 @@ class PrepareFilter(Step):
         volume {int} -- Volume of filter bottom.
         waste_vessel {str} -- Vessel to put waste material.
     """
-    def __init__(self, filter_vessel=None, solvent=None, volume=10, waste_vessel=None):
+    def __init__(self, filter_vessel, solvent=None, volume=10, 
+                       waste_vessel=None):
 
         self.properties = {
             'filter_vessel': filter_vessel,
-            'solvent': solvent,            'volume': volume, # This value should be replaced when XDL calls prepare_for_execution.
+            'solvent': solvent,
+            'volume': volume,
             'waste_vessel': waste_vessel,
         }
         self.steps = [
@@ -350,7 +353,8 @@ class Add(Step):
             reagent_vessel=self.reagent_vessel, waste_vessel=self.waste_vessel))
         self.steps.append(
             CMove(from_vessel=self.reagent_vessel, to_vessel=self.vessel, 
-                  to_port=self.port, volume=self.volume, move_speed=self.move_speed))
+                  to_port=self.port, volume=self.volume,
+                  move_speed=self.move_speed))
         self.steps.append(Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
 
         self.human_readable = 'Add {0} ({1} mL) to {2} {3}'.format(
@@ -503,17 +507,17 @@ class Filter(Step):
         waste_vessel {float} -- Node to move waste material to.
         time {str} -- Time to leave vacuum on filter vessel after contents have been moved. (optional)
     """
-    def __init__(self, filter_vessel=None, filter_top_volume=None, filter_bottom_volume=None, waste_vessel=None,
-                        time='default'):
+    def __init__(self, filter_vessel, filter_top_volume=None, 
+                       filter_bottom_volume=None, waste_vessel=None,
+                       vacuum=None):
 
         self.properties = {
             'filter_vessel': filter_vessel,
-            'filter_top_volume': filter_top_volume, # Filled in when XDL.prepare_for_execution is called
-            'filter_bottom_volume': filter_bottom_volume, # Filled in when XDL.prepare_for_execution is called
+            'filter_top_volume': filter_top_volume,
+            'filter_bottom_volume': filter_bottom_volume,
             'waste_vessel': waste_vessel,
-            'time': time,
+            'vacuum': vacuum,
         }
-        self.get_defaults()
 
         self.steps = [
             # Remove dead volume from bottom of filter vessel.
@@ -527,15 +531,16 @@ class Filter(Step):
                 volume=DEFAULT_FILTER_MOVE_VOLUME,
                 aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
             # Connect the vacuum.
-            CConnect(from_port=self.vacuum, to_port=self.filter_vessel,
-                     from_port="bottom"),
+            CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
+                     from_port=BOTTOM_PORT),
             # Move the filter top volume from the bottom to the waste.
             CMove(
                 from_vessel=self.filter_vessel, to_vessel=self.waste_vessel,
-                from_port="bottom", volume=self.filter_top_volume),
+                from_port=BOTTOM_PORT, volume=self.filter_top_volume),
         ]
 
-        self.human_readable = f'Filter contents of {filter_vessel} for {time} s.'
+        self.human_readable = 'Filter contents of {filter_vessel}.'.format(
+            **self.properties)
 
 
 ########################

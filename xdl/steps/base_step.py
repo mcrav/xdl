@@ -9,15 +9,22 @@ class Step(XDLBase):
         self.steps = []
         self.human_readable = ''
 
-    def execute(self, chempiler):
+    def execute(self, chempiler, logger=None):
         """
         Execute self with given Chempiler object.
         
         Args:
             chempiler {chempiler.Chempiler} -- Initialised Chempiler object.
         """
-        for step in self.steps:
-            keep_going = step.execute(chempiler)
-            if not keep_going:
-                return False
-        return True
+        try:
+            for step in self.steps:
+                if logger:
+                    logger.info(step.name)
+                keep_going = step.execute(chempiler, logger)
+                if not keep_going:
+                    return False
+            return True
+        except Exception as e:
+            if logger:
+                logger.exception(str(e), exc_info=1)
+            raise(e)

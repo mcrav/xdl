@@ -43,8 +43,10 @@ def xdl_str_to_objs(xdl_str):
             return (steps, hardware, reagents)
         else:
             print('Invalid XDL given.')
+            raise(Exception)
     else:
         print('No XDL given.')
+        raise(Exception)
 
 def xdl_valid(xdl_str):
     """Return True if XDL is valid, otherwise False.
