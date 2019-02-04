@@ -102,9 +102,6 @@ DEFAULT_VALS = {
     'Rotavap': {
         'time': DEFAULT_ROTAVAP_TIME,
     },
-    'WashFilterCake': {
-        'solvent_volume': DEFAULT_WASH_VOLUME,
-    },
     'StirAtRT': {
         'stir_rpm': DEFAULT_STIR_RPM,
     },

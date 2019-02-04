@@ -1,83 +1,12 @@
-from ..steps import *
-from ..hardware.components import *
+from ..steps import steps_xdl
+from ..steps import steps_chasm
 import copy
+import inspect
 
-BASE_STEP_OBJ_DICT = {
-    'CMove': CMove,
-    'CConnect': CConnect,
-    'CSeparate': CSeparatePhases,
-    'CPrime': CPrime,
-    'CSwitchVacuum': CSwitchVacuum,
-    'CSwitchCartridge': CSwitchCartridge,
-    'CSwitchColumn': CSwitchColumn,
-    'CStartStir': CStartStir,
-    'CStartHeat': CStartHeat,
-    'CStopStir': CStopStir,
-    'CStopHeat': CStopHeat,
-    'CSetTemp': CSetTemp,
-    'CSetStirRpm': CSetStirRpm,
-    'CStirrerWaitForTemp': CStirrerWaitForTemp,
-    'CStartHeaterBath': CStartHeaterBath,
-    'CStopHeaterBath': CStopHeaterBath,
-    'CStartRotation': CStartRotation,
-    'CStopRotation': CStopRotation,
-    'CLiftArmUp': CLiftArmUp,
-    'CLiftArmDown': CLiftArmDown,
-    'CResetRotavap': CResetRotavap,
-    'CSetBathTemp': CSetBathTemp,
-    'CSetRvRotationSpeed': CSetRvRotationSpeed,
-    'CRvWaitForTemp': CRvWaitForTemp,
-    'CSetInterval': CSetInterval,
-    'CInitVacPump': CInitVacPump,
-    'CGetVacSp': CGetVacSp,
-    'CSetVacSp': CSetVacSp,
-    'CStartVac': CStartVac,
-    'CStopVac': CStopVac,
-    'CVentVac': CVentVac,
-    'CSetSpeedSp': CSetSpeedSp,
-    'CStartChiller': CStartChiller,
-    'CStopChiller': CStopChiller,
-    'CSetChiller': CSetChiller,
-    'CChillerWaitForTemp': CChillerWaitForTemp,
-    'CRampChiller': CRampChiller,
-    'CSwitchChiller': CSwitchChiller,
-    'CSetCoolingPower': CSetCoolingPower,
-    'CSetRecordingSpeed': CSetRecordingSpeed,
-    'CWait': CWait,
-    'CBreakpoint': CBreakpoint,
-}
-
-XDL_STEP_OBJ_DICT = {
-    'StartVacuum': StartVacuum,
-    'StopVacuum': StopVacuum,
-    'StartHeat': StartHeat,
-    'StartStir': StartStir,
-
-    'Chill': Chill,
-    'Reflux': Reflux,
-
-    'CleanVessel': CleanVessel,
-    'CleanBackbone': CleanBackbone,
-
-
-    'Filter': Filter,
-    'WashFilterCake': WashFilterCake,
-    'Dry': Dry,
-
-    'Wait': Wait,
-
-    'Separate': Separate,
-
-    'Add': Add,
-    'PrimePumpForAdd': PrimePumpForAdd,
-    'Transfer': Transfer,
-    'MakeSolution': MakeSolution,
-    
-    'StirAtRT': StirAtRT,
-    'PrepareFilter': PrepareFilter,
-    'RemoveFilterDeadVolume': RemoveFilterDeadVolume,
-    'Confirm': Confirm,
-}
+BASE_STEP_OBJ_DICT = {m[0]: m[1] 
+                      for m in inspect.getmembers(steps_chasm, inspect.isclass)}
+XDL_STEP_OBJ_DICT = {m[0]: m[1]
+                     for m in inspect.getmembers(steps_xdl, inspect.isclass)}
 
 STEP_OBJ_DICT = copy.copy(BASE_STEP_OBJ_DICT)
 STEP_OBJ_DICT.update(XDL_STEP_OBJ_DICT)

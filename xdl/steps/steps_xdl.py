@@ -81,9 +81,10 @@ class PrimePumpForAdd(Step):
         reagent {str} -- Reagent to prime pump for addition.
         move_speed {str} -- Speed to move reagent at. (optional)
     """
-    def __init__(self, reagent_vessel=None, waste_vessel=None, move_speed='default',):
+    def __init__(self, reagent=None, reagent_vessel=None, waste_vessel=None, move_speed='default',):
 
         self.properties = {
+            'reagent': reagent,
             'reagent_vessel': reagent_vessel,
             'waste_vessel': waste_vessel,
             'move_speed': move_speed,
@@ -350,7 +351,8 @@ class Add(Step):
 
         self.steps = []
         self.steps.append(PrimePumpForAdd(
-            reagent_vessel=self.reagent_vessel, waste_vessel=self.waste_vessel))
+            reagent=self.reagent, reagent_vessel=self.reagent_vessel,
+            waste_vessel=self.waste_vessel))
         self.steps.append(
             CMove(from_vessel=self.reagent_vessel, to_vessel=self.vessel, 
                   to_port=self.port, volume=self.volume,
@@ -467,7 +469,7 @@ class WashFilterCake(Step):
                   aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
         ]
 
-        self.human_readable = 'Wash {0} with {1} ({2} mL).'.format(
+        self.human_readable = 'Wash {filter_vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
 
 class Dry(Step):
@@ -524,11 +526,6 @@ class Filter(Step):
             CMove(
                 from_vessel=self.filter_vessel, to_vessel=self.waste_vessel,
                 volume=self.filter_bottom_volume,
-                aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
-            # Remove a little extra just to make sure.
-            CMove(
-                from_vessel=self.filter_vessel, to_vessel=self.waste_vessel,
-                volume=DEFAULT_FILTER_MOVE_VOLUME,
                 aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
             # Connect the vacuum.
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
@@ -656,12 +653,13 @@ class Separate(Step):
                 Transfer(from_vessel=self.separation_vessel, 
                          from_port=BOTTOM_PORT, to_vessel=self.waste_vessel, 
                          volume=remove_volume),
-                CSeparatePhases(lower_phase_vessel=self.to_vessel,
-                          lower_phase_port=self.to_port,
-                          upper_phase_vessel=self.waste_phase_to_vessel,
-                          upper_phase_port=self.waste_phase_to_port,
-                          separation_vessel=self.separation_vessel,
-                          dead_volume_target=self.waste_vessel),
+                CSeparatePhases(
+                    separation_vessel=self.separation_vessel,
+                    lower_phase_vessel=self.to_vessel,
+                    lower_phase_port=self.to_port,
+                    upper_phase_vessel=self.waste_phase_to_vessel,
+                    upper_phase_port=self.waste_phase_to_port,
+                    dead_volume_target=self.waste_vessel),
             ])
         else:
             if n_separations > 1:

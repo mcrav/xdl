@@ -166,7 +166,7 @@ class XDLExecutor(object):
         elif type(step) in [PrepareFilter, Filter, Dry, WashFilterCake]:
             nearest_node = step.filter_vessel
 
-        elif type(step) == Separation:
+        elif type(step) == Separate:
             nearest_node = step.separation_vessel
 
         if not nearest_node:
@@ -349,7 +349,8 @@ class XDLExecutor(object):
         insertions = []
         for i, step in enumerate(self._xdl.steps):
             if 'from_vessel' in step.properties:
-                if step.from_vessel.type == CHEMPUTER_FILTER_CLASS_NAME:
+                if (self._xdl.hardware[step.from_vessel]
+                    == CHEMPUTER_FILTER_CLASS_NAME):
                     insertions.append(i, step.from_vessel)
 
         for i, filter_vessel in insertions:
@@ -538,7 +539,7 @@ class XDLExecutor(object):
             self._xdl.print_full_human_readable()
             for step in self._xdl.steps:
                 if logger:
-                    logger.info('\n*' + step.name)
+                    logger.info(step.name)
                 keep_going = step.execute(chempiler, logger)
                 if not keep_going:
                     return
