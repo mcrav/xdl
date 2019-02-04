@@ -2,42 +2,46 @@
 ### DEFAULT PARAMETERS ###
 ##########################
 
-DEFAULT_STIR_RPM = 400 # rpm
+
+# Move
+# mL/min Different to move speed as 40 mL / min aspiration speed means air gets sucked in.
 DEFAULT_MOVE_SPEED = 40 # mL/min
- # mL/min Different to move speed as 40 mL / min aspiration speed means air gets sucked in.
 DEFAULT_ASPIRATION_SPEED = 10
 DEFAULT_DISPENSE_SPEED = DEFAULT_MOVE_SPEED
-DEFAULT_CLEAN_STIR_TIME = 60 # seconds
 DEFAULT_PUMP_PRIME_VOLUME = 3 # mL
-DEFAULT_CLEAN_TUBING_VOLUME = 2.5 # mL
-DEFAULT_CLEAN_TUBING_SOLVENT = 'water'
-DEFAULT_CLEAN_VESSEL_SOLVENT = 'water'
-DEFAULT_CLEAN_VESSEL_VOLUME = 10 # mL
-DEFAULT_CLEAN_BACKBONE_ASPIRATION_SPEED = 30
-DEFAULT_WASH_QUANTITY = 20
-DEFAULT_WASHFILTERCAKE_WAIT_TIME = 60*2 # s
-DEFAULT_DRY_TIME = 60*5
-DEFAULT_FILTER_TIME = 60
-DEFAULT_EXTRACTION_VOLUME = 30 # mL
+
+# Separation
+DEFAULT_SEPARATION_SOLVENT_VOLUME = 30 # mL
 DEFAULT_SEPARATION_FAST_STIR_TIME = 5 * 60
 DEFAULT_SEPARATION_SLOW_STIR_TIME = 2 * 60
 DEFAULT_SEPARATION_FAST_STIR_RPM = 600
 DEFAULT_SEPARATION_SLOW_STIR_RPM = 30
 DEFAULT_SEPARATION_SETTLE_TIME = 60 * 5
+
+# Cleaning
 DEFAULT_ORGANIC_CLEANING_SOLVENT = 'ether'
 DEFAULT_CLEAN_BACKBONE_VOLUME = 3
+DEFAULT_CLEAN_VESSEL_SOLVENT = 'water'
+DEFAULT_CLEAN_VESSEL_VOLUME = 10 # mL
+DEFAULT_CLEAN_STIR_TIME = 60 # seconds
+
+# Rotavap
 DEFAULT_ROTAVAP_TIME = 60 * 5
 
-DEFAULT_TRANSFER_EXTRA_VOLUME = 5
-
-DEFAULT_WASH_VOLUME = 50 # mL
+# Filtering
+DEFAULT_FILTER_WAIT_TIME = 60
 DEFAULT_WASHFILTERCAKE_VOLUME = 20
+DEFAULT_WASHFILTERCAKE_WAIT_TIME = 60*2 # s
+DEFAULT_DRY_TIME = 60*5
+DEFAULT_DRY_WASTE_VOLUME = 5 # mL
 
-DEFAULT_FILTER_MOVE_VOLUME = 5 # mL
-DEFAULT_FILTER_ASPIRATION_SPEED = 5 # mL / min
-
+# Add
 DEFAULT_AFTER_ADD_WAIT_TIME = 10 # s (time to wait for stirring after addition)
 
+# Stirring
+DEFAULT_STIR_RPM = 400 # rpm
+
+# Video
 DEFAULT_RECORDING_SPEED = 14
 DEFAULT_WAIT_RECORDING_SPEED = 2000
 
@@ -53,14 +57,14 @@ DEFAULT_VALS = {
     'CPrime': {
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
     },
-    'Extract': {
-        'solvent_volume': DEFAULT_EXTRACTION_VOLUME,
+    'Separation': {
+        'solvent_volume': DEFAULT_SEPARATION_SOLVENT_VOLUME,
     },
     'Filter': {
-        'time': DEFAULT_FILTER_TIME,
+        'wait_time': DEFAULT_FILTER_WAIT_TIME,
     },
     'Dry': {
-        'time': DEFAULT_DRY_TIME,
+        'wait_time': DEFAULT_DRY_TIME,
     },
     'WashFilterCake': {
         'volume': DEFAULT_WASHFILTERCAKE_VOLUME,
@@ -76,13 +80,6 @@ DEFAULT_VALS = {
         'start_stir': True,
         'stop_stir': True,
     },
-    'HeatAndReact': {
-        'stir_rpm': DEFAULT_STIR_RPM,
-    },
-    'CleanTubing': {
-        'volume': DEFAULT_CLEAN_TUBING_VOLUME,
-        'reagent': DEFAULT_CLEAN_TUBING_SOLVENT,
-    },
     'CleanVessel': {
         'solvent': DEFAULT_CLEAN_VESSEL_SOLVENT,
         'volume': DEFAULT_CLEAN_VESSEL_VOLUME,
@@ -93,7 +90,7 @@ DEFAULT_VALS = {
         'stir_rpm': DEFAULT_STIR_RPM,
     },
     'PrimePumpForAdd': {
-        'move_speed': DEFAULT_MOVE_SPEED,
+        'volume': DEFAULT_PUMP_PRIME_VOLUME,
     },
     'Wait': {
         'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,

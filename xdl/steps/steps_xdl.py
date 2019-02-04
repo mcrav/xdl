@@ -81,17 +81,20 @@ class PrimePumpForAdd(Step):
         reagent {str} -- Reagent to prime pump for addition.
         move_speed {str} -- Speed to move reagent at. (optional)
     """
-    def __init__(self, reagent=None, reagent_vessel=None, waste_vessel=None, move_speed='default',):
+    def __init__(self, reagent=None, volume=None, reagent_vessel=None,
+                       waste_vessel=None):
 
         self.properties = {
             'reagent': reagent,
+            'volume': volume,
             'reagent_vessel': reagent_vessel,
             'waste_vessel': waste_vessel,
-            'move_speed': move_speed,
         }
+        self.get_defaults()
+
         self.steps = [
             CMove(from_vessel=self.reagent_vessel, to_vessel=self.waste_vessel,
-                    volume=DEFAULT_PUMP_PRIME_VOLUME, move_speed=move_speed)
+                  volume=self.volume)
         ]
 
 class PrepareFilter(Step):
@@ -339,8 +342,7 @@ class CleanBackbone(Step):
         for waste_vessel in self.waste_vessels:
             self.steps.append(CMove(
                 from_vessel=self.solvent_vessel, to_vessel=waste_vessel,
-                volume=DEFAULT_CLEAN_BACKBONE_VOLUME,
-                aspiration_speed=DEFAULT_CLEAN_BACKBONE_ASPIRATION_SPEED))
+                volume=DEFAULT_CLEAN_BACKBONE_VOLUME))
 
         self.human_readable = 'Clean backbone with {0}.'.format(self.solvent)
 
@@ -378,7 +380,7 @@ class Add(Step):
 
         self.steps = []
         self.steps.append(PrimePumpForAdd(
-            reagent=self.reagent, reagent_vessel=self.reagent_vessel,
+            reagent=self.reagent, volume='default', 
             waste_vessel=self.waste_vessel))
         self.steps.append(
             CMove(from_vessel=self.reagent_vessel, to_vessel=self.vessel, 
@@ -447,7 +449,8 @@ class MakeSolution(Step):
             solutes = [solutes]
         if not isinstance(solute_masses, list):
             solute_masses = [solute_masses]
-        self.steps.append(Add(reagent=solvent, volume=solvent_volume, vessel=vessel))
+        self.steps.append(
+            Add(reagent=solvent, volume=solvent_volume, vessel=vessel))
 
         self.human_readable = f'Make solution of '
         for s, m in zip(solutes, solute_masses):
@@ -467,33 +470,31 @@ class WashFilterCake(Step):
         filter_vessel {str} -- Filter vessel name to wash.
         solvent {str} -- Solvent to wash with.
         volume {float} -- Volume of solvent to wash with. (optional)
-        wait_time {str} -- Time to wait after moving solvent to filter flask. (optional)
+        wait_time {str} -- Time to wait after moving solvent to filter flask.
+                           (optional)
     """
-    def __init__(self, filter_vessel=None, solvent=None, volume='default', waste_vessel=None,
-                       wait_time='default'):
+    def __init__(self, filter_vessel=None, solvent=None, volume='default',
+                       waste_vessel=None, vacuum=None, wait_time='default'):
 
         self.properties = {
             'solvent': solvent,
             'filter_vessel': filter_vessel,
             'volume': volume,
-            'waste_vessel': waste_vessel, # should be set in prepare_for_execution
+            'waste_vessel': waste_vessel,
+            'vacuum': vacuum,
             'wait_time': wait_time,
         }
         self.get_defaults()
 
         self.steps = [
+            CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
+                     from_port=BOTTOM_PORT),
             Add(reagent=self.solvent, volume=self.volume,
                 vessel=self.filter_vessel, port=TOP_PORT, 
                 waste_vessel=self.waste_vessel),
-            StirAtRT(vessel=self.filter_vessel, time=60),
+            Wait(self.wait_time),
             CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT,
-                  to_vessel=self.waste_vessel, volume='all',
-                  aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
-
-            CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT, 
-                  to_vessel=self.waste_vessel, 
-                  volume=DEFAULT_WASHFILTERCAKE_WAIT_TIME, 
-                  aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
+                  to_vessel=self.waste_vessel, volume=self.volume)
         ]
 
         self.human_readable = 'Wash {filter_vessel} with {solvent} ({volume} mL).'.format(
@@ -506,23 +507,28 @@ class Dry(Step):
         vessel {str} -- Vessel name to dry.
         time {str} -- Time to dry vessel for in seconds. (optional)
     """
-    def __init__(self, filter_vessel=None, waste_vessel=None, time='default'):
+    def __init__(self, filter_vessel=None, waste_vessel=None, vacuum=None,
+                       wait_time='default'):
 
         self.properties = {
             'filter_vessel': filter_vessel,
-            'waste_vessel': waste_vessel, # set in prepare_for_execution
-            'time': time,
+            'waste_vessel': waste_vessel,
+            'vacuum': vacuum,
+            'wait_time': wait_time,
         }
         self.get_defaults()
 
-        volume = ((self.time) / 60) * DEFAULT_FILTER_ASPIRATION_SPEED
         self.steps = [
+            # Connect the vacuum.
+            CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
+                     from_port=BOTTOM_PORT),
+            Wait(self.wait_time),
+            # Move any liquid that has dripped through to waste.
             CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT,
-                  to_vessel=self.waste_vessel, volume=volume,
-                  aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
+                  to_vessel=self.waste_vessel, volume=DEFAULT_DRY_WASTE_VOLUME)
         ]
 
-        self.human_readable = 'Dry substance in {filter_vessel} for {time} s.'.format(
+        self.human_readable = 'Dry substance in {filter_vessel} for {wait_time} s.'.format(
             **self.properties)
 
 class Filter(Step):
@@ -538,7 +544,7 @@ class Filter(Step):
     """
     def __init__(self, filter_vessel, filter_top_volume=None, 
                        filter_bottom_volume=None, waste_vessel=None,
-                       vacuum=None):
+                       vacuum=None, wait_time='default'):
 
         self.properties = {
             'filter_vessel': filter_vessel,
@@ -546,17 +552,19 @@ class Filter(Step):
             'filter_bottom_volume': filter_bottom_volume,
             'waste_vessel': waste_vessel,
             'vacuum': vacuum,
+            'wait_time': wait_time,
         }
+        self.get_defaults()
 
         self.steps = [
             # Remove dead volume from bottom of filter vessel.
             CMove(
                 from_vessel=self.filter_vessel, to_vessel=self.waste_vessel,
-                volume=self.filter_bottom_volume,
-                aspiration_speed=DEFAULT_FILTER_ASPIRATION_SPEED),
+                volume=self.filter_bottom_volume),
             # Connect the vacuum.
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
+            Wait(time=self.wait_time),
             # Move the filter top volume from the bottom to the waste.
             CMove(
                 from_vessel=self.filter_vessel, to_vessel=self.waste_vessel,
