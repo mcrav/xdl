@@ -173,7 +173,20 @@ class StartStir(Step):
             **self.properties)
 
 class StopStir(Step):
-    pass
+    """Stop stirring given vessel.
+    
+    Args:
+        vessel (str): Vessel name to stop stirring.
+    """
+    def __init__(self, vessel=None, temp=None):
+
+        self.properties = {
+            'vessel': vessel,
+        }
+
+        self.steps = [CStopStir(vessel=self.vessel)]
+
+        self.human_readable = 'Stop stirring {0}.'.format(self.vessel)
 
 class StartHeat(Step):
     """Start heating given vessel at given temperature.
@@ -194,10 +207,24 @@ class StartHeat(Step):
             CStartHeat(vessel=self.vessel),
         ]
 
-        self.human_readable = f'Heat {self.vessel} to {self.temp} °C'
+        self.human_readable = 'Heat {vessel} to {temp} °C'.format(
+            **self.properties)
 
 class StopHeat(Step):
-    pass
+    """Stop heating given vessel.
+    
+    Args:
+        vessel (str): Vessel name to stop heating.
+    """
+    def __init__(self, vessel=None):
+
+        self.properties = {
+            'vessel': vessel,
+        }
+
+        self.steps = [CStopHeat(vessel=self.vessel)]
+
+        self.human_readable = 'Stop heating {0}.'.format(self.vessel)
 
 class StartVacuum(Step):
     """Start vacuum pump attached to given vessel.
