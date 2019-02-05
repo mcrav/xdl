@@ -40,13 +40,31 @@ def xdl_str_to_objs(xdl_str):
             steps = steps_from_xdl(xdl_str)
             hardware = hardware_from_xdl(xdl_str)
             reagents = reagents_from_xdl(xdl_str)
-            return (steps, hardware, reagents)
+            synthesis_attrs = synthesis_attrs_from_xdl(xdl_str)
+            parsed_xdl = {
+                'steps': steps,
+                'hardware': hardware,
+                'reagents': reagents,
+            }
+            parsed_xdl.update(synthesis_attrs)
+            return parsed_xdl
         else:
             print('Invalid XDL given.')
             raise(Exception)
     else:
         print('No XDL given.')
         raise(Exception)
+
+def synthesis_attrs_from_xdl(xdl_str):
+    """Return attrs from <Synthesis> tag.
+
+    Arguments:
+        xdl_str (str): XDL string.
+
+    Returns:
+        dict: attr dict from <Synthesis> tag.
+    """
+    return etree.fromstring(xdl_str).attrib
 
 def xdl_valid(xdl_str):
     """Return True if XDL is valid, otherwise False.

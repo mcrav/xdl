@@ -1,6 +1,7 @@
 from .constants import *
 from .steps import *
 from .utils.namespace import BASE_STEP_OBJ_DICT
+from .utils import parse_bool
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 from .readwrite import XDLGenerator
 from .safety import procedure_is_safe
@@ -37,12 +38,29 @@ class XDL(object):
             reagents (List[Reagent], optional): List of Reagent objects.
         """
         self._xdl_file = None
+        self.autoClean = DEFAULT_AUTO_CLEAN
+        self.organicCleaningReagent = DEFAULT_ORGANIC_CLEANING_SOLVENT
+        self.aqueousCleaningReagent = DEFAULT_AQUEOUS_CLEANING_SOLVENT
         if xdl:
+            parsed_xdl = {}
             if os.path.exists(xdl):
                 self._xdl_file = xdl
-                self.steps, self.hardware, self.reagents = xdl_file_to_objs(xdl)
+                parsed_xdl = xdl_file_to_objs(xdl)
             else:
-                self.steps, self.hardware, self.reagents = xdl_str_to_objs(xdl)
+                parsed_xdl = xdl_str_to_objs(xdl)
+            if parsed_xdl:
+                self.steps = parsed_xdl['steps']
+                self.hardware = parsed_xdl['hardware']
+                self.reagents = parsed_xdl['reagents']
+                # Get attrs from <Synthesis> tag.
+                if 'autoClean' in parsed_xdl:
+                    self.autoClean = parse_bool(parsed_xdl['autoClean'])
+                if 'organicCleaningReagent' in parsed_xdl:
+                    self.organicCleaningReagent = parsed_xdl[
+                        'organicCleaningReagent']
+                if 'aqueousCleaningReagent' in parsed_xdl:
+                    self.aqueousCleaningReagent = parsed_xdl[
+                        'aqueousCleaningReagent']
         elif steps and hardware and reagents:
             self.steps, self.hardware, self.reagents = steps, hardware, reagents
         else:

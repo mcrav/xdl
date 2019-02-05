@@ -182,9 +182,10 @@ class XDLExecutor(object):
     def _add_implied_steps(self):
         """Add extra steps implied by explicit XDL steps."""
         self._add_implied_prepare_filter_steps()
-        self._add_implied_clean_backbone_steps()
         self._add_implied_remove_dead_volume_steps()
-        # self._add_implied_stirring_steps()
+        if self._xdl.autoClean:
+            self._add_implied_clean_backbone_steps()
+        self._add_implied_stirring_steps()
 
     def _get_step_reagent_types(self):
         """Get the reagent type, 'organic' or 'aqueous' involved in every step.
@@ -264,9 +265,9 @@ class XDLExecutor(object):
         determine what solvents to clean the backbone with.
         """
         for i, clean_type in reversed(self._get_clean_backbone_sequence()):
-            solvent = DEFAULT_ORGANIC_CLEANING_SOLVENT
+            solvent = self._xdl.organicCleaningReagent 
             if clean_type == 'water':
-                solvent = 'water'
+                solvent = self._xdl.aqueousCleaningReagent
             self._xdl.steps.insert(i, CleanBackbone(solvent=solvent))
 
     def _get_filter_emptying_steps(self):
