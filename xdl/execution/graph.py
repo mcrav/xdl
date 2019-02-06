@@ -44,7 +44,6 @@ def hardware_from_graph(graph):
     """
     components = []
     for node in graph.nodes():
-        print('NODE', graph.node[node])
         props = graph.node[node]
         props['type'] = props['class']
         components.append(Component(node, props))

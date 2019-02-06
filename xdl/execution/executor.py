@@ -1,10 +1,13 @@
 import statistics
+import copy
+import logging
+
 from ..constants import *
 from ..utils.namespace import BASE_STEP_OBJ_DICT
 from ..steps import *
-from .graph import hardware_from_graph, get_graph, make_vessel_map
 from ..safety import procedure_is_safe
-import logging
+from .tracking import iter_vessel_contents
+from .graph import hardware_from_graph, get_graph, make_vessel_map
 
 # Steps after which backbone should be cleaned
 CLEAN_BACKBONE_AFTER_STEPS = [
@@ -197,8 +200,8 @@ class XDLExecutor(object):
 
         step_reagent_types = []
         step_reagent_type = 'organic'
-        for i, step, vessel_contents, additions in self._xdl.iter_vessel_contents(
-            additions=True):
+        for _, _, _, additions in iter_vessel_contents(
+            self._xdl.steps, self._graph_hardware, additions=True):
             if additions:
                 step_reagent_type = 'organic'
                 for reagent in additions:
@@ -283,15 +286,16 @@ class XDLExecutor(object):
         filters = []
         full_vessel_contents = []
         prev_vessel_contents = {}
-        for i, _, vessel_contents in self._xdl.iter_vessel_contents():
+        for i, _, vessel_contents in iter_vessel_contents(
+            self._xdl.steps, self._graph_hardware):
             full_vessel_contents.append(vessel_contents)
             for vessel, contents in vessel_contents.items():
-                print(vessel)
                 if (self._graph_hardware[vessel].type 
                     == CHEMPUTER_FILTER_CLASS_NAME
                     and vessel in prev_vessel_contents):
                     # If filter vessel has just been emptied, append to filters.
-                    if not contents and prev_vessel_contents[vessel]:
+                    if (not contents['reagents']
+                        and prev_vessel_contents[vessel]['reagents']):
                         filters.append((i, vessel, prev_vessel_contents))
                         break
             prev_vessel_contents = vessel_contents
@@ -329,7 +333,8 @@ class XDLExecutor(object):
 
             # Find point at which first reagent is added to filter vessel.
             # This is the point at which to insert the PrepareFilter step.
-            while j > 0 and filter_vessel in full_vessel_contents[j-1] and full_vessel_contents[j-1][filter_vessel]:
+            while (j > 0 and full_vessel_contents[j-1].get(
+                filter_vessel, {}).get('reagents', [])):
                 j -= 1
 
             # Find first thing that could be considered a solvent.
@@ -338,7 +343,6 @@ class XDLExecutor(object):
                 solvent = 'water'
             
             # Insert PrepareFilter step into self._xdl.steps.
-            print('PREP FILTER', solvent)
             self._xdl.steps.insert(j, PrepareFilter(
                 filter_vessel=filter_vessel, solvent=solvent, 
                 volume=self._get_filter_dead_volume(filter_vessel)))
@@ -404,14 +408,14 @@ class XDLExecutor(object):
         added to filter top to Filter steps.
         """
         prev_vessel_contents = {}
-        for _, step, vessel_contents in self._xdl.iter_vessel_contents():
+        for _, step, vessel_contents in iter_vessel_contents(
+            self._xdl.steps, self._graph_hardware):
 
             if type(step) == Filter:
                 step.filter_bottom_volume = self._get_filter_dead_volume(
                     step.filter_vessel)
-                step.filter_top_volume = sum(
-                    [reagent[1] 
-                     for reagent in prev_vessel_contents[step.filter_vessel]])
+                step.filter_top_volume = prev_vessel_contents[
+                    step.filter_vessel]['volume']
 
             prev_vessel_contents = vessel_contents
 
@@ -506,8 +510,11 @@ class XDLExecutor(object):
                     self._check_all_flasks_present()
 
                     # Map graph hardware to steps.
+                    # _map_hardware_to_steps is called twice so that 
+                    # _xdl.iter_vessel_contents has all vessels to play with
+                    # during _add_implied_steps.
                     self._get_hardware_map()
-                    self._map_hardware_to_steps()
+                    self._map_hardware_to_steps() 
 
                     # Add in steps implied by explicit steps.
                     self._add_implied_steps()

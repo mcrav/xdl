@@ -76,72 +76,6 @@ class XDL(object):
         else:
             return default
 
-    def iter_vessel_contents(self, additions=False):
-        """Iterator. Allows you to track vessel contents as they change
-        throughout the steps.
-
-        Args:
-            additions (bool, optional): Defaults to False. 
-                If True, list of what contents were added that step is yielded.
-        
-        Yields:
-            Tuple: (i, step, contents, {additions})
-                    i -- Index of step.
-                    step -- Step object of step.
-                    contents -- Dict of contents of all vessels after step.
-                    additions (optional) -- List of contents added during step.
-        """
-        vessel_contents = {}
-        for i, step in enumerate(self.steps):
-            additions_l = []
-            if type(step) == Add:
-                additions_l.append((step.reagent, step.volume))
-                vessel_contents.setdefault(step.vessel, []).append(
-                    (step.reagent, step.volume))
-
-            elif type(step) == MakeSolution:
-                additions_l.append((step.solvent, step.solvent_volume))
-                vessel_contents.setdefault(step.vessel, []).append(
-                    (step.solvent, step.solvent_volume))
-                for solute in step.solutes:
-                    additions_l.append((solute, 0))
-                    vessel_contents[step.vessel].append((solute, 0))
-
-            elif type(step) == Separate:
-                if step.from_vessel != step.separation_vessel:
-                    additions_l.extend(vessel_contents[step.from_vessel])
-                vessel_contents.setdefault(step.to_vessel, []).append(
-                    (step.solvent, step.solvent_volume))
-                vessel_contents[step.to_vessel].extend(vessel_contents[step.from_vessel])
-                vessel_contents[step.from_vessel].clear()
-                # vessel_contents.setdefault(step.waste_vessel, []).extend(
-                #   vessel_contents[step.from_vessel])
-                additions_l.append((step.solvent, step.solvent_volume))
-
-            elif type(step) == WashFilterCake:
-                additions_l.append((step.solvent, step.volume))
-
-            elif type(step) == Filter:
-                vessel_contents.setdefault(step.filter_vessel, []).clear()
-
-            elif type(step) == CMove:
-                additions_l.extend(vessel_contents[step.from_vessel])
-                vessel_contents.setdefault(step.to_vessel, []).extend(
-                    vessel_contents[step.from_vessel])
-                vessel_contents[step.from_vessel].clear()
-
-            elif type(step) == Transfer:
-                from_vessel = step.from_vessel
-                additions_l.extend(vessel_contents[from_vessel])
-                vessel_contents.setdefault(step.to_vessel, []).extend(
-                    vessel_contents[from_vessel])
-                vessel_contents[from_vessel].clear()
-
-            if additions:
-                yield (i, step, copy.deepcopy(vessel_contents), additions_l)
-            else:
-                yield (i, step, copy.deepcopy(vessel_contents))
-
     def climb_down_tree(self, step, print_tree=False, lvl=0):
         """Go through given step's sub steps recursively until base steps are reached.
         Return list containing the step, all sub steps and all base steps.
@@ -268,8 +202,8 @@ class XDL(object):
                                         as JSON file.
         """
 
-        self._xdl_executor = XDLExecutor(self)
-        self._xdl_executor.prepare_for_execution(graph_file)
+        self.executor = XDLExecutor(self)
+        self.executor.prepare_for_execution(graph_file)
 
     def execute(self, chempiler, logger=None):
         """Execute XDL using given Chempiler object. self.prepare_for_execution
@@ -281,8 +215,7 @@ class XDL(object):
         """
         if not logger:
             logger = logging.getLogger()
-        if self._xdl_executor:
-            self._xdl_executor.execute(chempiler, logger=logger)
+        if self.executor:
+            self.executor.execute(chempiler, logger=logger)
         else:
             logger.exception('XDL executor not available. Call prepare_for_execution before trying to execute.')
-

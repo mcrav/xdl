@@ -574,6 +574,10 @@ class Filter(Step):
         self.human_readable = 'Filter contents of {filter_vessel}.'.format(
             **self.properties)
 
+        self.movements = [
+            (self.filter_vessel, self.waste_vessel, 'all'),
+        ]
+
 
 ########################
 ### SEPARATION STEPS ###
@@ -591,13 +595,14 @@ class Separate(Step):
         solvent_volume {float} -- Volume of solvent to extract with.
         n_separations {int} -- Number of separations to perform.
     """
-    def __init__(self, from_vessel=None, from_port=None, separation_vessel=None, 
-                       to_vessel=None, to_port=None, solvent=None, 
-                       solvent_volume=None, n_separations=1, product_bottom=True,
-                       waste_vessel=None, waste_phase_to_vessel=None,
-                       waste_phase_to_port=None):
+    def __init__(self, purpose=None, from_vessel=None, from_port=None,
+                       separation_vessel=None, to_vessel=None, to_port=None,
+                       solvent=None, solvent_volume=None, n_separations=1,
+                       product_bottom=True, waste_vessel=None,
+                       waste_phase_to_vessel=None, waste_phase_to_port=None):
 
         self.properties = {
+            'purpose': purpose,
             'from_vessel': from_vessel,
             'from_port': from_port,
             'separation_vessel': separation_vessel,
@@ -839,6 +844,45 @@ class Rotavap(Step):
 
         self.human_readable = 'Rotavap contents of {vessel} at {temp} °C for {time}.'.format(
             **self.properties)
+
+class Column(Step):
+
+    def __init__(self):
+        self.properties = {
+
+        }
+        
+        self.steps = [
+
+        ]
+
+        self.human_readable = 'Run column.'
+
+class Recrystallization(Step):
+
+    def __init__(self):
+        self.properties = {
+
+        }
+
+        self.steps = [
+
+        ]
+
+        self.human_readable = 'Do recrystallisation.'
+
+class VacuumDistillation(Step):
+
+    def __init__(self):
+        self.properties = {
+
+        }
+
+        self.steps = [
+
+        ]
+
+        self.human_readable = 'Do vacuum distillation.'
 
 class Wait(Step):
     """Wait for given time.
