@@ -4,7 +4,8 @@
 
 
 # Move
-# mL/min Different to move speed as 40 mL / min aspiration speed means air gets sucked in.
+# mL/min Different to move speed as 40 mL / min aspiration speed means air gets
+# sucked in.
 DEFAULT_MOVE_SPEED = 40 # mL/min
 DEFAULT_ASPIRATION_SPEED = 10
 DEFAULT_DISPENSE_SPEED = DEFAULT_MOVE_SPEED

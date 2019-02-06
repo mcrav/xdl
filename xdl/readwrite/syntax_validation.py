@@ -5,6 +5,7 @@ from ..steps import MakeSolution
 import inspect
 import re
 import traceback
+import logging
 
 ACCEPTABLE_MASS_UNITS = ['ug', 'mg', 'g', 'kg']
 ACCEPTABLE_VOLUME_UNITS = ['ul', 'ml', 'cl', 'dl', 'l', 'cc']
@@ -34,10 +35,13 @@ class XDLSyntaxValidator(object):
     Validate that XDL is syntactically correct.
     """
 
-    def __init__(self, xdl):
+    def __init__(self, xdl, logger=None):
         """
         Load and validate XDL.
         """
+        self.logger = logger
+        if not logger:
+            self.logger = logging.getLogger('xdl_logger')
         try:
             self.xdl_tree = etree.fromstring(xdl)
             self.components = self.get_section_children('Hardware')
@@ -45,10 +49,10 @@ class XDLSyntaxValidator(object):
             self.steps = self.get_section_children('Procedure')
             self.validate_xdl()
 
-        except Exception:
+        except Exception as e:
             self.valid = False
-            traceback.print_exc()
-            print('\nFailed to load XDL.')
+            self.logger.error(
+                '{0}\nFailed to load XDL.'.format(traceback.format_exc()))
         
     def validate_xdl(self):
         """Run all validation tests on XDL and store result in self.valid."""
@@ -85,14 +89,14 @@ class XDLSyntaxValidator(object):
             elif element.tag == 'Procedure':
                 has_procedure = True
             else:
-                self.print_syntax_error(
+                self.log_syntax_error(
                     f'Unrecognised element: <{element.tag}>', element)
                 extra_sections = True
         for has_section, name in zip(
             [has_hardware, has_reagents, has_procedure], 
             ['Hardware', 'Reagents', 'Procedure']):
             if not has_section:
-                self.print_syntax_error(f'Missing section: <{name}>')
+                self.log_syntax_error(f'Missing section: <{name}>')
         return (has_hardware and has_reagents and has_procedure 
                 and not extra_sections) 
 
@@ -114,7 +118,7 @@ class XDLSyntaxValidator(object):
                     for reagent in step_reagents:
                         if reagent not in declared_reagent_ids:
                             all_reagents_declared = False
-                            self.print_syntax_error(
+                            self.log_syntax_error(
                                 f'{reagent} used in procedure but not declared in <Reagent> section.', 
                                 step)
         return all_reagents_declared
@@ -132,7 +136,7 @@ class XDLSyntaxValidator(object):
                     if (not val.replace('_top', '').replace('_bottom', '') 
                         in declared_vessel_ids):
                         all_vessels_declared = False
-                        self.print_syntax_error(
+                        self.log_syntax_error(
                             f'{val} used in procedure but not declared in <Hardware> section.', step)
         return all_vessels_declared
 
@@ -141,7 +145,7 @@ class XDLSyntaxValidator(object):
         steps_recognised = True
         for step in self.steps:
             if step.tag not in XDL_STEP_NAMESPACE:
-                self.print_syntax_error(
+                self.log_syntax_error(
                     f'{step.tag} is not a recognised step type.', step)
                 steps_recognised = False
         return steps_recognised
@@ -151,7 +155,7 @@ class XDLSyntaxValidator(object):
         hardware_recognised = True
         for component in self.components:
             if component.tag not in XDL_HARDWARE_NAMESPACE:
-                self.print_syntax_error(
+                self.log_syntax_error(
                     f'{component.tag} is not a recognised component type.', 
                     component)
                 hardware_recognised = False
@@ -214,8 +218,10 @@ class XDLSyntaxValidator(object):
         else:
             quantity_valid = True
         if not quantity_valid:
-            self.print_syntax_error(
-                f'{quantity_str} is not a valid {quantity_type}.\nAcceptable units are {", ".join(XDL_ACCEPTABLE_UNITS[quantity_type])}',
+            self.log_syntax_error(
+                '{0} is not a valid {1}.\nAcceptable units are {2}.'.format(
+                    quantity_str, quantity_type, ', '.join(
+                        XDL_ACCEPTABLE_UNITS[quantity_type])),
                 quantity_element)
         return quantity_valid
 
@@ -226,7 +232,7 @@ class XDLSyntaxValidator(object):
             # Check length of solutes and solute_masses lists are the same
             if isinstance(step, MakeSolution):
                 if len(step.solutes.split()) != len(step.solute_masses.split()):
-                    self.print_syntax_error(
+                    self.log_syntax_error(
                         'Length of solutes and solute_masses lists are different.', 
                         step)
             if step.tag in XDL_STEP_COMPULSORY_ATTRIBUTES:
@@ -241,16 +247,16 @@ class XDLSyntaxValidator(object):
                                 has_quantity = True
                                 break
                     elif attr not in step.attrib:
-                        self.print_syntax_error(
+                        self.log_syntax_error(
                             f'Step missing {attr} attribute.', step)
                         step_attributes_valid = False
                 if not has_quantity:
-                    self.print_syntax_error(
+                    self.log_syntax_error(
                         f'Step missing {attr} attribute.', step)
                     step_attributes_valid = False
         return step_attributes_valid
 
-    def print_syntax_error(self, error, element=None):
+    def log_syntax_error(self, error, element=None):
         """Print syntax error.
         
         Arguments:
@@ -266,4 +272,4 @@ class XDLSyntaxValidator(object):
         else:
             s += ': '
         s += error
-        print(s + '\n')
+        self.logger.error(s + '\n')
