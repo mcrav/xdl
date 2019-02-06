@@ -17,16 +17,19 @@ class XDL(object):
     
     Public Methods:
         as_human_readable -- Returns human readable description of the procedure.
-        print_human_readable -- Prints human readable description of the procedure.
+        print_human_readable -- Prints human readable description of the
+                                procedure.
         print_full_xdl_tree -- Prints reasonably human readable visualisation of 
                                the nested XDL steps.
         as_string -- Return XDL as XML string.
         save -- Save XDL as XML.
         save_chempiler_script -- Save XDL base steps as Python chempiler script.
-        as_literal_chempiler_code -- Return XDL base steps as Python chempiler script.
+        as_literal_chempiler_code -- Return XDL base steps as Python chempiler
+                                     script.
         iter_vessel_contents -- Return iterator of vessel_contents at each step.
     """
-    def __init__(self, xdl=None, steps=[], hardware=None, reagents=[]):
+    def __init__(self, xdl=None, steps=[], hardware=None, reagents=[],
+                       logger=None):
         """Init method for XDL object.
         One of xdl or (steps, hardware and reagents) must be given.
         
@@ -36,7 +39,13 @@ class XDL(object):
             hardware (Hardware, optional): Hardware object containing all 
                 components in XDL.
             reagents (List[Reagent], optional): List of Reagent objects.
+
+        Raises:
+            ValueError: If insufficient args provided to instantiate object.
         """
+        self.logger = logger
+        if not logger:
+            self.logger = logging.getLogger('xdl_logger')
         self._xdl_file = None
         self.autoClean = DEFAULT_AUTO_CLEAN
         self.organicCleaningReagent = DEFAULT_ORGANIC_CLEANING_SOLVENT
@@ -64,10 +73,12 @@ class XDL(object):
         elif steps and hardware and reagents:
             self.steps, self.hardware, self.reagents = steps, hardware, reagents
         else:
-            print("Can't create XDL object. Insufficient args given to __init__ method.")
+            raise ValueError(
+                "Can't create XDL object. Insufficient args given to __init__ method.")
         if self.steps:
-            self._xdlgenerator = XDLGenerator(
-                steps=self.steps, hardware=self.hardware, reagents=self.reagents)
+            self._xdlgenerator = XDLGenerator(steps=self.steps,
+                                              hardware=self.hardware,
+                                              reagents=self.reagents)
 
     def _get_exp_id(self, default='xdl_exp'):
         """Get experiment ID name to give to the Chempiler."""
@@ -96,7 +107,7 @@ class XDL(object):
         base_steps = list(BASE_STEP_OBJ_DICT.values())
         tree = [step]
         if print_tree:
-            print(f'{indent*lvl}{step.name}')
+            self.logger.info('{0}{1}'.format(indent*lvl, step.name))
         if type(step) in base_steps:
             return tree
         else:
@@ -104,12 +115,13 @@ class XDL(object):
             for step in step.steps:
                 if type(step) in base_steps:
                     if print_tree:
-                        print(f'{indent*lvl}{step.name}')
+                        self.logger.info('{0}{1}'.format(indent*lvl, step.name))
                     tree.append(step)
                     continue
                 else:
                     tree.extend(
-                        self.climb_down_tree(step, print_tree=print_tree, lvl=lvl))
+                        self.climb_down_tree(
+                            step, print_tree=print_tree, lvl=lvl))
         return tree
 
     def _get_full_xdl_tree(self):
@@ -128,10 +140,10 @@ class XDL(object):
 
     def print_full_xdl_tree(self):
         """Print nested structure of all steps in XDL procedure."""
-        print('\nOperation Tree\n--------------\n')
+        self.logger.info('\nOperation Tree\n--------------\n')
         for step in self.steps:
             self.climb_down_tree(step, print_tree=True)
-        print('\n')
+        self.logger.info('\n')
 
     def as_literal_chempiler_code(self, dry_run=False):
         """
@@ -154,7 +166,8 @@ class XDL(object):
                     step = new_step
                 s += re.sub(r'([a-zA-Z][a-z|A-Z|_|0-9]+)([\,|\)])', 
                             r"'\1'\2", 
-                            step.literal_code) + '\n'
+                            step.literal_code)
+                s += '\n'
         return s
 
     def save_chempiler_script(self, save_path, dry_run=False):
@@ -175,9 +188,8 @@ class XDL(object):
 
     def print_full_human_readable(self):
         """Print human-readable English description of XDL procedure."""
-        print('Synthesis Description\n---------------------\n')
-        print(self.as_human_readable())
-        print('\n')
+        self.logger.info('Synthesis Description\n---------------------\n')
+        self.logger.info('{0}\n'.format(self.as_human_readable()))
 
     def as_string(self):
         """Return XDL str of procedure."""
@@ -201,11 +213,10 @@ class XDL(object):
                                         or dict containing graph in same format
                                         as JSON file.
         """
-
         self.executor = XDLExecutor(self)
         self.executor.prepare_for_execution(graph_file)
 
-    def execute(self, chempiler, logger=None):
+    def execute(self, chempiler):
         """Execute XDL using given Chempiler object. self.prepare_for_execution
         must have been called before calling thie method.
         
@@ -213,9 +224,8 @@ class XDL(object):
             chempiler (chempiler.Chempiler): Chempiler object instantiated with
                 modules and graph to run XDL on.
         """
-        if not logger:
-            logger = logging.getLogger()
         if self.executor:
-            self.executor.execute(chempiler, logger=logger)
+            self.executor.execute(chempiler)
         else:
-            logger.exception('XDL executor not available. Call prepare_for_execution before trying to execute.')
+            raise RuntimeError(
+                'XDL executor not available. Call prepare_for_execution before trying to execute.')

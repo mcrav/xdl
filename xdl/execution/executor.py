@@ -38,6 +38,7 @@ class XDLExecutor(object):
         Args:
             xdl (XDL): XDL object to execute.
         """
+        self.logger = xdl.logger
         self._xdl = xdl
         self._warnings = []
         self._prepared_for_execution = False
