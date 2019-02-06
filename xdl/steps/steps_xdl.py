@@ -806,7 +806,8 @@ class Chill(Step):
 #####################
 
 class Rotavap(Step):
-    """Rotavap contents of given vessel at given temp and given pressure for given time.
+    """Rotavap contents of given vessel at given temp and given pressure for
+    given time.
 
     Keyword Arguments:
         vessel {str} -- Vessel with contents to be rotavapped.
@@ -826,20 +827,47 @@ class Rotavap(Step):
 
         # Steps incomplete
         self.steps = [
-            CSwitchCartridge('rotavap', 0),
-            CLiftArmDown('rotavap'),
-            CSetRvRotationSpeed('rotavap', 'default'),
-            CStartRotation('rotavap'),
-            CSetVacSp('rotavap', 'default'),
-            StartVacuum('rotavap'),
-            CSetBathTemp('rotavap', temp),
-            CStartHeaterBath('rotavap'),
-            Wait(300),
-            CSetVacSp('rotavap', 'default'),
+            # Lower flask start rotation.
+            CSwitchCartridge(self.rotavap_vessel, 0),
+            CLiftArmDown(self.rotavap_vessel),
+            CSetRvRotationSpeed(self.rotavap_vessel, self.rotation_speed),
+            CStartRotation(self.rotavap_vessel),
+
+            # Degas
+            CSetVacSp(self.rotavap_vessel, DEFAULT_ROTAVAP_DEGAS_PRESSURE),
+            CStartVac(self.rotavap_vessel),
+            CSetBathTemp(self.rotavap_vessel, self.temp),
+            CStartHeaterBath(self.rotavap_vessel),
+            Wait(DEFAULT_ROTAVAP_DEGAS_TIME),
+
+            # Main distillation
+            CSetVacSp(self.rotavap_vessel, self.vacuum_pressure),
             Wait(self.time),
-            StopVacuum('rotavap'),
-            CVentVac('rotavap'),
-            CMove('flask_rv_bottom', 'waste', )
+
+            # Vent and empty
+            CLiftArmUp(self.rotavap_vessel),
+            CWait(DEFAULT_ROTAVAP_VENT_TIME),
+            StopVacuum(self.rotavap_vessel),
+            CVentVac(self.rotavap_vessel),
+            CMove(from_vessel=self.rotavap_vessel, from_port=BOTTOM_PORT,
+                  to_vessel=self.waste_vessel, volume=self.distillate_volume),
+            
+            # Dry
+            CLiftArmDown(self.rotavap_vessel),
+            CSetVacSp(self.rotavap, self.vacuum_pressure),
+            CStartVac(self.rotavap_vessel),
+            CWait(DEFAULT_ROTAVAP_DRYING_TIME),
+            
+            # Recover flask and vent
+            CLiftArmUp(self.rotavap_vessel),
+            Wait(DEFAULT_ROTAVAP_VENT_TIME),
+            CStopVac(self.rotavap_vessel),
+            CVentVac(self.rotavap_vessel),
+            CStopRotation(self.rotavap_vessel),
+            CStopHeaterBath(self.rotavap_vessel),
+            CMove(from_vessel=self.rotavap_vessel, from_port=BOTTOM_PORT,
+                  to_vessel=self.waste_vessel, volume=self.distillate_volume),
+            Wait(DEFAULT_ROTAVAP_VENT_TIME),
         ]
 
         self.human_readable = 'Rotavap contents of {vessel} at {temp} °C for {time}.'.format(

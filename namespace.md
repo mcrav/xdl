@@ -22,10 +22,16 @@
 * StartVacuum
 * StopVacuum
 
+## Other
+* Recrystallization
+* Rotavap
+* Separate
+* VacuumDistillation
+* Column
+
 ## Cleaning steps
 * CleanBackbone
 * CleanVessel
-* Column
 
 ## Misc
 * Confirm
@@ -33,9 +39,3 @@
 * PrimePumpForAdd
 * PrepareFilter
 * RemoveFilterDeadVolume
-
-## Other
-* Recrystallization
-* Rotavap
-* Separate
-* VacuumDistillation
