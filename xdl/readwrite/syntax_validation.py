@@ -50,10 +50,12 @@ class XDLSyntaxValidator(object):
             self.validate_xdl()
 
         except Exception as e:
+            if type(e) == etree.XMLSyntaxError:
+                self.logger.error('XDL contains XML syntax error.')
             self.valid = False
             self.logger.error(
-                '{0}\nFailed to load XDL.'.format(traceback.format_exc()))
-        
+                '{0}\nFailed to load XDL.'.format(e))
+                         
     def validate_xdl(self):
         """Run all validation tests on XDL and store result in self.valid."""
         self.valid = (
