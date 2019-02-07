@@ -538,19 +538,16 @@ class XDLExecutor(object):
                     self.logger.error(
                         "Hardware is not compatible. Can't execute.")
 
-    def execute(self, chempiler, logger=None):
+    def execute(self, chempiler):
         """Execute XDL procedure with given chempiler. The same graph must be
         passed to the chempiler and to prepare_for_execution.
         """
-        if not logger:
-            logger = logging.getLogger()
         if self._prepared_for_execution:
             self._xdl.print_full_xdl_tree()
             self._xdl.print_full_human_readable()
             for step in self._xdl.steps:
-                if logger:
-                    logger.info(step.name)
-                keep_going = step.execute(chempiler, logger)
+                self.logger.info(step.name)
+                keep_going = step.execute(chempiler, self.logger)
                 if not keep_going:
                     return
         else:
