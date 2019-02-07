@@ -457,7 +457,7 @@ class XDLExecutor(object):
 
     def _print_warnings(self):
         for warning in self._warnings:
-            print(warning)
+            self.logger.warning(warning)
 
 
     ####################
@@ -494,7 +494,7 @@ class XDLExecutor(object):
         if not self._prepared_for_execution:
             # Check XDL is not empty.
             if self._xdl.steps:
-                print('XDL is valid')
+                self.logger.info('XDL is valid')
 
                 self._graph = get_graph(graph_file)
                 # Load graph, make Hardware object from graph, and map nearest
@@ -507,7 +507,7 @@ class XDLExecutor(object):
 
                 # Check hardware compatibility
                 if self._hardware_is_compatible():
-                    print('Hardware is compatible')
+                    self.logger.info('Hardware is compatible')
                     self._check_all_flasks_present()
 
                     # Map graph hardware to steps.
@@ -535,7 +535,8 @@ class XDLExecutor(object):
                     self._prepared_for_execution = True
                 
                 else:
-                    print("Hardware is not compatible. Can't execute.")
+                    self.logger.error(
+                        "Hardware is not compatible. Can't execute.")
 
     def execute(self, chempiler, logger=None):
         """Execute XDL procedure with given chempiler. The same graph must be
@@ -553,7 +554,8 @@ class XDLExecutor(object):
                 if not keep_going:
                     return
         else:
-            print('Not prepared for execution. Prepare by calling xdlexecutor.prepare_for_execution with your graph.')
+            self.logger.error(
+                'Not prepared for execution. Prepare by calling xdlexecutor.prepare_for_execution with your graph.')
                 
 
 def is_aqueous(reagent_name):
