@@ -545,6 +545,7 @@ class XDLExecutor(object):
         if self._prepared_for_execution:
             self._xdl.print_full_xdl_tree()
             self._xdl.print_full_human_readable()
+            self.logger.info('Execution\n---------\n')
             for step in self._xdl.steps:
                 self.logger.info(step.name)
                 keep_going = step.execute(chempiler, self.logger)
