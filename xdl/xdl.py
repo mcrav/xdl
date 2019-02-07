@@ -54,9 +54,9 @@ class XDL(object):
             parsed_xdl = {}
             if os.path.exists(xdl):
                 self._xdl_file = xdl
-                parsed_xdl = xdl_file_to_objs(xdl)
+                parsed_xdl = xdl_file_to_objs(xdl, self.logger)
             else:
-                parsed_xdl = xdl_str_to_objs(xdl)
+                parsed_xdl = xdl_str_to_objs(xdl, self.logger)
             if parsed_xdl:
                 self.steps = parsed_xdl['steps']
                 self.hardware = parsed_xdl['hardware']

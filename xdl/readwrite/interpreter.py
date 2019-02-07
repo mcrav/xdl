@@ -8,7 +8,7 @@ from .syntax_validation import XDLSyntaxValidator
 from ..utils.namespace import (STEP_OBJ_DICT, BASE_STEP_OBJ_DICT)
 from ..constants import XDL_HARDWARE_CHEMPUTER_CLASS_MAP
 
-def xdl_file_to_objs(xdl_file):
+def xdl_file_to_objs(xdl_file, logger):
     """Given XDL file return steps, hardware and reagents.
     
     Arguments:
@@ -21,9 +21,9 @@ def xdl_file_to_objs(xdl_file):
                   reagents -- List of Reagent objects.
     """
     with open(xdl_file) as fileobj:
-        return xdl_str_to_objs(fileobj.read())
+        return xdl_str_to_objs(fileobj.read(), logger)
 
-def xdl_str_to_objs(xdl_str):
+def xdl_str_to_objs(xdl_str, logger):
     """Given XDL str return steps, hardware and reagents.
     
     Arguments:
@@ -49,11 +49,10 @@ def xdl_str_to_objs(xdl_str):
             parsed_xdl.update(synthesis_attrs)
             return parsed_xdl
         else:
-            print('Invalid XDL given.')
-            raise(Exception)
+            logger.error('Invalid XDL given.')
     else:
-        print('No XDL given.')
-        raise(Exception)
+        logger.error('No XDL given.')
+    return None
 
 def synthesis_attrs_from_xdl(xdl_str):
     """Return attrs from <Synthesis> tag.
