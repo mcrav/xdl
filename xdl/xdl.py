@@ -182,8 +182,8 @@ class XDL(object):
             str: Human readable description of procedure.
         """
         s = ''
-        for step in self.steps:
-            s += f'{step.human_readable}\n'
+        for i, step in enumerate(self.steps):
+            s += f'{i+1}) {step.human_readable}\n'
         return s
 
     def print_full_human_readable(self):
