@@ -70,6 +70,8 @@ class XDL(object):
                 if 'aqueousCleaningReagent' in parsed_xdl:
                     self.aqueousCleaningReagent = parsed_xdl[
                         'aqueousCleaningReagent']
+            else:
+                self.logger.error('Invalid XDL given.')
         elif steps and hardware and reagents:
             self.steps, self.hardware, self.reagents = steps, hardware, reagents
         else:
