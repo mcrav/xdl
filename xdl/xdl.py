@@ -13,20 +13,7 @@ import copy
 
 class XDL(object):
     """
-    Interpets XDL (file or str) and provides the following public methods:.
-    
-    Public Methods:
-        as_human_readable -- Returns human readable description of the procedure.
-        print_human_readable -- Prints human readable description of the
-                                procedure.
-        print_full_xdl_tree -- Prints reasonably human readable visualisation of 
-                               the nested XDL steps.
-        as_string -- Return XDL as XML string.
-        save -- Save XDL as XML.
-        save_chempiler_script -- Save XDL base steps as Python chempiler script.
-        as_literal_chempiler_code -- Return XDL base steps as Python chempiler
-                                     script.
-        iter_vessel_contents -- Return iterator of vessel_contents at each step.
+    Interpets XDL (file or str) and provides an object for further use.
     """
     def __init__(self, xdl=None, steps=[], hardware=None, reagents=[],
                        logger=None):

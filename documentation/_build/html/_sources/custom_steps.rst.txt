@@ -1,6 +1,5 @@
-##########################
-Making custom step classes
-##########################
+Making Custom Steps
+*******************
 
 All step classes inherit the class :class:`xdl.utils.Step`.
 

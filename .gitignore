@@ -1,7 +1,8 @@
 # Project dirs
-data
-stuff
-build
+data/
+stuff/
+build/
+documentation/_build/
 
 # Python
 .ipynb_checkpoints

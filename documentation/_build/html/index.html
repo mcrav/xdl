@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to xdl’s documentation! &mdash; xdl 0.1.0 documentation</title>
+  <title>XDL documentation &mdash; xdl 0.1.0 documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Steps" href="steps.html" /> 
+    <link rel="next" title="Installation" href="install.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -79,7 +79,13 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="steps.html">Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthesis_steps.html">Synthesis Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utility_steps.html">Utility Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base_steps.html">Base Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_steps.html">Making Custom Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Documentation</a></li>
 </ul>
 
             
@@ -125,7 +131,7 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li>Welcome to xdl’s documentation!</li>
+      <li>XDL documentation</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -144,19 +150,32 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="welcome-to-xdl-s-documentation">
-<h1>Welcome to xdl’s documentation!<a class="headerlink" href="#welcome-to-xdl-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="xdl-documentation">
+<h1>XDL documentation<a class="headerlink" href="#xdl-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="steps.html">Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthesis_steps.html">Synthesis Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utility_steps.html">Utility Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base_steps.html">Base Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_steps.html">Making Custom Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/xdl_class.html">xdl.XDL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/execution.html">xdl.execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/hardware.html">xdl.hardware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/readwrite.html">xdl.readwrite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/reagents.html">xdl.reagents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/safety.html">xdl.safety</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/steps.html">xdl.steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/utils.html">xdl.utils</a></li>
+</ul>
+</li>
 </ul>
 </div>
-<div class="section" id="execution">
-<h2>Execution<a class="headerlink" href="#execution" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="hardware">
-<h2>Hardware<a class="headerlink" href="#hardware" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -176,7 +195,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="steps.html" class="btn btn-neutral float-right" title="Steps" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="install.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
@@ -207,20 +226,11 @@
 
     
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'0.1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
 
   

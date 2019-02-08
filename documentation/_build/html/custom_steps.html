@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Making custom step classes &mdash; xdl 0.1.0 documentation</title>
+  <title>Making Custom Steps &mdash; xdl 0.1.0 documentation</title>
   
 
   
@@ -27,7 +27,8 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Base Steps" href="base_steps.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -77,8 +78,12 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="steps.html">Steps</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthesis_steps.html">Synthesis Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utility_steps.html">Utility Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base_steps.html">Base Steps</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Making Custom Steps</a></li>
 </ul>
 
             
@@ -124,7 +129,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Making custom step classes</li>
+      <li>Making Custom Steps</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -143,8 +148,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="making-custom-step-classes">
-<h1>Making custom step classes<a class="headerlink" href="#making-custom-step-classes" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="making-custom-steps">
+<h1>Making Custom Steps<a class="headerlink" href="#making-custom-steps" title="Permalink to this headline">¶</a></h1>
 <p>All step classes inherit the class <code class="xref py py-class docutils literal notranslate"><span class="pre">xdl.utils.Step</span></code>.</p>
 <p>Three member variables must be set in the <cite>__init__</cite> function: <cite>properties</cite>, <cite>steps</cite> and <cite>human_readable</cite>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xdl</span> <span class="kn">import</span> <span class="n">Step</span>
@@ -178,6 +183,13 @@
           </div>
           <footer>
   
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="base_steps.html" class="btn btn-neutral" title="Base Steps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
   <hr/>
 
@@ -204,20 +216,11 @@
 
     
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'0.1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
 
   

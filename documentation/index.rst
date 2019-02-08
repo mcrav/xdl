@@ -3,25 +3,24 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to xdl's documentation!
+XDL documentation
 ===============================
 
+Usage
+*****
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   install
+   tutorial
+   synthesis_steps
+   utility_steps
+   base_steps
    custom_steps
-   steps
+   reference/index
 
-Execution
-*********
-.. automodule:: xdl.execution
-    :members:
 
-Hardware
-*********
-.. automodule:: xdl.hardware
-    :members:
 
 Indices and tables
 ==================
