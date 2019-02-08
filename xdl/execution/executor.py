@@ -72,15 +72,13 @@ class XDLExecutor(object):
         for reagent in self._xdl.reagents:
             reagent_flask_present = False
             for flask in self._graph_hardware:
-                if 'chemical' in self._graph.node[flask.xid]:
-                    flask_chemical = self._graph.node[
-                        flask.xid]['chemical']
-                    if flask_chemical == reagent.xid:
+                if 'chemical' in flask.properties:
+                    if flask.chemical == reagent.xid:
                         reagent_flask_present = True
                         break
             if reagent_flask_present == False:
-                self._warnings.append(
-                    'No flask present for {0}'.format(reagent.xid))
+                self.logger.warning(
+                    'WARNING: No flask present for {0}'.format(reagent.xid))
                 flasks_ok = False
         return flasks_ok
 
@@ -457,7 +455,7 @@ class XDLExecutor(object):
 
     def _print_warnings(self):
         for warning in self._warnings:
-            self.logger.warning(warning)
+            self.logger.info(warning)
 
 
     ####################

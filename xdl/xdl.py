@@ -88,8 +88,9 @@ class XDL(object):
             return default
 
     def climb_down_tree(self, step, print_tree=False, lvl=0):
-        """Go through given step's sub steps recursively until base steps are reached.
-        Return list containing the step, all sub steps and all base steps.
+        """Go through given step's sub steps recursively until base steps are
+        reached. Return list containing the step, all sub steps and all base
+        steps.
         
         Args:
             step (Step): step to find all sub steps for.
