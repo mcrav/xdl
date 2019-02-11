@@ -56,6 +56,9 @@ class XDLGenerator(object):
             for prop, val in step.properties.items():
                 if val != None:
                     step_tree.attrib[prop] = str(val)
+                    if type(val) == list:
+                        step_tree.attrib[prop] = ' '.join(
+                            [str(item) for item in val])
             procedure_tree.append(step_tree)
         self.xdltree.append(procedure_tree)
 
