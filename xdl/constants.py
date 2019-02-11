@@ -65,7 +65,7 @@ DEFAULT_VALS = {
     'CPrime': {
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
     },
-    'Separation': {
+    'Separate': {
         'solvent_volume': DEFAULT_SEPARATION_SOLVENT_VOLUME,
     },
     'Filter': {

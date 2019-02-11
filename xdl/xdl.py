@@ -15,7 +15,7 @@ class XDL(object):
     """
     Interpets XDL (file or str) and provides an object for further use.
     """
-    def __init__(self, xdl=None, steps=[], hardware=None, reagents=[],
+    def __init__(self, xdl=None, steps=None, hardware=None, reagents=None,
                        logger=None):
         """Init method for XDL object.
         One of xdl or (steps, hardware and reagents) must be given.
@@ -57,7 +57,9 @@ class XDL(object):
                 if 'aqueousCleaningReagent' in parsed_xdl:
                     self.aqueousCleaningReagent = parsed_xdl[
                         'aqueousCleaningReagent']
-        elif steps and hardware and reagents:
+        elif (steps is not None
+              and reagents is not None
+              and hardware is not None):
             self.steps, self.hardware, self.reagents = steps, hardware, reagents
         else:
             raise ValueError(
@@ -178,6 +180,11 @@ class XDL(object):
         """Print human-readable English description of XDL procedure."""
         self.logger.info('Synthesis Description\n---------------------\n')
         self.logger.info('{0}\n'.format(self.as_human_readable()))
+
+    def save_human_readable(self, save_file):
+        """Save human readable description of procedure to given path."""
+        with open(save_file, 'w') as fileobj:
+            fileobj.write(self.as_human_readable())
 
     def as_string(self):
         """Return XDL str of procedure."""

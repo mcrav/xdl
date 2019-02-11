@@ -265,6 +265,32 @@ class StopVacuum(Step):
 
         self.human_readable = f'Stop vacuum for {self.vessel}.'
 
+class StartChiller(Step):
+
+    def __init__(self, vessel=None, temp=None):
+
+        self.properties = {
+            'vessel': vessel,
+            'temp': temp,
+        }
+
+        self.steps = [
+            CSetChiller(vessel=self.vessel, temp=self.temp),
+            CChillerWaitForTemp(vessel=self.vessel),
+        ]
+
+class StopChiller(Step):
+
+    def __init__(self, vessel=None):
+
+        self.properties = {
+            'vessel': vessel,
+        }
+
+        self.steps = [
+            CStopChiller(self.vessel)
+        ]
+
 class ChillerReturnToRT(Step):
     """Stop the chiller.
 
@@ -815,12 +841,17 @@ class Rotavap(Step):
         pressure {float} -- Pressure to set rotary evaporator vacuum to in mbar.
         time {int} -- Time to rotavap for in seconds.
     """
-    def __init__(self, vessel=None, temp=None, pressure=None, time='default'):
+    def __init__(self, rotavap_vessel=None, temp=None, vacuum_pressure=None,
+                       time='default', rotation_speed=None, waste_vessel=None,
+                       distillate_volume=None):
 
         self.properties = {
-            'vessel': vessel,
+            'rotavap_vessel': rotavap_vessel,
             'temp': temp,
-            'pressure': pressure,
+            'vacuum_pressure': vacuum_pressure,
+            'rotation_speed': rotation_speed,
+            'waste_vessel': waste_vessel,
+            'distillate_volume': distillate_volume,
             'time': time,
         }
         self.get_defaults()
@@ -854,7 +885,7 @@ class Rotavap(Step):
             
             # Dry
             CLiftArmDown(self.rotavap_vessel),
-            CSetVacSp(self.rotavap, self.vacuum_pressure),
+            CSetVacSp(self.rotavap_vessel, self.vacuum_pressure),
             CStartVac(self.rotavap_vessel),
             CWait(DEFAULT_ROTAVAP_DRYING_TIME),
             
@@ -870,7 +901,7 @@ class Rotavap(Step):
             Wait(DEFAULT_ROTAVAP_VENT_TIME),
         ]
 
-        self.human_readable = 'Rotavap contents of {vessel} at {temp} °C for {time}.'.format(
+        self.human_readable = 'Rotavap contents of {rotavap_vessel} at {temp} °C for {time}.'.format(
             **self.properties)
 
 class Column(Step):

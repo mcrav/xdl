@@ -424,8 +424,7 @@ class XDLExecutor(object):
     ##########################
 
     def _tidy_up_procedure(self):
-        """Remove steps that are pointless.
-        """
+        """Remove steps that are pointless."""
         self._remove_pointless_backbone_cleaning()
         
     def _remove_pointless_backbone_cleaning(self):

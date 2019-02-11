@@ -36,7 +36,7 @@ def xdl_str_to_objs(xdl_str, logger):
                   reagents -- List of Reagent objects.
     """
     if xdl_str:
-        if xdl_valid(xdl_str):
+        if xdl_valid(xdl_str, logger):
             steps = steps_from_xdl(xdl_str)
             hardware = hardware_from_xdl(xdl_str)
             reagents = reagents_from_xdl(xdl_str)
@@ -65,7 +65,7 @@ def synthesis_attrs_from_xdl(xdl_str):
     """
     return etree.fromstring(xdl_str).attrib
 
-def xdl_valid(xdl_str):
+def xdl_valid(xdl_str, logger=None):
     """Return True if XDL is valid, otherwise False.
     
     Arguments:
@@ -74,7 +74,7 @@ def xdl_valid(xdl_str):
     Returns:
         bool -- True if XDL is valid, otherwise False.
     """
-    return XDLSyntaxValidator(xdl_str).valid
+    return XDLSyntaxValidator(xdl_str, logger=logger).valid
 
 def steps_from_xdl(xdl_str):
     """Given XDL str return list of Step objects.

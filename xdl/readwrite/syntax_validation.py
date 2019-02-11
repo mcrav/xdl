@@ -54,7 +54,7 @@ class XDLSyntaxValidator(object):
                 self.logger.error('XDL contains XML syntax error.')
             self.valid = False
             self.logger.error(
-                '{0}\nFailed to load XDL.'.format(e))
+                '{0}\nFailed to load XDL.\n{1}'.format(e, traceback.format_exc()))
                          
     def validate_xdl(self):
         """Run all validation tests on XDL and store result in self.valid."""
@@ -106,7 +106,7 @@ class XDLSyntaxValidator(object):
         """
         Check all reagents used in steps are declared in the Reagents section.
         """
-        declared_reagent_ids = [reagent.attrib['id'] 
+        declared_reagent_ids = [reagent.attrib['xid'] 
                                 for reagent in self.reagents]
         all_reagents_declared = True
         for step in self.steps:
@@ -129,7 +129,7 @@ class XDLSyntaxValidator(object):
         """
         Check all vessels used in steps are declared in the Hardware section.
         """
-        declared_vessel_ids = [component.attrib['id'] 
+        declared_vessel_ids = [component.attrib['xid'] 
                                for component in self.components]
         all_vessels_declared = True
         for step in self.steps:
