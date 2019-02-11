@@ -279,6 +279,8 @@ class StartChiller(Step):
             CChillerWaitForTemp(vessel=self.vessel),
         ]
 
+        self.human_readable = 'Start chiller for {vessel}.'
+
 class StopChiller(Step):
 
     def __init__(self, vessel=None):
@@ -290,6 +292,8 @@ class StopChiller(Step):
         self.steps = [
             CStopChiller(self.vessel)
         ]
+    
+        self.human_readable = 'Stop chiller for {vessel}.'
 
 class ChillerReturnToRT(Step):
     """Stop the chiller.

@@ -64,10 +64,6 @@ class XDL(object):
         else:
             raise ValueError(
                 "Can't create XDL object. Insufficient args given to __init__ method.")
-        if self.steps:
-            self._xdlgenerator = XDLGenerator(steps=self.steps,
-                                              hardware=self.hardware,
-                                              reagents=self.reagents)
 
     def _get_exp_id(self, default='xdl_exp'):
         """Get experiment ID name to give to the Chempiler."""
@@ -188,6 +184,9 @@ class XDL(object):
 
     def as_string(self):
         """Return XDL str of procedure."""
+        self._xdlgenerator = XDLGenerator(steps=self.steps,
+                                          hardware=self.hardware,
+                                          reagents=self.reagents)
         return self._xdlgenerator.as_string()
 
     def save(self, save_file):
@@ -196,7 +195,28 @@ class XDL(object):
         Args:
             save_file (str): File path to save XDL to.
         """
+        self._xdlgenerator = XDLGenerator(steps=self.steps,
+                                          hardware=self.hardware,
+                                          reagents=self.reagents)
         self._xdlgenerator.save(save_file)
+
+    def scale_procedure(self, scale):
+        """Scale all volumes in procedure.
+
+        Args:
+            scale (float): Number to scale all volumes by.
+        """
+        for step in self.steps:
+            for prop in step.properties:
+                if 'volume' in prop:
+                    val = step.properties[prop]
+                    if val:
+                        step.properties[prop] = float(val) * scale
+                        print(step.properties[prop])
+                        print(val)
+                        print('------')
+        for step in self.steps:
+            print(step.properties)
 
     def prepare_for_execution(self, graph_file):
         """Check hardware compatibility and prepare XDL for execution on given 

@@ -3,8 +3,8 @@ from ..constants import *
 
 class Component(XDLBase):
     """Base component class. At moment does nothing more than XDLBase."""
-    def __init__(self, xid=None, properties={}):
-        self.properties = {'xid': xid}
+    def __init__(self, xid=None, properties={}, type=None):
+        self.properties = {'xid': xid, 'type': type}
         self.properties.update(properties)
 
 class Hardware(object):

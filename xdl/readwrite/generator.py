@@ -30,7 +30,7 @@ class XDLGenerator(object):
         """Create and add Hardware section to XDL tree."""
         hardware_tree = etree.Element('Hardware')
         for component in self.hardware:
-            component_tree = etree.Element(component.name)
+            component_tree = etree.Element('Component')
             for prop, val in component.properties.items():
                 if val != None:
                     component_tree.attrib[prop] = str(val)

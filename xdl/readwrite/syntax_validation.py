@@ -156,7 +156,7 @@ class XDLSyntaxValidator(object):
         """Check all the component tags are in the XDL namespace."""
         hardware_recognised = True
         for component in self.components:
-            if component.tag not in XDL_HARDWARE_NAMESPACE:
+            if component.attrib['type'] not in XDL_HARDWARE_NAMESPACE:
                 self.log_syntax_error(
                     f'{component.tag} is not a recognised component type.', 
                     component)

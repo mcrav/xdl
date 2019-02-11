@@ -153,8 +153,7 @@ def xdl_to_step(xdl_step_element):
     """
     step_type = STEP_OBJ_DICT[xdl_step_element.tag]
     return step_type(
-        **preprocess_step_attrib(step_type, xdl_step_element.attrib)
-    )
+        **preprocess_step_attrib(step_type, xdl_step_element.attrib))
 
 def xdl_to_component(xdl_component_element):
     """Given XDL component element return corresponding Component object.
@@ -168,8 +167,6 @@ def xdl_to_component(xdl_component_element):
                      xdl_component_element.
     """
     attr = preprocess_attrib(xdl_component_element.attrib)
-    attr['type'] = XDL_HARDWARE_CHEMPUTER_CLASS_MAP[
-        xdl_component_element.tag]
     component = Component(attr['xid'], attr)  
     return component
 
