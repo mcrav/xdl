@@ -1,0 +1,7 @@
+============
+xdl.hardware
+============
+
+.. toctree::
+
+   components

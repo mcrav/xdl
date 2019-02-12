@@ -3,14 +3,14 @@ Documentation
 =============
 
 .. toctree::
-   :maxdepth: 2
 
    xdl_class
-   execution
-   hardware
-   readwrite
-   reagents
-   safety
-   steps
-   utils
+   execution/index
+   hardware/index
+   readwrite/index
+   reagents/index
+   safety/index
+   steps/index
+   utils/index
+   constants
    

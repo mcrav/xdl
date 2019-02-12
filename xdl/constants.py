@@ -2,24 +2,37 @@
 ### DEFAULT PARAMETERS ###
 ##########################
 
+##########
+## Move ##
+##########
+#: Default speed to move liquid in mL / min.
+DEFAULT_MOVE_SPEED = 40
 
-# Move
-# mL/min Different to move speed as 40 mL / min aspiration speed means air gets
-# sucked in.
-DEFAULT_MOVE_SPEED = 40 # mL/min
+#: Default aspiration speed (speed pulling liquid into pump) in mL / min. Lower
+#: than move speed to avoid air getting sucked in.
 DEFAULT_ASPIRATION_SPEED = 10
+
+#: Default dispence speed (speed pushing liquid out of pump) in mL / min.
 DEFAULT_DISPENSE_SPEED = DEFAULT_MOVE_SPEED
+
+#: Default volume of reagent to move to waste to prime the tubes before Add step.
 DEFAULT_PUMP_PRIME_VOLUME = 3 # mL
 
-# Separation
-DEFAULT_SEPARATION_SOLVENT_VOLUME = 30 # mL
+################
+## Separation ##
+################
+#: Default solvent volume to use in separation in mL.
+DEFAULT_SEPARATION_SOLVENT_VOLUME = 30
+
 DEFAULT_SEPARATION_FAST_STIR_TIME = 5 * 60
 DEFAULT_SEPARATION_SLOW_STIR_TIME = 2 * 60
 DEFAULT_SEPARATION_FAST_STIR_RPM = 600
 DEFAULT_SEPARATION_SLOW_STIR_RPM = 30
 DEFAULT_SEPARATION_SETTLE_TIME = 60 * 5
 
-# Cleaning
+##############
+## Cleaning ##
+##############
 DEFAULT_AUTO_CLEAN = True
 DEFAULT_ORGANIC_CLEANING_SOLVENT = 'ether'
 DEFAULT_AQUEOUS_CLEANING_SOLVENT = 'water'
@@ -28,7 +41,9 @@ DEFAULT_CLEAN_VESSEL_SOLVENT = 'water'
 DEFAULT_CLEAN_VESSEL_VOLUME = 10 # mL
 DEFAULT_CLEAN_STIR_TIME = 60 # seconds
 
-# Rotavap
+#############
+## Rotavap ##
+#############
 DEFAULT_ROTAVAP_TIME = 60 * 5 # s
 DEFAULT_ROTAVAP_DEGAS_PRESSURE = 900 # 
 DEFAULT_ROTAVAP_DEGAS_TIME = 300 # s
@@ -36,20 +51,28 @@ DEFAULT_ROTAVAP_VENT_TIME = 10 # s
 DEFAULT_ROTAVAP_DRYING_TIME = 3600 # s
 DEFAULT_ROTAVAP_ROTATION_SPEED = 280 # rpm
 
-# Filtering
+###############
+## Filtering ##
+###############
 DEFAULT_FILTER_WAIT_TIME = 60
 DEFAULT_WASHFILTERCAKE_VOLUME = 20
 DEFAULT_WASHFILTERCAKE_WAIT_TIME = 60*2 # s
 DEFAULT_DRY_TIME = 60*5
 DEFAULT_DRY_WASTE_VOLUME = 5 # mL
 
-# Add
+#########
+## Add ##
+#########
 DEFAULT_AFTER_ADD_WAIT_TIME = 10 # s (time to wait for stirring after addition)
 
-# Stirring
+##############
+## Stirring ##
+##############
 DEFAULT_STIR_RPM = 400 # rpm
 
-# Video
+###########
+## Video ##
+###########
 DEFAULT_RECORDING_SPEED = 14
 DEFAULT_WAIT_RECORDING_SPEED = 2000
 
@@ -148,6 +171,8 @@ XDL_HARDWARE_CHEMPUTER_CLASS_MAP = {
 ### MISC ###
 ############
 
+#: Room temperature in °C
 ROOM_TEMPERATURE = 25
 
+#: Keywords that if found in reagent name signify that the reagent is aqueous.
 AQUEOUS_KEYWORDS = ['water', 'aqueous', 'acid', '_m_']

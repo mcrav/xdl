@@ -4,6 +4,13 @@ from ..constants import *
 class Component(XDLBase):
     """Base component class. At moment does nothing more than XDLBase."""
     def __init__(self, xid=None, properties={}, type=None):
+        """Initialise component object.
+
+        Args:
+            xid (str): ID for the component.
+            properties (dict): Property dict of the component.
+            type (str): Type of the component i.e. 'ChemputerFlask'
+        """
         self.properties = {'xid': xid, 'type': type}
         self.properties.update(properties)
 

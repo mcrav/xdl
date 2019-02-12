@@ -52,9 +52,9 @@ from .steps_chasm import (
 class StirAtRT(Step):
     """Stir given vessel for given time at room temperature.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel to stir.
-        time {float} -- Time to stir for.
+    Args:
+        vessel (str): Vessel to stir.
+        time (float): Time to stir for.
     """
     def __init__(self, vessel, time, stir_rpm='default'):
 
@@ -77,9 +77,9 @@ class StirAtRT(Step):
 class PrimePumpForAdd(Step):
     """Prime pump attached to given reagent flask in anticipation of Add step.
 
-    Keyword Arguments:
-        reagent {str} -- Reagent to prime pump for addition.
-        move_speed {str} -- Speed to move reagent at. (optional)
+    Args:
+        reagent (str): Reagent to prime pump for addition.
+        move_speed (str): Speed to move reagent at. (optional)
     """
     def __init__(self, reagent=None, volume=None, reagent_vessel=None,
                        waste_vessel=None):
@@ -100,11 +100,11 @@ class PrimePumpForAdd(Step):
 class PrepareFilter(Step):
     """Fill bottom of filter vessel with solvent in anticipation of the filter top being used.
 
-    Keyword Arguments:
-        filter_vessel {str} -- Filter vessel name to prepare (generic name 'filter' not 'filter_filter_bottom').
-        solvent {str} -- Solvent to fill filter bottom with.
-        volume {int} -- Volume of filter bottom.
-        waste_vessel {str} -- Vessel to put waste material.
+    Args:
+        filter_vessel (str): Filter vessel name to prepare (generic name 'filter' not 'filter_filter_bottom').
+        solvent (str): Solvent to fill filter bottom with.
+        volume (int): Volume of filter bottom.
+        waste_vessel (str): Vessel to put waste material.
     """
     def __init__(self, filter_vessel, solvent=None, volume=10, 
                        waste_vessel=None):
@@ -385,13 +385,13 @@ class CleanBackbone(Step):
 class Add(Step):
     """Add given volume of given reagent to given vessel.
 
-    Keyword Arguments:
-        reagent {str} -- Reagent to add.
-        volume {float} -- Volume of reagent to add.
-        vessel {str} -- Vessel name to add reagent to.
-        time {float} -- Time to spend doing addition in seconds. (optional)
-        move_speed {float} -- Speed in mL / min to move liquid at. (optional)
-        clean_tubing {bool} -- Clean tubing before and after addition. (optional)
+    Args:
+        reagent (str): Reagent to add.
+        volume (float): Volume of reagent to add.
+        vessel (str): Vessel name to add reagent to.
+        time (float): Time to spend doing addition in seconds. (optional)
+        move_speed (float): Speed in mL / min to move liquid at. (optional)
+        clean_tubing (bool): Clean tubing before and after addition. (optional)
     """
     def __init__(self, reagent, volume, vessel, port=None, time=None,
                        move_speed='default', reagent_vessel=None, 
@@ -428,10 +428,10 @@ class Add(Step):
 class Transfer(Step):
     """Transfer contents of one vessel to another.
 
-    Keyword Arguments:
-        from_vessel {str} -- Vessel name to transfer from.
-        to_vessel {str} -- Vessel name to transfer to.
-        volume {float} -- Volume to transfer in mL.
+    Args:
+        from_vessel (str): Vessel name to transfer from.
+        to_vessel (str): Vessel name to transfer to.
+        volume (float): Volume to transfer in mL.
     """
     def __init__(self, from_vessel=None, to_vessel=None, from_port=None, 
                        to_port=None, volume=None):
@@ -458,12 +458,12 @@ class Transfer(Step):
 class MakeSolution(Step):
     """Make solution in given vessel of given solutes in given solvent.
 
-    Keyword Arguments:
-        solute {str or list} -- Solute(s).
-        solvent {str} -- Solvent.
-        solute_mass {str or list} -- Mass(es) corresponding to solute(s)
-        solvent_volume {float} -- Volume of solvent to use in mL.
-        vessel {str} -- Vessel name to make solution in.
+    Args:
+        solute (str or list): Solute(s).
+        solvent (str): Solvent.
+        solute_mass (str or list): Mass(es) corresponding to solute(s)
+        solvent_volume (float): Volume of solvent to use in mL.
+        vessel (str): Vessel name to make solution in.
     """
     def __init__(self, solutes=None, solvent=None, solute_masses=None, solvent_volume=None, vessel=None):
 
@@ -497,11 +497,11 @@ class MakeSolution(Step):
 class WashFilterCake(Step):
     """Wash filter cake with given volume of given solvent.
 
-    Keyword Arguments:
-        filter_vessel {str} -- Filter vessel name to wash.
-        solvent {str} -- Solvent to wash with.
-        volume {float} -- Volume of solvent to wash with. (optional)
-        wait_time {str} -- Time to wait after moving solvent to filter flask.
+    Args:
+        filter_vessel (str): Filter vessel name to wash.
+        solvent (str): Solvent to wash with.
+        volume (float): Volume of solvent to wash with. (optional)
+        wait_time (str): Time to wait after moving solvent to filter flask.
                            (optional)
     """
     def __init__(self, filter_vessel=None, solvent=None, volume='default',
@@ -534,9 +534,9 @@ class WashFilterCake(Step):
 class Dry(Step):
     """Dry given vessel by applying vacuum for given time.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel name to dry.
-        time {str} -- Time to dry vessel for in seconds. (optional)
+    Args:
+        vessel (str): Vessel name to dry.
+        time (str): Time to dry vessel for in seconds. (optional)
     """
     def __init__(self, filter_vessel=None, waste_vessel=None, vacuum=None,
                        wait_time='default'):
@@ -566,12 +566,12 @@ class Filter(Step):
     """Filter contents of filter_vessel_top. Apply vacuum for given time.
     Assumes filter_filter_bottom already filled with solvent and stuff already in filter_vessel_top.
 
-    Keyword Arguments:
-        filter_vessel {str} -- Filter vessel.
-        filter_top_volume {float} -- Volume (mL) of contents of filter top.
-        filter_bottom_volume {float} -- Volume (mL) of the filter bottom.
-        waste_vessel {float} -- Node to move waste material to.
-        time {str} -- Time to leave vacuum on filter vessel after contents have been moved. (optional)
+    Args:
+        filter_vessel (str): Filter vessel.
+        filter_top_volume (float): Volume (mL) of contents of filter top.
+        filter_bottom_volume (float): Volume (mL) of the filter bottom.
+        waste_vessel (float): Node to move waste material to.
+        time (str): Time to leave vacuum on filter vessel after contents have been moved. (optional)
     """
     def __init__(self, filter_vessel, filter_top_volume=None, 
                        filter_bottom_volume=None, waste_vessel=None,
@@ -616,15 +616,15 @@ class Filter(Step):
 
 class Separate(Step):
     """Extract contents of from_vessel using given amount of given solvent.
-
     NOTE: If n_separations > 1, to_vessel/to_port must be capable of giving
-          and receiving material.
-    Keyword Arguments:
-        from_vessel {str} -- Vessel name with contents to be extracted.
-        separation_vessel {str} -- Separation vessel name.
-        solvent {str} -- Solvent to extract with.
-        solvent_volume {float} -- Volume of solvent to extract with.
-        n_separations {int} -- Number of separations to perform.
+    and receiving material.
+
+    Args:
+        from_vessel (str): Vessel name with contents to be extracted.
+        separation_vessel (str): Separation vessel name.
+        solvent (str): Solvent to extract with.
+        solvent_volume (float): Volume of solvent to extract with.
+        n_separations (int): Number of separations to perform.
     """
     def __init__(self, purpose=None, from_vessel=None, from_port=None,
                        separation_vessel=None, to_vessel=None, to_port=None,
@@ -786,10 +786,10 @@ class Separate(Step):
 class Reflux(Step):
     """Reflux given vessel at given temperature for given time.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel to heat to reflux.
-        temp {float} -- Temperature to heat vessel to in °C.
-        time {int} -- Time to reflux vessel for in seconds.
+    Args:
+        vessel (str): Vessel to heat to reflux.
+        temp (float): Temperature to heat vessel to in °C.
+        time (int): Time to reflux vessel for in seconds.
     """
     def __init__(self, vessel=None, temp=None, time=None):
 
@@ -810,9 +810,9 @@ class Reflux(Step):
 class Chill(Step):
     """Chill vessel to given temperature.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel name to chill.
-        temp {float} -- Temperature in °C to chill to.
+    Args:
+        vessel (str): Vessel name to chill.
+        temp (float): Temperature in °C to chill to.
     """
     def __init__(self, vessel=None, temp=None):
 
@@ -840,11 +840,11 @@ class Rotavap(Step):
     """Rotavap contents of given vessel at given temp and given pressure for
     given time.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel with contents to be rotavapped.
-        temp {float} -- Temperature to set rotary evaporator water bath to in °C.
-        pressure {float} -- Pressure to set rotary evaporator vacuum to in mbar.
-        time {int} -- Time to rotavap for in seconds.
+    Args:
+        vessel (str): Vessel with contents to be rotavapped.
+        temp (float): Temperature to set rotary evaporator water bath to in °C.
+        pressure (float): Pressure to set rotary evaporator vacuum to in mbar.
+        time (int): Time to rotavap for in seconds.
     """
     def __init__(self, rotavap_vessel=None, temp=None, vacuum_pressure=None,
                        time='default', rotation_speed=None, waste_vessel=None,
@@ -951,10 +951,10 @@ class VacuumDistillation(Step):
 class Wait(Step):
     """Wait for given time.
 
-    Keyword Arguments:
-        time {int} -- Time in seconds
-        wait_recording_speed {int} -- Recording speed during wait (faster) ~2000
-        after_recording_speed {int} -- Recording speed after wait (slower) ~14
+    Args:
+        time (int): Time in seconds
+        wait_recording_speed (int): Recording speed during wait (faster) ~2000
+        after_recording_speed (int): Recording speed after wait (slower) ~14
     """
     def __init__(self, time=None, wait_recording_speed='default', after_recording_speed='default'):
 
@@ -976,8 +976,8 @@ class Wait(Step):
 class Confirm(Step):
     """Get the user to confirm something before execution continues.
 
-    Keyword Arguments:
-        msg {str} -- Message to get user to confirm experiment should continue.
+    Args:
+        msg (str): Message to get user to confirm experiment should continue.
     """
 
     def __init__(self, msg=None):

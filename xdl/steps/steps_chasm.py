@@ -6,13 +6,13 @@ class CMove(Step):
     """Moves a specified volume from one node in the graph to another. Moving from and to
     the same node is supported.
 
-    Keyword Arguments:
-        from_vessel {str} -- Vessel name to move from.
-        to_vessel {str} -- Vessel name to move to.
-        volume {float} -- Volume to move in mL. 'all' moves everything.
-        move_speed -- Speed at which liquid is moved in mL / min. (optional)
-        aspiration_speed -- Speed at which liquid aspirates from from_vessel. (optional)
-        dispense_speed -- Speed at which liquid dispenses from from_vessel. (optional)
+    Args:
+        from_vessel (str): Vessel name to move from.
+        to_vessel (str): Vessel name to move to.
+        volume (float): Volume to move in mL. 'all' moves everything.
+        move_speed: Speed at which liquid is moved in mL / min. (optional)
+        aspiration_speed: Speed at which liquid aspirates from from_vessel. (optional)
+        dispense_speed: Speed at which liquid dispenses from from_vessel. (optional)
     """
     def __init__(self, from_vessel=None, to_vessel=None, volume=None,
                        move_speed='default', aspiration_speed='default',
@@ -130,8 +130,8 @@ class CSeparatePhases(Step):
 class CPrime(Step):
     """Moves the tube volume of every node with "flask" as class to waste.
 
-    Keyword Arguments:
-        aspiration_speed {float} -- Speed in mL / min at which material should
+    Args:
+        aspiration_speed (float): Speed in mL / min at which material should
                                     be withdrawn.
     """
     def __init__(self, aspiration_speed='default'):
@@ -150,9 +150,9 @@ class CPrime(Step):
 class CSwitchVacuum(Step):
     """Switches a vacuum valve between backbone and vacuum.
 
-    Keyword Arguments:
-        vessel {str} -- Name of the node the vacuum valve is logically attacked to (e.g. "filter_bottom")
-        destination {str} -- Either "vacuum" or "backbone"
+    Args:
+        vessel (str): Name of the node the vacuum valve is logically attacked to (e.g. "filter_bottom")
+        destination (str): Either "vacuum" or "backbone"
     """
     def __init__(self, vessel=None, destination=None):
 
@@ -170,9 +170,9 @@ class CSwitchVacuum(Step):
 class CSwitchCartridge(Step):
     """Switches a cartridge carousel to the specified position.
 
-    Keyword Arguments:
-        vessel {str} -- Name of the node the vacuum valve is logically attacked to (e.g. "rotavap")
-        cartridge {int} -- Number of the position the carousel should be switched to (0-5)
+    Args:
+        vessel (str): Name of the node the vacuum valve is logically attacked to (e.g. "rotavap")
+        cartridge (int): Number of the position the carousel should be switched to (0-5)
     """
     def __init__(self, vessel=None, cartridge=None):
         self.properties = {
@@ -189,9 +189,9 @@ class CSwitchCartridge(Step):
 class CSwitchColumn(Step):
     """Switches a fractionating valve attached to a chromatography column.
 
-    Keyword Arguments:
-        column {str} -- Name of the column in the graph
-        destination {str} -- Either "collect" or "waste"
+    Args:
+        column (str): Name of the column in the graph
+        destination (str): Either "collect" or "waste"
     """
     def __init__(self, column=None, destination=None):
 
@@ -209,8 +209,8 @@ class CSwitchColumn(Step):
 class CStartStir(Step):
     """Starts the stirring operation of a hotplate or overhead stirrer.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel name to stir.
+    Args:
+        vessel (str): Vessel name to stir.
     """
     def __init__(self, vessel=None):
 
@@ -227,8 +227,8 @@ class CStartStir(Step):
 class CStartHeat(Step):
     """Starts the heating operation of a hotplate stirrer.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel name to heat.
+    Args:
+        vessel (str): Vessel name to heat.
     """
     def __init__(self, vessel=None):
 
@@ -245,8 +245,8 @@ class CStartHeat(Step):
 class CStopStir(Step):
     """Stops the stirring operation of a hotplate or overhead stirrer.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel name to stop stirring.
+    Args:
+        vessel (str): Vessel name to stop stirring.
     """
     def __init__(self, vessel=None):
 
@@ -266,8 +266,8 @@ class CStopHeat(Step):
     """Starts the stirring operation of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
 
-    Keyword Arguments:
-        vessel {str} -- Vessel name to stop heating.
+    Args:
+        vessel (str): Vessel name to stop heating.
     """
     def __init__(self, vessel=None):
 
@@ -285,9 +285,9 @@ class CSetTemp(Step):
     """Sets the temperature setpoint of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
 
-    Keyword Arguments:
-        vessel {str} -- Vessel name to set temperature of hotplate stirrer.
-        temp {float} -- Temperature in °C
+    Args:
+        vessel (str): Vessel name to set temperature of hotplate stirrer.
+        temp (float): Temperature in °C
     """
     def __init__(self, vessel=None, temp=None):
 
@@ -305,9 +305,9 @@ class CSetTemp(Step):
 class CSetStirRpm(Step):
     """Sets the stirring speed setpoint of a hotplate or overhead stirrer.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel name to set stir speed.
-        stir_rpm {float} -- Stir speed in RPM.
+    Args:
+        vessel (str): Vessel name to set stir speed.
+        stir_rpm (float): Stir speed in RPM.
     """
     def __init__(self, vessel=None, stir_rpm=None):
 
@@ -326,8 +326,8 @@ class CStirrerWaitForTemp(Step):
     """Delays the script execution until the current temperature of the hotplate is within
     0.5 °C of the setpoint. This command is NOT available for overhead stirrers!
 
-    Keyword Arguments:
-        vessel {str} -- Vessel name to wait for temperature.
+    Args:
+        vessel (str): Vessel name to wait for temperature.
     """
     def __init__(self, vessel=None):
 
@@ -344,8 +344,8 @@ class CStirrerWaitForTemp(Step):
 class CStartHeaterBath(Step):
     """Starts the heating bath of a rotary evaporator.
 
-    Keyword Arguments:
-        rotavap_name {str} -- Name of the node representing the rotary evaporator.
+    Args:
+        rotavap_name (str): Name of the node representing the rotary evaporator.
     """
     def __init__(self, rotavap_name=None):
 
@@ -362,8 +362,8 @@ class CStartHeaterBath(Step):
 class CStopHeaterBath(Step):
     """Stops the heating bath of a rotary evaporator.
 
-    Keyword Arguments:
-        rotavap_name {str} -- Name of the node representing the rotary evaporator.
+    Args:
+        rotavap_name (str): Name of the node representing the rotary evaporator.
     """
     def __init__(self, rotavap_name=None):
 
@@ -380,8 +380,8 @@ class CStopHeaterBath(Step):
 class CStartRotation(Step):
     """Starts the rotation of a rotary evaporator.
 
-    Keyword Arguments:
-        rotavap_name {str} -- Name of the node representing the rotary evaporator.
+    Args:
+        rotavap_name (str): Name of the node representing the rotary evaporator.
     """
     def __init__(self, rotavap_name=None):
 
@@ -398,8 +398,8 @@ class CStartRotation(Step):
 class CStopRotation(Step):
     """Stops the rotation of a rotary evaporator.
 
-    Keyword Arguments:
-        rotavap_name {str} -- Name of the node representing the rotary evaporator.
+    Args:
+        rotavap_name (str): Name of the node representing the rotary evaporator.
     """
     def __init__(self, rotavap_name=None):
 
@@ -416,8 +416,8 @@ class CStopRotation(Step):
 class CLiftArmUp(Step):
     """Lifts the rotary evaporator arm up.
 
-    Keyword Arguments:
-        rotavap_name {str} -- Name of the node representing the rotary evaporator.
+    Args:
+        rotavap_name (str): Name of the node representing the rotary evaporator.
     """
     def __init__(self, rotavap_name=None):
 
@@ -434,8 +434,8 @@ class CLiftArmUp(Step):
 class CLiftArmDown(Step):
     """Lifts the rotary evaporator down.
 
-    Keyword Arguments:
-        rotavap_name {str} -- Name of the node representing the rotary evaporator.
+    Args:
+        rotavap_name (str): Name of the node representing the rotary evaporator.
     """
     def __init__(self, rotavap_name=None):
 
@@ -453,8 +453,8 @@ class CResetRotavap(Step):
     """
     Resets the rotary evaporator.
 
-    Keyword Arguments:
-        rotavap_name {str} -- Name of the node representing the rotary evaporator.
+    Args:
+        rotavap_name (str): Name of the node representing the rotary evaporator.
     """
     def __init__(self, rotavap_name=None):
 
@@ -471,9 +471,9 @@ class CResetRotavap(Step):
 class CSetBathTemp(Step):
     """Sets the temperature setpoint for the heating bath.
 
-    Keyword Arguments:
-        rotavap_name {str} -- Name of the node representing the rotary evaporator.
-        temp {float} -- Temperature in °C.
+    Args:
+        rotavap_name (str): Name of the node representing the rotary evaporator.
+        temp (float): Temperature in °C.
     """
     def __init__(self, rotavap_name=None, temp=None):
 
@@ -491,9 +491,9 @@ class CSetBathTemp(Step):
 class CSetRvRotationSpeed(Step):
     """Sets the rotation speed setpoint for the rotary evaporator.
 
-    Keyword Arguments:
-        rotavap_name {str} -- Name of the node representing the rotary evaporator.
-        rotation_speed {str} -- Rotation speed setpoint in RPM.
+    Args:
+        rotavap_name (str): Name of the node representing the rotary evaporator.
+        rotation_speed (str): Rotation speed setpoint in RPM.
     """
     def __init__(self, rotavap_name=None, rotation_speed=None):
 
@@ -512,8 +512,8 @@ class CRvWaitForTemp(Step):
     """Delays the script execution until the current temperature of the heating bath is
     within 0.5°C of the setpoint.
 
-    Keyword Arguments:
-        rotavap_name {str} -- Name of the node representing the rotary evaporator.
+    Args:
+        rotavap_name (str): Name of the node representing the rotary evaporator.
     """
     def __init__(self, rotavap_name=None):
 
@@ -531,9 +531,9 @@ class CSetInterval(Step):
     """Sets the interval time for the rotary evaporator, causing it to periodically switch
     direction. Setting this to 0 deactivates interval operation.
 
-    Keyword Arguments:
-        rotavap_name {str} -- Name of the node representing the rotary evaporator.
-        interval {int} -- Interval time in seconds.
+    Args:
+        rotavap_name (str): Name of the node representing the rotary evaporator.
+        interval (int): Interval time in seconds.
     """
     def __init__(self, rotavap_name=None, interval=None):
 
@@ -551,8 +551,8 @@ class CSetInterval(Step):
 class CInitVacPump(Step):
     """Initialises the vacuum pump controller.
 
-    Keyword Arguments:
-        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
+    Args:
+        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
     """
     def __init__(self, vacuum_pump_name=None):
         self.properties = {
@@ -568,8 +568,8 @@ class CInitVacPump(Step):
 class CGetVacSp(Step):
     """Reads the current vacuum setpoint.
 
-    Keyword Arguments:
-        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
+    Args:
+        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
     """
     def __init__(self, vacuum_pump_name=None):
 
@@ -586,9 +586,9 @@ class CGetVacSp(Step):
 class CSetVacSp(Step):
     """Sets a new vacuum setpoint.
 
-    Keyword Arguments:
-        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
-        vacuum_pressure {float} -- Vacuum pressure setpoint in mbar.
+    Args:
+        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
+        vacuum_pressure (float): Vacuum pressure setpoint in mbar.
     """
     def __init__(self, vacuum_pump_name=None, vacuum_pressure=None):
 
@@ -606,8 +606,8 @@ class CSetVacSp(Step):
 class CStartVac(Step):
     """Starts the vacuum pump.
 
-    Keyword Arguments:
-        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
+    Args:
+        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
     """
     def __init__(self, vacuum_pump_name=None):
 
@@ -624,8 +624,8 @@ class CStartVac(Step):
 class CStopVac(Step):
     """Stops the vacuum pump.
 
-    Keyword Arguments:
-        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
+    Args:
+        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
     """
     def __init__(self, vacuum_pump_name=None):
 
@@ -642,8 +642,8 @@ class CStopVac(Step):
 class CVentVac(Step):
     """Vents the vacuum pump to ambient pressure.
 
-    Keyword Arguments:
-        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
+    Args:
+        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
     """
     def __init__(self, vacuum_pump_name=None):
 
@@ -660,9 +660,9 @@ class CVentVac(Step):
 class CSetSpeedSp(Step):
     """Sets the speed of the vacuum pump (0-100%).
 
-    Keyword Arguments:
-        vacuum_pump_name {str} -- Name of the node the vacuum pump is attached to.
-        vacuum_pump_speed {float} -- Vacuum pump speed in percent.
+    Args:
+        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
+        vacuum_pump_speed (float): Vacuum pump speed in percent.
     """
     def __init__(self, vacuum_pump_name=None, vacuum_pump_speed=None):
 
@@ -680,8 +680,8 @@ class CSetSpeedSp(Step):
 class CStartChiller(Step):
     """Starts the recirculation chiller.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel to chill. Name of the node the chiller is attached to.
+    Args:
+        vessel (str): Vessel to chill. Name of the node the chiller is attached to.
     """
     def __init__(self, vessel=None):
 
@@ -698,8 +698,8 @@ class CStartChiller(Step):
 class CStopChiller(Step):
     """Stops the recirculation chiller.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel to stop chilling. Name of the node the chiller is attached to.
+    Args:
+        vessel (str): Vessel to stop chilling. Name of the node the chiller is attached to.
     """
     def __init__(self, vessel=None):
 
@@ -717,9 +717,9 @@ class CStopChiller(Step):
 class CSetChiller(Step):
     """Sets the temperature setpoint.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel to set chiller temperature. Name of the node the chiller is attached to.
-        temp {float} -- Temperature in °C.
+    Args:
+        vessel (str): Vessel to set chiller temperature. Name of the node the chiller is attached to.
+        temp (float): Temperature in °C.
     """
     def __init__(self, vessel=None, temp=None):
 
@@ -738,8 +738,8 @@ class CChillerWaitForTemp(Step):
     """Delays the script execution until the current temperature of the chiller is within
     0.5°C of the setpoint.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel to wait for temperature. Name of the node the chiller is attached to.
+    Args:
+        vessel (str): Vessel to wait for temperature. Name of the node the chiller is attached to.
     """
     def __init__(self, vessel=None):
 
@@ -757,10 +757,10 @@ class CRampChiller(Step):
     """Causes the chiller to ramp the temperature up or down. Only available for Petite
     Fleur.
 
-    Keyword Arguments:
-        vessel {str} -- Vessel to ramp chiller on. Name of the node the chiller is attached to.
-        ramp_duration {int} -- Desired duration of the ramp in seconds.
-        end_temperature {float} -- Final temperature of the ramp in °C.
+    Args:
+        vessel (str): Vessel to ramp chiller on. Name of the node the chiller is attached to.
+        ramp_duration (int): Desired duration of the ramp in seconds.
+        end_temperature (float): Final temperature of the ramp in °C.
     """
     def __init__(self, vessel=None, ramp_duration=None, end_temperature=None):
 
@@ -779,9 +779,9 @@ class CRampChiller(Step):
 class CSwitchChiller(Step):
     """Switches the solenoid valve.
 
-    Keyword Arguments:
-        solenoid_valve_name -- {str} Name of the node the solenoid valve is attached to.
-        state {str} -- Is either "on" or "off"
+    Args:
+        solenoid_valve_name: (str) Name of the node the solenoid valve is attached to.
+        state (str): Is either "on" or "off"
     """
     def __init__(self, solenoid_valve_name=None, state=None):
 
@@ -799,9 +799,9 @@ class CSwitchChiller(Step):
 class CSetCoolingPower(Step):
     """Sets the cooling power (0-100%). Only available for CF41.
 
-    Keyword Arguments:
-        vessel -- Vessel to set cooling power of chiller. Name of the node the chiller is attached to.
-        cooling_power -- Desired cooling power in percent.
+    Args:
+        vessel: Vessel to set cooling power of chiller. Name of the node the chiller is attached to.
+        cooling_power: Desired cooling power in percent.
     """
     def __init__(self, vessel=None, cooling_power=None):
 
@@ -819,8 +819,8 @@ class CSetCoolingPower(Step):
 class CSetRecordingSpeed(Step):
     """Sets the timelapse speed of the camera module.
 
-    Keyword Arguments:
-        recording_speed {float} -- Factor by which the recording should be sped up, i.e. 2 would mean twice the normal speed. 1 means normal speed.
+    Args:
+        recording_speed (float): Factor by which the recording should be sped up, i.e. 2 would mean twice the normal speed. 1 means normal speed.
     """
     def __init__(self, recording_speed=None):
 
@@ -839,8 +839,8 @@ class CWait(Step):
     immediately reply with an estimate of when the waiting will be finished, and also
     give regular updates indicating that it is still alive.
 
-    Keyword Arguments:
-        time -- Time to wait in seconds.
+    Args:
+        time: Time to wait in seconds.
     """
     def __init__(self, time=None):
 
