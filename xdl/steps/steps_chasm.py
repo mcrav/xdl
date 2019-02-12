@@ -10,9 +10,9 @@ class CMove(Step):
         from_vessel (str): Vessel name to move from.
         to_vessel (str): Vessel name to move to.
         volume (float): Volume to move in mL. 'all' moves everything.
-        move_speed: Speed at which liquid is moved in mL / min. (optional)
-        aspiration_speed: Speed at which liquid aspirates from from_vessel. (optional)
-        dispense_speed: Speed at which liquid dispenses from from_vessel. (optional)
+        move_speed (float): Speed at which liquid is moved in mL / min. (optional)
+        aspiration_speed (float): Speed at which liquid aspirates from from_vessel. (optional)
+        dispense_speed (float): Speed at which liquid dispenses from from_vessel. (optional)
     """
     def __init__(self, from_vessel=None, to_vessel=None, volume=None,
                        move_speed='default', aspiration_speed='default',
@@ -800,8 +800,8 @@ class CSetCoolingPower(Step):
     """Sets the cooling power (0-100%). Only available for CF41.
 
     Args:
-        vessel: Vessel to set cooling power of chiller. Name of the node the chiller is attached to.
-        cooling_power: Desired cooling power in percent.
+        vessel (str): Vessel to set cooling power of chiller. Name of the node the chiller is attached to.
+        cooling_power (float): Desired cooling power in percent.
     """
     def __init__(self, vessel=None, cooling_power=None):
 
@@ -840,7 +840,7 @@ class CWait(Step):
     give regular updates indicating that it is still alive.
 
     Args:
-        time: Time to wait in seconds.
+        time (int): Time to wait in seconds.
     """
     def __init__(self, time=None):
 

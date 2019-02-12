@@ -50,14 +50,8 @@ class XDL(object):
                 self.hardware = parsed_xdl['hardware']
                 self.reagents = parsed_xdl['reagents']
                 # Get attrs from <Synthesis> tag.
-                for camelAttr, snakeAttr in [
-                    ('autoClean', 'auto_clean'),
-                    ('organicCleaningReagent', 'organic_cleaning_reagent'),
-                    ('aqueousCleaningReagent', 'aqueous_cleaning_reagent'),
-                    ('dryRun', 'dry_run'),
-                ]:
-                    if camelAttr in parsed_xdl:
-                        self.__setattr__(snakeAttr, parsed_xdl[camelAttr])
+                for k, v in parsed_xdl['procedure_attrs'].items():
+                    setattr(self, k, v)
                 
         elif (steps is not None
               and reagents is not None

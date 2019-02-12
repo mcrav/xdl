@@ -46,7 +46,7 @@ def xdl_str_to_objs(xdl_str, logger):
                 'hardware': hardware,
                 'reagents': reagents,
             }
-            parsed_xdl.update(synthesis_attrs)
+            parsed_xdl['procedure_attrs'] = synthesis_attrs
             return parsed_xdl
         else:
             logger.error('Invalid XDL given.')
@@ -63,7 +63,19 @@ def synthesis_attrs_from_xdl(xdl_str):
     Returns:
         dict: attr dict from <Synthesis> tag.
     """
-    return etree.fromstring(xdl_str).attrib
+    raw_attr = etree.fromstring(xdl_str).attrib
+    processed_attr = {}
+    for camel_attr, snake_attr, attr_type in [
+        ('autoClean', 'auto_clean', bool),
+        ('organicCleaningReagent', 'organic_cleaning_reagent', str),
+        ('aqueousCleaningReagent', 'aqueous_cleaning_reagent', str),
+        ('dryRun', 'dry_run', bool),
+    ]:
+        if camel_attr in raw_attr:
+           processed_attr[snake_attr] = raw_attr[camel_attr]
+           if attr_type == bool:
+               processed_attr[snake_attr] = parse_bool(raw_attr[camel_attr])
+    return processed_attr
 
 def xdl_valid(xdl_str, logger=None):
     """Return True if XDL is valid, otherwise False.
