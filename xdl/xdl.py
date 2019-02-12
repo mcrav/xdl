@@ -34,9 +34,10 @@ class XDL(object):
         if not logger:
             self.logger = logging.getLogger('xdl_logger')
         self._xdl_file = None
-        self.autoClean = DEFAULT_AUTO_CLEAN
-        self.organicCleaningReagent = DEFAULT_ORGANIC_CLEANING_SOLVENT
-        self.aqueousCleaningReagent = DEFAULT_AQUEOUS_CLEANING_SOLVENT
+        self.auto_clean = DEFAULT_AUTO_CLEAN
+        self.organic_cleaning_reagent = DEFAULT_ORGANIC_CLEANING_SOLVENT
+        self.aqueous_cleaning_reagent = DEFAULT_AQUEOUS_CLEANING_SOLVENT
+        self.dry_run = False
         if xdl:
             parsed_xdl = {}
             if os.path.exists(xdl):
@@ -49,14 +50,15 @@ class XDL(object):
                 self.hardware = parsed_xdl['hardware']
                 self.reagents = parsed_xdl['reagents']
                 # Get attrs from <Synthesis> tag.
-                if 'autoClean' in parsed_xdl:
-                    self.autoClean = parse_bool(parsed_xdl['autoClean'])
-                if 'organicCleaningReagent' in parsed_xdl:
-                    self.organicCleaningReagent = parsed_xdl[
-                        'organicCleaningReagent']
-                if 'aqueousCleaningReagent' in parsed_xdl:
-                    self.aqueousCleaningReagent = parsed_xdl[
-                        'aqueousCleaningReagent']
+                for camelAttr, snakeAttr in [
+                    ('autoClean', 'auto_clean'),
+                    ('organicCleaningReagent', 'organic_cleaning_reagent'),
+                    ('aqueousCleaningReagent', 'aqueous_cleaning_reagent'),
+                    ('dryRun', 'dry_run'),
+                ]:
+                    if camelAttr in parsed_xdl:
+                        self.__setattr__(snakeAttr, parsed_xdl[camelAttr])
+                
         elif (steps is not None
               and reagents is not None
               and hardware is not None):

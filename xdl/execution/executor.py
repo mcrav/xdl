@@ -426,7 +426,20 @@ class XDLExecutor(object):
     def _tidy_up_procedure(self):
         """Remove steps that are pointless."""
         self._remove_pointless_backbone_cleaning()
-        
+        self._no_waiting_if_dry_run()
+
+    def _no_waiting_if_dry_run(self):
+        if self._xdl.dry_run:
+            for step in self._xdl.steps:
+                self._set_all_waits_to_one(step)
+
+    def _set_all_waits_to_one(self, step):
+        for step in step.steps:
+            if type(step) == Wait:
+                step.time = 1
+            elif hasattr(step, 'steps'):
+                self._set_all_waits_to_one(step)
+            
     def _remove_pointless_backbone_cleaning(self):
         """Remove pointless CleanBackbone steps.
         Rules are:
