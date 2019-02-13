@@ -2,15 +2,15 @@ from ..utils.xdl_base import XDLBase
 from ..constants import *
 
 class Component(XDLBase):
-    """Base component class. At moment does nothing more than XDLBase."""
-    def __init__(self, xid=None, properties={}, type=None):
-        """Initialise component object.
+    """Base component class. At moment does nothing more than XDLBase.
 
-        Args:
-            xid (str): ID for the component.
-            properties (dict): Property dict of the component.
-            type (str): Type of the component i.e. 'ChemputerFlask'
-        """
+    Args:
+        xid (str): ID for the component.
+        properties (dict): Property dict of the component.
+        type (str): Type of the component i.e. 'ChemputerFlask'
+    """
+    def __init__(self, xid=None, properties={}, type=None):
+
         self.properties = {'xid': xid, 'type': type}
         self.properties.update(properties)
 
@@ -18,13 +18,12 @@ class Hardware(object):
     """
     Object describing entire setup. The purpose is easily accessible lists
     of reactors, flasks, filters, wastes etc.
+
+    Args:
+        components (List[Component]): List of Component objects.
     """
     def __init__(self, components):
-        """Sort components into categories.
         
-        Args:
-            components (List[Component]): List of Component objects.
-        """
         self.components = components
         self.component_ids = [item.xid for item in self.components]
         self.reactors = []

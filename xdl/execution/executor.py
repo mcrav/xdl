@@ -27,17 +27,12 @@ class XDLExecutor(object):
     """Class to execute XDL objects. To execute first call prepare_for_execution
     then execute.
 
-    Public methods:
-        prepare_for_execution(graphml_file=None, json_data=None, json_file=None)
-        execute(chempiler)
+    Args:
+        xdl (XDL): XDL object to execute.
     """
 
     def __init__(self, xdl):
-        """XDLExecutor init method.
-        
-        Args:
-            xdl (XDL): XDL object to execute.
-        """
+
         self.logger = xdl.logger
         self._xdl = xdl
         self._warnings = []
@@ -551,6 +546,10 @@ class XDLExecutor(object):
     def execute(self, chempiler):
         """Execute XDL procedure with given chempiler. The same graph must be
         passed to the chempiler and to prepare_for_execution.
+
+        Args:
+            chempiler (chempiler.Chempiler): Chempiler object to execute XDL
+                                             with.
         """
         if self._prepared_for_execution:
             self._xdl.print_full_xdl_tree()

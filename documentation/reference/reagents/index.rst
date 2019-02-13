@@ -2,6 +2,5 @@
 xdl.reagents
 ============
 
-.. toctree::
-    
-   reagents
+.. automodule:: xdl.reagents.reagents
+    :members:
