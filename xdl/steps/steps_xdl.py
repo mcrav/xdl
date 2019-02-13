@@ -892,7 +892,7 @@ class Rotavap(Step):
             CLiftArmDown(self.rotavap_vessel),
             CSetVacSp(self.rotavap_vessel, self.vacuum_pressure),
             CStartVac(self.rotavap_vessel),
-            CWait(DEFAULT_ROTAVAP_DRYING_TIME),
+            CWait(self.time),
             
             # Recover flask and vent
             CLiftArmUp(self.rotavap_vessel),

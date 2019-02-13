@@ -6,7 +6,6 @@ from ..reagents import Reagent
 from ..hardware import Hardware, Component
 from .syntax_validation import XDLSyntaxValidator
 from ..utils.namespace import (STEP_OBJ_DICT, BASE_STEP_OBJ_DICT)
-from ..constants import XDL_HARDWARE_CHEMPUTER_CLASS_MAP
 
 def xdl_file_to_objs(xdl_file, logger):
     """Given XDL file return steps, hardware and reagents.

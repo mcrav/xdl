@@ -185,7 +185,7 @@ class XDLExecutor(object):
         """Add extra steps implied by explicit XDL steps."""
         self._add_implied_prepare_filter_steps()
         self._add_implied_remove_dead_volume_steps()
-        if self._xdl.autoClean:
+        if self._xdl.auto_clean:
             self._add_implied_clean_backbone_steps()
         self._add_implied_stirring_steps()
 

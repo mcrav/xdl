@@ -24,58 +24,104 @@ DEFAULT_PUMP_PRIME_VOLUME = 3 # mL
 #: Default solvent volume to use in separation in mL.
 DEFAULT_SEPARATION_SOLVENT_VOLUME = 30
 
+#: Default time to stir separation mixture for at high speed.
 DEFAULT_SEPARATION_FAST_STIR_TIME = 5 * 60
+
+#: Default time to stir separation mixture for at slow speed.
 DEFAULT_SEPARATION_SLOW_STIR_TIME = 2 * 60
+
+#: Default speed in RPM to stir separation mixture during fast stir.
 DEFAULT_SEPARATION_FAST_STIR_RPM = 600
+
+#: Default speed in RPM to stir separation mixture during slow stir.
 DEFAULT_SEPARATION_SLOW_STIR_RPM = 30
+
+#: Default time to allow separation mixture to settle after stirring.
 DEFAULT_SEPARATION_SETTLE_TIME = 60 * 5
 
 ##############
 ## Cleaning ##
 ##############
+#: Default value for auto_clean, determines whether clean backbone steps are
+#: inserted between appropriate steps.
 DEFAULT_AUTO_CLEAN = True
+
+#: Default solvent to use for organic cleaning steps.
 DEFAULT_ORGANIC_CLEANING_SOLVENT = 'ether'
+
+#: Default solvent to use for aqueous cleaning steps.
 DEFAULT_AQUEOUS_CLEANING_SOLVENT = 'water'
+
+#: Default volume in mL of cleaning solvent to transfer to waste during cleaning
+#: step.
 DEFAULT_CLEAN_BACKBONE_VOLUME = 3
-DEFAULT_CLEAN_VESSEL_SOLVENT = 'water'
+
+#: Default volume in mL of solvent to clean vessel with.
 DEFAULT_CLEAN_VESSEL_VOLUME = 10 # mL
-DEFAULT_CLEAN_STIR_TIME = 60 # seconds
+
+#: Default time in seconds to stir vessel during CleanVessel step.
+DEFAULT_CLEAN_VESSEL_STIR_TIME = 60
 
 #############
 ## Rotavap ##
 #############
-DEFAULT_ROTAVAP_TIME = 60 * 5 # s
-DEFAULT_ROTAVAP_DEGAS_PRESSURE = 900 # 
+#: Default pressure in mbar for rotavap degassing.
+DEFAULT_ROTAVAP_DEGAS_PRESSURE = 900
+
+#: Default time in seconds for rotavap degassing.
 DEFAULT_ROTAVAP_DEGAS_TIME = 300 # s
-DEFAULT_ROTAVAP_VENT_TIME = 10 # s
-DEFAULT_ROTAVAP_DRYING_TIME = 3600 # s
-DEFAULT_ROTAVAP_ROTATION_SPEED = 280 # rpm
+
+#: Default time in seconds for rotavap venting.
+DEFAULT_ROTAVAP_VENT_TIME = 10
+
+#: Default time in seconds for evaporating mixture to dryness.
+DEFAULT_ROTAVAP_DRYING_TIME = 3600
+
+#: Default rotation speed in RPM for rotavap.
+DEFAULT_ROTAVAP_ROTATION_SPEED = 280
 
 ###############
 ## Filtering ##
 ###############
-DEFAULT_FILTER_WAIT_TIME = 60
+#: Default time in seconds to wait with vacuum on while filtering.
+DEFAULT_FILTER_WAIT_TIME = 60*2
+
+#: Default volume of solvent to use when washing a filter cake.
 DEFAULT_WASHFILTERCAKE_VOLUME = 20
-DEFAULT_WASHFILTERCAKE_WAIT_TIME = 60*2 # s
+
+#: Default time in seconds to wait for with vacuum on when washing a filter cake.
+DEFAULT_WASHFILTERCAKE_WAIT_TIME = 60*2
+
+#: Default time in seconds to wait for with vacuum on when drying a filter cake.
 DEFAULT_DRY_TIME = 60*5
-DEFAULT_DRY_WASTE_VOLUME = 5 # mL
+
+#: Default volume in mL to transfer from bottom of filter flask to waste after
+#: drying filter cake.
+DEFAULT_DRY_WASTE_VOLUME = 5
 
 #########
 ## Add ##
 #########
-DEFAULT_AFTER_ADD_WAIT_TIME = 10 # s (time to wait for stirring after addition)
+#: Default time in seconds to wait with stirring after addition of a reagent.
+DEFAULT_AFTER_ADD_WAIT_TIME = 10
 
 ##############
 ## Stirring ##
 ##############
-DEFAULT_STIR_RPM = 400 # rpm
+#: Default speed in RPM to stir at.
+DEFAULT_STIR_RPM = 400
 
 ###########
 ## Video ##
 ###########
+#: Default recording speed in multiples of real time speed.
 DEFAULT_RECORDING_SPEED = 14
+
+#: Default recording speed during wait step in multiples of real time speed.
 DEFAULT_WAIT_RECORDING_SPEED = 2000
 
+#: Dictionary of default values to provide to steps if no explicit values are
+#: given.
 DEFAULT_VALS = {
     'CMove': {
         'move_speed': DEFAULT_MOVE_SPEED,
@@ -112,10 +158,9 @@ DEFAULT_VALS = {
         'stop_stir': True,
     },
     'CleanVessel': {
-        'solvent': DEFAULT_CLEAN_VESSEL_SOLVENT,
         'volume': DEFAULT_CLEAN_VESSEL_VOLUME,
         'stir_rpm': DEFAULT_STIR_RPM,
-        'stir_time': DEFAULT_CLEAN_STIR_TIME,
+        'stir_time': DEFAULT_CLEAN_VESSEL_STIR_TIME,
     },
     'CStartStir': {
         'stir_rpm': DEFAULT_STIR_RPM,
@@ -128,7 +173,7 @@ DEFAULT_VALS = {
         'after_recording_speed': DEFAULT_RECORDING_SPEED,
     },
     'Rotavap': {
-        'time': DEFAULT_ROTAVAP_TIME,
+        'time': DEFAULT_ROTAVAP_DRYING_TIME,
     },
     'StirAtRT': {
         'stir_rpm': DEFAULT_STIR_RPM,
@@ -154,17 +199,6 @@ CHEMPUTER_VALVE_CLASS_NAME = 'ChemputerValve'
 
 BOTTOM_PORT = 'bottom'
 TOP_PORT = 'top'
-
-XDL_HARDWARE_CHEMPUTER_CLASS_MAP = {
-    'Filter': CHEMPUTER_FILTER_CLASS_NAME,
-    'Reactor': CHEMPUTER_REACTOR_CLASS_NAME,
-    'Separator': CHEMPUTER_SEPARATOR_CLASS_NAME,
-    'Flask': CHEMPUTER_FLASK_CLASS_NAME,
-    'Waste': CHEMPUTER_WASTE_CLASS_NAME,
-    'Vacuum': CHEMPUTER_VACUUM_CLASS_NAME,
-    'Pump': CHEMPUTER_PUMP_CLASS_NAME,
-    'Valve': CHEMPUTER_VALVE_CLASS_NAME
-}
 
 
 ############
