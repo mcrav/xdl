@@ -28,11 +28,11 @@ def get_reagent_combinations(steps, reagents):
     Get all combinations of reagents in given procedure.
     
     Arguments:
-        steps {list} -- list of Step objects.
-        reagents {list} -- List of Reagent objects.
+        steps (list): list of Step objects.
+        reagents (list): List of Reagent objects.
     
     Returns:
-        set -- Set of frozensets of pairs of CAS numbers.
+        set: Set of frozensets of pairs of CAS numbers.
     """
     return set()
     # vessel_contents = {}

@@ -2,7 +2,7 @@
 data/
 stuff/
 build/
-documentation/_build/
+documentation/_build
 
 # Python
 .ipynb_checkpoints

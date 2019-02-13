@@ -1042,7 +1042,7 @@
             <span class="n">CLiftArmDown</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_vessel</span><span class="p">),</span>
             <span class="n">CSetVacSp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_vessel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vacuum_pressure</span><span class="p">),</span>
             <span class="n">CStartVac</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_vessel</span><span class="p">),</span>
-            <span class="n">CWait</span><span class="p">(</span><span class="n">DEFAULT_ROTAVAP_DRYING_TIME</span><span class="p">),</span>
+            <span class="n">CWait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">),</span>
             
             <span class="c1"># Recover flask and vent</span>
             <span class="n">CLiftArmUp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotavap_vessel</span><span class="p">),</span>

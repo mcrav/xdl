@@ -188,13 +188,13 @@ class XDLSyntaxValidator(object):
         Check quantity is in valid format.
         
         Arguments:
-            quantity_type {str} -- XDL attribute, i.e. 'mass', 'volume', 
+            quantity_type (str): XDL attribute, i.e. 'mass', 'volume', 
                                    'time', 'temperature'
-            quantity_str {str} -- XDL value, i.e. '5g', '20 ml', '2hrs', '77'
-            quantity_element {Step} -- Step object containing quantity
+            quantity_str (str): XDL value, i.e. '5g', '20 ml', '2hrs', '77'
+            quantity_element (Step): Step object containing quantity
         
         Returns:
-            bool -- True is quantity is valid, otherwise False
+            bool: True is quantity is valid, otherwise False
         """
         if quantity_type == 'volume' and quantity_str == 'all':
             return True
@@ -262,10 +262,10 @@ class XDLSyntaxValidator(object):
         """Print syntax error.
         
         Arguments:
-            error {str} -- Error message.
+            error (str): Error message.
         
         Keyword Arguments:
-            element {lxml.etree.Element} -- Element producing error. 
+            element {lxml.etree.Element}: Element producing error. 
                                             Used to give an error line number.
         """
         s = 'XDL Syntax Error'

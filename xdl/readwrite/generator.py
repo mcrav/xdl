@@ -12,9 +12,9 @@ class XDLGenerator(object):
         Generate XDL from steps, hardware and reagents.
         
         Args:
-            steps {List[Step]} -- List of Step objects
-            hardware {Hardware} -- Hardware object.
-            reagents {List[Reagent]} -- List of Reagent objects
+            steps (List[xdl.steps.Step]): List of Step objects
+            hardware (xdl.hardware.Hardware): Hardware object.
+            reagents (List[xdl.reagents.Reagent]): List of Reagent objects
         """
         self.hardware, self.reagents, self.steps = hardware, reagents, steps
         self._generate_xdl()
@@ -75,10 +75,10 @@ def get_xdl_string(xdltree):
     """Convert XDL etree to pretty XML string.
     
     Args:
-        xdltree {lxml.etree.ElementTree} -- etree of XDL
+        xdltree (lxml.etree.ElementTree): etree of XDL
 
     Returns:
-        str -- XML string
+        str: XML string
     """
     indent = '  '
     # Synthesis tag

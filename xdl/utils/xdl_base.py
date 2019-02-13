@@ -10,7 +10,7 @@ class XDLBase(object):
         """Load dict of properties.
         
         Arguments:
-            properties {dict} -- dict of property names and values.
+            properties (dict): dict of property names and values.
         """
         for prop in self.properties:
             if prop in properties:

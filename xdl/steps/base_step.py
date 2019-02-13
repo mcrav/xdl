@@ -1,10 +1,18 @@
 from ..utils import XDLBase
 
 class Step(XDLBase):
-    """Base class for all step objects."""
+    """Base class for all step objects.
+    
+    Attributes:
+        properties (dict): Dictionary of step properties. Should be implemented
+            in step __init__.
+        steps (list): List of step objects. Should be implemented in step
+            __init__.
+        human_readable (str): Description of actions taken by step. Should be
+            implemented in step __init__.
+    """
     
     def __init__(self):
-        self.name = ''
         self.properties = {}
         self.steps = []
         self.human_readable = ''
@@ -14,7 +22,9 @@ class Step(XDLBase):
         Execute self with given Chempiler object.
         
         Args:
-            chempiler {chempiler.Chempiler} -- Initialised Chempiler object.
+            chempiler (chempiler.Chempiler): Initialised Chempiler object.
+            logger (logging.Logger): Logger to handle output step output.
+            level (int): Level of recursion in step execution.
         """
         level += 1
         try:

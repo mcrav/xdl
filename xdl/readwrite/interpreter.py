@@ -11,13 +11,13 @@ def xdl_file_to_objs(xdl_file, logger):
     """Given XDL file return steps, hardware and reagents.
     
     Arguments:
-        xdl_file {str} -- Path to XDL file.
+        xdl_file (str): Path to XDL file.
     
     Returns:
-        Tuple -- (steps, hardware, reagents)
-                  steps    -- List of Step objects.
-                  hardware -- Hardware object.
-                  reagents -- List of Reagent objects.
+        Tuple: (steps, hardware, reagents)
+                  steps: List of Step objects.
+                  hardware: Hardware object.
+                  reagents: List of Reagent objects.
     """
     with open(xdl_file) as fileobj:
         return xdl_str_to_objs(fileobj.read(), logger)
@@ -26,13 +26,13 @@ def xdl_str_to_objs(xdl_str, logger):
     """Given XDL str return steps, hardware and reagents.
     
     Arguments:
-        xdl_str {str} -- XDL str.
+        xdl_str (str): XDL str.
     
     Returns:
-        Tuple -- (steps, hardware, reagents)
-                  steps    -- List of Step objects.
-                  hardware -- Hardware object.
-                  reagents -- List of Reagent objects.
+        Tuple: (steps, hardware, reagents)
+                  steps: List of Step objects.
+                  hardware: Hardware object.
+                  reagents: List of Reagent objects.
     """
     if xdl_str:
         if xdl_valid(xdl_str, logger):
@@ -80,10 +80,10 @@ def xdl_valid(xdl_str, logger=None):
     """Return True if XDL is valid, otherwise False.
     
     Arguments:
-        xdl_str {str} -- XDL str.
+        xdl_str (str): XDL str.
     
     Returns:
-        bool -- True if XDL is valid, otherwise False.
+        bool: True if XDL is valid, otherwise False.
     """
     return XDLSyntaxValidator(xdl_str, logger=logger).valid
 
@@ -91,10 +91,10 @@ def steps_from_xdl(xdl_str):
     """Given XDL str return list of Step objects.
     
     Arguments:
-        xdl_str {str} -- XDL str.
+        xdl_str (str): XDL str.
     
     Returns:
-        List[Step] -- List of Step objects corresponding to procedure described
+        List[Step]: List of Step objects corresponding to procedure described
                       in xdl_str.
     """
     steps = []
@@ -109,10 +109,10 @@ def hardware_from_xdl(xdl_str):
     """Given XDL str return Hardware object.
     
     Arguments:
-        xdl_str {str} -- XDL str.
+        xdl_str (str): XDL str.
     
     Returns:
-        Hardware -- Hardware object containing all Component objects described
+        Hardware: Hardware object containing all Component objects described
                     by XDL.
     """
     return Hardware(components_from_xdl(xdl_str))
@@ -121,10 +121,10 @@ def components_from_xdl(xdl_str):
     """Given XDL str return list of Component objects.
     
     Arguments:
-        xdl_str {str} -- XDL str.
+        xdl_str (str): XDL str.
     
     Returns:
-        List[Component] -- List of Component objects corresponding to 
+        List[Component]: List of Component objects corresponding to 
                            components described in xdl_str.
     """
     components = []
@@ -139,10 +139,10 @@ def reagents_from_xdl(xdl_str):
     """Given XDL str return list of Reagent objects.
     
     Arguments:
-        xdl_str {str} -- XDL str.
+        xdl_str (str): XDL str.
     
     Returns:
-        List[Reagent] -- List of Reagent objects corresponding to reagents
+        List[Reagent]: List of Reagent objects corresponding to reagents
                          described in xdl_str.
     """
     reagents = []
@@ -157,10 +157,10 @@ def xdl_to_step(xdl_step_element):
     """Given XDL step element return corresponding Step object.
     
     Arguments:
-       xdl_step_element {lxml.etree._Element} -- XDL step lxml element.
+       xdl_step_element (lxml.etree._Element): XDL step lxml element.
 
     Returns:
-        Step -- Step object corresponding to step in xdl_step_element.
+        Step: Step object corresponding to step in xdl_step_element.
     """
     step_type = STEP_OBJ_DICT[xdl_step_element.tag]
     return step_type(
@@ -170,11 +170,11 @@ def xdl_to_component(xdl_component_element):
     """Given XDL component element return corresponding Component object.
     
     Arguments:
-       xdl_component_element {lxml.etree._Element} -- XDL component lxml 
+       xdl_component_element (lxml.etree._Element): XDL component lxml 
                                                       element.
 
     Returns:
-        Component -- Component object corresponding to component in 
+        Component: Component object corresponding to component in 
                      xdl_component_element.
     """
     attr = preprocess_attrib(xdl_component_element.attrib)
@@ -185,10 +185,10 @@ def xdl_to_reagent(xdl_reagent_element):
     """Given XDL reagent element return corresponding Reagent object.
     
     Arguments:
-        xdl_reagent_element {lxml.etree._Element} -- XDL reagent lxml element.
+        xdl_reagent_element (lxml.etree._Element): XDL reagent lxml element.
         
     Returns:
-        Reagent -- Reagent object corresponding to reagent in 
+        Reagent: Reagent object corresponding to reagent in 
                    xdl_reagent_element.
     """
     reagent = Reagent()
@@ -204,11 +204,11 @@ def preprocess_step_attrib(step_type, attrib):
     5. Convert MakeSolution solutes and solute_masses attributes to lists.
 
     Arguments:
-        step {Step} -- Step object to preprocess attributes for.
-        attrib {lxml.etree._Attrib} -- Raw attribute dictionary from XDL
+        step (Step): Step object to preprocess attributes for.
+        attrib (lxml.etree._Attrib): Raw attribute dictionary from XDL
     
     Returns:
-        dict -- Dict of processed attributes.
+        dict: Dict of processed attributes.
     """
     attr = preprocess_attrib(attrib)
     if 'clean_tubing' in attr:
