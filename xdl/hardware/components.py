@@ -56,6 +56,6 @@ class Hardware(object):
                 return component
         return None
 
-    def __iter__(self) -> Generator[Component]:
+    def __iter__(self) -> Generator[Component, None, None]:
         for item in self.components:
             yield item 

@@ -1,7 +1,7 @@
 import statistics
 import copy
 import logging
-from typing import List, Union
+from typing import List, Union, Tuple
 if False:
     from ..xdl import XDL
     from chempiler import Chempiler

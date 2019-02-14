@@ -9,8 +9,9 @@ def iter_vessel_contents(
     Tuple[
         int,
         Step,
-        Dict[str, [Dict[str, Union[List[str], float]]]],
-        Optional[List[str]]]]:
+        Dict[str, Dict[str, Union[List[str], float]]],
+        Optional[List[str]]],
+    None, None]:
     """Iterator. Allows you to track vessel contents as they change
     throughout the steps.
 
