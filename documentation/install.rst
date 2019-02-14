@@ -2,7 +2,7 @@
 Installation
 ============
 
-XDL has been tested with Python 3.6.
+This package has been tested with Python 3.6.
 
 Install with pip from PyPI::
 

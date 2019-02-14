@@ -1,7 +1,8 @@
 from typing import Dict, List
 
-from ..steps import steps_xdl
-from ..steps import steps_chasm
+from ..steps import steps_synthesis
+from ..steps import steps_utility
+from ..steps import steps_base
 from ..steps import Step
 import copy
 import inspect
@@ -9,15 +10,20 @@ from ..constants import *
 
 #: Dictionary of base step name keys and step class values.
 BASE_STEP_OBJ_DICT: Dict[str, type] = {
-    m[0]: m[1] for m in inspect.getmembers(steps_chasm, inspect.isclass)}
+    m[0]: m[1] for m in inspect.getmembers(steps_base, inspect.isclass)}
 
-#: Dictionary of XDL step name keys and step class values.
-XDL_STEP_OBJ_DICT: Dict[str, type] = {
-    m[0]: m[1] for m in inspect.getmembers(steps_xdl, inspect.isclass)}
+#: Dictionary of utility step name keys and step class values.
+UTILITY_STEP_OBJ_DICT: Dict[str, type] = {
+    m[0]: m[1] for m in inspect.getmembers(steps_utility, inspect.isclass)}
+
+#: Dictionary of synthesis step name keys and step class values.
+SYNTHESIS_STEP_OBJ_DICT: Dict[str, type] = {
+    m[0]: m[1] for m in inspect.getmembers(steps_synthesis, inspect.isclass)}
 
 #: Dictionary of all step name keys and step class values.
 STEP_OBJ_DICT: Dict[str, type] = copy.copy(BASE_STEP_OBJ_DICT)
-STEP_OBJ_DICT.update(XDL_STEP_OBJ_DICT)
+STEP_OBJ_DICT.update(UTILITY_STEP_OBJ_DICT)
+STEP_OBJ_DICT.update(SYNTHESIS_STEP_OBJ_DICT)
 
 #: List of all step names.
 XDL_STEP_NAMESPACE: List[str] = list(STEP_OBJ_DICT.keys())
