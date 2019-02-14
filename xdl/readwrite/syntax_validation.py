@@ -1,11 +1,11 @@
 from lxml import etree
-from ..utils.namespace import XDL_STEP_NAMESPACE, XDL_HARDWARE_NAMESPACE
-from .utils import float_regex
-from ..steps import MakeSolution
 import inspect
 import re
 import traceback
 import logging
+from ..utils.namespace import XDL_STEP_NAMESPACE, XDL_HARDWARE_NAMESPACE
+from .utils import float_regex
+from ..steps import MakeSolution
 
 ACCEPTABLE_MASS_UNITS = ['ug', 'mg', 'g', 'kg']
 ACCEPTABLE_VOLUME_UNITS = ['ul', 'ml', 'cl', 'dl', 'l', 'cc']
