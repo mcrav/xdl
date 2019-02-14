@@ -329,10 +329,10 @@ class Separate(Step):
                 vessel=self.separation_vessel, port=BOTTOM_PORT, 
                 waste_vessel=self.waste_vessel),
             # Stir separation_vessel
-            StirAtRT(vessel=self.separation_vessel, 
+            Stir(vessel=self.separation_vessel, 
                      time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
                      stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
-            StirAtRT(vessel=self.separation_vessel, 
+            Stir(vessel=self.separation_vessel, 
                      time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
                      stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
             # Wait for phases to separate
@@ -369,10 +369,10 @@ class Separate(Step):
                             vessel=self.separation_vessel, port=BOTTOM_PORT, 
                             waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
-                        StirAtRT(vessel=self.separation_vessel, 
+                        Stir(vessel=self.separation_vessel, 
                                  time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
                                  stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
-                        StirAtRT(vessel=self.separation_vessel, 
+                        Stir(vessel=self.separation_vessel, 
                                  time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
                                  stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
                         # Wait for phases to separate
@@ -411,10 +411,10 @@ class Separate(Step):
                             port=BOTTOM_PORT, volume=self.solvent_volume, 
                             waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
-                        StirAtRT(vessel=self.separation_vessel, 
+                        Stir(vessel=self.separation_vessel, 
                                  time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
                                  stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
-                        StirAtRT(vessel=self.separation_vessel, 
+                        Stir(vessel=self.separation_vessel, 
                                  time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
                                  stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
                         # Wait for phases to separate
