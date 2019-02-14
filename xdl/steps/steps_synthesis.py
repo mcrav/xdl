@@ -1,3 +1,5 @@
+from typing import Optional, List, Union
+
 from ..constants import *
 from ..utils.misc import get_port_str
 from .base_step import Step
@@ -15,13 +17,23 @@ class Add(Step):
         reagent (str): Reagent to add.
         volume (float): Volume of reagent to add.
         vessel (str): Vessel name to add reagent to.
+        port (str): vessel port to use.
         time (float): Time to spend doing addition in seconds. (optional)
         move_speed (float): Speed in mL / min to move liquid at. (optional)
-        clean_tubing (bool): Clean tubing before and after addition. (optional)
+        reagent_vessel (str): Given internally. Vessel containing reagent.
+        waste_vessel (str): Given internally. Vessel to send waste to.
     """
-    def __init__(self, reagent, volume, vessel, port=None, time=None,
-                       move_speed='default', reagent_vessel=None, 
-                       waste_vessel=None):
+    def __init__(
+        self,
+        reagent: str,
+        volume: float,
+        vessel: str,
+        port: Optional[str] = None,
+        time: Optional[float] = None,
+        move_speed: Optional[float] = 'default',
+        reagent_vessel: Optional[str] = None, 
+        waste_vessel: Optional[str] = None
+    ) -> None:
 
         self.properties = {
             'reagent': reagent,
@@ -67,8 +79,8 @@ class AddCorrosive(Step):
         reagent: str,
         vessel: str,
         volume: float,
-        reagent_vessel: str = None,
-        air_vessel: str = None
+        reagent_vessel: Optional[str] = None,
+        air_vessel: Optional[str] = None
     ) -> None:
 
         self.properties = {
@@ -81,8 +93,8 @@ class AddCorrosive(Step):
 
         self.steps = [
             Transfer(from_vessel=self.air_vessel,
-                     to_vessel=self.reagent_vessel,
-                     volume=self.volume)
+                  to_vessel=self.reagent_vessel,
+                  volume=self.volume)
         ]
 
         self.human_readable = 'Transfer corrosive reagent {0} ({1} mL) to {2}.'.format(
@@ -92,13 +104,20 @@ class MakeSolution(Step):
     """Make solution in given vessel of given solutes in given solvent.
 
     Args:
-        solute (str or list): Solute(s).
+        solutes (str or list): Solute(s).
         solvent (str): Solvent.
-        solute_mass (str or list): Mass(es) corresponding to solute(s)
-        solvent_volume (float): Volume of solvent to use in mL.
+        solute_masses (str or list): Mass(es) corresponding to solute(s)
         vessel (str): Vessel name to make solution in.
+        solvent_volume (float): Volume of solvent to use in mL.
     """
-    def __init__(self, solutes=None, solvent=None, solute_masses=None, solvent_volume=None, vessel=None):
+    def __init__(
+        self,
+        solutes: Union[str, List[str]],
+        solute_masses: Union[str, List[str]],
+        solvent: str,
+        vessel: str,
+        solvent_volume: Optional[float] = None,
+    ) -> None:
 
         self.properties = {
             'solutes': solutes,
@@ -135,12 +154,19 @@ class Filter(Step):
         filter_vessel (str): Filter vessel.
         filter_top_volume (float): Volume (mL) of contents of filter top.
         filter_bottom_volume (float): Volume (mL) of the filter bottom.
-        waste_vessel (float): Node to move waste material to.
-        time (str): Time to leave vacuum on filter vessel after contents have been moved. (optional)
+        wait_time (float): Time to leave vacuum on filter vessel after contents have been moved. (optional)
+        waste_vessel (float): Given internally.Vessel to move waste material to.
+        vacuum (str): Given internally. Name of vacuum flask.
     """
-    def __init__(self, filter_vessel, filter_top_volume=None, 
-                       filter_bottom_volume=None, waste_vessel=None,
-                       vacuum=None, wait_time='default'):
+    def __init__(
+        self,
+        filter_vessel: str,
+        filter_top_volume: Optional[float] = None,
+        filter_bottom_volume: Optional[float] = None,
+        waste_vessel: Optional[str] = None,
+        vacuum: Optional[str] = None,
+        wait_time: Optional[float] = 'default'
+    ) -> None:
 
         self.properties = {
             'filter_vessel': filter_vessel,
@@ -180,12 +206,20 @@ class WashFilterCake(Step):
     Args:
         filter_vessel (str): Filter vessel name to wash.
         solvent (str): Solvent to wash with.
-        volume (float): Volume of solvent to wash with. (optional)
+        volume (float): Volume of solvent to wash with.
         wait_time (str): Time to wait after moving solvent to filter flask.
-                           (optional)
+        waste_vessel (str): Given internally. Vessel to send waste to.
+        vacuum (str): Given internally. Name of vacuum flask.
     """
-    def __init__(self, filter_vessel=None, solvent=None, volume='default',
-                       waste_vessel=None, vacuum=None, wait_time='default'):
+    def __init__(
+        self,
+        filter_vessel: str,
+        solvent: str,
+        volume: Optional[float] = 'default',
+        wait_time: Optional[float] = 'default',
+        waste_vessel: Optional[str] = None,
+        vacuum: Optional[str] = None,
+    ) -> None:
 
         self.properties = {
             'solvent': solvent,
@@ -215,11 +249,18 @@ class Dry(Step):
     """Dry given vessel by applying vacuum for given time.
 
     Args:
-        vessel (str): Vessel name to dry.
-        time (str): Time to dry vessel for in seconds. (optional)
+        filter_vessel (str): Vessel name to dry.
+        wait_time (float): Time to dry vessel for in seconds. (optional)
+        waste_vessel (str): Given internally. Vessel to send waste to.
+        vacuum (str): Given internally. Vacuum flask.
     """
-    def __init__(self, filter_vessel=None, waste_vessel=None, vacuum=None,
-                       wait_time='default'):
+    def __init__(
+        self,
+        filter_vessel: str,
+        wait_time: Optional[float] = 'default',
+        waste_vessel: Optional[str] = None,
+        vacuum: Optional[str] = None,
+    ) -> None:
 
         self.properties = {
             'filter_vessel': filter_vessel,
@@ -249,10 +290,15 @@ class PrepareFilter(Step):
         filter_vessel (str): Filter vessel name to prepare (generic name 'filter' not 'filter_filter_bottom').
         solvent (str): Solvent to fill filter bottom with.
         volume (int): Volume of filter bottom.
-        waste_vessel (str): Vessel to put waste material.
+        waste_vessel (str): Given internally. Vessel to put waste material.
     """
-    def __init__(self, filter_vessel, solvent=None, volume=10, 
-                       waste_vessel=None):
+    def __init__(
+        self,
+        filter_vessel: str,
+        solvent: str,
+        volume: float, 
+        waste_vessel: Optional[str] = None
+    ) -> None:
 
         self.properties = {
             'filter_vessel': filter_vessel,
@@ -280,17 +326,36 @@ class Separate(Step):
     and receiving material.
 
     Args:
-        from_vessel (str): Vessel name with contents to be extracted.
+        purpose (str): 'extract' or 'wash'. Used in iter_vessel_contents.
+        from_vessel (str): Vessel name with contents to be separated.
+        from_port (str): from_vessel port to use.
         separation_vessel (str): Separation vessel name.
+        to_vessel (str): Vessel to send product phase to.
+        to_port (str): to_vessel port to use.
         solvent (str): Solvent to extract with.
         solvent_volume (float): Volume of solvent to extract with.
+        product_bottom (bool): True if product in bottom phase, otherwise False.
         n_separations (int): Number of separations to perform.
+        waste_phase_to_vessel (str): Vessel to send waste phase to.
+        waste_phase_to_port (str): waste_phase_to_vessel port to use.
+        waste_vessel (str): Given internally. Vessel to send waste to.
     """
-    def __init__(self, purpose=None, from_vessel=None, from_port=None,
-                       separation_vessel=None, to_vessel=None, to_port=None,
-                       solvent=None, solvent_volume=None, n_separations=1,
-                       product_bottom=True, waste_vessel=None,
-                       waste_phase_to_vessel=None, waste_phase_to_port=None):
+    def __init__(
+        self,
+        purpose: str,
+        from_vessel: str,
+        from_port: str,
+        separation_vessel: str,
+        to_vessel: str,
+        to_port: str,
+        solvent: str,
+        product_bottom: bool,
+        solvent_volume: Optional[float] = 'default',
+        n_separations: Optional[float] = 1,
+        waste_phase_to_vessel: Optional[str] = None,
+        waste_phase_to_port: Optional[str] = None,
+        waste_vessel: Optional[str] = None,
+    ) -> None:
 
         self.properties = {
             'purpose': purpose,
@@ -449,9 +514,9 @@ class Heat(Step):
     Args:
         vessel (str): Vessel to heat to reflux.
         temp (float): Temperature to heat vessel to in °C.
-        time (int): Time to reflux vessel for in seconds.
+        time (float): Time to reflux vessel for in seconds.
     """
-    def __init__(self, vessel=None, temp=None, time=None):
+    def __init__(self, vessel: str, temp: float, time: float) -> None:
 
         self.properties = {
             'vessel': vessel,
