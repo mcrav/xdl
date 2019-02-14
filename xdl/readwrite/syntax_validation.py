@@ -6,10 +6,14 @@ import logging
 from ..utils.namespace import XDL_STEP_NAMESPACE, XDL_HARDWARE_NAMESPACE
 from .utils import float_regex
 from ..steps import MakeSolution
+# For type annotations
+from typing import Dict, List
+if False:
+    from ..xdl import XDL
 
-ACCEPTABLE_MASS_UNITS = ['ug', 'mg', 'g', 'kg']
-ACCEPTABLE_VOLUME_UNITS = ['ul', 'ml', 'cl', 'dl', 'l', 'cc']
-XDL_ACCEPTABLE_UNITS = {
+ACCEPTABLE_MASS_UNITS: List[str] = ['ug', 'mg', 'g', 'kg']
+ACCEPTABLE_VOLUME_UNITS: List[str] = ['ul', 'ml', 'cl', 'dl', 'l', 'cc']
+XDL_ACCEPTABLE_UNITS: Dict[str, List[str]] = {
     'volume': ACCEPTABLE_VOLUME_UNITS,
     'mass': ACCEPTABLE_MASS_UNITS,
     'mol': ['umol', 'mmol', 'mol'],
@@ -20,22 +24,22 @@ XDL_ACCEPTABLE_UNITS = {
     'solvent_volume': ACCEPTABLE_VOLUME_UNITS,
 }
 
-XDL_STEP_COMPULSORY_ATTRIBUTES = {
+XDL_STEP_COMPULSORY_ATTRIBUTES: Dict[str, List[str]] = {
     'Add': ['reagent', 'vessel', 'quantity'],
 }
 
 # step properties that expect a quantity
-REAGENT_QUANTITY_ATTRIBUTES = ['mass', 'mol', 'volume'] 
+REAGENT_QUANTITY_ATTRIBUTES: List[str] = ['mass', 'mol', 'volume'] 
 
 # step properties that expect a reagent declared in Reagents section
-REAGENT_ATTRIBS = ['reagent', 'solute', 'solvent'] 
+REAGENT_ATTRIBS: List[str] = ['reagent', 'solute', 'solvent'] 
 
 class XDLSyntaxValidator(object):
     """
     Validate that XDL is syntactically correct.
     """
 
-    def __init__(self, xdl, logger=None):
+    def __init__(self, xdl: 'XDL', logger: logging.Logger = None) -> None:
         """
         Load and validate XDL.
         """
@@ -56,7 +60,7 @@ class XDLSyntaxValidator(object):
             self.logger.error(
                 '{0}\nFailed to load XDL.\n{1}'.format(e, traceback.format_exc()))
                          
-    def validate_xdl(self):
+    def validate_xdl(self) -> None:
         """Run all validation tests on XDL and store result in self.valid."""
         self.valid = (
             self.has_three_base_tags() 
@@ -67,14 +71,14 @@ class XDLSyntaxValidator(object):
             and self.check_quantities() 
             and self.check_step_attributes())
 
-    def get_section_children(self, section):
+    def get_section_children(self, section: str) -> List[etree._Element]:
         """Get children of given section tag."""
         for element in self.xdl_tree.findall('*'):
             if element.tag == section:
                 return element.findall('*')
         return []
 
-    def has_three_base_tags(self):
+    def has_three_base_tags(self) -> bool:
         """
         Check file has Hardware, Reagents and Procedure sections and nothing 
         else.
@@ -102,7 +106,7 @@ class XDLSyntaxValidator(object):
         return (has_hardware and has_reagents and has_procedure 
                 and not extra_sections) 
 
-    def all_reagents_declared(self):
+    def all_reagents_declared(self) -> bool:
         """
         Check all reagents used in steps are declared in the Reagents section.
         """
@@ -125,7 +129,7 @@ class XDLSyntaxValidator(object):
                                 step)
         return all_reagents_declared
 
-    def all_vessels_declared(self):
+    def all_vessels_declared(self) -> bool:
         """
         Check all vessels used in steps are declared in the Hardware section.
         """
@@ -142,7 +146,7 @@ class XDLSyntaxValidator(object):
                             f'{val} used in procedure but not declared in <Hardware> section.', step)
         return all_vessels_declared
 
-    def steps_in_namespace(self):
+    def steps_in_namespace(self) -> bool:
         """Check all step tags are in the XDL namespace."""
         steps_recognised = True
         for step in self.steps:
@@ -152,7 +156,7 @@ class XDLSyntaxValidator(object):
                 steps_recognised = False
         return steps_recognised
         
-    def hardware_in_namespace(self):
+    def hardware_in_namespace(self) -> bool:
         """Check all the component tags are in the XDL namespace."""
         hardware_recognised = True
         for component in self.components:
@@ -163,7 +167,7 @@ class XDLSyntaxValidator(object):
                 hardware_recognised = False
         return hardware_recognised
 
-    def check_quantities(self):
+    def check_quantities(self) -> bool:
         """Check all quantities are in a valid format."""
         quantities_valid = True
         for component in self.components:
@@ -183,7 +187,7 @@ class XDLSyntaxValidator(object):
         return quantities_valid
 
     def check_quantity_syntax(
-        self, quantity_type, quantity_str, quantity_element):
+        self, quantity_type, quantity_str, quantity_element) -> bool:
         """
         Check quantity is in valid format.
         
@@ -227,7 +231,7 @@ class XDLSyntaxValidator(object):
                 quantity_element)
         return quantity_valid
 
-    def check_step_attributes(self):
+    def check_step_attributes(self) -> bool:
         """Check that all compulsory Step attributes are present."""
         step_attributes_valid = True
         for step in self.steps:
@@ -258,7 +262,9 @@ class XDLSyntaxValidator(object):
                     step_attributes_valid = False
         return step_attributes_valid
 
-    def log_syntax_error(self, error, element=None):
+    def log_syntax_error(
+        self, error: str, element: etree._Element = None
+    ) -> None:
         """Print syntax error.
         
         Arguments:

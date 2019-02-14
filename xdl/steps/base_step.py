@@ -1,3 +1,8 @@
+# For type annotations
+import logging
+if False:
+    from chempiler import Chempiler
+
 from ..utils import XDLBase
 
 class Step(XDLBase):
@@ -17,7 +22,12 @@ class Step(XDLBase):
         self.steps = []
         self.human_readable = ''
 
-    def execute(self, chempiler, logger=None, level=0):
+    def execute(
+        self,
+        chempiler: 'Chempiler',
+        logger: logging.Logger = None,
+        level: int = 0
+    ) -> bool:
         """
         Execute self with given Chempiler object.
         

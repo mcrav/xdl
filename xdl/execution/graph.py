@@ -1,11 +1,14 @@
+from typing import Union, Dict
+import json
+
 from networkx.readwrite import json_graph
 from networkx import MultiDiGraph, read_graphml, NetworkXNoPath
 from networkx.algorithms.shortest_paths.generic import shortest_path_length
-import json
+
 from ..hardware.components import Component, Hardware
 from ..constants import CHEMPUTER_WASTE_CLASS_NAME
 
-def get_graph(graph_file):
+def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
     """Given one of the args available, return a networkx Graph object.
 
     Args:
@@ -32,7 +35,7 @@ def get_graph(graph_file):
             graph_file, directed=True, multigraph=True)
     return graph
 
-def hardware_from_graph(graph):
+def hardware_from_graph(graph: MultiDiGraph) -> Hardware:
     """Given networkx graph return a Hardware object corresponding to
     setup described in the graph.
 
@@ -49,7 +52,8 @@ def hardware_from_graph(graph):
         components.append(Component(node, props))
     return Hardware(components)
 
-def make_vessel_map(graph, target_vessel_class):
+def make_vessel_map(
+    graph: MultiDiGraph, target_vessel_class: str) -> Dict[str, str]:
     """Given graph, make dict with nodes as keys and nearest waste vessels to 
     each node as values, i.e. {node: nearest_waste_vessel}.
     

@@ -1,3 +1,9 @@
+import os
+import re
+import logging
+import copy
+from typing import List
+
 from .constants import *
 from .steps import *
 from .utils.namespace import BASE_STEP_OBJ_DICT
@@ -6,17 +12,25 @@ from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 from .readwrite import XDLGenerator
 from .safety import procedure_is_safe
 from .execution import XDLExecutor
-import os
-import re
-import logging
-import copy
+from .hardware import Hardware
+from .reagents import Reagent
+
+# For type annotations
+if False:
+    from chempiler import Chempiler
 
 class XDL(object):
     """
     Interpets XDL (file or str) and provides an object for further use.
     """
-    def __init__(self, xdl=None, steps=None, hardware=None, reagents=None,
-                       logger=None):
+    def __init__(
+        self,
+        xdl: str = None,
+        steps: List[Step] = None,
+        hardware: Hardware = None,
+        reagents: List[Reagent] = None,
+        logger: logging.Logger = None
+    ) -> None:
         """Init method for XDL object.
         One of xdl or (steps, hardware and reagents) must be given.
         
@@ -61,14 +75,15 @@ class XDL(object):
             raise ValueError(
                 "Can't create XDL object. Insufficient args given to __init__ method.")
 
-    def _get_exp_id(self, default='xdl_exp'):
+    def _get_exp_id(self, default: str = 'xdl_exp') -> str:
         """Get experiment ID name to give to the Chempiler."""
         if self._xdl_file:
             return os.path.splitext(os.path.split(self._xdl_file)[-1])[0]
-        else:
-            return default
+        return default
 
-    def climb_down_tree(self, step, print_tree=False, lvl=0):
+    def climb_down_tree(
+        self, step: Step, print_tree: bool = False, lvl: int = 0
+    ) -> List[Step]:
         """Go through given step's sub steps recursively until base steps are
         reached. Return list containing the step, all sub steps and all base
         steps.
@@ -106,7 +121,7 @@ class XDL(object):
                             step, print_tree=print_tree, lvl=lvl))
         return tree
 
-    def _get_full_xdl_tree(self):
+    def _get_full_xdl_tree(self) -> List[Step]:
         """
         Return list of all steps after unpacking nested steps.
         Root steps are included followed by all their children in order, 
@@ -120,14 +135,14 @@ class XDL(object):
             tree.extend(self.climb_down_tree(step))
         return tree
 
-    def print_full_xdl_tree(self):
+    def print_full_xdl_tree(self) -> None:
         """Print nested structure of all steps in XDL procedure."""
         self.logger.info('\nOperation Tree\n--------------\n')
         for step in self.steps:
             self.climb_down_tree(step, print_tree=True)
         self.logger.info('\n')
 
-    def as_literal_chempiler_code(self, dry_run=False):
+    def as_literal_chempiler_code(self, dry_run: bool = False) -> str:
         """
         Returns string of literal chempiler code built from steps.
 
@@ -152,12 +167,14 @@ class XDL(object):
                 s += '\n'
         return s
 
-    def save_chempiler_script(self, save_path, dry_run=False):
+    def save_chempiler_script(
+        self, save_path: str, dry_run: bool = False
+    ) -> None:
         """Save a chempiler script from the given steps."""
         with open(save_path, 'w') as fileobj:
             fileobj.write(self.as_literal_chempiler_code(dry_run=dry_run))
 
-    def as_human_readable(self):
+    def as_human_readable(self) -> str:
         """Return human-readable English description of XDL procedure.
         
         Returns:
@@ -168,24 +185,24 @@ class XDL(object):
             s += f'{i+1}) {step.human_readable}\n'
         return s
 
-    def print_full_human_readable(self):
+    def print_full_human_readable(self) -> None:
         """Print human-readable English description of XDL procedure."""
         self.logger.info('Synthesis Description\n---------------------\n')
         self.logger.info('{0}\n'.format(self.as_human_readable()))
 
-    def save_human_readable(self, save_file):
+    def save_human_readable(self, save_file: str) -> None:
         """Save human readable description of procedure to given path."""
         with open(save_file, 'w') as fileobj:
             fileobj.write(self.as_human_readable())
 
-    def as_string(self):
+    def as_string(self) -> str:
         """Return XDL str of procedure."""
         self._xdlgenerator = XDLGenerator(steps=self.steps,
                                           hardware=self.hardware,
                                           reagents=self.reagents)
         return self._xdlgenerator.as_string()
 
-    def save(self, save_file):
+    def save(self, save_file: str) -> str:
         """Save as XDL file.
         
         Args:
@@ -196,7 +213,7 @@ class XDL(object):
                                           reagents=self.reagents)
         self._xdlgenerator.save(save_file)
 
-    def scale_procedure(self, scale):
+    def scale_procedure(self, scale: float) -> None:
         """Scale all volumes in procedure.
 
         Args:
@@ -208,13 +225,8 @@ class XDL(object):
                     val = step.properties[prop]
                     if val:
                         step.properties[prop] = float(val) * scale
-                        print(step.properties[prop])
-                        print(val)
-                        print('------')
-        for step in self.steps:
-            print(step.properties)
 
-    def prepare_for_execution(self, graph_file):
+    def prepare_for_execution(self, graph_file: str) -> None:
         """Check hardware compatibility and prepare XDL for execution on given 
         setup.
         
@@ -227,7 +239,7 @@ class XDL(object):
         self.executor = XDLExecutor(self)
         self.executor.prepare_for_execution(graph_file)
 
-    def execute(self, chempiler):
+    def execute(self, chempiler: 'Chempiler') -> None:
         """Execute XDL using given Chempiler object. self.prepare_for_execution
         must have been called before calling thie method.
         

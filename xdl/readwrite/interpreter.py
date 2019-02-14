@@ -1,20 +1,22 @@
+import logging
+from typing import Dict, List, Any
 from lxml import etree
 from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml, 
                     convert_mass_str_to_g, parse_bool)
-from ..steps import MakeSolution
+from ..steps import MakeSolution, Step
 from ..reagents import Reagent
 from ..hardware import Hardware, Component
 from .syntax_validation import XDLSyntaxValidator
 from ..utils.namespace import (STEP_OBJ_DICT, BASE_STEP_OBJ_DICT)
 
-def xdl_file_to_objs(xdl_file, logger):
+def xdl_file_to_objs(xdl_file: str, logger: logging.Logger) -> Dict[str, Any]:
     """Given XDL file return steps, hardware and reagents.
     
     Arguments:
         xdl_file (str): Path to XDL file.
     
     Returns:
-        Tuple: (steps, hardware, reagents)
+        Dict: (steps, hardware, reagents)
                   steps: List of Step objects.
                   hardware: Hardware object.
                   reagents: List of Reagent objects.
@@ -22,7 +24,7 @@ def xdl_file_to_objs(xdl_file, logger):
     with open(xdl_file) as fileobj:
         return xdl_str_to_objs(fileobj.read(), logger)
 
-def xdl_str_to_objs(xdl_str, logger):
+def xdl_str_to_objs(xdl_str: str, logger: logging.Logger) -> Dict[str, Any]:
     """Given XDL str return steps, hardware and reagents.
     
     Arguments:
@@ -53,7 +55,7 @@ def xdl_str_to_objs(xdl_str, logger):
         logger.error('No XDL given.')
     return None
 
-def synthesis_attrs_from_xdl(xdl_str):
+def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
     """Return attrs from <Synthesis> tag.
 
     Arguments:
@@ -76,7 +78,7 @@ def synthesis_attrs_from_xdl(xdl_str):
                processed_attr[snake_attr] = parse_bool(raw_attr[camel_attr])
     return processed_attr
 
-def xdl_valid(xdl_str, logger=None):
+def xdl_valid(xdl_str: str, logger: logging.Logger = None) -> bool:
     """Return True if XDL is valid, otherwise False.
     
     Arguments:
@@ -87,7 +89,7 @@ def xdl_valid(xdl_str, logger=None):
     """
     return XDLSyntaxValidator(xdl_str, logger=logger).valid
 
-def steps_from_xdl(xdl_str):
+def steps_from_xdl(xdl_str: str) -> List[Step]:
     """Given XDL str return list of Step objects.
     
     Arguments:
@@ -105,7 +107,7 @@ def steps_from_xdl(xdl_str):
                 steps.append(xdl_to_step(step_xdl))
     return steps
 
-def hardware_from_xdl(xdl_str):
+def hardware_from_xdl(xdl_str: str) -> Hardware:
     """Given XDL str return Hardware object.
     
     Arguments:
@@ -117,7 +119,7 @@ def hardware_from_xdl(xdl_str):
     """
     return Hardware(components_from_xdl(xdl_str))
 
-def components_from_xdl(xdl_str):
+def components_from_xdl(xdl_str: str) -> List[Component]:
     """Given XDL str return list of Component objects.
     
     Arguments:
@@ -135,7 +137,7 @@ def components_from_xdl(xdl_str):
                 components.append(xdl_to_component(component_xdl))
     return components
 
-def reagents_from_xdl(xdl_str):
+def reagents_from_xdl(xdl_str: str) -> List[Reagent]:
     """Given XDL str return list of Reagent objects.
     
     Arguments:
@@ -153,7 +155,7 @@ def reagents_from_xdl(xdl_str):
                 reagents.append(xdl_to_reagent(reagent_xdl))
     return reagents 
 
-def xdl_to_step(xdl_step_element):
+def xdl_to_step(xdl_step_element: etree._Element) -> Step:
     """Given XDL step element return corresponding Step object.
     
     Arguments:
@@ -166,7 +168,7 @@ def xdl_to_step(xdl_step_element):
     return step_type(
         **preprocess_step_attrib(step_type, xdl_step_element.attrib))
 
-def xdl_to_component(xdl_component_element):
+def xdl_to_component(xdl_component_element: etree._Element) -> Component:
     """Given XDL component element return corresponding Component object.
     
     Arguments:
@@ -181,7 +183,7 @@ def xdl_to_component(xdl_component_element):
     component = Component(attr['xid'], attr)  
     return component
 
-def xdl_to_reagent(xdl_reagent_element):
+def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
     """Given XDL reagent element return corresponding Reagent object.
     
     Arguments:
@@ -195,7 +197,9 @@ def xdl_to_reagent(xdl_reagent_element):
     reagent.load_properties(preprocess_attrib(xdl_reagent_element.attrib))
     return reagent
 
-def preprocess_step_attrib(step_type, attrib):
+def preprocess_step_attrib(
+    step_type: type, attrib: etree._Attrib
+) -> Dict[str, Any]:
     """Process:
     1. Convert strs to bools i.e. 'false' -> False
     2. Convert all time strs to floats with second as unit.
@@ -204,7 +208,7 @@ def preprocess_step_attrib(step_type, attrib):
     5. Convert MakeSolution solutes and solute_masses attributes to lists.
 
     Arguments:
-        step (Step): Step object to preprocess attributes for.
+        step (type): Step object to preprocess attributes for.
         attrib (lxml.etree._Attrib): Raw attribute dictionary from XDL
     
     Returns:
@@ -239,7 +243,7 @@ def preprocess_step_attrib(step_type, attrib):
                                  for item in attr['solute_masses']]
     return attr
 
-def preprocess_attrib(attrib):
+def preprocess_attrib(attrib: etree._Attrib) -> Dict[str, Any]:
     """Change id key to xid.
     
     Args:

@@ -1,4 +1,4 @@
-def parse_bool(s):
+def parse_bool(s: str) -> bool:
     """Parse bool from string.
 
     Args:
@@ -11,7 +11,7 @@ def parse_bool(s):
         return True
     return False
 
-def get_port_str(port):
+def get_port_str(port: str) -> str:
     """Get str representing port for using in human_readable strings.
     
     Args:

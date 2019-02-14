@@ -1,7 +1,16 @@
+from typing import List, Dict, Generator, Optional, Union, Tuple
 import copy
-from ..steps import Filter, Dry, Separate, CMove
+from ..steps import Step, Filter, Dry, Separate, CMove
+from ..hardware import Hardware
 
-def iter_vessel_contents(steps, hardware, additions=False):
+def iter_vessel_contents(
+    steps: List[Step], hardware: Hardware, additions: bool = False
+) -> Generator[
+    Tuple[
+        int,
+        Step,
+        Dict[str, [Dict[str, Union[List[str], float]]]],
+        Optional[List[str]]]]:
     """Iterator. Allows you to track vessel contents as they change
     throughout the steps.
 
@@ -109,7 +118,7 @@ def iter_vessel_contents(steps, hardware, additions=False):
         else:
             yield (i, step, copy.deepcopy(vessel_contents))
 
-def get_movements(step):
+def get_movements(step: Step) -> List[Tuple[str, str, float]]:
     """Get all liquid movements associated with given step.
     
     Args:

@@ -1,15 +1,19 @@
 
-from .utils import cas_str_to_int, find_reagent_obj
-from ..steps import Add, MakeSolution, CMove, Transfer, Separate, WashFilterCake
 import itertools
 import copy
+from typing import Dict, List, Set
 
-dangerous_combinations = {
+from .utils import cas_str_to_int, find_reagent_obj
+from ..steps import (
+    Add, MakeSolution, CMove, Transfer, Separate, WashFilterCake, Step)
+from ..reagents import Reagent
+
+dangerous_combinations: Dict[frozenset, str] = {
     frozenset((67641, 16853853)): 'Acetone and LiAlH4 boom fucking boom!',
     # Alcohols and LiALH4,
 }
 
-def procedure_is_safe(steps, reagents):
+def procedure_is_safe(steps: List[Step], reagents: List[Reagent]) -> bool:
     """
     Return True if procedure is safe.
     Print message for every unsafe feature found.
@@ -22,7 +26,7 @@ def procedure_is_safe(steps, reagents):
             safe = False
     return safe
 
-def get_reagent_combinations(steps, reagents):
+def get_reagent_combinations(steps: List[Step], reagents: List[Reagent]) -> Set:
     """REWRITE USING iter_vessel_contents
     
     Get all combinations of reagents in given procedure.

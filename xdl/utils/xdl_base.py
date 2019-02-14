@@ -1,4 +1,5 @@
 from ..constants import DEFAULT_VALS
+from typing import Dict, Any
 
 class XDLBase(object):
     """Base object for Step, Component and Reagent objects."""
@@ -6,7 +7,7 @@ class XDLBase(object):
     def __init__(self):
         self.properties = {}
 
-    def load_properties(self, properties):
+    def load_properties(self, properties: Dict[str, Any]) -> None:
         """Load dict of properties.
         
         Arguments:
@@ -17,20 +18,17 @@ class XDLBase(object):
                 self.properties[prop] = properties[prop]
         self.update()
 
-    def update(self):
+    def update(self) -> None:
         """Reinitialise. Should be called after property dict is updated."""
         self.__init__(**self.properties)
 
-    def get_defaults(self):
+    def get_defaults(self) -> None:
         """Replace 'default' strings with default values from constants.py."""
         for k in self.properties:
             if self.properties[k] == 'default':
-                try:
-                    self.properties[k] = DEFAULT_VALS[self.name][k]
-                except KeyError as e:
-                    raise e 
-
-    def __setattr__(self, name, value):
+                self.properties[k] = DEFAULT_VALS[self.name][k]
+                    
+    def __setattr__(self, name: str, value: Any) -> None:
         """
         If name is in self.properties do self.properties[name] = value
         Otherwise set attribute as normal.
@@ -44,7 +42,7 @@ class XDLBase(object):
         else:
             object.__setattr__(self, name, value)
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> None:
         """
         If name is in self.properties return self.properties[name].
         Otherwise return attribute as normal.
@@ -59,5 +57,6 @@ class XDLBase(object):
             return object.__getattribute__(self, name)
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """Get class name."""
         return type(self).__name__
