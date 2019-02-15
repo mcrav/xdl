@@ -5,7 +5,7 @@ def find_reagent_obj(reagent_id: str, reagents: List[Reagent]) -> Reagent:
     """Return reagent object, given reagent_id and list of reagents."""
     reagent_obj = None
     for reagent in reagents:
-        if reagent_id == reagent.xid:
+        if reagent_id == reagent.id:
             reagent_obj = reagent
             break
     return reagent_obj

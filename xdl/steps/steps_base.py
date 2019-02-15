@@ -2,6 +2,26 @@ from ..constants import *
 from ..utils.misc import get_port_str
 from .base_step import Step
 
+# For type annotations
+if False:
+    from chempiler import Chempiler
+
+class Confirm(Step):
+    """Get the user to confirm something before execution continues.
+
+    Args:
+        msg (str): Message to get user to confirm experiment should continue.
+    """
+
+    def __init__(self, msg: str) -> None:
+        super().__init__(locals())
+
+    def execute(self, chempiler: 'Chempiler') -> bool:
+        keep_going = input(self.msg)
+        if not keep_going or keep_going.lower() in ['y', 'yes']:
+            return True
+        return False
+
 class CMove(Step):
     """Moves a specified volume from one node in the graph to another. Moving from and to
     the same node is supported.
@@ -17,7 +37,7 @@ class CMove(Step):
     def __init__(self, from_vessel=None, to_vessel=None, volume=None,
                        move_speed='default', aspiration_speed='default',
                        dispense_speed='default', from_port=None, to_port=None,
-                       unique=False):
+                       unique=False, through=None):
 
         self.properties = {
             'from_vessel': from_vessel,
@@ -29,6 +49,7 @@ class CMove(Step):
             'from_port': from_port,
             'to_port': to_port,
             'unique': unique,
+            'through': through,
         }
         self.get_defaults()
 
@@ -47,6 +68,7 @@ class CMove(Step):
             src_port=self.from_port,
             dst_port=self.to_port,
             unique=self.unique,
+            through=self.through,
         )
         return True
 

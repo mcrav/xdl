@@ -11,11 +11,15 @@ class Component(XDLBase):
         type (str): Type of the component i.e. 'ChemputerFlask'
     """
     def __init__(
-        self, xid: str = None, properties: Dict[str, Any] = {}, type: str = None
+        self,
+        id: str,
+        filter: bool = False,
+        separator: bool = False,
+        rotavap: bool = False,
+        stir: bool = False,
+        temp: List[float] = []
     ) -> None:
-
-        self.properties = {'xid': xid, 'type': type}
-        self.properties.update(properties)
+        super().__init__(locals())
 
 class Hardware(object):
     """
@@ -28,7 +32,7 @@ class Hardware(object):
     def __init__(self, components: List[Component]) -> None:
 
         self.components = components
-        self.component_ids = [item.xid for item in self.components]
+        self.component_ids = [item.id for item in self.components]
         self.reactors = []
         self.flasks = []
         self.wastes = []
@@ -45,14 +49,14 @@ class Hardware(object):
                 self.flasks.append(component)
             elif component.type == CHEMPUTER_WASTE_CLASS_NAME:
                 self.wastes.append(component)
-        self.waste_xids = [waste.xid for waste in self.wastes]
+        self.waste_xids = [waste.id for waste in self.wastes]
 
     def __getitem__(self, item: str) -> Union[Component, None]:
         """
         Get components like this: graph_hardware['filter'].
         """
         for component in self.components:
-            if component.xid == item:
+            if component.id == item:
                 return component
         return None
 

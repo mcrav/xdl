@@ -34,18 +34,7 @@ class Add(Step):
         reagent_vessel: Optional[str] = None, 
         waste_vessel: Optional[str] = None
     ) -> None:
-
-        self.properties = {
-            'reagent': reagent,
-            'reagent_vessel': reagent_vessel,
-            'volume': volume,
-            'vessel': vessel,
-            'port': port,
-            'time': time,
-            'move_speed': move_speed,
-            'waste_vessel': waste_vessel,
-        }
-        self.get_defaults()
+        super().__init__(locals())
 
         self.steps = []
         self.steps.append(PrimePumpForAdd(
@@ -82,19 +71,14 @@ class AddCorrosive(Step):
         reagent_vessel: Optional[str] = None,
         air_vessel: Optional[str] = None
     ) -> None:
-
-        self.properties = {
-            'reagent': reagent,
-            'vessel': vessel,
-            'volume': volume,
-            'reagent_vessel': reagent_vessel,
-            'air_vessel': air_vessel,
-        }
+        super().__init__(locals())
 
         self.steps = [
-            Transfer(from_vessel=self.air_vessel,
-                  to_vessel=self.reagent_vessel,
-                  volume=self.volume)
+            Transfer(
+                from_vessel=self.air_vessel,
+                to_vessel=self.vessel,
+                through=self.reagent_vessel,
+                volume=self.volume)
         ]
 
         self.human_readable = 'Transfer corrosive reagent {0} ({1} mL) to {2}.'.format(
@@ -118,20 +102,9 @@ class MakeSolution(Step):
         vessel: str,
         solvent_volume: Optional[float] = None,
     ) -> None:
-
-        self.properties = {
-            'solutes': solutes,
-            'solvent': solvent,
-            'solute_masses': solute_masses,
-            'solvent_volume': solvent_volume,
-            'vessel': vessel,
-        }
+        super().__init__(locals())
 
         self.steps = []
-        if not isinstance(solutes, list):
-            solutes = [solutes]
-        if not isinstance(solute_masses, list):
-            solute_masses = [solute_masses]
         self.steps.append(
             Add(reagent=solvent, volume=solvent_volume, vessel=vessel))
 
@@ -167,16 +140,7 @@ class Filter(Step):
         vacuum: Optional[str] = None,
         wait_time: Optional[float] = 'default'
     ) -> None:
-
-        self.properties = {
-            'filter_vessel': filter_vessel,
-            'filter_top_volume': filter_top_volume,
-            'filter_bottom_volume': filter_bottom_volume,
-            'waste_vessel': waste_vessel,
-            'vacuum': vacuum,
-            'wait_time': wait_time,
-        }
-        self.get_defaults()
+        super().__init__(locals())
 
         self.steps = [
             # Remove dead volume from bottom of filter vessel.
@@ -200,6 +164,8 @@ class Filter(Step):
             (self.filter_vessel, self.waste_vessel, 'all'),
         ]
 
+        self.requirements['filter'] = True
+
 class WashFilterCake(Step):
     """Wash filter cake with given volume of given solvent.
 
@@ -220,16 +186,7 @@ class WashFilterCake(Step):
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
     ) -> None:
-
-        self.properties = {
-            'solvent': solvent,
-            'filter_vessel': filter_vessel,
-            'volume': volume,
-            'waste_vessel': waste_vessel,
-            'vacuum': vacuum,
-            'wait_time': wait_time,
-        }
-        self.get_defaults()
+        super().__init__(locals())
 
         self.steps = [
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
@@ -244,6 +201,8 @@ class WashFilterCake(Step):
 
         self.human_readable = 'Wash {filter_vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
+
+        self.requirements['filter'] = True
 
 class Dry(Step):
     """Dry given vessel by applying vacuum for given time.
@@ -261,14 +220,7 @@ class Dry(Step):
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
     ) -> None:
-
-        self.properties = {
-            'filter_vessel': filter_vessel,
-            'waste_vessel': waste_vessel,
-            'vacuum': vacuum,
-            'wait_time': wait_time,
-        }
-        self.get_defaults()
+        super().__init__(locals())
 
         self.steps = [
             # Connect the vacuum.
@@ -282,6 +234,8 @@ class Dry(Step):
 
         self.human_readable = 'Dry substance in {filter_vessel} for {wait_time} s.'.format(
             **self.properties)
+
+        self.requirements['filter'] = True
 
 class PrepareFilter(Step):
     """Fill bottom of filter vessel with solvent in anticipation of the filter top being used.
@@ -299,13 +253,8 @@ class PrepareFilter(Step):
         volume: float, 
         waste_vessel: Optional[str] = None
     ) -> None:
+        super().__init__(locals())
 
-        self.properties = {
-            'filter_vessel': filter_vessel,
-            'solvent': solvent,
-            'volume': volume,
-            'waste_vessel': waste_vessel,
-        }
         self.steps = [
             Add(reagent=self.solvent, volume=self.volume,
                 vessel=self.filter_vessel, port=BOTTOM_PORT, 
@@ -315,6 +264,7 @@ class PrepareFilter(Step):
         self.human_readable = 'Fill bottom of {filter_vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
 
+        self.requirements['filter'] = True
 
 ########################
 ### SEPARATION STEPS ###
@@ -356,23 +306,7 @@ class Separate(Step):
         waste_phase_to_port: Optional[str] = None,
         waste_vessel: Optional[str] = None,
     ) -> None:
-
-        self.properties = {
-            'purpose': purpose,
-            'from_vessel': from_vessel,
-            'from_port': from_port,
-            'separation_vessel': separation_vessel,
-            'to_vessel': to_vessel,
-            'to_port': to_port,
-            'solvent': solvent,
-            'solvent_volume': solvent_volume,
-            'n_separations': n_separations,
-            'product_bottom': product_bottom,
-            'waste_phase_to_vessel': waste_phase_to_vessel,
-            'waste_phase_to_port': waste_phase_to_port,
-            'waste_vessel': waste_vessel, # set in prepare_for_execution
-        }
-        self.get_defaults()
+        super().__init__(locals())
 
         if not waste_phase_to_vessel and waste_vessel:
             self.waste_phase_to_vessel = waste_vessel
@@ -503,6 +437,7 @@ class Separate(Step):
             self.n_separations, self.solvent_volume, self.waste_phase_to_vessel,
             get_port_str(self.waste_phase_to_port), self.to_vessel, self.to_port)
 
+        self.requirements['separator'] = True
 
 ########################
 ### HEAT/CHILL STEPS ###
@@ -517,12 +452,7 @@ class Heat(Step):
         time (float): Time to reflux vessel for in seconds.
     """
     def __init__(self, vessel: str, temp: float, time: float) -> None:
-
-        self.properties = {
-            'vessel': vessel,
-            'temp': temp,
-            'time': time,
-        }
+        super().__init__(locals())
 
         self.steps = [
             StartHeat(vessel=self.vessel, temp=self.temp),
@@ -532,6 +462,7 @@ class Heat(Step):
         self.human_readable = 'Heat {vessel} to {temp} °C and reflux for {time} s.'.format(
             **self.properties)
 
+        self.requirements['temp'] = [self.temp]
 
 #####################
 ### ROTAVAP STEPS ###
@@ -550,17 +481,7 @@ class Rotavap(Step):
     def __init__(self, rotavap_vessel=None, temp=None, vacuum_pressure=None,
                        time='default', rotation_speed=None, waste_vessel=None,
                        distillate_volume=None):
-
-        self.properties = {
-            'rotavap_vessel': rotavap_vessel,
-            'temp': temp,
-            'vacuum_pressure': vacuum_pressure,
-            'rotation_speed': rotation_speed,
-            'waste_vessel': waste_vessel,
-            'distillate_volume': distillate_volume,
-            'time': time,
-        }
-        self.get_defaults()
+        super().__init__(locals())
 
         # Steps incomplete
         self.steps = [
@@ -610,12 +531,12 @@ class Rotavap(Step):
         self.human_readable = 'Rotavap contents of {rotavap_vessel} at {temp} °C for {time}.'.format(
             **self.properties)
 
+        self.requirements['rotavap'] = True
+
 class Column(Step):
 
     def __init__(self):
-        self.properties = {
-
-        }
+        super().__init__(locals())
         
         self.steps = [
 
@@ -626,9 +547,7 @@ class Column(Step):
 class Recrystallization(Step):
 
     def __init__(self):
-        self.properties = {
-
-        }
+        super().__init__(locals())
 
         self.steps = [
 
@@ -639,9 +558,7 @@ class Recrystallization(Step):
 class VacuumDistillation(Step):
 
     def __init__(self):
-        self.properties = {
-
-        }
+        super().__init__(locals())
 
         self.steps = [
 

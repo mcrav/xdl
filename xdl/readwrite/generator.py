@@ -36,6 +36,7 @@ class XDLGenerator(object):
         for component in self.hardware:
             component_tree = etree.Element('Component')
             for prop, val in component.properties.items():
+                if prop == 'xid': prop = 'id'
                 if val != None:
                     component_tree.attrib[prop] = str(val)
             hardware_tree.append(component_tree)
@@ -47,6 +48,7 @@ class XDLGenerator(object):
         for reagent in self.reagents:
             reagent_tree = etree.Element('Reagent')
             for prop, val in reagent.properties.items():
+                if prop == 'xid': prop = 'id'
                 if val != None:
                     reagent_tree.attrib[prop] = str(val)
             reagents_tree.append(reagent_tree)
