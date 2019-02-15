@@ -355,11 +355,22 @@ class CleanVessel(Step):
         self.get_defaults()
 
         self.steps = [
-            CMove(from_vessel=self.solvent_flask, 
-                  to_vessel=self.vessel, volume=self.volume),
-            Wait(time=60),
-            CMove(from_vessel=self.vessel, to_vessel=self.waste_vessel,
-                  volume='all'),
+            CMove(
+                from_vessel=self.solvent_vessel,
+                to_vessel=self.vessel,
+                volume=self.volume
+            ),
+            StartStir(vessel=self.vessel, stir_rpm=1000),
+            StartChiller(vessel=self.vessel, 60), # SPECIFIC TO FILTER IN CHILLER
+            CMove(
+                from_vessel=self.vessel, to_vessel=self.waste_vessel, volume=400,
+            ),
+            StopStir(vessel=self.vessel),
+            Dry(vessel=self.vessel, time=300),
+            CSetChiller(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+            Dry(vessel=self.vessel, time=600),
+            CChillerWaitForTemp(vessel=self.vessel),
+            StopChiller(vessel=self.vessel),
         ]
 
         self.human_readable = 'Clean {0} with {1} ({2}).'.format(
