@@ -186,6 +186,7 @@ class StartHeat(Step):
         self.steps = [
             CSetTemp(vessel=self.vessel, temp=self.temp),
             CStartHeat(vessel=self.vessel),
+            CStirrerWaitForTemp(vessel=self.vessel),
         ]
 
         self.human_readable = 'Heat {vessel} to {temp} °C'.format(
@@ -283,6 +284,7 @@ class StartChiller(Step):
 
         self.steps = [
             CSetChiller(vessel=self.vessel, temp=self.temp),
+            CStartChiller(vessel=self.vessel),
             CChillerWaitForTemp(vessel=self.vessel),
         ]
 
