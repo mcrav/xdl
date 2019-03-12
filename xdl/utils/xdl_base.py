@@ -1,11 +1,19 @@
 from ..constants import DEFAULT_VALS
+from .misc import clean_properties
 from typing import Dict, Any
 
 class XDLBase(object):
     """Base object for Step, Component and Reagent objects."""
 
-    def __init__(self):
+    def __init__(self, param_dict):
+        params = {k: v
+                  for k, v in param_dict.items()
+                  if k != 'self' and not k.startswith('_')}
         self.properties = {}
+        for param in clean_properties(type(self), params):
+            if param != 'self':
+                self.properties[param] = params[param]
+        self.get_defaults()
 
     def load_properties(self, properties: Dict[str, Any]) -> None:
         """Load dict of properties.
@@ -13,6 +21,7 @@ class XDLBase(object):
         Arguments:
             properties (dict): dict of property names and values.
         """
+        properties = clean_properties(type(self), properties)
         for prop in self.properties:
             if prop in properties:
                 self.properties[prop] = properties[prop]
@@ -28,6 +37,9 @@ class XDLBase(object):
             if self.properties[k] == 'default':
                 self.properties[k] = DEFAULT_VALS[self.name][k]
                     
+    def set_property(self, property: str, value: Any) -> None:
+        self.__setattr__(property, value)
+
     def __setattr__(self, name: str, value: Any) -> None:
         """
         If name is in self.properties do self.properties[name] = value

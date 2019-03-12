@@ -1,11 +1,15 @@
 import os
 import re
 import logging
+import inspect
 import copy
 from typing import List
 
 from .constants import *
 from .steps import *
+from .steps import steps_synthesis
+from .steps import steps_utility
+from .steps import steps_base
 from .utils.namespace import BASE_STEP_OBJ_DICT
 from .utils import parse_bool
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
@@ -47,6 +51,7 @@ class XDL(object):
         self.logger = logger
         if not logger:
             self.logger = logging.getLogger('xdl_logger')
+            self.logger.addHandler(logging.StreamHandler())
         self._xdl_file = None
         self.auto_clean = DEFAULT_AUTO_CLEAN
         self.organic_cleaning_reagent = DEFAULT_ORGANIC_CLEANING_SOLVENT

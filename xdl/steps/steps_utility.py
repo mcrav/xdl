@@ -1,3 +1,5 @@
+from typing import Optional
+
 from .steps_base import *
 from .base_step import Step
 from ..constants import ROOM_TEMPERATURE
@@ -14,14 +16,13 @@ class Wait(Step):
         wait_recording_speed (int): Recording speed during wait (faster) ~2000
         after_recording_speed (int): Recording speed after wait (slower) ~14
     """
-    def __init__(self, time=None, wait_recording_speed='default', after_recording_speed='default'):
-
-        self.properties = {
-            'time': time,
-            'wait_recording_speed': wait_recording_speed,
-            'after_recording_speed': after_recording_speed,
-        }
-        self.get_defaults()
+    def __init__(
+        self,
+        time: float,
+        wait_recording_speed: float = 'default',
+        after_recording_speed: float = 'default'
+    ) -> None:
+        super().__init__(locals())
 
         self.steps = [
             CSetRecordingSpeed(self.wait_recording_speed),
@@ -31,25 +32,6 @@ class Wait(Step):
 
         self.human_readable = 'Wait for {0} s.'.format(self.time)
 
-class Confirm(Step):
-    """Get the user to confirm something before execution continues.
-
-    Args:
-        msg (str): Message to get user to confirm experiment should continue.
-    """
-
-    def __init__(self, msg=None):
-
-        self.properties = {
-            'msg': msg,
-        }
-
-    def execute(self, chempiler):
-        keep_going = input(self.msg)
-        if not keep_going or keep_going.lower() in ['y', 'yes']:
-            return True
-        return False
-
 class PrimePumpForAdd(Step):
     """Prime pump attached to given reagent flask in anticipation of Add step.
 
@@ -57,16 +39,14 @@ class PrimePumpForAdd(Step):
         reagent (str): Reagent to prime pump for addition.
         move_speed (str): Speed to move reagent at. (optional)
     """
-    def __init__(self, reagent=None, volume=None, reagent_vessel=None,
-                       waste_vessel=None):
-
-        self.properties = {
-            'reagent': reagent,
-            'volume': volume,
-            'reagent_vessel': reagent_vessel,
-            'waste_vessel': waste_vessel,
-        }
-        self.get_defaults()
+    def __init__(
+        self,
+        reagent: str,
+        volume: Optional[float] = 'default',
+        reagent_vessel: Optional[str] = None,
+        waste_vessel: Optional[str] = None
+    ) -> None:
+        super().__init__(locals())
 
         self.steps = [
             CMove(from_vessel=self.reagent_vessel, to_vessel=self.waste_vessel,
@@ -80,13 +60,12 @@ class RemoveFilterDeadVolume(Step):
         filter_vessel (str): Filter vessel ID to remove dead volume from.
         dead_volume (float): Volume in mL to remove from bottom of filter vessel.
     """
-    def __init__(self, filter_vessel=None, dead_volume=0, waste_vessel=None):
-
-        self.properties = {
-            'filter_vessel': filter_vessel,
-            'dead_volume': dead_volume,
-            'waste_vessel': waste_vessel,
-        }
+    def __init__(
+        self,
+        filter_vessel: str,
+        dead_volume: Optional[float] = 0,
+        waste_vessel: Optional[str] = None):
+        super().__init__(locals())
 
         self.steps = [
             Transfer(from_vessel=self.filter_vessel, to_vessel=self.waste_vessel, 
@@ -95,6 +74,7 @@ class RemoveFilterDeadVolume(Step):
 
         self.human_readable = 'Remove dead volume ({volume} mL) from bottom of {filter_vessel}'.format(
             **self.properties)
+
 
 
 ################
@@ -108,21 +88,25 @@ class StartStir(Step):
         vessel (str): Vessel name to stir.
         stir_rpm (int, optional): Speed in RPM to stir at.
     """
-    def __init__(self, vessel=None, stir_rpm='default'):
-
-        self.properties = {
-            'vessel': vessel,
-            'stir_rpm': stir_rpm,
-        }
-        self.get_defaults()
+    def __init__(
+        self, vessel: str, stir_rpm: Optional[float] = 'default') -> None:
+        super().__init__(locals())
 
         self.steps = [
             CStartStir(vessel=self.vessel),
             CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm),
         ]
 
+        self.vessel_chain = [self.vessel]
+
         self.human_readable = 'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'.format(
             **self.properties)
+
+        self.requirements = {
+            'vessel': {
+                'stir': True,
+            }
+        }
 
 class StopStir(Step):
     """Stop stirring given vessel.
@@ -130,15 +114,20 @@ class StopStir(Step):
     Args:
         vessel (str): Vessel name to stop stirring.
     """
-    def __init__(self, vessel=None, temp=None):
-
-        self.properties = {
-            'vessel': vessel,
-        }
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.steps = [CStopStir(vessel=self.vessel)]
 
+        self.vessel_chain = [self.vessel]
+
         self.human_readable = 'Stop stirring {0}.'.format(self.vessel)
+
+        self.requirements = {
+            'vessel': {
+                'stir': True,
+            }
+        }
 
 class Stir(Step):
     """Stir given vessel for given time at room temperature.
@@ -147,14 +136,13 @@ class Stir(Step):
         vessel (str): Vessel to stir.
         time (float): Time to stir for.
     """
-    def __init__(self, vessel, time, stir_rpm='default'):
-
-        self.properties = {
-            'vessel': vessel,
-            'time': time,
-            'stir_rpm': stir_rpm,
-        }
-        self.get_defaults()
+    def __init__(
+        self,
+        vessel: str,
+        time: float,
+        stir_rpm: Optional[float] = 'default'
+    ) -> None:
+        super().__init__(locals())
 
         self.steps = [
             StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm),
@@ -162,8 +150,16 @@ class Stir(Step):
             StopStir(vessel=self.vessel),
         ]
 
+        self.vessel_chain = [self.vessel]
+
         self.human_readable = 'Stir {vessel} for {time} s.'.format(
             **self.properties)
+
+        self.requirements = {
+            'vessel': {
+                'stir': True,
+            }
+        }
 
 ###############
 ### HEATING ###
@@ -176,12 +172,8 @@ class StartHeat(Step):
         vessel (str): Vessel name to heat.
         temp (float): Temperature to heat to in °C.
     """
-    def __init__(self, vessel=None, temp=None):
-
-        self.properties = {
-            'vessel': vessel,
-            'temp': temp,
-        }
+    def __init__(self, vessel: str, temp: float) -> None:
+        super().__init__(locals())
 
         self.steps = [
             CSetTemp(vessel=self.vessel, temp=self.temp),
@@ -189,8 +181,17 @@ class StartHeat(Step):
             CStirrerWaitForTemp(vessel=self.vessel),
         ]
 
+        self.vessel_chain = ['vessel']
+
         self.human_readable = 'Heat {vessel} to {temp} °C'.format(
             **self.properties)
+
+        self.requirements = {
+            'vessel': {
+                'heatchill': True,
+                'temp': [self.temp]
+            }
+        }
 
 class StopHeat(Step):
     """Stop heating given vessel.
@@ -198,15 +199,20 @@ class StopHeat(Step):
     Args:
         vessel (str): Vessel name to stop heating.
     """
-    def __init__(self, vessel=None):
-
-        self.properties = {
-            'vessel': vessel,
-        }
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.steps = [CStopHeat(vessel=self.vessel)]
 
+        self.vessel_chain = ['vessel']
+
         self.human_readable = 'Stop heating {0}.'.format(self.vessel)
+
+        self.human_readable = {
+            'vessel': {
+                'heatchill': True,
+            }
+        }
 
 class HeaterReturnToRT(Step):
     """Wait for heater to return to room temperature then stop it.
@@ -214,11 +220,8 @@ class HeaterReturnToRT(Step):
     Args:
         vessel (str): Vessel to return to room temperature.
     """
-    def __init__(self, vessel: str = None) -> None:
-
-        self.properties = {
-            'vessel': vessel,
-        }
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.steps = [
             CSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
@@ -226,8 +229,16 @@ class HeaterReturnToRT(Step):
             CStopHeat(vessel=self.vessel),
         ]
 
+        self.vessel_chain = ['vessel']
+
         self.human_readable = 'Wait for heater attached to {0} to return to room temperature then stop it.'.format(
             self.vessel)
+
+        self.human_readable = {
+            'vessel': {
+                'heatchill': True,
+            }
+        }
 
 ##############
 ### VACUUM ###
@@ -239,15 +250,14 @@ class StartVacuum(Step):
     Args:
         vessel (str): Vessel name to start vacuum on.
     """
-    def __init__(self, vessel=None):
-
-        self.properties = {
-            'vessel': vessel,
-        }
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.steps = [
             CSwitchVacuum(vessel=self.vessel, destination='vacuum')
         ]
+
+        self.vessel_chain = ['vessel']
 
         self.human_readable = f'Start vacuum for {self.vessel}.'
 
@@ -257,15 +267,14 @@ class StopVacuum(Step):
     Args:
         vessel (str): Vessel name to stop vacuum on.
     """
-    def __init__(self, vessel=None):
-
-        self.properties = {
-            'vessel': vessel,
-        }
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.steps = [
             CSwitchVacuum(vessel=self.vessel, destination='backbone')
         ]
+
+        self.vessel_chain = ['vessel']
 
         self.human_readable = f'Stop vacuum for {self.vessel}.'
 
@@ -275,12 +284,8 @@ class StopVacuum(Step):
 
 class StartChiller(Step):
 
-    def __init__(self, vessel=None, temp=None):
-
-        self.properties = {
-            'vessel': vessel,
-            'temp': temp,
-        }
+    def __init__(self, vessel: str, temp: float) -> None:
+        super().__init__(locals())
 
         self.steps = [
             CSetChiller(vessel=self.vessel, temp=self.temp),
@@ -288,22 +293,36 @@ class StartChiller(Step):
             CChillerWaitForTemp(vessel=self.vessel),
         ]
 
+        self.vessel_chain = ['vessel']
+
         self.human_readable = 'Chill {0} to {1} °C.'.format(
             self.vessel, self.temp)
 
+        self.requirements = {
+            'vessel': {
+                'heatchill': True,
+                'temp': [self.temp]
+            }
+        }
+
 class StopChiller(Step):
 
-    def __init__(self, vessel=None):
-
-        self.properties = {
-            'vessel': vessel,
-        }
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.steps = [
             CStopChiller(self.vessel)
         ]
     
+        self.vessel_chain = ['vessel']
+
         self.human_readable = 'Stop chiller for {0}.'.format(self.vessel)
+    
+        self.requirements = {
+            'vessel': {
+                'heatchill': True,
+            }
+        }
 
 class ChillerReturnToRT(Step):
     """Stop the chiller.
@@ -311,11 +330,8 @@ class ChillerReturnToRT(Step):
     Args:
         vessel (str): Vessel to stop chiller for.
     """
-    def __init__(self, vessel=None,):
-
-        self.properties = {
-            'vessel': vessel,
-        }
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.steps = [
             CSetChiller(vessel=self.vessel, temp=ROOM_TEMPERATURE),
@@ -323,7 +339,15 @@ class ChillerReturnToRT(Step):
             CStopChiller(vessel)
         ]
 
+        self.vessel_chain = ['vessel']
+
         self.human_readable = 'Stop chiller for {0}'.format(self.vessel)
+
+        self.requirements = {
+            'vessel': {
+                'heatchill': True,
+            }
+        }
 
 ################
 ### CLEANING ###
@@ -343,18 +367,17 @@ class CleanVessel(Step):
         solvent_vessel (str, optional): Vessel containing solvent.
             Passed automatically by executor.
     """
-    def __init__(self, vessel=None, solvent='default', volume='default', stir_rpm='default',
-                    stir_time='default', waste_vessel=None, solvent_vessel=None):
-
-        self.properties = {
-            'vessel': vessel,
-            'solvent': solvent,
-            'solvent_vessel': solvent_vessel,
-            'volume': volume,
-            'stir_rpm': stir_rpm,
-            'waste_vessel': waste_vessel,
-        }
-        self.get_defaults()
+    def __init__(
+        self,
+        vessel: str,
+        solvent: Optional[str] = 'default',
+        volume: Optional[float] = 'default',
+        stir_rpm: Optional[float] = 'default',
+        stir_time: Optional[float] = 'default',
+        waste_vessel: Optional[str] = None,
+        solvent_vessel: Optional[str] = None
+    ) -> None:
+        super().__init__(locals())
 
         self.steps = [
             CMove(
@@ -363,7 +386,7 @@ class CleanVessel(Step):
                 volume=self.volume
             ),
             StartStir(vessel=self.vessel, stir_rpm=1000),
-            StartChiller(vessel=self.vessel, 60), # SPECIFIC TO FILTER IN CHILLER
+            StartChiller(vessel=self.vessel, temp=60), # SPECIFIC TO FILTER IN CHILLER
             CMove(
                 from_vessel=self.vessel, to_vessel=self.waste_vessel, volume=400,
             ),
@@ -380,13 +403,13 @@ class CleanVessel(Step):
 
 class CleanBackbone(Step):
 
-    def __init__(self, solvent, waste_vessels=[], solvent_vessel=None):
-
-        self.properties = {
-            'solvent': solvent,
-            'solvent_vessel': solvent_vessel,
-            'waste_vessels': waste_vessels,
-        }
+    def __init__(
+        self,
+        solvent: str,
+        waste_vessels: Optional[List[str]] = None,
+        solvent_vessel: Optional[str] = None
+    ) -> None:
+        super().__init__(locals())
 
         self.steps = []
         for waste_vessel in self.waste_vessels:
@@ -408,24 +431,25 @@ class Transfer(Step):
         to_vessel (str): Vessel name to transfer to.
         volume (float): Volume to transfer in mL.
     """
-    def __init__(self, from_vessel=None, to_vessel=None, from_port=None, 
-                       to_port=None, volume=None):
-
-        self.properties = {
-            'from_vessel': from_vessel,
-            'from_port': from_port,
-            'to_vessel': to_vessel,
-            'to_port': to_port,
-            'volume': volume,
-        }
-        self.get_defaults()
+    def __init__(
+        self,
+        from_vessel: str,
+        to_vessel: str,
+        volume: float,
+        from_port: Optional[str] = None, 
+        to_port: Optional[str] = None, 
+        through: Optional[str] = None
+    ) -> None:
+        super().__init__(locals())
 
         self.steps = []
         self.steps.append(
             CMove(from_vessel=self.from_vessel, from_port=self.from_port,
                   to_vessel=self.to_vessel, to_port=self.to_port, 
-                  volume=self.volume))
-        
+                  volume=self.volume, through=self.through))
+                  
+        self.vessel_chain = ['from_vessel', 'to_vessel']
+
         self.human_readable = 'Transfer {0} mL from {1} {2} to {3} {4}.'.format(
             self.volume, self.from_vessel, get_port_str(self.from_port),
             self.to_vessel, get_port_str(self.to_port))

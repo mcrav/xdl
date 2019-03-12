@@ -1,5 +1,7 @@
 # For type annotations
 import logging
+import copy
+
 if False:
     from chempiler import Chempiler
 
@@ -16,11 +18,13 @@ class Step(XDLBase):
         human_readable (str): Description of actions taken by step. Should be
             implemented in step __init__.
     """
-    
-    def __init__(self):
-        self.properties = {}
+    def __init__(self, param_dict):
+        super().__init__(param_dict)
+
         self.steps = []
         self.human_readable = ''
+        self.requirements = {}
+        self.vessel_chain = []
 
     def execute(
         self,

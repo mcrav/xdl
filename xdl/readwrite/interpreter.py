@@ -1,8 +1,11 @@
 import logging
-from typing import Dict, List, Any
+import re
+import copy
+from typing import Dict, List, Any, Optional, Union
 from lxml import etree
 from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml, 
-                    convert_mass_str_to_g, parse_bool)
+                    convert_mass_str_to_g)
+from ..utils import parse_bool
 from ..steps import MakeSolution, Step
 from ..reagents import Reagent
 from ..hardware import Hardware, Component
@@ -165,8 +168,8 @@ def xdl_to_step(xdl_step_element: etree._Element) -> Step:
         Step: Step object corresponding to step in xdl_step_element.
     """
     step_type = STEP_OBJ_DICT[xdl_step_element.tag]
-    return step_type(
-        **preprocess_step_attrib(step_type, xdl_step_element.attrib))
+    attr = dict(xdl_step_element.attrib)
+    return step_type(**attr)
 
 def xdl_to_component(xdl_component_element: etree._Element) -> Component:
     """Given XDL component element return corresponding Component object.
@@ -179,9 +182,8 @@ def xdl_to_component(xdl_component_element: etree._Element) -> Component:
         Component: Component object corresponding to component in 
                      xdl_component_element.
     """
-    attr = preprocess_attrib(xdl_component_element.attrib)
-    component = Component(attr['xid'], attr)  
-    return component
+    attr = dict(xdl_component_element.attrib)
+    return Component(**attr)
 
 def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
     """Given XDL reagent element return corresponding Reagent object.
@@ -193,67 +195,5 @@ def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
         Reagent: Reagent object corresponding to reagent in 
                    xdl_reagent_element.
     """
-    reagent = Reagent()
-    reagent.load_properties(preprocess_attrib(xdl_reagent_element.attrib))
-    return reagent
-
-def preprocess_step_attrib(
-    step_type: type, attrib: etree._Attrib
-) -> Dict[str, Any]:
-    """Process:
-    1. Convert strs to bools i.e. 'false' -> False
-    2. Convert all time strs to floats with second as unit.
-    3. Convert all volume strs to floats with mL as unit.
-    4. Convert all mass strs to floats with mL as unit.
-    5. Convert MakeSolution solutes and solute_masses attributes to lists.
-
-    Arguments:
-        step (type): Step object to preprocess attributes for.
-        attrib (lxml.etree._Attrib): Raw attribute dictionary from XDL
-    
-    Returns:
-        dict: Dict of processed attributes.
-    """
-    attr = preprocess_attrib(attrib)
-    if 'clean_tubing' in attr:
-        if attr['clean_tubing'].lower() == 'false':
-            attr['clean_tubing'] = False
-        else:
-            attr['clean_tubing'] = True
-
-    if 'time' in attr:
-        attr['time'] = convert_time_str_to_seconds(attr['time'])
-    
-    if 'volume' in attr and attr['volume'] != 'all':
-        attr['volume'] = convert_volume_str_to_ml(attr['volume'])
-
-    if 'solvent_volume' in attr:
-        attr['solvent_volume'] = convert_volume_str_to_ml(attr['solvent_volume'])
-
-    if 'mass' in attr:
-        attr['mass'] = convert_mass_str_to_g(attr['mass'])
-
-    if 'product_bottom' in attr:
-        attr['product_bottom'] = parse_bool(attr['product_bottom'])
-
-    if step_type == MakeSolution:
-        attr['solutes'] = attr['solutes'].split(' ')
-        attr['solute_masses'] = attr['solute_masses'].split(' ')
-        attr['solute_masses'] = [convert_mass_str_to_g(item) 
-                                 for item in attr['solute_masses']]
-    return attr
-
-def preprocess_attrib(attrib: etree._Attrib) -> Dict[str, Any]:
-    """Change id key to xid.
-    
-    Args:
-        attrib (lxml.etree._Attrib): Raw attribute dictionary from XDL
-    
-    Returns:
-        dict: Dict of processed attributes.
-    """
-    attr = dict(attrib)
-    if 'id' in attr:
-        attr['xid'] = attr['id']
-        del attr['id']
-    return attr
+    attr = dict(xdl_reagent_element.attrib)
+    return Reagent(**attr)
