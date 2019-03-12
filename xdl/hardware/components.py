@@ -10,15 +10,7 @@ class Component(XDLBase):
         properties (dict): Property dict of the component.
         type (str): Type of the component i.e. 'ChemputerFlask'
     """
-    def __init__(
-        self,
-        id: str,
-        filter: bool = False,
-        separator: bool = False,
-        rotavap: bool = False,
-        stir: bool = False,
-        temp: List[float] = []
-    ) -> None:
+    def __init__(self, id: str, type: str) -> None:
         super().__init__(locals())
 
 class Hardware(object):

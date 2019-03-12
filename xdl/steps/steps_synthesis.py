@@ -46,6 +46,8 @@ class Add(Step):
                   move_speed=self.move_speed))
         self.steps.append(Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
 
+        self.vessel_chain = ['vessel']
+
         self.human_readable = 'Add {0} ({1} mL) to {2} {3}'.format(
             self.reagent, self.volume, self.vessel, get_port_str(self.port))
         if time:
@@ -81,6 +83,8 @@ class AddCorrosive(Step):
                 volume=self.volume)
         ]
 
+        self.vessel_chain = ['vessel']
+
         self.human_readable = 'Transfer corrosive reagent {0} ({1} mL) to {2}.'.format(
             self.reagent, self.volume, self.vessel,)
 
@@ -108,11 +112,19 @@ class MakeSolution(Step):
         self.steps.append(
             Add(reagent=solvent, volume=solvent_volume, vessel=vessel))
 
+        self.vessel_chain = ['vessel']
+
         self.human_readable = f'Make solution of '
         for s, m in zip(solutes, solute_masses):
             self.human_readable += '{0} ({1} g), '.format(s, m)
         self.human_readable = self.human_readable[:-2] + ' in {solvent} ({solvent_volume} mL) in {vessel}.'.format(
             **self.properties)
+
+        self.requirements = {
+            'vessel': {
+                'stir': True,
+            }
+        }
 
 
 ####################
@@ -157,6 +169,8 @@ class Filter(Step):
                 from_port=BOTTOM_PORT, volume=self.filter_top_volume),
         ]
 
+        self.vessel_chain = ['filter_vessel']
+
         self.human_readable = 'Filter contents of {filter_vessel}.'.format(
             **self.properties)
 
@@ -164,7 +178,11 @@ class Filter(Step):
             (self.filter_vessel, self.waste_vessel, 'all'),
         ]
 
-        self.requirements['filter'] = True
+        self.requirements = {
+            'filter_vessel': {
+                'filter': True
+            }
+        }
 
 class WashFilterCake(Step):
     """Wash filter cake with given volume of given solvent.
@@ -199,10 +217,16 @@ class WashFilterCake(Step):
                   to_vessel=self.waste_vessel, volume=self.volume)
         ]
 
+        self.vessel_chain = ['filter_vessel']
+
         self.human_readable = 'Wash {filter_vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
 
-        self.requirements['filter'] = True
+        self.requirements = {
+            'filter_vessel': {
+                'filter': True
+            }
+        }
 
 class Dry(Step):
     """Dry given vessel by applying vacuum for given time.
@@ -232,10 +256,16 @@ class Dry(Step):
                   to_vessel=self.waste_vessel, volume=DEFAULT_DRY_WASTE_VOLUME)
         ]
 
+        self.vessel_chain = ['filter_vessel']
+
         self.human_readable = 'Dry substance in {filter_vessel} for {wait_time} s.'.format(
             **self.properties)
 
-        self.requirements['filter'] = True
+        self.requirements = {
+            'filter_vessel': {
+                'filter': True
+            }
+        }
 
 class PrepareFilter(Step):
     """Fill bottom of filter vessel with solvent in anticipation of the filter top being used.
@@ -261,10 +291,16 @@ class PrepareFilter(Step):
                 waste_vessel=waste_vessel)
         ]
 
+        self.vessel_chain = ['filter_vessel']
+
         self.human_readable = 'Fill bottom of {filter_vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
 
-        self.requirements['filter'] = True
+        self.requirements = {
+            'filter_vessel': {
+                'filter': True
+            }
+        }
 
 ########################
 ### SEPARATION STEPS ###
@@ -425,19 +461,25 @@ class Separate(Step):
                          from_port=BOTTOM_PORT, to_vessel=self.waste_vessel, 
                          volume=remove_volume),
                 CSeparatePhases(lower_phase_vessel=self.waste_phase_to_vessel, 
-                          lower_phase_port=self.waste_phase_to_port, 
-                          upper_phase_vessel=self.to_vessel,
-                          upper_phase_port=self.to_port,
-                          separation_vessel=self.separation_vessel,
-                          dead_volume_target=self.waste_vessel),
+                                lower_phase_port=self.waste_phase_to_port, 
+                                upper_phase_vessel=self.to_vessel,
+                                upper_phase_port=self.to_port,
+                                separation_vessel=self.separation_vessel,
+                                dead_volume_target=self.waste_vessel)
             ])
+
+        self.vessel_chain = ['from_vessel', 'separation_vessel', 'to_vessel']
 
         self.human_readable = 'Separate contents of {0} {1} with {2} ({3}x{4} mL). Transfer waste phase to {5} {6} and product phase to {7} {8}.'.format(
             self.from_vessel, get_port_str(self.from_port), self.solvent,
             self.n_separations, self.solvent_volume, self.waste_phase_to_vessel,
             get_port_str(self.waste_phase_to_port), self.to_vessel, self.to_port)
 
-        self.requirements['separator'] = True
+        self.requirements = {
+            'separation_vessel': {
+                'separator': True,
+            }
+        }
 
 ########################
 ### HEAT/CHILL STEPS ###
@@ -459,10 +501,18 @@ class Heat(Step):
             Wait(time=self.time),
             StopHeat(vessel=self.vessel),
         ]
+
+        self.vessel_chain = ['vessel']
+
         self.human_readable = 'Heat {vessel} to {temp} °C and reflux for {time} s.'.format(
             **self.properties)
 
-        self.requirements['temp'] = [self.temp]
+        self.requirements = {
+            'vessel': {
+                'heatchill': True,
+                'temp': [self.temp],
+            }
+        }
 
 #####################
 ### ROTAVAP STEPS ###
@@ -528,10 +578,16 @@ class Rotavap(Step):
             Wait(DEFAULT_ROTAVAP_VENT_TIME),
         ]
 
+        self.vessel_chain = ['rotavap_vessel']
+
         self.human_readable = 'Rotavap contents of {rotavap_vessel} at {temp} °C for {time}.'.format(
             **self.properties)
 
-        self.requirements['rotavap'] = True
+        self.requirements = {
+            'rotavap_vessel': {
+                'rotavap': True,
+            }
+        }
 
 class Column(Step):
 

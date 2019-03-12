@@ -37,6 +37,9 @@ class XDLBase(object):
             if self.properties[k] == 'default':
                 self.properties[k] = DEFAULT_VALS[self.name][k]
                     
+    def set_property(self, property: str, value: Any) -> None:
+        self.__setattr__(property, value)
+
     def __setattr__(self, name: str, value: Any) -> None:
         """
         If name is in self.properties do self.properties[name] = value

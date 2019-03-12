@@ -64,7 +64,7 @@ def convert_val_to_std_units(val):
             return UNIT_CONVERTERS[unit.lower()](val)
         else:
             return val
-    return None
+    return val 
 
 def clean_properties(xdl_class, properties):
     annotations = xdl_class.__init__.__annotations__

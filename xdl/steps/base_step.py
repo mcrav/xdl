@@ -23,13 +23,8 @@ class Step(XDLBase):
 
         self.steps = []
         self.human_readable = ''
-        self.requirements = {
-            'filter': False,
-            'separator': False,
-            'rotavap': False,
-            'stir': False,
-            'temp': [],
-        }
+        self.requirements = {}
+        self.vessel_chain = []
 
     def execute(
         self,
