@@ -257,3 +257,9 @@ class XDL(object):
         else:
             raise RuntimeError(
                 'XDL executor not available. Call prepare_for_execution before trying to execute.')
+
+    @property
+    def base_steps(self):
+        return [step
+                for step in self._get_full_xdl_tree()
+                if not hasattr(step, 'steps')]

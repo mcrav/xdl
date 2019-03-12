@@ -161,6 +161,7 @@ class StartHeat(Step):
         self.steps = [
             CSetTemp(vessel=self.vessel, temp=self.temp),
             CStartHeat(vessel=self.vessel),
+            CStirrerWaitForTemp(vessel=self.vessel),
         ]
 
         self.human_readable = 'Heat {vessel} to {temp} °C'.format(
@@ -244,6 +245,7 @@ class StartChiller(Step):
 
         self.steps = [
             CSetChiller(vessel=self.vessel, temp=self.temp),
+            CStartChiller(vessel=self.vessel),
             CChillerWaitForTemp(vessel=self.vessel),
         ]
 
@@ -311,11 +313,22 @@ class CleanVessel(Step):
         super().__init__(locals())
 
         self.steps = [
-            CMove(from_vessel=self.solvent_flask, 
-                  to_vessel=self.vessel, volume=self.volume),
-            Wait(time=60),
-            CMove(from_vessel=self.vessel, to_vessel=self.waste_vessel,
-                  volume='all'),
+            CMove(
+                from_vessel=self.solvent_vessel,
+                to_vessel=self.vessel,
+                volume=self.volume
+            ),
+            StartStir(vessel=self.vessel, stir_rpm=1000),
+            StartChiller(vessel=self.vessel, 60), # SPECIFIC TO FILTER IN CHILLER
+            CMove(
+                from_vessel=self.vessel, to_vessel=self.waste_vessel, volume=400,
+            ),
+            StopStir(vessel=self.vessel),
+            Dry(vessel=self.vessel, time=300),
+            CSetChiller(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+            Dry(vessel=self.vessel, time=600),
+            CChillerWaitForTemp(vessel=self.vessel),
+            StopChiller(vessel=self.vessel),
         ]
 
         self.human_readable = 'Clean {0} with {1} ({2}).'.format(
@@ -367,7 +380,7 @@ class Transfer(Step):
             CMove(from_vessel=self.from_vessel, from_port=self.from_port,
                   to_vessel=self.to_vessel, to_port=self.to_port, 
                   volume=self.volume, through=self.through))
-        
+                  
         self.human_readable = 'Transfer {0} mL from {1} {2} to {3} {4}.'.format(
             self.volume, self.from_vessel, get_port_str(self.from_port),
             self.to_vessel, get_port_str(self.to_port))
