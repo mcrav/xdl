@@ -28,11 +28,14 @@ def get_port_str(port: str) -> str:
         return '(port {0})'.format(port)
     return ''
 
-def minutes_to_seconds(x):
-    return x * 60
+minutes_to_seconds = lambda x: x * 60
+hours_to_seconds = lambda x: x * 60 * 60
+no_conversion = lambda x: x
 
 UNIT_CONVERTERS = {
-    'ml': lambda x: x,
+    'ml': no_conversion,
+    'cm3': no_conversion,
+    'cc': no_conversion,
     'cl': lambda x: x * 10,
     'dl': lambda x: x * 10**2,
     'l': lambda x: x * 10**3,
@@ -46,11 +49,17 @@ UNIT_CONVERTERS = {
     'k': lambda x: x + 273.15,
     'f': lambda x: (x - 32 / 1.8),
 
-    'h': lambda x: x * 60 * 60,
+    'h': hours_to_seconds,
+    'hour': hours_to_seconds,
+    'hours': hours_to_seconds,
+    'hrs': hours_to_seconds,
     'm': minutes_to_seconds,
     'min': minutes_to_seconds,
     'mins': minutes_to_seconds,
-    's': lambda x: x,
+    'minutes': minutes_to_seconds,
+    's': no_conversion,
+    'secs': no_conversion,
+    'seconds': no_conversion,
 }
 
 

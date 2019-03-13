@@ -504,7 +504,7 @@ class Heat(Step):
 
         self.vessel_chain = ['vessel']
 
-        self.human_readable = 'Heat {vessel} to {temp} °C and reflux for {time} s.'.format(
+        self.human_readable = 'Heat {vessel} to {temp} °C for {time} s.'.format(
             **self.properties)
 
         self.requirements = {
@@ -513,6 +513,36 @@ class Heat(Step):
                 'temp': [self.temp],
             }
         }
+
+class Chill(Step):
+    """Chill given vessel at given temperature for given time.
+
+    Args:
+        vessel (str): Vessel to heat to reflux.
+        temp (float): Temperature to heat vessel to in °C.
+        time (float): Time to reflux vessel for in seconds.
+    """
+    def __init__(self, vessel: str, temp: float, time: float) -> None:
+        super().__init__(locals())
+
+        self.steps = [
+            StartChiller(vessel=self.vessel, temp=self.temp),
+            Wait(time=self.time),
+            StopChiller(vessel=self.vessel),
+        ]
+
+        self.vessel_chain = ['vessel']
+
+        self.human_readable = 'Chill {vessel} to {temp} °C for {time} s.'.format(
+            **self.properties)
+
+        self.requirements = {
+            'vessel': {
+                'heatchill': True,
+                'temp': [self.temp],
+            }
+        }
+
 
 #####################
 ### ROTAVAP STEPS ###
@@ -528,9 +558,9 @@ class Rotavap(Step):
         pressure (float): Pressure to set rotary evaporator vacuum to in mbar.
         time (int): Time to rotavap for in seconds.
     """
-    def __init__(self, rotavap_vessel=None, temp=None, vacuum_pressure=None,
-                       time='default', rotation_speed=None, waste_vessel=None,
-                       distillate_volume=None):
+    def __init__(self, rotavap_vessel: str, temp: float, vacuum_pressure: float,
+                       time: float = 'default', rotation_speed: float = None,
+                       waste_vessel: str = None, distillate_volume: float = None):
         super().__init__(locals())
 
         # Steps incomplete
