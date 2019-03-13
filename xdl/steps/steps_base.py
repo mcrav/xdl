@@ -68,7 +68,7 @@ class CMove(Step):
             src_port=self.from_port,
             dst_port=self.to_port,
             unique=self.unique,
-            through=self.through,
+            through_node=self.through,
         )
         return True
 

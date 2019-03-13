@@ -49,7 +49,9 @@ def hardware_from_graph(graph: MultiDiGraph) -> Hardware:
     for node in graph.nodes():
         props = graph.node[node]
         props['type'] = props['class']
-        components.append(Component(node, props))
+        component = Component(node, props['type'])
+        component.properties.update(props)
+        components.append(component)
     return Hardware(components)
 
 def make_vessel_map(
@@ -88,3 +90,40 @@ def make_vessel_map(
 
             vessel_map[node] = closest_target_vessel
     return vessel_map
+
+def make_filter_inert_gas_map(graph: MultiDiGraph):
+    """Given graph, make dict with filter_vessel IDs as keys and nearest
+    inert gas flasks as values. i.e. { 'filter1': 'flask_nitrogen' }.
+    
+    Args:
+        graph (networkx.MultiDiGraph): networkx graph of setup.
+    
+    Returns:
+        Dict[str, str]: dict with filter vessels as keys and nearest nitrogen
+            flasks as values.
+    """
+    filter_vessels = [node for node in graph.nodes()
+                      if graph.node[node]['type'] == 'ChemputerFilter']
+    nitrogen_flasks = [
+        node
+        for node in graph.nodes()
+        if (graph.node[node]['type'] == 'ChemputerFlask'
+            and graph.node[node]['chemical'].lower() in ['nitrogen', 'argon',
+                                                         'n2', 'ar'])
+    ]
+    filter_inert_gas_map = {}
+    for filter_vessel in filter_vessels:
+        shortest_path_found = 100000
+        closest_nitrogen_flask = None
+        for nitrogen_flask in nitrogen_flasks:
+            try:
+                shortest_path_to_nitrogen_flask = shortest_path_length(
+                    graph, source=nitrogen_flask, target=filter_vessel)
+                if shortest_path_to_nitrogen_flask < shortest_path_found:
+                    shortest_path_found = shortest_path_to_nitrogen_flask
+                    closest_nitrogen_flask = nitrogen_flask
+            except NetworkXNoPath:
+                pass
+
+        filter_inert_gas_map[filter_vessel] = closest_nitrogen_flask
+    return filter_inert_gas_map

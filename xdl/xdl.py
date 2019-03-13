@@ -1,4 +1,5 @@
 import os
+import sys
 import re
 import logging
 import inspect
@@ -50,8 +51,8 @@ class XDL(object):
         """
         self.logger = logger
         if not logger:
+            logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format='%(message)s')
             self.logger = logging.getLogger('xdl_logger')
-            self.logger.addHandler(logging.StreamHandler())
         self._xdl_file = None
         self.auto_clean = DEFAULT_AUTO_CLEAN
         self.organic_cleaning_reagent = DEFAULT_ORGANIC_CLEANING_SOLVENT
@@ -252,7 +253,7 @@ class XDL(object):
             chempiler (chempiler.Chempiler): Chempiler object instantiated with
                 modules and graph to run XDL on.
         """
-        if self.executor:
+        if hasattr(self, 'executor'):
             self.executor.execute(chempiler)
         else:
             raise RuntimeError(

@@ -150,7 +150,6 @@ class Filter(Step):
         self,
         filter_vessel: str,
         filter_top_volume: Optional[float] = None,
-        filter_bottom_volume: Optional[float] = None,
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
         wait_time: Optional[float] = 'default',
@@ -159,18 +158,14 @@ class Filter(Step):
         super().__init__(locals())
 
         self.steps = [
-            # Remove dead volume from bottom of filter vessel.
-            CMove(
-                from_vessel=self.filter_vessel, to_vessel=self.waste_vessel,
-                volume=self.filter_bottom_volume),
-            # Connect the vacuum.
-            CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
-                     from_port=BOTTOM_PORT),
-            Wait(time=self.wait_time),
             # Move the filter top volume from the bottom to the waste.
             CMove(
                 from_vessel=self.filter_vessel, to_vessel=self.waste_vessel,
                 from_port=BOTTOM_PORT, volume=self.filter_top_volume),
+            # Connect the vacuum.
+            CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
+                     from_port=BOTTOM_PORT),
+            Wait(time=self.wait_time),
         ]
 
         self.vessel_chain = ['filter_vessel']
@@ -212,14 +207,14 @@ class WashFilterCake(Step):
         super().__init__(locals())
 
         self.steps = [
-            CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
-                     from_port=BOTTOM_PORT),
             Add(reagent=self.solvent, volume=self.volume,
                 vessel=self.filter_vessel, port=TOP_PORT, 
                 waste_vessel=self.waste_vessel),
-            Wait(self.wait_time),
             CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT,
-                  to_vessel=self.waste_vessel, volume=self.volume)
+                  to_vessel=self.waste_vessel, volume=self.volume),
+            CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
+                     from_port=BOTTOM_PORT),
+            Wait(self.wait_time),
         ]
 
         self.vessel_chain = ['filter_vessel']
@@ -238,14 +233,14 @@ class Dry(Step):
 
     Args:
         filter_vessel (str): Vessel name to dry.
-        wait_time (float): Time to dry vessel for in seconds. (optional)
+        time (float): Time to dry vessel for in seconds. (optional)
         waste_vessel (str): Given internally. Vessel to send waste to.
         vacuum (str): Given internally. Vacuum flask.
     """
     def __init__(
         self,
         filter_vessel: str,
-        wait_time: Optional[float] = 'default',
+        time: Optional[float] = 'default',
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
         **kwargs
@@ -253,54 +248,18 @@ class Dry(Step):
         super().__init__(locals())
 
         self.steps = [
+            # Move bulk of liquid to waste.
+            CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT,
+                  to_vessel=self.waste_vessel, volume=DEFAULT_DRY_WASTE_VOLUME),
             # Connect the vacuum.
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
-            Wait(self.wait_time),
-            # Move any liquid that has dripped through to waste.
-            CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT,
-                  to_vessel=self.waste_vessel, volume=DEFAULT_DRY_WASTE_VOLUME)
+            Wait(self.time),
         ]
 
         self.vessel_chain = ['filter_vessel']
 
-        self.human_readable = 'Dry substance in {filter_vessel} for {wait_time} s.'.format(
-            **self.properties)
-
-        self.requirements = {
-            'filter_vessel': {
-                'filter': True
-            }
-        }
-
-class PrepareFilter(Step):
-    """Fill bottom of filter vessel with solvent in anticipation of the filter top being used.
-
-    Args:
-        filter_vessel (str): Filter vessel name to prepare (generic name 'filter' not 'filter_filter_bottom').
-        solvent (str): Solvent to fill filter bottom with.
-        volume (int): Volume of filter bottom.
-        waste_vessel (str): Given internally. Vessel to put waste material.
-    """
-    def __init__(
-        self,
-        filter_vessel: str,
-        solvent: str,
-        volume: float, 
-        waste_vessel: Optional[str] = None,
-        **kwargs
-    ) -> None:
-        super().__init__(locals())
-
-        self.steps = [
-            Add(reagent=self.solvent, volume=self.volume,
-                vessel=self.filter_vessel, port=BOTTOM_PORT, 
-                waste_vessel=waste_vessel)
-        ]
-
-        self.vessel_chain = ['filter_vessel']
-
-        self.human_readable = 'Fill bottom of {filter_vessel} with {solvent} ({volume} mL).'.format(
+        self.human_readable = 'Dry substance in {filter_vessel} for {time} s.'.format(
             **self.properties)
 
         self.requirements = {
