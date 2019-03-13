@@ -91,6 +91,9 @@ DEFAULT_FILTER_WAIT_TIME: int = 60*2
 #: Default volume of solvent to use when washing a filter cake.
 DEFAULT_WASHFILTERCAKE_VOLUME: int = 20
 
+#: Default time to stir mixture for after adding solvent but before filtering.
+DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME: int = 30
+
 #: Default time in seconds to wait for with vacuum on when washing a filter cake.
 DEFAULT_WASHFILTERCAKE_WAIT_TIME: int = 60*2
 
