@@ -202,7 +202,7 @@ class XDLExecutor(object):
             if additions:
                 step_reagent_type = 'organic'
                 for reagent in additions:
-                    if is_aqueous(reagent[0]):
+                    if is_aqueous(reagent):
                         step_reagent_type = 'aqueous'
                         break
             step_reagent_types.append(step_reagent_type)
@@ -265,6 +265,7 @@ class XDLExecutor(object):
         determine what solvents to clean the backbone with.
         """
         for i, clean_type in reversed(self._get_clean_backbone_sequence()):
+            print(clean_type)
             solvent = self._xdl.organic_cleaning_reagent 
             if clean_type == 'water':
                 solvent = self._xdl.aqueous_cleaning_reagent

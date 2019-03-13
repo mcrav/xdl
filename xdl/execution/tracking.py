@@ -27,6 +27,11 @@ def iter_vessel_contents(
                 additions (optional) -- List of contents added during step.
     """
     vessel_contents = {}
+    for flask in hardware.flasks:
+        vessel_contents[flask.id] = {
+            'reagents': [flask.chemical],
+            'volume': flask.current_volume,
+        }
     for i, step in enumerate(steps):
         additions_l = []
 
@@ -89,7 +94,9 @@ def iter_vessel_contents(
 
         # Handle normal Move steps.
         else:
+            print('contents', vessel_contents)
             for from_vessel, to_vessel, volume in get_movements(step):
+                print('from', from_vessel, 'to', to_vessel)
                 empty_from_vessel = False
                 # Add vessels to vessel_contents if they aren't there.
                 for vessel in [from_vessel, to_vessel]:
@@ -103,19 +110,20 @@ def iter_vessel_contents(
                 vessel_contents[to_vessel]['volume'] += volume 
                 vessel_contents[to_vessel]['reagents'].extend(
                     vessel_contents[from_vessel]['reagents'])
+                additions_l.extend(vessel_contents[from_vessel]['reagents'])
+                print('additions', additions_l)
                 # Remove volume from from_vessel.
                 vessel_contents[from_vessel]['volume'] -= volume
                 if vessel_contents[from_vessel]['volume'] <= 0:
                     vessel_contents[from_vessel]['reagents'] = []
                 # Extend list of reagents added in the step.
-                additions_l.extend(vessel_contents[from_vessel]['reagents'])
                 # Empty from_vessel if 'all' volume specified.
                 if empty_from_vessel:
                     vessel_contents[from_vessel]['volume'] = 0
                     vessel_contents[from_vessel]['reagents'] = []
     
         if additions:
-            yield (i, step, copy.deepcopy(vessel_contents), additions_l)
+            yield (i, step, copy.deepcopy(vessel_contents), copy.deepcopy(additions_l))
         else:
             yield (i, step, copy.deepcopy(vessel_contents))
 
