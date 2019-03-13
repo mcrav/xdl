@@ -1,6 +1,7 @@
 # For type annotations
 import logging
 import copy
+import sys
 
 if False:
     from chempiler import Chempiler
@@ -45,6 +46,10 @@ class Step(XDLBase):
             level (int): Level of recursion in step execution.
         """
         level += 1
+        if not logger:
+            logging.basicConfig(
+                stream=sys.stdout, level=logging.DEBUG, format='%(message)s')
+            logger = logging.getLogger('xdl_logger')
         try:
             for step in self.steps:
                 logger.info('{0}{1}'.format('  ' * level, step.name))

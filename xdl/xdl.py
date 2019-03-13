@@ -51,7 +51,8 @@ class XDL(object):
         """
         self.logger = logger
         if not logger:
-            logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format='%(message)s')
+            logging.basicConfig(
+                stream=sys.stdout, level=logging.DEBUG, format='%(message)s')
             self.logger = logging.getLogger('xdl_logger')
         self._xdl_file = None
         self.auto_clean = DEFAULT_AUTO_CLEAN
