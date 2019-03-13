@@ -78,7 +78,7 @@ def convert_val_to_std_units(val):
 def clean_properties(xdl_class, properties):
     annotations = xdl_class.__init__.__annotations__
     for prop, val in properties.items():
-        if val == 'default':
+        if val == 'default' or prop == 'kwargs':
             continue
 
         prop_type = annotations[prop]
