@@ -25,7 +25,14 @@ CLEAN_BACKBONE_AFTER_STEPS: List[type] = [
 ]
 
 # Steps that should be stirred.
-STIR_STEPS = [Add, StartChiller, ChillerReturnToRT, Heat]
+STIR_STEPS = [
+    Add,
+    StartChiller,
+    ChillerReturnToRT,
+    Chill,
+    StartHeat,
+    HeaterReturnToRT,
+    Heat]
 
 class XDLExecutor(object):
  
