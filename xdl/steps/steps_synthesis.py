@@ -32,7 +32,8 @@ class Add(Step):
         time: Optional[float] = None,
         move_speed: Optional[float] = 'default',
         reagent_vessel: Optional[str] = None, 
-        waste_vessel: Optional[str] = None
+        waste_vessel: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -71,7 +72,8 @@ class AddCorrosive(Step):
         vessel: str,
         volume: float,
         reagent_vessel: Optional[str] = None,
-        air_vessel: Optional[str] = None
+        air_vessel: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -105,6 +107,7 @@ class MakeSolution(Step):
         solvent: str,
         vessel: str,
         solvent_volume: Optional[float] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -150,7 +153,8 @@ class Filter(Step):
         filter_bottom_volume: Optional[float] = None,
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
-        wait_time: Optional[float] = 'default'
+        wait_time: Optional[float] = 'default',
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -203,6 +207,7 @@ class WashFilterCake(Step):
         wait_time: Optional[float] = 'default',
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -243,6 +248,7 @@ class Dry(Step):
         wait_time: Optional[float] = 'default',
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -281,7 +287,8 @@ class PrepareFilter(Step):
         filter_vessel: str,
         solvent: str,
         volume: float, 
-        waste_vessel: Optional[str] = None
+        waste_vessel: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -341,6 +348,7 @@ class Separate(Step):
         waste_phase_to_vessel: Optional[str] = None,
         waste_phase_to_port: Optional[str] = None,
         waste_vessel: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -498,7 +506,8 @@ class Heat(Step):
         vessel: str,
         temp: float,
         time: float,
-        stir_rpm: float = None
+        stir_rpm: float = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -538,7 +547,8 @@ class Chill(Step):
         vessel: str,
         temp: float,
         time: float,
-        stir_rpm: float = None
+        stir_rpm: float = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -580,9 +590,17 @@ class Rotavap(Step):
         pressure (float): Pressure to set rotary evaporator vacuum to in mbar.
         time (int): Time to rotavap for in seconds.
     """
-    def __init__(self, rotavap_vessel: str, temp: float, vacuum_pressure: float,
-                       time: float = 'default', rotation_speed: float = None,
-                       waste_vessel: str = None, distillate_volume: float = None):
+    def __init__(
+        self,
+        rotavap_vessel: str,
+        temp: float,
+        vacuum_pressure: float,
+        time: float = 'default',
+        rotation_speed: float = None,
+        waste_vessel: str = None,
+        distillate_volume: float = None,
+        **kwargs
+    ):
         super().__init__(locals())
 
         # Steps incomplete

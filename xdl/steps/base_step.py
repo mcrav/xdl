@@ -20,7 +20,11 @@ class Step(XDLBase):
     """
     def __init__(self, param_dict):
         super().__init__(param_dict)
-
+        if 'kwargs' in param_dict:
+            kwargs = ['repeat']
+            for kwarg in kwargs:
+                if kwarg in param_dict['kwargs']:
+                    self.properties[kwarg] = param_dict['kwargs'][kwarg]
         self.steps = []
         self.human_readable = ''
         self.requirements = {}
@@ -45,7 +49,10 @@ class Step(XDLBase):
             for step in self.steps:
                 if logger:
                     logger.info('{0}{1}'.format('  ' * level, step.name))
-                keep_going = step.execute(chempiler, logger, level=level)
+                repeats = 1
+                if 'repeat' in step.properties: repeats = step.repeats
+                for _ in range(repeats):
+                    keep_going = step.execute(chempiler, logger, level=level)
                 if not keep_going:
                     return False
             return True

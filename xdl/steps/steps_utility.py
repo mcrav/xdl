@@ -20,7 +20,8 @@ class Wait(Step):
         self,
         time: float,
         wait_recording_speed: float = 'default',
-        after_recording_speed: float = 'default'
+        after_recording_speed: float = 'default',
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -44,7 +45,8 @@ class PrimePumpForAdd(Step):
         reagent: str,
         volume: Optional[float] = 'default',
         reagent_vessel: Optional[str] = None,
-        waste_vessel: Optional[str] = None
+        waste_vessel: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -64,7 +66,9 @@ class RemoveFilterDeadVolume(Step):
         self,
         filter_vessel: str,
         dead_volume: Optional[float] = 0,
-        waste_vessel: Optional[str] = None):
+        waste_vessel: Optional[str] = None,
+        **kwargs
+    ) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -89,7 +93,11 @@ class StartStir(Step):
         stir_rpm (int, optional): Speed in RPM to stir at.
     """
     def __init__(
-        self, vessel: str, stir_rpm: Optional[float] = 'default') -> None:
+        self,
+        vessel: str,
+        stir_rpm: Optional[float] = 'default',
+        **kwargs
+    ) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -114,7 +122,7 @@ class StopStir(Step):
     Args:
         vessel (str): Vessel name to stop stirring.
     """
-    def __init__(self, vessel: str) -> None:
+    def __init__(self, vessel: str, **kwargs) -> None:
         super().__init__(locals())
 
         self.steps = [CStopStir(vessel=self.vessel)]
@@ -140,7 +148,8 @@ class Stir(Step):
         self,
         vessel: str,
         time: float,
-        stir_rpm: Optional[float] = 'default'
+        stir_rpm: Optional[float] = 'default',
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -172,7 +181,7 @@ class StartHeat(Step):
         vessel (str): Vessel name to heat.
         temp (float): Temperature to heat to in °C.
     """
-    def __init__(self, vessel: str, temp: float) -> None:
+    def __init__(self, vessel: str, temp: float, **kwargs) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -199,7 +208,7 @@ class StopHeat(Step):
     Args:
         vessel (str): Vessel name to stop heating.
     """
-    def __init__(self, vessel: str) -> None:
+    def __init__(self, vessel: str, **kwargs) -> None:
         super().__init__(locals())
 
         self.steps = [CStopHeat(vessel=self.vessel)]
@@ -220,7 +229,7 @@ class HeaterReturnToRT(Step):
     Args:
         vessel (str): Vessel to return to room temperature.
     """
-    def __init__(self, vessel: str) -> None:
+    def __init__(self, vessel: str, **kwargs) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -250,7 +259,7 @@ class StartVacuum(Step):
     Args:
         vessel (str): Vessel name to start vacuum on.
     """
-    def __init__(self, vessel: str) -> None:
+    def __init__(self, vessel: str, **kwargs) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -267,7 +276,7 @@ class StopVacuum(Step):
     Args:
         vessel (str): Vessel name to stop vacuum on.
     """
-    def __init__(self, vessel: str) -> None:
+    def __init__(self, vessel: str, **kwargs) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -284,7 +293,7 @@ class StopVacuum(Step):
 
 class StartChiller(Step):
 
-    def __init__(self, vessel: str, temp: float) -> None:
+    def __init__(self, vessel: str, temp: float, **kwargs) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -307,7 +316,7 @@ class StartChiller(Step):
 
 class StopChiller(Step):
 
-    def __init__(self, vessel: str) -> None:
+    def __init__(self, vessel: str, **kwargs) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -330,7 +339,7 @@ class ChillerReturnToRT(Step):
     Args:
         vessel (str): Vessel to stop chiller for.
     """
-    def __init__(self, vessel: str) -> None:
+    def __init__(self, vessel: str, **kwargs) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -375,7 +384,8 @@ class CleanVessel(Step):
         stir_rpm: Optional[float] = 'default',
         stir_time: Optional[float] = 'default',
         waste_vessel: Optional[str] = None,
-        solvent_vessel: Optional[str] = None
+        solvent_vessel: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -407,7 +417,8 @@ class CleanBackbone(Step):
         self,
         solvent: str,
         waste_vessels: Optional[List[str]] = None,
-        solvent_vessel: Optional[str] = None
+        solvent_vessel: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -438,7 +449,8 @@ class Transfer(Step):
         volume: float,
         from_port: Optional[str] = None, 
         to_port: Optional[str] = None, 
-        through: Optional[str] = None
+        through: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
