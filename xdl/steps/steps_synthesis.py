@@ -493,7 +493,13 @@ class Heat(Step):
         temp (float): Temperature to heat vessel to in °C.
         time (float): Time to reflux vessel for in seconds.
     """
-    def __init__(self, vessel: str, temp: float, time: float) -> None:
+    def __init__(
+        self,
+        vessel: str,
+        temp: float,
+        time: float,
+        stir_rpm: float = None
+    ) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -501,6 +507,11 @@ class Heat(Step):
             Wait(time=self.time),
             StopHeat(vessel=self.vessel),
         ]
+        if self.stir_rpm:
+            self.steps.insert(
+                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            self.steps.append(
+                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
 
         self.vessel_chain = ['vessel']
 
@@ -522,14 +533,25 @@ class Chill(Step):
         temp (float): Temperature to heat vessel to in °C.
         time (float): Time to reflux vessel for in seconds.
     """
-    def __init__(self, vessel: str, temp: float, time: float) -> None:
+    def __init__(
+        self,
+        vessel: str,
+        temp: float,
+        time: float,
+        stir_rpm: float = None
+    ) -> None:
         super().__init__(locals())
 
         self.steps = [
             StartChiller(vessel=self.vessel, temp=self.temp),
             Wait(time=self.time),
-            StopChiller(vessel=self.vessel),
+            StopChiller(vessel=self.vessel)
         ]
+        if self.stir_rpm:
+            self.steps.insert(
+                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            self.steps.append(
+                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
 
         self.vessel_chain = ['vessel']
 
