@@ -47,12 +47,16 @@ class Step(XDLBase):
         level += 1
         try:
             for step in self.steps:
-                if logger:
-                    logger.info('{0}{1}'.format('  ' * level, step.name))
+                logger.info('{0}{1}'.format('  ' * level, step.name))
                 repeats = 1
                 if 'repeat' in step.properties: repeats = step.repeats
                 for _ in range(repeats):
-                    keep_going = step.execute(chempiler, logger, level=level)
+                    try:
+                        keep_going = step.execute(chempiler, logger, level=level)
+                    except Exception as e:
+                        logger.info(
+                            'Step failed {0} {1}'.format(type(step), step.properties))
+                        raise e
                 if not keep_going:
                     return False
             return True

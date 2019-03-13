@@ -416,7 +416,7 @@ class CleanBackbone(Step):
     def __init__(
         self,
         solvent: str,
-        waste_vessels: Optional[List[str]] = None,
+        waste_vessels: Optional[List[str]] = [],
         solvent_vessel: Optional[str] = None,
         **kwargs
     ) -> None:

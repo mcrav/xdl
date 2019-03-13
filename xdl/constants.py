@@ -143,7 +143,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'wait_time': DEFAULT_FILTER_WAIT_TIME,
     },
     'Dry': {
-        'wait_time': DEFAULT_DRY_TIME,
+        'time': DEFAULT_DRY_TIME,
     },
     'WashFilterCake': {
         'volume': DEFAULT_WASHFILTERCAKE_VOLUME,
