@@ -97,6 +97,10 @@ DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME: int = 30
 #: Default time in seconds to wait for with vacuum on when washing a filter cake.
 DEFAULT_WASHFILTERCAKE_WAIT_TIME: int = 60*2
 
+#: Default volume factor to remove solvent after washing filter cake,
+# i.e. 1.5 means remove 1.5x the solvent volume.
+DEFAULT_WASHFILTERCAKE_EXCESS_REMOVE_FACTOR: float = 1.5
+
 #: Default time in seconds to wait for with vacuum on when drying a filter cake.
 DEFAULT_DRY_TIME: int = 60*5
 

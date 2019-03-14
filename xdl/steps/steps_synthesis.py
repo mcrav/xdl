@@ -213,8 +213,12 @@ class WashFilterCake(Step):
             StartStir(vessel=self.filter_vessel),
             Wait(DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME),
             StopStir(vessel=self.filter_vessel),
-            CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT,
-                  to_vessel=self.waste_vessel, volume=self.volume),
+            CMove(
+                from_vessel=self.filter_vessel,
+                from_port=BOTTOM_PORT,
+                to_vessel=self.waste_vessel,
+                volume=self.volume * DEFAULT_WASHFILTERCAKE_EXCESS_REMOVE_FACTOR
+            ),
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
             Wait(self.wait_time),
