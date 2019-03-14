@@ -190,9 +190,9 @@ class XDLExecutor(object):
 
     def _add_implied_steps(self) -> None:
         """Add extra steps implied by explicit XDL steps."""
-        self._add_filter_inert_gas_connect_steps()
         if self._xdl.auto_clean:
             self._add_implied_clean_backbone_steps()
+        self._add_filter_inert_gas_connect_steps()
         self._add_implied_stirring_steps()
 
     def _get_step_reagent_types(self) -> List[str]:
@@ -296,21 +296,16 @@ class XDLExecutor(object):
         # Reconnect inert gas to bottom of filter flasks after filtration
         # sequences.
         filter_step_types = [Filter, WashFilterCake, Dry]
-        in_filter_sequence = False
         for i in reversed(range(len(self._xdl.steps))):
             step = self._xdl.steps[i]
             if type(step) in filter_step_types:
-                if not in_filter_sequence:
-                    self._xdl.steps.insert(
-                        i+1,
-                        CConnect(
-                            from_vessel=self._filter_inert_gas_map[
-                                step.filter_vessel],
-                            to_vessel=step.filter_vessel,
-                            to_port=BOTTOM_PORT))
-                in_filter_sequence = True
-            else:
-                in_filter_sequence = False
+                self._xdl.steps.insert(
+                    i+1,
+                    CConnect(
+                        from_vessel=self._filter_inert_gas_map[
+                            step.filter_vessel],
+                        to_vessel=step.filter_vessel,
+                        to_port=BOTTOM_PORT))
 
     def _add_implied_stirring_steps(self) -> None:
         """Add in stirring to appropriate steps."""
