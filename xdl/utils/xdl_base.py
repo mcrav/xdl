@@ -9,6 +9,9 @@ class XDLBase(object):
         params = {k: v
                   for k, v in param_dict.items()
                   if k != 'self' and not k.startswith('_')}
+        if 'kwargs' in params:
+            params.update(params['kwargs'])
+            del params['kwargs']
         self.properties = {}
         for param in clean_properties(type(self), params):
             if param != 'self':

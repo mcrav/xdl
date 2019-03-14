@@ -161,7 +161,7 @@ class Filter(Step):
     def __init__(
         self,
         filter_vessel: str,
-        filter_top_volume: Optional[float] = None,
+        filter_top_volume: Optional[float] = 0,
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
         wait_time: Optional[float] = 'default',
@@ -172,8 +172,10 @@ class Filter(Step):
         self.steps = [
             # Move the filter top volume from the bottom to the waste.
             CMove(
-                from_vessel=self.filter_vessel, to_vessel=self.waste_vessel,
-                from_port=BOTTOM_PORT, volume=self.filter_top_volume),
+                from_vessel=self.filter_vessel,
+                to_vessel=self.waste_vessel,
+                from_port=BOTTOM_PORT,
+                volume=self.filter_top_volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR),
             # Connect the vacuum.
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
@@ -229,7 +231,7 @@ class WashFilterCake(Step):
                 from_vessel=self.filter_vessel,
                 from_port=BOTTOM_PORT,
                 to_vessel=self.waste_vessel,
-                volume=self.volume * DEFAULT_WASHFILTERCAKE_EXCESS_REMOVE_FACTOR
+                volume=self.volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR
             ),
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),

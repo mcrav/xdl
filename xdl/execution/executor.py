@@ -320,7 +320,9 @@ class XDLExecutor(object):
         prev_vessel_contents = {}
         for _, step, vessel_contents in iter_vessel_contents(
             self._xdl.steps, self._graph_hardware):
-
+            print(step)
+            print(vessel_contents)
+            print('\n')
             if type(step) == Filter:
                 step.filter_top_volume = prev_vessel_contents[
                     step.filter_vessel]['volume']
@@ -473,7 +475,7 @@ class XDLExecutor(object):
             for step in self._xdl.steps:
                 self.logger.info(step.name)
                 repeats = 1
-                if 'repeat' in step.properties: repeats = step.repeats
+                if 'repeat' in step.properties: repeats = int(step.repeat)
                 for _ in range(repeats):
                     try:
                         keep_going = step.execute(chempiler, self.logger)
