@@ -55,31 +55,6 @@ class PrimePumpForAdd(Step):
                   volume=self.volume)
         ]
 
-class RemoveFilterDeadVolume(Step):
-    """Remove dead volume (volume below filter) from filter vessel.
-    
-    Args:
-        filter_vessel (str): Filter vessel ID to remove dead volume from.
-        dead_volume (float): Volume in mL to remove from bottom of filter vessel.
-    """
-    def __init__(
-        self,
-        filter_vessel: str,
-        dead_volume: Optional[float] = 0,
-        waste_vessel: Optional[str] = None,
-        **kwargs
-    ) -> None:
-        super().__init__(locals())
-
-        self.steps = [
-            Transfer(from_vessel=self.filter_vessel, to_vessel=self.waste_vessel, 
-                     volume=self.dead_volume)
-        ]
-
-        self.human_readable = 'Remove dead volume ({volume} mL) from bottom of {filter_vessel}'.format(
-            **self.properties)
-
-
 
 ################
 ### STIRRING ###
@@ -181,7 +156,14 @@ class StartHeat(Step):
         vessel (str): Vessel name to heat.
         temp (float): Temperature to heat to in °C.
     """
-    def __init__(self, vessel: str, temp: float, **kwargs) -> None:
+    def __init__(
+        self,
+        vessel: str,
+        temp: float,
+        stir: Optional[bool] = True,
+        stir_rpm: Optional[float] = None,
+        **kwargs
+    ) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -189,6 +171,15 @@ class StartHeat(Step):
             CStartHeat(vessel=self.vessel),
             CStirrerWaitForTemp(vessel=self.vessel),
         ]
+        if self.stir:
+            self.steps.insert(0, CStartStir(vessel=self.vessel))
+            self.steps.append(CStopStir(vessel=self.vessel))
+            
+        if self.stir_rpm:
+            self.steps.insert(
+                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            self.steps.append(
+                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
 
         self.vessel_chain = ['vessel']
 
@@ -229,7 +220,13 @@ class HeaterReturnToRT(Step):
     Args:
         vessel (str): Vessel to return to room temperature.
     """
-    def __init__(self, vessel: str, **kwargs) -> None:
+    def __init__(
+        self,
+        vessel: str,
+        stir: Optional[bool] = True,
+        stir_rpm: Optional[float] = None,
+        **kwargs
+    ) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -237,6 +234,15 @@ class HeaterReturnToRT(Step):
             CStirrerWaitForTemp(vessel=self.vessel),
             CStopHeat(vessel=self.vessel),
         ]
+        if self.stir:
+            self.steps.insert(0, CStartStir(vessel=self.vessel))
+            self.steps.append(CStopStir(vessel=self.vessel))
+            
+        if self.stir_rpm:
+            self.steps.insert(
+                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            self.steps.append(
+                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
 
         self.vessel_chain = ['vessel']
 
@@ -293,7 +299,13 @@ class StopVacuum(Step):
 
 class StartChiller(Step):
 
-    def __init__(self, vessel: str, temp: float, **kwargs) -> None:
+    def __init__(
+        self,
+        vessel: str,
+        temp: float,
+        stir: Optional[bool] = True,
+        stir_rpm: Optional[float] = None,
+        **kwargs) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -301,6 +313,15 @@ class StartChiller(Step):
             CStartChiller(vessel=self.vessel),
             CChillerWaitForTemp(vessel=self.vessel),
         ]
+        if self.stir:
+            self.steps.insert(0, CStartStir(vessel=self.vessel))
+            self.steps.append(CStopStir(vessel=self.vessel))
+            
+        if self.stir_rpm:
+            self.steps.insert(
+                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            self.steps.append(
+                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
 
         self.vessel_chain = ['vessel']
 
@@ -339,7 +360,12 @@ class ChillerReturnToRT(Step):
     Args:
         vessel (str): Vessel to stop chiller for.
     """
-    def __init__(self, vessel: str, **kwargs) -> None:
+    def __init__(
+        self,
+        vessel: str,
+        stir: Optional[bool] = True,
+        stir_rpm: Optional[float] = None,
+        **kwargs) -> None:
         super().__init__(locals())
 
         self.steps = [
@@ -347,6 +373,15 @@ class ChillerReturnToRT(Step):
             CChillerWaitForTemp(vessel=self.vessel),
             CStopChiller(vessel)
         ]
+        if self.stir:
+            self.steps.insert(0, CStartStir(vessel=self.vessel))
+            self.steps.append(CStopStir(vessel=self.vessel))
+            
+        if self.stir_rpm:
+            self.steps.insert(
+                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            self.steps.append(
+                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
 
         self.vessel_chain = ['vessel']
 

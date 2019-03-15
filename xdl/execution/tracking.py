@@ -1,6 +1,6 @@
 from typing import List, Dict, Generator, Optional, Union, Tuple
 import copy
-from ..steps import Step, Filter, Dry, Separate, CMove
+from ..steps import Step, Filter, WashFilterCake, Dry, Separate, CMove
 from ..hardware import Hardware
 
 def iter_vessel_contents(
@@ -74,7 +74,7 @@ def iter_vessel_contents(
                         'volume'] += step.solvent_volume
                 vessel_contents[step.to_vessel]['volume'] += from_volume
 
-        elif type(step) == Filter:
+        elif type(step) in [Filter, WashFilterCake, Dry]:
             for vessel in [step.filter_vessel, step.waste_vessel]:
                 vessel_contents.setdefault(vessel, {
                     'reagents': [],
@@ -94,9 +94,7 @@ def iter_vessel_contents(
 
         # Handle normal Move steps.
         else:
-            print('contents', vessel_contents)
             for from_vessel, to_vessel, volume in get_movements(step):
-                print('from', from_vessel, 'to', to_vessel)
                 empty_from_vessel = False
                 # Add vessels to vessel_contents if they aren't there.
                 for vessel in [from_vessel, to_vessel]:
@@ -111,7 +109,6 @@ def iter_vessel_contents(
                 vessel_contents[to_vessel]['reagents'].extend(
                     vessel_contents[from_vessel]['reagents'])
                 additions_l.extend(vessel_contents[from_vessel]['reagents'])
-                print('additions', additions_l)
                 # Remove volume from from_vessel.
                 vessel_contents[from_vessel]['volume'] -= volume
                 if vessel_contents[from_vessel]['volume'] <= 0:

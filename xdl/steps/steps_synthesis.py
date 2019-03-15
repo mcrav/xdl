@@ -33,19 +33,27 @@ class Add(Step):
         move_speed: Optional[float] = 'default',
         reagent_vessel: Optional[str] = None, 
         waste_vessel: Optional[str] = None,
+        stir: Optional[bool] = True,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
-        self.steps = []
-        self.steps.append(PrimePumpForAdd(
-            reagent=self.reagent, volume='default', 
-            waste_vessel=self.waste_vessel))
-        self.steps.append(
-            CMove(from_vessel=self.reagent_vessel, to_vessel=self.vessel, 
-                  to_port=self.port, volume=self.volume,
-                  move_speed=self.move_speed))
-        self.steps.append(Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
+        self.steps = [
+            PrimePumpForAdd(
+                reagent=self.reagent,
+                volume='default',
+                waste_vessel=self.waste_vessel),
+            CMove(
+                from_vessel=self.reagent_vessel,
+                to_vessel=self.vessel, 
+                to_port=self.port,
+                volume=self.volume,
+                move_speed=self.move_speed),
+            Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME)
+        ]
+        if self.stir:
+            self.steps.insert(0, CStartStir(vessel=self.vessel))
+            self.steps.append(CStopStir(vessel=self.vessel))
 
         self.vessel_chain = ['vessel']
 
@@ -73,6 +81,7 @@ class AddCorrosive(Step):
         volume: float,
         reagent_vessel: Optional[str] = None,
         air_vessel: Optional[str] = None,
+        stir: Optional[bool] = True,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -84,6 +93,9 @@ class AddCorrosive(Step):
                 through=self.reagent_vessel,
                 volume=self.volume)
         ]
+        if self.stir:
+            self.steps.insert(0, CStartStir(vessel=self.vessel))
+            self.steps.append(CStopStir(vessel=self.vessel))
 
         self.vessel_chain = ['vessel']
 
@@ -149,7 +161,7 @@ class Filter(Step):
     def __init__(
         self,
         filter_vessel: str,
-        filter_top_volume: Optional[float] = None,
+        filter_top_volume: Optional[float] = 0,
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
         wait_time: Optional[float] = 'default',
@@ -160,8 +172,10 @@ class Filter(Step):
         self.steps = [
             # Move the filter top volume from the bottom to the waste.
             CMove(
-                from_vessel=self.filter_vessel, to_vessel=self.waste_vessel,
-                from_port=BOTTOM_PORT, volume=self.filter_top_volume),
+                from_vessel=self.filter_vessel,
+                to_vessel=self.waste_vessel,
+                from_port=BOTTOM_PORT,
+                volume=self.filter_top_volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR),
             # Connect the vacuum.
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
@@ -217,7 +231,7 @@ class WashFilterCake(Step):
                 from_vessel=self.filter_vessel,
                 from_port=BOTTOM_PORT,
                 to_vessel=self.waste_vessel,
-                volume=self.volume * DEFAULT_WASHFILTERCAKE_EXCESS_REMOVE_FACTOR
+                volume=self.volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR
             ),
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
@@ -472,7 +486,8 @@ class Heat(Step):
         vessel: str,
         temp: float,
         time: float,
-        stir_rpm: float = None,
+        stir: Optional[bool] = True,
+        stir_rpm: Optional[float] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -482,6 +497,10 @@ class Heat(Step):
             Wait(time=self.time),
             StopHeat(vessel=self.vessel),
         ]
+        if self.stir:
+            self.steps.insert(0, CStartStir(vessel=self.vessel))
+            self.steps.append(CStopStir(vessel=self.vessel))
+            
         if self.stir_rpm:
             self.steps.insert(
                 0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
@@ -513,7 +532,8 @@ class Chill(Step):
         vessel: str,
         temp: float,
         time: float,
-        stir_rpm: float = None,
+        stir: Optional[bool] = True,
+        stir_rpm: Optional[float] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -523,6 +543,10 @@ class Chill(Step):
             Wait(time=self.time),
             StopChiller(vessel=self.vessel)
         ]
+        if self.stir:
+            self.steps.insert(0, CStartStir(vessel=self.vessel))
+            self.steps.append(CStopStir(vessel=self.vessel))
+
         if self.stir_rpm:
             self.steps.insert(
                 0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
@@ -561,10 +585,10 @@ class Rotavap(Step):
         rotavap_vessel: str,
         temp: float,
         vacuum_pressure: float,
-        time: float = 'default',
-        rotation_speed: float = None,
-        waste_vessel: str = None,
-        distillate_volume: float = None,
+        time: Optional[float] = 'default',
+        rotation_speed: Optional[float] = None,
+        waste_vessel: Optional[str] = None,
+        distillate_volume: Optional[float] = None,
         **kwargs
     ):
         super().__init__(locals())

@@ -24,16 +24,6 @@ CLEAN_BACKBONE_AFTER_STEPS: List[type] = [
     Dry,
 ]
 
-# Steps that should be stirred.
-STIR_STEPS = [
-    Add,
-    StartChiller,
-    ChillerReturnToRT,
-    Chill,
-    StartHeat,
-    HeaterReturnToRT,
-    Heat]
-
 class XDLExecutor(object):
  
     """Class to execute XDL objects. To execute first call prepare_for_execution
@@ -193,7 +183,6 @@ class XDLExecutor(object):
         if self._xdl.auto_clean:
             self._add_implied_clean_backbone_steps()
         self._add_filter_inert_gas_connect_steps()
-        self._add_implied_stirring_steps()
 
     def _get_step_reagent_types(self) -> List[str]:
         """Get the reagent type, 'organic' or 'aqueous' involved in every step.
@@ -307,28 +296,6 @@ class XDLExecutor(object):
                         to_vessel=step.filter_vessel,
                         to_port=BOTTOM_PORT))
 
-    def _add_implied_stirring_steps(self) -> None:
-        """Add in stirring to appropriate steps."""
-        stirring = {}
-        insertions = []
-        for i, step in enumerate(self._xdl.steps):
-            if type(step) != CleanBackbone:
-                if type(step) in STIR_STEPS:
-                    vessel = step.vessel
-                    # If vessel not stirring, add StartStir(vessel)
-                    if not vessel in stirring or not stirring[vessel]:
-                        stirring[vessel] = True
-                        insertions.append((i, StartStir(vessel)))
-                else:
-                    # If vessel is stirring add StopStir(vessel)
-                    for vessel in stirring:
-                        if stirring[vessel]:
-                            insertions.append((i, StopStir(vessel)))
-                            stirring[vessel] = False
-
-        for i, step in reversed(insertions):
-            self._xdl.steps.insert(i, step)
-
 
     ###################################
     ### SOLIDIFY IMPLIED PROPERTIES ###
@@ -353,7 +320,9 @@ class XDLExecutor(object):
         prev_vessel_contents = {}
         for _, step, vessel_contents in iter_vessel_contents(
             self._xdl.steps, self._graph_hardware):
-
+            print(step)
+            print(vessel_contents)
+            print('\n')
             if type(step) == Filter:
                 step.filter_top_volume = prev_vessel_contents[
                     step.filter_vessel]['volume']
@@ -506,7 +475,7 @@ class XDLExecutor(object):
             for step in self._xdl.steps:
                 self.logger.info(step.name)
                 repeats = 1
-                if 'repeat' in step.properties: repeats = step.repeats
+                if 'repeat' in step.properties: repeats = int(step.repeat)
                 for _ in range(repeats):
                     try:
                         keep_going = step.execute(chempiler, self.logger)

@@ -54,7 +54,7 @@ class Step(XDLBase):
             for step in self.steps:
                 logger.info('{0}{1}'.format('  ' * level, step.name))
                 repeats = 1
-                if 'repeat' in step.properties: repeats = step.repeats
+                if 'repeat' in step.properties: repeats = int(step.repeat)
                 for _ in range(repeats):
                     try:
                         keep_going = step.execute(chempiler, logger, level=level)

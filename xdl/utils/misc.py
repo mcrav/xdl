@@ -80,10 +80,14 @@ def clean_properties(xdl_class, properties):
     for prop, val in properties.items():
         if val == 'default' or prop == 'kwargs':
             continue
+        elif prop == 'repeat':
+            properties[prop] = int(val)
+            continue
 
         prop_type = annotations[prop]
         if prop_type in [str, Optional[str]]:
             pass
+
         elif prop_type in [float, Optional[float]]:
             if type(val) == str:
                 properties[prop] = convert_val_to_std_units(val)
@@ -103,4 +107,5 @@ def clean_properties(xdl_class, properties):
                 properties[prop] = [val]
             elif type(val) == list:
                 pass
+
     return properties
