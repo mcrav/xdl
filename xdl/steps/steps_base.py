@@ -1,3 +1,5 @@
+from typing import Optional
+
 from ..constants import *
 from ..utils.misc import get_port_str
 from .base_step import Step
@@ -34,10 +36,19 @@ class CMove(Step):
         aspiration_speed (float): Speed at which liquid aspirates from from_vessel. (optional)
         dispense_speed (float): Speed at which liquid dispenses from from_vessel. (optional)
     """
-    def __init__(self, from_vessel=None, to_vessel=None, volume=None,
-                       move_speed='default', aspiration_speed='default',
-                       dispense_speed='default', from_port=None, to_port=None,
-                       unique=False, through=None):
+    def __init__(
+        self,
+        from_vessel: str,
+        to_vessel: str,
+        volume: float,
+        move_speed: Optional[float] = 'default',
+        aspiration_speed: Optional[float] = 'default',
+        dispense_speed: Optional[float] = 'default',
+        from_port: Optional[str] = None,
+        to_port: Optional[str] = None,
+        unique: Optional[bool] = False,
+        through: Optional[str] = None
+    ) -> None:
 
         self.properties = {
             'from_vessel': from_vessel,
@@ -82,8 +93,15 @@ class CConnect(Step):
         to_port (str): Port name to connect to.
         unique (bool): Must use unique route.
     """
-    def __init__(self, from_vessel=None, to_vessel=None, from_port=None,
-                       to_port=None, unique=True):
+    def __init__(
+        self,
+        from_vessel: str,
+        to_vessel: str,
+        from_port: Optional[str] = None,
+        to_port: Optional[str] = None,
+        unique: Optional[bool] = True
+    ) -> None:
+        super().__init__(locals())
         
         self.properties = {
             'from_vessel': from_vessel,
@@ -113,20 +131,28 @@ class CConnect(Step):
 
 
 class CSeparatePhases(Step):
+    """
+    Args:
+        lower_phase_vessel (str): Name of vessel to transfer lower phase to.
+        lower_phase_port (str): Name of port to transfer lower phase to
+        upper_phase_vessel (str): Name of vessel to transfer upper phase to.
+        separator_top (str): Name of separator top node in graph.
+        separator_bottom (str): Name of separator bottom node in graph.
+        dead_volume_target (str): Name of waste vessel to transfer dead
+                                    volume between phases to.
+    """
 
-    def __init__(self, lower_phase_vessel, upper_phase_vessel,
-                       separation_vessel, dead_volume_target,
-                       lower_phase_port=None, upper_phase_port=None):
-        """
-        Args:
-            lower_phase_vessel (str): Name of vessel to transfer lower phase to.
-            lower_phase_port (str): Name of port to transfer lower phase to
-            upper_phase_vessel (str): Name of vessel to transfer upper phase to.
-            separator_top (str): Name of separator top node in graph.
-            separator_bottom (str): Name of separator bottom node in graph.
-            dead_volume_target (str): Name of waste vessel to transfer dead
-                                      volume between phases to.
-        """
+    def __init__(
+        self,
+        lower_phase_vessel: str,
+        upper_phase_vessel: str,
+        separation_vessel: str,
+        dead_volume_target: str,
+        lower_phase_port: Optional[str] = None,
+        upper_phase_port: Optional[str] = None
+    ) -> None:
+        super().__init__(locals())
+
         self.properties = {
             'lower_phase_vessel': lower_phase_vessel,
             'lower_phase_port': lower_phase_port,
@@ -156,8 +182,8 @@ class CPrime(Step):
         aspiration_speed (float): Speed in mL / min at which material should
                                     be withdrawn.
     """
-    def __init__(self, aspiration_speed='default'):
-
+    def __init__(self, aspiration_speed: Optional[float] = 'default') -> None:
+        super().__init__(locals())
         self.properties = {
             'aspiration_speed': aspiration_speed,
         }
@@ -176,7 +202,8 @@ class CSwitchVacuum(Step):
         vessel (str): Name of the node the vacuum valve is logically attacked to (e.g. "filter_bottom")
         destination (str): Either "vacuum" or "backbone"
     """
-    def __init__(self, vessel=None, destination=None):
+    def __init__(self, vessel: str, destination: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -196,7 +223,8 @@ class CSwitchCartridge(Step):
         vessel (str): Name of the node the vacuum valve is logically attacked to (e.g. "rotavap")
         cartridge (int): Number of the position the carousel should be switched to (0-5)
     """
-    def __init__(self, vessel=None, cartridge=None):
+    def __init__(self, vessel: str, cartridge: int) -> None:
+        super().__init__(locals())
         self.properties = {
             'vessel': vessel,
             'cartridge': cartridge,
@@ -215,7 +243,8 @@ class CSwitchColumn(Step):
         column (str): Name of the column in the graph
         destination (str): Either "collect" or "waste"
     """
-    def __init__(self, column=None, destination=None):
+    def __init__(self, column: str, destination: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'column': column,
@@ -234,7 +263,8 @@ class CStartStir(Step):
     Args:
         vessel (str): Vessel name to stir.
     """
-    def __init__(self, vessel=None):
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -252,7 +282,8 @@ class CStartHeat(Step):
     Args:
         vessel (str): Vessel name to heat.
     """
-    def __init__(self, vessel=None):
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -270,7 +301,8 @@ class CStopStir(Step):
     Args:
         vessel (str): Vessel name to stop stirring.
     """
-    def __init__(self, vessel=None):
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -291,7 +323,8 @@ class CStopHeat(Step):
     Args:
         vessel (str): Vessel name to stop heating.
     """
-    def __init__(self, vessel=None):
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -311,7 +344,8 @@ class CSetTemp(Step):
         vessel (str): Vessel name to set temperature of hotplate stirrer.
         temp (float): Temperature in °C
     """
-    def __init__(self, vessel=None, temp=None):
+    def __init__(self, vessel: str, temp: float) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -331,7 +365,8 @@ class CSetStirRpm(Step):
         vessel (str): Vessel name to set stir speed.
         stir_rpm (float): Stir speed in RPM.
     """
-    def __init__(self, vessel=None, stir_rpm=None):
+    def __init__(self, vessel: str, stir_rpm: float) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -351,7 +386,8 @@ class CStirrerWaitForTemp(Step):
     Args:
         vessel (str): Vessel name to wait for temperature.
     """
-    def __init__(self, vessel=None):
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -369,7 +405,8 @@ class CStartHeaterBath(Step):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
-    def __init__(self, rotavap_name=None):
+    def __init__(self, rotavap_name: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'rotavap_name': rotavap_name,
@@ -387,7 +424,8 @@ class CStopHeaterBath(Step):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
-    def __init__(self, rotavap_name=None):
+    def __init__(self, rotavap_name: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'rotavap_name': rotavap_name,
@@ -405,7 +443,8 @@ class CStartRotation(Step):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
-    def __init__(self, rotavap_name=None):
+    def __init__(self, rotavap_name: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'rotavap_name': rotavap_name,
@@ -423,7 +462,8 @@ class CStopRotation(Step):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
-    def __init__(self, rotavap_name=None):
+    def __init__(self, rotavap_name: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'rotavap_name': rotavap_name,
@@ -441,7 +481,8 @@ class CLiftArmUp(Step):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
-    def __init__(self, rotavap_name=None):
+    def __init__(self, rotavap_name: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'rotavap_name': rotavap_name,
@@ -459,7 +500,8 @@ class CLiftArmDown(Step):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
-    def __init__(self, rotavap_name=None):
+    def __init__(self, rotavap_name: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'rotavap_name': rotavap_name,
@@ -478,7 +520,8 @@ class CResetRotavap(Step):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
-    def __init__(self, rotavap_name=None):
+    def __init__(self, rotavap_name: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'rotavap_name': rotavap_name,
@@ -497,7 +540,8 @@ class CSetBathTemp(Step):
         rotavap_name (str): Name of the node representing the rotary evaporator.
         temp (float): Temperature in °C.
     """
-    def __init__(self, rotavap_name=None, temp=None):
+    def __init__(self, rotavap_name: str, temp: float) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'rotavap_name': rotavap_name,
@@ -517,7 +561,8 @@ class CSetRvRotationSpeed(Step):
         rotavap_name (str): Name of the node representing the rotary evaporator.
         rotation_speed (str): Rotation speed setpoint in RPM.
     """
-    def __init__(self, rotavap_name=None, rotation_speed=None):
+    def __init__(self, rotavap_name: str, rotation_speed: float) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'rotavap_name': rotavap_name,
@@ -537,7 +582,8 @@ class CRvWaitForTemp(Step):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
-    def __init__(self, rotavap_name=None):
+    def __init__(self, rotavap_name: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'rotavap_name': rotavap_name,
@@ -557,7 +603,8 @@ class CSetInterval(Step):
         rotavap_name (str): Name of the node representing the rotary evaporator.
         interval (int): Interval time in seconds.
     """
-    def __init__(self, rotavap_name=None, interval=None):
+    def __init__(self, rotavap_name: str, interval: int) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'rotavap_name': rotavap_name,
@@ -576,7 +623,8 @@ class CInitVacPump(Step):
     Args:
         vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
     """
-    def __init__(self, vacuum_pump_name=None):
+    def __init__(self, vacuum_pump_name: str) -> None:
+        super().__init__(locals())
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
         }
@@ -593,7 +641,8 @@ class CGetVacSp(Step):
     Args:
         vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
     """
-    def __init__(self, vacuum_pump_name=None):
+    def __init__(self, vacuum_pump_name: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
@@ -612,7 +661,8 @@ class CSetVacSp(Step):
         vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
         vacuum_pressure (float): Vacuum pressure setpoint in mbar.
     """
-    def __init__(self, vacuum_pump_name=None, vacuum_pressure=None):
+    def __init__(self, vacuum_pump_name: str, vacuum_pressure: float) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
@@ -631,7 +681,8 @@ class CStartVac(Step):
     Args:
         vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
     """
-    def __init__(self, vacuum_pump_name=None):
+    def __init__(self, vacuum_pump_name: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
@@ -649,7 +700,8 @@ class CStopVac(Step):
     Args:
         vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
     """
-    def __init__(self, vacuum_pump_name=None):
+    def __init__(self, vacuum_pump_name: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
@@ -667,7 +719,8 @@ class CVentVac(Step):
     Args:
         vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
     """
-    def __init__(self, vacuum_pump_name=None):
+    def __init__(self, vacuum_pump_name: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
@@ -686,7 +739,8 @@ class CSetSpeedSp(Step):
         vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
         vacuum_pump_speed (float): Vacuum pump speed in percent.
     """
-    def __init__(self, vacuum_pump_name=None, vacuum_pump_speed=None):
+    def __init__(self, vacuum_pump_name: str, vacuum_pump_speed: float) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vacuum_pump_name': vacuum_pump_name,
@@ -705,7 +759,8 @@ class CStartChiller(Step):
     Args:
         vessel (str): Vessel to chill. Name of the node the chiller is attached to.
     """
-    def __init__(self, vessel=None):
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -723,7 +778,8 @@ class CStopChiller(Step):
     Args:
         vessel (str): Vessel to stop chilling. Name of the node the chiller is attached to.
     """
-    def __init__(self, vessel=None):
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -743,7 +799,8 @@ class CSetChiller(Step):
         vessel (str): Vessel to set chiller temperature. Name of the node the chiller is attached to.
         temp (float): Temperature in °C.
     """
-    def __init__(self, vessel=None, temp=None):
+    def __init__(self, vessel: str, temp: float) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -763,7 +820,8 @@ class CChillerWaitForTemp(Step):
     Args:
         vessel (str): Vessel to wait for temperature. Name of the node the chiller is attached to.
     """
-    def __init__(self, vessel=None):
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -784,7 +842,13 @@ class CRampChiller(Step):
         ramp_duration (int): Desired duration of the ramp in seconds.
         end_temperature (float): Final temperature of the ramp in °C.
     """
-    def __init__(self, vessel=None, ramp_duration=None, end_temperature=None):
+    def __init__(
+        self,
+        vessel: str,
+        ramp_duration: int,
+        end_temperature: float
+    ) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -805,7 +869,8 @@ class CSwitchChiller(Step):
         solenoid_valve_name: (str) Name of the node the solenoid valve is attached to.
         state (str): Is either "on" or "off"
     """
-    def __init__(self, solenoid_valve_name=None, state=None):
+    def __init__(self, solenoid_valve_name: str, state: str) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'solenoid_valve_name': solenoid_valve_name,
@@ -825,7 +890,8 @@ class CSetCoolingPower(Step):
         vessel (str): Vessel to set cooling power of chiller. Name of the node the chiller is attached to.
         cooling_power (float): Desired cooling power in percent.
     """
-    def __init__(self, vessel=None, cooling_power=None):
+    def __init__(self, vessel: str, cooling_power: float) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'vessel': vessel,
@@ -844,7 +910,8 @@ class CSetRecordingSpeed(Step):
     Args:
         recording_speed (float): Factor by which the recording should be sped up, i.e. 2 would mean twice the normal speed. 1 means normal speed.
     """
-    def __init__(self, recording_speed=None):
+    def __init__(self, recording_speed: float) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'recording_speed': recording_speed,
@@ -864,7 +931,8 @@ class CWait(Step):
     Args:
         time (int): Time to wait in seconds.
     """
-    def __init__(self, time=None):
+    def __init__(self, time: float) -> None:
+        super().__init__(locals())
 
         self.properties = {
             'time': time,
@@ -880,7 +948,8 @@ class CBreakpoint(Step):
     """Introduces a breakpoint in the script. The execution is halted until the operator
     resumes it.
     """
-    def __init__(self):
+    def __init__(self) -> None:
+        super().__init__(locals())
 
         self.properties = {
         }
@@ -890,49 +959,3 @@ class CBreakpoint(Step):
     def execute(self, chempiler, logger=None, level=0):
         chempiler.breakpoint()
         return True
-
-# class StartRecordingVideo(Step):
-
-#     def __init__(self):
-
-#         self.properties = {
-#         }
-
-#         self.literal_code = f'# spawn queues message_queue = multiprocessing.Queue() recording_speed_queue = multiprocessing.Queue()'
-
-#     def execute(self, chempiler, logger=None, level=0):
-#         # spawn queues
-#         message_queue = multiprocessing.Queue()
-#         recording_speed_queue = multiprocessing.Queue()
-
-#         # create logging message handlers
-#         video_handler = VlogHandler(message_queue)
-#         recording_speed_handler = VlogHandler(recording_speed_queue)
-
-#         # set logging levels
-#         video_handler.setLevel(logging.INFO)
-#         recording_speed_handler.setLevel(5)  # set a logging level below DEBUG
-
-#         # only allow dedicated messages for the recording speed handler
-#         speed_filter = RecordingSpeedFilter()
-#         recording_speed_handler.addFilter(speed_filter)
-
-#         # attach the handlers
-#         logger.addHandler(video_handler)
-#         logger.addHandler(recording_speed_handler)
-
-#         # work out video name and path
-#         i = 0
-#         video_path = os.path.join(HERE, "log_videos", "{0}_{1}.avi".format(EXPERIMENT_CODE, i))
-
-#         while True:
-#             # keep incrementing the file counter until you hit one that doesn't yet exist
-#             if os.path.isfile(video_path):
-#                 i += 1
-#                 video_path = os.path.join(HERE, "log_videos", "{0}_{1}.avi".format(EXPERIMENT_CODE, i))
-#             else:
-#                 break
-#         # launch recording process
-#         recording_process = multiprocessing.Process(target=recording_worker, args=(message_queue, recording_speed_queue, video_path))
-#         recording_process.start()
-#         time.sleep(5)  # wait for the video feed to stabilise

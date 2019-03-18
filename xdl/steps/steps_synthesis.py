@@ -493,7 +493,7 @@ class Heat(Step):
         super().__init__(locals())
 
         self.steps = [
-            StartHeat(vessel=self.vessel, temp=self.temp),
+            StartHeat(vessel=self.vessel, temp=self.temp, stir=False),
             Wait(time=self.time),
             StopHeat(vessel=self.vessel),
         ]
@@ -539,7 +539,7 @@ class Chill(Step):
         super().__init__(locals())
 
         self.steps = [
-            StartChiller(vessel=self.vessel, temp=self.temp),
+            StartChiller(vessel=self.vessel, temp=self.temp, stir=False),
             Wait(time=self.time),
             StopChiller(vessel=self.vessel)
         ]
