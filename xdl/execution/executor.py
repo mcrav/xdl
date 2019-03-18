@@ -336,15 +336,35 @@ class XDLExecutor(object):
 
     def _tidy_up_procedure(self) -> None:
         """Remove steps that are pointless."""
+        self._set_all_stir_rpms()
         self._remove_pointless_backbone_cleaning()
         self._no_waiting_if_dry_run()
 
+    def _set_all_stir_rpms(self) -> None:
+        """Set stir RPM to default at start of procedure for all stirrers
+        used in procedure.
+        """
+        stir_vessels = []
+        for step in self._xdl.base_steps:
+            if type(step) == CStartStir:
+                if not step.vessel in stir_vessels:
+                    stir_vessels.append(step.vessel)
+        for vessel in stir_vessels:
+            self._xdl.steps.insert(
+                0, CSetStirRpm(vessel=vessel, stir_rpm=DEFAULT_STIR_RPM))
+
     def _no_waiting_if_dry_run(self) -> None:
+        """Set all Wait step times to 1 second if the dry run flag is True."""
         if self._xdl.dry_run:
             for step in self._xdl.steps:
                 self._set_all_waits_to_one(step)
 
     def _set_all_waits_to_one(self, step: Step) -> None:
+        """Recursive function setting all nested Wait step times to 1 second.
+        
+        Args:
+            step (Step): step to set all nested Wait step times to 1 second.
+        """
         for step in step.steps:
             if type(step) == Wait:
                 step.time = 1
