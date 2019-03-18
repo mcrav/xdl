@@ -485,15 +485,21 @@ class Transfer(Step):
         from_port: Optional[str] = None, 
         to_port: Optional[str] = None, 
         through: Optional[str] = None,
+        aspiration_speed: Optional[float] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
 
         self.steps = []
         self.steps.append(
-            CMove(from_vessel=self.from_vessel, from_port=self.from_port,
-                  to_vessel=self.to_vessel, to_port=self.to_port, 
-                  volume=self.volume, through=self.through))
+            CMove(
+                from_vessel=self.from_vessel,
+                from_port=self.from_port,
+                to_vessel=self.to_vessel,
+                to_port=self.to_port, 
+                volume=self.volume,
+                through=self.through,
+                aspiration_speed=self.aspiration_speed))
                   
         self.vessel_chain = ['from_vessel', 'to_vessel']
 

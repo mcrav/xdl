@@ -35,6 +35,7 @@ class Add(Step):
         waste_vessel: Optional[str] = None,
         stir: Optional[bool] = False,
         stir_rpm: Optional[float] = None,
+        aspiration_speed: Optional[float] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -49,7 +50,8 @@ class Add(Step):
                 to_vessel=self.vessel, 
                 to_port=self.port,
                 volume=self.volume,
-                move_speed=self.move_speed),
+                move_speed=self.move_speed,
+                aspiration_speed=self.aspiration_speed),
             Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME)
         ]
         if self.stir:
@@ -61,7 +63,7 @@ class Add(Step):
                 0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
             self.steps.append(
                 CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
-                
+
         self.vessel_chain = ['vessel']
 
         self.human_readable = 'Add {0} ({1} mL) to {2} {3}'.format(
@@ -172,6 +174,7 @@ class Filter(Step):
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
         wait_time: Optional[float] = 'default',
+        aspiration_speed: Optional[float] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -182,7 +185,8 @@ class Filter(Step):
                 from_vessel=self.filter_vessel,
                 to_vessel=self.waste_vessel,
                 from_port=BOTTOM_PORT,
-                volume=self.filter_top_volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR),
+                volume=self.filter_top_volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
+                aspiration_speed=self.aspiration_speed),
             # Connect the vacuum.
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
@@ -223,6 +227,7 @@ class WashFilterCake(Step):
         wait_time: Optional[float] = 'default',
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
+        aspiration_speed: Optional[float] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -238,8 +243,8 @@ class WashFilterCake(Step):
                 from_vessel=self.filter_vessel,
                 from_port=BOTTOM_PORT,
                 to_vessel=self.waste_vessel,
-                volume=self.volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR
-            ),
+                volume=self.volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
+                aspiration_speed=self.aspiration_speed),
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
             Wait(self.wait_time),
@@ -271,14 +276,19 @@ class Dry(Step):
         time: Optional[float] = 'default',
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
+        aspiration_speed: Optional[float] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
 
         self.steps = [
             # Move bulk of liquid to waste.
-            CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT,
-                  to_vessel=self.waste_vessel, volume=DEFAULT_DRY_WASTE_VOLUME),
+            CMove(
+                from_vessel=self.filter_vessel,
+                from_port=BOTTOM_PORT,
+                to_vessel=self.waste_vessel,
+                volume=DEFAULT_DRY_WASTE_VOLUME,
+                aspiration_speed=self.aspiration_speed),
             # Connect the vacuum.
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
