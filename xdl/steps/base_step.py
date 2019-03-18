@@ -27,7 +27,7 @@ class Step(XDLBase):
                 if kwarg in param_dict['kwargs']:
                     self.properties[kwarg] = param_dict['kwargs'][kwarg]
         self.steps = []
-        self.human_readable = ''
+        self.human_readable = self.__class__.__name__
         self.requirements = {}
         self.vessel_chain = []
 
