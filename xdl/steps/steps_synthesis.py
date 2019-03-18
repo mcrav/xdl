@@ -33,7 +33,8 @@ class Add(Step):
         move_speed: Optional[float] = 'default',
         reagent_vessel: Optional[str] = None, 
         waste_vessel: Optional[str] = None,
-        stir: Optional[bool] = True,
+        stir: Optional[bool] = False,
+        stir_rpm: Optional[float] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -55,6 +56,12 @@ class Add(Step):
             self.steps.insert(0, CStartStir(vessel=self.vessel))
             self.steps.append(CStopStir(vessel=self.vessel))
 
+        if self.stir_rpm:
+            self.steps.insert(
+                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            self.steps.append(
+                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
+                
         self.vessel_chain = ['vessel']
 
         self.human_readable = 'Add {0} ({1} mL) to {2} {3}'.format(
