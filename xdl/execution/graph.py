@@ -2,7 +2,7 @@ from typing import Union, Dict
 import json
 
 from networkx.readwrite import json_graph
-from networkx import MultiDiGraph, read_graphml, NetworkXNoPath
+from networkx import MultiDiGraph, read_graphml, NetworkXNoPath, relabel_nodes
 from networkx.algorithms.shortest_paths.generic import shortest_path_length
 
 from ..hardware.components import Component, Hardware
@@ -23,6 +23,10 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
     if type(graph_file) == str:
         if graph_file.lower().endswith('.graphml'):
             graph = MultiDiGraph(read_graphml(graph_file))
+            name_mapping = {}
+            for node in graph.nodes():
+                name_mapping[node] = graph.node[node]['label']
+            graph = relabel_nodes(graph, name_mapping)
 
         elif graph_file.lower().endswith('.json'):
             with open(graph_file) as fileobj:
