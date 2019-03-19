@@ -119,6 +119,10 @@ class XDLExecutor(object):
             if 'reagent_vessel' in step.properties and not step.reagent_vessel:
                 step.reagent_vessel = self._get_reagent_vessel(step.reagent)
 
+            if ('flush_tube_vessel' in step.properties
+                and not step.flush_tube_vessel):
+                step.flush_tube_vessel = self._get_flush_tube_vessel()
+
             if 'vacuum' in step.properties and not step.vacuum:
                 step.vacuum = self._get_vacuum(step.filter_vessel)
 
@@ -139,6 +143,26 @@ class XDLExecutor(object):
 
     def _get_vacuum(self, filter_vessel: str) -> str:
         return self._vacuum_map[filter_vessel]
+
+    def _get_flush_tube_vessel(self) -> Optional[str]:
+        """Look for gas vessel to flush tube with after Add steps.
+
+        Returns:
+            str: Flask to use for flushing tube.
+                Preference is nitrogen > air > None.
+        """
+        nitrogen_flask = None
+        air_flask = None
+        for flask in self._graph_hardware.flasks:
+            if flask.chemical.lower() == 'nitrogen':
+                nitrogen_flask = flask.id
+            elif flask.chemical.lower() == 'air':
+                air_flask = flask.id
+        if nitrogen_flask:
+            return nitrogen_flask
+        elif air_flask:
+            return air_flask
+        return None
 
     def _get_reagent_vessel(self, reagent: str) -> Union[str, None]:
         """Get vessel containing given reagent.

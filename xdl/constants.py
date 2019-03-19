@@ -20,6 +20,8 @@ DEFAULT_DISPENSE_SPEED: int = DEFAULT_MOVE_SPEED
 #: Default volume of reagent to move to waste to prime the tubes before Add step.
 DEFAULT_PUMP_PRIME_VOLUME: int = 3 # mL
 
+DEFAULT_AIR_FLUSH_TUBE_VOLUME = 5 # mL
+
 ################
 ## Separation ##
 ################
@@ -102,7 +104,7 @@ DEFAULT_WASHFILTERCAKE_WAIT_TIME: int = 10
 DEFAULT_FILTER_EXCESS_REMOVE_FACTOR: float = 1.5
 
 #: Default time in seconds to wait for with vacuum on when drying a filter cake.
-DEFAULT_DRY_TIME: int = 60*5
+DEFAULT_DRY_TIME: int = 60*60
 
 #: Default volume in mL to transfer from bottom of filter flask to waste after
 #: drying filter cake.
@@ -167,9 +169,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'Add': {
         'move_speed': DEFAULT_MOVE_SPEED,
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
-        'clean_tubing': True,
-        'start_stir': True,
-        'stop_stir': True,
+        'stir_rpm': DEFAULT_STIR_RPM,
     },
     'CleanVessel': {
         'volume': DEFAULT_CLEAN_VESSEL_VOLUME,
@@ -193,6 +193,9 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'stir_rpm': DEFAULT_STIR_RPM,
     },
     'StartStir': {
+        'stir_rpm': DEFAULT_STIR_RPM,
+    },
+    'Stir': {
         'stir_rpm': DEFAULT_STIR_RPM,
     }
 }

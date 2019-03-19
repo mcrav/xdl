@@ -22,6 +22,8 @@ class Add(Step):
         move_speed (float): Speed in mL / min to move liquid at. (optional)
         reagent_vessel (str): Given internally. Vessel containing reagent.
         waste_vessel (str): Given internally. Vessel to send waste to.
+        flush_tube_vessel (str): Given internally. Air/nitrogen vessel to use to 
+            flush liquid out of the valve -> vessel tube.
     """
     def __init__(
         self,
@@ -31,11 +33,12 @@ class Add(Step):
         port: Optional[str] = None,
         time: Optional[float] = None,
         move_speed: Optional[float] = 'default',
-        reagent_vessel: Optional[str] = None, 
-        waste_vessel: Optional[str] = None,
         stir: Optional[bool] = False,
         stir_rpm: Optional[float] = None,
         aspiration_speed: Optional[float] = 'default',
+        reagent_vessel: Optional[str] = None, 
+        waste_vessel: Optional[str] = None,
+        flush_tube_vessel: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -63,6 +66,13 @@ class Add(Step):
                 0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
             self.steps.append(
                 CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
+
+        if self.flush_tube_vessel:
+            self.steps.append(CMove(
+                from_vessel=self.flush_tube_vessel,
+                to_vessel=self.vessel,
+                to_port=self.port,
+                volume=DEFAULT_AIR_FLUSH_TUBE_VOLUME,))
 
         self.vessel_chain = ['vessel']
 

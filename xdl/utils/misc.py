@@ -52,6 +52,7 @@ UNIT_CONVERTERS = {
     'h': hours_to_seconds,
     'hour': hours_to_seconds,
     'hours': hours_to_seconds,
+    'hr': hours_to_seconds,
     'hrs': hours_to_seconds,
     'm': minutes_to_seconds,
     'min': minutes_to_seconds,
