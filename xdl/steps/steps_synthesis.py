@@ -57,6 +57,14 @@ class Add(Step):
                 aspiration_speed=self.aspiration_speed),
             Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME)
         ]
+
+        if self.flush_tube_vessel:
+            self.steps.append(CMove(
+                from_vessel=self.flush_tube_vessel,
+                to_vessel=self.vessel,
+                to_port=self.port,
+                volume=DEFAULT_AIR_FLUSH_TUBE_VOLUME,))
+
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
             self.steps.append(CStopStir(vessel=self.vessel))
@@ -66,13 +74,6 @@ class Add(Step):
                 0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
             self.steps.append(
                 CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
-
-        if self.flush_tube_vessel:
-            self.steps.append(CMove(
-                from_vessel=self.flush_tube_vessel,
-                to_vessel=self.vessel,
-                to_port=self.port,
-                volume=DEFAULT_AIR_FLUSH_TUBE_VOLUME,))
 
         self.vessel_chain = ['vessel']
 
@@ -520,7 +521,7 @@ class Heat(Step):
         super().__init__(locals())
 
         self.steps = [
-            StartHeat(vessel=self.vessel, temp=self.temp, stir=False),
+            HeatToTemp(vessel=self.vessel, temp=self.temp, stir=False),
             Wait(time=self.time),
             StopHeat(vessel=self.vessel),
         ]
@@ -566,7 +567,7 @@ class Chill(Step):
         super().__init__(locals())
 
         self.steps = [
-            StartChiller(vessel=self.vessel, temp=self.temp, stir=False),
+            ChillToTemp(vessel=self.vessel, temp=self.temp, stir=False),
             Wait(time=self.time),
             StopChiller(vessel=self.vessel)
         ]

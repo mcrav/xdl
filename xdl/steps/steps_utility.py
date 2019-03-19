@@ -149,7 +149,7 @@ class Stir(Step):
 ### HEATING ###
 ###############
 
-class StartHeat(Step):
+class HeatToTemp(Step):
     """Start heating given vessel at given temperature.
 
     Args:
@@ -297,7 +297,7 @@ class StopVacuum(Step):
 ### CHILLING ###
 ################
 
-class StartChiller(Step):
+class ChillToTemp(Step):
 
     def __init__(
         self,
@@ -431,7 +431,7 @@ class CleanVessel(Step):
                 volume=self.volume
             ),
             StartStir(vessel=self.vessel, stir_rpm=1000),
-            StartChiller(vessel=self.vessel, temp=60), # SPECIFIC TO FILTER IN CHILLER
+            ChillToTemp(vessel=self.vessel, temp=60), # SPECIFIC TO FILTER IN CHILLER
             CMove(
                 from_vessel=self.vessel, to_vessel=self.waste_vessel, volume=400,
             ),
