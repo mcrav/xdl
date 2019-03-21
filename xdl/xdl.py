@@ -64,7 +64,8 @@ class XDL(object):
             if os.path.exists(xdl):
                 self._xdl_file = xdl
                 parsed_xdl = xdl_file_to_objs(xdl, self.logger)
-            else:
+            # Check XDL is XDL str and not just mistyped XDL file path.
+            elif '<Synthesis>' in xdl and '<Procedure>' in xdl:
                 parsed_xdl = xdl_str_to_objs(xdl, self.logger)
             if parsed_xdl:
                 self.steps = parsed_xdl['steps']
