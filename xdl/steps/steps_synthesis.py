@@ -67,7 +67,6 @@ class Add(Step):
 
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
-            self.steps.append(CStopStir(vessel=self.vessel))
 
         if self.stir_rpm:
             self.steps.insert(
@@ -115,7 +114,6 @@ class AddCorrosive(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
-            self.steps.append(CStopStir(vessel=self.vessel))
 
         self.vessel_chain = ['vessel']
 
@@ -191,6 +189,7 @@ class Filter(Step):
         super().__init__(locals())
 
         self.steps = [
+            StopStir(vessel=self.filter_vessel),
             # Move the filter top volume from the bottom to the waste.
             CMove(
                 from_vessel=self.filter_vessel,
@@ -292,7 +291,9 @@ class Dry(Step):
     ) -> None:
         super().__init__(locals())
 
+        # Super Titties
         self.steps = [
+            StopStir(vessel=self.filter_vessel),
             # Move bulk of liquid to waste.
             CMove(
                 from_vessel=self.filter_vessel,
@@ -381,11 +382,11 @@ class Separate(Step):
                 waste_vessel=self.waste_vessel),
             # Stir separation_vessel
             Stir(vessel=self.separation_vessel, 
-                     time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
-                     stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+                 time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
+                 stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
             Stir(vessel=self.separation_vessel, 
-                     time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
-                     stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
+                 time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
+                 stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
             # Wait for phases to separate
             Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
         ])
@@ -421,11 +422,11 @@ class Separate(Step):
                             waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
                         Stir(vessel=self.separation_vessel, 
-                                 time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
-                                 stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+                             time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
+                             stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
                         Stir(vessel=self.separation_vessel, 
-                                 time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
-                                 stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
+                             time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
+                             stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME)
                     ])
@@ -527,7 +528,6 @@ class Heat(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
-            self.steps.append(CStopStir(vessel=self.vessel))
             
         if self.stir_rpm:
             self.steps.insert(
@@ -573,7 +573,6 @@ class Chill(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
-            self.steps.append(CStopStir(vessel=self.vessel))
 
         if self.stir_rpm:
             self.steps.insert(

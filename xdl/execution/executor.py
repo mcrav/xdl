@@ -361,8 +361,54 @@ class XDLExecutor(object):
     def _tidy_up_procedure(self) -> None:
         """Remove steps that are pointless."""
         self._set_all_stir_rpms()
+        self._stop_stirring_when_vessels_lose_scope()
         self._remove_pointless_backbone_cleaning()
         self._no_waiting_if_dry_run()
+
+    def find_stirring_schedule(
+        self, step: Step, stirring: List[str]) -> List[str]:
+        """Find vessels being stirred after given step.
+
+        Args:
+            step (Step): step to find stirring changes in.
+            stirring (List[str]): List of vessels being stirred before step.
+
+        Returns:
+            List[str]: List of vessels being stirred after step.
+        """            
+        for sub_step in step.steps:
+            if not hasattr(sub_step, 'execute'):
+                self.find_stirring_schedule(sub_step, stirring)
+            else:
+                if type(sub_step) == CStartStir:
+                    stirring.append(sub_step.vessel)
+                elif type(sub_step) == CStopStir:
+                    if sub_step.vessel in stirring:
+                        stirring.remove(sub_step.vessel)
+        return stirring
+
+    def _stop_stirring_when_vessels_lose_scope(self) -> None:
+        """Add in CStopStir steps whenever a vessel that is stirring becomes
+        empty.
+        """
+        stirring_schedule = []
+        stirred_vessels = []
+        insertions = []
+        
+        # Find stirring state after every step.
+        for i, step in enumerate(self._xdl.steps):
+            stirred_vessels = self.find_stirring_schedule(step, stirred_vessels)
+            stirring_schedule.append(stirred_vessels)
+            
+        # Look for vessels out of scope that need stirring stopped
+        for i, step, vessel_contents in iter_vessel_contents(
+            self._xdl.steps, self._graph_hardware):
+            for prop, val in step.properties.items():
+                if 'vessel' in prop and val in stirring_schedule[i]:
+                    if (val in vessel_contents
+                        and not vessel_contents[val]['content']):
+
+                        insertions.append(i + 1, StopStir(vessel=val))
 
     def _set_all_stir_rpms(self) -> None:
         """Set stir RPM to default at start of procedure for all stirrers

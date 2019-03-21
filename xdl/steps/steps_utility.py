@@ -173,7 +173,6 @@ class HeatToTemp(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
-            self.steps.append(CStopStir(vessel=self.vessel))
             
         if self.stir_rpm:
             self.steps.insert(
@@ -236,7 +235,6 @@ class HeaterReturnToRT(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
-            self.steps.append(CStopStir(vessel=self.vessel))
             
         if self.stir_rpm:
             self.steps.insert(
@@ -315,7 +313,6 @@ class ChillToTemp(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
-            self.steps.append(CStopStir(vessel=self.vessel))
             
         if self.stir_rpm:
             self.steps.insert(
@@ -375,7 +372,6 @@ class ChillerReturnToRT(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
-            self.steps.append(CStopStir(vessel=self.vessel))
             
         if self.stir_rpm:
             self.steps.insert(
