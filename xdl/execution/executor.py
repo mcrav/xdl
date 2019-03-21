@@ -406,9 +406,9 @@ class XDLExecutor(object):
             for prop, val in step.properties.items():
                 if 'vessel' in prop and val in stirring_schedule[i]:
                     if (val in vessel_contents
-                        and not vessel_contents[val]['content']):
+                        and not vessel_contents[val]['reagents']):
 
-                        insertions.append(i + 1, StopStir(vessel=val))
+                        insertions.append((i + 1, StopStir(vessel=val)))
 
     def _set_all_stir_rpms(self) -> None:
         """Set stir RPM to default at start of procedure for all stirrers
