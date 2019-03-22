@@ -74,6 +74,9 @@ class XDL(object):
                 # Get attrs from <Synthesis> tag.
                 for k, v in parsed_xdl['procedure_attrs'].items():
                     setattr(self, k, v)
+            
+            else:
+                print('Invalid XDL given.')
                 
         elif (steps is not None
               and reagents is not None
