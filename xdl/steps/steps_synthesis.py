@@ -35,9 +35,10 @@ class Add(Step):
         vessel: str,
         port: Optional[str] = None,
         move_speed: Optional[float] = 'default',
+        aspiration_speed: Optional[float] = 'default',
+        dispense_speed: Optional[float] = 'default',
         stir: Optional[bool] = False,
         stir_rpm: Optional[float] = None,
-        aspiration_speed: Optional[float] = 'default',
         reagent_vessel: Optional[str] = None, 
         waste_vessel: Optional[str] = None,
         flush_tube_vessel: Optional[str] = None,
@@ -56,7 +57,8 @@ class Add(Step):
                 to_port=self.port,
                 volume=self.volume,
                 move_speed=self.move_speed,
-                aspiration_speed=self.aspiration_speed),
+                aspiration_speed=self.aspiration_speed,
+                dispense_speed=self.dispense_speed),
             Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME)
         ]
 
