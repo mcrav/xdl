@@ -70,14 +70,18 @@ def make_vessel_map(
         Dict[str, str]: dict with nodes as keys and nearest waste vessels as
                         values.
     """
+    # Make graph undirected so actual closest waste vessels are found, not
+    # closest in liquid flow path. As long as vessels are all attached to a
+    # valve which is attached to a waste vessel this should be fine.
+    undirected_graph = graph.to_undirected()
     vessel_map = {}
     target_vessels = [
-        node for node in graph.nodes() 
-        if (graph.node[node]['type'] 
+        node for node in undirected_graph.nodes() 
+        if (undirected_graph.node[node]['type'] 
             == target_vessel_class)
     ]
-    for node in graph.nodes():
-        node_info = graph.node[node]
+    for node in undirected_graph.nodes():
+        node_info = undirected_graph.node[node]
         if node_info['type'] != target_vessel_class:
 
             shortest_path_found = 100000
@@ -85,7 +89,7 @@ def make_vessel_map(
             for target_vessel in target_vessels:
                 try:
                     shortest_path_to_target_vessel = shortest_path_length(
-                        graph, source=node, target=target_vessel)
+                        undirected_graph, source=node, target=target_vessel)
                     if shortest_path_to_target_vessel < shortest_path_found:
                         shortest_path_found = shortest_path_to_target_vessel
                         closest_target_vessel = target_vessel
