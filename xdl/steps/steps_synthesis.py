@@ -18,8 +18,11 @@ class Add(Step):
         volume (float): Volume of reagent to add.
         vessel (str): Vessel name to add reagent to.
         port (str): vessel port to use.
-        time (float): Time to spend doing addition in seconds. (optional)
         move_speed (float): Speed in mL / min to move liquid at. (optional)
+        stir (bool): If True, stirring will be started before addition.
+        stir_rpm (float): RPM to stir at, only relevant if stir = True.
+        aspiration_speed (float): Aspiration speed (speed at which liquid is
+            pulled out of reagent_vessel).
         reagent_vessel (str): Given internally. Vessel containing reagent.
         waste_vessel (str): Given internally. Vessel to send waste to.
         flush_tube_vessel (str): Given internally. Air/nitrogen vessel to use to 
@@ -31,7 +34,6 @@ class Add(Step):
         volume: float,
         vessel: str,
         port: Optional[str] = None,
-        time: Optional[float] = None,
         move_speed: Optional[float] = 'default',
         stir: Optional[bool] = False,
         stir_rpm: Optional[float] = None,
