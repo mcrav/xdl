@@ -179,6 +179,9 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'CStartStir': {
         'stir_rpm': DEFAULT_STIR_RPM,
     },
+    'CSetStirRpm': {
+        'stir_rpm': DEFAULT_STIR_RPM,
+    },
     'PrimePumpForAdd': {
         'volume': DEFAULT_PUMP_PRIME_VOLUME,
     },

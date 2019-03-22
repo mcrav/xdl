@@ -173,12 +173,12 @@ class HeatToTemp(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
-            
-        if self.stir_rpm:
-            self.steps.insert(
-                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
-            self.steps.append(
-                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
+            if self.stir_rpm:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            else:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm='default'))
 
         self.vessel_chain = ['vessel']
 
@@ -235,12 +235,12 @@ class HeaterReturnToRT(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
-            
-        if self.stir_rpm:
-            self.steps.insert(
-                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
-            self.steps.append(
-                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
+            if self.stir_rpm:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            else:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm='default'))
 
         self.vessel_chain = ['vessel']
 
@@ -313,13 +313,13 @@ class ChillToTemp(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
+            if self.stir_rpm:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            else:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm='default'))
             
-        if self.stir_rpm:
-            self.steps.insert(
-                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
-            self.steps.append(
-                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
-
         self.vessel_chain = ['vessel']
 
         self.human_readable = 'Chill {0} to {1} °C.'.format(
@@ -372,13 +372,13 @@ class ChillerReturnToRT(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
+            if self.stir_rpm:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            else:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm='default'))
             
-        if self.stir_rpm:
-            self.steps.insert(
-                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
-            self.steps.append(
-                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
-
         self.vessel_chain = ['vessel']
 
         self.human_readable = 'Stop chiller for {0}'.format(self.vessel)

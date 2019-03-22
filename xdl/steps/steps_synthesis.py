@@ -69,20 +69,17 @@ class Add(Step):
 
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
-
-        if self.stir_rpm:
-            self.steps.insert(
-                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
-            self.steps.append(
-                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
+            if self.stir_rpm:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            else:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm='default'))
 
         self.vessel_chain = ['vessel']
 
-        self.human_readable = 'Add {0} ({1} mL) to {2} {3}'.format(
+        self.human_readable = 'Add {0} ({1} mL) to {2} {3}.'.format(
             self.reagent, self.volume, self.vessel, get_port_str(self.port))
-        if time:
-            self.human_readable += ' over {0}'.format(self.time)
-        self.human_readable += '.'
 
 class AddCorrosive(Step):
     """Add corrosive reagent that can't come into contact with a valve.
@@ -530,12 +527,12 @@ class Heat(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
-            
-        if self.stir_rpm:
-            self.steps.insert(
-                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
-            self.steps.append(
-                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
+            if self.stir_rpm:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            else:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm='default'))
 
         self.vessel_chain = ['vessel']
 
@@ -575,12 +572,12 @@ class Chill(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStartStir(vessel=self.vessel))
-
-        if self.stir_rpm:
-            self.steps.insert(
-                0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
-            self.steps.append(
-                CSetStirRpm(vessel=self.vessel, stir_rpm=DEFAULT_STIR_RPM))
+            if self.stir_rpm:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            else:
+                self.steps.insert(
+                    0, CSetStirRpm(vessel=self.vessel, stir_rpm='default'))
 
         self.vessel_chain = ['vessel']
 
