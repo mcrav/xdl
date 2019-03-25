@@ -96,6 +96,9 @@ DEFAULT_WASHFILTERCAKE_VOLUME: int = 20
 #: Default time to stir mixture for after adding solvent but before filtering.
 DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME: int = 30
 
+#: Default speed in RPM to stir mixture after adding solvent but before filtering.
+DEFAULT_WASHFILTERCAKE_STIR_RPM: int = 50
+
 #: Default time in seconds to wait for with vacuum on when washing a filter cake.
 DEFAULT_WASHFILTERCAKE_VACUUM_TIME: int = 10 
 
@@ -161,6 +164,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'move_speed': DEFAULT_MOVE_SPEED,
         'vacuum_time': DEFAULT_WASHFILTERCAKE_VACUUM_TIME,
         'stir_time': DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME,
+        'stir_rpm': DEFAULT_WASHFILTERCAKE_STIR_RPM,
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
     },
     'Transfer': {

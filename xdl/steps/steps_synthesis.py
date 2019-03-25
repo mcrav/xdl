@@ -239,6 +239,7 @@ class WashFilterCake(Step):
         volume: Optional[float] = 'default',
         vacuum_time: Optional[float] = 'default',
         stir_time: Optional[float] = 'default',
+        stir_rpm: Optional[float] =  'default',
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
@@ -250,7 +251,7 @@ class WashFilterCake(Step):
             Add(reagent=self.solvent, volume=self.volume,
                 vessel=self.filter_vessel, port=TOP_PORT, 
                 waste_vessel=self.waste_vessel),
-            StartStir(vessel=self.filter_vessel),
+            StartStir(vessel=self.filter_vessel, stir_rpm=self.stir_rpm),
             Wait(self.stir_time),
             StopStir(vessel=self.filter_vessel),
             CMove(
