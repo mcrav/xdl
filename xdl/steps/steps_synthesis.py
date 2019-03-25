@@ -281,6 +281,7 @@ class Dry(Step):
     Args:
         filter_vessel (str): Vessel name to dry.
         time (float): Time to dry vessel for in seconds. (optional)
+        temp (float): Temperature to dry at.
         waste_vessel (str): Given internally. Vessel to send waste to.
         vacuum (str): Given internally. Vacuum flask.
     """
@@ -288,6 +289,7 @@ class Dry(Step):
         self,
         filter_vessel: str,
         time: Optional[float] = 'default',
+        temp: Optional[float] = None,
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
@@ -295,7 +297,6 @@ class Dry(Step):
     ) -> None:
         super().__init__(locals())
 
-        # Super Titties
         self.steps = [
             StopStir(vessel=self.filter_vessel),
             # Move bulk of liquid to waste.
@@ -310,6 +311,9 @@ class Dry(Step):
                      from_port=BOTTOM_PORT),
             Wait(self.time),
         ]
+        if self.temp != None:
+            self.steps.insert(0, ChillToTemp(
+                vessel=self.filter_vessel, temp=self.temp))
 
         self.vessel_chain = ['filter_vessel']
 
