@@ -53,26 +53,8 @@ class CMove(Step):
         unique: Optional[bool] = False,
         through: Optional[str] = None
     ) -> None:
+        super().__init__(locals())
 
-        self.properties = {
-            'from_vessel': from_vessel,
-            'to_vessel': to_vessel,
-            'volume': volume,
-            'move_speed': move_speed,
-            'aspiration_speed': aspiration_speed,
-            'dispense_speed': dispense_speed,
-            'from_port': from_port,
-            'to_port': to_port,
-            'unique': unique,
-            'through': through,
-        }
-        self.get_defaults()
-
-        self.human_readable = 'Move {0} mL from {1} {2} to {3} {4}.'.format(
-            self.volume, self.from_vessel, get_port_str(self.from_port),
-            self.to_vessel, get_port_str(self.to_port))
-
-        self.literal_code = f'chempiler.move( src_node={self.from_vessel}, dst_node={self.to_vessel}, volume={self.volume}, speed=({self.aspiration_speed}, {self.move_speed}, {self.dispense_speed}), src_port={self.from_port}, dst_port={self.to_port}, unique={self.unique}, )'
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.move(
@@ -107,22 +89,6 @@ class CConnect(Step):
     ) -> None:
         super().__init__(locals())
         
-        self.properties = {
-            'from_vessel': from_vessel,
-            'to_vessel': to_vessel,
-            'from_port': from_port,
-            'to_port': to_port,
-            'unique': unique,
-        }
-
-        self.human_readable = 'Connect {0} {1} to {2} {3}.'.format(
-            self.from_vessel, get_port_str(self.from_port), self.to_vessel, 
-            get_port_str(self.to_port))
-
-        self.literal_code = 'chempiler.connect( src_node={0}, dst_node={1}, src_port={2}, dst_port={3}, unique={4}'.format(
-            self.from_vessel, self.to_vessel, self.from_port, self.to_port,
-            self.unique)
-
     def execute(self, chempiler, logger=None, level=0):
         chempiler.connect(
             src_node=self.from_vessel,
@@ -160,17 +126,6 @@ class CSeparatePhases(Step):
     ) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'lower_phase_vessel': lower_phase_vessel,
-            'lower_phase_port': lower_phase_port,
-            'upper_phase_vessel': upper_phase_vessel,
-            'upper_phase_port': upper_phase_port,
-            'separation_vessel': separation_vessel,
-            'dead_volume_target': dead_volume_target,
-        }
-
-        self.literal_code = f'chempiler.pump.separate_phases( lower_phase_target={self.lower_phase_vessel}, lower_phase_port={self.lower_phase_port}, upper_phase_target={self.upper_phase_vessel}, upper_phase_port={self.upper_phase_port}, separation_vessel={self.separation_vessel}, dead_volume_target={self.dead_volume_target}, )'
-
     def execute(self, chempiler, logger=None, level=0):
         chempiler.pump.separate_phases(
             separator_flask=self.separation_vessel,
@@ -195,12 +150,6 @@ class CStir(Step):
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'vessel': vessel,
-        }
-
-        self.literal_code = f'chempiler.stirrer.stir({self.vessel})'
-
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.stir(self.vessel)
         return True
@@ -213,12 +162,6 @@ class CStirrerHeat(Step):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
-
-        self.properties = {
-            'vessel': vessel,
-        }
-
-        self.literal_code = f'chempiler.stirrer.heat({self.vessel})'
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.heat(self.vessel)
@@ -233,14 +176,6 @@ class CStopStir(Step):
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'vessel': vessel,
-        }
-
-        self.human_readable = f'Stop stirring {self.vessel}.'
-
-        self.literal_code = f'chempiler.stirrer.stop_stir({self.vessel})'
-
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.stop_stir(self.vessel)
         return True
@@ -254,12 +189,6 @@ class CStopHeat(Step):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
-
-        self.properties = {
-            'vessel': vessel,
-        }
-
-        self.literal_code = f'chempiler.stirrer.stop_heat({self.vessel})'
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.stop_heat(self.vessel)
@@ -276,13 +205,6 @@ class CStirrerSetTemp(Step):
     def __init__(self, vessel: str, temp: float) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'vessel': vessel,
-            'temp': temp,
-        }
-
-        self.literal_code = f'chempiler.stirrer.set_temp({self.vessel}, {self.temp})'
-
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.set_temp(self.vessel, self.temp)
         return True
@@ -297,13 +219,6 @@ class CSetStirRate(Step):
     def __init__(self, vessel: str, stir_rpm: float) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'vessel': vessel,
-            'stir_rpm': stir_rpm,
-        }
-
-        self.literal_code = f'chempiler.stirrer.set_stir_rate({self.vessel}, {self.stir_rpm})'
-
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.set_stir_rate(self.vessel, self.stir_rpm)
         return True
@@ -317,12 +232,6 @@ class CStirrerWaitForTemp(Step):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
-
-        self.properties = {
-            'vessel': vessel,
-        }
-
-        self.literal_code = f'chempiler.stirrer.wait_for_temp({self.vessel})'
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.wait_for_temp(self.vessel)
@@ -341,12 +250,6 @@ class CStirrerWaitForTemp(Step):
 #     def __init__(self, rotavap_name: str) -> None:
 #         super().__init__(locals())
 
-#         self.properties = {
-#             'rotavap_name': rotavap_name,
-#         }
-
-#         self.literal_code = f'chempiler.rotavap.start_heater({self.rotavap_name})'
-
 #     def execute(self, chempiler, logger=None, level=0):
 #         chempiler.rotavap.start_heater(self.rotavap_name)
 #         return True
@@ -359,12 +262,6 @@ class CStirrerWaitForTemp(Step):
 #     """
 #     def __init__(self, rotavap_name: str) -> None:
 #         super().__init__(locals())
-
-#         self.properties = {
-#             'rotavap_name': rotavap_name,
-#         }
-
-#         self.literal_code = f'chempiler.rotavap.stop_heater({self.rotavap_name})'
 
 #     def execute(self, chempiler, logger=None, level=0):
 #         chempiler.rotavap.stop_heater(self.rotavap_name)
@@ -379,12 +276,6 @@ class CStirrerWaitForTemp(Step):
 #     def __init__(self, rotavap_name: str) -> None:
 #         super().__init__(locals())
 
-#         self.properties = {
-#             'rotavap_name': rotavap_name,
-#         }
-
-#         self.literal_code = f'chempiler.rotavap.start_rotation({self.rotavap_name})'
-
 #     def execute(self, chempiler, logger=None, level=0):
 #         chempiler.rotavap.start_rotation(self.rotavap_name)
 #         return True
@@ -397,12 +288,6 @@ class CStirrerWaitForTemp(Step):
 #     """
 #     def __init__(self, rotavap_name: str) -> None:
 #         super().__init__(locals())
-
-#         self.properties = {
-#             'rotavap_name': rotavap_name,
-#         }
-
-#         self.literal_code = f'chempiler.rotavap.stop_rotation({self.rotavap_name})'
 
 #     def execute(self, chempiler, logger=None, level=0):
 #         chempiler.rotavap.stop_rotation(self.rotavap_name)
@@ -417,12 +302,6 @@ class CStirrerWaitForTemp(Step):
 #     def __init__(self, rotavap_name: str) -> None:
 #         super().__init__(locals())
 
-#         self.properties = {
-#             'rotavap_name': rotavap_name,
-#         }
-
-#         self.literal_code = f'chempiler.rotavap.lift_up({self.rotavap_name})'
-
 #     def execute(self, chempiler, logger=None, level=0):
 #         chempiler.rotavap.lift_up(self.rotavap_name)
 #         return True
@@ -435,12 +314,6 @@ class CStirrerWaitForTemp(Step):
 #     """
 #     def __init__(self, rotavap_name: str) -> None:
 #         super().__init__(locals())
-
-#         self.properties = {
-#             'rotavap_name': rotavap_name,
-#         }
-
-#         self.literal_code = f'chempiler.rotavap.lift_down({self.rotavap_name})'
 
 #     def execute(self, chempiler, logger=None, level=0):
 #         chempiler.rotavap.lift_down(self.rotavap_name)
@@ -456,12 +329,6 @@ class CStirrerWaitForTemp(Step):
 #     def __init__(self, rotavap_name: str) -> None:
 #         super().__init__(locals())
 
-#         self.properties = {
-#             'rotavap_name': rotavap_name,
-#         }
-
-#         self.literal_code = f'chempiler.rotavap.reset({self.rotavap_name})'
-
 #     def execute(self, chempiler, logger=None, level=0):
 #         chempiler.rotavap.reset(self.rotavap_name)
 #         return True
@@ -475,13 +342,6 @@ class CStirrerWaitForTemp(Step):
 #     """
 #     def __init__(self, rotavap_name: str, temp: float) -> None:
 #         super().__init__(locals())
-
-#         self.properties = {
-#             'rotavap_name': rotavap_name,
-#             'temp': temp,
-#         }
-
-#         self.literal_code = f'chempiler.rotavap.set_temp({self.rotavap_name}, {self.temp})'
 
 #     def execute(self, chempiler, logger=None, level=0):
 #         chempiler.rotavap.set_temp(self.rotavap_name, self.temp)
@@ -497,13 +357,6 @@ class CStirrerWaitForTemp(Step):
 #     def __init__(self, rotavap_name: str, rotation_speed: float) -> None:
 #         super().__init__(locals())
 
-#         self.properties = {
-#             'rotavap_name': rotavap_name,
-#             'rotation_speed': rotation_speed,
-#         }
-
-#         self.literal_code = f'chempiler.rotavap.set_rotation({self.rotavap_name}, {self.rotation_speed})'
-
 #     def execute(self, chempiler, logger=None, level=0):
 #         chempiler.rotavap.set_rotation(self.rotavap_name, self.rotation_speed)
 #         return True
@@ -517,12 +370,6 @@ class CStirrerWaitForTemp(Step):
 #     """
 #     def __init__(self, rotavap_name: str) -> None:
 #         super().__init__(locals())
-
-#         self.properties = {
-#             'rotavap_name': rotavap_name,
-#         }
-
-#         self.literal_code = f'chempiler.rotavap.wait_for_temp({self.rotavap_name})'
 
 #     def execute(self, chempiler, logger=None, level=0):
 #         chempiler.rotavap.wait_for_temp(self.rotavap_name)
@@ -539,13 +386,6 @@ class CStirrerWaitForTemp(Step):
 #     def __init__(self, rotavap_name: str, interval: int) -> None:
 #         super().__init__(locals())
 
-#         self.properties = {
-#             'rotavap_name': rotavap_name,
-#             'interval': interval,
-#         }
-
-#         self.literal_code = f'chempiler.rotavap.set_interval({self.rotavap_name}, {self.interval})'
-
 #     def execute(self, chempiler, logger=None, level=0):
 #         chempiler.rotavap.set_interval(self.rotavap_name, self.interval)
 #         return True
@@ -558,119 +398,81 @@ class CGetVacuumSetPoint(Step):
     """Reads the current vacuum setpoint.
 
     Args:
-        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
+        vessel (str): Name of the node the vacuum pump is attached to.
     """
-    def __init__(self, vacuum_pump_name: str) -> None:
+    def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
-        }
-
-        self.literal_code = f'chempiler.vacuum.get_vacuum_set_point({self.vacuum_pump_name})'
-
     def execute(self, chempiler, logger=None, level=0):
-        chempiler.vacuum.get_vacuum_set_point(self.vacuum_pump_name)
+        chempiler.vacuum.get_vacuum_set_point(self.vessel)
         return True
 
 class CSetVacuumSetPoint(Step):
     """Sets a new vacuum setpoint.
 
     Args:
-        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
+        vessel:$ (str): Name of the node the vacuum pump is attached to.
         vacuum_pressure (float): Vacuum pressure setpoint in mbar.
     """
-    def __init__(self, vacuum_pump_name: str, vacuum_pressure: float) -> None:
+    def __init__(self, vessel: str, vacuum_pressure: float) -> None:
         super().__init__(locals())
-
-        self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
-            'vacuum_pressure': vacuum_pressure,
-        }
-
-        self.literal_code = f'chempiler.vacuum.set_vacuum_set_point({self.vacuum_pump_name}, {self.vacuum_pressure})'
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.set_vacuum_set_point(
-            self.vacuum_pump_name, self.vacuum_pressure)
+            self.vessel, self.vacuum_pressure)
         return True
 
 class CStartVacuum(Step):
     """Starts the vacuum pump.
 
     Args:
-        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
+        vessel (str): Name of the node the vacuum pump is attached to.
     """
-    def __init__(self, vacuum_pump_name: str) -> None:
+    def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
-        }
-
-        self.literal_code = f'chempiler.vacuum.start_vacuum({self.vacuum_pump_name})'
-
     def execute(self, chempiler, logger=None, level=0):
-        chempiler.vacuum.start_vacuum(self.vacuum_pump_name)
+        chempiler.vacuum.start_vacuum(self.vessel)
         return True
 
 class CStopVacuum(Step):
     """Stops the vacuum pump.
 
     Args:
-        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
+        vessel (str): Name of the node the vacuum pump is attached to.
     """
-    def __init__(self, vacuum_pump_name: str) -> None:
+    def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
-        }
-
-        self.literal_code = f'chempiler.vacuum.stop_vacuum({self.vacuum_pump_name})'
-
     def execute(self, chempiler, logger=None, level=0):
-        chempiler.vacuum.stop_vacuum(self.vacuum_pump_name)
+        chempiler.vacuum.stop_vacuum(self.vessel)
         return True
 
 class CVentVacuum(Step):
     """Vents the vacuum pump to ambient pressure.
 
     Args:
-        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
+        vessel (str): Name of the node the vacuum pump is attached to.
     """
-    def __init__(self, vacuum_pump_name: str) -> None:
+    def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
-        }
-
-        self.literal_code = f'chempiler.vacuum.vent_vacuum({self.vacuum_pump_name})'
-
     def execute(self, chempiler, logger=None, level=0):
-        chempiler.vacuum.vent_vacuum(self.vacuum_pump_name)
+        chempiler.vacuum.vent_vacuum(self.vessel)
         return True
 
 class CSetSpeedSetPoint(Step):
     """Sets the speed of the vacuum pump (0-100%).
 
     Args:
-        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
+        vessel (str): Name of the node the vacuum pump is attached to.
         vacuum_pump_speed (float): Vacuum pump speed in percent.
     """
-    def __init__(self, vacuum_pump_name: str, vacuum_pump_speed: float) -> None:
+    def __init__(self, vessel: str, vacuum_pump_speed: float) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
-            'vacuum_pump_speed': vacuum_pump_speed,
-        }
-
-        self.literal_code = f'chempiler.vacuum.set_speed_set_point({self.vacuum_pump_name}, {self.set_point})'
-
     def execute(self, chempiler, logger=None, level=0):
-        chempiler.vacuum.set_speed_set_point(self.vacuum_pump_name, self.set_point)
+        chempiler.vacuum.set_speed_set_point(self.vessel, self.set_point)
         return True
 
 
@@ -687,12 +489,6 @@ class CStartChiller(Step):
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'vessel': vessel,
-        }
-
-        self.literal_code = f'chempiler.chiller.start_chiller({self.vessel})'
-
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.start_chiller(self.vessel)
         return True
@@ -705,13 +501,6 @@ class CStopChiller(Step):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
-
-        self.properties = {
-            'vessel': vessel,
-        }
-        self.human_readable = f'Stop chiller for {vessel}.'
-
-        self.literal_code = f'chempiler.chiller.stop_chiller({self.vessel})'
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.stop_chiller(self.vessel)
@@ -727,13 +516,6 @@ class CChillerSetTemp(Step):
     def __init__(self, vessel: str, temp: float) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'vessel': vessel,
-            'temp': temp,
-        }
-
-        self.literal_code = f'chempiler.chiller.set_temp({self.vessel}, {self.temp})'
-
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.set_temp(self.vessel, self.temp)
         return True
@@ -747,12 +529,6 @@ class CChillerWaitForTemp(Step):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
-
-        self.properties = {
-            'vessel': vessel,
-        }
-
-        self.literal_code = f'chempiler.chiller.wait_for_temp({self.vessel})'
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.wait_for_temp(self.vessel)
@@ -775,14 +551,6 @@ class CRampChiller(Step):
     ) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'vessel': vessel,
-            'ramp_duration': ramp_duration,
-            'end_temperature': end_temperature,
-        }
-
-        self.literal_code = f'chempiler.chiller.ramp_chiller({self.vessel}, {self.ramp_duration}, {self.end_temperature})'
-
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.ramp_chiller(self.vessel, self.ramp_duration, self.end_temperature)
         return True
@@ -797,13 +565,6 @@ class CSetCoolingPower(Step):
     def __init__(self, vessel: str, cooling_power: float) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'vessel': vessel,
-            'cooling_power': cooling_power,
-        }
-
-        self.literal_code = f'chempiler.chiller.cooling_power({self.vessel}, {self.cooling_power})'
-
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.cooling_power(self.vessel, self.cooling_power)
         return True
@@ -816,12 +577,6 @@ class CSetRecordingSpeed(Step):
     """
     def __init__(self, recording_speed: float) -> None:
         super().__init__(locals())
-
-        self.properties = {
-            'recording_speed': recording_speed,
-        }
-
-        self.literal_code = f'chempiler.camera.change_recording_speed({self.recording_speed})'
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.camera.change_recording_speed(self.recording_speed)
@@ -838,12 +593,6 @@ class CWait(Step):
     def __init__(self, time: float) -> None:
         super().__init__(locals())
 
-        self.properties = {
-            'time': time,
-        }
-
-        self.literal_code = f'chempiler.wait({self.time})'
-
     def execute(self, chempiler, logger=None, level=0):
         chempiler.wait(self.time)
         return True
@@ -854,11 +603,6 @@ class CBreakpoint(Step):
     """
     def __init__(self) -> None:
         super().__init__(locals())
-
-        self.properties = {
-        }
-
-        self.literal_code = f'chempiler.breakpoint()'
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.breakpoint()
