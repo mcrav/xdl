@@ -19,10 +19,12 @@ class Add(Step):
         vessel (str): Vessel name to add reagent to.
         port (str): vessel port to use.
         move_speed (float): Speed in mL / min to move liquid at. (optional)
-        stir (bool): If True, stirring will be started before addition.
-        stir_rpm (float): RPM to stir at, only relevant if stir = True.
         aspiration_speed (float): Aspiration speed (speed at which liquid is
             pulled out of reagent_vessel).
+        dispense_speed (float): Dispense speed (speed at which liquid is pushed
+            from pump into vessel).
+        stir (bool): If True, stirring will be started before addition.
+        stir_rpm (float): RPM to stir at, only relevant if stir = True.
         reagent_vessel (str): Given internally. Vessel containing reagent.
         waste_vessel (str): Given internally. Vessel to send waste to.
         flush_tube_vessel (str): Given internally. Air/nitrogen vessel to use to 

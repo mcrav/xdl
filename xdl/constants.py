@@ -169,6 +169,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'Add': {
         'move_speed': DEFAULT_MOVE_SPEED,
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
+        'dispense_speed': DEFAULT_DISPENSE_SPEED,
         'stir_rpm': DEFAULT_STIR_RPM,
     },
     'CleanVessel': {

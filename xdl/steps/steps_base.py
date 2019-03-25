@@ -24,6 +24,10 @@ class Confirm(Step):
             return True
         return False
 
+#################
+### chempiler ###
+#################
+
 class CMove(Step):
     """Moves a specified volume from one node in the graph to another. Moving from and to
     the same node is supported.
@@ -129,6 +133,9 @@ class CConnect(Step):
         )
         return True
 
+######################
+### chempiler.pump ###
+######################
 
 class CSeparatePhases(Step):
     """
@@ -175,89 +182,11 @@ class CSeparatePhases(Step):
         )
         return True
 
-class CPrime(Step):
-    """Moves the tube volume of every node with "flask" as class to waste.
+#########################
+### chempiler.stirrer ###
+#########################
 
-    Args:
-        aspiration_speed (float): Speed in mL / min at which material should
-                                    be withdrawn.
-    """
-    def __init__(self, aspiration_speed: Optional[float] = 'default') -> None:
-        super().__init__(locals())
-        self.properties = {
-            'aspiration_speed': aspiration_speed,
-        }
-        self.get_defaults()
-
-        self.literal_code = f'chempiler.pump.prime_tubes({self.aspiration_speed})'
-
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.pump.prime_tubes(self.aspiration_speed)
-        return True
-
-class CSwitchVacuum(Step):
-    """Switches a vacuum valve between backbone and vacuum.
-
-    Args:
-        vessel (str): Name of the node the vacuum valve is logically attacked to (e.g. "filter_bottom")
-        destination (str): Either "vacuum" or "backbone"
-    """
-    def __init__(self, vessel: str, destination: str) -> None:
-        super().__init__(locals())
-
-        self.properties = {
-            'vessel': vessel,
-            'destination': destination,
-        }
-
-        self.literal_code = f'chempiler.pump.switch_cartridge({self.vessel}, {self.destination})'
-
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.pump.switch_cartridge(self.vessel, self.destination)
-        return True
-
-class CSwitchCartridge(Step):
-    """Switches a cartridge carousel to the specified position.
-
-    Args:
-        vessel (str): Name of the node the vacuum valve is logically attacked to (e.g. "rotavap")
-        cartridge (int): Number of the position the carousel should be switched to (0-5)
-    """
-    def __init__(self, vessel: str, cartridge: int) -> None:
-        super().__init__(locals())
-        self.properties = {
-            'vessel': vessel,
-            'cartridge': cartridge,
-        }
-
-        self.literal_code = f'chempiler.pump.switch_cartridge({self.vessel}, {self.cartridge})'
-
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.pump.switch_cartridge(self.vessel, self.cartridge)
-        return True
-
-class CSwitchColumn(Step):
-    """Switches a fractionating valve attached to a chromatography column.
-
-    Args:
-        column (str): Name of the column in the graph
-        destination (str): Either "collect" or "waste"
-    """
-    def __init__(self, column: str, destination: str) -> None:
-        super().__init__(locals())
-
-        self.properties = {
-            'column': column,
-            'destination': destination,
-        }
-
-        self.literal_code = f'chempiler.pump.switch_column_fraction({self.column}, {self.destination})'
-
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.pump.switch_column_fraction(self.column, self.destination)
-        return True
-
-class CStartStir(Step):
+class CStir(Step):
     """Starts the stirring operation of a hotplate or overhead stirrer.
 
     Args:
@@ -276,7 +205,7 @@ class CStartStir(Step):
         chempiler.stirrer.stir(self.vessel)
         return True
 
-class CStartHeat(Step):
+class CStirrerHeat(Step):
     """Starts the heating operation of a hotplate stirrer.
 
     Args:
@@ -336,7 +265,7 @@ class CStopHeat(Step):
         chempiler.stirrer.stop_heat(self.vessel)
         return True
 
-class CSetTemp(Step):
+class CStirrerSetTemp(Step):
     """Sets the temperature setpoint of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
 
@@ -358,7 +287,7 @@ class CSetTemp(Step):
         chempiler.stirrer.set_temp(self.vessel, self.temp)
         return True
 
-class CSetStirRpm(Step):
+class CSetStirRate(Step):
     """Sets the stirring speed setpoint of a hotplate or overhead stirrer.
 
     Args:
@@ -399,243 +328,233 @@ class CStirrerWaitForTemp(Step):
         chempiler.stirrer.wait_for_temp(self.vessel)
         return True
 
-class CStartHeaterBath(Step):
-    """Starts the heating bath of a rotary evaporator.
+#########################
+### chempiler.rotavap ###
+#########################
 
-    Args:
-        rotavap_name (str): Name of the node representing the rotary evaporator.
-    """
-    def __init__(self, rotavap_name: str) -> None:
-        super().__init__(locals())
+# class CStartHeaterBath(Step):
+#     """Starts the heating bath of a rotary evaporator.
 
-        self.properties = {
-            'rotavap_name': rotavap_name,
-        }
+#     Args:
+#         rotavap_name (str): Name of the node representing the rotary evaporator.
+#     """
+#     def __init__(self, rotavap_name: str) -> None:
+#         super().__init__(locals())
 
-        self.literal_code = f'chempiler.rotavap.start_heater({self.rotavap_name})'
+#         self.properties = {
+#             'rotavap_name': rotavap_name,
+#         }
 
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.rotavap.start_heater(self.rotavap_name)
-        return True
+#         self.literal_code = f'chempiler.rotavap.start_heater({self.rotavap_name})'
 
-class CStopHeaterBath(Step):
-    """Stops the heating bath of a rotary evaporator.
+#     def execute(self, chempiler, logger=None, level=0):
+#         chempiler.rotavap.start_heater(self.rotavap_name)
+#         return True
 
-    Args:
-        rotavap_name (str): Name of the node representing the rotary evaporator.
-    """
-    def __init__(self, rotavap_name: str) -> None:
-        super().__init__(locals())
+# class CStopHeaterBath(Step):
+#     """Stops the heating bath of a rotary evaporator.
 
-        self.properties = {
-            'rotavap_name': rotavap_name,
-        }
+#     Args:
+#         rotavap_name (str): Name of the node representing the rotary evaporator.
+#     """
+#     def __init__(self, rotavap_name: str) -> None:
+#         super().__init__(locals())
 
-        self.literal_code = f'chempiler.rotavap.stop_heater({self.rotavap_name})'
+#         self.properties = {
+#             'rotavap_name': rotavap_name,
+#         }
 
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.rotavap.stop_heater(self.rotavap_name)
-        return True
+#         self.literal_code = f'chempiler.rotavap.stop_heater({self.rotavap_name})'
 
-class CStartRotation(Step):
-    """Starts the rotation of a rotary evaporator.
+#     def execute(self, chempiler, logger=None, level=0):
+#         chempiler.rotavap.stop_heater(self.rotavap_name)
+#         return True
 
-    Args:
-        rotavap_name (str): Name of the node representing the rotary evaporator.
-    """
-    def __init__(self, rotavap_name: str) -> None:
-        super().__init__(locals())
+# class CStartRotation(Step):
+#     """Starts the rotation of a rotary evaporator.
 
-        self.properties = {
-            'rotavap_name': rotavap_name,
-        }
+#     Args:
+#         rotavap_name (str): Name of the node representing the rotary evaporator.
+#     """
+#     def __init__(self, rotavap_name: str) -> None:
+#         super().__init__(locals())
 
-        self.literal_code = f'chempiler.rotavap.start_rotation({self.rotavap_name})'
+#         self.properties = {
+#             'rotavap_name': rotavap_name,
+#         }
 
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.rotavap.start_rotation(self.rotavap_name)
-        return True
+#         self.literal_code = f'chempiler.rotavap.start_rotation({self.rotavap_name})'
 
-class CStopRotation(Step):
-    """Stops the rotation of a rotary evaporator.
+#     def execute(self, chempiler, logger=None, level=0):
+#         chempiler.rotavap.start_rotation(self.rotavap_name)
+#         return True
 
-    Args:
-        rotavap_name (str): Name of the node representing the rotary evaporator.
-    """
-    def __init__(self, rotavap_name: str) -> None:
-        super().__init__(locals())
+# class CStopRotation(Step):
+#     """Stops the rotation of a rotary evaporator.
 
-        self.properties = {
-            'rotavap_name': rotavap_name,
-        }
+#     Args:
+#         rotavap_name (str): Name of the node representing the rotary evaporator.
+#     """
+#     def __init__(self, rotavap_name: str) -> None:
+#         super().__init__(locals())
 
-        self.literal_code = f'chempiler.rotavap.stop_rotation({self.rotavap_name})'
+#         self.properties = {
+#             'rotavap_name': rotavap_name,
+#         }
 
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.rotavap.stop_rotation(self.rotavap_name)
-        return True
+#         self.literal_code = f'chempiler.rotavap.stop_rotation({self.rotavap_name})'
 
-class CLiftArmUp(Step):
-    """Lifts the rotary evaporator arm up.
+#     def execute(self, chempiler, logger=None, level=0):
+#         chempiler.rotavap.stop_rotation(self.rotavap_name)
+#         return True
 
-    Args:
-        rotavap_name (str): Name of the node representing the rotary evaporator.
-    """
-    def __init__(self, rotavap_name: str) -> None:
-        super().__init__(locals())
+# class CLiftArmUp(Step):
+#     """Lifts the rotary evaporator arm up.
 
-        self.properties = {
-            'rotavap_name': rotavap_name,
-        }
+#     Args:
+#         rotavap_name (str): Name of the node representing the rotary evaporator.
+#     """
+#     def __init__(self, rotavap_name: str) -> None:
+#         super().__init__(locals())
 
-        self.literal_code = f'chempiler.rotavap.lift_up({self.rotavap_name})'
+#         self.properties = {
+#             'rotavap_name': rotavap_name,
+#         }
 
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.rotavap.lift_up(self.rotavap_name)
-        return True
+#         self.literal_code = f'chempiler.rotavap.lift_up({self.rotavap_name})'
 
-class CLiftArmDown(Step):
-    """Lifts the rotary evaporator down.
+#     def execute(self, chempiler, logger=None, level=0):
+#         chempiler.rotavap.lift_up(self.rotavap_name)
+#         return True
 
-    Args:
-        rotavap_name (str): Name of the node representing the rotary evaporator.
-    """
-    def __init__(self, rotavap_name: str) -> None:
-        super().__init__(locals())
+# class CLiftArmDown(Step):
+#     """Lifts the rotary evaporator down.
 
-        self.properties = {
-            'rotavap_name': rotavap_name,
-        }
+#     Args:
+#         rotavap_name (str): Name of the node representing the rotary evaporator.
+#     """
+#     def __init__(self, rotavap_name: str) -> None:
+#         super().__init__(locals())
 
-        self.literal_code = f'chempiler.rotavap.lift_down({self.rotavap_name})'
+#         self.properties = {
+#             'rotavap_name': rotavap_name,
+#         }
 
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.rotavap.lift_down(self.rotavap_name)
-        return True
+#         self.literal_code = f'chempiler.rotavap.lift_down({self.rotavap_name})'
 
-class CResetRotavap(Step):
-    """
-    Resets the rotary evaporator.
+#     def execute(self, chempiler, logger=None, level=0):
+#         chempiler.rotavap.lift_down(self.rotavap_name)
+#         return True
 
-    Args:
-        rotavap_name (str): Name of the node representing the rotary evaporator.
-    """
-    def __init__(self, rotavap_name: str) -> None:
-        super().__init__(locals())
+# class CResetRotavap(Step):
+#     """
+#     Resets the rotary evaporator.
 
-        self.properties = {
-            'rotavap_name': rotavap_name,
-        }
+#     Args:
+#         rotavap_name (str): Name of the node representing the rotary evaporator.
+#     """
+#     def __init__(self, rotavap_name: str) -> None:
+#         super().__init__(locals())
 
-        self.literal_code = f'chempiler.rotavap.reset({self.rotavap_name})'
+#         self.properties = {
+#             'rotavap_name': rotavap_name,
+#         }
 
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.rotavap.reset(self.rotavap_name)
-        return True
+#         self.literal_code = f'chempiler.rotavap.reset({self.rotavap_name})'
 
-class CSetBathTemp(Step):
-    """Sets the temperature setpoint for the heating bath.
+#     def execute(self, chempiler, logger=None, level=0):
+#         chempiler.rotavap.reset(self.rotavap_name)
+#         return True
 
-    Args:
-        rotavap_name (str): Name of the node representing the rotary evaporator.
-        temp (float): Temperature in °C.
-    """
-    def __init__(self, rotavap_name: str, temp: float) -> None:
-        super().__init__(locals())
+# class CSetBathTemp(Step):
+#     """Sets the temperature setpoint for the heating bath.
 
-        self.properties = {
-            'rotavap_name': rotavap_name,
-            'temp': temp,
-        }
+#     Args:
+#         rotavap_name (str): Name of the node representing the rotary evaporator.
+#         temp (float): Temperature in °C.
+#     """
+#     def __init__(self, rotavap_name: str, temp: float) -> None:
+#         super().__init__(locals())
 
-        self.literal_code = f'chempiler.rotavap.set_temp({self.rotavap_name}, {self.temp})'
+#         self.properties = {
+#             'rotavap_name': rotavap_name,
+#             'temp': temp,
+#         }
 
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.rotavap.set_temp(self.rotavap_name, self.temp)
-        return True
+#         self.literal_code = f'chempiler.rotavap.set_temp({self.rotavap_name}, {self.temp})'
 
-class CSetRvRotationSpeed(Step):
-    """Sets the rotation speed setpoint for the rotary evaporator.
+#     def execute(self, chempiler, logger=None, level=0):
+#         chempiler.rotavap.set_temp(self.rotavap_name, self.temp)
+#         return True
 
-    Args:
-        rotavap_name (str): Name of the node representing the rotary evaporator.
-        rotation_speed (str): Rotation speed setpoint in RPM.
-    """
-    def __init__(self, rotavap_name: str, rotation_speed: float) -> None:
-        super().__init__(locals())
+# class CSetRvRotationSpeed(Step):
+#     """Sets the rotation speed setpoint for the rotary evaporator.
 
-        self.properties = {
-            'rotavap_name': rotavap_name,
-            'rotation_speed': rotation_speed,
-        }
+#     Args:
+#         rotavap_name (str): Name of the node representing the rotary evaporator.
+#         rotation_speed (str): Rotation speed setpoint in RPM.
+#     """
+#     def __init__(self, rotavap_name: str, rotation_speed: float) -> None:
+#         super().__init__(locals())
 
-        self.literal_code = f'chempiler.rotavap.set_rotation({self.rotavap_name}, {self.rotation_speed})'
+#         self.properties = {
+#             'rotavap_name': rotavap_name,
+#             'rotation_speed': rotation_speed,
+#         }
 
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.rotavap.set_rotation(self.rotavap_name, self.rotation_speed)
-        return True
+#         self.literal_code = f'chempiler.rotavap.set_rotation({self.rotavap_name}, {self.rotation_speed})'
 
-class CRvWaitForTemp(Step):
-    """Delays the script execution until the current temperature of the heating bath is
-    within 0.5°C of the setpoint.
+#     def execute(self, chempiler, logger=None, level=0):
+#         chempiler.rotavap.set_rotation(self.rotavap_name, self.rotation_speed)
+#         return True
 
-    Args:
-        rotavap_name (str): Name of the node representing the rotary evaporator.
-    """
-    def __init__(self, rotavap_name: str) -> None:
-        super().__init__(locals())
+# class CRvWaitForTemp(Step):
+#     """Delays the script execution until the current temperature of the heating bath is
+#     within 0.5°C of the setpoint.
 
-        self.properties = {
-            'rotavap_name': rotavap_name,
-        }
+#     Args:
+#         rotavap_name (str): Name of the node representing the rotary evaporator.
+#     """
+#     def __init__(self, rotavap_name: str) -> None:
+#         super().__init__(locals())
 
-        self.literal_code = f'chempiler.rotavap.wait_for_temp({self.rotavap_name})'
+#         self.properties = {
+#             'rotavap_name': rotavap_name,
+#         }
 
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.rotavap.wait_for_temp(self.rotavap_name)
-        return True
+#         self.literal_code = f'chempiler.rotavap.wait_for_temp({self.rotavap_name})'
 
-class CSetInterval(Step):
-    """Sets the interval time for the rotary evaporator, causing it to periodically switch
-    direction. Setting this to 0 deactivates interval operation.
+#     def execute(self, chempiler, logger=None, level=0):
+#         chempiler.rotavap.wait_for_temp(self.rotavap_name)
+#         return True
 
-    Args:
-        rotavap_name (str): Name of the node representing the rotary evaporator.
-        interval (int): Interval time in seconds.
-    """
-    def __init__(self, rotavap_name: str, interval: int) -> None:
-        super().__init__(locals())
+# class CSetInterval(Step):
+#     """Sets the interval time for the rotary evaporator, causing it to periodically switch
+#     direction. Setting this to 0 deactivates interval operation.
 
-        self.properties = {
-            'rotavap_name': rotavap_name,
-            'interval': interval,
-        }
+#     Args:
+#         rotavap_name (str): Name of the node representing the rotary evaporator.
+#         interval (int): Interval time in seconds.
+#     """
+#     def __init__(self, rotavap_name: str, interval: int) -> None:
+#         super().__init__(locals())
 
-        self.literal_code = f'chempiler.rotavap.set_interval({self.rotavap_name}, {self.interval})'
+#         self.properties = {
+#             'rotavap_name': rotavap_name,
+#             'interval': interval,
+#         }
 
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.rotavap.set_interval(self.rotavap_name, self.interval)
-        return True
+#         self.literal_code = f'chempiler.rotavap.set_interval({self.rotavap_name}, {self.interval})'
 
-class CInitVacPump(Step):
-    """Initialises the vacuum pump controller.
+#     def execute(self, chempiler, logger=None, level=0):
+#         chempiler.rotavap.set_interval(self.rotavap_name, self.interval)
+#         return True
 
-    Args:
-        vacuum_pump_name (str): Name of the node the vacuum pump is attached to.
-    """
-    def __init__(self, vacuum_pump_name: str) -> None:
-        super().__init__(locals())
-        self.properties = {
-            'vacuum_pump_name': vacuum_pump_name,
-        }
+########################
+### chempiler.vacuum ###
+########################
 
-        self.literal_code = f'chempiler.vacuum.initialise({self.vacuum_pump_name})'
-
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.vacuum.initialise(self.vacuum_pump_name)
-        return True
-
-class CGetVacSp(Step):
+class CGetVacuumSetPoint(Step):
     """Reads the current vacuum setpoint.
 
     Args:
@@ -654,7 +573,7 @@ class CGetVacSp(Step):
         chempiler.vacuum.get_vacuum_set_point(self.vacuum_pump_name)
         return True
 
-class CSetVacSp(Step):
+class CSetVacuumSetPoint(Step):
     """Sets a new vacuum setpoint.
 
     Args:
@@ -672,10 +591,11 @@ class CSetVacSp(Step):
         self.literal_code = f'chempiler.vacuum.set_vacuum_set_point({self.vacuum_pump_name}, {self.vacuum_pressure})'
 
     def execute(self, chempiler, logger=None, level=0):
-        chempiler.vacuum.set_vacuum_set_point(self.vacuum_pump_name, self.vacuum_pressure)
+        chempiler.vacuum.set_vacuum_set_point(
+            self.vacuum_pump_name, self.vacuum_pressure)
         return True
 
-class CStartVac(Step):
+class CStartVacuum(Step):
     """Starts the vacuum pump.
 
     Args:
@@ -694,7 +614,7 @@ class CStartVac(Step):
         chempiler.vacuum.start_vacuum(self.vacuum_pump_name)
         return True
 
-class CStopVac(Step):
+class CStopVacuum(Step):
     """Stops the vacuum pump.
 
     Args:
@@ -713,7 +633,7 @@ class CStopVac(Step):
         chempiler.vacuum.stop_vacuum(self.vacuum_pump_name)
         return True
 
-class CVentVac(Step):
+class CVentVacuum(Step):
     """Vents the vacuum pump to ambient pressure.
 
     Args:
@@ -732,7 +652,7 @@ class CVentVac(Step):
         chempiler.vacuum.vent_vacuum(self.vacuum_pump_name)
         return True
 
-class CSetSpeedSp(Step):
+class CSetSpeedSetPoint(Step):
     """Sets the speed of the vacuum pump (0-100%).
 
     Args:
@@ -752,6 +672,11 @@ class CSetSpeedSp(Step):
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.set_speed_set_point(self.vacuum_pump_name, self.set_point)
         return True
+
+
+#########################
+### chempiler.chiller ###
+#########################
 
 class CStartChiller(Step):
     """Starts the recirculation chiller.
@@ -792,7 +717,7 @@ class CStopChiller(Step):
         chempiler.chiller.stop_chiller(self.vessel)
         return True
 
-class CSetChiller(Step):
+class CChillerSetTemp(Step):
     """Sets the temperature setpoint.
 
     Args:
@@ -860,27 +785,6 @@ class CRampChiller(Step):
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.ramp_chiller(self.vessel, self.ramp_duration, self.end_temperature)
-        return True
-
-class CSwitchChiller(Step):
-    """Switches the solenoid valve.
-
-    Args:
-        solenoid_valve_name: (str) Name of the node the solenoid valve is attached to.
-        state (str): Is either "on" or "off"
-    """
-    def __init__(self, solenoid_valve_name: str, state: str) -> None:
-        super().__init__(locals())
-
-        self.properties = {
-            'solenoid_valve_name': solenoid_valve_name,
-            'state': state,
-        }
-
-        self.literal_code = f'chempiler.chiller.switch_vessel({self.solenoid_valve_name}, {self.state})'
-
-    def execute(self, chempiler, logger=None, level=0):
-        chempiler.chiller.switch_vessel(self.solenoid_valve_name, self.state)
         return True
 
 class CSetCoolingPower(Step):

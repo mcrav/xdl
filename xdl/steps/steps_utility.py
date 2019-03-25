@@ -393,55 +393,6 @@ class ChillerReturnToRT(Step):
 ### CLEANING ###
 ################
 
-class CleanVessel(Step):
-    """Clean given vessel.
-
-    Args:
-        vessel (str): Vessel to clean.
-        solvent (str, optional): Solvent to clean with.
-        volume (str, optional): Volume of solvent to clean with in mL.
-        stir_rpm (str, optional): RPM to stir vessel at during cleaning.
-        stir_time (str, optional): Time to stir once solvent has been added.
-        waste_vessel (str, optional): Vessel to send waste to. 
-            Passed automatically by executor.
-        solvent_vessel (str, optional): Vessel containing solvent.
-            Passed automatically by executor.
-    """
-    def __init__(
-        self,
-        vessel: str,
-        solvent: Optional[str] = 'default',
-        volume: Optional[float] = 'default',
-        stir_rpm: Optional[float] = 'default',
-        stir_time: Optional[float] = 'default',
-        waste_vessel: Optional[str] = None,
-        solvent_vessel: Optional[str] = None,
-        **kwargs
-    ) -> None:
-        super().__init__(locals())
-
-        self.steps = [
-            CMove(
-                from_vessel=self.solvent_vessel,
-                to_vessel=self.vessel,
-                volume=self.volume
-            ),
-            StartStir(vessel=self.vessel, stir_rpm=1000),
-            ChillToTemp(vessel=self.vessel, temp=60), # SPECIFIC TO FILTER IN CHILLER
-            CMove(
-                from_vessel=self.vessel, to_vessel=self.waste_vessel, volume=400,
-            ),
-            StopStir(vessel=self.vessel),
-            Dry(vessel=self.vessel, time=300),
-            CSetChiller(vessel=self.vessel, temp=ROOM_TEMPERATURE),
-            Dry(vessel=self.vessel, time=600),
-            CChillerWaitForTemp(vessel=self.vessel),
-            StopChiller(vessel=self.vessel),
-        ]
-
-        self.human_readable = 'Clean {0} with {1} ({2}).'.format(
-            self.vessel, self.solvent, self.volume)
-
 class CleanBackbone(Step):
 
     def __init__(
