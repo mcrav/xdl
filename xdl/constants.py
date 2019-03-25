@@ -97,7 +97,7 @@ DEFAULT_WASHFILTERCAKE_VOLUME: int = 20
 DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME: int = 30
 
 #: Default time in seconds to wait for with vacuum on when washing a filter cake.
-DEFAULT_WASHFILTERCAKE_WAIT_TIME: int = 10 
+DEFAULT_WASHFILTERCAKE_VACUUM_TIME: int = 10 
 
 #: Default volume factor to remove solvent after washing filter cake,
 # i.e. 1.5 means remove 1.5x the solvent volume.
@@ -159,7 +159,8 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'WashFilterCake': {
         'volume': DEFAULT_WASHFILTERCAKE_VOLUME,
         'move_speed': DEFAULT_MOVE_SPEED,
-        'wait_time': DEFAULT_WASHFILTERCAKE_WAIT_TIME,
+        'vacuum_time': DEFAULT_WASHFILTERCAKE_VACUUM_TIME,
+        'stir_time': DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME,
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
     },
     'Transfer': {
