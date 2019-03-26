@@ -142,12 +142,6 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
         'dispense_speed': DEFAULT_DISPENSE_SPEED,
     },
-    'CHome': {
-        'move_speed': DEFAULT_MOVE_SPEED, 
-    },
-    'CPrime': {
-        'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
-    },
     'Separate': {
         'solvent_volume': DEFAULT_SEPARATION_SOLVENT_VOLUME,
     },
@@ -177,15 +171,10 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'dispense_speed': DEFAULT_DISPENSE_SPEED,
         'stir_rpm': DEFAULT_STIR_RPM,
     },
-    'CleanVessel': {
-        'volume': DEFAULT_CLEAN_VESSEL_VOLUME,
-        'stir_rpm': DEFAULT_STIR_RPM,
-        'stir_time': DEFAULT_CLEAN_VESSEL_STIR_TIME,
-    },
-    'CStartStir': {
+    'CStir': {
         'stir_rpm': DEFAULT_STIR_RPM,
     },
-    'CSetStirRpm': {
+    'CSetStirRate': {
         'stir_rpm': DEFAULT_STIR_RPM,
     },
     'PrimePumpForAdd': {
