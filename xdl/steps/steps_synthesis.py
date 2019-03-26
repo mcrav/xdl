@@ -33,8 +33,9 @@ class Add(Step):
     def __init__(
         self,
         reagent: str,
-        volume: float,
         vessel: str,
+        volume: Optional[float] = None,
+        mass: Optional[float] = None,
         port: Optional[str] = None,
         move_speed: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
@@ -48,42 +49,50 @@ class Add(Step):
     ) -> None:
         super().__init__(locals())
 
-        self.steps = [
-            PrimePumpForAdd(
-                reagent=self.reagent,
-                volume='default',
-                waste_vessel=self.waste_vessel),
-            CMove(
-                from_vessel=self.reagent_vessel,
-                to_vessel=self.vessel, 
-                to_port=self.port,
-                volume=self.volume,
-                move_speed=self.move_speed,
-                aspiration_speed=self.aspiration_speed,
-                dispense_speed=self.dispense_speed),
-            Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME)
-        ]
+        # Solid addition
+        if self.mass:
+            self.steps = [Confirm(f'Is {reagent} ({mass} g) in {vessel}?')]
+            self.human_readable = 'Add {0} ({1} g) to {2} {3}.'.format(
+                self.reagent, self.mass, self.vessel, get_port_str(self.port))
 
-        if self.flush_tube_vessel:
-            self.steps.append(CMove(
-                from_vessel=self.flush_tube_vessel,
-                to_vessel=self.vessel,
-                to_port=self.port,
-                volume=DEFAULT_AIR_FLUSH_TUBE_VOLUME,))
+        # Liquid addition
+        else:
+            self.steps = [
+                PrimePumpForAdd(
+                    reagent=self.reagent,
+                    volume='default',
+                    waste_vessel=self.waste_vessel),
+                CMove(
+                    from_vessel=self.reagent_vessel,
+                    to_vessel=self.vessel, 
+                    to_port=self.port,
+                    volume=self.volume,
+                    move_speed=self.move_speed,
+                    aspiration_speed=self.aspiration_speed,
+                    dispense_speed=self.dispense_speed),
+                Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME)
+            ]
 
-        if self.stir:
-            self.steps.insert(0, CStir(vessel=self.vessel))
-            if self.stir_rpm:
-                self.steps.insert(
-                    0, CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm))
-            else:
-                self.steps.insert(
-                    0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+            if self.flush_tube_vessel:
+                self.steps.append(CMove(
+                    from_vessel=self.flush_tube_vessel,
+                    to_vessel=self.vessel,
+                    to_port=self.port,
+                    volume=DEFAULT_AIR_FLUSH_TUBE_VOLUME,))
+
+            if self.stir:
+                self.steps.insert(0, CStir(vessel=self.vessel))
+                if self.stir_rpm:
+                    self.steps.insert(
+                        0, CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm))
+                else:
+                    self.steps.insert(
+                        0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+
+            self.human_readable = 'Add {0} ({1} mL) to {2} {3}.'.format(
+                self.reagent, self.volume, self.vessel, get_port_str(self.port))
 
         self.vessel_chain = ['vessel']
-
-        self.human_readable = 'Add {0} ({1} mL) to {2} {3}.'.format(
-            self.reagent, self.volume, self.vessel, get_port_str(self.port))
 
 class AddCorrosive(Step):
     """Add corrosive reagent that can't come into contact with a valve.
