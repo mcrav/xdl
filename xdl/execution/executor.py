@@ -380,7 +380,7 @@ class XDLExecutor(object):
             if not hasattr(sub_step, 'execute'):
                 self.find_stirring_schedule(sub_step, stirring)
             else:
-                if type(sub_step) == CStartStir:
+                if type(sub_step) == CStir:
                     stirring.append(sub_step.vessel)
                 elif type(sub_step) == CStopStir:
                     if sub_step.vessel in stirring:
@@ -416,12 +416,12 @@ class XDLExecutor(object):
         """
         stir_vessels = []
         for step in self._xdl.base_steps:
-            if type(step) == CStartStir:
+            if type(step) == CStir:
                 if not step.vessel in stir_vessels:
                     stir_vessels.append(step.vessel)
         for vessel in stir_vessels:
             self._xdl.steps.insert(
-                0, CSetStirRpm(vessel=vessel, stir_rpm=DEFAULT_STIR_RPM))
+                0, CSetStirRate(vessel=vessel, stir_rpm=DEFAULT_STIR_RPM))
 
     def _no_waiting_if_dry_run(self) -> None:
         """Set all Wait step times to 1 second if the dry run flag is True."""
