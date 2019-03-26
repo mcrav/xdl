@@ -231,9 +231,8 @@ class XDL(object):
             scale (float): Number to scale all volumes by.
         """
         for step in self.steps:
-            for prop in step.properties:
-                if 'volume' in prop:
-                    val = step.properties[prop]
+            for prop, val in step.properties.items():
+                if 'volume' in prop and type(val) == float:
                     if val:
                         step.properties[prop] = float(val) * scale
 
