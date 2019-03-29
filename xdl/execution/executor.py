@@ -10,6 +10,7 @@ from ..constants import *
 from ..utils.namespace import BASE_STEP_OBJ_DICT
 from ..steps import *
 from ..safety import procedure_is_safe
+from ..reagents import Reagent
 from .tracking import iter_vessel_contents
 from .graph import (
     hardware_from_graph, get_graph, make_vessel_map, make_filter_inert_gas_map)
@@ -222,7 +223,8 @@ class XDLExecutor(object):
             if additions:
                 step_reagent_type = 'organic'
                 for reagent in additions:
-                    if is_aqueous(reagent):
+                    if get_reagent_clean_type(
+                        reagent, self._xdl.reagents) == 'aqueous':
                         step_reagent_type = 'aqueous'
                         break
             step_reagent_types.append(step_reagent_type)
@@ -578,7 +580,8 @@ class XDLExecutor(object):
                 'Not prepared for execution. Prepare by calling xdlexecutor.prepare_for_execution with your graph.')
                 
 
-def is_aqueous(reagent_name: str) -> bool:
+def get_reagent_clean_type(
+    reagent_name: str, xdl_reagents: List[Reagent]) -> bool:
     """Return True if reagent_name is an aqueous reagent, otherwise False.
     
     Args:
@@ -587,10 +590,13 @@ def is_aqueous(reagent_name: str) -> bool:
     Returns:
         bool: True if reagent_name is aqueous, otherwise False.
     """
+    for xdl_reagent in xdl_reagents:
+        if xdl_reagent.id == reagent_name and xdl_reagent.clean_type:
+            return xdl_reagent.clean_type
     for word in AQUEOUS_KEYWORDS:
         if word in reagent_name:
-            return True
-    return False
+            return 'aqueous'
+    return 'organic'
 
 def should_remove_clean_backbone_step(
     before_step: Step, after_step: Step) -> bool:

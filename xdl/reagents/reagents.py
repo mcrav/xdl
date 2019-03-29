@@ -6,7 +6,9 @@ class Reagent(XDLBase):
 
     Args:
         xid (str): Unique identifier containing only letters, numbers and _
+        clean_type (str): 'organic' or 'aqueous'. Used by XDLExecutor to decide
+            what solvent to use in CleanBackbone steps.
         cas (int, optional): Defaults to None. CAS number of reagent as int.
     """
-    def __init__(self, id: str, cas: int = None) -> None:
+    def __init__(self, id: str, clean_type: str = None, cas: int = None) -> None:
         super().__init__(locals())
