@@ -195,6 +195,9 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     },
     'Stir': {
         'stir_rpm': DEFAULT_STIR_RPM,
+    },
+    'HeatChill': {
+        'stir_rpm': DEFAULT_STIR_RPM,
     }
 }
 

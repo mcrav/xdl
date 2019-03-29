@@ -158,6 +158,9 @@ class HeatToTemp(Step):
         stir_rpm: Optional[float] = None,
         **kwargs
     ) -> None:
+
+        print('HeatToTemp is deprecated. Please use HeatChillToTemp.')
+
         super().__init__(locals())
 
         self.steps = [
@@ -193,6 +196,9 @@ class StopHeat(Step):
         vessel (str): Vessel name to stop heating.
     """
     def __init__(self, vessel: str, **kwargs) -> None:
+
+        print('StopHeat is deprecated. Please use StopHeatChill.')
+
         super().__init__(locals())
 
         self.steps = [CStopHeat(vessel=self.vessel)]
@@ -218,6 +224,9 @@ class HeaterReturnToRT(Step):
         stir_rpm: Optional[float] = None,
         **kwargs
     ) -> None:
+
+        print('HeaterReturnToRT is deprecated. Please use HeatChillReturnToRT.')
+
         super().__init__(locals())
 
         self.steps = [
@@ -292,6 +301,9 @@ class ChillToTemp(Step):
         stir: Optional[bool] = True,
         stir_rpm: Optional[float] = None,
         **kwargs) -> None:
+
+        print('ChillToTemp is deprecated. Please use HeatChillToTemp.')
+
         super().__init__(locals())
 
         self.steps = [
@@ -323,8 +335,10 @@ class ChillToTemp(Step):
 class StopChiller(Step):
 
     def __init__(self, vessel: str, **kwargs) -> None:
-        super().__init__(locals())
 
+        print('StopChiller is deprecated. Please use StopHeatChill.')
+
+        super().__init__(locals())
         self.steps = [
             CStopChiller(self.vessel)
         ]
@@ -349,8 +363,10 @@ class ChillerReturnToRT(Step):
         stir: Optional[bool] = True,
         stir_rpm: Optional[float] = None,
         **kwargs) -> None:
-        super().__init__(locals())
 
+        print('ChillerReturnToRT is deprecated. Please use HeatChillReturnToRT.')
+
+        super().__init__(locals())
         self.steps = [
             CChillerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
             CStartChiller(vessel=self.vessel),
@@ -375,6 +391,158 @@ class ChillerReturnToRT(Step):
                 'heatchill': True,
             }
         }
+
+
+##################
+### HEAT/CHILL ###
+##################
+
+class HeatChillToTemp(Step):
+    """Heat/Chill vessel to given temp and leave heater/chiller on.
+    
+    Args:
+        vessel (str): Vessel to heat/chill.
+        temp (float): Temperature to heat/chill to in degrees C.
+        stir (bool): If True, step will be stirred, otherwise False.
+        stir_rpm (float): Speed to stir at, only used if stir == True.
+        vessel_type (str): Given internally. Used to know whether to use
+            heater or chiller base steps. 'ChemputerFilter' or
+            'ChemputerReactor'.
+    """
+    def __init__(
+        self,
+        vessel: str,
+        temp: float,
+        stir: Optional[bool] = True,
+        stir_rpm: Optional[float] = None,
+        vessel_type: Optional[str] = None,
+        **kwargs
+    ) -> None:
+
+        super().__init__(locals())
+        self.steps = []
+        if self.vessel_type == 'ChemputerFilter':
+            self.steps = [
+                CChillerSetTemp(vessel=self.vessel, temp=self.temp),
+                CStartChiller(vessel=self.vessel),
+                CChillerWaitForTemp(vessel=self.vessel),
+            ]
+        elif self.vessel_type == 'ChemputerReactor':
+            self.steps = [
+                CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+                CStirrerHeat(vessel=self.vessel),
+                CStirrerWaitForTemp(vessel=self.vessel),
+            ]
+
+        if self.stir:
+            self.steps.insert(0, CStir(vessel=self.vessel))
+            if self.stir_rpm:
+                self.steps.insert(
+                    0, CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            else:
+                self.steps.insert(
+                    0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+        else:
+            self.steps.insert(0, CStopStir(vessel=self.vessel))
+
+        self.human_readable = 'Heat/Chill {0} to {1} °C.'.format(
+            self.vessel, self.temp)
+
+        self.requirements = {
+            'vessel': {
+                'heatchill': True,
+                'temp': [self.temp]
+            }
+        }
+
+class StopHeatChill(Step):
+    """Stop heater/chiller on given vessel..
+    
+    Args:
+        vessel (str): Name of vessel attached to heater/chiller..
+        vessel_type (str): Given internally. Used to know whether to use
+            heater or chiller base steps. 'ChemputerFilter' or
+            'ChemputerReactor'.
+    """
+    def __init__(
+        self, vessel: str, vessel_type: Optional[str] = None, **kwargs) -> None:
+        super().__init__(locals())
+        self.steps = []
+        if self.vessel_type == 'ChemputerFilter':
+            self.steps = [
+                CStopChiller(self.vessel)
+            ]
+        elif self.vessel_type == 'ChemputerReactor':
+            self.steps = [
+                CStopHeat(self.vessel)
+            ]
+    
+        self.human_readable = 'Stop heater/chiller for {0}.'.format(self.vessel)
+    
+        self.requirements = {
+            'vessel': {
+                'heatchill': True,
+            }
+        }
+
+class HeatChillReturnToRT(Step):
+    """Let heater/chiller return to room temperatre and then stop
+    heating/chilling.
+    
+    Args:
+        vessel (str): Vessel to attached to heater/chiller to return to room
+            temperature.
+        stir (bool): If True, step will be stirred, otherwise False.
+        stir_rpm (float): Speed to stir at, only used if stir == True.
+        vessel_type (str): Given internally. Used to know whether to use
+            heater or chiller base steps. 'ChemputerFilter' or
+            'ChemputerReactor'.
+    """
+    def __init__(
+        self,
+        vessel: str,
+        stir: Optional[bool] = True,
+        stir_rpm: Optional[float] = None,
+        vessel_type: Optional[str] = None,
+        **kwargs) -> None:
+
+        super().__init__(locals())
+        self.steps = []
+        if self.vessel_type == 'ChemputerFilter':
+            self.steps = [
+                CChillerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+                CStartChiller(vessel=self.vessel),
+                CChillerWaitForTemp(vessel=self.vessel),
+                CStopChiller(self.vessel)
+            ]
+        elif self.vessel_type == 'ChemputerReactor':
+            self.steps = [
+                CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+                CStirrerHeat(vessel=self.vessel),
+                CStirrerWaitForTemp(vessel=self.vessel),
+                CStopHeat(self.vessel),
+            ]
+
+        if self.stir:
+            self.steps.insert(0, CStir(vessel=self.vessel))
+            if self.stir_rpm:
+                self.steps.insert(
+                    0, CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm))
+            else:
+                self.steps.insert(
+                    0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+        else:
+            self.steps.insert(0, CStopStir(vessel=self.vessel))
+            
+        self.human_readable = 'Stop heater/chiller for {0} and wait for it to return to room temperature'.format(
+            self.vessel)
+
+        self.requirements = {
+            'vessel': {
+                'heatchill': True,
+            }
+        }
+
 
 ################
 ### CLEANING ###

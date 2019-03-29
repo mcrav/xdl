@@ -127,6 +127,12 @@ class XDLExecutor(object):
             if 'vacuum' in step.properties and not step.vacuum:
                 step.vacuum = self._get_vacuum(step.filter_vessel)
 
+            # Used by HeatChill step to know whether to Heat or Chill depending
+            # on whether vessel is a ChemputerReactor or ChemputerFilter.
+            if 'vessel_type' in step.properties:
+                step.vessel_type = self._graph_hardware[
+                    step.vessel].component_type
+
             if step.name not in BASE_STEP_OBJ_DICT:
                 self._map_hardware_to_step_list(step.steps)
 
