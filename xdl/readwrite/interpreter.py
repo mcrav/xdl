@@ -183,6 +183,8 @@ def xdl_to_component(xdl_component_element: etree._Element) -> Component:
                      xdl_component_element.
     """
     attr = dict(xdl_component_element.attrib)
+    attr['component_type'] = attr['type']
+    del attr['type']
     return Component(**attr)
 
 def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:

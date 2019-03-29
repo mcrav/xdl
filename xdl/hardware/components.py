@@ -10,7 +10,7 @@ class Component(XDLBase):
         properties (dict): Property dict of the component.
         type (str): Type of the component i.e. 'ChemputerFlask'
     """
-    def __init__(self, id: str, type: str) -> None:
+    def __init__(self, id: str, component_type: str) -> None:
         super().__init__(locals())
 
 class Hardware(object):
@@ -31,15 +31,15 @@ class Hardware(object):
         self.filters = []
         self.separators = []
         for component in self.components:
-            if component.type == CHEMPUTER_REACTOR_CLASS_NAME:
+            if component.component_type == CHEMPUTER_REACTOR_CLASS_NAME:
                 self.reactors.append(component)
-            elif component.type == CHEMPUTER_SEPARATOR_CLASS_NAME:
+            elif component.component_type == CHEMPUTER_SEPARATOR_CLASS_NAME:
                 self.separators.append(component)
-            elif component.type == CHEMPUTER_FILTER_CLASS_NAME:
+            elif component.component_type == CHEMPUTER_FILTER_CLASS_NAME:
                 self.filters.append(component)
-            elif component.type == CHEMPUTER_FLASK_CLASS_NAME:
+            elif component.component_type == CHEMPUTER_FLASK_CLASS_NAME:
                 self.flasks.append(component)
-            elif component.type == CHEMPUTER_WASTE_CLASS_NAME:
+            elif component.component_type == CHEMPUTER_WASTE_CLASS_NAME:
                 self.wastes.append(component)
         self.waste_xids = [waste.id for waste in self.wastes]
 
