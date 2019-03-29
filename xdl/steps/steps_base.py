@@ -181,8 +181,7 @@ class CStopStir(Step):
         return True
 
 class CStopHeat(Step):
-    """Starts the stirring operation of a hotplate stirrer. This command is NOT available
-    for overhead stirrers!
+    """Stop heating hotplace stirrer.
 
     Args:
         vessel (str): Vessel name to stop heating.

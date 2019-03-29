@@ -30,7 +30,6 @@ class Step(XDLBase):
         self.steps = []
         self.human_readable = self.__class__.__name__
         self.requirements = {}
-        self.vessel_chain = []
 
     def execute(
         self,

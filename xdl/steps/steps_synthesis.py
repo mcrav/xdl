@@ -239,7 +239,16 @@ class WashFilterCake(Step):
         filter_vessel (str): Filter vessel name to wash.
         solvent (str): Solvent to wash with.
         volume (float): Volume of solvent to wash with.
-        wait_time (str): Time to wait after moving solvent to filter flask.
+        vacuum_time (float): Time to wait after vacuum connected.
+        stir (Union[float, str]): True, 'solvent' or False. True means stir from
+            the start until the solvent has been removed. 'solvent' means stir
+            after the solvent has been added and stop before it is removed.
+            False means don't stir.
+        stir_time (float): Time to stir for after solvent has been added. Only
+            relevant if stir is True or 'solvent'.
+        stir_rpm (float): Speed to stir at in RPM. Only relevant if stir is True
+            or 'solvent'.
+        aspiration_speed (float): Speed to remove solvent from filter_vessel.
         waste_vessel (str): Given internally. Vessel to send waste to.
         vacuum (str): Given internally. Name of vacuum flask.
     """
@@ -249,6 +258,7 @@ class WashFilterCake(Step):
         solvent: str,
         volume: Optional[float] = 'default',
         vacuum_time: Optional[float] = 'default',
+        stir: Optional[Union[bool, str]] = 'solvent', 
         stir_time: Optional[float] = 'default',
         stir_rpm: Optional[float] =  'default',
         waste_vessel: Optional[str] = None,
@@ -259,22 +269,36 @@ class WashFilterCake(Step):
         super().__init__(locals())
 
         self.steps = [
+            # Add solvent
             Add(reagent=self.solvent, volume=self.volume,
                 vessel=self.filter_vessel, port=TOP_PORT, 
                 waste_vessel=self.waste_vessel),
-            StartStir(vessel=self.filter_vessel, stir_rpm=self.stir_rpm),
+            # Stir (or not if stir=False) filter cake and solvent briefly.
             Wait(self.stir_time),
-            StopStir(vessel=self.filter_vessel),
+            # Remove solvent.
             CMove(
                 from_vessel=self.filter_vessel,
                 from_port=BOTTOM_PORT,
                 to_vessel=self.waste_vessel,
                 volume=self.volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
                 aspiration_speed=self.aspiration_speed),
+            # Briefly dry under vacuum.
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
             Wait(self.vacuum_time),
         ]
+        # Start stirring before the solvent is added and stop stirring after the
+        # solvent has been removed but before the vacuum is connected.
+        if self.stir == True:
+            self.steps.insert(
+                0, StartStir(vessel=self.filter_vessel, stir_rpm=self.stir_rpm))
+            self.steps.insert(-2, StopStir(vessel=self.filter_vessel))
+        # Only stir after solvent is added and stop stirring before it is
+        # removed.
+        elif self.stir == 'solvent':
+            self.steps.insert(
+                1, StartStir(vessel=self.filter_vessel, stir_rpm=self.stir_rpm))
+            self.steps.insert(-3, StopStir(vessel=self.filter_vessel))
 
         self.human_readable = 'Wash {filter_vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
