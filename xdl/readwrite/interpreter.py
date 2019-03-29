@@ -69,16 +69,16 @@ def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
     """
     raw_attr = etree.fromstring(xdl_str).attrib
     processed_attr = {}
-    for camel_attr, snake_attr, attr_type in [
-        ('autoClean', 'auto_clean', bool),
-        ('organicCleaningReagent', 'organic_cleaning_reagent', str),
-        ('aqueousCleaningReagent', 'aqueous_cleaning_reagent', str),
-        ('dryRun', 'dry_run', bool),
+    for attr_name, attr_type in [
+        ('auto_clean', bool),
+        ('organic_cleaning_reagent', str),
+        ('aqueous_cleaning_reagent', str),
+        ('dry_run', bool),
     ]:
-        if camel_attr in raw_attr:
-           processed_attr[snake_attr] = raw_attr[camel_attr]
+        if attr_name in raw_attr:
+           processed_attr[attr_name] = raw_attr[attr_name]
            if attr_type == bool:
-               processed_attr[snake_attr] = parse_bool(raw_attr[camel_attr])
+               processed_attr[attr_name] = parse_bool(raw_attr[attr_name])
     return processed_attr
 
 def xdl_valid(xdl_str: str, logger: logging.Logger = None) -> bool:
