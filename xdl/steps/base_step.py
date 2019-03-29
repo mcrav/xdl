@@ -2,6 +2,7 @@
 import logging
 import copy
 import sys
+from ..utils import initialise_logger
 
 if False:
     from chempiler import Chempiler
@@ -47,9 +48,9 @@ class Step(XDLBase):
         """
         level += 1
         if not logger:
-            logging.basicConfig(
-                stream=sys.stdout, level=logging.DEBUG, format='%(message)s')
             logger = logging.getLogger('xdl_logger')
+            if not logger.hasHandlers():
+                logger = initialise_logger(logger)
         try:
             repeats = 1
             if 'repeat' in self.properties: repeats = int(self.repeat)

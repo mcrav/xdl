@@ -12,7 +12,7 @@ from .steps import steps_synthesis
 from .steps import steps_utility
 from .steps import steps_base
 from .utils.namespace import BASE_STEP_OBJ_DICT
-from .utils import parse_bool
+from .utils import parse_bool, initialise_logger
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 from .readwrite import XDLGenerator
 from .safety import procedure_is_safe
@@ -51,9 +51,10 @@ class XDL(object):
         """
         self.logger = logger
         if not logger:
-            logging.basicConfig(
-                stream=sys.stdout, level=logging.DEBUG, format='%(message)s')
             self.logger = logging.getLogger('xdl_logger')
+            if not self.logger.hasHandlers():
+                self.logger = initialise_logger(self.logger)
+                
         self._xdl_file = None
         self.auto_clean = DEFAULT_AUTO_CLEAN
         self.organic_cleaning_reagent = DEFAULT_ORGANIC_CLEANING_SOLVENT
