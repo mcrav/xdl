@@ -349,7 +349,7 @@ class XDLExecutor(object):
             print('\n')
             if type(step) == Filter:
                 step.filter_top_volume = prev_vessel_contents[
-                    step.filter_vessel]['volume']
+                    step.filter_vessel].volume
 
             prev_vessel_contents = vessel_contents
 
@@ -406,7 +406,7 @@ class XDLExecutor(object):
             for prop, val in step.properties.items():
                 if 'vessel' in prop and val in stirring_schedule[i]:
                     if (val in vessel_contents
-                        and not vessel_contents[val]['reagents']):
+                        and not vessel_contents[val].reagents):
 
                         insertions.append((i + 1, StopStir(vessel=val)))
 
