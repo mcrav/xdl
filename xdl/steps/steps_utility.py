@@ -179,6 +179,8 @@ class HeatToTemp(Step):
             else:
                 self.steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+        else:
+            self.steps.insert(0, CStopStir(vessel=self.vessel))
 
         self.vessel_chain = ['vessel']
 
@@ -241,7 +243,10 @@ class HeaterReturnToRT(Step):
             else:
                 self.steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+        else:
+            self.steps.insert(0, CStopStir(vessel=self.vessel))
 
+            
         self.vessel_chain = ['vessel']
 
         self.human_readable = 'Wait for heater attached to {0} to return to room temperature then stop it.'.format(
@@ -319,7 +324,9 @@ class ChillToTemp(Step):
             else:
                 self.steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
-            
+        else:
+            self.steps.insert(0, CStopStir(vessel=self.vessel))
+
         self.vessel_chain = ['vessel']
 
         self.human_readable = 'Chill {0} to {1} °C.'.format(
@@ -379,6 +386,8 @@ class ChillerReturnToRT(Step):
             else:
                 self.steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+        else:
+            self.steps.insert(0, CStopStir(vessel=self.vessel))
             
         self.vessel_chain = ['vessel']
 

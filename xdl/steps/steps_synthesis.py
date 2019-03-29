@@ -88,6 +88,8 @@ class Add(Step):
                 else:
                     self.steps.insert(
                         0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+            else:
+                self.steps.insert(0, CStopStir(vessel=self.vessel))
 
             self.human_readable = 'Add {0} ({1} mL) to {2} {3}.'.format(
                 self.reagent, self.volume, self.vessel, get_port_str(self.port))
@@ -126,6 +128,8 @@ class AddCorrosive(Step):
         ]
         if self.stir:
             self.steps.insert(0, CStir(vessel=self.vessel))
+        else:
+            self.steps.insert(0, CStopStir(vessel=self.vessel))
 
         self.vessel_chain = ['vessel']
 
@@ -552,6 +556,8 @@ class Heat(Step):
             else:
                 self.steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+        else:
+            self.steps.insert(0, CStopStir(vessel=self.vessel))
 
         self.vessel_chain = ['vessel']
 
@@ -597,6 +603,8 @@ class Chill(Step):
             else:
                 self.steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+        else:
+            self.steps.insert(0, CStopStir(vessel=self.vessel))
 
         self.vessel_chain = ['vessel']
 
