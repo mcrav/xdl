@@ -564,16 +564,13 @@ class XDLExecutor(object):
             self.logger.info('Execution\n---------\n')
             for step in self._xdl.steps:
                 self.logger.info(step.name)
-                repeats = 1
-                if 'repeat' in step.properties: repeats = int(step.repeat)
-                for _ in range(repeats):
-                    try:
-                        keep_going = step.execute(chempiler, self.logger)
-                    except Exception as e:
-                        self.logger.info(
-                            'Step failed {0} {1}'.format(
-                                type(step), step.properties))
-                        raise e
+                try:
+                    keep_going = step.execute(chempiler, self.logger)
+                except Exception as e:
+                    self.logger.info(
+                        'Step failed {0} {1}'.format(
+                            type(step), step.properties))
+                    raise e
                 if not keep_going:
                     return
         else:

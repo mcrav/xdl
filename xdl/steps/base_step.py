@@ -51,19 +51,19 @@ class Step(XDLBase):
                 stream=sys.stdout, level=logging.DEBUG, format='%(message)s')
             logger = logging.getLogger('xdl_logger')
         try:
-            for step in self.steps:
-                logger.info('{0}{1}'.format('  ' * level, step.name))
-                repeats = 1
-                if 'repeat' in step.properties: repeats = int(step.repeat)
-                for _ in range(repeats):
+            repeats = 1
+            if 'repeat' in self.properties: repeats = int(self.repeat)
+            for _ in range(repeats):
+                for step in self.steps:
+                    logger.info('{0}{1}'.format('  ' * level, step.name))
                     try:
                         keep_going = step.execute(chempiler, logger, level=level)
                     except Exception as e:
                         logger.info(
                             'Step failed {0} {1}'.format(type(step), step.properties))
                         raise e
-                if not keep_going:
-                    return False
+                    if not keep_going:
+                        return False
             return True
         except Exception as e:
             if logger:
