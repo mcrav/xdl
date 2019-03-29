@@ -475,6 +475,65 @@ class CSetSpeedSetPoint(Step):
         chempiler.vacuum.set_speed_set_point(self.vessel, self.set_point)
         return True
 
+class CSetEndVacuumSetPoint(Step):
+    """
+    Sets the switch off vacuum set point.
+
+    Args:
+        vessel (str): Name of the node the vacuum pump is attached to.
+        vacuum_set_point (int): Set point value to set vacuum to.
+    """
+    def __init__(self, vessel: str, vacuum_set_point: int) -> None:
+        super().__init__(locals())
+
+    def execute(self, chempiler, logger=None, level=0):
+        chempiler.vacuum.set_end_vacuum_set_point(
+            self.vessel, self.vacuum_set_point)
+        return True
+
+class CGetEndVacuumSetPoint(Step):
+    """
+    Gets the set point (target) for the switch off vacuum in mode Auto.
+
+    Args:
+        vessel (str): Name of the node the vacuum pump is attached to.
+    """
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
+
+    def execute(self, chempiler, logger=None, level=0):
+        chempiler.vacuum.get_end_vacuum_set_point(self.vessel)
+        return True
+
+class CSetRuntimeSetPoint(Step):
+    """
+    Sets the switch off vacuum set point.
+
+    Args:
+        vessel (str): Name of the node the vacuum pump is attached to.
+        time (float): Desired runtime.
+    """
+    def __init__(self, vessel: str, time: float) -> None:
+        super().__init__(locals())
+
+    def execute(self, chempiler, logger=None, level=0):
+        chempiler.vacuum.set_runtime_set_point(self.vessel, self.time)
+        return True
+
+class CGetRuntimeSetPoint(Step):
+    """
+    Gets the set point (target) for the run time in mode Auto.
+
+    Args:
+        vessel (str): Name of the node the vacuum pump is attached to.
+    """
+    def __init__(self, vessel: str) -> None:
+        super().__init__(locals())
+
+    def execute(self, chempiler, logger=None, level=0):
+        chempiler.vacuum.get_runtime_set_point(self.vessel)
+        return True
+
 
 #########################
 ### chempiler.chiller ###
