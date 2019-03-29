@@ -367,8 +367,9 @@ class ChillerReturnToRT(Step):
 
         self.steps = [
             CChillerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+            CStartChiller(vessel=self.vessel),
             CChillerWaitForTemp(vessel=self.vessel),
-            CStopChiller(vessel)
+            CStopChiller(self.vessel)
         ]
         if self.stir:
             self.steps.insert(0, CStir(vessel=self.vessel))
