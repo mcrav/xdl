@@ -80,8 +80,6 @@ class StartStir(Step):
             CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm),
         ]
 
-        self.vessel_chain = [self.vessel]
-
         self.human_readable = 'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'.format(
             **self.properties)
 
@@ -101,8 +99,6 @@ class StopStir(Step):
         super().__init__(locals())
 
         self.steps = [CStopStir(vessel=self.vessel)]
-
-        self.vessel_chain = [self.vessel]
 
         self.human_readable = 'Stop stirring {0}.'.format(self.vessel)
 
@@ -133,8 +129,6 @@ class Stir(Step):
             Wait(time=self.time),
             StopStir(vessel=self.vessel),
         ]
-
-        self.vessel_chain = [self.vessel]
 
         self.human_readable = 'Stir {vessel} for {time} s.'.format(
             **self.properties)
@@ -182,8 +176,6 @@ class HeatToTemp(Step):
         else:
             self.steps.insert(0, CStopStir(vessel=self.vessel))
 
-        self.vessel_chain = ['vessel']
-
         self.human_readable = 'Heat {vessel} to {temp} °C'.format(
             **self.properties)
 
@@ -205,11 +197,9 @@ class StopHeat(Step):
 
         self.steps = [CStopHeat(vessel=self.vessel)]
 
-        self.vessel_chain = ['vessel']
-
         self.human_readable = 'Stop heating {0}.'.format(self.vessel)
 
-        self.human_readable = {
+        self.requirements = {
             'vessel': {
                 'heatchill': True,
             }
@@ -246,13 +236,10 @@ class HeaterReturnToRT(Step):
         else:
             self.steps.insert(0, CStopStir(vessel=self.vessel))
 
-            
-        self.vessel_chain = ['vessel']
-
         self.human_readable = 'Wait for heater attached to {0} to return to room temperature then stop it.'.format(
             self.vessel)
 
-        self.human_readable = {
+        self.requirements = {
             'vessel': {
                 'heatchill': True,
             }
@@ -275,8 +262,6 @@ class StartVacuum(Step):
             CStartVacuum(vessel=self.vessel)
         ]
 
-        self.vessel_chain = ['vessel']
-
         self.human_readable = f'Start vacuum for {self.vessel}.'
 
 class StopVacuum(Step):
@@ -291,8 +276,6 @@ class StopVacuum(Step):
         self.steps = [
             CStopVacuum(vessel=self.vessel)
         ]
-
-        self.vessel_chain = ['vessel']
 
         self.human_readable = f'Stop vacuum for {self.vessel}.'
 
@@ -327,8 +310,6 @@ class ChillToTemp(Step):
         else:
             self.steps.insert(0, CStopStir(vessel=self.vessel))
 
-        self.vessel_chain = ['vessel']
-
         self.human_readable = 'Chill {0} to {1} °C.'.format(
             self.vessel, self.temp)
 
@@ -348,8 +329,6 @@ class StopChiller(Step):
             CStopChiller(self.vessel)
         ]
     
-        self.vessel_chain = ['vessel']
-
         self.human_readable = 'Stop chiller for {0}.'.format(self.vessel)
     
         self.requirements = {
@@ -389,8 +368,6 @@ class ChillerReturnToRT(Step):
         else:
             self.steps.insert(0, CStopStir(vessel=self.vessel))
             
-        self.vessel_chain = ['vessel']
-
         self.human_readable = 'Stop chiller for {0}'.format(self.vessel)
 
         self.requirements = {
@@ -458,8 +435,6 @@ class Transfer(Step):
                 through=self.through,
                 aspiration_speed=self.aspiration_speed))
                   
-        self.vessel_chain = ['from_vessel', 'to_vessel']
-
         self.human_readable = 'Transfer {0} mL from {1} {2} to {3} {4}.'.format(
             self.volume, self.from_vessel, get_port_str(self.from_port),
             self.to_vessel, get_port_str(self.to_port))

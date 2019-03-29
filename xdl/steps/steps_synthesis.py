@@ -94,7 +94,11 @@ class Add(Step):
             self.human_readable = 'Add {0} ({1} mL) to {2} {3}.'.format(
                 self.reagent, self.volume, self.vessel, get_port_str(self.port))
 
-        self.vessel_chain = ['vessel']
+        self.requirements = {
+            'vessel': {
+                'stir': self.stir,
+            }
+        }
 
 class AddCorrosive(Step):
     """Add corrosive reagent that can't come into contact with a valve.
@@ -131,8 +135,6 @@ class AddCorrosive(Step):
         else:
             self.steps.insert(0, CStopStir(vessel=self.vessel))
 
-        self.vessel_chain = ['vessel']
-
         self.human_readable = 'Transfer corrosive reagent {0} ({1} mL) to {2}.'.format(
             self.reagent, self.volume, self.vessel,)
 
@@ -160,8 +162,6 @@ class MakeSolution(Step):
         self.steps = []
         self.steps.append(
             Add(reagent=solvent, volume=solvent_volume, vessel=vessel))
-
-        self.vessel_chain = ['vessel']
 
         self.human_readable = f'Make solution of '
         for s, m in zip(solutes, solute_masses):
@@ -218,8 +218,6 @@ class Filter(Step):
                      from_port=BOTTOM_PORT),
             Wait(time=self.wait_time),
         ]
-
-        self.vessel_chain = ['filter_vessel']
 
         self.human_readable = 'Filter contents of {filter_vessel}.'.format(
             **self.properties)
@@ -278,8 +276,6 @@ class WashFilterCake(Step):
             Wait(self.vacuum_time),
         ]
 
-        self.vessel_chain = ['filter_vessel']
-
         self.human_readable = 'Wash {filter_vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
 
@@ -328,8 +324,6 @@ class Dry(Step):
         if self.temp != None:
             self.steps.insert(0, ChillToTemp(
                 vessel=self.filter_vessel, temp=self.temp))
-
-        self.vessel_chain = ['filter_vessel']
 
         self.human_readable = 'Dry substance in {filter_vessel} for {time} s.'.format(
             **self.properties)
@@ -507,8 +501,6 @@ class Separate(Step):
                                 dead_volume_target=self.waste_vessel)
             ])
 
-        self.vessel_chain = ['from_vessel', 'separation_vessel', 'to_vessel']
-
         self.human_readable = 'Separate contents of {0} {1} with {2} ({3}x{4} mL). Transfer waste phase to {5} {6} and product phase to {7} {8}.'.format(
             self.from_vessel, get_port_str(self.from_port), self.solvent,
             self.n_separations, self.solvent_volume, self.waste_phase_to_vessel,
@@ -559,8 +551,6 @@ class Heat(Step):
         else:
             self.steps.insert(0, CStopStir(vessel=self.vessel))
 
-        self.vessel_chain = ['vessel']
-
         self.human_readable = 'Heat {vessel} to {temp} °C for {time} s.'.format(
             **self.properties)
 
@@ -605,8 +595,6 @@ class Chill(Step):
                     0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
         else:
             self.steps.insert(0, CStopStir(vessel=self.vessel))
-
-        self.vessel_chain = ['vessel']
 
         self.human_readable = 'Chill {vessel} to {temp} °C for {time} s.'.format(
             **self.properties)
@@ -691,7 +679,6 @@ class Chill(Step):
 #             Wait(DEFAULT_ROTAVAP_VENT_TIME),
 #         ]
 
-#         self.vessel_chain = ['rotavap_vessel']
 
 #         self.human_readable = 'Rotavap contents of {rotavap_vessel} at {temp} °C for {time}.'.format(
 #             **self.properties)
