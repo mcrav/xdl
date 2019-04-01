@@ -187,19 +187,24 @@ class Filter(Step):
     Args:
         filter_vessel (str): Filter vessel.
         filter_top_volume (float): Volume (mL) of contents of filter top.
-        filter_bottom_volume (float): Volume (mL) of the filter bottom.
-        wait_time (float): Time to leave vacuum on filter vessel after contents have been moved. (optional)
-        waste_vessel (float): Given internally.Vessel to move waste material to.
+        wait_time (float): Time to leave vacuum on filter vessel after contents
+            have been moved. (optional)
+        aspiration_speed (float): Speed in mL / min to draw liquid from
+            filter_vessel.
+        waste_vessel (float): Given internally. Vessel to move waste material to.
         vacuum (str): Given internally. Name of vacuum flask.
+        inert_gas (str): Given internally. Name of node supplying inert gas.
+            Only used if inert gas filter dead volume method is being used.
     """
     def __init__(
         self,
         filter_vessel: str,
         filter_top_volume: Optional[float] = 0,
-        waste_vessel: Optional[str] = None,
-        vacuum: Optional[str] = None,
         wait_time: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
+        waste_vessel: Optional[str] = None,
+        vacuum: Optional[str] = None,
+        inert_gas: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -218,6 +223,11 @@ class Filter(Step):
                      from_port=BOTTOM_PORT),
             Wait(time=self.wait_time),
         ]
+
+        if self.inert_gas:
+            self.steps.append(
+                CConnect(
+                    from_vessel=self.inert_gas, to_vessel=self.filter_vessel))
 
         self.human_readable = 'Filter contents of {filter_vessel}.'.format(
             **self.properties)
@@ -248,9 +258,11 @@ class WashFilterCake(Step):
             relevant if stir is True or 'solvent'.
         stir_rpm (float): Speed to stir at in RPM. Only relevant if stir is True
             or 'solvent'.
-        aspiration_speed (float): Speed to remove solvent from filter_vessel.
         waste_vessel (str): Given internally. Vessel to send waste to.
+        aspiration_speed (float): Speed to remove solvent from filter_vessel.
         vacuum (str): Given internally. Name of vacuum flask.
+        inert_gas (str): Given internally. Name of node supplying inert gas.
+            Only used if inert gas filter dead volume method is being used.
     """
     def __init__(
         self,
@@ -262,8 +274,9 @@ class WashFilterCake(Step):
         stir_time: Optional[float] = 'default',
         stir_rpm: Optional[float] =  'default',
         waste_vessel: Optional[str] = None,
-        vacuum: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
+        vacuum: Optional[str] = None,
+        inert_gas: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -300,6 +313,11 @@ class WashFilterCake(Step):
                 1, StartStir(vessel=self.filter_vessel, stir_rpm=self.stir_rpm))
             self.steps.insert(-3, StopStir(vessel=self.filter_vessel))
 
+        if self.inert_gas:
+            self.steps.append(
+                CConnect(
+                    from_vessel=self.inert_gas, to_vessel=self.filter_vessel))
+
         self.human_readable = 'Wash {filter_vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
 
@@ -318,6 +336,8 @@ class Dry(Step):
         temp (float): Temperature to dry at.
         waste_vessel (str): Given internally. Vessel to send waste to.
         vacuum (str): Given internally. Vacuum flask.
+        inert_gas (str): Given internally. Name of node supplying inert gas.
+            Only used if inert gas filter dead volume method is being used.
     """
     def __init__(
         self,
@@ -325,8 +345,9 @@ class Dry(Step):
         time: Optional[float] = 'default',
         temp: Optional[float] = None,
         waste_vessel: Optional[str] = None,
-        vacuum: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
+        vacuum: Optional[str] = None,
+        inert_gas: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -350,6 +371,11 @@ class Dry(Step):
                 vessel=self.filter_vessel,
                 temp=self.temp,
                 vessel_type='ChemputerFilter'))
+
+        if self.inert_gas:
+            self.steps.append(
+                CConnect(
+                    from_vessel=self.inert_gas, to_vessel=self.filter_vessel))
 
         self.human_readable = 'Dry substance in {filter_vessel} for {time} s.'.format(
             **self.properties)

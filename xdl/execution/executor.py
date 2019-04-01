@@ -135,6 +135,13 @@ class XDLExecutor(object):
                 step.vessel_type = self._graph_hardware[
                     step.vessel].component_type
 
+            # Filter, WashFilterCake, Dry need this filled in if inert gas
+            # filter dead volume method being used.
+            if ('inert_gas' in step.properties
+                and self._xdl.filter_dead_volume_method
+                == FILTER_DEAD_VOLUME_INERT_GAS_METHOD):
+                step.inert_gas = self._filter_inert_gas_map[step.filter_vessel]
+
             if step.name not in BASE_STEP_OBJ_DICT:
                 self._map_hardware_to_step_list(step.steps)
 
@@ -454,20 +461,6 @@ class XDLExecutor(object):
                     from_vessel=self._filter_inert_gas_map[filter_vessel.id],
                     to_vessel=filter_vessel.id,
                     to_port=BOTTOM_PORT))
-
-        # Reconnect inert gas to bottom of filter flasks after filtration
-        # sequences.
-        filter_step_types = [Filter, WashFilterCake, Dry]
-        for i in reversed(range(len(self._xdl.steps))):
-            step = self._xdl.steps[i]
-            if type(step) in filter_step_types:
-                self._xdl.steps.insert(
-                    i+1,
-                    CConnect(
-                        from_vessel=self._filter_inert_gas_map[
-                            step.filter_vessel],
-                        to_vessel=step.filter_vessel,
-                        to_port=BOTTOM_PORT))
 
 
     ###################################
