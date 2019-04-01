@@ -69,14 +69,6 @@ DEFAULT_CLEAN_VESSEL_STIR_TIME: int = 60
 #############
 ## Rotavap ##
 #############
-#: Default pressure in mbar for rotavap degassing.
-DEFAULT_ROTAVAP_DEGAS_PRESSURE: int = 900
-
-#: Default time in seconds for rotavap degassing.
-DEFAULT_ROTAVAP_DEGAS_TIME: int = 300 # s
-
-#: Default time in seconds for rotavap venting.
-DEFAULT_ROTAVAP_VENT_TIME: int = 10
 
 #: Default time in seconds for evaporating mixture to dryness.
 DEFAULT_ROTAVAP_DRYING_TIME: int = 2* 60 * 60
@@ -186,6 +178,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     },
     'Rotavap': {
         'time': DEFAULT_ROTAVAP_DRYING_TIME,
+        'rotation_speed': DEFAULT_ROTAVAP_ROTATION_SPEED,
     },
     'StirAtRT': {
         'stir_rpm': DEFAULT_STIR_RPM,

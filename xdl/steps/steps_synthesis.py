@@ -716,83 +716,63 @@ class HeatChill(Step):
 ### ROTAVAP STEPS ###
 #####################
 
-# class Rotavap(Step):
-#     """Rotavap contents of given vessel at given temp and given pressure for
-#     given time.
+class Rotavap(Step):
+    """Rotavap contents of given vessel at given temp and given pressure for
+    given time.
 
-#     Args:
-#         vessel (str): Vessel with contents to be rotavapped.
-#         temp (float): Temperature to set rotary evaporator water bath to in °C.
-#         pressure (float): Pressure to set rotary evaporator vacuum to in mbar.
-#         time (int): Time to rotavap for in seconds.
-#     """
-#     def __init__(
-#         self,
-#         rotavap_vessel: str,
-#         temp: float,
-#         vacuum_pressure: float,
-#         time: Optional[float] = 'default',
-#         rotation_speed: Optional[float] = None,
-#         waste_vessel: Optional[str] = None,
-#         distillate_volume: Optional[float] = None,
-#         **kwargs
-#     ):
-#         super().__init__(locals())
+    Args:
+        rotavap_vessel (str): Name of rotavap vessel.
+        temp (float): Temperature to set rotavap water bath to in °C.
+        vacuum_pressure (float): Pressure to set rotavap vacuum to in mbar.
+        time (float): Time to rotavap for in seconds.
+        rotation_speed (float): Speed in RPM to rotate flask at.
+    """
+    def __init__(
+        self,
+        rotavap_vessel: str,
+        temp: float,
+        pressure: float,
+        time: Optional[float] = 'default',
+        rotation_speed: Optional[float] = 'default',
+        **kwargs
+    ):
+        super().__init__(locals())
 
-#         # Steps incomplete
-#         self.steps = [
-#             # Lower flask start rotation.
-#             CSwitchCartridge(self.rotavap_vessel, 0),
-#             CLiftArmDown(self.rotavap_vessel),
-#             CSetRvRotationSpeed(self.rotavap_vessel, self.rotation_speed),
-#             CStartRotation(self.rotavap_vessel),
+        self.steps = [
+            # Start rotation
+            CRotavapSetRotationSpeed(self.rotavap_vessel, self.rotation_speed),
+            CRotavapStartRotation(self.rotavap_vessel),
 
-#             # Degas
-#             CSetVacSp(self.rotavap_vessel, DEFAULT_ROTAVAP_DEGAS_PRESSURE),
-#             CStartVac(self.rotavap_vessel),
-#             CSetBathTemp(self.rotavap_vessel, self.temp),
-#             CStartHeaterBath(self.rotavap_vessel),
-#             Wait(DEFAULT_ROTAVAP_DEGAS_TIME),
+            # Lower flask into bath.
+            CRotavapLiftDown(self.rotavap_vessel),
 
-#             # Main distillation
-#             CSetVacSp(self.rotavap_vessel, self.vacuum_pressure),
-#             Wait(self.time),
+            # Start heating
+            CRotavapSetTemp(self.rotavap_vessel, self.temp),
+            CRotavapStartHeater(self.rotavap_vessel),
 
-#             # Vent and empty
-#             CLiftArmUp(self.rotavap_vessel),
-#             CWait(DEFAULT_ROTAVAP_VENT_TIME),
-#             StopVacuum(self.rotavap_vessel),
-#             CVentVac(self.rotavap_vessel),
-#             CMove(from_vessel=self.rotavap_vessel, from_port=BOTTOM_PORT,
-#                   to_vessel=self.waste_vessel, volume=self.distillate_volume),
+            # Start vacuum
+            CSetVacuumSetPoint(self.rotavap_vessel, self.pressure),
+            CStartVacuum(self.rotavap_vessel),
             
-#             # Dry
-#             CLiftArmDown(self.rotavap_vessel),
-#             CSetVacSp(self.rotavap_vessel, self.vacuum_pressure),
-#             CStartVac(self.rotavap_vessel),
-#             CWait(self.time),
-            
-#             # Recover flask and vent
-#             CLiftArmUp(self.rotavap_vessel),
-#             Wait(DEFAULT_ROTAVAP_VENT_TIME),
-#             CStopVac(self.rotavap_vessel),
-#             CVentVac(self.rotavap_vessel),
-#             CStopRotation(self.rotavap_vessel),
-#             CStopHeaterBath(self.rotavap_vessel),
-#             CMove(from_vessel=self.rotavap_vessel, from_port=BOTTOM_PORT,
-#                   to_vessel=self.waste_vessel, volume=self.distillate_volume),
-#             Wait(DEFAULT_ROTAVAP_VENT_TIME),
-#         ]
+            # Wait for evaporation to happen.
+            Wait(time=self.time),
 
+            # Stop evaporation.
+            CStopVacuum(self.rotavap_vessel),
+            CVentVacuum(self.rotavap_vessel),
+            CRotavapStopRotation(self.rotavap_vessel),
+            CRotavapStopHeater(self.rotavap_vessel),
+            CRotavapLiftUp(self.rotavap_vessel),            
+        ]
 
-#         self.human_readable = 'Rotavap contents of {rotavap_vessel} at {temp} °C for {time}.'.format(
-#             **self.properties)
+        self.human_readable = 'Rotavap contents of {rotavap_vessel} at {temp} °C and {pressure} mbar for {time}.'.format(
+            **self.properties)
 
-#         self.requirements = {
-#             'rotavap_vessel': {
-#                 'rotavap': True,
-#             }
-#         }
+        self.requirements = {
+            'rotavap_vessel': {
+                'rotavap': True,
+            }
+        }
 
 class Column(Step):
 
