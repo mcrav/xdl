@@ -218,6 +218,9 @@ CHEMPUTER_VALVE_CLASS_NAME: str = 'ChemputerValve'
 BOTTOM_PORT: str = 'bottom'
 TOP_PORT: str = 'top'
 
+FILTER_DEAD_VOLUME_INERT_GAS_METHOD: str = 'inert_gas'
+FILTER_DEAD_VOLUME_LIQUID_METHOD: str = 'solvent'
+
 
 ############
 ### MISC ###

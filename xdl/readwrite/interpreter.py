@@ -74,6 +74,8 @@ def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
         ('organic_cleaning_reagent', str),
         ('aqueous_cleaning_reagent', str),
         ('dry_run', bool),
+        ('filter_dead_volume_method', str),
+        ('filter_dead_volume_solvent', str),
     ]:
         if attr_name in raw_attr:
            processed_attr[attr_name] = raw_attr[attr_name]

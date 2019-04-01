@@ -8,12 +8,14 @@ if False:
 
 from ..constants import *
 from ..utils.namespace import BASE_STEP_OBJ_DICT
+from ..utils.misc import raise_error
 from ..steps import *
 from ..safety import procedure_is_safe
 from ..reagents import Reagent
 from .tracking import iter_vessel_contents
 from .graph import (
     hardware_from_graph, get_graph, make_vessel_map, make_filter_inert_gas_map)
+from .utils import VesselContents
 
 # Steps after which backbone should be cleaned
 CLEAN_BACKBONE_AFTER_STEPS: List[type] = [
@@ -193,7 +195,13 @@ class XDLExecutor(object):
         if type(step) == Add:
             nearest_node = step.vessel
                 
-        elif type(step) in [Filter, Dry, WashFilterCake]:
+        elif type(step) in [
+            Filter,
+            Dry,
+            WashFilterCake,
+            AddFilterDeadVolume,
+            RemoveFilterDeadVolume
+        ]:
             nearest_node = step.filter_vessel
 
         elif type(step) == Separate:
@@ -213,7 +221,7 @@ class XDLExecutor(object):
         """Add extra steps implied by explicit XDL steps."""
         if self._xdl.auto_clean:
             self._add_implied_clean_backbone_steps()
-        self._add_filter_inert_gas_connect_steps()
+        self._add_filter_dead_volume_handling_steps()
 
     def _get_step_reagent_types(self) -> List[str]:
         """Get the reagent type, 'organic' or 'aqueous' involved in every step.
@@ -298,6 +306,139 @@ class XDLExecutor(object):
             if clean_type == 'water':
                 solvent = self._xdl.aqueous_cleaning_reagent
             self._xdl.steps.insert(i, CleanBackbone(solvent=solvent))
+        self._map_hardware_to_steps()
+
+
+###################################
+### FILTER DEAD VOLUME HANDLING ###
+###################################
+
+    def _add_filter_dead_volume_handling_steps(self) -> None:
+        """Add steps to handle the filter dead volume. This can be handled in
+        two ways determined by the XDL object's filter_dead_volume_method
+        attribute (default is 'solvent', alternative is 'inert_gas').
+
+        'solvent' means before liquid is added to the filter, the bottom is
+        filled  up with a solvent specified in the <Synthesis> tag of the XDL.
+        Before liquid is removed from the filter, the solvent in the bottom is
+        removed first.
+
+        'inert_gas' means that when not connected to the vacuumm, the bottom of
+        the flask is connected to a stream of inert gas that keeps the liquid in
+        the top part of the filter where it is.
+        """
+        if (self._xdl.filter_dead_volume_method
+            == FILTER_DEAD_VOLUME_INERT_GAS_METHOD):
+            self._add_filter_inert_gas_connect_steps()
+
+        elif (self._xdl.filter_dead_volume_method
+              == FILTER_DEAD_VOLUME_LIQUID_METHOD):
+            self._add_filter_liquid_dead_volume_steps()
+
+    def _add_filter_liquid_dead_volume_steps(self) -> None:
+        """Using 'solvent' method for handling filter dead volume, add
+        AddFilterDeadVolume steps and RemoveFilterDeadVolume steps at
+        appropriate places to deal with the filter dead volume.
+        """
+        self._add_implied_add_dead_volume_steps()
+        self._map_hardware_to_steps()
+        self._add_implied_remove_dead_volume_steps()
+        self._map_hardware_to_steps()
+
+    def _get_filter_emptying_steps(
+        self) -> List[Tuple[int, str, Dict[str, VesselContents]]]:
+        """Get steps at which a filter vessel is emptied. Also return full
+        list of vessel contents dict at every step.
+        
+        Returns:
+            List[Tuple[int, str, Dict[str, VesselContents]]]: List of tuples,
+                format:
+                [(step_index,
+                  filter_vessel_name,
+                  {vessel: VesselContents, ...},
+                  ...]
+        """
+        filter_emptying_steps = []
+        full_vessel_contents = []
+        prev_vessel_contents = {}
+        for i, _, vessel_contents in iter_vessel_contents(
+            self._xdl.steps, self._graph_hardware):
+            full_vessel_contents.append(vessel_contents)
+            for vessel, contents in vessel_contents.items():
+                if (self._graph_hardware[vessel].type 
+                    == CHEMPUTER_FILTER_CLASS_NAME
+                    and vessel in prev_vessel_contents):
+                    # If filter vessel has just been emptied, append to filters.
+                    if (not contents.reagents
+                        and prev_vessel_contents[vessel].reagents):
+                        filter_emptying_steps.append(
+                            (i, vessel, full_vessel_contents))
+                        
+            prev_vessel_contents = vessel_contents
+        return filter_emptying_steps
+
+    def _get_filter_dead_volume(self, filter_vessel: str) -> float:
+        """Return dead volume (volume below filter) of given filter vessel.
+        
+        Args:
+            filter_vessel (str): ID of filter vessel.
+        
+        Returns:
+            float: Dead volume of given filter vessel.
+        """
+        for vessel in self._graph_hardware.filters:
+            if vessel.id == filter_vessel:
+                return vessel.dead_volume
+        return 0
+
+    def _add_implied_add_dead_volume_steps(self) -> None:
+        """
+        Add PrepareFilter steps if filter top is being used, to fill up the 
+        bottom of the filter with solvent, so material added to the top doesn't 
+        drip through.
+
+        Raises:
+            AttributeError: If filter_dead_volume_method is liquid, but
+                self._xdl has no filter_dead_volume_solvent attribute.
+        """
+        # Find steps at which a filter vessel is emptied. Can't just look for
+        # Filter steps as liquid may be transferred to filter flask for other
+        # reasons i.e. using the chiller.
+        for filter_i, filter_vessel, full_vessel_contents in reversed(
+            self._get_filter_emptying_steps()):
+            j = filter_i - 1
+
+            # Find point at which first reagent is added to filter vessel.
+            # This is the point at which to insert the PrepareFilter step.
+            while (j > 0 
+                   and filter_vessel in full_vessel_contents[j-1]
+                   and full_vessel_contents[j-1][filter_vessel].reagents):
+                j -= 1
+
+            if self._xdl.filter_dead_volume_solvent:
+                solvent = self._xdl.filter_dead_volume_solvent
+            else:
+                raise_error(
+                    AttributeError,
+                    'No filter_dead_volume_solvent specified in <Synthesis> tag'
+                )
+
+            # Insert AddFilterDeadVolume step into self._xdl.steps.
+            self._xdl.steps.insert(j, AddFilterDeadVolume(
+                filter_vessel=filter_vessel, solvent=solvent, 
+                volume=self._get_filter_dead_volume(filter_vessel)))
+
+    def _add_implied_remove_dead_volume_steps(self) -> None:
+        """When liquid is transferred from a filter vessel remove dead volume
+        first.
+        """
+        # Look for filter emptying steps and add RemoveFilterDeadVolume step
+        # just before them.
+        for i, vessel, _ in reversed(self._get_filter_emptying_steps()):
+            self._xdl.steps.insert(i,
+                RemoveFilterDeadVolume(
+                    filter_vessel=vessel, 
+                    dead_volume=self._get_filter_dead_volume(vessel)))
 
     def _add_filter_inert_gas_connect_steps(self) -> None:
         """Add steps to self._xdl.steps to implement the following:
@@ -539,7 +680,6 @@ class XDLExecutor(object):
 
                     # Add in steps implied by explicit steps.
                     self._add_implied_steps()
-                    self._map_hardware_to_steps()
 
                     # Convert implied properties to concrete values.
                     self._add_all_volumes()

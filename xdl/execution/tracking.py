@@ -1,18 +1,8 @@
 from typing import List, Dict, Generator, Optional, Union, Tuple
 import copy
+from .utils import VesselContents
 from ..steps import Step, Filter, WashFilterCake, Dry, Separate, CMove
 from ..hardware import Hardware
-
-class VesselContents(object):
-    """Convenience class to represents contents of one vessel.
-
-    Attributes:
-        reagents (List[str]): List of reagents flask contains.
-        volume (float): Current volume of liquid in flask.
-    """
-    def __init__(self, reagents: List[str] = [], volume: float = 0) -> None:
-        self.reagents = reagents
-        self.volume = volume
 
 def iter_vessel_contents(
     steps: List[Step], hardware: Hardware, additions: bool = False
@@ -100,6 +90,7 @@ def iter_vessel_contents(
                 empty_from_vessel = False
                 # Add vessels to vessel_contents if they aren't there.
                 for vessel in [from_vessel, to_vessel]:
+                    print('VESSEL', vessel, step)
                     vessel_contents.setdefault(
                         vessel,
                         VesselContents([], hardware[vessel].current_volume))
