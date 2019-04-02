@@ -416,6 +416,8 @@ class HeatChillToTemp(Step):
         stir: Optional[bool] = True,
         stir_rpm: Optional[float] = None,
         vessel_type: Optional[str] = None,
+        wait_recording_speed: Optional[float] = 'default',
+        after_recording_speed: Optional[float] = 'default',
         **kwargs
     ) -> None:
 
@@ -425,13 +427,17 @@ class HeatChillToTemp(Step):
             self.steps = [
                 CChillerSetTemp(vessel=self.vessel, temp=self.temp),
                 CStartChiller(vessel=self.vessel),
+                CSetRecordingSpeed(self.wait_recording_speed),
                 CChillerWaitForTemp(vessel=self.vessel),
+                CSetRecordingSpeed(self.after_recording_speed),
             ]
         elif self.vessel_type == 'ChemputerReactor':
             self.steps = [
                 CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
                 CStirrerHeat(vessel=self.vessel),
+                CSetRecordingSpeed(self.wait_recording_speed),
                 CStirrerWaitForTemp(vessel=self.vessel),
+                CSetRecordingSpeed(self.after_recording_speed),
             ]
 
         if self.stir:
