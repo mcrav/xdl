@@ -13,6 +13,7 @@ setup(name='xdl',
             'xdl.hardware', 
             'xdl.safety',
             'xdl.execution',
-            'xdl.readwrite'
+            'xdl.readwrite',
+            'xdl.graph',
       ],
 )

@@ -7,6 +7,7 @@ import copy
 from typing import List
 
 from .constants import *
+from .graph.generator import GraphGenerator
 from .steps import *
 from .steps import steps_synthesis
 from .steps import steps_utility
@@ -238,6 +239,21 @@ class XDL(object):
                 if 'volume' in prop and type(val) == float:
                     if val:
                         step.properties[prop] = float(val) * scale
+
+    def generate_graph(
+        self, save_path: str = None) -> Dict[str, List[Dict[str, Any]]]:
+        """Generate basic node link JSON graph based on procedure and return it
+        as dict. If save_path is given also save to file.
+
+        Args:
+            save_path (str): Path to save JSON graph file to.
+        
+        Returns:
+            Dict[str, List[Dict[str, Any]]]:
+        """
+        graph_generator = GraphGenerator(self)
+        graph_generator.generate_graph(save_path)
+        return graph_generator.graph
 
     def prepare_for_execution(self, graph_file: str) -> None:
         """Check hardware compatibility and prepare XDL for execution on given 
