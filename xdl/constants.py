@@ -190,9 +190,12 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'stir_rpm': DEFAULT_STIR_RPM,
     },
     'HeatChill': {
+        'stir': True,
         'stir_rpm': DEFAULT_STIR_RPM,
     },
     'HeatChillToTemp': {
+        'stir': True,
+        'stir_rpm': DEFAULT_STIR_RPM,
         'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
         'after_recording_speed': DEFAULT_RECORDING_SPEED,
     },

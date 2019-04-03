@@ -308,7 +308,6 @@ class XDLExecutor(object):
         determine what solvents to clean the backbone with.
         """
         for i, clean_type in reversed(self._get_clean_backbone_sequence()):
-            print(clean_type)
             solvent = self._xdl.organic_cleaning_reagent 
             if clean_type == 'water':
                 solvent = self._xdl.aqueous_cleaning_reagent
@@ -486,9 +485,6 @@ class XDLExecutor(object):
         prev_vessel_contents = {}
         for _, step, vessel_contents in iter_vessel_contents(
             self._xdl.steps, self._graph_hardware):
-            print(step)
-            print(vessel_contents)
-            print('\n')
             if type(step) == Filter:
                 step.filter_top_volume = prev_vessel_contents[
                     step.filter_vessel].volume

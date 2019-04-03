@@ -90,7 +90,6 @@ def iter_vessel_contents(
                 empty_from_vessel = False
                 # Add vessels to vessel_contents if they aren't there.
                 for vessel in [from_vessel, to_vessel]:
-                    print('VESSEL', vessel, step)
                     vessel_contents.setdefault(
                         vessel,
                         VesselContents([], hardware[vessel].current_volume))

@@ -721,7 +721,7 @@ class Rotavap(Step):
     given time.
 
     Args:
-        rotavap_vessel (str): Name of rotavap vessel.
+        rotavap_name (str): Name of rotavap vessel.
         temp (float): Temperature to set rotavap water bath to in °C.
         vacuum_pressure (float): Pressure to set rotavap vacuum to in mbar.
         time (float): Time to rotavap for in seconds.
@@ -729,7 +729,7 @@ class Rotavap(Step):
     """
     def __init__(
         self,
-        rotavap_vessel: str,
+        rotavap_name: str,
         temp: float,
         pressure: float,
         time: Optional[float] = 'default',
@@ -740,36 +740,36 @@ class Rotavap(Step):
 
         self.steps = [
             # Start rotation
-            CRotavapSetRotationSpeed(self.rotavap_vessel, self.rotation_speed),
-            CRotavapStartRotation(self.rotavap_vessel),
+            CRotavapSetRotationSpeed(self.rotavap_name, self.rotation_speed),
+            CRotavapStartRotation(self.rotavap_name),
 
             # Lower flask into bath.
-            CRotavapLiftDown(self.rotavap_vessel),
+            CRotavapLiftDown(self.rotavap_name),
 
             # Start heating
-            CRotavapSetTemp(self.rotavap_vessel, self.temp),
-            CRotavapStartHeater(self.rotavap_vessel),
+            CRotavapSetTemp(self.rotavap_name, self.temp),
+            CRotavapStartHeater(self.rotavap_name),
 
             # Start vacuum
-            CSetVacuumSetPoint(self.rotavap_vessel, self.pressure),
-            CStartVacuum(self.rotavap_vessel),
+            CSetVacuumSetPoint(self.rotavap_name, self.pressure),
+            CStartVacuum(self.rotavap_name),
             
             # Wait for evaporation to happen.
             Wait(time=self.time),
 
             # Stop evaporation.
-            CStopVacuum(self.rotavap_vessel),
-            CVentVacuum(self.rotavap_vessel),
-            CRotavapStopRotation(self.rotavap_vessel),
-            CRotavapStopHeater(self.rotavap_vessel),
-            CRotavapLiftUp(self.rotavap_vessel),            
+            CStopVacuum(self.rotavap_name),
+            CVentVacuum(self.rotavap_name),
+            CRotavapStopRotation(self.rotavap_name),
+            CRotavapStopHeater(self.rotavap_name),
+            CRotavapLiftUp(self.rotavap_name),            
         ]
 
-        self.human_readable = 'Rotavap contents of {rotavap_vessel} at {temp} °C and {pressure} mbar for {time}.'.format(
+        self.human_readable = 'Rotavap contents of {rotavap_name} at {temp} °C and {pressure} mbar for {time}.'.format(
             **self.properties)
 
         self.requirements = {
-            'rotavap_vessel': {
+            'rotavap_name': {
                 'rotavap': True,
             }
         }
