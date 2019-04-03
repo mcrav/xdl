@@ -3,6 +3,7 @@ from lxml import etree
 from ..reagents import Reagent
 from ..hardware import Hardware
 from ..steps import Add, Step
+from ..constants import DEFAULT_VALS, INTERNAL_PROPERTIES
 
 class XDLGenerator(object):   
     """
@@ -10,7 +11,11 @@ class XDLGenerator(object):
     """
 
     def __init__(
-        self, steps: List[Step], hardware: Hardware, reagents: List[Reagent]
+        self,
+        steps: List[Step],
+        hardware: Hardware,
+        reagents: List[Reagent],
+        full_properties: bool = False,
     ) -> None:
         """
         Generate XDL from steps, hardware and reagents.
@@ -19,8 +24,15 @@ class XDLGenerator(object):
             steps (List[xdl.steps.Step]): List of Step objects
             hardware (xdl.hardware.Hardware): Hardware object.
             reagents (List[xdl.reagents.Reagent]): List of Reagent objects
+            full_properties (bool): If True, all properties will be included.
+                If False, only properties that differ from their default values
+                and that aren't internal properties will be included.
+                Including full properties is recommended for making XDL files
+                that will stand the test of time, as defaults may change in new
+                versions of XDL.
         """
         self.hardware, self.reagents, self.steps = hardware, reagents, steps
+        self.full_properties = full_properties
         self._generate_xdl()
 
     def _generate_xdl(self) -> None:
@@ -61,6 +73,19 @@ class XDLGenerator(object):
             step_tree = etree.Element(step.name)
             for prop, val in step.properties.items():
                 if val != None:
+                    # if self.full_properties is False ignore some properties.
+                    if not self.full_properties:
+                        # Don't write properties that are the same as the default.
+                        if (step.name in DEFAULT_VALS
+                        and prop in DEFAULT_VALS[step.name]
+                        and DEFAULT_VALS[step.name][prop] == val):
+                            continue
+                        
+                        # Don't write internal properties.
+                        elif (step.name in INTERNAL_PROPERTIES
+                             and prop in INTERNAL_PROPERTIES[step.name]):
+                             continue
+
                     step_tree.attrib[prop] = str(val)
                     if type(val) == list:
                         step_tree.attrib[prop] = ' '.join(

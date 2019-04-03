@@ -201,6 +201,23 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     },
 }
 
+INTERNAL_PROPERTIES = {
+    'Add': ['reagent_vessel', 'waste_vessel', 'flush_tube_vessel'],
+    'AddCorrosive': ['reagent_vessel', 'air_vessel'],
+    'Filter': ['waste_vessel', 'vacuum', 'inert_gas', 'filter_top_volume'],
+    'WashFilterCake': ['waste_vessel', 'vacuum', 'inert_gas'],
+    'Dry': ['waste_vessel', 'vacuum', 'inert_gas'],
+    'Separate': ['waste_vessel'],
+    'HeatChill': ['vessel_type'],
+    'PrimePumpForAdd': ['reagent_vessel', 'waste_vessel'],
+    'HeatChillToTemp': ['vessel_type'],
+    'StopHeatChill': ['vessel_type'],
+    'HeatChillReturnToRT': ['vessel_type'],
+    'CleanBackbone': ['solvent_vessel', 'waste_vessels'],
+    'AddFilterDeadVolume': ['waste_vessel', 'solvent_vessel'],
+    'RemoveFilterDeadVolume': ['waste_vessel'],
+}
+
 
 ####################################
 ### CHEMPUTER DEVICE CLASS NAMES ###

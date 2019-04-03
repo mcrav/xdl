@@ -217,15 +217,22 @@ class XDL(object):
                                           reagents=self.reagents)
         return self._xdlgenerator.as_string()
 
-    def save(self, save_file: str) -> str:
+    def save(self, save_file: str, full_properties: bool = False) -> str:
         """Save as XDL file.
         
         Args:
             save_file (str): File path to save XDL to.
+            full_properties (bool): If True, all properties will be included.
+                If False, only properties that differ from their default values
+                will be included.
+                Including full properties is recommended for making XDL files
+                that will stand the test of time, as defaults may change in new
+                versions of XDL.
         """
         self._xdlgenerator = XDLGenerator(steps=self.steps,
                                           hardware=self.hardware,
-                                          reagents=self.reagents)
+                                          reagents=self.reagents,
+                                          full_properties=full_properties)
         self._xdlgenerator.save(save_file)
 
     def scale_procedure(self, scale: float) -> None:
