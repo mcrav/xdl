@@ -78,6 +78,7 @@ class XDL(object):
                 # Get attrs from <Synthesis> tag.
                 for k, v in parsed_xdl['procedure_attrs'].items():
                     setattr(self, k, v)
+                self.executor = XDLExecutor(self)
             
             else:
                 print('Invalid XDL given.')
@@ -272,7 +273,6 @@ class XDL(object):
                                         or dict containing graph in same format
                                         as JSON file.
         """
-        self.executor = XDLExecutor(self)
         self.executor.prepare_for_execution(graph_file)
 
     def execute(self, chempiler: 'Chempiler') -> None:
