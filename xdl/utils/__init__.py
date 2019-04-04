@@ -1,2 +1,2 @@
 from .xdl_base import XDLBase
-from .misc import parse_bool, initialise_logger
+from .misc import parse_bool, initialise_logger, raise_error

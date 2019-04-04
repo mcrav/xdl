@@ -1,4 +1,12 @@
 from typing import Union, Generator
+from .constants import (
+    FILTER_TYPES,
+    REACTOR_TYPES,
+    ROTAVAP_TYPES,
+    SEPARATOR_TYPES,
+    FLASK_TYPES,
+    WASTE_TYPES,
+)
 from ..utils.xdl_base import XDLBase 
 from ..constants import *
 
@@ -31,15 +39,15 @@ class Hardware(object):
         self.filters = []
         self.separators = []
         for component in self.components:
-            if component.component_type == CHEMPUTER_REACTOR_CLASS_NAME:
+            if component.component_type in REACTOR_TYPES:
                 self.reactors.append(component)
-            elif component.component_type == CHEMPUTER_SEPARATOR_CLASS_NAME:
+            elif component.component_type in SEPARATOR_TYPES: 
                 self.separators.append(component)
-            elif component.component_type == CHEMPUTER_FILTER_CLASS_NAME:
+            elif component.component_type in FILTER_TYPES:
                 self.filters.append(component)
-            elif component.component_type == CHEMPUTER_FLASK_CLASS_NAME:
+            elif component.component_type in FLASK_TYPES:
                 self.flasks.append(component)
-            elif component.component_type == CHEMPUTER_WASTE_CLASS_NAME:
+            elif component.component_type in WASTE_TYPES:
                 self.wastes.append(component)
         self.waste_xids = [waste.id for waste in self.wastes]
 
