@@ -308,9 +308,9 @@ class XDLExecutor(object):
         determine what solvents to clean the backbone with.
         """
         for i, clean_type in reversed(self._get_clean_backbone_sequence()):
-            solvent = self._xdl.organic_cleaning_reagent 
+            solvent = self._xdl.organic_cleaning_solvent 
             if clean_type == 'water':
-                solvent = self._xdl.aqueous_cleaning_reagent
+                solvent = self._xdl.aqueous_cleaning_solvent
             self._xdl.steps.insert(i, CleanBackbone(solvent=solvent))
         self._map_hardware_to_steps()
 

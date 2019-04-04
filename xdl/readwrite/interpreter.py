@@ -71,8 +71,8 @@ def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
     processed_attr = {}
     for attr_name, attr_type in [
         ('auto_clean', bool),
-        ('organic_cleaning_reagent', str),
-        ('aqueous_cleaning_reagent', str),
+        ('organic_cleaning_solvent', str),
+        ('aqueous_cleaning_solvent', str),
         ('dry_run', bool),
         ('filter_dead_volume_method', str),
         ('filter_dead_volume_solvent', str),
