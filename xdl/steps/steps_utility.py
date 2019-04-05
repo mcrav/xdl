@@ -584,6 +584,14 @@ class Transfer(Step):
         from_vessel (str): Vessel name to transfer from.
         to_vessel (str): Vessel name to transfer to.
         volume (float): Volume to transfer in mL.
+        from_port (str): Port on from_vessel to transfer from.
+        to_port (str): Port on to_vessel to transfer from.
+        through (str): Node name to transfer to.
+        aspiration_speed (float): Speed in mL / min to pull liquid out of
+            from_vessel.
+        move_speed (float): Speed in mL / min to move liquid at.
+        dispense_speed (float): Speed in mL / min to push liquid out of pump
+            into to_vessel.
     """
     def __init__(
         self,
@@ -594,6 +602,8 @@ class Transfer(Step):
         to_port: Optional[str] = None, 
         through: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
+        move_speed: Optional[float] = 'default',
+        dispense_speed: Optional[float] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -607,7 +617,9 @@ class Transfer(Step):
                 to_port=self.to_port, 
                 volume=self.volume,
                 through=self.through,
-                aspiration_speed=self.aspiration_speed))
+                aspiration_speed=self.aspiration_speed,
+                move_speed=self.move_speed,
+                dispense_speed=self.dispense_speed))
                   
         self.human_readable = 'Transfer {0} mL from {1} {2} to {3} {4}.'.format(
             self.volume, self.from_vessel, get_port_str(self.from_port),
