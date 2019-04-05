@@ -23,6 +23,10 @@ class Add(Step):
             pulled out of reagent_vessel).
         dispense_speed (float): Dispense speed (speed at which liquid is pushed
             from pump into vessel).
+        time (float): Time to spend dispensing liquid. Works by changing
+            dispense_speed. Note: The time given here will not be the total step
+            execution time, it will be the total time spent dispensing from the
+            pump into self.vessel during the addition.
         stir (bool): If True, stirring will be started before addition.
         stir_rpm (float): RPM to stir at, only relevant if stir = True.
         reagent_vessel (str): Given internally. Vessel containing reagent.
@@ -40,6 +44,7 @@ class Add(Step):
         move_speed: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
         dispense_speed: Optional[float] = 'default',
+        time: Optional[float] = None,
         stir: Optional[bool] = False,
         stir_rpm: Optional[float] = None,
         reagent_vessel: Optional[str] = None, 
@@ -54,6 +59,10 @@ class Add(Step):
             self.steps = [Confirm(f'Is {reagent} ({mass} g) in {vessel}?')]
             self.human_readable = 'Add {0} ({1} g) to {2} {3}.'.format(
                 self.reagent, self.mass, self.vessel, get_port_str(self.port))
+
+        if self.time:
+            # dispense_speed (mL / min) = volume (mL) / time (min)
+            self.dispense_speed = self.volume / (self.time / 60)
 
         # Liquid addition
         else:
