@@ -156,6 +156,8 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'Transfer': {
         'stir_rpm': DEFAULT_STIR_RPM,
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
+        'dispense_speed': DEFAULT_DISPENSE_SPEED,
+        'move_speed': DEFAULT_MOVE_SPEED,
     },
     'Add': {
         'move_speed': DEFAULT_MOVE_SPEED,
