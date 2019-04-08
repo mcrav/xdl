@@ -5,11 +5,12 @@ from typing import Dict, List, Any, Optional, Union
 from lxml import etree
 from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml, 
                     convert_mass_str_to_g)
+from .syntax_validation import XDLSyntaxValidator
+from .constants import SYNTHESIS_ATTRS
 from ..utils import parse_bool
 from ..steps import MakeSolution, Step
 from ..reagents import Reagent
 from ..hardware import Hardware, Component
-from .syntax_validation import XDLSyntaxValidator
 from ..utils.namespace import (STEP_OBJ_DICT, BASE_STEP_OBJ_DICT)
 
 def xdl_file_to_objs(xdl_file: str, logger: logging.Logger) -> Dict[str, Any]:
@@ -69,18 +70,11 @@ def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
     """
     raw_attr = etree.fromstring(xdl_str).attrib
     processed_attr = {}
-    for attr_name, attr_type in [
-        ('auto_clean', bool),
-        ('organic_cleaning_solvent', str),
-        ('aqueous_cleaning_solvent', str),
-        ('dry_run', bool),
-        ('filter_dead_volume_method', str),
-        ('filter_dead_volume_solvent', str),
-    ]:
-        if attr_name in raw_attr:
-           processed_attr[attr_name] = raw_attr[attr_name]
-           if attr_type == bool:
-               processed_attr[attr_name] = parse_bool(raw_attr[attr_name])
+    for attr in SYNTHESIS_ATTRS: 
+        if attr['name'] in raw_attr:
+           processed_attr[attr['name']] = raw_attr[attr['name']]
+           if attr['type'] == bool:
+               processed_attr[attr['name']] = parse_bool(raw_attr[attr['name']])
     return processed_attr
 
 def xdl_valid(xdl_str: str, logger: logging.Logger = None) -> bool:

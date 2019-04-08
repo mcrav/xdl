@@ -250,3 +250,37 @@ ROOM_TEMPERATURE: int = 25
 
 #: Keywords that if found in reagent name signify that the reagent is aqueous.
 AQUEOUS_KEYWORDS: List[str] = ['water', 'aqueous', 'acid', '_m_']
+
+#: Attributes of the <Synthesis> element.
+SYNTHESIS_ATTRS = [
+    {
+        'name': 'auto_clean',
+        'type': bool,
+        'default': True,
+    },
+    {
+        'name': 'organic_cleaning_solvent',
+        'type': str,
+        'default': 'ether',
+    },
+    {
+        'name': 'aqueous_cleaning_solvent',
+        'type': str,
+        'default': 'water',
+    },
+    {
+        'name': 'dry_run',
+        'type': bool,
+        'default': False,
+    },
+    {
+        'name': 'filter_dead_volume_method',
+        'type': str,
+        'default': 'inert_gas',
+    },
+    {
+        'name': 'filter_dead_volume_solvent',
+        'type': str,
+        'default': None,
+    },
+]
