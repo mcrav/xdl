@@ -50,7 +50,10 @@ class XDLGenerator(object):
             for prop, val in component.properties.items():
                 if prop == 'xid': prop = 'id'
                 if val != None:
-                    component_tree.attrib[prop] = str(val)
+                    if prop == 'component_type':
+                        component_tree.attrib['type'] = str(val)
+                    else:
+                        component_tree.attrib[prop] = str(val)
             hardware_tree.append(component_tree)
         self.xdltree.append(hardware_tree)
 
