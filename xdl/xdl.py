@@ -61,7 +61,7 @@ class XDL(object):
         self.organic_cleaning_solvent = DEFAULT_ORGANIC_CLEANING_SOLVENT
         self.aqueous_cleaning_solvent = DEFAULT_AQUEOUS_CLEANING_SOLVENT
         self.dry_run = False
-        self.filter_dead_volume_method = 'solvent'
+        self.filter_dead_volume_method = 'inert_gas'
         self.filter_dead_volume_solvent = None
         if xdl:
             parsed_xdl = {}

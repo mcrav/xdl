@@ -6,7 +6,7 @@ from lxml import etree
 from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml, 
                     convert_mass_str_to_g)
 from .syntax_validation import XDLSyntaxValidator
-from .constants import SYNTHESIS_ATTRS
+from ..constants import SYNTHESIS_ATTRS
 from ..utils import parse_bool
 from ..steps import MakeSolution, Step
 from ..reagents import Reagent
