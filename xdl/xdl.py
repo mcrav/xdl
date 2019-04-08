@@ -87,6 +87,7 @@ class XDL(object):
               and reagents is not None
               and hardware is not None):
             self.steps, self.hardware, self.reagents = steps, hardware, reagents
+            self.executor = XDLExecutor(self)
         else:
             raise ValueError(
                 "Can't create XDL object. Insufficient args given to __init__ method.")
