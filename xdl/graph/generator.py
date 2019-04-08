@@ -2,37 +2,12 @@ from typing import Dict, Tuple, Any, Union
 import json
 import copy
 
+from .constants  import *
 from ..hardware import Component
 
 if False:
     from .. import XDL
 from ..hardware import Component
-
-DEFAULT_VALVE_MAX_VOLUME = 100
-
-DEFAULT_WASTE_CURRENT_VOLUME = 0
-DEFAULT_WASTE_MAX_VOLUME = 250
-
-DEFAULT_PUMP_MAX_VOLUME = 25
-
-DEFAULT_FLASK_CURRENT_VOLUME = 100
-DEFAULT_FLASK_MAX_VOLUME = 100
-
-DEFAULT_FILTER_CURRENT_VOLUME = 0
-DEFAULT_FILTER_MAX_VOLUME = 200
-DEFAULT_FILTER_DEAD_VOLUME = 10
-
-DEFAULT_REACTOR_MAX_VOLUME = 200
-DEFAULT_REACTOR_CURRENT_VOLUME = 0
-
-DEFAULT_SEPARATOR_MAX_VOLUME = 200
-DEFAULT_SEPARATOR_CURRENT_VOLUME = 0
-
-DEFAULT_ROTAVAP_CURRENT_VOLUME = 0
-DEFAULT_ROTAVAP_MAX_VOLUME = 250
-
-PORT = 'COM15'
-IP_ADDRESS = 'IP ADDRESS HERE'
 
 class GraphGenerator(object):
     """Class to generate a basic graph from a XDL object that should be
@@ -58,7 +33,8 @@ class GraphGenerator(object):
         self._reagents = copy.deepcopy([reagent.id for reagent in xdl.reagents])
         if xdl.filter_dead_volume_method == 'inert_gas':
             self._reagents.append('nitrogen')
-        elif xdl.filter_dead_volume_method == 'solvent':
+        elif (xdl.filter_dead_volume_method == 'solvent'
+              and xdl.filter_dead_volume_solvent):
             self._reagents.append(xdl.filter_dead_volume_solvent)
         # ID number incremented by 1 for every node/edge added in
         # _get_internal_id.
@@ -294,7 +270,7 @@ class GraphGenerator(object):
             'y': y,
             'properties': {
                 'class': 'ChemputerWaste',
-                'name': 'waste_filter',
+                'name': id,
                 'current_volume': DEFAULT_WASTE_CURRENT_VOLUME,
                 'max_volume': DEFAULT_WASTE_MAX_VOLUME,
             },
