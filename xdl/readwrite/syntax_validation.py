@@ -117,10 +117,7 @@ class XDLSyntaxValidator(object):
             for reagent_attrib in REAGENT_ATTRIBS:
                 if reagent_attrib in step.attrib:
                     step_reagents = step.attrib[reagent_attrib]
-                    if ' ' in step_reagents:
-                        step_reagents = step_reagents.split(' ')
-                    else:
-                        step_reagents = [step_reagents]
+                    step_reagents = [step_reagents]
                     for reagent in step_reagents:
                         if reagent not in declared_reagent_ids:
                             all_reagents_declared = False
