@@ -1,4 +1,5 @@
 from typing import Optional
+from logging import Logger
 
 from ..constants import *
 from ..utils.misc import get_port_str
@@ -18,7 +19,9 @@ class Confirm(Step):
     def __init__(self, msg: str) -> None:
         super().__init__(locals())
 
-    def execute(self, chempiler: 'Chempiler') -> bool:
+    def execute(
+        self, chempiler: 'Chempiler', logger: Logger = None, level: int = 0
+    ) -> bool:
         keep_going = input(self.msg)
         if not keep_going or keep_going.lower() in ['y', 'yes']:
             return True
