@@ -36,6 +36,9 @@ class GraphGenerator(object):
         elif (xdl.filter_dead_volume_method == 'solvent'
               and xdl.filter_dead_volume_solvent):
             self._reagents.append(xdl.filter_dead_volume_solvent)
+        print(xdl.organic_cleaning_solvent)
+        if xdl.organic_cleaning_solvent not in self._reagents:
+            self._reagents.append(xdl.organic_cleaning_solvent)
         # ID number incremented by 1 for every node/edge added in
         # _get_internal_id.
         self._internal_id = -1
