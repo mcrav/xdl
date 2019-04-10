@@ -486,8 +486,11 @@ class XDLExecutor(object):
         for _, step, vessel_contents in iter_vessel_contents(
             self._xdl.steps, self._graph_hardware):
             if type(step) == Filter:
-                step.filter_top_volume = prev_vessel_contents[
-                    step.filter_vessel].volume
+                if step.filter_vessel in prev_vessel_contents:
+                    step.filter_top_volume = prev_vessel_contents[
+                        step.filter_vessel].volume
+                else:
+                    step.filter_top_volume = 0
 
             prev_vessel_contents = vessel_contents
 

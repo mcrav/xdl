@@ -63,8 +63,11 @@ class Add(Step):
         else:
 
             if self.time:
+                time = self.time
                 # dispense_speed (mL / min) = volume (mL) / time (min)
-                self.dispense_speed = self.volume / (self.time / 60)
+                dispense_speed = self.volume / (self.time / 60)
+            else:
+                dispense_speed = self.dispense_speed
 
             # Liquid addition
             self.steps = [
@@ -79,7 +82,7 @@ class Add(Step):
                     volume=self.volume,
                     move_speed=self.move_speed,
                     aspiration_speed=self.aspiration_speed,
-                    dispense_speed=self.dispense_speed),
+                    dispense_speed=dispense_speed),
                 Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME)
             ]
 
