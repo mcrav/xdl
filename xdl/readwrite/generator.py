@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any
 from lxml import etree
 from ..reagents import Reagent
 from ..hardware import Hardware
@@ -80,19 +80,17 @@ class XDLGenerator(object):
                     if not self.full_properties:
                         # Don't write properties that are the same as the default.
                         if (step.name in DEFAULT_VALS
-                        and prop in DEFAULT_VALS[step.name]
-                        and DEFAULT_VALS[step.name][prop] == val):
+                            and prop in DEFAULT_VALS[step.name]
+                            and DEFAULT_VALS[step.name][prop] == val):
                             continue
                         
                         # Don't write internal properties.
                         elif (step.name in INTERNAL_PROPERTIES
                              and prop in INTERNAL_PROPERTIES[step.name]):
                              continue
+                    # Convert value to nice units and add to element attrib.
+                    step_tree.attrib[prop] = format_property(prop, val)
 
-                    step_tree.attrib[prop] = str(val)
-                    if type(val) == list:
-                        step_tree.attrib[prop] = ' '.join(
-                            [str(item) for item in val])
             procedure_tree.append(step_tree)
         self.xdltree.append(procedure_tree)
 
@@ -136,3 +134,129 @@ def get_xdl_string(xdltree: etree._ElementTree) -> str:
         s += f'{indent * indent_level}</{element.tag}>\n\n'
     s += '</Synthesis>\n'
     return s
+
+def format_property(prop: str, val: Any) -> str:
+    """Given property key and value in standard units, convert value
+    to sensitive units and return str ready for putting in XDL.
+    E.g. time: 3600 -> '1 hr', volume 2000 -> '2 l'.
+    If no modifications are required just return str of val.
+    
+    Args:
+        prop (str): Property name.
+        val (Any): Property value.
+    
+    Returns:
+        str: Value converted to nice units if necessary and returned
+            as neat str ready for outputting.
+    """
+    if 'time' in prop:
+        return format_time(val)
+    
+    elif 'volume' in prop:
+        return format_volume(val)
+
+    elif 'mass' in prop:
+        return format_mass(val)
+
+    elif 'temp' in prop:
+        return format_temp(val)
+
+    elif type(val) == list:
+        return ' '.join([str(item) for item in val])
+
+    return str(val)
+    
+def format_volume(val_ml: float) -> str:
+    """Return formatted volume in sensible units.
+    
+    Args:
+        val_ml (float): Volume in mL.
+    
+    Returns:
+        str: Formatted volume in sensible units.
+    """
+    # litres
+    if val_ml > 1000:
+        l = val_ml / 1000
+        return f'{format_val(l)} l'
+    # microlitres
+    elif val_ml < 0.1:
+        ul = val_ml * 1000
+        return f'{format_val(ul)} ul'
+    # millilitres
+    return f'{format_val(val_ml)} mL'
+
+def format_time(val_seconds: float) -> str:
+    """Return formatted time in sensible units.
+    
+    Args:
+        val_seconds (float): Time in seconds.
+    
+    Returns:
+        str: Formatted time in sensible units.
+    """
+    val = val_seconds
+    if val_seconds > 60:
+        minutes = val_seconds / 60
+        # hours
+        if minutes > 60:
+            hours = minutes / 60
+            val_str = f'{format_val(hours)} hrs'
+            val = hours
+        # minutes
+        else:
+            val_str = f'{format_val(minutes)} mins'
+            val = minutes
+    # seconds
+    else:
+        val_str = f'{format_val(val_seconds)} secs'
+    # Convert '1 hrs' to '1 hr'.
+    if val == 1:
+        val_str = val_str[:-1]
+    return val_str
+    
+def format_mass(val_grams: float) -> str:
+    """Return formatted mass in sensible units.
+    
+    Args:
+        val_grams (float): Mass in grams.
+    
+    Returns:
+        str: Formatted mass in sensible units.
+    """
+    if val_grams > 1000:
+        # kilograms
+        kg = val_grams / 1000
+        return f'{format_val(kg)} kg'
+    elif val_grams < 0.1:
+        # milligrams
+        mg = val_grams * 1000
+        return f'{format_val(mg)} mg'
+    # grams
+    return f'{format_val(val_grams)} g'
+
+def format_temp(val_celsius: float) -> str:
+    """Return formatted temperature.
+    
+    Args:
+        val_celsius (float): Temperature in °C.
+    
+    Returns:
+        str: Formatted temperature. 
+    """
+    return f'{format_val(val_celsius)}°C'
+
+def format_val(val: float) -> str:
+    """Format float and return as str. Rules are round to two decimal places,
+    then remove any trailing 0s and decimal point if necessary.
+    
+    Args:
+        val (float): Number to format.
+    
+    Returns:
+        str: Number rounded to two decimal places with trailing '0' and '.'
+            removed.
+    """
+    hours_str = f'{val:.2f}'
+    return hours_str.rstrip('0').rstrip('0').rstrip('.')
+    

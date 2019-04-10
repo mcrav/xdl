@@ -59,14 +59,14 @@ class Add(Step):
             self.steps = [Confirm(f'Is {reagent} ({mass} g) in {vessel}?')]
             self.human_readable = 'Add {0} ({1} g) to {2} {3}.'.format(
                 self.reagent, self.mass, self.vessel, get_port_str(self.port))
-            return
-
-        if self.time:
-            # dispense_speed (mL / min) = volume (mL) / time (min)
-            self.dispense_speed = self.volume / (self.time / 60)
-
-        # Liquid addition
+        
         else:
+
+            if self.time:
+                # dispense_speed (mL / min) = volume (mL) / time (min)
+                self.dispense_speed = self.volume / (self.time / 60)
+
+            # Liquid addition
             self.steps = [
                 PrimePumpForAdd(
                     reagent=self.reagent,
