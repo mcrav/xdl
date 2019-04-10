@@ -23,3 +23,21 @@ DEFAULT_ROTAVAP_MAX_VOLUME = 250
 
 PORT = 'COM15'
 IP_ADDRESS = 'IP ADDRESS HERE'
+
+COMPONENT_TYPE_DICT = {
+    'ChemputerFilter': 'filter',
+    'ChemputerReactor': 'reactor',
+    'IKARV10': 'rotavap',
+    'ChemputerSeparator': 'separator',
+    'filter': 'filter',
+    'reactor': 'reactor',
+    'rotavap': 'rotavap',
+    'separator': 'separator',
+}
+
+TYPE_COMPONENT_DICT = {
+    'filter': 'ChemputerFilter',
+    'reactor': 'ChemputerReactor',
+    'rotavap': 'IKARV10',
+    'separator': 'ChemputerSeparator',
+}

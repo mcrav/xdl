@@ -29,7 +29,11 @@ class GraphGenerator(object):
                 'ChemputerFilter',
                 'ChemputerReactor',
                 'ChemputerSeparator',
-                'IKARV10',]]
+                'IKARV10',
+                'filter',
+                'reactor',
+                'separator',
+                'rotavap']]
         self._reagents = copy.deepcopy([reagent.id for reagent in xdl.reagents])
         if xdl.filter_dead_volume_method == 'inert_gas':
             self._reagents.append('nitrogen')
@@ -178,12 +182,12 @@ class GraphGenerator(object):
             "x": x,
             "y": y,
             "properties": {
-                "class": component.component_type,
+                "class": TYPE_COMPONENT_DICT[component.component_type],
                 "name": component.id,
                 "current_volume": 0,
                 "max_volume": 0,
             },
-            "class": component.component_type,
+            "class": TYPE_COMPONENT_DICT[component.component_type],
             "name": component.id,
             "current_volume": 0,
             "max_volume": 0,
@@ -192,29 +196,30 @@ class GraphGenerator(object):
         }
         # Update base dict with specific for each component type.
         params = {
-            'ChemputerFilter': {
+            'filter': {
                 'dead_volume': DEFAULT_FILTER_DEAD_VOLUME,
                 'max_volume': DEFAULT_FILTER_MAX_VOLUME,
                 'current_volume': DEFAULT_FILTER_CURRENT_VOLUME,
                 'type': 'filter',
             },
-            'ChemputerSeparator': {
+            'separator': {
                 'max_volume': DEFAULT_SEPARATOR_MAX_VOLUME,
                 'current_volume': DEFAULT_SEPARATOR_CURRENT_VOLUME,
                 'type': 'separator',
             },
-            'ChemputerReactor': {
+            'reactor': {
                 'max_volume': DEFAULT_REACTOR_MAX_VOLUME,
                 'current_volume': DEFAULT_REACTOR_CURRENT_VOLUME,
                 'type': 'reactor',
             },
-            'IKARV10': {
+            'rotavap': {
                 'current_volume': DEFAULT_ROTAVAP_CURRENT_VOLUME,
                 'max_volume': DEFAULT_ROTAVAP_MAX_VOLUME,
                 'port': PORT,
             }
         }
-        for k, v in params[component.component_type].items():
+        for k, v in params[
+            COMPONENT_TYPE_DICT[component.component_type]].items():
             cdict[k] = v
             cdict['properties'][k] = v
         return cdict
