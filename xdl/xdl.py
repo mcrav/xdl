@@ -71,6 +71,10 @@ class XDL(object):
             # Check XDL is XDL str and not just mistyped XDL file path.
             elif '<Synthesis>' in xdl and '<Procedure>' in xdl:
                 parsed_xdl = xdl_str_to_objs(xdl, self.logger)
+            else:
+                raise ValueError(
+                    f"Can't instantiate XDL from this: \n{xdl}"
+                )
             if parsed_xdl:
                 self.steps = parsed_xdl['steps']
                 self.hardware = parsed_xdl['hardware']
@@ -81,7 +85,7 @@ class XDL(object):
                 self.executor = XDLExecutor(self)
             
             else:
-                print('Invalid XDL given.')
+                self.logger.info('Invalid XDL given.')
                 
         elif (steps is not None
               and reagents is not None
