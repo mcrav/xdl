@@ -205,6 +205,8 @@ class Filter(Step):
         aspiration_speed (float): Speed in mL / min to draw liquid from
             filter_vessel.
         waste_vessel (float): Given internally. Vessel to move waste material to.
+        filtrate_vessel (str): Optional. Vessel to send filtrate to. Defaults to
+            waste_vessel.
         vacuum (str): Given internally. Name of vacuum flask.
         inert_gas (str): Given internally. Name of node supplying inert gas.
             Only used if inert gas filter dead volume method is being used.
@@ -216,18 +218,22 @@ class Filter(Step):
         wait_time: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
         waste_vessel: Optional[str] = None,
+        filtrate_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
         inert_gas: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
+        if not filtrate_vessel:
+            filtrate_vessel = self.waste_vessel
+
         self.steps = [
             StopStir(vessel=self.filter_vessel),
             # Move the filter top volume from the bottom to the waste.
             CMove(
                 from_vessel=self.filter_vessel,
-                to_vessel=self.waste_vessel,
+                to_vessel=filtrate_vessel,
                 from_port=BOTTOM_PORT,
                 volume=self.filter_top_volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
                 aspiration_speed=self.aspiration_speed),
@@ -272,6 +278,8 @@ class WashFilterCake(Step):
         stir_rpm (float): Speed to stir at in RPM. Only relevant if stir is True
             or 'solvent'.
         waste_vessel (str): Given internally. Vessel to send waste to.
+        filtrate_vessel (str): Optional. Vessel to send filtrate to. Defaults to
+            waste_vessel.
         aspiration_speed (float): Speed to remove solvent from filter_vessel.
         vacuum (str): Given internally. Name of vacuum flask.
         inert_gas (str): Given internally. Name of node supplying inert gas.
@@ -287,12 +295,16 @@ class WashFilterCake(Step):
         stir_time: Optional[float] = 'default',
         stir_rpm: Optional[float] =  'default',
         waste_vessel: Optional[str] = None,
+        filtrate_vessel: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
         vacuum: Optional[str] = None,
         inert_gas: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+        if not filtrate_vessel:
+            filtrate_vessel = self.waste_vessel
 
         self.steps = [
             # Add solvent
@@ -305,7 +317,7 @@ class WashFilterCake(Step):
             CMove(
                 from_vessel=self.filter_vessel,
                 from_port=BOTTOM_PORT,
-                to_vessel=self.waste_vessel,
+                to_vessel=filtrate_vessel,
                 volume=self.volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
                 aspiration_speed=self.aspiration_speed),
             # Briefly dry under vacuum.
