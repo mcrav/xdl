@@ -40,9 +40,11 @@ def parse_bool(s: str) -> bool:
     Returns:
         bool: True is s lower case is 'true' or '1', otherwise False.
     """
-    if s.lower() in ['true', '1']:
+    if s.lower() == 'true':
         return True
-    return False
+    elif s.lower() == 'false':
+        return False
+    return None
 
 def get_port_str(port: str) -> str:
     """Get str representing port for using in human_readable strings.
@@ -138,5 +140,12 @@ def clean_properties(xdl_class, properties):
                 properties[prop] = [val]
             elif type(val) == list:
                 pass
+
+        elif prop_type == Union[bool, str]:
+            bool_val = parse_bool(val)
+            if bool_val != None:
+                return bool_val
+            else:
+                return val
 
     return properties

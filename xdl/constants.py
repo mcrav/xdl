@@ -201,6 +201,10 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
         'after_recording_speed': DEFAULT_RECORDING_SPEED,
     },
+    'Dissolve': {
+        'time': 20 * 60,
+        'temp': 25,
+    }
 }
 
 INTERNAL_PROPERTIES = {
