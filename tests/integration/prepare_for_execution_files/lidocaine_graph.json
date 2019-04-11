@@ -288,15 +288,15 @@
       "max_volume": 100
     },
     {
-      "id": "flask_3 M hydrochloric acid",
+      "id": "flask_hydrochloric acid",
       "type": "flask",
       "x": 1120,
       "y": 320,
       "internalId": 40,
-      "label": "flask_3 M hydrochloric acid",
+      "label": "flask_hydrochloric acid",
       "class": "ChemputerFlask",
-      "name": "flask_3 M hydrochloric acid",
-      "chemical": "3 M hydrochloric acid",
+      "name": "flask_hydrochloric acid",
+      "chemical": "hydrochloric acid",
       "current_volume": 100,
       "max_volume": 100
     },
@@ -371,30 +371,6 @@
       "current_volume": 0,
       "max_volume": 250,
       "necks": 1
-    },
-    {
-      "id": 55,
-      "type": "valve",
-      "x": 1400,
-      "y": 200,
-      "class": "ChemputerValve",
-      "name": "",
-      "address": "",
-      "internalId": 55,
-      "label": 55
-    },
-    {
-      "id": 67,
-      "type": "reactor",
-      "x": 1520,
-      "y": 280,
-      "class": "ChemputerReactor",
-      "name": "",
-      "current_volume": 0,
-      "max_volume": 100,
-      "necks": 1,
-      "internalId": 67,
-      "label": 67
     }
   ],
   "links": [
@@ -674,7 +650,7 @@
       "id": 41,
       "sourceInternal": 40,
       "targetInternal": 42,
-      "source": "flask_3 M hydrochloric acid",
+      "source": "flask_hydrochloric acid",
       "target": "valve_workup",
       "port": "(0,1)"
     },
@@ -725,38 +701,6 @@
       "source": "valve_workup",
       "target": "flask_separator",
       "port": "(3,bottom)"
-    },
-    {
-      "id": 63,
-      "sourceInternal": 42,
-      "targetInternal": 55,
-      "source": "valve_workup",
-      "target": 55,
-      "port": "(4,5)"
-    },
-    {
-      "id": 65,
-      "sourceInternal": 55,
-      "targetInternal": 42,
-      "source": 55,
-      "target": "valve_workup",
-      "port": "(5,4)"
-    },
-    {
-      "id": 72,
-      "sourceInternal": 55,
-      "targetInternal": 67,
-      "source": 55,
-      "target": 67,
-      "port": "(0,0)"
-    },
-    {
-      "id": 73,
-      "sourceInternal": 67,
-      "targetInternal": 55,
-      "source": 67,
-      "target": 55,
-      "port": "(0,0)"
     }
   ]
 }

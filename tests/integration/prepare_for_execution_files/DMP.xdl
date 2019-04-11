@@ -31,12 +31,12 @@
       volume="650.0"
       port="top"
       stir="False" />
-    <Add
+    <!-- <Add
       reagent="2-Iodobenzoic acid"
       vessel="filter"
       mass="50.0"
       port="top"
-      stir="True" />
+      stir="True" /> -->
     <HeatChill
       vessel="filter"
       temp="70.0"
@@ -71,12 +71,12 @@
       filter_vessel="filter"
       time="300.0"
       temp="25.0" />
-    <Add
+    <!-- <Add
       reagent="the moist solid iodinane oxide"
       vessel="filter"
       mass="88.2"
       port="top"
-      stir="False" />
+      stir="False" /> -->
     <Add
       reagent="glacial acetic acid"
       vessel="filter"

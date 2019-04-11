@@ -68,19 +68,20 @@ class XDLSyntaxValidator(object):
             and self.all_vessels_declared() 
             and self.steps_in_namespace() 
             # and self.hardware_in_namespace() 
-            and self.check_quantities() 
+            # and self.check_quantities() 
             and self.check_step_attributes()]
         validation_messages = [
             "XDL doesn't contain Hardware, Reagents and Procedure tags",
             "XDL doesn't have all reagents declared.",
             "XDL doesn't have all vessels declared.",
             "Not all steps used are valid XDL step types.",
-            "Not all quantities are in an acceptable format.",
+            # "Not all quantities are in an acceptable format.",
             "Not all necessary step attributes are present.",   
         ]
         for i, item in enumerate(self.validations):
             if not item:
                 self.logger.info(validation_messages[i])
+        self.valid = all(self.validations)
         
 
     def get_section_children(self, section: str) -> List[etree._Element]:

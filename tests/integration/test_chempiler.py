@@ -18,8 +18,9 @@ def test_prepare_for_execution():
     i = 0
     while i + 1 < len(files):
         x = XDL(files[i])
+        print('xdl', files[i])
+        print('graph', files[i+1])
         x.prepare_for_execution(files[i+1]) 
-        i += 2
         chempiler = Chempiler(
             experiment_code='test',
             output_dir=os.path.join(HERE, 'logs'),
@@ -27,3 +28,4 @@ def test_prepare_for_execution():
             graph_file=files[i+1],
             device_modules=[ChemputerAPI, SerialLabware])
         x.execute(chempiler)
+        i += 2
