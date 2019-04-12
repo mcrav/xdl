@@ -9,7 +9,7 @@ def test_prepare_for_execution():
     """Test by instantiating XDL objects on files known to work
     and calling prepare_for_execution on graph known to work.
     """
-    folder = os.path.join(HERE, 'prepare_for_execution_files')
+    folder = os.path.join(HERE, 'files')
     files = [os.path.join(folder, f) for f in sorted(os.listdir(folder))]
     i = 0
     while i + 1 < len(files):
