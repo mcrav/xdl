@@ -3,11 +3,11 @@ import re
 import copy
 from typing import Dict, List, Any, Optional, Union
 from lxml import etree
+from .validation import check_attrs_are_valid
 from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml, 
                     convert_mass_str_to_g)
-from .syntax_validation import XDLSyntaxValidator
 from ..constants import SYNTHESIS_ATTRS
-from ..utils import parse_bool
+from ..utils import parse_bool, XDLError, raise_error
 from ..steps import MakeSolution, Step
 from ..reagents import Reagent
 from ..hardware import Hardware, Component
@@ -41,7 +41,7 @@ def xdl_str_to_objs(xdl_str: str, logger: logging.Logger) -> Dict[str, Any]:
                   reagents: List of Reagent objects.
     """
     if xdl_str:
-        if xdl_valid(xdl_str, logger):
+        try:
             steps = steps_from_xdl(xdl_str)
             hardware = hardware_from_xdl(xdl_str)
             reagents = reagents_from_xdl(xdl_str)
@@ -53,10 +53,10 @@ def xdl_str_to_objs(xdl_str: str, logger: logging.Logger) -> Dict[str, Any]:
             }
             parsed_xdl['procedure_attrs'] = synthesis_attrs
             return parsed_xdl
-        else:
-            logger.error('Invalid XDL given.')
+        except Exception as e:
+            raise_error(e, 'Error parsing XDL.')
     else:
-        logger.error('No XDL given.')
+        raise XDLError('Empty XDL given.')
     return None
 
 def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
@@ -76,17 +76,6 @@ def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
            if attr['type'] == bool:
                processed_attr[attr['name']] = parse_bool(raw_attr[attr['name']])
     return processed_attr
-
-def xdl_valid(xdl_str: str, logger: logging.Logger = None) -> bool:
-    """Return True if XDL is valid, otherwise False.
-    
-    Arguments:
-        xdl_str (str): XDL str.
-    
-    Returns:
-        bool: True if XDL is valid, otherwise False.
-    """
-    return XDLSyntaxValidator(xdl_str, logger=logger).valid
 
 def steps_from_xdl(xdl_str: str) -> List[Step]:
     """Given XDL str return list of Step objects.
@@ -163,9 +152,22 @@ def xdl_to_step(xdl_step_element: etree._Element) -> Step:
     Returns:
         Step: Step object corresponding to step in xdl_step_element.
     """
+    # Check if step name is valid and get step class.
+    if not xdl_step_element.tag in STEP_OBJ_DICT:
+        raise XDLError(f'{xdl_step_element.tag} is not a valid step type.')
     step_type = STEP_OBJ_DICT[xdl_step_element.tag]
-    attr = dict(xdl_step_element.attrib)
-    return step_type(**attr)
+    # Check all attributes are valid.
+    attrs = dict(xdl_step_element.attrib)
+    check_attrs_are_valid(attrs, step_type)
+    # Try to instantiate step, any invalid values given will throw an error
+    # here.
+    try:
+        step = step_type(**attrs)
+    except Exception as e:
+        raise_error(
+            e,
+            f'Error instantiating {step_type.__name__} step with following properties: \n{attrs}')
+    return step
 
 def xdl_to_component(xdl_component_element: etree._Element) -> Component:
     """Given XDL component element return corresponding Component object.
@@ -178,10 +180,30 @@ def xdl_to_component(xdl_component_element: etree._Element) -> Component:
         Component: Component object corresponding to component in 
                      xdl_component_element.
     """
-    attr = dict(xdl_component_element.attrib)
-    attr['component_type'] = attr['type']
-    del attr['type']
-    return Component(**attr)
+    attrs = dict(xdl_component_element.attrib)
+    # Check 'id' is in attrs..
+    if not 'id' in attrs:
+        raise XDLError(
+            "'id' attribute not specified for component.")
+    #  Check 'type' is in attrs.
+    if not 'type' in attrs:
+        raise XDLError(
+            f"'type' attribute not specified for {attrs['id']} component.")
+    check_attrs_are_valid(attrs, Component)
+    # Rename 'type' attr to 'component_type' to avoid conflict with Python
+    # built-in function type.
+    attrs['component_type'] = attrs['type']
+    del attrs['type']
+    # Try to instantiate components, any invalid values given will throw an
+    # error here.
+    try:
+        component = Component(**attrs)
+    except Exception as e:
+        raise_error(
+            e,
+            f'Error instantiating Component with following attributes: \n{attrs}'
+        )
+    return component
 
 def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
     """Given XDL reagent element return corresponding Reagent object.
@@ -193,5 +215,18 @@ def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
         Reagent: Reagent object corresponding to reagent in 
                    xdl_reagent_element.
     """
-    attr = dict(xdl_reagent_element.attrib)
-    return Reagent(**attr)
+    # Check attrs are valid for Reagent
+    attrs = dict(xdl_reagent_element.attrib)
+    if not 'id' in attrs:
+        raise XDLError(
+            "'id' attribute not specified for reagent.")
+    check_attrs_are_valid(attrs, Reagent)
+    # Try to instantiate Reagent object and return it.
+    try:
+        reagent = Reagent(**attrs)
+    except Exception as e:
+        raise_error(
+            e,
+            f'Error instantiating Reagent with following attributes: \n{attrs}'
+        )
+    return reagent

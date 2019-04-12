@@ -1,5 +1,5 @@
 from ..constants import DEFAULT_VALS
-from .misc import clean_properties
+from .sanitisation import clean_properties
 from typing import Dict, Any
 
 class XDLBase(object):

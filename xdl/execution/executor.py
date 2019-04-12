@@ -8,7 +8,7 @@ if False:
 
 from ..constants import *
 from ..utils.namespace import BASE_STEP_OBJ_DICT
-from ..utils.misc import raise_error
+from ..utils.errors import raise_error
 from ..steps import *
 from ..safety import procedure_is_safe
 from ..reagents import Reagent
