@@ -79,6 +79,8 @@ def iter_vessel_contents(
                 vessel_contents[step.filter_vessel].volume = 0
                 vessel_contents[step.waste_vessel].reagents.extend(filter_reagents)
                 vessel_contents[step.waste_vessel].volume += filter_volume
+                if type(step) == WashFilterCake:
+                    additions_l.append(step.solvent)
 
             elif type(step) == Dry:
                 # This is necessary to stop move command putting filter into

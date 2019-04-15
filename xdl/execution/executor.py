@@ -16,16 +16,7 @@ from .tracking import iter_vessel_contents
 from .graph import (
     hardware_from_graph, get_graph, make_vessel_map, make_filter_inert_gas_map)
 from .utils import VesselContents
-
-# Steps after which backbone should be cleaned
-CLEAN_BACKBONE_AFTER_STEPS: List[type] = [
-    Add,
-    Separate,
-    MakeSolution,
-    WashFilterCake,
-    Filter,
-    Dry,
-]
+from .cleaning import add_cleaning_steps 
 
 class XDLExecutor(object):
  
@@ -226,80 +217,10 @@ class XDLExecutor(object):
 
     def _add_implied_steps(self) -> None:
         """Add extra steps implied by explicit XDL steps."""
+        self._add_filter_dead_volume_handling_steps()
         if self._xdl.auto_clean:
             self._add_implied_clean_backbone_steps()
-        self._add_filter_dead_volume_handling_steps()
 
-    def _get_step_reagent_types(self) -> List[str]:
-        """Get the reagent type, 'organic' or 'aqueous' involved in every step.
-        
-        Returns:
-            List[str]: List of reagent types, 'organic' or 'aqueous',
-                corresponding to every step in self._xdl.steps.
-        """
-        step_reagent_types = []
-        step_reagent_type = 'organic'
-        for _, _, _, additions in iter_vessel_contents(
-            self._xdl.steps, self._graph_hardware, additions=True):
-            if additions:
-                step_reagent_type = 'organic'
-                for reagent in additions:
-                    if get_reagent_clean_type(
-                        reagent, self._xdl.reagents) == 'aqueous':
-                        step_reagent_type = 'aqueous'
-                        break
-            step_reagent_types.append(step_reagent_type)
-        return step_reagent_types
-
-    def _get_clean_backbone_steps(self) -> List[int]:
-        """Get list of steps after which backbone should be cleaned.
-        
-        Returns:
-            List[int]: List of indexes for steps after which the backbone should
-                be cleaned.
-        """
-        clean_backbone_steps = []
-        for i, step in enumerate(self._xdl.steps):
-            if type(step) in CLEAN_BACKBONE_AFTER_STEPS:
-                clean_backbone_steps.append(i)
-        return clean_backbone_steps
-
-    def _get_clean_backbone_sequence(self) -> List[Tuple[int, str]]:
-        """Get sequence of backbone cleans required. clean_type can be 'organic'
-        or 'aqueous'.
-        
-        Returns:
-            List[int, str]: List of Tuples like this
-                [(step_to_insert_backbone_clean, clean_type), ]
-        """
-        step_reagent_types = self._get_step_reagent_types()
-        clean_backbone_steps = self._get_clean_backbone_steps()
-        cleans = []
-        for _, step_i in enumerate(clean_backbone_steps):
-
-            # Get after_type and before_type
-            if step_i+1 < len(step_reagent_types):
-                after_type = step_reagent_types[step_i+1]
-            else:
-                after_type = 'organic'
-            before_type = step_reagent_types[step_i] 
-
-            # Workout sequence of cleans needed.
-            # organic then organic -> organic clean
-            # aqueous then organic -> aqueous clean then organic clean
-            # organic then aqueous -> organic clean then aqueous clean
-            # aqueous then aqueous -> aqueous clean
-            if before_type == 'organic' and after_type == 'organic':
-                cleans.append((step_i+1, 'organic'))
-            elif before_type == 'aqueous' and after_type == 'organic':
-                cleans.append((step_i+1, 'water'))
-                cleans.append((step_i+1, 'organic'))
-            elif before_type == 'organic' and after_type == 'aqueous':
-                cleans.append((step_i+1, 'organic'))
-                cleans.append((step_i+1, 'water'))
-            elif before_type == 'aqueous' and after_type == 'aqueous':
-                cleans.append((step_i+1, 'water'))
-        return cleans
 
     def _add_implied_clean_backbone_steps(self) -> None:
         """Add CleanBackbone steps after certain steps which will contaminate 
@@ -307,11 +228,7 @@ class XDLExecutor(object):
         Takes into account when organic and aqueous reagents have been used to 
         determine what solvents to clean the backbone with.
         """
-        for i, clean_type in reversed(self._get_clean_backbone_sequence()):
-            solvent = self._xdl.organic_cleaning_solvent 
-            if clean_type == 'water':
-                solvent = self._xdl.aqueous_cleaning_solvent
-            self._xdl.steps.insert(i, CleanBackbone(solvent=solvent))
+        add_cleaning_steps(self._xdl)
         self._map_hardware_to_steps()
 
 
@@ -717,24 +634,6 @@ class XDLExecutor(object):
             self.logger.error(
                 'Not prepared for execution. Prepare by calling xdlexecutor.prepare_for_execution with your graph.')
                 
-
-def get_reagent_clean_type(
-    reagent_name: str, xdl_reagents: List[Reagent]) -> bool:
-    """Return True if reagent_name is an aqueous reagent, otherwise False.
-    
-    Args:
-        reagent_name (str): Name of reagent.
-    
-    Returns:
-        bool: True if reagent_name is aqueous, otherwise False.
-    """
-    for xdl_reagent in xdl_reagents:
-        if xdl_reagent.id == reagent_name and xdl_reagent.clean_type:
-            return xdl_reagent.clean_type
-    for word in AQUEOUS_KEYWORDS:
-        if word in reagent_name:
-            return 'aqueous'
-    return 'organic'
 
 def should_remove_clean_backbone_step(
     before_step: Step, after_step: Step) -> bool:
