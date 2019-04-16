@@ -108,6 +108,9 @@ DEFAULT_DRY_TIME: int = 60*60
 #: drying filter cake.
 DEFAULT_DRY_WASTE_VOLUME: int = 5
 
+#: Default move speed in mL for transferring liquid through filtering cartridge.
+DEFAULT_FILTER_THROUGH_MOVE_SPEED: int = 5
+
 #########
 ## Add ##
 #########
@@ -211,6 +214,11 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'time': 20 * 60,
         'temp': 25,
         'stir_rpm': DEFAULT_DISSOLVE_STIR_RPM,
+    },
+    'FilterThrough': {
+        'move_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
+        'aspiration_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
+        'eluting_repeats': 1,
     }
 }
 
