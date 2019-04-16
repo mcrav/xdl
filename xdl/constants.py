@@ -118,7 +118,7 @@ DEFAULT_AFTER_ADD_WAIT_TIME: int = 10
 ## Stirring ##
 ##############
 #: Default speed in RPM to stir at.
-DEFAULT_STIR_RPM: int = 400
+DEFAULT_STIR_RPM: int = 250
 
 ###########
 ## Video ##
