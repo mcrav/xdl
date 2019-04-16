@@ -74,7 +74,7 @@ DEFAULT_CLEAN_VESSEL_STIR_TIME: int = 60
 DEFAULT_ROTAVAP_DRYING_TIME: int = 2* 60 * 60
 
 #: Default rotation speed in RPM for rotavap.
-DEFAULT_ROTAVAP_ROTATION_SPEED: int = 280
+DEFAULT_ROTAVAP_ROTATION_SPEED: int = 150
 
 ###############
 ## Filtering ##
