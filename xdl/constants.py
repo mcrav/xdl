@@ -118,7 +118,10 @@ DEFAULT_AFTER_ADD_WAIT_TIME: int = 10
 ## Stirring ##
 ##############
 #: Default speed in RPM to stir at.
-DEFAULT_STIR_RPM: int = 400
+DEFAULT_STIR_RPM: int = 250
+
+#: Default speed in RPM to stir at when dissolving.
+DEFAULT_DISSOLVE_STIR_RPM: int = 400
 
 ###########
 ## Video ##
@@ -207,6 +210,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'Dissolve': {
         'time': 20 * 60,
         'temp': 25,
+        'stir_rpm': DEFAULT_DISSOLVE_STIR_RPM,
     }
 }
 

@@ -195,6 +195,7 @@ class Dissolve(Step):
         vessel (str): Vessel to dissolve contents of. 
         solvent (str): Solvent to dissolve contents of vessel with.
         volume (float): Volume of solvent to use.
+        port (str): Port to add solvent to.
         temp (float): Temperature to stir at. Optional.
         time (float): Time to stir for. Optional.
         solvent_vessel (str): Given internally. Flask containing solvent.
@@ -204,16 +205,24 @@ class Dissolve(Step):
         vessel: str,
         solvent: str,
         volume: float,
+        port: Optional[str] = None,
         temp: Optional[float] = 'default',
         time: Optional[float] = 'default',
+        stir_rpm: Optional[float] = 'default',
         solvent_vessel: Optional[str] = None,
     ) -> None:
         super().__init__(locals())
 
         self.steps = [
-            Add(reagent=self.solvent, volume=self.volume, vessel=self.vessel),
+            Add(reagent=self.solvent,
+                volume=self.volume,
+                vessel=self.vessel,
+                port=self.port),
             HeatChillToTemp(
-                vessel=self.vessel, temp=self.temp, stir=True),
+                vessel=self.vessel,
+                temp=self.temp,
+                stir=True,
+                stir_rpm=self.stir_rpm),
             Wait(self.time),
         ]
 
