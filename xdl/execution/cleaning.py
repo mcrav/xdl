@@ -96,7 +96,7 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
                 schedule[j] = reagent
         i = max(j, i + 1)
     # 2) Go forward applying last encountered solvent to every step in schedule.
-    current_reagent = None
+    current_reagent = [item for item in schedule if item][0]
     for i, reagent in enumerate(schedule):
         if reagent:
             if reagent != 'water':
@@ -126,8 +126,8 @@ def get_reagent_cleaning_solvent(
             return reagent_name
                 
     for xdl_reagent in xdl_reagents:
-        if xdl_reagent.id == reagent_name and xdl_reagent.clean_type:
-            return xdl_reagent.clean_type
+        if xdl_reagent.id == reagent_name and xdl_reagent.cleaning_solvent:
+            return xdl_reagent.cleaning_solvent
     for word in AQUEOUS_KEYWORDS:
         if word in reagent_name:
             return 'water'
@@ -159,13 +159,15 @@ def get_clean_backbone_sequence(xdl_obj) -> List[Tuple[int, str]]:
     cleans = []
     for i, step_i in enumerate(clean_backbone_steps):
         # Get after_type and before_type
-        if step_i + 1 < len(step_solvents):
-            if i + 1 < len(clean_backbone_steps):
-                next_step_i = clean_backbone_steps[i+1]
+        if i + 1 < len(clean_backbone_steps):
+            next_step_i = clean_backbone_steps[i+1]
+            if next_step_i < len(step_solvents):
                 after_solvent = step_solvents[next_step_i]
-        else:
-            after_solvent = xdl_obj.organic_cleaning_solvent 
+
         before_solvent = step_solvents[step_i] 
+        # If on last clean backbone step then there will be no after solvent.
+        if not after_solvent:
+            after_solvent = before_solvent
 
         if before_solvent == after_solvent:
             cleans.append((step_i+1, before_solvent))
@@ -185,7 +187,9 @@ def add_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
     """
     for i, solvent in reversed(get_clean_backbone_sequence(
         xdl_obj)):
-        if not solvent:
+        # If organic_cleaning_solvent is given use it otherwise use solvent in
+        # synthesis.
+        if solvent != 'water' and xdl_obj.organic_cleaning_solvent:
             solvent = xdl_obj.organic_cleaning_solvent
         xdl_obj.steps.insert(i, CleanBackbone(solvent=solvent))
     verify = None

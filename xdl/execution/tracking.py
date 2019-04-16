@@ -38,6 +38,7 @@ def iter_vessel_contents(
             # Handle separate step differently.
             if type(step) == Separate:
                 # Add vessels to vessel_contents if they aren't there.
+                additions_l.append(step.solvent)
                 for vessel in [step.from_vessel, step.to_vessel,
                                 step.waste_phase_to_vessel]:
                     vessel_contents.setdefault(

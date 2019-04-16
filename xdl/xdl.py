@@ -58,7 +58,7 @@ class XDL(object):
                 
         self._xdl_file = None
         self.auto_clean = DEFAULT_AUTO_CLEAN
-        self.organic_cleaning_solvent = DEFAULT_ORGANIC_CLEANING_SOLVENT
+        self.organic_cleaning_solvent = None 
         self.aqueous_cleaning_solvent = DEFAULT_AQUEOUS_CLEANING_SOLVENT
         self.dry_run = False
         self.filter_dead_volume_method = 'inert_gas'
