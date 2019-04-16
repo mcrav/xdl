@@ -79,6 +79,9 @@ DEFAULT_ROTAVAP_ROTATION_SPEED: int = 280
 ###############
 ## Filtering ##
 ###############
+#: Default aspiration speed for removing solvent from filter vessel.
+DEFAULT_FILTER_ASPIRATION_SPEED: int = 5
+
 #: Default time in seconds to wait with vacuum on while filtering.
 DEFAULT_FILTER_WAIT_TIME: int = 60*2
 
@@ -139,11 +142,11 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     },
     'Filter': {
         'wait_time': DEFAULT_FILTER_WAIT_TIME,
-        'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
+        'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
     },
     'Dry': {
         'time': DEFAULT_DRY_TIME,
-        'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
+        'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
     },
     'WashFilterCake': {
         'volume': DEFAULT_WASHFILTERCAKE_VOLUME,
@@ -151,7 +154,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'vacuum_time': DEFAULT_WASHFILTERCAKE_VACUUM_TIME,
         'stir_time': DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME,
         'stir_rpm': DEFAULT_WASHFILTERCAKE_STIR_RPM,
-        'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
+        'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
     },
     'Transfer': {
         'stir_rpm': DEFAULT_STIR_RPM,
