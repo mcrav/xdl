@@ -78,15 +78,11 @@ class WashFilterCake(Step):
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
             Wait(self.vacuum_time),
-            StopVacuum(vessel=self.vacuum),
-            CVentVacuum(vessel=self.vacuum),
         ]
 
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
         if not self.vacuum_device:
-            self.steps.pop()
-            self.steps.pop()
             self.steps.pop(-3)
 
         # Start stirring before the solvent is added and stop stirring after the
@@ -107,6 +103,11 @@ class WashFilterCake(Step):
             vacuum_valve=self.vacuum_valve,
             valve_unused_port=self.valve_unused_port,
             filter_vessel=self.filter_vessel))
+
+        if self.vacuum_device:
+            self.steps.extend([
+                StopVacuum(vessel=self.vacuum),
+                CVentVacuum(vessel=self.vacuum)])
 
         self.human_readable = 'Wash {filter_vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)

@@ -50,15 +50,11 @@ class Dry(Step):
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
             Wait(self.time),
-            StopVacuum(vessel=self.vacuum),
-            CVentVacuum(vessel=self.vacuum),
         ]
 
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
         if not self.vacuum_device:
-            self.steps.pop()
-            self.steps.pop()
             self.steps.pop(-3)
 
         if self.temp != None:
@@ -72,6 +68,11 @@ class Dry(Step):
             vacuum_valve=self.vacuum_valve,
             valve_unused_port=self.valve_unused_port,
             filter_vessel=self.filter_vessel))
+
+        if self.vacuum_device:
+            self.steps.extend([
+                StopVacuum(vessel=self.vacuum),
+                CVentVacuum(vessel=self.vacuum)])
 
         self.human_readable = 'Dry substance in {filter_vessel} for {time} s.'.format(
             **self.properties)

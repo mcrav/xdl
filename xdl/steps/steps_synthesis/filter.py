@@ -62,15 +62,11 @@ class Filter(Step):
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
             Wait(time=self.wait_time),
-            StopVacuum(vessel=self.vacuum),
-            CVentVacuum(vessel=self.vacuum),
         ]
 
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
         if not self.vacuum_device:
-            self.steps.pop()
-            self.steps.pop()
             self.steps.pop(-3)
 
         # Reconnect vacuum valve to inert gas or unconnected port after done
@@ -80,6 +76,11 @@ class Filter(Step):
             vacuum_valve=self.vacuum_valve,
             valve_unused_port=self.valve_unused_port,
             filter_vessel=self.filter_vessel))
+
+        if self.vacuum_device:
+            self.steps.extend([
+                StopVacuum(vessel=self.vacuum),
+                CVentVacuum(vessel=self.vacuum)])
 
         self.human_readable = 'Filter contents of {filter_vessel}.'.format(
             **self.properties)
