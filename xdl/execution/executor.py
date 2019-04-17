@@ -18,7 +18,8 @@ from .graph import (
     get_graph,
     make_vessel_map,
     make_filter_inert_gas_map,
-    get_unused_valve_port)
+    get_unused_valve_port,
+    flask_attached_to_vacuum)
 from .utils import VesselContents
 from .cleaning import add_cleaning_steps, verify_cleaning_steps
 
@@ -143,6 +144,10 @@ class XDLExecutor(object):
                 step.vacuum_valve = self._valve_map[step.vacuum]
                 step.valve_unused_port = get_unused_valve_port(
                     graph=self._graph, valve_node=step.vacuum_valve)
+
+            if 'vacuum_device' in step.properties:
+                step.vacuum_device = flask_attached_to_vacuum(
+                    graph=self._graph, flask_node=step.vacuum)
 
 
             if step.name not in BASE_STEP_OBJ_DICT:

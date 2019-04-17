@@ -2,8 +2,11 @@ from typing import Optional
 from .utils import get_vacuum_valve_reconnect_steps
 from ..base_step import Step
 from ..steps_base import CMove, CConnect
-from ..steps_utility import StopStir, Wait
-from ...constants import BOTTOM_PORT, DEFAULT_FILTER_EXCESS_REMOVE_FACTOR
+from ..steps_utility import StopStir, Wait, StartVacuum, StopVacuum
+from ...constants import (
+    BOTTOM_PORT,
+    DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
+    DEFAULT_FILTER_VACUUM_PRESSURE)
 
 class Filter(Step):
     """Filter contents of filter vessel. Apply vacuum for given time.
@@ -32,6 +35,7 @@ class Filter(Step):
         waste_vessel: Optional[str] = None,
         filtrate_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
+        vacuum_device: Optional[bool] = False,
         inert_gas: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
         valve_unused_port: Optional[str] = None,
@@ -49,14 +53,27 @@ class Filter(Step):
                 from_vessel=self.filter_vessel,
                 to_vessel=filtrate_vessel,
                 from_port=BOTTOM_PORT,
-                volume=self.filter_top_volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
+                volume=(self.filter_top_volume
+                        * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR),
                 aspiration_speed=self.aspiration_speed),
+            StartVacuum(
+                vessel=self.vacuum, pressure=DEFAULT_FILTER_VACUUM_PRESSURE),
             # Connect the vacuum.
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
             Wait(time=self.wait_time),
+            StopVacuum(
+                vessel=self.vacuum),
         ]
 
+        # If vacuum is just from vacuum line not device remove Start/Stop vacuum
+        # steps.
+        if not self.vacuum_device:
+            self.steps.pop()
+            self.steps.pop(-3)
+
+        # Reconnect vacuum valve to inert gas or unconnected port after done
+        # with vacuum.
         self.steps.extend(get_vacuum_valve_reconnect_steps(
             inert_gas=self.inert_gas,
             vacuum_valve=self.vacuum_valve,

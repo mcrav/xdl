@@ -1,9 +1,11 @@
 from typing import Optional
 from .utils import get_vacuum_valve_reconnect_steps
 from ..base_step import Step
-from ..steps_utility import StopStir, HeatChillToTemp, Wait
+from ..steps_utility import (
+    StopStir, HeatChillToTemp, Wait, StartVacuum, StopVacuum)
 from ..steps_base import CMove, CConnect
-from ...constants import BOTTOM_PORT, DEFAULT_DRY_WASTE_VOLUME
+from ...constants import (
+    BOTTOM_PORT, DEFAULT_DRY_WASTE_VOLUME, DEFAULT_FILTER_VACUUM_PRESSURE)
 
 class Dry(Step):
     """Dry given vessel by applying vacuum for given time.
@@ -25,6 +27,7 @@ class Dry(Step):
         waste_vessel: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
         vacuum: Optional[str] = None,
+        vacuum_device: Optional[str] = False,
         inert_gas: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
         valve_unused_port: Optional[str] = None,
@@ -41,11 +44,21 @@ class Dry(Step):
                 to_vessel=self.waste_vessel,
                 volume=DEFAULT_DRY_WASTE_VOLUME,
                 aspiration_speed=self.aspiration_speed),
+            StartVacuum(
+                vessel=self.vacuum, pressure=DEFAULT_FILTER_VACUUM_PRESSURE),
             # Connect the vacuum.
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
             Wait(self.time),
+            StopVacuum(vessel=self.vacuum)
         ]
+
+        # If vacuum is just from vacuum line not device remove Start/Stop vacuum
+        # steps.
+        if not self.vacuum_device:
+            self.steps.pop()
+            self.steps.pop(-3)
+
         if self.temp != None:
             self.steps.insert(0, HeatChillToTemp(
                 vessel=self.filter_vessel,

@@ -85,6 +85,9 @@ DEFAULT_FILTER_ASPIRATION_SPEED: int = 5
 #: Default time in seconds to wait with vacuum on while filtering.
 DEFAULT_FILTER_WAIT_TIME: int = 60*2
 
+#: Default pressure to set vacuum to while filtering.
+DEFAULT_FILTER_VACUUM_PRESSURE: int = 400 # mbar
+
 #: Default volume of solvent to use when washing a filter cake.
 DEFAULT_WASHFILTERCAKE_VOLUME: int = 20
 
@@ -219,7 +222,10 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'move_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
         'aspiration_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
         'eluting_repeats': 1,
-    }
+    },
+    'StartVacuum': {
+        'pressure': DEFAULT_FILTER_VACUUM_PRESSURE,
+    },
 }
 
 INTERNAL_PROPERTIES = {

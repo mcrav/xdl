@@ -2,10 +2,13 @@ from typing import Optional, Union
 from ..base_step import Step
 from .add import Add
 from .utils import get_vacuum_valve_reconnect_steps
-from ..steps_utility import Wait, StartStir, StopStir
+from ..steps_utility import Wait, StartStir, StopStir, StartVacuum, StopVacuum
 from ..steps_base import CMove, CConnect
 from ...constants import (
-    BOTTOM_PORT, TOP_PORT, DEFAULT_FILTER_EXCESS_REMOVE_FACTOR)
+    BOTTOM_PORT,
+    TOP_PORT,
+    DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
+    DEFAULT_FILTER_VACUUM_PRESSURE)
 
 class WashFilterCake(Step):
     """Wash filter cake with given volume of given solvent.
@@ -44,6 +47,7 @@ class WashFilterCake(Step):
         filtrate_vessel: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
         vacuum: Optional[str] = None,
+        vacuum_device: Optional[bool] = False,
         inert_gas: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
         valve_unused_port: Optional[str] = None,
@@ -69,10 +73,20 @@ class WashFilterCake(Step):
                 volume=self.volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
                 aspiration_speed=self.aspiration_speed),
             # Briefly dry under vacuum.
+            StartVacuum(
+                vessel=self.vacuum, pressure=DEFAULT_FILTER_VACUUM_PRESSURE),
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
             Wait(self.vacuum_time),
+            StopVacuum(vessel=self.vacuum)
         ]
+
+        # If vacuum is just from vacuum line not device remove Start/Stop vacuum
+        # steps.
+        if not self.vacuum_device:
+            self.steps.pop()
+            self.steps.pop(-3)
+
         # Start stirring before the solvent is added and stop stirring after the
         # solvent has been removed but before the vacuum is connected.
         if self.stir == True:

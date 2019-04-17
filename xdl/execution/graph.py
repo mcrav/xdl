@@ -169,3 +169,20 @@ def get_unused_valve_port(valve_node: str, graph: MultiDiGraph) -> int:
         if i not in used_ports:
             return i
     return None
+
+def flask_attached_to_vacuum(flask_node: str, graph: MultiDiGraph) -> bool:
+    """Return True if given vacuum flask is attached to a vacuum device. If it
+    is attached to nothing (i.e. vacuum line in fumehood) return False.
+    
+    Args:
+        flask_node (str): Name of vacuum flask node.
+        graph (MultiDiGraph): Graph containing flask_node.
+    
+    Returns:
+        bool: True if vacuum flask is attached to vacuum device not just vacuum
+            line in fumehood.
+    """
+    for src_node, _ in graph.in_edges(flask_node):
+        if graph.nodes[src_node]['class'] == 'CVC3000':
+            return True
+    return False
