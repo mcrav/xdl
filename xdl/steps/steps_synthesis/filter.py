@@ -1,7 +1,7 @@
 from typing import Optional
 from .utils import get_vacuum_valve_reconnect_steps
 from ..base_step import Step
-from ..steps_base import CMove, CConnect
+from ..steps_base import CMove, CConnect, CVentVacuum
 from ..steps_utility import StopStir, Wait, StartVacuum, StopVacuum
 from ...constants import (
     BOTTOM_PORT,
@@ -62,13 +62,14 @@ class Filter(Step):
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
             Wait(time=self.wait_time),
-            StopVacuum(
-                vessel=self.vacuum),
+            StopVacuum(vessel=self.vacuum),
+            CVentVacuum(vessel=self.vacuum),
         ]
 
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
         if not self.vacuum_device:
+            self.steps.pop()
             self.steps.pop()
             self.steps.pop(-3)
 

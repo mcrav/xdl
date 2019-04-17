@@ -3,7 +3,7 @@ from .utils import get_vacuum_valve_reconnect_steps
 from ..base_step import Step
 from ..steps_utility import (
     StopStir, HeatChillToTemp, Wait, StartVacuum, StopVacuum)
-from ..steps_base import CMove, CConnect
+from ..steps_base import CMove, CConnect, CVentVacuum
 from ...constants import (
     BOTTOM_PORT, DEFAULT_DRY_WASTE_VOLUME, DEFAULT_FILTER_VACUUM_PRESSURE)
 
@@ -50,12 +50,14 @@ class Dry(Step):
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
             Wait(self.time),
-            StopVacuum(vessel=self.vacuum)
+            StopVacuum(vessel=self.vacuum),
+            CVentVacuum(vessel=self.vacuum),
         ]
 
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
         if not self.vacuum_device:
+            self.steps.pop()
             self.steps.pop()
             self.steps.pop(-3)
 

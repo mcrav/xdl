@@ -3,7 +3,7 @@ from ..base_step import Step
 from .add import Add
 from .utils import get_vacuum_valve_reconnect_steps
 from ..steps_utility import Wait, StartStir, StopStir, StartVacuum, StopVacuum
-from ..steps_base import CMove, CConnect
+from ..steps_base import CMove, CConnect, CVentVacuum
 from ...constants import (
     BOTTOM_PORT,
     TOP_PORT,
@@ -78,12 +78,14 @@ class WashFilterCake(Step):
             CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
             Wait(self.vacuum_time),
-            StopVacuum(vessel=self.vacuum)
+            StopVacuum(vessel=self.vacuum),
+            CVentVacuum(vessel=self.vacuum),
         ]
 
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
         if not self.vacuum_device:
+            self.steps.pop()
             self.steps.pop()
             self.steps.pop(-3)
 
