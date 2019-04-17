@@ -1,6 +1,6 @@
 from typing import Optional
-from ..steps_utility import Confirm, PrimePumpForAdd, Wait
-from ..steps_base import CMove, CSetStirRate, CStopStir, CStir
+from ..steps_utility import PrimePumpForAdd, Wait
+from ..steps_base import CMove, CSetStirRate, CStopStir, CStir, Confirm
 from ..base_step import Step
 from ...utils.misc import get_port_str
 from ...constants import (
