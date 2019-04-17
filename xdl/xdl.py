@@ -162,39 +162,7 @@ class XDL(object):
         for step in self.steps:
             self.climb_down_tree(step, print_tree=True)
         self.logger.info('\n')
-
-    def as_literal_chempiler_code(self, dry_run: bool = False) -> str:
-        """
-        Returns string of literal chempiler code built from steps.
-
-        Args:
-            dry_run (bool, optional): Defaults to False. 
-                Don't include Wait steps in dry run.
-        """
-        s = 'from chempiler import Chempiler\n\nchempiler = Chempiler(r"{self._get_exp_id(default="xdl_simulation")}", "{self.graphml_file}", "output_dir", False)\n\nchempiler.start_recording()\nchempiler.camera.change_recording_speed(14)\n'
-        full_tree = self._get_full_xdl_tree()
-        base_steps = list(BASE_STEP_OBJ_DICT.values())
-        for step in full_tree:
-            if step in self.steps:
-                s += f'\n# {step.human_readable}\n'
-            if type(step) in base_steps:
-                if dry_run and type(step) == CWait:
-                    new_step = copy.deepcopy(step)
-                    new_step.time = 2
-                    step = new_step
-                s += re.sub(r'([a-zA-Z][a-z|A-Z|_|0-9]+)([\,|\)])', 
-                            r"'\1'\2", 
-                            step.literal_code)
-                s += '\n'
-        return s
-
-    def save_chempiler_script(
-        self, save_path: str, dry_run: bool = False
-    ) -> None:
-        """Save a chempiler script from the given steps."""
-        with open(save_path, 'w') as fileobj:
-            fileobj.write(self.as_literal_chempiler_code(dry_run=dry_run))
-
+            
     def as_human_readable(self) -> str:
         """Return human-readable English description of XDL procedure.
         
@@ -252,21 +220,6 @@ class XDL(object):
                 if 'volume' in prop and type(val) == float:
                     if val:
                         step.properties[prop] = float(val) * scale
-
-    def generate_graph(
-        self, save_path: str = None) -> Dict[str, List[Dict[str, Any]]]:
-        """Generate basic node link JSON graph based on procedure and return it
-        as dict. If save_path is given also save to file.
-
-        Args:
-            save_path (str): Path to save JSON graph file to.
-        
-        Returns:
-            Dict[str, List[Dict[str, Any]]]:
-        """
-        graph_generator = GraphGenerator(self)
-        graph_generator.generate_graph(save_path)
-        return graph_generator.graph
 
     def prepare_for_execution(
         self, graph_file: str, interactive: bool = True) -> None:
