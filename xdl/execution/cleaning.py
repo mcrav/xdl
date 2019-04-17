@@ -11,6 +11,7 @@ from .tracking import iter_vessel_contents
 from ..steps import *
 from ..hardware import Hardware
 from ..reagents import Reagent
+from ..constants import AQUEOUS_KEYWORDS
 
 '''
 Backbone Cleaning Rules
@@ -193,10 +194,6 @@ def add_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
             solvent = xdl_obj.organic_cleaning_solvent
         xdl_obj.steps.insert(i, CleanBackbone(solvent=solvent))
     verify = None
-    while verify not in ['y', 'n', '']:
-        verify = input('Verify solvents used in backbone cleaning? (y, [n])')
-    if verify == 'y':
-        verify_cleaning_steps(xdl_obj)
     return xdl_obj
 
 def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':

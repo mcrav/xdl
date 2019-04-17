@@ -8,7 +8,7 @@ from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml,
                     convert_mass_str_to_g)
 from ..constants import SYNTHESIS_ATTRS
 from ..utils import parse_bool, XDLError, raise_error
-from ..steps import MakeSolution, Step
+from ..steps import Step
 from ..reagents import Reagent
 from ..hardware import Hardware, Component
 from ..utils.namespace import (STEP_OBJ_DICT, BASE_STEP_OBJ_DICT)

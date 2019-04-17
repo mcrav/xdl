@@ -20,7 +20,7 @@ def test_prepare_for_execution():
         x = XDL(files[i])
         print('xdl', files[i])
         print('graph', files[i+1])
-        x.prepare_for_execution(files[i+1]) 
+        x.prepare_for_execution(files[i+1], interactive=False) 
         chempiler = Chempiler(
             experiment_code='test',
             output_dir=os.path.join(HERE, 'logs'),

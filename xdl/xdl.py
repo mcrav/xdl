@@ -268,7 +268,8 @@ class XDL(object):
         graph_generator.generate_graph(save_path)
         return graph_generator.graph
 
-    def prepare_for_execution(self, graph_file: str) -> None:
+    def prepare_for_execution(
+        self, graph_file: str, interactive: bool = True) -> None:
         """Check hardware compatibility and prepare XDL for execution on given 
         setup.
         
@@ -278,7 +279,7 @@ class XDL(object):
                                         or dict containing graph in same format
                                         as JSON file.
         """
-        self.executor.prepare_for_execution(graph_file)
+        self.executor.prepare_for_execution(graph_file, interactive=interactive)
 
     def execute(self, chempiler: 'Chempiler') -> None:
         """Execute XDL using given Chempiler object. self.prepare_for_execution

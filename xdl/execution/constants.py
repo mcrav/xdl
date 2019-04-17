@@ -16,7 +16,6 @@ SOLVENT_CONTAINING_STEPS: List[type] = [
 CLEAN_BACKBONE_AFTER_STEPS: List[type] = [
     Add,
     Separate,
-    MakeSolution,
     WashFilterCake,
     Filter,
     Dry,

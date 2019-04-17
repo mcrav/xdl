@@ -14,5 +14,5 @@ def test_prepare_for_execution():
     i = 0
     while i + 1 < len(files):
         x = XDL(files[i])
-        x.prepare_for_execution(files[i+1]) 
+        x.prepare_for_execution(files[i+1], interactive=False) 
         i += 2

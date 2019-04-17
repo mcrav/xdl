@@ -16,7 +16,7 @@ from .tracking import iter_vessel_contents
 from .graph import (
     hardware_from_graph, get_graph, make_vessel_map, make_filter_inert_gas_map)
 from .utils import VesselContents
-from .cleaning import add_cleaning_steps 
+from .cleaning import add_cleaning_steps, verify_cleaning_steps
 
 class XDLExecutor(object):
  
@@ -215,20 +215,29 @@ class XDLExecutor(object):
     ### ADD IMPLIED STEPS ###
     #########################
 
-    def _add_implied_steps(self) -> None:
+    def _add_implied_steps(self, interactive: bool = True) -> None:
         """Add extra steps implied by explicit XDL steps."""
         self._add_filter_dead_volume_handling_steps()
         if self._xdl.auto_clean:
-            self._add_implied_clean_backbone_steps()
+            self._add_implied_clean_backbone_steps(interactive=interactive)
+        
 
 
-    def _add_implied_clean_backbone_steps(self) -> None:
+    def _add_implied_clean_backbone_steps(
+        self, interactive: bool = True) -> None:
         """Add CleanBackbone steps after certain steps which will contaminate 
         the backbone. 
         Takes into account when organic and aqueous reagents have been used to 
         determine what solvents to clean the backbone with.
         """
         add_cleaning_steps(self._xdl)
+        if interactive:
+            verify = None
+            while verify not in ['y', 'n', '']:
+                verify = input(
+                    'Verify solvents used in backbone cleaning? (y, [n])')
+            if verify == 'y':
+                verify_cleaning_steps(self._xdl)
         self._map_hardware_to_steps()
 
 
@@ -548,7 +557,8 @@ class XDLExecutor(object):
     ### PUBLIC METHODS ###
     ######################
 
-    def prepare_for_execution(self, graph_file: Union[str, Dict]) -> None:
+    def prepare_for_execution(
+        self, graph_file: Union[str, Dict], interactive=True) -> None:
         """
         Prepare the XDL for execution on a Chemputer corresponding to the given
         graph. Any one of graphml_file, json_data, or json_file must be given.
@@ -588,7 +598,7 @@ class XDLExecutor(object):
                     self._map_hardware_to_steps() 
 
                     # Add in steps implied by explicit steps.
-                    self._add_implied_steps()
+                    self._add_implied_steps(interactive=interactive)
 
                     # Convert implied properties to concrete values.
                     self._add_all_volumes()

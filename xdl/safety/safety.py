@@ -5,7 +5,7 @@ from typing import Dict, List, Set
 
 from .utils import cas_str_to_int, find_reagent_obj
 from ..steps import (
-    Add, MakeSolution, CMove, Transfer, Separate, WashFilterCake, Step)
+    Add, CMove, Transfer, Separate, WashFilterCake, Step)
 from ..reagents import Reagent
 
 dangerous_combinations: Dict[frozenset, str] = {
