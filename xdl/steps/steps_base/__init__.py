@@ -4,3 +4,4 @@ from .vacuum import *
 from .chiller import *
 from .stirrer import *
 from .rotavap import *
+from .valve import *

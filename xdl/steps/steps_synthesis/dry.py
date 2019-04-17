@@ -1,4 +1,5 @@
 from typing import Optional
+from .utils import get_vacuum_valve_reconnect_steps
 from ..base_step import Step
 from ..steps_utility import StopStir, HeatChillToTemp, Wait
 from ..steps_base import CMove, CConnect
@@ -25,6 +26,8 @@ class Dry(Step):
         aspiration_speed: Optional[float] = 'default',
         vacuum: Optional[str] = None,
         inert_gas: Optional[str] = None,
+        vacuum_valve: Optional[str] = None,
+        valve_unused_port: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -49,10 +52,11 @@ class Dry(Step):
                 temp=self.temp,
                 vessel_type='ChemputerFilter'))
 
-        if self.inert_gas:
-            self.steps.append(
-                CConnect(
-                    from_vessel=self.inert_gas, to_vessel=self.filter_vessel))
+        self.steps.extend(get_vacuum_valve_reconnect_steps(
+            inert_gas=self.inert_gas,
+            vacuum_valve=self.vacuum_valve,
+            valve_unused_port=self.valve_unused_port,
+            filter_vessel=self.filter_vessel))
 
         self.human_readable = 'Dry substance in {filter_vessel} for {time} s.'.format(
             **self.properties)

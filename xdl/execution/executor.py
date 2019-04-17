@@ -14,7 +14,11 @@ from ..safety import procedure_is_safe
 from ..reagents import Reagent
 from .tracking import iter_vessel_contents
 from .graph import (
-    hardware_from_graph, get_graph, make_vessel_map, make_filter_inert_gas_map)
+    hardware_from_graph,
+    get_graph,
+    make_vessel_map,
+    make_filter_inert_gas_map,
+    get_unused_valve_port)
 from .utils import VesselContents
 from .cleaning import add_cleaning_steps, verify_cleaning_steps
 
@@ -130,8 +134,16 @@ class XDLExecutor(object):
             # filter dead volume method being used.
             if ('inert_gas' in step.properties
                 and self._xdl.filter_dead_volume_method
-                == FILTER_DEAD_VOLUME_INERT_GAS_METHOD):
+                    == FILTER_DEAD_VOLUME_INERT_GAS_METHOD):
                 step.inert_gas = self._filter_inert_gas_map[step.filter_vessel]
+
+            if ('vacuum_valve' in step.properties
+                  and self._xdl.filter_dead_volume_method
+                      == FILTER_DEAD_VOLUME_LIQUID_METHOD):
+                step.vacuum_valve = self._valve_map[step.vacuum]
+                step.valve_unused_port = get_unused_valve_port(
+                    graph=self._graph, valve_node=step.vacuum_valve)
+
 
             if step.name not in BASE_STEP_OBJ_DICT:
                 self._map_hardware_to_step_list(step.steps)
@@ -376,8 +388,6 @@ class XDLExecutor(object):
         """Add steps to self._xdl.steps to implement the following:
         1) Connection of inert gas to bottom of filter flasks at start of
         procedure.
-        2) Reconnect inert gas to bottom of filter flasks after filtration
-        sequences.
         """
         # Connect inert gas to bottom of filter flasks at start of procedure.
         for filter_vessel in self._graph_hardware.filters:
@@ -584,6 +594,8 @@ class XDLExecutor(object):
                     self._graph, CHEMPUTER_VACUUM_CLASS_NAME)
                 self._filter_inert_gas_map = make_filter_inert_gas_map(
                     self._graph)
+                self._valve_map = make_vessel_map(
+                    self._graph, CHEMPUTER_VALVE_CLASS_NAME)
 
                 # Check hardware compatibility
                 if self._hardware_is_compatible():

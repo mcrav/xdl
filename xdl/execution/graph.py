@@ -37,6 +37,12 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
     elif type(graph_file) == dict:
         graph = json_graph.node_link_graph(
             graph_file, directed=True, multigraph=True)
+    for edge in graph.edges:
+        print(edge)
+        print(graph.edges[edge])
+        if 'port' in graph.edges[edge]:
+            port_str = graph.edges[edge]['port']
+            graph.edges[edge]['port'] = port_str[1:-1].split(',')
     return graph
 
 def hardware_from_graph(graph: MultiDiGraph) -> Hardware:
@@ -135,3 +141,31 @@ def make_filter_inert_gas_map(graph: MultiDiGraph):
 
         filter_inert_gas_map[filter_vessel] = closest_nitrogen_flask
     return filter_inert_gas_map
+
+def get_unused_valve_port(valve_node: str, graph: MultiDiGraph) -> int:
+    """Given a valve, return a position where the valve isn't connected to
+    anything.
+    
+    Args:
+        valve_node (str): Name of the valve on which to find an unused port.
+        graph (MultiDiGraph): Graph that contains valve.
+    
+    Returns:
+        int: Valve position which is not connected to anything. If there is no
+            unconnected position then None is returned.
+    """
+    used_ports = []
+    # Get connected valve positions. 
+    for _, _, edge_data in graph.in_edges(valve_node, data=True):
+        if 'port' in edge_data:
+            used_ports.append(int(edge_data['port'][1]))
+
+    for _, _, edge_data in graph.out_edges(valve_node, data=True):
+        if 'port' in edge_data:
+            used_ports.append(int(edge_data['port'][0]))
+
+    # Return first found unconnected valve positions.
+    for i in range(-1, 6): # Possible valve ports are -1, 0, 1, 2, 3, 4, 5.
+        if i not in used_ports:
+            return i
+    return None

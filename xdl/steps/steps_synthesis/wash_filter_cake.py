@@ -1,6 +1,7 @@
 from typing import Optional, Union
 from ..base_step import Step
 from .add import Add
+from .utils import get_vacuum_valve_reconnect_steps
 from ..steps_utility import Wait, StartStir, StopStir
 from ..steps_base import CMove, CConnect
 from ...constants import (
@@ -44,6 +45,8 @@ class WashFilterCake(Step):
         aspiration_speed: Optional[float] = 'default',
         vacuum: Optional[str] = None,
         inert_gas: Optional[str] = None,
+        vacuum_valve: Optional[str] = None,
+        valve_unused_port: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -83,10 +86,11 @@ class WashFilterCake(Step):
                 1, StartStir(vessel=self.filter_vessel, stir_rpm=self.stir_rpm))
             self.steps.insert(-3, StopStir(vessel=self.filter_vessel))
 
-        if self.inert_gas:
-            self.steps.append(
-                CConnect(
-                    from_vessel=self.inert_gas, to_vessel=self.filter_vessel))
+        self.steps.extend(get_vacuum_valve_reconnect_steps(
+            inert_gas=self.inert_gas,
+            vacuum_valve=self.vacuum_valve,
+            valve_unused_port=self.valve_unused_port,
+            filter_vessel=self.filter_vessel))
 
         self.human_readable = 'Wash {filter_vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
