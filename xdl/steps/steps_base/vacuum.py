@@ -23,7 +23,7 @@ class CSetVacuumSetPoint(Step):
     """Sets a new vacuum setpoint.
 
     Args:
-        vessel:$ (str): Name of the node the vacuum pump is attached to.
+        vessel (str): Name of the node the vacuum pump is attached to.
         vacuum_pressure (float): Vacuum pressure setpoint in mbar.
     """
     def __init__(self, vessel: str, vacuum_pressure: float) -> None:

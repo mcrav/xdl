@@ -1,7 +1,7 @@
 from typing import Optional
 
 from ..base_step import Step
-from ..steps_base import CMove
+from ..steps_base import CMove, CValveMoveToPosition
 from ...constants import BOTTOM_PORT
 
 class AddFilterDeadVolume(Step):
@@ -22,6 +22,9 @@ class AddFilterDeadVolume(Step):
         volume: float, 
         waste_vessel: Optional[str] = None,
         solvent_vessel: Optional[str] = None,
+        vacuum: Optional[str] = None,
+        vacuum_valve: Optional[str] = None,
+        valve_unused_port: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -30,6 +33,11 @@ class AddFilterDeadVolume(Step):
             CMove(from_vessel=self.solvent_vessel, volume=self.volume,
                 to_vessel=self.filter_vessel, to_port=BOTTOM_PORT)
         ]
+
+        if self.vacuum_valve and self.valve_unused_port != None:
+            self.steps.append(
+                CValveMoveToPosition(valve_name=self.vacuum_valve,
+                                     position=self.valve_unused_port))
 
         self.human_readable = 'Fill bottom of {filter_vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
@@ -53,6 +61,9 @@ class RemoveFilterDeadVolume(Step):
         filter_vessel: str,
         dead_volume: Optional[float] = 0,
         waste_vessel: Optional[str] = None,
+        vacuum: Optional[str] = None,
+        vacuum_valve: Optional[str] = None,
+        valve_unused_port: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -61,6 +72,11 @@ class RemoveFilterDeadVolume(Step):
             CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT,
                   to_vessel=self.waste_vessel, volume=self.dead_volume)
         ]
+
+        if self.vacuum_valve and self.valve_unused_port != None:
+            self.steps.append(
+                CValveMoveToPosition(valve_name=self.vacuum_valve,
+                                     position=self.valve_unused_port))
 
         self.human_readable = 'Remove dead volume ({dead_volume} mL) from bottom of {filter_vessel}'.format(
             **self.properties)

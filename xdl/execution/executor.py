@@ -141,6 +141,7 @@ class XDLExecutor(object):
             if ('vacuum_valve' in step.properties
                   and self._xdl.filter_dead_volume_method
                       == FILTER_DEAD_VOLUME_LIQUID_METHOD):
+                print('VAC', step.name)
                 step.vacuum_valve = self._valve_map[step.vacuum]
                 step.valve_unused_port = get_unused_valve_port(
                     graph=self._graph, valve_node=step.vacuum_valve)
