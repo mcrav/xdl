@@ -5,8 +5,8 @@ from ..steps_utility import StopStir, Wait
 from ...constants import BOTTOM_PORT, DEFAULT_FILTER_EXCESS_REMOVE_FACTOR
 
 class Filter(Step):
-    """Filter contents of filter_vessel_top. Apply vacuum for given time.
-    Assumes filter_filter_bottom already filled with solvent and stuff already in filter_vessel_top.
+    """Filter contents of filter vessel. Apply vacuum for given time.
+    Assumes liquid is already in the top of the filter vessel.
 
     Args:
         filter_vessel (str): Filter vessel.
