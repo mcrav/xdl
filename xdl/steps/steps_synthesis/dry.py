@@ -1,5 +1,5 @@
 from typing import Optional
-from .utils import get_vacuum_valve_reconnect_steps
+from ..utils import get_vacuum_valve_reconnect_steps
 from ..base_step import Step
 from ..steps_utility import (
     StopStir, HeatChillToTemp, Wait, StartVacuum, StopVacuum)
@@ -15,9 +15,15 @@ class Dry(Step):
         time (float): Time to dry vessel for in seconds. (optional)
         temp (float): Temperature to dry at.
         waste_vessel (str): Given internally. Vessel to send waste to.
-        vacuum (str): Given internally. Vacuum flask.
+        vacuum (str): Given internally. Name of vacuum flask.
+        vacuum_device (bool): True if vacuum device is node in graph, False if
+            not i.e. vacuum is just vacuum line in fumehood.
         inert_gas (str): Given internally. Name of node supplying inert gas.
             Only used if inert gas filter dead volume method is being used.
+        vacuum_valve (str): Given internally. Name of valve connecting filter
+            bottom to vacuum.
+        valve_unused_port (str): Given internally. Random unused position on
+            valve.
     """
     def __init__(
         self,

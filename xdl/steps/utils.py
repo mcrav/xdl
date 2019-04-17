@@ -1,7 +1,6 @@
 from typing import List
-
-from ..base_step import Step
-from ..steps_base import CConnect, CValveMoveToPosition
+from .base_step import Step
+from .steps_base import CConnect, CValveMoveToPosition
 
 def get_vacuum_valve_reconnect_steps(
     filter_vessel: str,

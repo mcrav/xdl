@@ -1,7 +1,7 @@
 from typing import Optional, Union
 from ..base_step import Step
 from .add import Add
-from .utils import get_vacuum_valve_reconnect_steps
+from ..utils import get_vacuum_valve_reconnect_steps
 from ..steps_utility import Wait, StartStir, StopStir, StartVacuum, StopVacuum
 from ..steps_base import CMove, CConnect, CVentVacuum
 from ...constants import (
@@ -31,8 +31,14 @@ class WashFilterCake(Step):
             waste_vessel.
         aspiration_speed (float): Speed to remove solvent from filter_vessel.
         vacuum (str): Given internally. Name of vacuum flask.
+        vacuum_device (bool): True if vacuum device is node in graph, False if
+            not i.e. vacuum is just vacuum line in fumehood.
         inert_gas (str): Given internally. Name of node supplying inert gas.
             Only used if inert gas filter dead volume method is being used.
+        vacuum_valve (str): Given internally. Name of valve connecting filter
+            bottom to vacuum.
+        valve_unused_port (str): Given internally. Random unused position on
+            valve.
     """
     def __init__(
         self,
