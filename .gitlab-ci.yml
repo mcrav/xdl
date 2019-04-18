@@ -28,6 +28,7 @@ before_script:
   - pip3 install wheel
   - pip3 install -r requirements.txt
   - pip3 install pytest
+  - pip3 install .
 
 test:
   script:
