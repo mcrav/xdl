@@ -20,6 +20,7 @@ cache:
 
 before_script:
   - python3 -V
+  - pip3 -V
   - pip install virtualenv
   - python3 -m venv venv
   - . venv/bin/activate
