@@ -1,6 +1,7 @@
 # Official language image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/python/tags/
 image: python:3.7.3
+image: pip:latest
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -18,9 +19,8 @@ cache:
     - venv/
 
 before_script:
-  - sudo apt-get install -y python3-pip
   - python3 -V
-  - pip3 install virtualenv
+  - pip install virtualenv
   - python3 -m venv venv
   - . venv/bin/activate
 
