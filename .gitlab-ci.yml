@@ -1,0 +1,54 @@
+# Official language image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/python/tags/
+image: latest
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+# Pip's cache doesn't store the python packages
+# https://pip.pypa.io/en/stable/reference/pip_install/#caching
+#
+# If you want to also cache the installed packages, you have to install
+# them in a virtualenv and cache it as well.
+# cache:
+#   paths:
+#     - .cache/pip
+#     - venv/
+
+before_script:
+  # Initialise virtualenv
+  - sudo apt-get install python3-pip -y
+  - sudo apt-get install python3-venv -y
+  - python3 -V
+  - pip3 -V
+  - pip3 install virtualenv
+  - python3 -m venv venv
+  - . venv/bin/activate
+  - pip3 install wheel
+  # Install xdl requirements
+  - pip3 install pytest
+  - pip3 install -r requirements.txt
+
+  # Install Chempiler, SerialLabware and ChemputerAPI for simulations
+  - git clone -b develop http://gitlab+deploy-token-2:u5KWxsk2hAU75o31rZUe@datalore.chem.gla.ac.uk/Chemputer/Chempiler.git
+  - cat Chempiler/requirements.txt
+  - cd Chempiler; pip3 install .; cd ..
+  - pip3 install kanren
+  
+  - git clone http://gitlab+deploy-token-3:sNsCFqh2szkE_AXkN3Vm@datalore.chem.gla.ac.uk/Chemputer/SerialLabware.git
+  - cd SerialLabware; pip3 install .; cd ..
+  
+  - git clone -b MC/tricont_import_error http://gitlab+deploy-token-4:NjJny1c5xxvnxMDXmpfB@datalore.chem.gla.ac.uk/Chemputer/ChemputerAPI.git
+  - cd ChemputerAPI; pip3 install .; cd ..
+  
+  # Install xdl
+  - pip3 install .
+
+test:
+  script:
+  - pytest -s tests/integration/test_prepare_for_execution.py
+  - pytest -s tests/integration/test_chempiler.py
+#   - pip3 install tox flake8 # you can also use tox
+#   - tox -e py36,flake8
