@@ -4,8 +4,6 @@ if False: # For type annotations
 import re
 import time
 
-from chemdata.synonyms import SOLVENT_SYNONYM_CAS_DICT
-
 from .constants import *
 from .tracking import iter_vessel_contents
 from ..steps import *
@@ -45,7 +43,7 @@ def get_available_solvents(reagents: List[Reagent]) -> List[str]:
     """
     solvents = []
     for reagent in reagents:
-        for solvent in SOLVENT_SYNONYM_CAS_DICT:
+        for solvent in COMMON_SOLVENT_NAMES:
             # Look for stuff like 'X in THF' as well as plain 'THF'.
             if (re.match(r'[ _]?' + solvent, reagent.id.lower())
                 or re.match(r'[ _]?' + solvent, reagent.id.lower())):
@@ -193,7 +191,6 @@ def add_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
         if solvent != 'water' and xdl_obj.organic_cleaning_solvent:
             solvent = xdl_obj.organic_cleaning_solvent
         xdl_obj.steps.insert(i, CleanBackbone(solvent=solvent))
-    verify = None
     return xdl_obj
 
 def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
