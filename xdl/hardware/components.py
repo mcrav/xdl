@@ -38,6 +38,7 @@ class Hardware(object):
         self.wastes = []
         self.filters = []
         self.separators = []
+        self.rotavaps = []
         for component in self.components:
             if component.component_type in REACTOR_TYPES:
                 self.reactors.append(component)
@@ -49,6 +50,8 @@ class Hardware(object):
                 self.flasks.append(component)
             elif component.component_type in WASTE_TYPES:
                 self.wastes.append(component)
+            elif component.component_type in ROTAVAP_TYPES:
+                self.rotavaps.append(component)
         self.waste_xids = [waste.id for waste in self.wastes]
 
     def __getitem__(self, item: str) -> Union[Component, None]:

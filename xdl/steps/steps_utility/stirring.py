@@ -41,11 +41,18 @@ class StopStir(Step):
     
     Args:
         vessel (str): Vessel name to stop stirring.
+        vessel_has_stirrer (bool): True if vessel has stirrer, otherwise False.
+            The point of this is that StopStir can be used and if there is no
+            stirrer then it is just ignored rather than an error being raised.
     """
-    def __init__(self, vessel: str, **kwargs) -> None:
+    def __init__(
+        self, vessel: str, vessel_has_stirrer: bool = True, **kwargs) -> None:
         super().__init__(locals())
 
-        self.steps = [CStopStir(vessel=self.vessel)]
+        if not self.vessel_has_stirrer:
+            self.steps = []
+        else:
+            self.steps = [CStopStir(vessel=self.vessel)]
 
         self.human_readable = 'Stop stirring {0}.'.format(self.vessel)
 

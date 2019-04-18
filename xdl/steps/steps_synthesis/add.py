@@ -1,6 +1,6 @@
 from typing import Optional
-from ..steps_utility import PrimePumpForAdd, Wait
-from ..steps_base import CMove, CSetStirRate, CStopStir, CStir, Confirm
+from ..steps_utility import PrimePumpForAdd, Wait, StopStir
+from ..steps_base import CMove, CSetStirRate, CStir, Confirm
 from ..base_step import Step
 from ...utils.misc import get_port_str
 from ...constants import (
@@ -98,7 +98,7 @@ class Add(Step):
                     self.steps.insert(
                         0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
             else:
-                self.steps.insert(0, CStopStir(vessel=self.vessel))
+                self.steps.insert(0, StopStir(vessel=self.vessel))
 
             self.human_readable = 'Add {0} ({1} mL) to {2} {3}.'.format(
                 self.reagent, self.volume, self.vessel, get_port_str(self.port))

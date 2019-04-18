@@ -152,6 +152,13 @@ class XDLExecutor(object):
             if 'vessel_is_rotavap' in step.properties:
                 step.vessel_is_rotavap = step.vessel in [
                     item.id for item in self._graph_hardware.rotavaps] 
+
+            if 'vessel_has_stirrer' in step.properties:
+                step.vessel_has_stirrer = not step.vessel in [
+                    item.id
+                    for item in self._graph_hardware.rotavaps 
+                                + self._graph_hardware.flasks]
+
             if step.name not in BASE_STEP_OBJ_DICT:
                 self._map_hardware_to_step_list(step.steps)
 
