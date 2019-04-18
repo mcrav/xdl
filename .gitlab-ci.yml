@@ -18,7 +18,7 @@ cache:
     - venv/
 
 before_script:
-  - apt-get install pip3 -y
+  - sudo apt-get install pip3 -y
   - python3 -V
   - pip3 -V
   - pip install virtualenv
