@@ -158,6 +158,7 @@ def get_clean_backbone_sequence(xdl_obj) -> List[Tuple[int, str]]:
     cleans = []
     for i, step_i in enumerate(clean_backbone_steps):
         # Get after_type and before_type
+        after_solvent = None
         if i + 1 < len(clean_backbone_steps):
             next_step_i = clean_backbone_steps[i+1]
             if next_step_i < len(step_solvents):
@@ -205,7 +206,6 @@ def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
             input.
     """
     available_solvents = get_available_solvents(xdl_obj.reagents)
-    print('Available cleaning solvents:', '\n'.join(available_solvents))
     step_i = 0
     for step in xdl_obj.steps:
         # If step is CleanBackbone give user option to change solvent.
