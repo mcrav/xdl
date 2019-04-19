@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 
 from ..utils import get_vacuum_valve_reconnect_steps
 from ..base_step import AbstractStep, Step
@@ -57,7 +57,7 @@ class AddFilterDeadVolume(AbstractStep):
             **self.properties)
 
     @property
-    def requirements(self):
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {
             'filter_vessel': {
                 'filter': True,
@@ -110,7 +110,7 @@ class RemoveFilterDeadVolume(AbstractStep):
             **self.properties)
             
     @property
-    def requirements(self):
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {
             'filter_vessel': {
                 'filter': True,

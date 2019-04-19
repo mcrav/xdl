@@ -66,6 +66,6 @@ class CleanVessel(AbstractStep):
         ]
 
     @property
-    def human_readable(self):
+    def human_readable(self) -> str:
         return 'Clean {vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)

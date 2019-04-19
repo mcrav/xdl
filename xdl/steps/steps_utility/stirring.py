@@ -30,7 +30,7 @@ class StartStir(AbstractStep):
         ]
 
     @property
-    def human_readable(self):
+    def human_readable(self) -> str:
         return 'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'.format(
             **self.properties)
 
@@ -61,7 +61,7 @@ class StopStir(AbstractStep):
         return []
 
     @property
-    def human_readable(self):
+    def human_readable(self) -> str:
         return 'Stop stirring {0}.'.format(self.vessel)
 
     @property
