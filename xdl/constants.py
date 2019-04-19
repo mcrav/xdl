@@ -246,6 +246,9 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     },
     'RotavapStir': {
         'rotation_speed': DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED,
+    },
+    'CleanVessel': {
+        'stir_time': DEFAULT_CLEAN_VESSEL_STIR_TIME,
     }
 }
 
