@@ -2,6 +2,7 @@
 import logging
 import copy
 import sys
+from abc import ABC, abstractmethod
 from ..utils import initialise_logger
 
 if False:
@@ -15,10 +16,6 @@ class Step(XDLBase):
     Attributes:
         properties (dict): Dictionary of step properties. Should be implemented
             in step __init__.
-        steps (list): List of step objects. Should be implemented in step
-            __init__.
-        human_readable (str): Description of actions taken by step. Should be
-            implemented in step __init__.
     """
     def __init__(self, param_dict):
         super().__init__(param_dict)
@@ -27,9 +24,33 @@ class Step(XDLBase):
             for kwarg in kwargs:
                 if kwarg in param_dict['kwargs']:
                     self.properties[kwarg] = param_dict['kwargs'][kwarg]
-        self.steps = []
-        self.human_readable = self.__class__.__name__
-        self.requirements = {}
+
+class AbstractStep(Step, ABC):
+    """Abstract base class for all steps that contain other steps.
+    Subclasses must implement steps and human_readable, and can also override
+    requirements if necessary.
+    
+    Attributes:
+        properties (dict): Dictionary of step properties.
+        steps (list): List of Step objects.
+        human_readable (str): Description of actions taken by step.
+    """
+    def __init__(self, param_dict):
+        super().__init__(param_dict)
+        
+    @property
+    @abstractmethod
+    def steps(self):
+        return []
+
+    @property
+    @abstractmethod
+    def human_readable(self):
+        return self.__class__.__name__
+
+    @property
+    def requirements(self):
+        return {}
 
     def execute(
         self,
@@ -69,3 +90,24 @@ class Step(XDLBase):
             if logger:
                 logger.exception(str(e), exc_info=1)
             raise(e)
+
+class AbstractBaseStep(Step, ABC):
+    """Abstract base class for all steps that do not contain other steps and
+    instead have an execute method that takes a chempiler object.
+    
+    Subclasses must implement execute.
+    """
+    def __init__(self, param_dict):
+        super().__init__(param_dict)
+
+    @property
+    def human_readable(self):
+        return self.__class__.__name__
+
+    @property
+    def steps(self):
+        return []
+
+    @abstractmethod
+    def execute(self, chempiler):
+        return False
