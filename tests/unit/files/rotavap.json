@@ -5,62 +5,75 @@
       "type": "pump",
       "x": 120,
       "y": 40,
+      "internalId": 0,
+      "label": "pump",
       "class": "ChemputerPump",
       "name": "pump",
       "address": "",
-      "max_volume": 100,
-      "internalId": 0,
-      "label": "pump"
+      "max_volume": 100
     },
     {
       "id": "valve",
       "type": "valve",
       "x": 120,
       "y": 160,
+      "internalId": 1,
+      "label": "valve",
       "class": "ChemputerValve",
       "name": "valve",
-      "address": "",
-      "internalId": 1,
-      "label": "valve"
+      "address": ""
     },
     {
       "id": "flask_water",
       "type": "flask",
       "x": 40,
       "y": 240,
+      "internalId": 2,
+      "label": "flask_water",
       "class": "ChemputerFlask",
       "name": "flask_water",
       "chemical": "water",
       "current_volume": 100,
-      "max_volume": 100,
-      "internalId": 2,
-      "label": "flask_water"
+      "max_volume": 100
     },
     {
       "id": "rotavap",
       "type": "rotavap",
-      "x": 200,
-      "y": 240,
+      "x": 320,
+      "y": 200,
+      "internalId": 3,
+      "label": "rotavap",
       "class": "IKARV10",
       "name": "rotavap",
       "port": "evaporate",
       "current_volume": 0,
-      "max_volume": 100,
-      "internalId": 3,
-      "label": "rotavap"
+      "max_volume": 100
     },
     {
-      "id": 8,
+      "id": "waste",
       "type": "waste",
       "x": 0,
       "y": 80,
+      "internalId": 8,
+      "label": "waste",
       "class": "ChemputerWaste",
+      "name": "waste",
+      "current_volume": 0,
+      "max_volume": 100,
+      "necks": 1
+    },
+    {
+      "id": 11,
+      "type": "vacuum",
+      "x": 360,
+      "y": 280,
+      "class": "CVC3000",
       "name": "",
       "current_volume": 0,
       "max_volume": 100,
       "necks": 1,
-      "internalId": 8,
-      "label": 8
+      "internalId": 11,
+      "label": 11
     }
   ],
   "links": [
@@ -101,8 +114,24 @@
       "sourceInternal": 1,
       "targetInternal": 8,
       "source": "valve",
-      "target": 8,
+      "target": "waste",
       "port": "(2,0)"
+    },
+    {
+      "id": 10,
+      "sourceInternal": 3,
+      "targetInternal": 1,
+      "source": "rotavap",
+      "target": "valve",
+      "port": "(collect,2)"
+    },
+    {
+      "id": 12,
+      "sourceInternal": 11,
+      "targetInternal": 3,
+      "source": 11,
+      "target": "rotavap",
+      "port": "(,)"
     }
   ]
 }

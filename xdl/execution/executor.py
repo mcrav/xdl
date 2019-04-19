@@ -216,7 +216,7 @@ class XDLExecutor(object):
         Get nearest waste node to given step. 
         """
         nearest_node = None
-        if type(step) == Add:
+        if type(step) in [Add, WashSolid]:
             nearest_node = step.vessel
                 
         elif type(step) in [

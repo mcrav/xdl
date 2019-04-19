@@ -1,3 +1,1 @@
-from .test_dissolve_in_rotavap import (
-    test_dissolve_in_rotavap
-)
+from .tests_rotavap import *

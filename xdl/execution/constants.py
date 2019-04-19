@@ -17,6 +17,7 @@ CLEAN_BACKBONE_AFTER_STEPS: List[type] = [
     Add,
     Separate,
     WashFilterCake,
+    WashSolid,
     Filter,
     Dry,
     AddFilterDeadVolume,
