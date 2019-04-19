@@ -472,15 +472,21 @@ class XDLExecutor(object):
         Returns:
             List[str]: List of vessels being stirred after step.
         """            
-        for sub_step in step.steps:
-            if not hasattr(sub_step, 'execute'):
-                self.find_stirring_schedule(sub_step, stirring)
-            else:
-                if type(sub_step) == CStir:
-                    stirring.append(sub_step.vessel)
-                elif type(sub_step) == CStopStir:
-                    if sub_step.vessel in stirring:
-                        stirring.remove(sub_step.vessel)
+        if type(step) == CStir:
+            stirring.append(step.vessel)
+        elif type(step) == CStopStir:
+            if step.vessel in stirring:
+                stirring.remove(step.vessel)
+        elif not isinstance(step, AbstractBaseStep):
+            for sub_step in step.steps:
+                if not hasattr(sub_step, 'execute'):
+                    self.find_stirring_schedule(sub_step, stirring)
+                else:
+                    if type(sub_step) == CStir:
+                        stirring.append(sub_step.vessel)
+                    elif type(sub_step) == CStopStir:
+                        if sub_step.vessel in stirring:
+                            stirring.remove(sub_step.vessel)
         return stirring
 
     def _stop_stirring_when_vessels_lose_scope(self) -> None:
@@ -534,7 +540,7 @@ class XDLExecutor(object):
         for step in step.steps:
             if type(step) == Wait:
                 step.time = 1
-            elif hasattr(step, 'steps'):
+            elif step.steps:
                 self._set_all_waits_to_one(step)
             
     def _remove_pointless_backbone_cleaning(self) -> None:

@@ -18,8 +18,6 @@ def generic_chempiler_test(xdl_file: str, graph_file: str) -> None:
     x.prepare_for_execution(graph_file, interactive=False)
     x.steps = [
         remove_confirm_steps(step) for step in x.steps]
-    for step in x.steps:
-        print(step, '\n', step.steps, '\n\n')
     chempiler = Chempiler(
         experiment_code='test',
         output_dir=os.path.join(HERE, 'chempiler_output'),
