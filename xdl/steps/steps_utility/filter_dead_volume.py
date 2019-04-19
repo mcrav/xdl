@@ -1,11 +1,11 @@
-from typing import Optional
+from typing import Optional, List
 
 from ..utils import get_vacuum_valve_reconnect_steps
-from ..base_step import Step
+from ..base_step import AbstractStep, Step
 from ..steps_base import CMove, CValveMoveToPosition
 from ...constants import BOTTOM_PORT
 
-class AddFilterDeadVolume(Step):
+class AddFilterDeadVolume(AbstractStep):
     """Fill bottom of filter vessel with solvent in anticipation of the filter
     top being used.
 
@@ -38,28 +38,34 @@ class AddFilterDeadVolume(Step):
     ) -> None:
         super().__init__(locals())
 
-        self.steps = [
-            CMove(from_vessel=self.solvent_vessel, volume=self.volume,
-                to_vessel=self.filter_vessel, to_port=BOTTOM_PORT)
-        ]
-
+    @property
+    def steps(self) -> List[Step]:
+        steps = [CMove(from_vessel=self.solvent_vessel,
+                       volume=self.volume,
+                       to_vessel=self.filter_vessel,
+                       to_port=BOTTOM_PORT)]
         # Reconnect vacuum valve to inert gas or unconnected port after done
-        self.steps.extend(get_vacuum_valve_reconnect_steps(
+        steps.extend(get_vacuum_valve_reconnect_steps(
             inert_gas=self.inert_gas,
             vacuum_valve=self.vacuum_valve,
             valve_unused_port=self.valve_unused_port,
             filter_vessel=self.filter_vessel))
+        return steps
 
-        self.human_readable = 'Fill bottom of {filter_vessel} with {solvent} ({volume} mL).'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Fill bottom of {filter_vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self):
+        return {
             'filter_vessel': {
-                'filter': True
+                'filter': True,
             }
         }
 
-class RemoveFilterDeadVolume(Step):
+class RemoveFilterDeadVolume(AbstractStep):
     """Remove dead volume (volume below filter) from filter vessel.
     
     Args:
@@ -86,15 +92,29 @@ class RemoveFilterDeadVolume(Step):
     ) -> None:
         super().__init__(locals())
 
-        self.steps = [
-            CMove(from_vessel=self.filter_vessel, from_port=BOTTOM_PORT,
-                  to_vessel=self.waste_vessel, volume=self.dead_volume)
-        ]
+    @property
+    def steps(self) -> List[Step]:
+        steps = [CMove(from_vessel=self.filter_vessel,
+                       from_port=BOTTOM_PORT,
+                       to_vessel=self.waste_vessel,
+                       volume=self.dead_volume)]
+        # Reconnect vacuum valve to inert gas or unconnected port after done
+        steps.extend(get_vacuum_valve_reconnect_steps(
+            inert_gas=self.inert_gas,
+            vacuum_valve=self.vacuum_valve,
+            valve_unused_port=self.valve_unused_port,
+            filter_vessel=self.filter_vessel))
+        return steps
 
-        if self.vacuum_valve and self.valve_unused_port != None:
-            self.steps.append(
-                CValveMoveToPosition(valve_name=self.vacuum_valve,
-                                     position=self.valve_unused_port))
-
-        self.human_readable = 'Remove dead volume ({dead_volume} mL) from bottom of {filter_vessel}'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Remove dead volume ({dead_volume} mL) from bottom of {filter_vessel}'.format(
             **self.properties)
+            
+    @property
+    def requirements(self):
+        return {
+            'filter_vessel': {
+                'filter': True,
+            }
+        }

@@ -1,10 +1,10 @@
-from typing import Optional
+from typing import Optional, List
 
-from ..base_step import Step
+from ..base_step import AbstractStep, Step
 from ..steps_base import CMove
 from ...utils.misc import get_port_str
 
-class PrimePumpForAdd(Step):
+class PrimePumpForAdd(AbstractStep):
     """Prime pump attached to given reagent flask in anticipation of Add step.
 
     Args:
@@ -20,13 +20,19 @@ class PrimePumpForAdd(Step):
         **kwargs
     ) -> None:
         super().__init__(locals())
+    
+    @property
+    def steps(self) -> List[Step]:
+        return [CMove(from_vessel=self.reagent_vessel,
+                      to_vessel=self.waste_vessel,
+                      volume=self.volume)]
 
-        self.steps = [
-            CMove(from_vessel=self.reagent_vessel, to_vessel=self.waste_vessel,
-                  volume=self.volume)
-        ]
+    @property
+    def human_readable(self) -> str:
+        return 'Move {volume} mL of {reagent} to waste to prime pump'.format(
+            **self.properties)
 
-class Transfer(Step):
+class Transfer(AbstractStep):
     """Transfer contents of one vessel to another.
 
     Args:
@@ -57,19 +63,20 @@ class Transfer(Step):
     ) -> None:
         super().__init__(locals())
 
-        self.steps = []
-        self.steps.append(
-            CMove(
-                from_vessel=self.from_vessel,
-                from_port=self.from_port,
-                to_vessel=self.to_vessel,
-                to_port=self.to_port, 
-                volume=self.volume,
-                through=self.through,
-                aspiration_speed=self.aspiration_speed,
-                move_speed=self.move_speed,
-                dispense_speed=self.dispense_speed))
-                  
-        self.human_readable = 'Transfer {0} mL from {1} {2} to {3} {4}.'.format(
+    @property
+    def steps(self) -> List[Step]:
+        return [CMove(from_vessel=self.from_vessel,
+                      from_port=self.from_port,
+                      to_vessel=self.to_vessel,
+                      to_port=self.to_port, 
+                      volume=self.volume,
+                      through=self.through,
+                      aspiration_speed=self.aspiration_speed,
+                      move_speed=self.move_speed,
+                      dispense_speed=self.dispense_speed)]
+
+    @property
+    def human_readable(self) -> str:
+        return 'Transfer {0} mL from {1} {2} to {3} {4}.'.format(
             self.volume, self.from_vessel, get_port_str(self.from_port),
             self.to_vessel, get_port_str(self.to_port))

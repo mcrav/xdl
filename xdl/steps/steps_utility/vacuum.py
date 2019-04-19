@@ -1,7 +1,8 @@
-from ..base_step import Step
+from typing import List, Dict, Any
+from ..base_step import Step, AbstractStep
 from ..steps_base import CStartVacuum, CStopVacuum, CSetVacuumSetPoint
 
-class StartVacuum(Step):
+class StartVacuum(AbstractStep):
     """Start vacuum pump attached to given vessel.
 
     Args:
@@ -11,13 +12,17 @@ class StartVacuum(Step):
         self, vessel: str, pressure: float = 'default', **kwargs) -> None:
         super().__init__(locals())
 
-        self.steps = [
+    @property
+    def steps(self) -> List[Step]:
+        return [
             CSetVacuumSetPoint(
                 vessel=self.vessel, vacuum_pressure=self.pressure),
             CStartVacuum(vessel=self.vessel)
         ]
 
-        self.human_readable = f'Start vacuum for {self.vessel}.'
+    @property
+    def human_readable(self) -> str:
+        return 'Start vacuum for {vessel}.'.format(**self.properties)
 
 class StopVacuum(Step):
     """Stop vacuum pump attached to given vessel.
@@ -28,8 +33,10 @@ class StopVacuum(Step):
     def __init__(self, vessel: str, **kwargs) -> None:
         super().__init__(locals())
 
-        self.steps = [
-            CStopVacuum(vessel=self.vessel)
-        ]
+    @property
+    def steps(self) -> List[Step]:
+        return [CStopVacuum(vessel=self.vessel)]
 
-        self.human_readable = f'Stop vacuum for {self.vessel}.'
+    @property
+    def human_readable(self) -> str:
+        return 'Stop vacuum for {vessel}.'.format(**self.properties)
