@@ -159,6 +159,11 @@ class XDLExecutor(object):
                     for item in self._graph_hardware.rotavaps 
                                 + self._graph_hardware.flasks]
 
+            if 'volume' in step.properties and type(step) == CleanVessel:
+                if step.volume == None:
+                    step.volume = self._graph_hardware[
+                        step.vessel].max_volume * 0.8
+
             if step.name not in BASE_STEP_OBJ_DICT:
                 self._map_hardware_to_step_list(step.steps)
 
@@ -216,7 +221,7 @@ class XDLExecutor(object):
         Get nearest waste node to given step. 
         """
         nearest_node = None
-        if type(step) in [Add, WashSolid]:
+        if type(step) in [Add, WashSolid, CleanVessel]:
             nearest_node = step.vessel
                 
         elif type(step) in [

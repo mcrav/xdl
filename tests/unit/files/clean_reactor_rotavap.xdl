@@ -1,0 +1,29 @@
+
+
+<Synthesis>
+  <Hardware>
+    <Component
+      id="rotavap"
+      type="rotavap"
+    />
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="NaCl" />
+    <Reagent
+      id="water" />
+  </Reagents>
+
+  <Procedure>
+    <CleanVessel
+      solvent="water"
+      vessel="rotavap" />
+    <CleanVessel
+      solvent="ether"
+      vessel="reactor"
+      volume="50 mL"
+      stir_time="5 mins" />
+  </Procedure>
+
+</Synthesis>
