@@ -45,8 +45,7 @@ class Rotavap(AbstractStep):
     ):
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [
             # Start rotation
             RotavapStartRotation(self.rotavap_name, self.rotation_speed),

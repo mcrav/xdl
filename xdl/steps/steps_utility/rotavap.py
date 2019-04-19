@@ -31,8 +31,7 @@ class RotavapStartRotation(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [
             CRotavapSetRotationSpeed(
                 rotavap_name=self.rotavap_name,
@@ -63,8 +62,7 @@ class RotavapStopRotation(AbstractStep):
         self, rotavap_name: str, **kwargs) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [CRotavapStopRotation(rotavap_name=self.rotavap_name)]
 
     @property
@@ -97,8 +95,7 @@ class RotavapStir(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [
             RotavapStartRotation(
                 rotavap_name=self.rotavap_name,
@@ -131,8 +128,7 @@ class RotavapStopEverything(AbstractStep):
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [
             CStopVacuum(self.rotavap_name),
             CRotavapLiftUp(self.rotavap_name),
@@ -164,8 +160,7 @@ class RotavapStartVacuum(AbstractStep):
     def __init__(self, rotavap_name: str, pressure: float) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [
             CSetVacuumSetPoint(self.rotavap_name, self.pressure),
             CStartVacuum(self.rotavap_name),
@@ -194,8 +189,7 @@ class RotavapHeatToTemp(AbstractStep):
     def __init__(self, rotavap_name: str, temp: float) -> None:
         super().__init__(locals())
         
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [
             CRotavapSetTemp(self.rotavap_name, self.temp),
             CRotavapStartHeater(self.rotavap_name),

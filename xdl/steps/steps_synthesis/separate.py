@@ -53,11 +53,9 @@ class Separate(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
-        waste_phase_to_vessel = self.waste_phase_to_vessel
+    def get_steps(self) -> List[Step]:
         if not self.waste_phase_to_vessel and self.waste_vessel:
-            waste_phase_to_vessel = self.waste_vessel
+            self.waste_phase_to_vessel = self.waste_vessel
 
         if not self.n_separations:
             n_separations = 1
@@ -102,7 +100,7 @@ class Separate(AbstractStep):
                                  volume=remove_volume),
                         CSeparatePhases(lower_phase_vessel=self.to_vessel, 
                                   lower_phase_port=self.to_port,
-                                  upper_phase_vessel=waste_phase_to_vessel,
+                                  upper_phase_vessel=self.waste_phase_to_vessel,
                                   upper_phase_port=self.waste_phase_to_port,
                                   separation_vessel=self.separation_vessel, 
                                   dead_volume_target=self.waste_vessel),
@@ -135,7 +133,7 @@ class Separate(AbstractStep):
                     separation_vessel=self.separation_vessel,
                     lower_phase_vessel=self.to_vessel,
                     lower_phase_port=self.to_port,
-                    upper_phase_vessel=waste_phase_to_vessel,
+                    upper_phase_vessel=self.waste_phase_to_vessel,
                     upper_phase_port=self.waste_phase_to_port,
                     dead_volume_target=self.waste_vessel),
             ])
@@ -148,7 +146,7 @@ class Separate(AbstractStep):
                                  to_vessel=self.waste_vessel,
                                  volume=remove_volume),
                         CSeparatePhases(
-                            lower_phase_vessel=waste_phase_to_vessel,
+                            lower_phase_vessel=self.waste_phase_to_vessel,
                             lower_phase_port=self.waste_phase_to_port,
                             upper_phase_vessel=self.separation_vessel,
                             separation_vessel=self.separation_vessel,
@@ -172,7 +170,7 @@ class Separate(AbstractStep):
                 Transfer(from_vessel=self.separation_vessel, 
                          from_port=BOTTOM_PORT, to_vessel=self.waste_vessel, 
                          volume=remove_volume),
-                CSeparatePhases(lower_phase_vessel=waste_phase_to_vessel, 
+                CSeparatePhases(lower_phase_vessel=self.waste_phase_to_vessel, 
                                 lower_phase_port=self.waste_phase_to_port, 
                                 upper_phase_vessel=self.to_vessel,
                                 upper_phase_port=self.to_port,

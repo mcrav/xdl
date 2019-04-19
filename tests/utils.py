@@ -1,6 +1,6 @@
 import os
 from xdl import XDL
-from xdl.steps import Confirm, Step
+from xdl.steps import Confirm, Step, AbstractBaseStep
 from chempiler import Chempiler
 import ChemputerAPI
 
@@ -34,7 +34,7 @@ def remove_confirm_steps(step: Step) -> None:
     Args:
         step (Step): Step to remove Confirm steps from.
     """
-    if not hasattr(step, 'steps'): # If step is base step just return step.
+    if isinstance(step, AbstractBaseStep): # If step is base step just return step.
         return step
     else:
         for i in reversed(range(len(step.steps))):

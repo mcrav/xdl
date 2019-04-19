@@ -21,8 +21,7 @@ class PrimePumpForAdd(AbstractStep):
     ) -> None:
         super().__init__(locals())
     
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [CMove(from_vessel=self.reagent_vessel,
                       to_vessel=self.waste_vessel,
                       volume=self.volume)]
@@ -63,8 +62,7 @@ class Transfer(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [CMove(from_vessel=self.from_vessel,
                       from_port=self.from_port,
                       to_vessel=self.to_vessel,

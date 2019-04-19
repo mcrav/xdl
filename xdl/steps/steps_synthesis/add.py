@@ -50,8 +50,7 @@ class Add(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         steps = []
         # Solid addition
         if self.mass != None:

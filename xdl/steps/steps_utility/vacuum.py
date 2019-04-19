@@ -12,8 +12,7 @@ class StartVacuum(AbstractStep):
         self, vessel: str, pressure: float = 'default', **kwargs) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [
             CSetVacuumSetPoint(
                 vessel=self.vessel, vacuum_pressure=self.pressure),
@@ -33,8 +32,7 @@ class StopVacuum(Step):
     def __init__(self, vessel: str, **kwargs) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [CStopVacuum(vessel=self.vessel)]
 
     @property

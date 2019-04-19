@@ -164,7 +164,7 @@ class XDLExecutor(object):
                     step.volume = self._graph_hardware[
                         step.vessel].max_volume * 0.8
 
-            if step.name not in BASE_STEP_OBJ_DICT:
+            if not isinstance(step, AbstractBaseStep):
                 self._map_hardware_to_step_list(step.steps)
 
     def _map_hardware_to_steps(self) -> None:
@@ -479,7 +479,7 @@ class XDLExecutor(object):
                 stirring.remove(step.vessel)
         elif not isinstance(step, AbstractBaseStep):
             for sub_step in step.steps:
-                if not hasattr(sub_step, 'execute'):
+                if isinstance(sub_step, AbstractStep):
                     self.find_stirring_schedule(sub_step, stirring)
                 else:
                     if type(sub_step) == CStir:
@@ -633,10 +633,8 @@ class XDLExecutor(object):
                     # during _add_implied_steps.
                     self._get_hardware_map()
                     self._map_hardware_to_steps() 
-
                     # Add in steps implied by explicit steps.
                     self._add_implied_steps(interactive=interactive)
-
                     # Convert implied properties to concrete values.
                     self._add_all_volumes()
                     self._add_filter_volumes()

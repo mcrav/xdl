@@ -17,8 +17,7 @@ class CleanBackbone(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [CMove(from_vessel=self.solvent_vessel,
                       to_vessel=waste_vessel,
                       volume=DEFAULT_CLEAN_BACKBONE_VOLUME)
@@ -54,8 +53,7 @@ class CleanVessel(AbstractStep):
         """
         super().__init__(locals())
 
-    @property
-    def steps(self):
+    def get_steps(self):
         return [
             CMove(from_vessel=self.solvent_vessel,
                   to_vessel=self.vessel,

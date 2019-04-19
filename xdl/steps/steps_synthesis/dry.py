@@ -41,8 +41,7 @@ class Dry(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         steps = [
             StopStir(vessel=self.filter_vessel),
             # Move bulk of liquid to waste.

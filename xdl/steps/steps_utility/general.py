@@ -20,8 +20,7 @@ class Wait(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [
             CSetRecordingSpeed(self.wait_recording_speed),
             CWait(self.time),

@@ -38,8 +38,7 @@ class AddFilterDeadVolume(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         steps = [CMove(from_vessel=self.solvent_vessel,
                        volume=self.volume,
                        to_vessel=self.filter_vessel,
@@ -92,8 +91,7 @@ class RemoveFilterDeadVolume(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         steps = [CMove(from_vessel=self.filter_vessel,
                        from_port=BOTTOM_PORT,
                        to_vessel=self.waste_vessel,

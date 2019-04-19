@@ -61,8 +61,7 @@ class WashFilterCake(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         filtrate_vessel = self.filtrate_vessel
         if not filtrate_vessel:
             filtrate_vessel = self.waste_vessel

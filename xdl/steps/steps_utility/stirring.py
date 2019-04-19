@@ -23,8 +23,7 @@ class StartStir(AbstractStep):
     ) -> None:
         super().__init__(locals())
         
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         return [
             CStir(vessel=self.vessel),
             CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm),
@@ -56,8 +55,7 @@ class StopStir(AbstractStep):
         self, vessel: str, vessel_has_stirrer: bool = True, **kwargs) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         if self.vessel_has_stirrer:
             return [CStopStir(vessel=self.vessel)]
         return []
@@ -92,8 +90,9 @@ class Stir(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
+        if self.vessel == 'rotavap':
+            print(self.vessel_is_rotavap, 'STIR')
         if self.vessel_is_rotavap:
             return [
                 RotavapStir(

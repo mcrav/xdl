@@ -44,8 +44,7 @@ class HeatChillToTemp(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         steps = []
         if self.vessel_type == 'ChemputerFilter':
             steps = [
@@ -63,8 +62,6 @@ class HeatChillToTemp(AbstractStep):
                 CStirrerWaitForTemp(vessel=self.vessel),
                 CSetRecordingSpeed(self.after_recording_speed),
             ]
-        else:
-            raise XDLError('Invalid vessel used for HeatChillToTemp step.')
 
         if self.stir:
             steps.insert(0, CStir(vessel=self.vessel))
@@ -105,8 +102,7 @@ class StopHeatChill(AbstractStep):
         self, vessel: str, vessel_type: Optional[str] = None, **kwargs) -> None:
         super().__init__(locals())
     
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         if self.vessel_type == 'ChemputerFilter':
             return [
                 CStopChiller(self.vessel)
@@ -115,7 +111,6 @@ class StopHeatChill(AbstractStep):
             return [
                 CStopHeat(self.vessel)
             ]
-        raise XDLError('Invalid vessel used for StopHeatChill step')
 
     @property
     def human_readable(self) -> str:
@@ -151,8 +146,7 @@ class HeatChillReturnToRT(AbstractStep):
         **kwargs) -> None:
         super().__init__(locals())
             
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         steps = []
         if self.vessel_type == 'ChemputerFilter':
             steps = [

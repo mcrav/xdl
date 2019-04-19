@@ -4,9 +4,9 @@ if False:
     from chempiler import Chempiler
 from logging import Logger
 
-from ..base_step import Step
+from ..base_step import AbstractBaseStep
 
-class CStartChiller(Step):
+class CStartChiller(AbstractBaseStep):
     """Starts the recirculation chiller.
 
     Args:
@@ -19,7 +19,7 @@ class CStartChiller(Step):
         chempiler.chiller.start_chiller(self.vessel)
         return True
 
-class CStopChiller(Step):
+class CStopChiller(AbstractBaseStep):
     """Stops the recirculation chiller.
 
     Args:
@@ -32,7 +32,7 @@ class CStopChiller(Step):
         chempiler.chiller.stop_chiller(self.vessel)
         return True
 
-class CChillerSetTemp(Step):
+class CChillerSetTemp(AbstractBaseStep):
     """Sets the temperature setpoint.
 
     Args:
@@ -46,7 +46,7 @@ class CChillerSetTemp(Step):
         chempiler.chiller.set_temp(self.vessel, self.temp)
         return True
 
-class CChillerWaitForTemp(Step):
+class CChillerWaitForTemp(AbstractBaseStep):
     """Delays the script execution until the current temperature of the chiller is within
     0.5°C of the setpoint.
 
@@ -60,7 +60,7 @@ class CChillerWaitForTemp(Step):
         chempiler.chiller.wait_for_temp(self.vessel)
         return True
 
-class CRampChiller(Step):
+class CRampChiller(AbstractBaseStep):
     """Causes the chiller to ramp the temperature up or down. Only available for Petite
     Fleur.
 
@@ -81,7 +81,7 @@ class CRampChiller(Step):
         chempiler.chiller.ramp_chiller(self.vessel, self.ramp_duration, self.end_temperature)
         return True
 
-class CSetCoolingPower(Step):
+class CSetCoolingPower(AbstractBaseStep):
     """Sets the cooling power (0-100%). Only available for CF41.
 
     Args:

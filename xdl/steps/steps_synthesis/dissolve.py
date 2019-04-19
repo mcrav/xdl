@@ -45,8 +45,7 @@ class Dissolve(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         if self.vessel_is_rotavap:
             steps = [
                 Add(reagent=self.solvent,

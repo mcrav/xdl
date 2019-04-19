@@ -26,8 +26,7 @@ class AddCorrosive(AbstractStep):
     ) -> None:
         super().__init__(locals())
         
-    @property
-    def steps(self) -> List[Step]:
+    def get_steps(self) -> List[Step]:
         steps = [
             Transfer(
                 from_vessel=self.air_vessel,

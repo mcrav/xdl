@@ -37,10 +37,10 @@ class AbstractStep(Step, ABC):
     """
     def __init__(self, param_dict):
         super().__init__(param_dict)
+        self.steps = self.get_steps()
         
-    @property
     @abstractmethod
-    def steps(self):
+    def get_steps(self):
         return []
 
     @property
@@ -51,10 +51,6 @@ class AbstractStep(Step, ABC):
     @property
     def requirements(self):
         return {}
-
-    @property
-    def movements(self):
-        return []
 
     def execute(
         self,
@@ -103,14 +99,11 @@ class AbstractBaseStep(Step, ABC):
     """
     def __init__(self, param_dict):
         super().__init__(param_dict)
+        self.steps = []
 
     @property
     def human_readable(self):
         return self.__class__.__name__
-
-    @property
-    def steps(self):
-        return []
 
     @abstractmethod
     def execute(self, chempiler):
