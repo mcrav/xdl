@@ -5,9 +5,9 @@ if False:
     from chempiler import Chempiler
 from logging import Logger
 
-from ..base_step import Step
+from ..base_step import AbstractBaseStep
 
-class CSeparatePhases(Step):
+class CSeparatePhases(AbstractBaseStep):
     """
     Args:
         lower_phase_vessel (str): Name of vessel to transfer lower phase to.

@@ -4,9 +4,9 @@ if False:
     from chempiler import Chempiler
 from logging import Logger
 
-from ..base_step import Step
+from ..base_step import AbstractBaseStep
 
-class CStir(Step):
+class CStir(AbstractBaseStep):
     """Starts the stirring operation of a hotplate or overhead stirrer.
 
     Args:
@@ -19,7 +19,7 @@ class CStir(Step):
         chempiler.stirrer.stir(self.vessel)
         return True
 
-class CStirrerHeat(Step):
+class CStirrerHeat(AbstractBaseStep):
     """Starts the heating operation of a hotplate stirrer.
 
     Args:
@@ -32,7 +32,7 @@ class CStirrerHeat(Step):
         chempiler.stirrer.heat(self.vessel)
         return True
 
-class CStopStir(Step):
+class CStopStir(AbstractBaseStep):
     """Stops the stirring operation of a hotplate or overhead stirrer.
 
     Args:
@@ -45,7 +45,7 @@ class CStopStir(Step):
         chempiler.stirrer.stop_stir(self.vessel)
         return True
 
-class CStopHeat(Step):
+class CStopHeat(AbstractBaseStep):
     """Stop heating hotplace stirrer.
 
     Args:
@@ -58,7 +58,7 @@ class CStopHeat(Step):
         chempiler.stirrer.stop_heat(self.vessel)
         return True
 
-class CStirrerSetTemp(Step):
+class CStirrerSetTemp(AbstractBaseStep):
     """Sets the temperature setpoint of a hotplate stirrer. This command is NOT available
     for overhead stirrers!
 
@@ -73,7 +73,7 @@ class CStirrerSetTemp(Step):
         chempiler.stirrer.set_temp(self.vessel, self.temp)
         return True
 
-class CSetStirRate(Step):
+class CSetStirRate(AbstractBaseStep):
     """Sets the stirring speed setpoint of a hotplate or overhead stirrer.
 
     Args:
@@ -87,7 +87,7 @@ class CSetStirRate(Step):
         chempiler.stirrer.set_stir_rate(self.vessel, self.stir_rpm)
         return True
 
-class CStirrerWaitForTemp(Step):
+class CStirrerWaitForTemp(AbstractBaseStep):
     """Delays the script execution until the current temperature of the hotplate is within
     0.5 °C of the setpoint. This command is NOT available for overhead stirrers!
 
