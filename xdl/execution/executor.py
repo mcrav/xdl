@@ -141,7 +141,6 @@ class XDLExecutor(object):
             if ('vacuum_valve' in step.properties
                   and self._xdl.filter_dead_volume_method
                       == FILTER_DEAD_VOLUME_LIQUID_METHOD):
-                print('VAC', step.name)
                 step.vacuum_valve = self._valve_map[step.vacuum]
                 step.valve_unused_port = get_unused_valve_port(
                     graph=self._graph, valve_node=step.vacuum_valve)
@@ -150,6 +149,15 @@ class XDLExecutor(object):
                 step.vacuum_device = flask_attached_to_vacuum(
                     graph=self._graph, flask_node=step.vacuum)
 
+            if 'vessel_is_rotavap' in step.properties:
+                step.vessel_is_rotavap = step.vessel in [
+                    item.id for item in self._graph_hardware.rotavaps] 
+
+            if 'vessel_has_stirrer' in step.properties:
+                step.vessel_has_stirrer = not step.vessel in [
+                    item.id
+                    for item in self._graph_hardware.rotavaps 
+                                + self._graph_hardware.flasks]
 
             if step.name not in BASE_STEP_OBJ_DICT:
                 self._map_hardware_to_step_list(step.steps)

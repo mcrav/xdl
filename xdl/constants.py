@@ -76,6 +76,9 @@ DEFAULT_ROTAVAP_DRYING_TIME: int = 2* 60 * 60
 #: Default rotation speed in RPM for rotavap.
 DEFAULT_ROTAVAP_ROTATION_SPEED: int = 150
 
+#: Default rotation speed in RPM for the rotavap when dissolving something.
+DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED: int = 300
+
 ###############
 ## Filtering ##
 ###############
@@ -259,8 +262,12 @@ CHEMPUTER_VACUUM_CLASS_NAME: str = 'ChemputerVacuum'
 CHEMPUTER_PUMP_CLASS_NAME: str = 'ChemputerPump'
 CHEMPUTER_VALVE_CLASS_NAME: str = 'ChemputerValve'
 
+# Filter, separator ports
 BOTTOM_PORT: str = 'bottom'
 TOP_PORT: str = 'top'
+# Rotavap ports
+EVAPORATE_PORT: str = 'evaporate'
+COLLECT_PORT: str = 'collect'
 
 FILTER_DEAD_VOLUME_INERT_GAS_METHOD: str = 'inert_gas'
 FILTER_DEAD_VOLUME_LIQUID_METHOD: str = 'solvent'

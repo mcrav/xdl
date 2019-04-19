@@ -1,0 +1,108 @@
+{
+  "nodes": [
+    {
+      "id": "pump",
+      "type": "pump",
+      "x": 120,
+      "y": 40,
+      "class": "ChemputerPump",
+      "name": "pump",
+      "address": "",
+      "max_volume": 100,
+      "internalId": 0,
+      "label": "pump"
+    },
+    {
+      "id": "valve",
+      "type": "valve",
+      "x": 120,
+      "y": 160,
+      "class": "ChemputerValve",
+      "name": "valve",
+      "address": "",
+      "internalId": 1,
+      "label": "valve"
+    },
+    {
+      "id": "flask_water",
+      "type": "flask",
+      "x": 40,
+      "y": 240,
+      "class": "ChemputerFlask",
+      "name": "flask_water",
+      "chemical": "water",
+      "current_volume": 100,
+      "max_volume": 100,
+      "internalId": 2,
+      "label": "flask_water"
+    },
+    {
+      "id": "rotavap",
+      "type": "rotavap",
+      "x": 200,
+      "y": 240,
+      "class": "IKARV10",
+      "name": "rotavap",
+      "port": "evaporate",
+      "current_volume": 0,
+      "max_volume": 100,
+      "internalId": 3,
+      "label": "rotavap"
+    },
+    {
+      "id": 8,
+      "type": "waste",
+      "x": 0,
+      "y": 80,
+      "class": "ChemputerWaste",
+      "name": "",
+      "current_volume": 0,
+      "max_volume": 100,
+      "necks": 1,
+      "internalId": 8,
+      "label": 8
+    }
+  ],
+  "links": [
+    {
+      "id": 4,
+      "sourceInternal": 1,
+      "targetInternal": 3,
+      "source": "valve",
+      "target": "rotavap",
+      "port": "(1,evaporate)"
+    },
+    {
+      "id": 5,
+      "sourceInternal": 2,
+      "targetInternal": 1,
+      "source": "flask_water",
+      "target": "valve",
+      "port": "(0,0)"
+    },
+    {
+      "id": 6,
+      "sourceInternal": 0,
+      "targetInternal": 1,
+      "source": "pump",
+      "target": "valve",
+      "port": "(0,-1)"
+    },
+    {
+      "id": 7,
+      "sourceInternal": 1,
+      "targetInternal": 0,
+      "source": "valve",
+      "target": "pump",
+      "port": "(-1,0)"
+    },
+    {
+      "id": 9,
+      "sourceInternal": 1,
+      "targetInternal": 8,
+      "source": "valve",
+      "target": 8,
+      "port": "(2,0)"
+    }
+  ]
+}

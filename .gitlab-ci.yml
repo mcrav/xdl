@@ -19,11 +19,11 @@ variables:
 
 before_script:
   # Initialise virtualenv
+  - sudo apt-get install python3-dev
   - sudo apt-get install python3-pip -y
   - sudo apt-get install python3-venv -y
   - python3 -V
   - pip3 -V
-  - pip3 install virtualenv
   - python3 -m venv venv
   - . venv/bin/activate
   - pip3 install wheel
@@ -32,23 +32,17 @@ before_script:
   - pip3 install -r requirements.txt
 
   # Install Chempiler, SerialLabware and ChemputerAPI for simulations
-  - git clone -b develop http://gitlab+deploy-token-2:u5KWxsk2hAU75o31rZUe@datalore.chem.gla.ac.uk/Chemputer/Chempiler.git
-  - cat Chempiler/requirements.txt
-  - cd Chempiler; pip3 install .; cd ..
-  - pip3 install kanren
-  
-  - git clone http://gitlab+deploy-token-3:sNsCFqh2szkE_AXkN3Vm@datalore.chem.gla.ac.uk/Chemputer/SerialLabware.git
-  - cd SerialLabware; pip3 install .; cd ..
-  
-  - git clone -b MC/tricont_import_error http://gitlab+deploy-token-4:NjJny1c5xxvnxMDXmpfB@datalore.chem.gla.ac.uk/Chemputer/ChemputerAPI.git
-  - cd ChemputerAPI; pip3 install .; cd ..
-  
+  - pip3 install git+http://gitlab+deploy-token-2:u5KWxsk2hAU75o31rZUe@datalore.chem.gla.ac.uk/Chemputer/Chempiler.git@develop
+
+  - pip3 install git+http://gitlab+deploy-token-3:sNsCFqh2szkE_AXkN3Vm@datalore.chem.gla.ac.uk/Chemputer/SerialLabware.git
+
+  - pip3 install git+http://gitlab+deploy-token-4:NjJny1c5xxvnxMDXmpfB@datalore.chem.gla.ac.uk/Chemputer/ChemputerAPI.git@develop
+
   # Install xdl
   - pip3 install .
-
+  - pip freeze
 test:
   script:
-  - pytest -s tests/integration/test_prepare_for_execution.py
-  - pytest -s tests/integration/test_chempiler.py
+  - pytest tests/all_tests.py
 #   - pip3 install tox flake8 # you can also use tox
 #   - tox -e py36,flake8

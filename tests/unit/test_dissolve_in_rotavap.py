@@ -1,18 +1,13 @@
 import os
-import pytest
-
 from ..utils import generic_chempiler_test
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
-def test_chempiler():
+def test_dissolve_in_rotavap():
     """Test by instantiating XDL objects on files known to work
     and calling prepare_for_execution on graph known to work.
     """
     folder = os.path.join(HERE, 'files')
-    files = [os.path.join(folder, f) for f in sorted(os.listdir(folder))]
-    i = 0
-    while i + 1 < len(files):
-        print(files[i])
-        generic_chempiler_test(files[i], files[i+1])
-        i += 2
+    xdl_f = os.path.join(folder, 'dissolve_in_rotavap.xdl')
+    graph_f = os.path.join(folder, 'dissolve_in_rotavap.json')
+    generic_chempiler_test(xdl_f, graph_f)
