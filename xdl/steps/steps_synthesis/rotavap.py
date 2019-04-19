@@ -1,5 +1,5 @@
-from typing import Optional
-from ..base_step import Step
+from typing import Optional, List, Dict, Any
+from ..base_step import Step, AbstractStep
 from ..steps_base import (
     CRotavapSetRotationSpeed,
     CRotavapStartRotation,
@@ -23,7 +23,7 @@ from ..steps_utility import (
 )
 
 
-class Rotavap(Step):
+class Rotavap(AbstractStep):
     """Rotavap contents of given vessel at given temp and given pressure for
     given time.
 
@@ -45,7 +45,9 @@ class Rotavap(Step):
     ):
         super().__init__(locals())
 
-        self.steps = [
+    @property
+    def steps(self) -> List[Step]:
+        return [
             # Start rotation
             RotavapStartRotation(self.rotavap_name, self.rotation_speed),
             # Lower flask into bath.
@@ -60,10 +62,14 @@ class Rotavap(Step):
             RotavapStopEverything(self.rotavap_name),
         ]
 
-        self.human_readable = 'Rotavap contents of {rotavap_name} at {temp} °C and {pressure} mbar for {time}.'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Rotavap contents of {rotavap_name} at {temp} °C and {pressure} mbar for {time}.'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'rotavap_name': {
                 'rotavap': True,
             }

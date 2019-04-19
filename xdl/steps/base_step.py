@@ -52,6 +52,10 @@ class AbstractStep(Step, ABC):
     def requirements(self):
         return {}
 
+    @property
+    def movements(self):
+        return []
+
     def execute(
         self,
         chempiler: 'Chempiler',

@@ -1,9 +1,9 @@
-from typing import Optional
-from ..base_step import Step
+from typing import Optional, List, Dict, Any
+from ..base_step import AbstractStep, Step
 from .add import Add
 from ..steps_utility import Stir, Transfer
 
-class WashSolid(Step):
+class WashSolid(AbstractStep):
     """Wash a solid in vessel with given solvent by adding solvent, stirring,
     then removing solvent through a filter. Assumes vessel outlet is fitted with
     a filter.
@@ -30,7 +30,9 @@ class WashSolid(Step):
     ) -> None:
         super().__init__(locals())
 
-        self.steps = [
+    @property
+    def steps(self) -> List[Step]:
+        return [
             Add(vessel=self.vessel, reagent=self.solvent, volume=self.volume),
             Stir(vessel=self.vessel,
                  time=self.stir_time,
@@ -40,10 +42,14 @@ class WashSolid(Step):
                      volume='all'),
         ]
 
-        self.human_readable = 'Wash solid in {vessel} with {solvent} ({volume} mL) stirring for {stir_time} s at {stir_rpm} RPM.'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Wash solid in {vessel} with {solvent} ({volume} mL) stirring for {stir_time} s at {stir_rpm} RPM.'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'vessel': {
                 'stir': True,
             }

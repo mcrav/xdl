@@ -1,5 +1,5 @@
-from typing import Optional
-from ..base_step import Step
+from typing import Optional, Dict, Any, List
+from ..base_step import Step, AbstractStep
 from .add import Add
 from ..steps_utility import Transfer, Wait, Stir
 from ..steps_base import CSeparatePhases, CMove
@@ -14,7 +14,7 @@ from ...constants import (
     DEFAULT_SEPARATION_SETTLE_TIME,
 )
 
-class Separate(Step):
+class Separate(AbstractStep):
     """Extract contents of from_vessel using given amount of given solvent.
     NOTE: If n_separations > 1, to_vessel/to_port must be capable of giving
     and receiving material.
@@ -53,16 +53,19 @@ class Separate(Step):
     ) -> None:
         super().__init__(locals())
 
-        if not waste_phase_to_vessel and waste_vessel:
-            self.waste_phase_to_vessel = waste_vessel
+    @property
+    def steps(self) -> List[Step]:
+        waste_phase_to_vessel = self.waste_phase_to_vessel
+        if not self.waste_phase_to_vessel and self.waste_vessel:
+            waste_phase_to_vessel = self.waste_vessel
 
         if not self.n_separations:
             n_separations = 1
         else:
             n_separations = int(self.n_separations)
 
-        self.steps = []
-        self.steps.extend([
+        steps = []
+        steps.extend([
             # Move from from_vessel to separation_vessel
             Transfer(
                 from_vessel=self.from_vessel, from_port=self.from_port, 
@@ -84,7 +87,7 @@ class Separate(Step):
         ])
 
         if self.from_vessel == self.separation_vessel:
-            self.steps.pop(0)
+            steps.pop(0)
 
         remove_volume = 2
 
@@ -92,19 +95,19 @@ class Separate(Step):
         if self.product_bottom:
             if n_separations > 1:
                 for _ in range(n_separations - 1):
-                    self.steps.extend([
+                    steps.extend([
                         Transfer(from_vessel=self.separation_vessel, 
                                  from_port=BOTTOM_PORT, 
                                  to_vessel=self.waste_vessel, 
                                  volume=remove_volume),
                         CSeparatePhases(lower_phase_vessel=self.to_vessel, 
                                   lower_phase_port=self.to_port,
-                                  upper_phase_vessel=self.waste_phase_to_vessel,
+                                  upper_phase_vessel=waste_phase_to_vessel,
                                   upper_phase_port=self.waste_phase_to_port,
                                   separation_vessel=self.separation_vessel, 
                                   dead_volume_target=self.waste_vessel),
                         # Move to_vessel to separation_vessel
-                        CMove(from_vessel=to_vessel, 
+                        CMove(from_vessel=self.to_vessel, 
                               to_vessel=self.separation_vessel, volume='all'),
                         # Move solvent to separation_vessel. 
                         # Bottom port as washes any reagent from previous 
@@ -124,7 +127,7 @@ class Separate(Step):
                     ])
 
 
-            self.steps.extend([
+            steps.extend([
                 Transfer(from_vessel=self.separation_vessel, 
                          from_port=BOTTOM_PORT, to_vessel=self.waste_vessel, 
                          volume=remove_volume),
@@ -132,20 +135,20 @@ class Separate(Step):
                     separation_vessel=self.separation_vessel,
                     lower_phase_vessel=self.to_vessel,
                     lower_phase_port=self.to_port,
-                    upper_phase_vessel=self.waste_phase_to_vessel,
+                    upper_phase_vessel=waste_phase_to_vessel,
                     upper_phase_port=self.waste_phase_to_port,
                     dead_volume_target=self.waste_vessel),
             ])
         else:
             if n_separations > 1:
                 for _ in range(n_separations - 1):
-                    self.steps.extend([
+                    steps.extend([
                         Transfer(from_vessel=self.separation_vessel, 
                                  from_port=BOTTOM_PORT, 
                                  to_vessel=self.waste_vessel,
                                  volume=remove_volume),
                         CSeparatePhases(
-                            lower_phase_vessel=self.waste_phase_to_vessel,
+                            lower_phase_vessel=waste_phase_to_vessel,
                             lower_phase_port=self.waste_phase_to_port,
                             upper_phase_vessel=self.separation_vessel,
                             separation_vessel=self.separation_vessel,
@@ -156,33 +159,44 @@ class Separate(Step):
                             waste_vessel=self.waste_vessel),
                         # Stir separation_vessel
                         Stir(vessel=self.separation_vessel, 
-                                 time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
-                                 stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+                             time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
+                             stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
                         Stir(vessel=self.separation_vessel, 
-                                 time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
-                                 stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
+                             time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
+                             stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
 
-            self.steps.extend([
+            steps.extend([
                 Transfer(from_vessel=self.separation_vessel, 
                          from_port=BOTTOM_PORT, to_vessel=self.waste_vessel, 
                          volume=remove_volume),
-                CSeparatePhases(lower_phase_vessel=self.waste_phase_to_vessel, 
+                CSeparatePhases(lower_phase_vessel=waste_phase_to_vessel, 
                                 lower_phase_port=self.waste_phase_to_port, 
                                 upper_phase_vessel=self.to_vessel,
                                 upper_phase_port=self.to_port,
                                 separation_vessel=self.separation_vessel,
                                 dead_volume_target=self.waste_vessel)
             ])
+        return steps
 
-        self.human_readable = 'Separate contents of {0} {1} with {2} ({3}x{4} mL). Transfer waste phase to {5} {6} and product phase to {7} {8}.'.format(
-            self.from_vessel, get_port_str(self.from_port), self.solvent,
-            self.n_separations, self.solvent_volume, self.waste_phase_to_vessel,
-            get_port_str(self.waste_phase_to_port), self.to_vessel, self.to_port)
+    @property
+    def human_readable(self) -> str:
+        return 'Separate contents of {0} {1} with {2} ({3}x{4} mL). Transfer waste phase to {5} {6} and product phase to {7} {8}.'.format(
+            self.from_vessel,
+            get_port_str(self.from_port),
+            self.solvent,
+            self.n_separations,
+            self.solvent_volume,
+            self.waste_phase_to_vessel,
+            get_port_str(self.waste_phase_to_port),
+            self.to_vessel,
+            self.to_port)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'separation_vessel': {
                 'separator': True,
             }

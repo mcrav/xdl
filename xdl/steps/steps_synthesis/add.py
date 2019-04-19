@@ -1,12 +1,12 @@
-from typing import Optional
+from typing import Optional, List, Dict, Any
 from ..steps_utility import PrimePumpForAdd, Wait, StopStir
 from ..steps_base import CMove, CSetStirRate, CStir, Confirm
-from ..base_step import Step
+from ..base_step import Step, AbstractStep
 from ...utils.misc import get_port_str
 from ...constants import (
     DEFAULT_AFTER_ADD_WAIT_TIME, DEFAULT_AIR_FLUSH_TUBE_VOLUME)
 
-class Add(Step):
+class Add(AbstractStep):
     """Add given volume of given reagent to given vessel.
 
     Args:
@@ -50,23 +50,23 @@ class Add(Step):
     ) -> None:
         super().__init__(locals())
 
+    @property
+    def steps(self) -> List[Step]:
+        steps = []
         # Solid addition
-        if self.mass:
-            self.steps = [Confirm(f'Is {reagent} ({mass} g) in {vessel}?')]
-            self.human_readable = 'Add {0} ({1} g) to {2} {3}.'.format(
-                self.reagent, self.mass, self.vessel, get_port_str(self.port))
-        
+        if self.mass != None:
+            steps = [Confirm('Is {reagent} ({mass} g) in {vessel}?'.format(
+                **self.properties))]
+        # Liquid addition
         else:
-
             if self.time:
-                time = self.time
                 # dispense_speed (mL / min) = volume (mL) / time (min)
                 dispense_speed = self.volume / (self.time / 60)
             else:
                 dispense_speed = self.dispense_speed
 
             # Liquid addition
-            self.steps = [
+            steps = [
                 PrimePumpForAdd(
                     reagent=self.reagent,
                     volume='default',
@@ -83,27 +83,36 @@ class Add(Step):
             ]
 
             if self.flush_tube_vessel:
-                self.steps.append(CMove(
+                steps.append(CMove(
                     from_vessel=self.flush_tube_vessel,
                     to_vessel=self.vessel,
                     to_port=self.port,
                     volume=DEFAULT_AIR_FLUSH_TUBE_VOLUME,))
 
             if self.stir:
-                self.steps.insert(0, CStir(vessel=self.vessel))
+                steps.insert(0, CStir(vessel=self.vessel))
                 if self.stir_rpm:
-                    self.steps.insert(
+                    steps.insert(
                         0, CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm))
                 else:
-                    self.steps.insert(
+                    steps.insert(
                         0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
             else:
-                self.steps.insert(0, StopStir(vessel=self.vessel))
+                steps.insert(0, StopStir(vessel=self.vessel))
+        return steps
 
-            self.human_readable = 'Add {0} ({1} mL) to {2} {3}.'.format(
-                self.reagent, self.volume, self.vessel, get_port_str(self.port))
+    @property
+    def human_readable(self) -> str:
+        # Solid addition
+        if self.mass != None:
+            return 'Add {0} ({1} g) to {2} {3}.'.format(
+                self.reagent, self.mass, self.vessel, get_port_str(self.port))
+        return 'Add {0} ({1} mL) to {2} {3}.'.format(
+            self.reagent, self.volume, self.vessel, get_port_str(self.port))
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'vessel': {
                 'stir': self.stir,
             }

@@ -1,5 +1,5 @@
-from typing import Optional
-from ..base_step import Step
+from typing import Optional, List, Dict, Any
+from ..base_step import Step, AbstractStep
 from ..steps_utility import Wait, HeatChillToTemp
 from ..steps_base import (
     CRotavapSetRotationSpeed,
@@ -16,7 +16,7 @@ from ..steps_base import (
 from .add import Add
 from ...constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED, EVAPORATE_PORT
 
-class Dissolve(Step):
+class Dissolve(AbstractStep):
     """Dissolve contents of vessel in given solvent.
     
     Args:
@@ -45,8 +45,10 @@ class Dissolve(Step):
     ) -> None:
         super().__init__(locals())
 
-        if vessel_is_rotavap:
-            self.steps = [
+    @property
+    def steps(self) -> List[Step]:
+        if self.vessel_is_rotavap:
+            steps = [
                 Add(reagent=self.solvent,
                     volume=self.volume,
                     vessel=self.vessel,
@@ -66,7 +68,7 @@ class Dissolve(Step):
                 CRotavapLiftUp(self.vessel),
             ]
         else:
-            self.steps = [
+            steps = [
                 Add(reagent=self.solvent,
                     volume=self.volume,
                     vessel=self.vessel,
@@ -78,13 +80,20 @@ class Dissolve(Step):
                     stir_rpm=self.stir_rpm),
                 Wait(self.time),
             ]
+        return steps
 
-        self.human_readable = f'Dissolve contents of {vessel} in {solvent} ({volume} mL) at {temp} °C over {time} seconds.'
+    @property
+    def human_readable(self) -> str:
+        return 'Dissolve contents of {vessel} in {solvent} ({volume} mL) at {temp} °C over {time} seconds.'.format(
+            **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'vessel': {
                 'heatchill': True,
                 'temp': [self.temp],
                 'stir': True,
             }
         }
+        
