@@ -6,6 +6,7 @@ from ..steps_base import (
     CSetStirRate,
     CStopStir)
 from .general import Wait
+from .rotavap import RotavapStir
 
 class StartStir(Step):
     """Start stirring given vessel.
@@ -74,17 +75,26 @@ class Stir(Step):
         vessel: str,
         time: float,
         stir_rpm: Optional[float] = 'default',
+        vessel_is_rotavap: Optional[str] = False,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
-        self.steps = [
-            StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm),
-            Wait(time=self.time),
-            StopStir(vessel=self.vessel),
-        ]
+        if self.vessel_is_rotavap:
+            self.steps = [
+                RotavapStir(
+                    rotavap_name=self.vessel,
+                    stir_rpm=self.stir_rpm,
+                    time=self.time),
+            ]
+        else:
+            self.steps = [
+                StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm),
+                Wait(time=self.time),
+                StopStir(vessel=self.vessel),
+            ]
 
-        self.human_readable = 'Stir {vessel} for {time} s.'.format(
+        self.human_readable = 'Stir {vessel} for {time} s at {stir_rpm} RPM.'.format(
             **self.properties)
 
         self.requirements = {

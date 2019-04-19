@@ -117,6 +117,14 @@ DEFAULT_DRY_WASTE_VOLUME: int = 5
 #: Default move speed in mL for transferring liquid through filtering cartridge.
 DEFAULT_FILTER_THROUGH_MOVE_SPEED: int = 5
 
+#################
+### WashSolid ###
+#################
+
+DEFAULT_WASH_SOLID_STIR_RPM: int = 400
+
+DEFAULT_WASH_SOLID_STIR_TIME: int = 60 * 5
+
 #########
 ## Add ##
 #########
@@ -229,6 +237,16 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'StartVacuum': {
         'pressure': DEFAULT_FILTER_VACUUM_PRESSURE,
     },
+    'WashSolid': {
+        'stir_rpm': DEFAULT_WASH_SOLID_STIR_RPM,
+        'stir_time': DEFAULT_WASH_SOLID_STIR_TIME,
+    },
+    'RotavapStartRotation': {
+        'rotation_speed': DEFAULT_ROTAVAP_ROTATION_SPEED,
+    },
+    'RotavapStir': {
+        'rotation_speed': DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED,
+    }
 }
 
 INTERNAL_PROPERTIES = {
