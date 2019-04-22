@@ -1,13 +1,13 @@
-from typing import Optional
+from typing import Optional, List, Dict, Any
 from ..utils import get_vacuum_valve_reconnect_steps
-from ..base_step import Step
+from ..base_step import Step, AbstractStep
 from ..steps_utility import (
     StopStir, HeatChillToTemp, Wait, StartVacuum, StopVacuum)
 from ..steps_base import CMove, CConnect, CVentVacuum
 from ...constants import (
     BOTTOM_PORT, DEFAULT_DRY_WASTE_VOLUME, DEFAULT_FILTER_VACUUM_PRESSURE)
 
-class Dry(Step):
+class Dry(AbstractStep):
     """Dry given vessel by applying vacuum for given time.
 
     Args:
@@ -41,7 +41,8 @@ class Dry(Step):
     ) -> None:
         super().__init__(locals())
 
-        self.steps = [
+    def get_steps(self) -> List[Step]:
+        steps = [
             StopStir(vessel=self.filter_vessel),
             # Move bulk of liquid to waste.
             CMove(
@@ -61,29 +62,35 @@ class Dry(Step):
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
         if not self.vacuum_device:
-            self.steps.pop(-3)
+            steps.pop(-3)
 
         if self.temp != None:
-            self.steps.insert(0, HeatChillToTemp(
+            steps.insert(0, HeatChillToTemp(
                 vessel=self.filter_vessel,
                 temp=self.temp,
                 vessel_type='ChemputerFilter'))
 
-        self.steps.extend(get_vacuum_valve_reconnect_steps(
+        steps.extend(get_vacuum_valve_reconnect_steps(
             inert_gas=self.inert_gas,
             vacuum_valve=self.vacuum_valve,
             valve_unused_port=self.valve_unused_port,
             filter_vessel=self.filter_vessel))
 
         if self.vacuum_device:
-            self.steps.extend([
+            steps.extend([
                 StopVacuum(vessel=self.vacuum),
                 CVentVacuum(vessel=self.vacuum)])
 
-        self.human_readable = 'Dry substance in {filter_vessel} for {time} s.'.format(
+        return steps
+
+    @property
+    def human_readable(self) -> str:
+        return 'Dry substance in {filter_vessel} for {time} s.'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'filter_vessel': {
                 'filter': True
             }

@@ -5,9 +5,9 @@ if False:
     from chempiler import Chempiler
 from logging import Logger
 
-from ..base_step import Step
+from ..base_step import Step, AbstractBaseStep
 
-class Confirm(Step):
+class Confirm(AbstractBaseStep):
     """Get the user to confirm something before execution continues.
 
     Args:
@@ -25,7 +25,7 @@ class Confirm(Step):
             return True
         return False
 
-class CSetRecordingSpeed(Step):
+class CSetRecordingSpeed(AbstractBaseStep):
     """Sets the timelapse speed of the camera module.
 
     Args:
@@ -38,7 +38,7 @@ class CSetRecordingSpeed(Step):
         chempiler.camera.change_recording_speed(self.recording_speed)
         return True
 
-class CWait(Step):
+class CWait(AbstractBaseStep):
     """Delays execution of the script for a set amount of time. This command will
     immediately reply with an estimate of when the waiting will be finished, and also
     give regular updates indicating that it is still alive.
@@ -53,7 +53,7 @@ class CWait(Step):
         chempiler.wait(self.time)
         return True
 
-class CBreakpoint(Step):
+class CBreakpoint(AbstractBaseStep):
     """Introduces a breakpoint in the script. The execution is halted until the operator
     resumes it.
     """
@@ -63,7 +63,7 @@ class CBreakpoint(Step):
     def execute(self, chempiler, logger=None, level=0):
         chempiler.breakpoint()
         return True
-class CMove(Step):
+class CMove(AbstractBaseStep):
     """Moves a specified volume from one node in the graph to another. Moving from and to
     the same node is supported.
 
@@ -104,7 +104,7 @@ class CMove(Step):
         )
         return True
 
-class CConnect(Step):
+class CConnect(AbstractBaseStep):
     """Connect two nodes together.
     
     Args:

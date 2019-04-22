@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import Optional, Dict, Any, List
 
-from ..base_step import Step
+from ..base_step import AbstractStep, Step
 from ..steps_base import (
     CStir,
     CSetStirRate,
@@ -8,7 +8,7 @@ from ..steps_base import (
 from .general import Wait
 from .rotavap import RotavapStir
 
-class StartStir(Step):
+class StartStir(AbstractStep):
     """Start stirring given vessel.
 
     Args:
@@ -22,22 +22,27 @@ class StartStir(Step):
         **kwargs
     ) -> None:
         super().__init__(locals())
-
-        self.steps = [
+        
+    def get_steps(self) -> List[Step]:
+        return [
             CStir(vessel=self.vessel),
             CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm),
         ]
 
-        self.human_readable = 'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'vessel': {
-                'stir': True,
+                'stir': True
             }
         }
 
-class StopStir(Step):
+class StopStir(AbstractStep):
     """Stop stirring given vessel.
     
     Args:
@@ -50,20 +55,25 @@ class StopStir(Step):
         self, vessel: str, vessel_has_stirrer: bool = True, **kwargs) -> None:
         super().__init__(locals())
 
-        if not self.vessel_has_stirrer:
-            self.steps = []
-        else:
-            self.steps = [CStopStir(vessel=self.vessel)]
+    def get_steps(self) -> List[Step]:
+        if self.vessel_has_stirrer:
+            return [CStopStir(vessel=self.vessel)]
+        return []
 
-        self.human_readable = 'Stop stirring {0}.'.format(self.vessel)
+    @property
+    def human_readable(self) -> str:
+        return 'Stop stirring {0}.'.format(self.vessel)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'vessel': {
-                'stir': True,
+                'stir': True
             }
         }
 
-class Stir(Step):
+
+class Stir(AbstractStep):
     """Stir given vessel for given time at room temperature.
 
     Args:
@@ -80,25 +90,33 @@ class Stir(Step):
     ) -> None:
         super().__init__(locals())
 
+    def get_steps(self) -> List[Step]:
+        if self.vessel == 'rotavap':
+            print(self.vessel_is_rotavap, 'STIR')
         if self.vessel_is_rotavap:
-            self.steps = [
+            return [
                 RotavapStir(
                     rotavap_name=self.vessel,
                     stir_rpm=self.stir_rpm,
                     time=self.time),
             ]
         else:
-            self.steps = [
+            return [
                 StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm),
                 Wait(time=self.time),
                 StopStir(vessel=self.vessel),
             ]
 
-        self.human_readable = 'Stir {vessel} for {time} s at {stir_rpm} RPM.'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Stir {vessel} for {time} s at {stir_rpm} RPM.'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'vessel': {
                 'stir': True,
             }
         }
+ 

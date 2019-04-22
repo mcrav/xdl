@@ -156,6 +156,7 @@ def xdl_to_step(xdl_step_element: etree._Element) -> Step:
     if not xdl_step_element.tag in STEP_OBJ_DICT:
         raise XDLError(f'{xdl_step_element.tag} is not a valid step type.')
     step_type = STEP_OBJ_DICT[xdl_step_element.tag]
+    print('STEP TYPE', step_type)
     # Check all attributes are valid.
     attrs = dict(xdl_step_element.attrib)
     check_attrs_are_valid(attrs, step_type)

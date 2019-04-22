@@ -1,9 +1,9 @@
-from typing import Optional
+from typing import Optional, List
 
-from ..base_step import Step
+from ..base_step import AbstractStep, Step
 from ..steps_base import CSetRecordingSpeed, CWait
 
-class Wait(Step):
+class Wait(AbstractStep):
     """Wait for given time.
 
     Args:
@@ -20,10 +20,13 @@ class Wait(Step):
     ) -> None:
         super().__init__(locals())
 
-        self.steps = [
+    def get_steps(self) -> List[Step]:
+        return [
             CSetRecordingSpeed(self.wait_recording_speed),
             CWait(self.time),
             CSetRecordingSpeed(self.after_recording_speed),
         ]
 
-        self.human_readable = 'Wait for {0} s.'.format(self.time)
+    @property
+    def human_readable(self) -> str:
+       return 'Wait for {time} s.'.format(**self.properties) 

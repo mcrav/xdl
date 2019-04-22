@@ -1,9 +1,9 @@
-from typing import Optional
-from ..base_step import Step
+from typing import Optional, List
+from ..base_step import Step, AbstractStep
 from ..steps_utility import Transfer
 from ..steps_base import CStir, CStopStir
 
-class AddCorrosive(Step):
+class AddCorrosive(AbstractStep):
     """Add corrosive reagent that can't come into contact with a valve.
 
     Args:
@@ -25,8 +25,9 @@ class AddCorrosive(Step):
         **kwargs
     ) -> None:
         super().__init__(locals())
-
-        self.steps = [
+        
+    def get_steps(self) -> List[Step]:
+        steps = [
             Transfer(
                 from_vessel=self.air_vessel,
                 to_vessel=self.vessel,
@@ -34,9 +35,12 @@ class AddCorrosive(Step):
                 volume=self.volume)
         ]
         if self.stir:
-            self.steps.insert(0, CStir(vessel=self.vessel))
+            steps.insert(0, CStir(vessel=self.vessel))
         else:
-            self.steps.insert(0, CStopStir(vessel=self.vessel))
+            steps.insert(0, CStopStir(vessel=self.vessel))
+        return steps
 
-        self.human_readable = 'Transfer corrosive reagent {0} ({1} mL) to {2}.'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Transfer corrosive reagent {0} ({1} mL) to {2}.'.format(
             self.reagent, self.volume, self.vessel,)

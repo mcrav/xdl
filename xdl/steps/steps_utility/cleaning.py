@@ -1,12 +1,12 @@
 from typing import Optional, List
 
-from ..base_step import Step
+from ..base_step import AbstractStep, Step
 from ..steps_base import CMove
 from .stirring import Stir
 from .liquid_handling import Transfer
 from ...constants import DEFAULT_CLEAN_BACKBONE_VOLUME
 
-class CleanBackbone(Step):
+class CleanBackbone(AbstractStep):
 
     def __init__(
         self,
@@ -17,15 +17,18 @@ class CleanBackbone(Step):
     ) -> None:
         super().__init__(locals())
 
-        self.steps = []
-        for waste_vessel in self.waste_vessels:
-            self.steps.append(CMove(
-                from_vessel=self.solvent_vessel, to_vessel=waste_vessel,
-                volume=DEFAULT_CLEAN_BACKBONE_VOLUME))
+    def get_steps(self) -> List[Step]:
+        return [CMove(from_vessel=self.solvent_vessel,
+                      to_vessel=waste_vessel,
+                      volume=DEFAULT_CLEAN_BACKBONE_VOLUME)
+                for waste_vessel in self.waste_vessels]
 
-        self.human_readable = 'Clean backbone with {0}.'.format(self.solvent)
+    @property
+    def human_readable(self) -> str:
+        return 'Clean backbone with {solvent}.'.format(**self.properties)
 
-class CleanVessel(Step):
+
+class CleanVessel(AbstractStep):
 
     def __init__(
         self,
@@ -49,7 +52,9 @@ class CleanVessel(Step):
                 to.
         """
         super().__init__(locals())
-        self.steps = [
+
+    def get_steps(self):
+        return [
             CMove(from_vessel=self.solvent_vessel,
                   to_vessel=self.vessel,
                   volume=self.volume),
@@ -60,6 +65,7 @@ class CleanVessel(Step):
                      volume='all'),
         ]
 
-        self.human_readable = 'Clean {vessel} with {solvent} ({volume} mL).'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Clean {vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
-        

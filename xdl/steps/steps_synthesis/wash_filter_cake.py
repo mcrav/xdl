@@ -1,5 +1,5 @@
-from typing import Optional, Union
-from ..base_step import Step
+from typing import Optional, Union, List, Dict, Any
+from ..base_step import Step, AbstractStep
 from .add import Add
 from ..utils import get_vacuum_valve_reconnect_steps
 from ..steps_utility import Wait, StartStir, StopStir, StartVacuum, StopVacuum
@@ -10,7 +10,7 @@ from ...constants import (
     DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
     DEFAULT_FILTER_VACUUM_PRESSURE)
 
-class WashFilterCake(Step):
+class WashFilterCake(AbstractStep):
     """Wash filter cake with given volume of given solvent.
 
     Args:
@@ -61,10 +61,12 @@ class WashFilterCake(Step):
     ) -> None:
         super().__init__(locals())
 
+    def get_steps(self) -> List[Step]:
+        filtrate_vessel = self.filtrate_vessel
         if not filtrate_vessel:
             filtrate_vessel = self.waste_vessel
 
-        self.steps = [
+        steps = [
             # Add solvent
             Add(reagent=self.solvent, volume=self.volume,
                 vessel=self.filter_vessel, port=TOP_PORT, 
@@ -89,36 +91,42 @@ class WashFilterCake(Step):
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
         if not self.vacuum_device:
-            self.steps.pop(-3)
+            steps.pop(-3)
 
         # Start stirring before the solvent is added and stop stirring after the
         # solvent has been removed but before the vacuum is connected.
         if self.stir == True:
-            self.steps.insert(
+            steps.insert(
                 0, StartStir(vessel=self.filter_vessel, stir_rpm=self.stir_rpm))
-            self.steps.insert(-2, StopStir(vessel=self.filter_vessel))
+            steps.insert(-2, StopStir(vessel=self.filter_vessel))
         # Only stir after solvent is added and stop stirring before it is
         # removed.
         elif self.stir == 'solvent':
-            self.steps.insert(
+            steps.insert(
                 1, StartStir(vessel=self.filter_vessel, stir_rpm=self.stir_rpm))
-            self.steps.insert(-3, StopStir(vessel=self.filter_vessel))
+            steps.insert(-3, StopStir(vessel=self.filter_vessel))
 
-        self.steps.extend(get_vacuum_valve_reconnect_steps(
+        steps.extend(get_vacuum_valve_reconnect_steps(
             inert_gas=self.inert_gas,
             vacuum_valve=self.vacuum_valve,
             valve_unused_port=self.valve_unused_port,
             filter_vessel=self.filter_vessel))
 
         if self.vacuum_device:
-            self.steps.extend([
+            steps.extend([
                 StopVacuum(vessel=self.vacuum),
                 CVentVacuum(vessel=self.vacuum)])
+        
+        return steps
 
-        self.human_readable = 'Wash {filter_vessel} with {solvent} ({volume} mL).'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Wash {filter_vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'filter_vessel': {
                 'filter': True
             }

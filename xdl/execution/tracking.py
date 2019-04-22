@@ -145,7 +145,7 @@ def get_movements(step: Step) -> List[Tuple[str, str, float]]:
     if type(step) == CMove:
         movements.append((step.from_vessel, step.to_vessel, step.volume))
     # Recursive calls until CMove steps encountered.
-    elif hasattr(step, 'steps'):
+    elif step.steps:
         for sub_step in step.steps:
             movements.extend(get_movements(sub_step))
     return movements

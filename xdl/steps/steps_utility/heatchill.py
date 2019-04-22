@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import Optional, List, Dict, Any
 
-from ..base_step import Step
+from ..base_step import AbstractStep, Step
 from ..steps_base import (
     CChillerSetTemp,
     CStartChiller,
@@ -17,8 +17,9 @@ from ..steps_base import (
     CStopHeat,
 )
 from ...constants import ROOM_TEMPERATURE
+from ...utils.errors import XDLError
 
-class HeatChillToTemp(Step):
+class HeatChillToTemp(AbstractStep):
     """Heat/Chill vessel to given temp and leave heater/chiller on.
     
     Args:
@@ -41,11 +42,12 @@ class HeatChillToTemp(Step):
         after_recording_speed: Optional[float] = 'default',
         **kwargs
     ) -> None:
-
         super().__init__(locals())
-        self.steps = []
+
+    def get_steps(self) -> List[Step]:
+        steps = []
         if self.vessel_type == 'ChemputerFilter':
-            self.steps = [
+            steps = [
                 CChillerSetTemp(vessel=self.vessel, temp=self.temp),
                 CStartChiller(vessel=self.vessel),
                 CSetRecordingSpeed(self.wait_recording_speed),
@@ -53,7 +55,7 @@ class HeatChillToTemp(Step):
                 CSetRecordingSpeed(self.after_recording_speed),
             ]
         elif self.vessel_type == 'ChemputerReactor':
-            self.steps = [
+            steps = [
                 CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
                 CStirrerHeat(vessel=self.vessel),
                 CSetRecordingSpeed(self.wait_recording_speed),
@@ -62,27 +64,32 @@ class HeatChillToTemp(Step):
             ]
 
         if self.stir:
-            self.steps.insert(0, CStir(vessel=self.vessel))
+            steps.insert(0, CStir(vessel=self.vessel))
             if self.stir_rpm:
-                self.steps.insert(
+                steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm))
             else:
-                self.steps.insert(
+                steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
         else:
-            self.steps.insert(0, CStopStir(vessel=self.vessel))
+            steps.insert(0, CStopStir(vessel=self.vessel))
+        return steps
+    
+    @property
+    def human_readable(self) -> str:
+        return 'Heat/Chill {vessel} to {temp} °C.'.format(
+            **self.properties)
 
-        self.human_readable = 'Heat/Chill {0} to {1} °C.'.format(
-            self.vessel, self.temp)
-
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'vessel': {
                 'heatchill': True,
                 'temp': [self.temp]
             }
         }
 
-class StopHeatChill(Step):
+class StopHeatChill(AbstractStep):
     """Stop heater/chiller on given vessel..
     
     Args:
@@ -94,25 +101,30 @@ class StopHeatChill(Step):
     def __init__(
         self, vessel: str, vessel_type: Optional[str] = None, **kwargs) -> None:
         super().__init__(locals())
-        self.steps = []
+    
+    def get_steps(self) -> List[Step]:
         if self.vessel_type == 'ChemputerFilter':
-            self.steps = [
+            return [
                 CStopChiller(self.vessel)
             ]
         elif self.vessel_type == 'ChemputerReactor':
-            self.steps = [
+            return [
                 CStopHeat(self.vessel)
             ]
-    
-        self.human_readable = 'Stop heater/chiller for {0}.'.format(self.vessel)
-    
-        self.requirements = {
+
+    @property
+    def human_readable(self) -> str:
+        return 'Stop heater/chiller for {vessel}.'.format(**self.properties)
+
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'vessel': {
                 'heatchill': True,
             }
         }
 
-class HeatChillReturnToRT(Step):
+class HeatChillReturnToRT(AbstractStep):
     """Let heater/chiller return to room temperatre and then stop
     heating/chilling.
     
@@ -132,18 +144,19 @@ class HeatChillReturnToRT(Step):
         stir_rpm: Optional[float] = None,
         vessel_type: Optional[str] = None,
         **kwargs) -> None:
-
         super().__init__(locals())
-        self.steps = []
+            
+    def get_steps(self) -> List[Step]:
+        steps = []
         if self.vessel_type == 'ChemputerFilter':
-            self.steps = [
+            steps = [
                 CChillerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
                 CStartChiller(vessel=self.vessel),
                 CChillerWaitForTemp(vessel=self.vessel),
                 CStopChiller(self.vessel)
             ]
         elif self.vessel_type == 'ChemputerReactor':
-            self.steps = [
+            steps = [
                 CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
                 CStirrerHeat(vessel=self.vessel),
                 CStirrerWaitForTemp(vessel=self.vessel),
@@ -151,20 +164,25 @@ class HeatChillReturnToRT(Step):
             ]
 
         if self.stir:
-            self.steps.insert(0, CStir(vessel=self.vessel))
+            steps.insert(0, CStir(vessel=self.vessel))
             if self.stir_rpm:
-                self.steps.insert(
+                steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm))
             else:
-                self.steps.insert(
+                steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
         else:
-            self.steps.insert(0, CStopStir(vessel=self.vessel))
-            
-        self.human_readable = 'Stop heater/chiller for {0} and wait for it to return to room temperature'.format(
-            self.vessel)
+            steps.insert(0, CStopStir(vessel=self.vessel))
+        return steps
 
-        self.requirements = {
+    @property
+    def human_readable(self) -> str:
+        return 'Stop heater/chiller for {vessel} and wait for it to return to room temperature'.format(
+            **self.properties)
+
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'vessel': {
                 'heatchill': True,
             }

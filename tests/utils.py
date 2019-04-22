@@ -1,6 +1,6 @@
 import os
 from xdl import XDL
-from xdl.steps import Confirm, Step
+from xdl.steps import Confirm, Step, AbstractBaseStep
 from chempiler import Chempiler
 import ChemputerAPI
 
@@ -18,8 +18,6 @@ def generic_chempiler_test(xdl_file: str, graph_file: str) -> None:
     x.prepare_for_execution(graph_file, interactive=False)
     x.steps = [
         remove_confirm_steps(step) for step in x.steps]
-    for step in x.steps:
-        print(step, '\n', step.steps, '\n\n')
     chempiler = Chempiler(
         experiment_code='test',
         output_dir=os.path.join(HERE, 'chempiler_output'),
@@ -36,7 +34,7 @@ def remove_confirm_steps(step: Step) -> None:
     Args:
         step (Step): Step to remove Confirm steps from.
     """
-    if not hasattr(step, 'steps'): # If step is base step just return step.
+    if isinstance(step, AbstractBaseStep): # If step is base step just return step.
         return step
     else:
         for i in reversed(range(len(step.steps))):
