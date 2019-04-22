@@ -14,7 +14,13 @@ from ..steps_base import (
     CRotavapStopHeater,
     CRotavapLiftUp
 )
-from ..steps_utility import Wait
+from ..steps_utility import (
+    Wait,
+    RotavapStopEverything,
+    RotavapHeatToTemp,
+    RotavapStartVacuum,
+    RotavapStartRotation,
+)
 
 
 class Rotavap(Step):
@@ -41,29 +47,17 @@ class Rotavap(Step):
 
         self.steps = [
             # Start rotation
-            CRotavapSetRotationSpeed(self.rotavap_name, self.rotation_speed),
-            CRotavapStartRotation(self.rotavap_name),
-
+            RotavapStartRotation(self.rotavap_name, self.rotation_speed),
             # Lower flask into bath.
             CRotavapLiftDown(self.rotavap_name),
-
             # Start heating
-            CRotavapSetTemp(self.rotavap_name, self.temp),
-            CRotavapStartHeater(self.rotavap_name),
-
+            RotavapHeatToTemp(self.rotavap_name, self.temp),
             # Start vacuum
-            CSetVacuumSetPoint(self.rotavap_name, self.pressure),
-            CStartVacuum(self.rotavap_name),
-            
+            RotavapStartVacuum(self.rotavap_name, self.pressure),
             # Wait for evaporation to happen.
             Wait(time=self.time),
-
             # Stop evaporation.
-            CStopVacuum(self.rotavap_name),
-            CVentVacuum(self.rotavap_name),
-            CRotavapStopRotation(self.rotavap_name),
-            CRotavapStopHeater(self.rotavap_name),
-            CRotavapLiftUp(self.rotavap_name),            
+            RotavapStopEverything(self.rotavap_name),
         ]
 
         self.human_readable = 'Rotavap contents of {rotavap_name} at {temp} °C and {pressure} mbar for {time}.'.format(

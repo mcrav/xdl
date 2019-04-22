@@ -6,6 +6,7 @@ from ..steps_base import (
     CSetStirRate,
     CStopStir)
 from .general import Wait
+from .rotavap import RotavapStir
 
 class StartStir(Step):
     """Start stirring given vessel.
@@ -41,11 +42,18 @@ class StopStir(Step):
     
     Args:
         vessel (str): Vessel name to stop stirring.
+        vessel_has_stirrer (bool): True if vessel has stirrer, otherwise False.
+            The point of this is that StopStir can be used and if there is no
+            stirrer then it is just ignored rather than an error being raised.
     """
-    def __init__(self, vessel: str, **kwargs) -> None:
+    def __init__(
+        self, vessel: str, vessel_has_stirrer: bool = True, **kwargs) -> None:
         super().__init__(locals())
 
-        self.steps = [CStopStir(vessel=self.vessel)]
+        if not self.vessel_has_stirrer:
+            self.steps = []
+        else:
+            self.steps = [CStopStir(vessel=self.vessel)]
 
         self.human_readable = 'Stop stirring {0}.'.format(self.vessel)
 
@@ -67,17 +75,26 @@ class Stir(Step):
         vessel: str,
         time: float,
         stir_rpm: Optional[float] = 'default',
+        vessel_is_rotavap: Optional[str] = False,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
-        self.steps = [
-            StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm),
-            Wait(time=self.time),
-            StopStir(vessel=self.vessel),
-        ]
+        if self.vessel_is_rotavap:
+            self.steps = [
+                RotavapStir(
+                    rotavap_name=self.vessel,
+                    stir_rpm=self.stir_rpm,
+                    time=self.time),
+            ]
+        else:
+            self.steps = [
+                StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm),
+                Wait(time=self.time),
+                StopStir(vessel=self.vessel),
+            ]
 
-        self.human_readable = 'Stir {vessel} for {time} s.'.format(
+        self.human_readable = 'Stir {vessel} for {time} s at {stir_rpm} RPM.'.format(
             **self.properties)
 
         self.requirements = {

@@ -4,8 +4,6 @@ if False: # For type annotations
 import re
 import time
 
-from chemdata.synonyms import SOLVENT_SYNONYM_CAS_DICT
-
 from .constants import *
 from .tracking import iter_vessel_contents
 from ..steps import *
@@ -45,7 +43,7 @@ def get_available_solvents(reagents: List[Reagent]) -> List[str]:
     """
     solvents = []
     for reagent in reagents:
-        for solvent in SOLVENT_SYNONYM_CAS_DICT:
+        for solvent in COMMON_SOLVENT_NAMES:
             # Look for stuff like 'X in THF' as well as plain 'THF'.
             if (re.match(r'[ _]?' + solvent, reagent.id.lower())
                 or re.match(r'[ _]?' + solvent, reagent.id.lower())):
@@ -97,7 +95,10 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
                 schedule[j] = reagent
         i = max(j, i + 1)
     # 2) Go forward applying last encountered solvent to every step in schedule.
-    current_reagent = [item for item in schedule if item][0]
+    try:
+        current_reagent = [item for item in schedule if item][0]
+    except IndexError:
+        current_reagent = available_solvents[0]
     for i, reagent in enumerate(schedule):
         if reagent:
             if reagent != 'water':
@@ -160,6 +161,7 @@ def get_clean_backbone_sequence(xdl_obj) -> List[Tuple[int, str]]:
     cleans = []
     for i, step_i in enumerate(clean_backbone_steps):
         # Get after_type and before_type
+        after_solvent = None
         if i + 1 < len(clean_backbone_steps):
             next_step_i = clean_backbone_steps[i+1]
             if next_step_i < len(step_solvents):
@@ -193,7 +195,6 @@ def add_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
         if solvent != 'water' and xdl_obj.organic_cleaning_solvent:
             solvent = xdl_obj.organic_cleaning_solvent
         xdl_obj.steps.insert(i, CleanBackbone(solvent=solvent))
-    verify = None
     return xdl_obj
 
 def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
@@ -208,7 +209,6 @@ def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
             input.
     """
     available_solvents = get_available_solvents(xdl_obj.reagents)
-    print('Available cleaning solvents:', '\n'.join(available_solvents))
     step_i = 0
     for step in xdl_obj.steps:
         # If step is CleanBackbone give user option to change solvent.

@@ -1,2 +1,2 @@
 lxml==4.2.1
-networkx==1.10
+networkx==2.2

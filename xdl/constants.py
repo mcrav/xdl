@@ -76,6 +76,9 @@ DEFAULT_ROTAVAP_DRYING_TIME: int = 2* 60 * 60
 #: Default rotation speed in RPM for rotavap.
 DEFAULT_ROTAVAP_ROTATION_SPEED: int = 150
 
+#: Default rotation speed in RPM for the rotavap when dissolving something.
+DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED: int = 300
+
 ###############
 ## Filtering ##
 ###############
@@ -113,6 +116,14 @@ DEFAULT_DRY_WASTE_VOLUME: int = 5
 
 #: Default move speed in mL for transferring liquid through filtering cartridge.
 DEFAULT_FILTER_THROUGH_MOVE_SPEED: int = 5
+
+#################
+### WashSolid ###
+#################
+
+DEFAULT_WASH_SOLID_STIR_RPM: int = 400
+
+DEFAULT_WASH_SOLID_STIR_TIME: int = 60 * 5
 
 #########
 ## Add ##
@@ -226,6 +237,19 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'StartVacuum': {
         'pressure': DEFAULT_FILTER_VACUUM_PRESSURE,
     },
+    'WashSolid': {
+        'stir_rpm': DEFAULT_WASH_SOLID_STIR_RPM,
+        'stir_time': DEFAULT_WASH_SOLID_STIR_TIME,
+    },
+    'RotavapStartRotation': {
+        'rotation_speed': DEFAULT_ROTAVAP_ROTATION_SPEED,
+    },
+    'RotavapStir': {
+        'rotation_speed': DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED,
+    },
+    'CleanVessel': {
+        'stir_time': DEFAULT_CLEAN_VESSEL_STIR_TIME,
+    }
 }
 
 INTERNAL_PROPERTIES = {
@@ -259,8 +283,12 @@ CHEMPUTER_VACUUM_CLASS_NAME: str = 'ChemputerVacuum'
 CHEMPUTER_PUMP_CLASS_NAME: str = 'ChemputerPump'
 CHEMPUTER_VALVE_CLASS_NAME: str = 'ChemputerValve'
 
+# Filter, separator ports
 BOTTOM_PORT: str = 'bottom'
 TOP_PORT: str = 'top'
+# Rotavap ports
+EVAPORATE_PORT: str = 'evaporate'
+COLLECT_PORT: str = 'collect'
 
 FILTER_DEAD_VOLUME_INERT_GAS_METHOD: str = 'inert_gas'
 FILTER_DEAD_VOLUME_LIQUID_METHOD: str = 'solvent'
