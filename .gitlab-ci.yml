@@ -4,8 +4,8 @@ image: latest
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
-variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+# variables:
+#   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
 # Pip's cache doesn't store the python packages
 # https://pip.pypa.io/en/stable/reference/pip_install/#caching
@@ -19,9 +19,6 @@ variables:
 
 before_script:
   # Initialise virtualenv
-  - sudo apt-get install python3-dev
-  - sudo apt-get install python3-pip -y
-  - sudo apt-get install python3-venv -y
   - python3 -V
   - pip3 -V
   - python3 -m venv venv

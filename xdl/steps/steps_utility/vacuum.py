@@ -23,7 +23,7 @@ class StartVacuum(AbstractStep):
     def human_readable(self) -> str:
         return 'Start vacuum for {vessel}.'.format(**self.properties)
 
-class StopVacuum(Step):
+class StopVacuum(AbstractStep):
     """Stop vacuum pump attached to given vessel.
 
     Args:
