@@ -175,6 +175,8 @@ def format_volume(val_ml: float) -> str:
     Returns:
         str: Formatted volume in sensible units.
     """
+    if val_ml == 'all':
+        return val_ml
     # litres
     if val_ml > 1000:
         l = val_ml / 1000

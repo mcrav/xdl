@@ -51,6 +51,8 @@ def convert_time_str_to_seconds(time_str: str) -> float:
 
 def convert_volume_str_to_ml(volume_str: str) -> float:
     """Convert volume str to float with unit mL i.e. '1l' -> 1000.""" 
+    if volume_str == 'all':
+        return volume_str
     volume_str = volume_str.lower()
     if volume_str.endswith(VOLUME_ML_UNIT_WORDS):
         multiplier = 1
