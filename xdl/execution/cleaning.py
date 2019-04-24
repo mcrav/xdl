@@ -195,6 +195,48 @@ def add_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
         if solvent != 'water' and xdl_obj.organic_cleaning_solvent:
             solvent = xdl_obj.organic_cleaning_solvent
         xdl_obj.steps.insert(i, CleanBackbone(solvent=solvent))
+    xdl_obj = add_cleaning_steps_at_beginning_and_end(xdl_obj)
+    return xdl_obj
+
+def add_cleaning_steps_at_beginning_and_end(xdl_obj: 'XDL') -> 'XDL':
+    """Add CleanBackbone steps at beginning and end of procedure with
+    appropriate solvents.
+
+    Args:
+        xdl_obj (XDL): XDL object to add CleanBackbone steps to.
+    
+    Returns:
+        XDL: xdl_obj with CleanBackbone steps added at beginning and end with
+            appropriate solvents.
+    """
+    # Set default solvents to use if nothing better found.
+    available_solvents = get_available_solvents(xdl_obj.reagents)
+    start_solvent, end_solvent = None, None
+    if len(available_solvents) > 0:
+        start_solvent, end_solvent = (
+            available_solvents[0], available_solvents[0])
+    cleaning_solvents = [
+        step.solvent for step in xdl_obj.steps if type(step) == CleanBackbone]
+    # Set start solvent and end solvent to first used and last used cleaning
+    # solvent if they exist.
+    if len(cleaning_solvents) > 0:
+        start_solvent = cleaning_solvents[0]
+        end_solvent = cleaning_solvents[-1]
+    # If end solvent is in blacklist look for a better solvent in available
+    # solvents.
+    if end_solvent in CLEANING_SOLVENT_PREFER_NOT_TO_USE:
+        # Do it like this as probably prefer to use solvent from procedure
+        # rather than random one available.
+        potential_solvents = cleaning_solvents + available_solvents
+        for solvent in potential_solvents:
+            if not solvent in CLEANING_SOLVENT_PREFER_NOT_TO_USE:
+                end_solvent = solvent
+                break
+    # Add cleaning steps.
+    if start_solvent:
+        xdl_obj.steps.insert(0, CleanBackbone(solvent=start_solvent))
+    else:
+        xdl_obj.steps.append(CleanBackbone(solvent=end_solvent))
     return xdl_obj
 
 def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':

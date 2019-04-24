@@ -19,6 +19,7 @@ def test_clean_vessel():
 #########################
 
 ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE = [
+    'acetonitrile',
     # Dry
     'acetonitrile',
     # Add acetonitrile
@@ -43,7 +44,8 @@ ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE = [
     # WashSolid
     'ether',
     # Dry
-    'ether'
+    'ether',
+    'acetonitrile'
 ]
 
 def test_cleaning_schedule():
