@@ -17,12 +17,15 @@
   <Procedure>
     <Add
       reagent="water"
-      vessel="rotavap"
-      mass="500 mL" />
-    <Rotavap
-      rotavap_name="rotavap"
-      temp="40"
-      pressure="50" />
+      vessel="reactor"
+      volume="300 mL" />
+    <FilterThrough
+      from_vessel="reactor"
+      to_vessel="rotavap"
+      through_cartridge="celite_cartridge"
+      eluting_solvent="ether"
+      eluting_volume="50 mL"
+      eluting_repeats="3" />
 
   </Procedure>
 
