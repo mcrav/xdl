@@ -57,13 +57,13 @@
     <HeatChillReturnToRT
       vessel="filter2"
       stir="True" />
-    <!-- <FilterThrough
+    <FilterThrough
       from_vessel="filter2"
       to_vessel="rotavap"
       through_cartridge="cartridge_celite"
       eluting_solvent="DCM"
       eluting_volume="25ml"
-      eluting_repeats="3" /> -->
+      eluting_repeats="3" />
     <Rotavap
       rotavap_name="rotavap"
       temp="40"

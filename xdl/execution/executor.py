@@ -21,7 +21,8 @@ from .graph import (
     get_unused_valve_port,
     flask_attached_to_vacuum)
 from .utils import VesselContents
-from .cleaning import add_cleaning_steps, verify_cleaning_steps
+from .cleaning import (
+    add_cleaning_steps, verify_cleaning_steps, get_cleaning_schedule)
 
 class XDLExecutor(object):
  
@@ -369,6 +370,7 @@ class XDLExecutor(object):
             AttributeError: If filter_dead_volume_method is liquid, but
                 self._xdl has no filter_dead_volume_solvent attribute.
         """
+        cleaning_solvents = get_cleaning_schedule(self._xdl)
         # Find steps at which a filter vessel is emptied. Can't just look for
         # Filter steps as liquid may be transferred to filter flask for other
         # reasons i.e. using the chiller.
@@ -383,13 +385,7 @@ class XDLExecutor(object):
                    and full_vessel_contents[j-1][filter_vessel].reagents):
                 j -= 1
 
-            if self._xdl.filter_dead_volume_solvent:
-                solvent = self._xdl.filter_dead_volume_solvent
-            else:
-                raise_error(
-                    AttributeError,
-                    'No filter_dead_volume_solvent specified in <Synthesis> tag'
-                )
+            solvent = cleaning_solvents[j]
 
             # Insert AddFilterDeadVolume step into self._xdl.steps.
             self._xdl.steps.insert(j, AddFilterDeadVolume(

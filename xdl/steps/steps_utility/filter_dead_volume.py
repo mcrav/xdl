@@ -45,7 +45,7 @@ class AddFilterDeadVolume(AbstractStep):
                        to_port=BOTTOM_PORT)]
         # Reconnect vacuum valve to inert gas or unconnected port after done
         steps.extend(get_vacuum_valve_reconnect_steps(
-            inert_gas=self.inert_gas,
+            inert_gas=None,
             vacuum_valve=self.vacuum_valve,
             valve_unused_port=self.valve_unused_port,
             filter_vessel=self.filter_vessel))
@@ -98,7 +98,7 @@ class RemoveFilterDeadVolume(AbstractStep):
                        volume=self.dead_volume)]
         # Reconnect vacuum valve to inert gas or unconnected port after done
         steps.extend(get_vacuum_valve_reconnect_steps(
-            inert_gas=self.inert_gas,
+            inert_gas=None,
             vacuum_valve=self.vacuum_valve,
             valve_unused_port=self.valve_unused_port,
             filter_vessel=self.filter_vessel))
