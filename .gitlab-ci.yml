@@ -1,6 +1,6 @@
 # Official language image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/python/tags/
-image: latest
+image: python:latest
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -12,31 +12,33 @@ image: latest
 #
 # If you want to also cache the installed packages, you have to install
 # them in a virtualenv and cache it as well.
-# cache:
-#   paths:
-#     - .cache/pip
-#     - venv/
+cache:
+  paths:
+    - .cache/pip
+    - venv/
 
 before_script:
   # Initialise virtualenv
-  - python3 -V
-  - pip3 -V
-  - python3 -m venv venv
+  # - conda -V
+  - python -V
+  - pip -V
+  # - pip install virtualenv
+  - python -m venv venv 
   - . venv/bin/activate
-  - pip3 install wheel
-  # Install xdl requirements
-  - pip3 install pytest
-  - pip3 install -r requirements.txt
+  - pip install wheel
+  # # Install xdl requirements
+  - pip install pytest
+  - pip install -r requirements.txt
 
-  # Install Chempiler, SerialLabware and ChemputerAPI for simulations
-  - pip3 install git+http://gitlab+deploy-token-2:u5KWxsk2hAU75o31rZUe@datalore.chem.gla.ac.uk/Chemputer/Chempiler.git@develop
+  # # Install Chempiler, SerialLabware and ChemputerAPI for simulations
+  - pip install git+http://gitlab+deploy-token-2:u5KWxsk2hAU75o31rZUe@datalore.chem.gla.ac.uk/Chemputer/Chempiler.git@develop
 
-  - pip3 install git+http://gitlab+deploy-token-3:sNsCFqh2szkE_AXkN3Vm@datalore.chem.gla.ac.uk/Chemputer/SerialLabware.git
+  - pip install git+http://gitlab+deploy-token-3:sNsCFqh2szkE_AXkN3Vm@datalore.chem.gla.ac.uk/Chemputer/SerialLabware.git
 
-  - pip3 install git+http://gitlab+deploy-token-4:NjJny1c5xxvnxMDXmpfB@datalore.chem.gla.ac.uk/Chemputer/ChemputerAPI.git@develop
+  - pip install git+http://gitlab+deploy-token-4:NjJny1c5xxvnxMDXmpfB@datalore.chem.gla.ac.uk/Chemputer/ChemputerAPI.git@develop
 
-  # Install xdl
-  - pip3 install .
+  # # Install xdl
+  - pip install .
   - pip freeze
 test:
   script:
