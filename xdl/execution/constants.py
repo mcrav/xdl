@@ -9,6 +9,10 @@ from ..steps import *
 #: Toluene tends to dissolve glue in syringe pumps.
 CLEANING_SOLVENT_BLACKLIST: List[str] = ['toluene']
 
+#: Solvents that can be used but aren't ideal. Used to decide what solvent to
+#: use for final CleanBackbone step at end of procedure.
+CLEANING_SOLVENT_PREFER_NOT_TO_USE: List[str] = ['ether']
+
 SOLVENT_CONTAINING_STEPS: List[type] = [
     Add, Dissolve, WashFilterCake, Separate, AddFilterDeadVolume]
 
