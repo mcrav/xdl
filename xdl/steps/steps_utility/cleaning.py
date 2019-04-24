@@ -38,6 +38,7 @@ class CleanVessel(AbstractStep):
         volume: Optional[float] = None,
         solvent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
+        **kwargs
     ) -> None:
         """Clean given vessel with given solvent.
         
