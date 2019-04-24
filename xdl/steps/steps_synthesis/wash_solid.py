@@ -27,6 +27,7 @@ class WashSolid(AbstractStep):
         stir_rpm: Optional[float] = 'default',
         solvent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
