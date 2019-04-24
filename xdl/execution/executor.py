@@ -128,6 +128,10 @@ class XDLExecutor(object):
                 and not step.flush_tube_vessel):
                 step.flush_tube_vessel = self._get_flush_tube_vessel()
 
+            if ('flush_cartridge_vessel' in step.properties
+                and not step.flush_cartridge_vessel):
+                step.flush_cartridge_vessel = self._get_flush_tube_vessel()
+
             if 'vacuum' in step.properties and not step.vacuum:
                 step.vacuum = self._get_vacuum(step.filter_vessel)
 
