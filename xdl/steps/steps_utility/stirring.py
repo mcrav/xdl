@@ -91,8 +91,6 @@ class Stir(AbstractStep):
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
-        if self.vessel == 'rotavap':
-            print(self.vessel_is_rotavap, 'STIR')
         if self.vessel_is_rotavap:
             return [
                 RotavapStir(

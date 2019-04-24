@@ -38,8 +38,6 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
         graph = json_graph.node_link_graph(
             graph_file, directed=True, multigraph=True)
     for edge in graph.edges:
-        print(edge)
-        print(graph.edges[edge])
         if 'port' in graph.edges[edge]:
             port_str = graph.edges[edge]['port']
             graph.edges[edge]['port'] = port_str[1:-1].split(',')

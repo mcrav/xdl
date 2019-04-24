@@ -16,7 +16,6 @@ def get_valid_attrs(class_: type) -> List[str]:
         List[str]: List of arg names for class_ __init__ method.
     """
     valid_attrs = [k for k in class_.__init__.__annotations__ if k  != 'return']
-    print(type(class_))
     if (AbstractStep in class_.__bases__
         or AbstractBaseStep in class_.__bases__):
         valid_attrs.append('repeat')
