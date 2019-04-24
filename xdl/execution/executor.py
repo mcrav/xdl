@@ -23,6 +23,7 @@ from .graph import (
 from .utils import VesselContents
 from .cleaning import (
     add_cleaning_steps, verify_cleaning_steps, get_cleaning_schedule)
+from .constants import INERT_GAS_SYNONYMS
 
 class XDLExecutor(object):
  
@@ -199,15 +200,15 @@ class XDLExecutor(object):
             str: Flask to use for flushing tube.
                 Preference is nitrogen > air > None.
         """
-        nitrogen_flask = None
+        inert_gas_flask = None
         air_flask = None
         for flask in self._graph_hardware.flasks:
-            if flask.chemical.lower() == 'nitrogen':
-                nitrogen_flask = flask.id
+            if flask.chemical.lower() in INERT_GAS_SYNONYMS:
+                inert_gas_flask = flask.id
             elif flask.chemical.lower() == 'air':
                 air_flask = flask.id
-        if nitrogen_flask:
-            return nitrogen_flask
+        if inert_gas_flask:
+            return inert_gas_flask
         elif air_flask:
             return air_flask
         return None

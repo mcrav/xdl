@@ -155,3 +155,5 @@ COMMON_SOLVENT_NAMES = [
     'm-xylene',
     'p-xylene',
 ]
+
+INERT_GAS_SYNONYMS: List[str] = ['nitrogen', 'n2', 'ar', 'argon']
