@@ -22,6 +22,8 @@ ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE = [
     'acetonitrile',
     # Dry
     'acetonitrile',
+    # AddFilterDeadVolume acetonitrile
+    'acetonitrile',
     # Add acetonitrile
     'acetonitrile',
     # Dissolve acetonitrile
@@ -30,8 +32,13 @@ ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE = [
     'acetonitrile',
     # Clean vessel acetonitrile
     'acetonitrile',
+    # HeatChill, HeatChillReturnToRT
+    # RemoveFilterDeadVolume
+    'acetonitrile',
     'dcm',
-    # HeatChill, HeatCHillReturnToRT, Rotavap
+    # FilterThrough
+    'dcm',
+    # Rotavap
     # Dissolve DCM
     'dcm',
     # FilterThrough DCM
