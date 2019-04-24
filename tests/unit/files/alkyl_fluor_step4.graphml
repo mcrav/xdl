@@ -521,7 +521,7 @@
           <y:Geometry height="154.85203340926319" width="56.40923076923082" x="3170.0052681534403" y="355.1886960087837"/>
           <y:Fill color="#CCCCFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="sandwich" modelPosition="s" textColor="#000000" verticalTextPosition="bottom" visible="true" width="100.052734375" x="-21.82175180288459" xml:space="preserve" y="158.85203340926319">cartridge_celite_A</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="sandwich" modelPosition="s" textColor="#000000" verticalTextPosition="bottom" visible="true" width="100.052734375" x="-21.82175180288459" xml:space="preserve" y="158.85203340926319">cartridge_celite</y:NodeLabel>
           <y:Image alphaImage="true" refid="3"/>
         </y:ImageNode>
       </data>

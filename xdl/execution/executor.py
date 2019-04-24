@@ -129,9 +129,17 @@ class XDLExecutor(object):
                 and not step.flush_tube_vessel):
                 step.flush_tube_vessel = self._get_flush_tube_vessel()
 
+            # FilterThrough step flushes cartridge with inert gas/air
             if ('flush_cartridge_vessel' in step.properties
                 and not step.flush_cartridge_vessel):
                 step.flush_cartridge_vessel = self._get_flush_tube_vessel()
+
+            # FilterThrough needs to know what dead volume of cartridge is. If
+            # it is not provided in the graph it falls back to default.
+            if 'cartridge_dead_volume' in step.properties:
+                cartridge = self._graph_hardware[step.through_cartridge]
+                if 'dead_volume' in cartridge.properties:
+                    step.cartridge_dead_volume = cartridge.dead_volume
 
             if 'vacuum' in step.properties and not step.vacuum:
                 step.vacuum = self._get_vacuum(step.filter_vessel)

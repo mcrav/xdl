@@ -119,7 +119,7 @@ DEFAULT_FILTER_THROUGH_MOVE_SPEED: int = 5
 
 #: Default amount of nitrogen (or air) to push through cartridge after
 #: FilterThrough step to push out any remaining liquid.
-DEFAULT_CARTRIDGE_DEAD_VOLUME: int = 10
+DEFAULT_CARTRIDGE_DEAD_VOLUME: int = 25
 
 #################
 ### WashSolid ###

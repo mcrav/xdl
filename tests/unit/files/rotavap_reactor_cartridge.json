@@ -156,7 +156,8 @@
       "name": "celite_cartridge",
       "internalId": 28,
       "label": "celite_cartridge",
-      "class": "ChemputerCartridge"
+      "class": "ChemputerCartridge",
+      "dead_volume": 50
     },
     {
       "id": "flask_nitrogen",
