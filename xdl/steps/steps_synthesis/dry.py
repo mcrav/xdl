@@ -68,7 +68,8 @@ class Dry(AbstractStep):
             steps.insert(0, HeatChillToTemp(
                 vessel=self.filter_vessel,
                 temp=self.temp,
-                vessel_type='ChemputerFilter'))
+                vessel_type='ChemputerFilter',
+                stir=False))
 
         steps.extend(get_vacuum_valve_reconnect_steps(
             inert_gas=self.inert_gas,
