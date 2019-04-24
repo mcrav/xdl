@@ -22,6 +22,10 @@ CLEAN_BACKBONE_AFTER_STEPS: List[type] = [
     Dry,
     AddFilterDeadVolume,
     RemoveFilterDeadVolume,
+    Dissolve,
+    CleanVessel,
+    Transfer,
+    FilterThrough,
 ]
 
 COMMON_SOLVENT_NAMES = [
