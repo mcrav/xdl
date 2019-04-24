@@ -18,6 +18,11 @@ class FilterThrough(AbstractStep):
         aspiration_speed (float): Aspiration speed in mL / min.
         eluting_solvent_vessel (str): Given internally. Flask containing eluting
             solvent.
+        flush_cartridge_vessel (str): Given internally. Flask to flush dead
+            volume of cartridge with after main transfers are done. Order of
+            preference is nitrogen > air > nothing.
+        cartridge_dead_volume (float): Volume of gas to push through if flushing
+            cartridge dead volume.
     """
     def __init__(
         self,
@@ -30,6 +35,8 @@ class FilterThrough(AbstractStep):
         move_speed: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
         eluting_solvent_vessel: Optional[str] = None,
+        flush_cartridge_vessel: Optional[str] = None,
+        cartridge_dead_volume: Optional[float] = 'default',
         **kwargs
     ):
         super().__init__(locals())
@@ -53,6 +60,16 @@ class FilterThrough(AbstractStep):
                 move_speed=self.move_speed,
                 aspiration_speed=self.aspiration_speed,
                 repeat=self.eluting_repeats))
+        
+        if self.flush_cartridge_vessel:
+            steps.append(
+                Transfer(
+                    from_vessel=self.flush_cartridge_vessel,
+                    to_vessel=self.to_vessel,
+                    through=self.through_cartridge,
+                    volume=self.cartridge_dead_volume,
+                    move_speed=self.move_speed,
+                    aspiration_speed=self.aspiration_speed))
         return steps
 
     @property

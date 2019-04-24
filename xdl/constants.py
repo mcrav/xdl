@@ -117,6 +117,10 @@ DEFAULT_DRY_WASTE_VOLUME: int = 5
 #: Default move speed in mL for transferring liquid through filtering cartridge.
 DEFAULT_FILTER_THROUGH_MOVE_SPEED: int = 5
 
+#: Default amount of nitrogen (or air) to push through cartridge after
+#: FilterThrough step to push out any remaining liquid.
+DEFAULT_CARTRIDGE_DEAD_VOLUME: int = 10
+
 #################
 ### WashSolid ###
 #################
@@ -233,6 +237,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'move_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
         'aspiration_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
         'eluting_repeats': 1,
+        'cartridge_dead_volume': DEFAULT_CARTRIDGE_DEAD_VOLUME,
     },
     'StartVacuum': {
         'pressure': DEFAULT_FILTER_VACUUM_PRESSURE,

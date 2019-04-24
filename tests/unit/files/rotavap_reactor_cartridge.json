@@ -153,10 +153,23 @@
       "type": "custom",
       "x": 80,
       "y": 320,
-      "class": "ChemputerCartridge",
       "name": "celite_cartridge",
       "internalId": 28,
-      "label": "celite_cartridge"
+      "label": "celite_cartridge",
+      "class": "ChemputerCartridge"
+    },
+    {
+      "id": "flask_nitrogen",
+      "type": "flask",
+      "x": -200,
+      "y": 160,
+      "class": "ChemputerFlask",
+      "name": "flask_nitrogen",
+      "chemical": "nitrogen",
+      "current_volume": 100,
+      "max_volume": 100,
+      "internalId": 31,
+      "label": "flask_nitrogen"
     }
   ],
   "links": [
@@ -303,6 +316,14 @@
       "source": "celite_cartridge",
       "target": "rotavap",
       "port": "(out,evaporate)"
+    },
+    {
+      "id": 32,
+      "sourceInternal": 31,
+      "targetInternal": 13,
+      "source": "flask_nitrogen",
+      "target": "valve_reactor",
+      "port": "(0,3)"
     }
   ]
 }
