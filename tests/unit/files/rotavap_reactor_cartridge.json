@@ -67,86 +67,96 @@
       "type": "vacuum",
       "x": 280,
       "y": 240,
+      "internalId": 11,
+      "label": "vacuum_rotavap",
       "class": "CVC3000",
       "name": "vacuum_rotavap",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1,
-      "internalId": 11,
-      "label": "vacuum_rotavap"
+      "necks": 1
     },
     {
       "id": "valve_reactor",
       "type": "valve",
       "x": -80,
       "y": 160,
+      "internalId": 13,
+      "label": "valve_reactor",
       "class": "ChemputerValve",
       "name": "valve_reactor",
-      "address": "",
-      "internalId": 13,
-      "label": "valve_reactor"
+      "address": ""
     },
     {
       "id": "pump_reactor",
       "type": "pump",
       "x": -80,
       "y": 40,
+      "internalId": 14,
+      "label": "pump_reactor",
       "class": "ChemputerPump",
       "name": "pump_reactor",
       "address": "",
-      "max_volume": 100,
-      "internalId": 14,
-      "label": "pump_reactor"
+      "max_volume": 100
     },
     {
       "id": "waste_reactor",
       "type": "waste",
       "x": -160,
       "y": 80,
+      "internalId": 15,
+      "label": "waste_reactor",
       "class": "ChemputerWaste",
       "name": "waste_reactor",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1,
-      "internalId": 15,
-      "label": "waste_reactor"
+      "necks": 1
     },
     {
       "id": "flask_ether",
       "type": "flask",
       "x": -160,
       "y": 240,
+      "internalId": 19,
+      "label": "flask_ether",
       "class": "ChemputerFlask",
       "name": "flask_ether",
       "chemical": "ether",
       "current_volume": 100,
-      "max_volume": 100,
-      "internalId": 19,
-      "label": "flask_ether"
+      "max_volume": 100
     },
     {
       "id": "reactor",
       "type": "reactor",
       "x": -80,
       "y": 280,
+      "internalId": 21,
+      "label": "reactor",
       "class": "ChemputerReactor",
       "name": "reactor",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1,
-      "internalId": 21,
-      "label": "reactor"
+      "necks": 1
     },
     {
       "id": "stirrer_reactor",
       "type": "stirrer",
       "x": -80,
       "y": 360,
+      "internalId": 26,
+      "label": "stirrer_reactor",
       "class": "IKAmicrostar75",
       "name": "stirrer_reactor",
-      "port": "",
-      "internalId": 26,
-      "label": "stirrer_reactor"
+      "port": ""
+    },
+    {
+      "id": "celite_cartridge",
+      "type": "custom",
+      "x": 80,
+      "y": 320,
+      "class": "ChemputerCartridge",
+      "name": "celite_cartridge",
+      "internalId": 28,
+      "label": "celite_cartridge"
     }
   ],
   "links": [
@@ -277,6 +287,22 @@
       "source": "stirrer_reactor",
       "target": "reactor",
       "port": "(,)"
+    },
+    {
+      "id": 29,
+      "sourceInternal": 21,
+      "targetInternal": 28,
+      "source": "reactor",
+      "target": "celite_cartridge",
+      "port": "(0,in)"
+    },
+    {
+      "id": 30,
+      "sourceInternal": 28,
+      "targetInternal": 3,
+      "source": "celite_cartridge",
+      "target": "rotavap",
+      "port": "(out,evaporate)"
     }
   ]
 }

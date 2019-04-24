@@ -10,15 +10,14 @@ class FilterThrough(AbstractStep):
         from_vessel (str): Vessel with contents to filter.
         to_vessel (str): Vessel to pass filtered contents to.
         through_cartridge (str): Cartridge to pass from_vessel contents through.
-        eluting_solvent (Optional[str]): Optional. Solvent to elute with after
-            filtering.
-        eluting_volume (Optional[float]): Optional. Volume of solvent to elute
-            with after filtering.
-        eluting_repeats (Optional[float]): Optional. Number of times to elute
-            with eluting_solvent and eluting_volume. Defaults to 1.
-        move_speed (Optional[float]): Optional. Move speed in mL / min.
-        aspiration_speed (Optional[float]): Optional. Aspiration speed in
-            mL / min.
+        eluting_solvent (str): Solvent to elute with after filtering.
+        eluting_volume (float): Volume of solvent to elute with after filtering.
+        eluting_repeats (float): Number of times to elute with eluting_solvent
+            and eluting_volume. Defaults to 1.
+        move_speed (float): Move speed in mL / min.
+        aspiration_speed (float): Aspiration speed in mL / min.
+        eluting_solvent_vessel (str): Given internally. Flask containing eluting
+            solvent.
     """
     def __init__(
         self,
@@ -30,6 +29,8 @@ class FilterThrough(AbstractStep):
         eluting_repeats: Optional[float] = 'default',
         move_speed: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
+        eluting_solvent_vessel: Optional[str] = None,
+        **kwargs
     ):
         super().__init__(locals())
 
