@@ -1,24 +1,26 @@
-<Synthesis filter_dead_volume_method="solvent" auto_clean="false">
+
+
+<Synthesis>
   <Hardware>
     <Component
-      id="rotavap"
-      type="rotavap"
+      id="reactor"
+      type="reactor"
     />
   </Hardware>
 
   <Reagents>
     <Reagent id="NaCl" />
-    <Reagent id="ether" />
   </Reagents>
 
   <Procedure>
     <Add
-      vessel="rotavap"
+      vessel="reactor"
       reagent="NaCl"
       mass="5g"
+      port="top"
     />
     <Dry
-      vessel="rotavap"
+      vessel="filter"
       vacuum_pressure="600"
       time="2 hrs"
     />

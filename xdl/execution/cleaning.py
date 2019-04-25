@@ -64,6 +64,8 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
             organic clean should be performed at that step.
     """
     available_solvents = get_available_solvents(xdl_obj.reagents)
+    if not available_solvents:
+        return None
     schedule = [None for step in xdl_obj.steps]
     # Add solvents to schedule at solvent addition steps.
     for i, _, _, additions in iter_vessel_contents(
@@ -157,6 +159,8 @@ def get_clean_backbone_sequence(xdl_obj) -> List[Tuple[int, str]]:
             [(step_to_insert_backbone_clean, cleaning_solvent)...]
     """
     step_solvents = get_cleaning_schedule(xdl_obj)
+    if step_solvents == None:
+        return []
     clean_backbone_steps = get_clean_backbone_steps(xdl_obj.steps)
     cleans = []
     for i, step_i in enumerate(clean_backbone_steps):
@@ -188,14 +192,15 @@ def add_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
     Returns:
         XDL: xdl_obj with cleaning steps added.
     """
-    for i, solvent in reversed(get_clean_backbone_sequence(
-        xdl_obj)):
-        # If organic_cleaning_solvent is given use it otherwise use solvent in
-        # synthesis.
-        if solvent != 'water' and xdl_obj.organic_cleaning_solvent:
-            solvent = xdl_obj.organic_cleaning_solvent
-        xdl_obj.steps.insert(i, CleanBackbone(solvent=solvent))
-    xdl_obj = add_cleaning_steps_at_beginning_and_end(xdl_obj)
+    clean_backbone_sequence = get_clean_backbone_sequence(xdl_obj)
+    if clean_backbone_sequence:
+        for i, solvent in reversed(clean_backbone_sequence):
+            # If organic_cleaning_solvent is given use it otherwise use solvent in
+            # synthesis.
+            if solvent != 'water' and xdl_obj.organic_cleaning_solvent:
+                solvent = xdl_obj.organic_cleaning_solvent
+            xdl_obj.steps.insert(i, CleanBackbone(solvent=solvent))
+        xdl_obj = add_cleaning_steps_at_beginning_and_end(xdl_obj)
     return xdl_obj
 
 def add_cleaning_steps_at_beginning_and_end(xdl_obj: 'XDL') -> 'XDL':
