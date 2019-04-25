@@ -50,6 +50,7 @@ class Dry(AbstractStep):
         vacuum_valve: Optional[str] = None,
         valve_unused_port: Optional[str] = None,
         vessel_is_filter: Optional[bool] = True,
+        vessel_is_rotavap: Optional[bool] = False,
         vessel_has_stirrer: Optional[bool] = True,
         **kwargs
     ) -> None:
@@ -59,10 +60,18 @@ class Dry(AbstractStep):
         steps = []
         if self.vessel_has_stirrer:
             steps.append(StopStir(vessel=self.vessel))
-
+        # Normally vacuum is a vacuum flask, but in the case of the rotavap,
+        # the node attached to the vacuum is the rotavap itself.
+        vacuum_vessel = self.vacuum
         from_port = None
+        if self.vessel_is_rotavap:
+            vacuum_vessel = self.vessel
+            from_port='collect'
+        # from_port should be None unless drying is in a filter in which case
+        # use bottom port, or for a rotavap port 'collect' is used.
         if self.vessel_is_filter:
             from_port = BOTTOM_PORT
+            
         steps.extend([
             # Move bulk of liquid to waste.
             CMove(from_vessel=self.vessel,
@@ -71,14 +80,18 @@ class Dry(AbstractStep):
                   volume=DEFAULT_DRY_WASTE_VOLUME,
                   aspiration_speed=self.aspiration_speed),
 
-            StartVacuum(vessel=self.vacuum, pressure=self.vacuum_pressure),
+            StartVacuum(vessel=vacuum_vessel, pressure=self.vacuum_pressure),
             # Connect the vacuum.
-            CConnect(from_vessel=self.vessel,
-                     to_vessel=self.vacuum,
-                     from_port=from_port),
-            Wait(self.time),
         ])
+        # If using rotavap CConnect not needed.
+        if vacuum_vessel != self.vessel:
+            steps.append(
+                CConnect(from_vessel=self.vessel,
+                        to_vessel=vacuum_vessel,
+                        from_port=from_port))
 
+        steps.append(Wait(self.time))
+        
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
         if not self.vacuum_device:
@@ -91,18 +104,19 @@ class Dry(AbstractStep):
                 vessel_type='ChemputerFilter',
                 stir=False))
 
-        steps.extend(get_vacuum_valve_reconnect_steps(
-            inert_gas=self.inert_gas,
-            vacuum_valve=self.vacuum_valve,
-            valve_unused_port=self.valve_unused_port,
-            vessel=self.vessel))
+        if not self.vessel_is_rotavap:
+            steps.extend(get_vacuum_valve_reconnect_steps(
+                inert_gas=self.inert_gas,
+                vacuum_valve=self.vacuum_valve,
+                valve_unused_port=self.valve_unused_port,
+                vessel=self.vessel))
 
         if self.vacuum_device:
             steps.extend([
-                StopVacuum(vessel=self.vacuum),
-                CVentVacuum(vessel=self.vacuum),
+                StopVacuum(vessel=vacuum_vessel),
+                CVentVacuum(vessel=vacuum_vessel),
                 CSetVacuumSetPoint(
-                    vessel=self.vacuum,
+                    vessel=vacuum_vessel,
                     vacuum_pressure=DEFAULT_FILTER_VACUUM_PRESSURE)
             ])
 

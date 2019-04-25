@@ -2,10 +2,6 @@
 <Synthesis filter_dead_volume_method="solvent">
   <Hardware>
     <Component
-      id="filter"
-      type="filter"
-    />
-    <Component
       id="reactor"
       type="reactor"
     />

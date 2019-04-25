@@ -11,8 +11,14 @@ def test_dry_in_filter():
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     generic_chempiler_test(xdl_f, graph_f)
 
-def test_dry_in_rotavapp():
-    """Test that dry step at specific pressure works in rotavap."""
+def test_dry_in_reactor():
+    """Test that dry step at specific pressure works in reactor."""
     xdl_f = os.path.join(FOLDER, 'dry_in_reactor.xdl')
+    graph_f = os.path.join(FOLDER, 'bigrig.json')
+    generic_chempiler_test(xdl_f, graph_f)
+
+def test_dry_in_rotavap():
+    """Test that dry step at specific pressure works in reactor."""
+    xdl_f = os.path.join(FOLDER, 'dry_in_rotavap.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     generic_chempiler_test(xdl_f, graph_f)
