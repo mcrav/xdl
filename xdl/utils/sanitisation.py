@@ -30,6 +30,7 @@ UNIT_CONVERTERS = {
     'cl': lambda x: x * 10,
     'dl': lambda x: x * 10**2,
     'l': lambda x: x * 10**3,
+    'ul': lambda x: x * 10**-3,
 
     'kg': lambda x: x * 10**3,
     'g': lambda x: x,
@@ -37,8 +38,8 @@ UNIT_CONVERTERS = {
     'ug': lambda x: x * 10**-6,
 
     '°c': lambda x: x,
-    'k': lambda x: x + 273.15,
-    'f': lambda x: (x - 32 / 1.8),
+    'k': lambda x: x - 273.15,
+    'f': lambda x: (x - 32) / 1.8,
 
     'h': hours_to_seconds,
     'hour': hours_to_seconds,
@@ -50,12 +51,35 @@ UNIT_CONVERTERS = {
     'mins': minutes_to_seconds,
     'minutes': minutes_to_seconds,
     's': no_conversion,
+    'sec': no_conversion,
     'secs': no_conversion,
     'seconds': no_conversion,
+
+    'mbar': no_conversion,
+    'bar': lambda x: x * 10**3,
+    'torr': lambda x: x * 1.33322,
+    'mmhg': lambda x: x * 1.33322,
+    'atm': lambda x: x * 1013.25,
+    'pa': lambda x: x * 0.01,
 }
 
-
-def convert_val_to_std_units(val):
+def convert_val_to_std_units(val: str) -> float:
+    """Given str of value with/without units, convert it into standard unit and
+    return float value.
+    Standard units:
+        time      seconds
+        volume    mL
+        pressure  mbar
+        temp      °c
+        mass      g
+    
+    Arguments:
+        val (str): Value (and units) as str. If no units are specified it is
+            assumed value is already in default units.
+    
+    Returns:
+        float: Value in default units.
+    """
     float_regex_pattern = r'([-]?[0-9]+(?:[.][0-9]+)?)' 
     unit_search = re.search(r'[a-zA-Z°]+', val)
     val_search = re.search(float_regex_pattern, val)
