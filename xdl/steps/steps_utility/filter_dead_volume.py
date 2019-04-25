@@ -48,7 +48,7 @@ class AddFilterDeadVolume(AbstractStep):
             inert_gas=None,
             vacuum_valve=self.vacuum_valve,
             valve_unused_port=self.valve_unused_port,
-            filter_vessel=self.filter_vessel))
+            vessel=self.filter_vessel))
         return steps
 
     @property
@@ -101,7 +101,7 @@ class RemoveFilterDeadVolume(AbstractStep):
             inert_gas=None,
             vacuum_valve=self.vacuum_valve,
             valve_unused_port=self.valve_unused_port,
-            filter_vessel=self.filter_vessel))
+            vessel=self.filter_vessel))
         return steps
 
     @property

@@ -110,7 +110,7 @@ class WashFilterCake(AbstractStep):
             inert_gas=self.inert_gas,
             vacuum_valve=self.vacuum_valve,
             valve_unused_port=self.valve_unused_port,
-            filter_vessel=self.filter_vessel))
+            vessel=self.filter_vessel))
 
         if self.vacuum_device:
             steps.extend([

@@ -5,29 +5,25 @@
       id="filter"
       type="filter"
     />
+    <Component
+      id="reactor"
+      type="reactor"
+    />
   </Hardware>
 
   <Reagents>
+    <Reagent id="NaCl" />
     <Reagent id="ether" />
   </Reagents>
 
   <Procedure>
     <Add
-      vessel="filter"
-      reagent="ether"
-      volume="15 mL"
-      port="top"
+      vessel="reactor"
+      reagent="NaCl"
+      mass="5g"
     />
-
-    <Filter filter_vessel="filter" />
-
-    <WashFilterCake
-      filter_vessel="filter"
-      solvent="ether"
-    />
-
     <Dry
-      filter_vessel="filter"
+      vessel="reactor"
       vacuum_pressure="600"
       time="2 hrs"
     />

@@ -68,7 +68,7 @@
       stir="solvent"
       repeat="2" />
     <Dry
-      filter_vessel="filter"
+      vessel="filter"
       time="300.0"
       temp="25.0" />
     <!-- <Add
@@ -110,7 +110,7 @@
       stir="solvent"
       repeat="3" />
     <Dry
-      filter_vessel="filter" />
+      vessel="filter" />
   </Procedure>
 
 </Synthesis>

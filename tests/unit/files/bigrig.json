@@ -177,97 +177,134 @@
       "type": "valve",
       "x": -280,
       "y": 160,
+      "internalId": 33,
+      "label": "valve_filter",
       "class": "ChemputerValve",
       "name": "valve_filter",
-      "address": "",
-      "internalId": 33,
-      "label": "valve_filter"
+      "address": ""
     },
     {
       "id": "pump_filter",
       "type": "pump",
       "x": -280,
       "y": 40,
+      "internalId": 36,
+      "label": "pump_filter",
       "class": "ChemputerPump",
       "name": "pump_filter",
       "address": "",
-      "max_volume": 100,
-      "internalId": 36,
-      "label": "pump_filter"
+      "max_volume": 100
     },
     {
       "id": "filter",
       "type": "filter",
       "x": -280,
       "y": 360,
+      "internalId": 39,
+      "label": "filter",
       "class": "ChemputerFilter",
       "name": "filter",
       "current_volume": 0,
       "max_volume": 100,
-      "dead_volume": 10,
-      "internalId": 39,
-      "label": "filter"
+      "dead_volume": 10
     },
     {
       "id": "vacuum_flask",
       "type": "vacuum",
       "x": -280,
       "y": 480,
+      "internalId": 43,
+      "label": "vacuum_flask",
       "class": "ChemputerVacuum",
       "name": "vacuum_flask",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1,
-      "internalId": 43,
-      "label": "vacuum_flask"
+      "necks": 1
     },
     {
       "id": "vacuum_device",
       "type": "vacuum",
       "x": -400,
       "y": 480,
+      "internalId": 45,
+      "label": "vacuum_device",
       "class": "CVC3000",
       "name": "vacuum_device",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1,
-      "internalId": 45,
-      "label": "vacuum_device"
+      "necks": 1
     },
     {
       "id": "waste_filter",
       "type": "waste",
       "x": -360,
       "y": 80,
+      "internalId": 47,
+      "label": "waste_filter",
       "class": "ChemputerWaste",
       "name": "waste_filter",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1,
-      "internalId": 47,
-      "label": "waste_filter"
+      "necks": 1
     },
     {
       "id": "stirrer",
       "type": "stirrer",
       "x": -400,
       "y": 360,
+      "internalId": 49,
+      "label": "stirrer",
       "class": "IKAmicrostar75",
       "name": "stirrer",
-      "port": "",
-      "internalId": 49,
-      "label": "stirrer"
+      "port": ""
     },
     {
       "id": "valve_vacuum",
       "type": "valve",
       "x": -160,
       "y": 440,
+      "internalId": 51,
+      "label": "valve_vacuum",
       "class": "ChemputerValve",
       "name": "valve_vacuum",
+      "address": ""
+    },
+    {
+      "id": "vacuum_reactor_device",
+      "type": "vacuum",
+      "x": 0,
+      "y": 560,
+      "class": "CVC3000",
+      "name": "vacuum_reactor_device",
+      "current_volume": 0,
+      "max_volume": 100,
+      "necks": 1,
+      "internalId": 55,
+      "label": "vacuum_reactor_device"
+    },
+    {
+      "id": "vacuum_reactor_flask",
+      "type": "vacuum",
+      "x": 0,
+      "y": 480,
+      "class": "ChemputerVacuum",
+      "name": "vacuum_reactor_flask",
+      "current_volume": 0,
+      "max_volume": 100,
+      "necks": 1,
+      "internalId": 57,
+      "label": "vacuum_reactor_flask"
+    },
+    {
+      "id": "valve_reactor_vacuum",
+      "type": "valve",
+      "x": 0,
+      "y": 360,
+      "class": "ChemputerValve",
+      "name": "valve_reactor_vacuum",
       "address": "",
-      "internalId": 51,
-      "label": "valve_vacuum"
+      "internalId": 56,
+      "label": "valve_reactor_vacuum"
     }
   ],
   "links": [
@@ -534,6 +571,30 @@
       "source": "valve_vacuum",
       "target": "filter",
       "port": "(-1,bottom)"
+    },
+    {
+      "id": 59,
+      "sourceInternal": 21,
+      "targetInternal": 56,
+      "source": "reactor",
+      "target": "valve_reactor_vacuum",
+      "port": "(0,-1)"
+    },
+    {
+      "id": 60,
+      "sourceInternal": 56,
+      "targetInternal": 57,
+      "source": "valve_reactor_vacuum",
+      "target": "vacuum_reactor_flask",
+      "port": "(0,0)"
+    },
+    {
+      "id": 58,
+      "sourceInternal": 55,
+      "targetInternal": 57,
+      "source": "vacuum_reactor_device",
+      "target": "vacuum_reactor_flask",
+      "port": "(,)"
     }
   ]
 }
