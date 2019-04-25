@@ -1,0 +1,37 @@
+
+<Synthesis filter_dead_volume_method="solvent">
+  <Hardware>
+    <Component
+      id="filter"
+      type="filter"
+    />
+  </Hardware>
+
+  <Reagents>
+    <Reagent id="ether" />
+  </Reagents>
+
+  <Procedure>
+    <Add
+      vessel="filter"
+      reagent="ether"
+      volume="15 mL"
+      port="top"
+    />
+
+    <Filter filter_vessel="filter" />
+
+    <WashFilterCake
+      filter_vessel="filter"
+      solvent="ether"
+    />
+
+    <Dry
+      filter_vessel="filter"
+      vacuum_pressure="600"
+      time="2 hrs"
+    />
+
+  </Procedure>
+
+</Synthesis>

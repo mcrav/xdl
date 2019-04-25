@@ -19,7 +19,8 @@ from .graph import (
     make_vessel_map,
     make_filter_inert_gas_map,
     get_unused_valve_port,
-    flask_attached_to_vacuum)
+    vacuum_device_attached_to_flask,
+)
 from .utils import VesselContents
 from .cleaning import (
     add_cleaning_steps, verify_cleaning_steps, get_cleaning_schedule)
@@ -165,7 +166,7 @@ class XDLExecutor(object):
                     graph=self._graph, valve_node=step.vacuum_valve)
 
             if 'vacuum_device' in step.properties:
-                step.vacuum_device = flask_attached_to_vacuum(
+                step.vacuum_device = vacuum_device_attached_to_flask(
                     graph=self._graph, flask_node=step.vacuum)
 
             if 'vessel_is_rotavap' in step.properties:

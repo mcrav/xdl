@@ -2,7 +2,13 @@ from typing import Optional, List, Dict, Any
 from ..utils import get_vacuum_valve_reconnect_steps
 from ..base_step import Step, AbstractStep
 from ..steps_utility import (
-    StopStir, HeatChillToTemp, Wait, StartVacuum, StopVacuum)
+    StopStir,
+    HeatChillToTemp,
+    Wait,
+    StartVacuum,
+    StopVacuum,
+    CSetVacuumSetPoint,
+)
 from ..steps_base import CMove, CConnect, CVentVacuum
 from ...constants import (
     BOTTOM_PORT, DEFAULT_DRY_WASTE_VOLUME, DEFAULT_FILTER_VACUUM_PRESSURE)
@@ -16,8 +22,11 @@ class Dry(AbstractStep):
         temp (float): Temperature to dry at.
         waste_vessel (str): Given internally. Vessel to send waste to.
         vacuum (str): Given internally. Name of vacuum flask.
-        vacuum_device (bool): True if vacuum device is node in graph, False if
-            not i.e. vacuum is just vacuum line in fumehood.
+        vacuum_device (str): Name of actual vacuum device attached to vacuum
+            flask. If there is no device (i.e. vacuum line in fumehood) will be
+            None.
+        vacuum_pressure (float): Pressure in mbar of vacuum. Only applied if
+            vacuum_device isn't None.
         inert_gas (str): Given internally. Name of node supplying inert gas.
             Only used if inert gas filter dead volume method is being used.
         vacuum_valve (str): Given internally. Name of valve connecting filter
@@ -34,6 +43,7 @@ class Dry(AbstractStep):
         aspiration_speed: Optional[float] = 'default',
         vacuum: Optional[str] = None,
         vacuum_device: Optional[str] = False,
+        vacuum_pressure: Optional[float] = 'default',
         inert_gas: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
         valve_unused_port: Optional[str] = None,
@@ -52,9 +62,10 @@ class Dry(AbstractStep):
                 volume=DEFAULT_DRY_WASTE_VOLUME,
                 aspiration_speed=self.aspiration_speed),
             StartVacuum(
-                vessel=self.vacuum, pressure=DEFAULT_FILTER_VACUUM_PRESSURE),
+                vessel=self.vacuum, pressure=self.vacuum_pressure),
             # Connect the vacuum.
-            CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
+            CConnect(from_vessel=self.filter_vessel,
+                     to_vessel=self.vacuum,
                      from_port=BOTTOM_PORT),
             Wait(self.time),
         ]
@@ -80,7 +91,11 @@ class Dry(AbstractStep):
         if self.vacuum_device:
             steps.extend([
                 StopVacuum(vessel=self.vacuum),
-                CVentVacuum(vessel=self.vacuum)])
+                CVentVacuum(vessel=self.vacuum),
+                CSetVacuumSetPoint(
+                    vessel=self.vacuum,
+                    vacuum_pressure=DEFAULT_FILTER_VACUUM_PRESSURE)
+            ])
 
         return steps
 

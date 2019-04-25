@@ -10,7 +10,7 @@ FOLDER = os.path.join(HERE, 'files')
 def test_clean_vessel():
     """Test that dissolving a solid in the rotavap works."""
     xdl_f = os.path.join(FOLDER, 'clean_reactor_rotavap.xdl')
-    graph_f = os.path.join(FOLDER, 'rotavap_reactor_cartridge.json')
+    graph_f = os.path.join(FOLDER, 'bigrig.json')
     generic_chempiler_test(xdl_f, graph_f)
 
 
