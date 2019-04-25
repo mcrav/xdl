@@ -1,5 +1,5 @@
 
-<Synthesis filter_dead_volume_method="solvent">
+<Synthesis filter_dead_volume_method="solvent" auto_clean="false">
   <Hardware>
     <Component
       id="reactor"

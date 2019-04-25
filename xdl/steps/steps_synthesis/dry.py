@@ -35,6 +35,10 @@ class Dry(AbstractStep):
             valve.
         vessel_is_filter (bool): Given internally. True if vessel is a filter,
             otherwise False. Determines drying method.
+        vessel_is_rotavap (bool): Given internally. True if vessel is a rotavap,
+            otherwise False.
+        vessel_has_stirrer (bool): Given internally. True if vessel is connected
+            to a stirrer.
     """
     def __init__(
         self,
@@ -58,7 +62,7 @@ class Dry(AbstractStep):
 
     def get_steps(self) -> List[Step]:
         steps = []
-        if self.vessel_has_stirrer:
+        if self.vessel_has_stirrer or self.vessel_is_rotavap:
             steps.append(StopStir(vessel=self.vessel))
         # Normally vacuum is a vacuum flask, but in the case of the rotavap,
         # the node attached to the vacuum is the rotavap itself.
