@@ -66,3 +66,9 @@ def test_cleaning_schedule():
     for i in range(len(cleaning_solvents)):
         assert (ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE[i].lower()
                 == cleaning_solvents[i].lower())
+
+def test_cleaning_no_solvents():
+    """Test that having no solvents available doesn't cause an error."""
+    xdl_f = os.path.join(FOLDER, 'no_cleaning_solvents.xdl')
+    graph_f = os.path.join(FOLDER, 'bigrig.json')
+    generic_chempiler_test(xdl_f, graph_f)
