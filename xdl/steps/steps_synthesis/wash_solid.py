@@ -145,3 +145,11 @@ class WashSolid(AbstractStep):
     def human_readable(self) -> str:
         return 'Wash solid in {vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
+
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
+            'vessel': {
+                'stir': self.stir != False,
+            }
+        }

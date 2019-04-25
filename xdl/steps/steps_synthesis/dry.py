@@ -130,3 +130,11 @@ class Dry(AbstractStep):
     def human_readable(self) -> str:
         return 'Dry substance in {vessel} for {time} s.'.format(
             **self.properties)
+
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
+            'vessel': {
+                'temp': [item for item in [self.temp] if item != None],
+            }
+        }
