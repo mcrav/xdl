@@ -173,7 +173,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
         'vacuum_pressure': DEFAULT_FILTER_VACUUM_PRESSURE,
     },
-    'WashFilterCake': {
+    'WashSolid': {
         'volume': DEFAULT_WASHFILTERCAKE_VOLUME,
         'move_speed': DEFAULT_MOVE_SPEED,
         'vacuum_time': DEFAULT_WASHFILTERCAKE_VACUUM_TIME,
@@ -243,10 +243,6 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'StartVacuum': {
         'pressure': DEFAULT_FILTER_VACUUM_PRESSURE,
     },
-    'WashSolid': {
-        'stir_rpm': DEFAULT_WASH_SOLID_STIR_RPM,
-        'stir_time': DEFAULT_WASH_SOLID_STIR_TIME,
-    },
     'RotavapStartRotation': {
         'rotation_speed': DEFAULT_ROTAVAP_ROTATION_SPEED,
     },
@@ -261,9 +257,15 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
 INTERNAL_PROPERTIES = {
     'Add': ['reagent_vessel', 'waste_vessel', 'flush_tube_vessel'],
     'AddCorrosive': ['reagent_vessel', 'air_vessel'],
-    'Filter': ['waste_vessel', 'vacuum', 'inert_gas', 'filter_top_volume'],
-    'WashFilterCake': ['waste_vessel', 'vacuum', 'inert_gas'],
-    'Dry': ['waste_vessel', 'vacuum', 'inert_gas'],
+    'Filter': [
+        'waste_vessel',
+        'vacuum',
+        'inert_gas',
+        'filter_top_volume',
+        'vacuum_device'
+    ],
+    'WashSolid': ['waste_vessel', 'vacuum', 'inert_gas', 'vacuum_device'],
+    'Dry': ['waste_vessel', 'vacuum', 'inert_gas', 'vacuum_device',],
     'Separate': ['waste_vessel'],
     'HeatChill': ['vessel_type'],
     'PrimePumpForAdd': ['reagent_vessel', 'waste_vessel'],

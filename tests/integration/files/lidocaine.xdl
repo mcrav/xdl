@@ -99,8 +99,8 @@
       n_separations="1" />
     <Filter
       filter_vessel="filter" />
-    <WashFilterCake
-      filter_vessel="filter"
+    <WashSolid
+      vessel="filter"
       solvent="water"
       stir="solvent"
       repeat="1" />

@@ -6,7 +6,6 @@ from .heatchill import HeatChill
 
 from .filter import Filter
 from .filter_through import FilterThrough
-from .wash_filter_cake import WashFilterCake
 from .wash_solid import WashSolid
 from .dry import Dry
 

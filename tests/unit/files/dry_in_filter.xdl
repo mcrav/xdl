@@ -20,8 +20,8 @@
       port="top"
     />
     <Filter filter_vessel="filter" />
-    <WashFilterCake
-      filter_vessel="filter"
+    <WashSolid
+      vessel="filter"
       solvent="ether"
     />
     <Dry

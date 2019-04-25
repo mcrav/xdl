@@ -17,7 +17,7 @@ from .graph import (
     hardware_from_graph,
     get_graph,
     make_vessel_map,
-    make_filter_inert_gas_map,
+    make_inert_gas_map,
     get_unused_valve_port,
     vacuum_device_attached_to_flask,
 )
@@ -151,7 +151,7 @@ class XDLExecutor(object):
                 step.vessel_type = self._graph_hardware[
                     step.vessel].component_type
 
-            # Filter, WashFilterCake, Dry need this filled in if inert gas
+            # Filter, WashSolid, Dry need this filled in if inert gas
             # filter dead volume method being used.
             if ('inert_gas' in step.properties
                 and self._xdl.filter_dead_volume_method
@@ -205,16 +205,20 @@ class XDLExecutor(object):
 
     def _get_vacuum(self, step: Step) -> str:
         if hasattr(step, 'filter_vessel'):
-            return self._vacuum_map[step.filter_vessel]
+            if step.filter_vessel in self._vacuum_map:
+                return self._vacuum_map[step.filter_vessel]
         elif hasattr(step, 'vessel'):
-            return self._vacuum_map[step.vessel]
+            if step.vessel in self._vacuum_map:
+                return self._vacuum_map[step.vessel]
         return None
 
     def _get_inert_gas(self, step: Step) -> str:
         if hasattr(step, 'filter_vessel'):
-            return self._filter_inert_gas_map[step.filter_vessel]
+            if step.filter_vessel in self._inert_gas_map:
+                return self._inert_gas_map[step.filter_vessel]
         elif hasattr(step, 'vessel'):
-            return self._filter_inert_gas_map[step.vessel]
+            if step.vessel in self._inert_gas_map:
+                return self._inert_gas_map[step.vessel]
         return None
 
     def _get_flush_tube_vessel(self) -> Optional[str]:
@@ -261,7 +265,6 @@ class XDLExecutor(object):
                 
         elif type(step) in [
             Filter,
-            WashFilterCake,
             AddFilterDeadVolume,
             RemoveFilterDeadVolume
         ]:
@@ -441,7 +444,7 @@ class XDLExecutor(object):
         for filter_vessel in self._graph_hardware.filters:
             self._xdl.steps.insert(
                 0, CConnect(
-                    from_vessel=self._filter_inert_gas_map[filter_vessel.id],
+                    from_vessel=self._inert_gas_map[filter_vessel.id],
                     to_vessel=filter_vessel.id,
                     to_port=BOTTOM_PORT))
 
@@ -646,7 +649,7 @@ class XDLExecutor(object):
                     self._graph, CHEMPUTER_WASTE_CLASS_NAME)
                 self._vacuum_map = make_vessel_map(
                     self._graph, CHEMPUTER_VACUUM_CLASS_NAME)
-                self._filter_inert_gas_map = make_filter_inert_gas_map(
+                self._inert_gas_map = make_inert_gas_map(
                     self._graph)
                 self._valve_map = make_vessel_map(
                     self._graph, CHEMPUTER_VALVE_CLASS_NAME)

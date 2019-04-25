@@ -1,7 +1,7 @@
 from typing import List, Dict, Generator, Optional, Union, Tuple
 import copy
 from .utils import VesselContents
-from ..steps import Step, Filter, WashFilterCake, Dry, Separate, CMove
+from ..steps import Step, Filter, WashSolid, Dry, Separate, CMove
 from ..hardware import Hardware
 from ..utils import raise_error
 
@@ -69,7 +69,7 @@ def iter_vessel_contents(
                         step.waste_phase_to_vessel].volume += step.solvent_volume
                     vessel_contents[step.to_vessel].volume += from_volume
 
-            elif type(step) in [Filter, WashFilterCake]:
+            elif type(step) == Filter:
                 for vessel in [step.filter_vessel, step.waste_vessel]:
                     vessel_contents.setdefault(
                         vessel, VesselContents([], hardware[vessel].current_volume))
@@ -80,8 +80,19 @@ def iter_vessel_contents(
                 vessel_contents[step.filter_vessel].volume = 0
                 vessel_contents[step.waste_vessel].reagents.extend(filter_reagents)
                 vessel_contents[step.waste_vessel].volume += filter_volume
-                if type(step) == WashFilterCake:
-                    additions_l.append(step.solvent)
+
+            elif type(step) == WashSolid:
+                for vessel in [step.vessel, step.waste_vessel]:
+                    vessel_contents.setdefault(
+                        vessel, VesselContents([], hardware[vessel].current_volume))
+
+                reagents = vessel_contents[step.vessel].reagents
+                volume = vessel_contents[step.vessel].volume
+                vessel_contents[step.vessel].reagents = []
+                vessel_contents[step.vessel].volume = 0
+                vessel_contents[step.waste_vessel].reagents.extend(reagents)
+                vessel_contents[step.waste_vessel].volume += volume
+                additions_l.append(step.solvent)
 
             elif type(step) == Dry:
                 # This is necessary to stop move command putting filter into
