@@ -244,6 +244,11 @@ def add_cleaning_steps_at_beginning_and_end(xdl_obj: 'XDL') -> 'XDL':
         xdl_obj.steps.append(CleanBackbone(solvent=end_solvent))
     return xdl_obj
 
+
+########################################
+### Interactive Solvent Verification ###
+########################################
+
 def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
     """Allow user to see cleaning steps being added and make changes to what
     solvents are used.
@@ -255,42 +260,77 @@ def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
         xdl_obj (XDL): XDL object with cleaning steps amended according to user
             input.
     """
+    print('\nVerifying Cleaning Steps\n------------------------\n')
+    print('* CleanBackbone solvent indicates the step which is being verified. Other steps are shown for context.\n\n')
     available_solvents = get_available_solvents(xdl_obj.reagents)
-    step_i = 0
-    for step in xdl_obj.steps:
-        # If step is CleanBackbone give user option to change solvent.
-        if type(step) == CleanBackbone:
-            print(f'\nCleanBackbone {step.solvent}')
-            answer = None
-            # Get appropriate answer.
-            while answer not in ['', 'y', 'n']:
-                answer = input(
-                    f'Is {step.solvent} an appropriate cleaning solvent? ([y], n)\n')
-            # Leave solvent as is. Move onto next steps.
-            if not answer or answer == 'y':
-                continue
-            # Get user to select new solvent.
-            else:
-                new_solvent_index = None
-                # Wait for user to give appropriate input.
-                while new_solvent_index not in list(
-                    range(len(available_solvents))):
-                    input_msg = f'Select new solvent by number\n'
-                    input_msg += '\n'.join(
-                        [f'{solvent} ({i})'
-                         for i, solvent in enumerate(available_solvents)]
-                    ) + '\n'
-                    new_solvent_index = input(input_msg)
-                    try:
-                        new_solvent_index = int(new_solvent_index)
-                    except ValueError:
-                        print('Input must be number corresponding to solvent.')
-                # Change CleanBackbone step solvent.
-                step.solvent = available_solvents[new_solvent_index]
-                print(f'Solvent changed to {step.solvent}\n')
-                time.sleep(1)
-        # Print step to show user context of CleanBackbone step.
-        else:
-            print(f'{step_i + 1}) {step.human_readable}')
-            step_i += 1
+    chunks = get_cleaning_chunks(xdl_obj)
+    print('Procedure Start')
+    for chunk in chunks:
+        for i in range(len(chunk)):
+            if type(chunk[i]) == CleanBackbone:
+                print('---------------\n')
+                for j, step in enumerate(chunk):
+                    if j == i:
+                        print(f'* CleanBackbone {step.solvent}')
+                    elif type(step) == CleanBackbone:
+                        print(f'CleanBackbone {step.solvent}')
+                    else:
+                        print(step.human_readable)
+                answer = None
+                # Get appropriate answer.
+                while answer not in ['', 'y', 'n']:
+                    answer = input(
+                        f'\nIs {chunk[i].solvent} an appropriate cleaning solvent? ([y], n)\n')
+                # Leave solvent as is. Move onto next steps.
+                if not answer or answer == 'y':
+                    continue
+                # Get user to select new solvent.
+                else:
+                    new_solvent_index = None
+                    # Wait for user to give appropriate input.
+                    while new_solvent_index not in list(
+                        range(len(available_solvents))):
+                        input_msg = f'Select new solvent by number\n'
+                        input_msg += '\n'.join(
+                            [f'{solvent} ({i})'
+                            for i, solvent in enumerate(available_solvents)]
+                        ) + '\n'
+                        new_solvent_index = input(input_msg)
+                        try:
+                            new_solvent_index = int(new_solvent_index)
+                        except ValueError:
+                            print('Input must be number corresponding to solvent.')
+                    # Change CleanBackbone step solvent.
+                    chunk[i].solvent = available_solvents[new_solvent_index]
+                    print(f'Solvent changed to {chunk[i].solvent}\n')
+                    time.sleep(1)
                     
+def get_cleaning_chunks(xdl_obj: 'XDL') -> List[List[Step]]:
+    """Takes slices out of xdl_obj steps showing context of cleaning. Chunks
+    are the step before a set of CleanBackbone steps, the CleanBackbone steps,
+    and the step immediately after, e.g. [Add, CleanBackbone, CleanBackbone, Add]
+    
+    Arguments:
+        xdl_obj (XDL): XDL object to get cleaning chunks from.
+    
+    Returns:
+        List[List[Step]]: List of slices from xdl_obj steps showing immediate 
+            context of all CleanBackbone steps.
+    """
+    chunks = []
+    steps = xdl_obj.steps
+    i = 0
+    while i < len(steps):
+        if type(steps[i]) == CleanBackbone:
+            chunk_start = i
+            if i > 0:
+                chunk_start = i-1
+            chunk_end = i
+            while (chunk_end < len(steps)
+                   and type(steps[chunk_end]) == CleanBackbone):
+                chunk_end += 1
+            chunks.append(steps[chunk_start:chunk_end+1])
+            i = chunk_end
+        i += 1
+    return chunks
+

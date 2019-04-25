@@ -155,5 +155,6 @@ COMMON_SOLVENT_NAMES = [
     'm-xylene',
     'p-xylene',
 ]
-
+COMMON_SOLVENT_NAMES.extend(
+    [f'anhydrous {name}' for name in COMMON_SOLVENT_NAMES])
 INERT_GAS_SYNONYMS: List[str] = ['nitrogen', 'n2', 'ar', 'argon']
