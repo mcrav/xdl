@@ -14,13 +14,12 @@ CLEANING_SOLVENT_BLACKLIST: List[str] = ['toluene']
 CLEANING_SOLVENT_PREFER_NOT_TO_USE: List[str] = ['ether']
 
 SOLVENT_CONTAINING_STEPS: List[type] = [
-    Add, Dissolve, WashFilterCake, Separate, AddFilterDeadVolume]
+    Add, Dissolve, WashSolid, Separate, AddFilterDeadVolume]
 
 # Steps after which backbone should be cleaned
 CLEAN_BACKBONE_AFTER_STEPS: List[type] = [
     Add,
     Separate,
-    WashFilterCake,
     WashSolid,
     Filter,
     Dry,

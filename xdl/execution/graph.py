@@ -103,7 +103,7 @@ def make_vessel_map(
             vessel_map[node] = closest_target_vessel
     return vessel_map
 
-def make_filter_inert_gas_map(graph: MultiDiGraph):
+def make_inert_gas_map(graph: MultiDiGraph):
     """Given graph, make dict with filter_vessel IDs as keys and nearest
     inert gas flasks as values. i.e. { 'filter1': 'flask_nitrogen' }.
     
@@ -114,8 +114,7 @@ def make_filter_inert_gas_map(graph: MultiDiGraph):
         Dict[str, str]: dict with filter vessels as keys and nearest nitrogen
             flasks as values.
     """
-    filter_vessels = [node for node in graph.nodes()
-                      if graph.node[node]['type'] == 'ChemputerFilter']
+    vessels = graph.nodes()
     nitrogen_flasks = [
         node
         for node in graph.nodes()
@@ -123,22 +122,22 @@ def make_filter_inert_gas_map(graph: MultiDiGraph):
             and graph.node[node]['chemical'].lower() in ['nitrogen', 'argon',
                                                          'n2', 'ar'])
     ]
-    filter_inert_gas_map = {}
-    for filter_vessel in filter_vessels:
+    inert_gas_map = {}
+    for vessel in vessels:
         shortest_path_found = 100000
         closest_nitrogen_flask = None
         for nitrogen_flask in nitrogen_flasks:
             try:
                 shortest_path_to_nitrogen_flask = shortest_path_length(
-                    graph, source=nitrogen_flask, target=filter_vessel)
+                    graph, source=nitrogen_flask, target=vessel)
                 if shortest_path_to_nitrogen_flask < shortest_path_found:
                     shortest_path_found = shortest_path_to_nitrogen_flask
                     closest_nitrogen_flask = nitrogen_flask
             except NetworkXNoPath:
                 pass
 
-        filter_inert_gas_map[filter_vessel] = closest_nitrogen_flask
-    return filter_inert_gas_map
+        inert_gas_map[vessel] = closest_nitrogen_flask
+    return inert_gas_map
 
 def get_unused_valve_port(valve_node: str, graph: MultiDiGraph) -> int:
     """Given a valve, return a position where the valve isn't connected to
