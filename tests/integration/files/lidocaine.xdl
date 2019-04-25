@@ -61,7 +61,7 @@
       vessel="filter"
       time="60 mins" />
     <Dry
-      filter_vessel="filter" />
+      vessel="filter" />
     <Add
       reagent="diethylamine"
       vessel="filter"

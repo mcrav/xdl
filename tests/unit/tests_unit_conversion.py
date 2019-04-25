@@ -69,17 +69,17 @@ def test_mass_conversion():
 def test_pressure_conversion():
     correct_pressure = EQUIVALENT_PRESSURES[0]
     for pressure in EQUIVALENT_PRESSURES[1]:
-        step = Dry(filter_vessel='filter', vacuum_pressure=pressure)
+        step = Dry(vessel='filter', vacuum_pressure=pressure)
         assert (f'{step.vacuum_pressure:.2f}' == f'{correct_pressure:.2f}')
 
 def test_temperature_conversion():
     correct_temp = EQUIVALENT_TEMPERATURES[0]
     for temp in EQUIVALENT_TEMPERATURES[1]:
-        step = Dry(filter_vessel='filter', temp=temp)
+        step = Dry(vessel='filter', temp=temp)
         assert step.temp == correct_temp
 
 def test_time_conversion():
     correct_time = EQUIVALENT_TIMES[0]
     for time in EQUIVALENT_TIMES[1]:
-        step = Dry(filter_vessel='filter', time=time)
+        step = Dry(vessel='filter', time=time)
         assert step.time == correct_time

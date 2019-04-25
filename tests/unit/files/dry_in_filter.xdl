@@ -1,9 +1,10 @@
 
-<Synthesis filter_dead_volume_method="solvent">
+
+<Synthesis>
   <Hardware>
     <Component
-      id="filter"
-      type="filter"
+      id="rotavap"
+      type="rotavap"
     />
   </Hardware>
 
@@ -18,16 +19,13 @@
       volume="15 mL"
       port="top"
     />
-
     <Filter filter_vessel="filter" />
-
     <WashFilterCake
       filter_vessel="filter"
       solvent="ether"
     />
-
     <Dry
-      filter_vessel="filter"
+      vessel="filter"
       vacuum_pressure="600"
       time="2 hrs"
     />

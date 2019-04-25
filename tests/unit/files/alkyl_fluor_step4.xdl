@@ -22,7 +22,7 @@
 
   <Procedure>
     <Dry
-      filter_vessel="filter2"
+      vessel="filter2"
       temp="40"
       time="2h" />
   	<Add
@@ -99,7 +99,7 @@
       volume="15ml"
       repeat="3" />
     <Dry
-      filter_vessel="rotavap"
+      vessel="rotavap"
       temp="23"
       time="1h" />
       <!-- pressure="100mbar"

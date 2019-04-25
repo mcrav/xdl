@@ -143,8 +143,8 @@ class XDLExecutor(object):
                     step.cartridge_dead_volume = cartridge.dead_volume
 
             if 'vacuum' in step.properties and not step.vacuum:
-                step.vacuum = self._get_vacuum(step.filter_vessel)
-
+                step.vacuum = self._get_vacuum(step)
+                
             # Used by HeatChill step to know whether to Heat or Chill depending
             # on whether vessel is a ChemputerReactor or ChemputerFilter.
             if 'vessel_type' in step.properties:
@@ -156,7 +156,7 @@ class XDLExecutor(object):
             if ('inert_gas' in step.properties
                 and self._xdl.filter_dead_volume_method
                     == FILTER_DEAD_VOLUME_INERT_GAS_METHOD):
-                step.inert_gas = self._filter_inert_gas_map[step.filter_vessel]
+                step.inert_gas = self._get_inert_gas(step)
 
             if ('vacuum_valve' in step.properties
                   and self._xdl.filter_dead_volume_method
@@ -172,6 +172,10 @@ class XDLExecutor(object):
             if 'vessel_is_rotavap' in step.properties:
                 step.vessel_is_rotavap = step.vessel in [
                     item.id for item in self._graph_hardware.rotavaps] 
+
+            if 'vessel_is_filter' in step.properties:
+                step.vessel_is_filter = step.vessel in [
+                    item.id for item in self._graph_hardware.filters] 
 
             if 'vessel_has_stirrer' in step.properties:
                 step.vessel_has_stirrer = not step.vessel in [
@@ -199,8 +203,19 @@ class XDLExecutor(object):
             if type(step) == CleanBackbone and not step.waste_vessels:
                 step.waste_vessels = self._graph_hardware.waste_xids
 
-    def _get_vacuum(self, filter_vessel: str) -> str:
-        return self._vacuum_map[filter_vessel]
+    def _get_vacuum(self, step: Step) -> str:
+        if hasattr(step, 'filter_vessel'):
+            return self._vacuum_map[step.filter_vessel]
+        elif hasattr(step, 'vessel'):
+            return self._vacuum_map[step.vessel]
+        return None
+
+    def _get_inert_gas(self, step: Step) -> str:
+        if hasattr(step, 'filter_vessel'):
+            return self._filter_inert_gas_map[step.filter_vessel]
+        elif hasattr(step, 'vessel'):
+            return self._filter_inert_gas_map[step.vessel]
+        return None
 
     def _get_flush_tube_vessel(self) -> Optional[str]:
         """Look for gas vessel to flush tube with after Add steps.
@@ -241,12 +256,11 @@ class XDLExecutor(object):
         Get nearest waste node to given step. 
         """
         nearest_node = None
-        if type(step) in [Add, WashSolid, CleanVessel]:
+        if type(step) in [Add, WashSolid, CleanVessel, Dry]:
             nearest_node = step.vessel
                 
         elif type(step) in [
             Filter,
-            Dry,
             WashFilterCake,
             AddFilterDeadVolume,
             RemoveFilterDeadVolume

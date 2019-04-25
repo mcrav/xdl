@@ -17,7 +17,7 @@ class Dry(AbstractStep):
     """Dry given vessel by applying vacuum for given time.
 
     Args:
-        filter_vessel (str): Vessel name to dry.
+        vessel (str): Vessel name to dry.
         time (float): Time to dry vessel for in seconds. (optional)
         temp (float): Temperature to dry at.
         waste_vessel (str): Given internally. Vessel to send waste to.
@@ -33,10 +33,12 @@ class Dry(AbstractStep):
             bottom to vacuum.
         valve_unused_port (str): Given internally. Random unused position on
             valve.
+        vessel_is_filter (bool): Given internally. True if vessel is a filter,
+            otherwise False. Determines drying method.
     """
     def __init__(
         self,
-        filter_vessel: str,
+        vessel: str,
         time: Optional[float] = 'default',
         temp: Optional[float] = None,
         waste_vessel: Optional[str] = None,
@@ -47,29 +49,49 @@ class Dry(AbstractStep):
         inert_gas: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
         valve_unused_port: Optional[str] = None,
+        vessel_is_filter: Optional[bool] = True,
+        vessel_is_rotavap: Optional[bool] = False,
+        vessel_has_stirrer: Optional[bool] = True,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
-        steps = [
-            StopStir(vessel=self.filter_vessel),
+        steps = []
+        if self.vessel_has_stirrer:
+            steps.append(StopStir(vessel=self.vessel))
+        # Normally vacuum is a vacuum flask, but in the case of the rotavap,
+        # the node attached to the vacuum is the rotavap itself.
+        vacuum_vessel = self.vacuum
+        from_port = None
+        if self.vessel_is_rotavap:
+            vacuum_vessel = self.vessel
+            from_port='collect'
+        # from_port should be None unless drying is in a filter in which case
+        # use bottom port, or for a rotavap port 'collect' is used.
+        if self.vessel_is_filter:
+            from_port = BOTTOM_PORT
+            
+        steps.extend([
             # Move bulk of liquid to waste.
-            CMove(
-                from_vessel=self.filter_vessel,
-                from_port=BOTTOM_PORT,
-                to_vessel=self.waste_vessel,
-                volume=DEFAULT_DRY_WASTE_VOLUME,
-                aspiration_speed=self.aspiration_speed),
-            StartVacuum(
-                vessel=self.vacuum, pressure=self.vacuum_pressure),
-            # Connect the vacuum.
-            CConnect(from_vessel=self.filter_vessel,
-                     to_vessel=self.vacuum,
-                     from_port=BOTTOM_PORT),
-            Wait(self.time),
-        ]
+            CMove(from_vessel=self.vessel,
+                  from_port=from_port,
+                  to_vessel=self.waste_vessel,
+                  volume=DEFAULT_DRY_WASTE_VOLUME,
+                  aspiration_speed=self.aspiration_speed),
 
+            StartVacuum(vessel=vacuum_vessel, pressure=self.vacuum_pressure),
+            # Connect the vacuum.
+        ])
+        # If using rotavap CConnect not needed.
+        if vacuum_vessel != self.vessel:
+            steps.append(
+                CConnect(from_vessel=self.vessel,
+                        to_vessel=vacuum_vessel,
+                        from_port=from_port))
+
+        steps.append(Wait(self.time))
+        
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
         if not self.vacuum_device:
@@ -77,23 +99,24 @@ class Dry(AbstractStep):
 
         if self.temp != None:
             steps.insert(0, HeatChillToTemp(
-                vessel=self.filter_vessel,
+                vessel=self.vessel,
                 temp=self.temp,
                 vessel_type='ChemputerFilter',
                 stir=False))
 
-        steps.extend(get_vacuum_valve_reconnect_steps(
-            inert_gas=self.inert_gas,
-            vacuum_valve=self.vacuum_valve,
-            valve_unused_port=self.valve_unused_port,
-            filter_vessel=self.filter_vessel))
+        if not self.vessel_is_rotavap:
+            steps.extend(get_vacuum_valve_reconnect_steps(
+                inert_gas=self.inert_gas,
+                vacuum_valve=self.vacuum_valve,
+                valve_unused_port=self.valve_unused_port,
+                vessel=self.vessel))
 
         if self.vacuum_device:
             steps.extend([
-                StopVacuum(vessel=self.vacuum),
-                CVentVacuum(vessel=self.vacuum),
+                StopVacuum(vessel=vacuum_vessel),
+                CVentVacuum(vessel=vacuum_vessel),
                 CSetVacuumSetPoint(
-                    vessel=self.vacuum,
+                    vessel=vacuum_vessel,
                     vacuum_pressure=DEFAULT_FILTER_VACUUM_PRESSURE)
             ])
 
@@ -101,13 +124,5 @@ class Dry(AbstractStep):
 
     @property
     def human_readable(self) -> str:
-        return 'Dry substance in {filter_vessel} for {time} s.'.format(
+        return 'Dry substance in {vessel} for {time} s.'.format(
             **self.properties)
-
-    @property
-    def requirements(self) -> Dict[str, Dict[str, Any]]:
-        return {
-            'filter_vessel': {
-                'filter': True
-            }
-        }

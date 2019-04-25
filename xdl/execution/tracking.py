@@ -69,7 +69,7 @@ def iter_vessel_contents(
                         step.waste_phase_to_vessel].volume += step.solvent_volume
                     vessel_contents[step.to_vessel].volume += from_volume
 
-            elif type(step) in [Filter, WashFilterCake, Dry]:
+            elif type(step) in [Filter, WashFilterCake]:
                 for vessel in [step.filter_vessel, step.waste_vessel]:
                     vessel_contents.setdefault(
                         vessel, VesselContents([], hardware[vessel].current_volume))
@@ -86,7 +86,7 @@ def iter_vessel_contents(
             elif type(step) == Dry:
                 # This is necessary to stop move command putting filter into
                 # negative volume
-                pass 
+                pass
 
             # Handle normal Move steps.
             else:

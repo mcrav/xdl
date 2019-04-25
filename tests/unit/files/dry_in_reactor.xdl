@@ -2,8 +2,8 @@
 <Synthesis filter_dead_volume_method="solvent">
   <Hardware>
     <Component
-      id="rotavap"
-      type="rotavap"
+      id="reactor"
+      type="reactor"
     />
   </Hardware>
 
@@ -14,12 +14,12 @@
 
   <Procedure>
     <Add
-      vessel="rotavap"
+      vessel="reactor"
       reagent="NaCl"
       mass="5g"
     />
     <Dry
-      vessel="rotavap"
+      vessel="reactor"
       vacuum_pressure="600"
       time="2 hrs"
     />
