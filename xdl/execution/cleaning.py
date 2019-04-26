@@ -5,13 +5,13 @@ import re
 import time
 
 from .constants import *
-from .tracking import iter_vessel_contents
+from .tracking import iter_vessel_contents, VesselContents
 from ..steps import *
 from ..hardware import Hardware
 from ..reagents import Reagent
 from ..constants import AQUEOUS_KEYWORDS
 
-'''
+"""
 Backbone Cleaning Rules
 -----------------------
 If a step contains a common solvent then that solvent is used for backbone
@@ -30,7 +30,21 @@ CleanBackbone( ether )
 Add( ether )
 CleanBackbone( ether )
 ...
-'''
+
+Vessel Cleaning Rules
+---------------------
+Vessels are cleaned after emptying steps if the step preceding the emptying step
+was a dissolve step. This is to make sure that no vessels are cleaned after
+emptying steps when they actually still contain solids.
+e.g.
+...
+Rotavap rotavap
+Dissolve rotavap
+Transfer rotavap -> reactor
+CleanVessel rotavap
+...
+
+"""
 
 def get_available_solvents(reagents: List[Reagent]) -> List[str]:
     """Get list of common available solvents in list of Reagent objects given. 
@@ -242,6 +256,84 @@ def add_cleaning_steps_at_beginning_and_end(xdl_obj: 'XDL') -> 'XDL':
         xdl_obj.steps.insert(0, CleanBackbone(solvent=start_solvent))
     else:
         xdl_obj.steps.append(CleanBackbone(solvent=end_solvent))
+    return xdl_obj
+
+#######################
+### Vessel Cleaning ###
+#######################
+
+def get_vessel_emptying_steps(
+    steps: List[Step], hardware: Hardware
+) -> List[Tuple[int, str, Dict[str, VesselContents]]]:
+    """Get steps at which a filter vessel is emptied. Also return full
+    list of vessel contents dict at every step.
+    
+    Returns:
+        List[Tuple[int, str, Dict[str, VesselContents]]]: List of tuples,
+            format:
+            [(step_index,
+                filter_vessel_name,
+                {vessel: VesselContents, ...},
+                ...]
+    """
+    vessel_emptying_steps = []
+    full_vessel_contents = []
+    prev_vessel_contents = {}
+    for i, _, vessel_contents in iter_vessel_contents(steps, hardware):
+        full_vessel_contents.append(vessel_contents)
+        for vessel, contents in vessel_contents.items():
+            # If target vessel has just been emptied, append to vessel
+            # emptying steps.
+            if vessel in prev_vessel_contents:
+                if (not contents.reagents
+                    and prev_vessel_contents[vessel].reagents):
+                    vessel_emptying_steps.append((i, vessel))
+                    
+        prev_vessel_contents = vessel_contents
+    return vessel_emptying_steps
+
+def get_clean_vessel_sequence(
+    xdl_obj: 'XDL', hardware: Hardware) -> List[Tuple[int, str, str]]:
+    """Get list of places where CleanVessel steps need to be added along with
+    vessel name and solvent to use.
+    
+    Args:
+        xdl_obj (XDL): XDL object to get vessel cleaning sequence for.
+        hardware (Hardware): Hardware to use when finding emptying steps.
+    
+    Returns:
+        List[Tuple[int, str, str]]: List of tuples like below.
+            [(index_to_insert_clean_vessel_step, vessel, solvent_to_use)...]
+    """
+    step_solvents = get_cleaning_schedule(xdl_obj)
+    cleaning_sequence = []
+    for i, vessel in get_vessel_emptying_steps(xdl_obj.steps, hardware):
+        if i > 0:
+            before_step = xdl_obj.steps[i-1]
+            if type(before_step) == Dissolve and before_step.vessel == vessel:
+                cleaning_sequence.append((i+1, vessel, step_solvents[i]))
+    return cleaning_sequence
+
+def add_vessel_cleaning_steps(xdl_obj: 'XDL', hardware: Hardware) -> 'XDL':
+    """Add CleanVessel steps to xdl_obj at appropriate places. Rule is that a
+    CleanVessel step should be added after a vessel has been emptied only if the
+    step before the emptying step was a Dissolve step. This ensures that any
+    solids in the vessel have also been removed before cleaning.
+    
+    Args:
+        xdl_obj (XDL): XDL object to add CleanVessel steps to.
+
+    Returns:
+        XDL: XDL object with CleanVessel steps added at appropriate places.
+    """
+    clean_vessel_sequence = get_clean_vessel_sequence(xdl_obj, hardware)
+    if clean_vessel_sequence:
+        for i, vessel, solvent in reversed(clean_vessel_sequence):
+            # If organic_cleaning_solvent is given use it otherwise use solvent
+            # in synthesis.
+            if solvent != 'water' and xdl_obj.organic_cleaning_solvent:
+                solvent = xdl_obj.organic_cleaning_solvent
+            xdl_obj.steps.insert(i, CleanVessel(vessel=vessel, solvent=solvent))
     return xdl_obj
 
 
