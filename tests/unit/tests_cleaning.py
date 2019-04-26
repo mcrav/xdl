@@ -2,7 +2,7 @@ import os
 from ..utils import generic_chempiler_test
 
 from xdl import XDL
-from xdl.steps import CleanBackbone
+from xdl.steps import CleanBackbone, Dissolve, CleanVessel
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')
@@ -30,7 +30,7 @@ ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE = [
     'acetonitrile',
     # Transfer
     'acetonitrile',
-    # Clean vessel acetonitrile
+    # CleanVessel
     'acetonitrile',
     # HeatChill, HeatChillReturnToRT
     # RemoveFilterDeadVolume
@@ -43,7 +43,7 @@ ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE = [
     'dcm',
     # FilterThrough DCM
     'dcm',
-    # CleanVessel DCM
+    # CleanVessel
     'dcm',
     # Transfer
     'dcm',
@@ -72,3 +72,45 @@ def test_cleaning_no_solvents():
     xdl_f = os.path.join(FOLDER, 'no_cleaning_solvents.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     generic_chempiler_test(xdl_f, graph_f)
+
+def test_clean_vessel_scheduling():
+    """Test that all CleanVessel steps are added at correct places, i.e. 
+    ...Dissolve, emptying_step, CleanVessel,..."""
+    xdl_f = os.path.join(FOLDER, 'alkyl_fluor_step4.xdl')
+    graph_f = os.path.join(FOLDER, 'alkyl_fluor_step4.graphml')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)
+
+    # Check right number of steps with right vessel/solvent have been added.
+    clean_vessel_steps = [step for step in x.steps if type(step) == CleanVessel]
+    assert len(clean_vessel_steps) == 2
+    assert (clean_vessel_steps[0].solvent.lower() == 'acetonitrile'
+            and clean_vessel_steps[0].vessel == 'rotavap')
+    assert (clean_vessel_steps[1].solvent.lower() == 'dcm'
+            and clean_vessel_steps[1].vessel == 'rotavap')
+
+    # Check all CleanVessel steps come after Dissolve + filter_emptying step.
+    for i in range(len(x.steps)):
+        emptying_step_passed = False
+        legit = True
+        if type(x.steps[i]) == CleanVessel:
+            legit = False
+            j = i
+            while j > 0:
+                j -= 1
+                #  Ignore CleanBackbone steps
+                if type(x.steps[j]) == CleanBackbone:
+                    continue
+                # Dissolve steps encountered after emptying step.
+                elif type(x.steps[j]) == Dissolve and emptying_step_passed:
+                    legit = True
+                    break
+                # Found emptying step.
+                elif not emptying_step_passed:
+                    emptying_step_passed = True
+                # Emptying step already found but next step backwards is not a
+                # Dissolve step. Therefore CleanVessel is incorrectly placed.
+                else:
+                    legit = False
+                    break
+            assert legit

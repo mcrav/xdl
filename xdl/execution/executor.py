@@ -23,7 +23,11 @@ from .graph import (
 )
 from .utils import VesselContents
 from .cleaning import (
-    add_cleaning_steps, verify_cleaning_steps, get_cleaning_schedule)
+    add_cleaning_steps,
+    add_vessel_cleaning_steps,
+    verify_cleaning_steps,
+    get_cleaning_schedule
+)
 from .constants import INERT_GAS_SYNONYMS
 
 class XDLExecutor(object):
@@ -287,10 +291,9 @@ class XDLExecutor(object):
         """Add extra steps implied by explicit XDL steps."""
         self._add_filter_dead_volume_handling_steps()
         if self._xdl.auto_clean:
+            self._add_implied_clean_vessel_steps()
             self._add_implied_clean_backbone_steps(interactive=interactive)
         
-
-
     def _add_implied_clean_backbone_steps(
         self, interactive: bool = True) -> None:
         """Add CleanBackbone steps after certain steps which will contaminate 
@@ -308,6 +311,10 @@ class XDLExecutor(object):
                 verify_cleaning_steps(self._xdl)
         self._map_hardware_to_steps()
 
+    def _add_implied_clean_vessel_steps(self) -> None:
+        """Add CleanVessel steps after steps which completely empty a vessel."""
+        add_vessel_cleaning_steps(self._xdl, self._graph_hardware)
+        self._map_hardware_to_steps()
 
 ###################################
 ### FILTER DEAD VOLUME HANDLING ###
@@ -649,8 +656,7 @@ class XDLExecutor(object):
                     self._graph, CHEMPUTER_WASTE_CLASS_NAME)
                 self._vacuum_map = make_vessel_map(
                     self._graph, CHEMPUTER_VACUUM_CLASS_NAME)
-                self._inert_gas_map = make_inert_gas_map(
-                    self._graph)
+                self._inert_gas_map = make_inert_gas_map(self._graph)
                 self._valve_map = make_vessel_map(
                     self._graph, CHEMPUTER_VALVE_CLASS_NAME)
 

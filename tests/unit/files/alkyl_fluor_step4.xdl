@@ -43,11 +43,6 @@
       to_vessel="filter2"
       volume="all"
       from_port="evaporate" />
-    <CleanVessel
-      vessel="rotavap"
-      solvent="acetonitrile"
-      volume="25ml"
-      repeat="3" />
     <HeatChill
       vessel="filter2"
       temp="80"
@@ -82,11 +77,6 @@
       eluting_solvent="DCM"
       eluting_volume="25ml"
       eluting_repeats="3" />
-    <CleanVessel
-      vessel="rotavap"
-      solvent="DCM"
-      volume="25ml"
-      repeat="3" />
     <Transfer
       from_vessel="buffer_flask"
       to_vessel="rotavap"
