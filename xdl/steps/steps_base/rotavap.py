@@ -150,4 +150,34 @@ class CRotavapSetInterval(AbstractBaseStep):
         rotavap = chempiler[self.rotavap_name]
         rotavap.set_interval(self.interval)
         return True
-        
+
+class CRotavapAutoEvaporation(AbstractBaseStep):
+    """Perform the rotavap built-in auto-evaporation routine.
+
+    Args:
+        rotavap_name (str): Node name of the rotavap.
+        sensitivity (int): Sensitivity mode to use. 0, 1 or 2 (Low, medium, high
+            respectively).
+        vacuum_limit (float): Minimum pressure for the process.
+        time_limit (float): Maximum time to use for the process.
+        vent_after (bool): If True, vacuum will be vented after the process is
+            complete.
+    """
+    def __init__(
+        self,
+        rotavap_name: str,
+        sensitivity: int,
+        vacuum_limit: float,
+        time_limit: float,
+        vent_after: Optional[bool] = True
+    ):
+        super().__init__(locals())
+    
+    def execute(self, chempiler, logger=None, level=0):
+        chempiler.vacuum.auto_evaporation(
+            node_name=self.rotavap_name,
+            auto_mode=self.sensitivity,
+            vacuum_limit=self.vacuum_limit,
+            duration=self.time_limit / 60,
+            vent_after=self.vent_after)
+        return True

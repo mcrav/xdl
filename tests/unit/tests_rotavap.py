@@ -1,4 +1,6 @@
 import os
+from xdl import XDL
+from xdl.steps import Rotavap, CRotavapAutoEvaporation
 from ..utils import generic_chempiler_test
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -20,4 +22,16 @@ def test_rotavap():
     """Test rotavap evaporate step."""
     xdl_f = os.path.join(FOLDER, 'rotavap.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
+    generic_chempiler_test(xdl_f, graph_f)
+
+def test_rotavap_auto_mode():
+    """Test rotavap auto evaporate mode."""
+    xdl_f = os.path.join(FOLDER, 'rotavap_auto.xdl')
+    graph_f = os.path.join(FOLDER, 'bigrig.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)
+    for step in x.steps:
+        if type(step) == Rotavap:
+            assert type(step.steps[0]) == CRotavapAutoEvaporation
+            break
     generic_chempiler_test(xdl_f, graph_f)
