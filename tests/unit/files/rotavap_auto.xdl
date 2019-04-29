@@ -1,0 +1,31 @@
+
+<Synthesis>
+  <Hardware>
+    <Component
+      id="rotavap"
+      type="rotavap"
+    />
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="NaCl" />
+    <Reagent
+      id="water" />
+  </Reagents>
+
+  <Procedure>
+    <Add
+      reagent="water"
+      vessel="rotavap"
+      mass="500 mL" />
+    <Rotavap
+      rotavap_name="rotavap"
+      mode="auto"
+      temp="40"
+      time="30mins"
+      pressure="50mbar" />
+
+  </Procedure>
+
+</Synthesis>
