@@ -264,8 +264,26 @@ INTERNAL_PROPERTIES = {
         'filter_top_volume',
         'vacuum_device'
     ],
-    'WashSolid': ['waste_vessel', 'vacuum', 'inert_gas', 'vacuum_device'],
-    'Dry': ['waste_vessel', 'vacuum', 'inert_gas', 'vacuum_device',],
+    'WashSolid': [
+        'waste_vessel',
+        'vacuum',
+        'inert_gas',
+        'vacuum_device',
+        'vessel_is_filter',
+        'valve_unused_port',
+        'vacuum_valve',
+    ],
+    'Dry': [
+        'waste_vessel',
+        'vacuum',
+        'inert_gas',
+        'vacuum_device',
+        'vacuum_valve',
+        'valve_unused_port',
+        'vessel_is_filter',
+        'vessel_is_rotavap',
+        'vessel_has_stirrer'
+    ],
     'Separate': ['waste_vessel'],
     'HeatChill': ['vessel_type'],
     'PrimePumpForAdd': ['reagent_vessel', 'waste_vessel'],

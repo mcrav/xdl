@@ -85,7 +85,7 @@ class XDLGenerator(object):
                             continue
                         
                         # Don't write internal properties.
-                        elif (step.name in INTERNAL_PROPERTIES
+                        if (step.name in INTERNAL_PROPERTIES
                              and prop in INTERNAL_PROPERTIES[step.name]):
                              continue
                     # Convert value to nice units and add to element attrib.
