@@ -293,6 +293,7 @@ INTERNAL_PROPERTIES = {
     'CleanBackbone': ['solvent_vessel', 'waste_vessels'],
     'AddFilterDeadVolume': ['waste_vessel', 'solvent_vessel'],
     'RemoveFilterDeadVolume': ['waste_vessel'],
+    'Stir': ['vessel_is_rotavap'],
 }
 
 
