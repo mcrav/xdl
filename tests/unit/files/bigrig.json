@@ -275,7 +275,7 @@
     {
       "id": "valve_vacuum",
       "type": "valve",
-      "x": -160,
+      "x": -200,
       "y": 440,
       "internalId": 51,
       "label": "valve_vacuum",
@@ -319,6 +319,66 @@
       "class": "ChemputerValve",
       "name": "valve_reactor_vacuum",
       "address": ""
+    },
+    {
+      "id": "valve_separator",
+      "type": "valve",
+      "x": -480,
+      "y": 160,
+      "class": "ChemputerValve",
+      "name": "valve_separator",
+      "address": "",
+      "internalId": 61,
+      "label": "valve_separator"
+    },
+    {
+      "id": "pump_separator",
+      "type": "pump",
+      "x": -480,
+      "y": 40,
+      "class": "ChemputerPump",
+      "name": "pump_separator",
+      "address": "",
+      "max_volume": 100,
+      "internalId": 62,
+      "label": "pump_separator"
+    },
+    {
+      "id": "waste_separator",
+      "type": "waste",
+      "x": -560,
+      "y": 80,
+      "class": "ChemputerWaste",
+      "name": "waste_separator",
+      "current_volume": 0,
+      "max_volume": 100,
+      "necks": 1,
+      "internalId": 67,
+      "label": "waste_separator"
+    },
+    {
+      "id": 69,
+      "type": "separator",
+      "x": -480,
+      "y": 280,
+      "class": "ChemputerSeparator",
+      "name": "",
+      "current_volume": 0,
+      "max_volume": 100,
+      "necks": 1,
+      "internalId": 69,
+      "label": 69
+    },
+    {
+      "id": 73,
+      "type": "stirrer",
+      "x": -480,
+      "y": 360,
+      "class": "IKAmicrostar75",
+      "name": "",
+      "port": "",
+      "internalId": 73,
+      "label": 73
     }
   ],
   "links": [
@@ -608,6 +668,78 @@
       "targetInternal": 57,
       "source": "vacuum_reactor_device",
       "target": "vacuum_reactor_flask",
+      "port": "(,)"
+    },
+    {
+      "id": 63,
+      "sourceInternal": 62,
+      "targetInternal": 61,
+      "source": "pump_separator",
+      "target": "valve_separator",
+      "port": "(0,-1)"
+    },
+    {
+      "id": 64,
+      "sourceInternal": 61,
+      "targetInternal": 62,
+      "source": "valve_separator",
+      "target": "pump_separator",
+      "port": "(-1,0)"
+    },
+    {
+      "id": 65,
+      "sourceInternal": 33,
+      "targetInternal": 61,
+      "source": "valve_filter",
+      "target": "valve_separator",
+      "port": "(5,4)"
+    },
+    {
+      "id": 66,
+      "sourceInternal": 61,
+      "targetInternal": 33,
+      "source": "valve_separator",
+      "target": "valve_filter",
+      "port": "(4,5)"
+    },
+    {
+      "id": 68,
+      "sourceInternal": 61,
+      "targetInternal": 67,
+      "source": "valve_separator",
+      "target": "waste_separator",
+      "port": "(2,0)"
+    },
+    {
+      "id": 70,
+      "sourceInternal": 61,
+      "targetInternal": 69,
+      "source": "valve_separator",
+      "target": 69,
+      "port": "(0,top)"
+    },
+    {
+      "id": 71,
+      "sourceInternal": 69,
+      "targetInternal": 61,
+      "source": 69,
+      "target": "valve_separator",
+      "port": "(bottom,1)"
+    },
+    {
+      "id": 72,
+      "sourceInternal": 61,
+      "targetInternal": 69,
+      "source": "valve_separator",
+      "target": 69,
+      "port": "(1,bottom)"
+    },
+    {
+      "id": 74,
+      "sourceInternal": 73,
+      "targetInternal": 69,
+      "source": 73,
+      "target": 69,
       "port": "(,)"
     }
   ]

@@ -148,12 +148,6 @@ class XDLExecutor(object):
 
             if 'vacuum' in step.properties and not step.vacuum:
                 step.vacuum = self._get_vacuum(step)
-                
-            # Used by HeatChill step to know whether to Heat or Chill depending
-            # on whether vessel is a ChemputerReactor or ChemputerFilter.
-            if 'vessel_type' in step.properties:
-                step.vessel_type = self._graph_hardware[
-                    step.vessel].component_type
 
             # Filter, WashSolid, Dry need this filled in if inert gas
             # filter dead volume method being used.
@@ -187,6 +181,9 @@ class XDLExecutor(object):
                     for item in self._graph_hardware.rotavaps 
                                 + self._graph_hardware.flasks]
 
+            if 'vessel_type' in step.properties:
+                step.vessel_type = self._get_vessel_type(step.vessel)
+
             if 'volume' in step.properties and type(step) == CleanVessel:
                 if step.volume == None:
                     step.volume = self._graph_hardware[
@@ -206,6 +203,28 @@ class XDLExecutor(object):
         for step in self._xdl.steps:
             if type(step) == CleanBackbone and not step.waste_vessels:
                 step.waste_vessels = self._graph_hardware.waste_xids
+
+    def _get_vessel_type(self, vessel: str) -> str:
+        """Given vessel return type of vessel from options 'filter', 'rotavap',
+        'reactor', 'separator' or None if it isn't any of those options.
+        
+        Args:
+            vessel (str): Vessel to get type of.
+        
+        Returns:
+            str: Type of vessel, 'filter', 'reactor', 'rotavap', 'separator' or
+                None
+        """
+        vessel_types = [
+            ('filter', self._graph_hardware.filters),
+            ('rotavap', self._graph_hardware.rotavaps),
+            ('reactor', self._graph_hardware.reactors),
+            ('separator', self._graph_hardware.separators),
+        ]
+        for vessel_type, hardware_list in vessel_types:
+            if vessel in [item.id for item in hardware_list]:
+                return vessel_type
+        return None
 
     def _get_vacuum(self, step: Step) -> str:
         if hasattr(step, 'filter_vessel'):
