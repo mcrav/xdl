@@ -5,6 +5,7 @@ import logging
 import inspect
 import copy
 from typing import List
+from math import ceil
 
 from .constants import *
 from .graph.generator import GraphGenerator
@@ -123,16 +124,15 @@ class XDL(object):
                         base steps.
         """
         indent = '  '
-        base_steps = list(BASE_STEP_OBJ_DICT.values())
         tree = [step]
         if print_tree:
             self.logger.info('{0}{1}'.format(indent*lvl, step.name))
-        if type(step) in base_steps:
+        if isinstance(step, AbstractBaseStep):
             return tree
         else:
             lvl += 1
             for step in step.steps:
-                if type(step) in base_steps:
+                if isinstance(step, AbstractBaseStep):
                     if print_tree:
                         self.logger.info('{0}{1}'.format(indent*lvl, step.name))
                     tree.append(step)
@@ -223,6 +223,78 @@ class XDL(object):
                         if val:
                             step.properties[prop] = float(val) * scale
 
+    @property
+    def estimated_duration(self) -> float:
+        """Estimated duration of procedure. It is approximate but should give a
+        give a rough idea how long the procedure should take.
+        
+        Returns:
+            float: Estimated runtime of procedure in seconds.
+        """
+        if not self.prepared:
+            self.logger.warning(
+                'prepare_for_execution must be called before estimated duration can be calculated.')
+            return
+        time = 0
+        temps = {}
+        heatchill_time_per_degree = 60 # seconds. Pretty random guess.
+        fallback_wait_for_temp_time = 60 * 30 # seconds. Again random guess.
+        for step in self.base_steps:
+            if type(step) == CMove:
+                rate_seconds = (step.move_speed * 60
+                                + step.aspiration_speed * 60
+                                + step.dispense_speed * 60) / 3
+                time += step.volume / rate_seconds
+            elif type(step) == CWait:
+                time += step.time
+            elif type(step) == CSetRecordingSpeed:
+                pass
+            elif type(step) == CSeparatePhases:
+                # VERY APPROXIMATE. Assumes 250 mL separation funnel and
+                # 35 mL / min move speed (defined in Chempiler 481b10a1527280fa51a2134e536211614f8108e8).
+                volume = 250
+                move_speed = 35 * 60 # mL / s
+                time += (volume / 2) / move_speed
+                if step.upper_phase_vessel != step.separation_vessel:
+                    time += (volume / 2) / move_speed
+            elif type(step) == CRotavapAutoEvaporation:
+                time += step.time_limit
+            elif type(step) == CRampChiller:
+                time += step.ramp_duration
+            # EXTREMELY APPROXIMATE. Don't know what temp is in base steps or 
+            elif type(step) in [CChillerWaitForTemp, CStirrerWaitForTemp]:
+                if step.vessel in temps:
+                    abs_delta = abs(
+                        temps[step.vessel][-1] - temps[step.vessel][-2])
+                    time += abs_delta * heatchill_time_per_degree
+                else:
+                    time += fallback_wait_for_temp_time
+            elif type(step) in [CChillerSetTemp, CStirrerSetTemp]:
+                temps.setdefault(step.vessel, [25, step.temp])
+            else:
+                time += 1
+        return time
+
+    def print_estimated_duration(self) -> None:
+        """Format estimated duration into hours, minutes and seconds and log it
+        like "Estimated duration: 19 hrs 30 mins".
+        """
+        s = ''
+        seconds = self.estimated_duration
+        if seconds < 60:
+            s = f'{ceil(seconds):.0f} seconds'
+        else:
+            seconds_remainder = seconds % 60
+            minutes = (seconds - seconds_remainder) / 60
+            if minutes < 60:
+                s = f'{minutes+1:.0f} mins'
+            else:
+                minutes_remainder = minutes % 60
+                hours = (minutes - minutes_remainder) / 60
+                minutes = minutes - (hours * 60)
+                s = f'{hours:.0f} hrs {minutes+1:.0f} mins'
+        self.logger.info(f'Estimated duration: {s}')
+
     def prepare_for_execution(
         self, graph_file: str, interactive: bool = True) -> None:
         """Check hardware compatibility and prepare XDL for execution on given 
@@ -237,8 +309,10 @@ class XDL(object):
         if not self.prepared:
             self.executor.prepare_for_execution(graph_file, interactive=interactive)
             self.prepared = True
+            self.logger.info('Experiment Details\n')
+            self.print_estimated_duration()
         else:
-            self.logger.warn('Cannot call prepare for execution twice on same XDL object.')
+            self.logger.warning('Cannot call prepare for execution twice on same XDL object.')
 
     def execute(self, chempiler: 'Chempiler') -> None:
         """Execute XDL using given Chempiler object. self.prepare_for_execution
