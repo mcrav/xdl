@@ -235,11 +235,12 @@ class XDL(object):
             self.logger.warning(
                 'prepare_for_execution must be called before estimated duration can be calculated.')
             return
-        time = 0
+        total_time = 0
         temps = {}
         heatchill_time_per_degree = 60 # seconds. Pretty random guess.
         fallback_wait_for_temp_time = 60 * 30 # seconds. Again random guess.
         for step in self.base_steps:
+            time = 0
             if type(step) == CMove:
                 rate_seconds = (step.move_speed * 60
                                 + step.aspiration_speed * 60
@@ -271,9 +272,14 @@ class XDL(object):
                     time += fallback_wait_for_temp_time
             elif type(step) in [CChillerSetTemp, CStirrerSetTemp]:
                 temps.setdefault(step.vessel, [25, step.temp])
+                time += 1
             else:
                 time += 1
-        return time
+            repeat = 1
+            if 'repeat' in step.properties:
+                repeat = step.repeat
+            total_time += time * repeat
+        return total_time
 
     def print_estimated_duration(self) -> None:
         """Format estimated duration into hours, minutes and seconds and log it
@@ -293,7 +299,52 @@ class XDL(object):
                 hours = (minutes - minutes_remainder) / 60
                 minutes = minutes - (hours * 60)
                 s = f'{hours:.0f} hrs {minutes+1:.0f} mins'
-        self.logger.info(f'Estimated duration: {s}')
+        self.logger.info(f'    Estimated duration: {s}')
+
+    @property
+    def reagent_volumes(self) -> None:
+        """Compute volumes used of all liquid reagents in procedure and return
+        as dict.
+
+        Returns:
+            Dict[str, float]: Dict of { reagent_name: volume_used... }
+        """
+        if not self.prepared:
+            self.logger.warning(
+                'prepare_for_execution must be called before reagent volumes can be calculated.')
+            return
+        reagent_volumes = {}
+        flasks = self.executor._graph_hardware.flasks
+        flask_ids = [item.id for item in flasks]
+        for step in self.base_steps:
+            if type(step) == CMove and step.from_vessel in flask_ids:
+                reagent = self.executor._graph_hardware[
+                    step.from_vessel].chemical
+                if not reagent in reagent_volumes:
+                    reagent_volumes[reagent] = 0
+                reagent_volumes[reagent] += step.volume
+        return reagent_volumes
+
+    def print_reagent_volumes(self) -> None:
+        """Pretty print table of reagent volumes used in procedure.
+        """
+        reagent_volumes = self.reagent_volumes
+        reagent_volumes = [
+            (reagent, volume)
+            for reagent, volume in reagent_volumes.items()]
+        reagent_volumes = sorted(reagent_volumes, key=lambda x: 1 / x[1])
+        reagent_volumes = [
+            (reagent, f'{volume:.2f}'.rstrip('0').rstrip('0').rstrip('.'))
+            for reagent, volume in reagent_volumes]
+        if reagent_volumes:
+            max_reagent_name_length = max(
+                [len(reagent) for reagent, _ in reagent_volumes])
+            max_volume_length = max([len(volume) + 3 for _, volume in reagent_volumes])
+            self.logger.info(f'    {"Reagent Volumes":^{max_reagent_name_length + max_volume_length + 3}}')
+            self.logger.info(f'    {"-" * (max_reagent_name_length + max_volume_length + 3)}')
+            for reagent, volume in reagent_volumes:
+                self.logger.info(f'    {reagent:^{max_reagent_name_length}} | {volume} mL')
+            self.logger.info('\n')
 
     def prepare_for_execution(
         self, graph_file: str, interactive: bool = True) -> None:
@@ -309,8 +360,10 @@ class XDL(object):
         if not self.prepared:
             self.executor.prepare_for_execution(graph_file, interactive=interactive)
             self.prepared = True
-            self.logger.info('Experiment Details\n')
+            self.logger.info('    Experiment Details\n')
+            self.print_reagent_volumes()
             self.print_estimated_duration()
+            
         else:
             self.logger.warning('Cannot call prepare for execution twice on same XDL object.')
 
