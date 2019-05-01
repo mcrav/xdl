@@ -124,7 +124,6 @@ DEFAULT_CARTRIDGE_DEAD_VOLUME: int = 25
 #################
 ### WashSolid ###
 #################
-
 DEFAULT_WASH_SOLID_STIR_RPM: int = 400
 
 DEFAULT_WASH_SOLID_STIR_TIME: int = 60 * 5
@@ -364,3 +363,8 @@ SYNTHESIS_ATTRS = [
         'default': None,
     },
 ]
+
+#: Steps for which the volume shouldn't be scaled if XDL.scale_procedure is
+# called.
+UNSCALED_STEPS = [
+    'CleanVessel', 'AddFilterDeadVolume', 'RemoveFilterDeadVolume']
