@@ -17,11 +17,13 @@ from ..steps_base import (
 )
 from ..steps_utility import (
     Wait,
+    Transfer,
     RotavapStopEverything,
     RotavapHeatToTemp,
     RotavapStartVacuum,
     RotavapStartRotation,
 )
+from ...constants import COLLECT_PORT
 
 class Rotavap(AbstractStep):
     """Rotavap contents of given vessel at given temp and given pressure for
@@ -47,11 +49,17 @@ class Rotavap(AbstractStep):
         time: Optional[float] = 'default',
         rotation_speed: Optional[float] = 'default',
         mode: Optional[str] = 'manual',
+        waste_vessel: Optional[str] = None,
+        collection_flask_volume: Optional[float] = None,
         **kwargs
     ):
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
+        collection_flask_volume = 'all'
+        if self.collection_flask_volume:
+            collection_flask_volume = self.collection_flask_volume
+
         if self.mode == 'manual':
             steps = [
                 # Start rotation
@@ -66,6 +74,11 @@ class Rotavap(AbstractStep):
                 Wait(time=self.time),
                 # Stop evaporation.
                 RotavapStopEverything(self.rotavap_name),
+                # Empty collect flask
+                Transfer(from_vessel=self.rotavap_name,
+                         to_vessel=self.waste_vessel,
+                         from_port=COLLECT_PORT,
+                         volume=collection_flask_volume)
             ]
 
         elif self.mode == 'auto':
@@ -78,7 +91,12 @@ class Rotavap(AbstractStep):
                     sensitivity=HIGH_SENSITIVITY,
                     vacuum_limit=self.pressure,
                     time_limit=self.time,
-                    vent_after=True)
+                    vent_after=True),
+                # Empty collect flask
+                Transfer(from_vessel=self.rotavap_name,
+                         to_vessel=self.waste_vessel,
+                         from_port=COLLECT_PORT,
+                         volume=collection_flask_volume)
             ]
         return steps
 

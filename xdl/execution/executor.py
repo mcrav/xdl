@@ -189,6 +189,12 @@ class XDLExecutor(object):
                     step.volume = self._graph_hardware[
                         step.vessel].max_volume * 0.8
 
+            if ('collection_flask_volume' in step.properties
+                 and not step.collection_flask_volume):
+                rotavap = self._graph_hardware[step.rotavap_name]
+                if 'collection_flask_volume' in rotavap.properties:
+                    step.collection_flask_volume = rotavap.collection_flask_volume
+
             if not isinstance(step, AbstractBaseStep):
                 self._map_hardware_to_step_list(step.steps)
 
@@ -296,6 +302,9 @@ class XDLExecutor(object):
         elif type(step) == Separate:
             nearest_node = step.separation_vessel
 
+        elif type(step) == Rotavap:
+            nearest_node = step.rotavap_name
+            
         if not nearest_node:
             return None
         else:

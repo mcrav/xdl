@@ -40,19 +40,28 @@
       "id": "rotavap",
       "type": "rotavap",
       "x": 200,
-      "y": 240,
+      "y": 200,
       "internalId": 3,
       "label": "rotavap",
+      "customProperties": {
+        "collection_flask_volume": {
+          "name": "Collection flask volume",
+          "id": "collection_flask_volume",
+          "units": "mL",
+          "type": "number"
+        }
+      },
       "class": "IKARV10",
       "name": "rotavap",
       "port": "evaporate",
       "current_volume": 0,
-      "max_volume": 100
+      "max_volume": 100,
+      "collection_flask_volume": "50"
     },
     {
       "id": "waste_rotavap",
       "type": "waste",
-      "x": 0,
+      "x": 40,
       "y": 80,
       "internalId": 8,
       "label": "waste_rotavap",
@@ -264,7 +273,7 @@
     {
       "id": "stirrer",
       "type": "stirrer",
-      "x": -400,
+      "x": -360,
       "y": 360,
       "internalId": 49,
       "label": "stirrer",
