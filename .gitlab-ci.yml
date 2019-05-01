@@ -42,6 +42,6 @@ before_script:
   - pip freeze
 test:
   script:
-  - pytest tests/all_tests.py
+  - pytest tests/all_tests.py -x
 #   - pip3 install tox flake8 # you can also use tox
 #   - tox -e py36,flake8
