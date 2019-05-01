@@ -46,11 +46,13 @@ class Add(AbstractStep):
         reagent_vessel: Optional[str] = None, 
         waste_vessel: Optional[str] = None,
         flush_tube_vessel: Optional[str] = None,
+        vessel_type: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
+        port = self.get_port()
         steps = []
         # Solid addition
         if self.mass != None:
@@ -73,7 +75,7 @@ class Add(AbstractStep):
                 CMove(
                     from_vessel=self.reagent_vessel,
                     to_vessel=self.vessel, 
-                    to_port=self.port,
+                    to_port=port,
                     volume=self.volume,
                     move_speed=self.move_speed,
                     aspiration_speed=self.aspiration_speed,
@@ -85,14 +87,15 @@ class Add(AbstractStep):
                 steps.append(CMove(
                     from_vessel=self.flush_tube_vessel,
                     to_vessel=self.vessel,
-                    to_port=self.port,
-                    volume=DEFAULT_AIR_FLUSH_TUBE_VOLUME,))
+                    to_port=port,
+                    volume=DEFAULT_AIR_FLUSH_TUBE_VOLUME))
 
             if self.stir:
                 steps.insert(0, CStir(vessel=self.vessel))
                 if self.stir_rpm:
                     steps.insert(
-                        0, CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm))
+                        0, CSetStirRate(
+                            vessel=self.vessel, stir_rpm=self.stir_rpm))
                 else:
                     steps.insert(
                         0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
@@ -116,3 +119,19 @@ class Add(AbstractStep):
                 'stir': self.stir,
             }
         }
+
+    def get_port(self) -> str:
+        """If self.port is None, return default port for different vessel types.
+        
+        Returns:
+            str: Vessel port to add to.
+        """
+        if self.port:
+            return self.port
+        elif self.vessel_type == 'filter':
+            return 'top'
+        elif self.vessel_type == 'separator':
+            return 'top'
+        elif self.vessel_type == 'rotavap':
+            return 'evaporate'
+        return None

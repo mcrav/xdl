@@ -46,7 +46,7 @@ class HeatChillToTemp(AbstractStep):
 
     def get_steps(self) -> List[Step]:
         steps = []
-        if self.vessel_type == 'ChemputerFilter':
+        if self.vessel_type == 'filter':
             steps = [
                 CChillerSetTemp(vessel=self.vessel, temp=self.temp),
                 CStartChiller(vessel=self.vessel),
@@ -54,7 +54,7 @@ class HeatChillToTemp(AbstractStep):
                 CChillerWaitForTemp(vessel=self.vessel),
                 CSetRecordingSpeed(self.after_recording_speed),
             ]
-        elif self.vessel_type == 'ChemputerReactor':
+        elif self.vessel_type == 'reactor':
             steps = [
                 CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
                 CStirrerHeat(vessel=self.vessel),
@@ -103,11 +103,11 @@ class StopHeatChill(AbstractStep):
         super().__init__(locals())
     
     def get_steps(self) -> List[Step]:
-        if self.vessel_type == 'ChemputerFilter':
+        if self.vessel_type == 'filter':
             return [
                 CStopChiller(self.vessel)
             ]
-        elif self.vessel_type == 'ChemputerReactor':
+        elif self.vessel_type == 'reactor':
             return [
                 CStopHeat(self.vessel)
             ]
@@ -148,14 +148,14 @@ class HeatChillReturnToRT(AbstractStep):
             
     def get_steps(self) -> List[Step]:
         steps = []
-        if self.vessel_type == 'ChemputerFilter':
+        if self.vessel_type == 'filter':
             steps = [
                 CChillerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
                 CStartChiller(vessel=self.vessel),
                 CChillerWaitForTemp(vessel=self.vessel),
                 CStopChiller(self.vessel)
             ]
-        elif self.vessel_type == 'ChemputerReactor':
+        elif self.vessel_type == 'reactor':
             steps = [
                 CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
                 CStirrerHeat(vessel=self.vessel),

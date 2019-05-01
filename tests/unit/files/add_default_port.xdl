@@ -1,0 +1,50 @@
+<Synthesis auto_clean="false">
+  <Hardware>
+    <Component
+      id="rotavap"
+      type="rotavap"
+    />
+    <Component
+      id="separator"
+      type="separator"
+    />
+    <Component
+      id="filter"
+      type="filter"
+    />
+    <Component
+      id="reactor"
+      type="reactor"
+    />
+  </Hardware>
+
+  <Reagents>
+    <Reagent id="ether" />
+  </Reagents>
+
+  <Procedure>
+    <Add
+      vessel="filter"
+      reagent="ether"
+      volume="15 mL" />
+    <Add
+      vessel="reactor"
+      reagent="ether"
+      volume="15 mL" />
+    <Add
+      vessel="rotavap"
+      reagent="ether"
+      volume="15 mL" />
+    <Add
+      vessel="separator"
+      reagent="ether"
+      volume="15 mL" />
+    <!-- Test supplied port doesn't get overridden by default port. -->
+    <Add
+      vessel="separator"
+      reagent="ether"
+      volume="15 mL"
+      port="bottom" />
+  </Procedure>
+
+</Synthesis>
