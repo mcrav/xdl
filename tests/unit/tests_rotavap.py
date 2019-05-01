@@ -35,3 +35,14 @@ def test_rotavap_auto_mode():
             assert type(step.steps[0]) == CRotavapAutoEvaporation
             break
     generic_chempiler_test(xdl_f, graph_f)
+
+def test_rotavap_collection_volume():
+    """Test rotavap withdraws correct amount after evaporation."""
+    xdl_f = os.path.join(FOLDER, 'rotavap.xdl')
+    graph_f = os.path.join(FOLDER, 'bigrig.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)
+    for step in x.steps:
+        if type(step) == Rotavap:
+            # collection_flask_volume in graph
+            assert step.steps[-1].volume == 50

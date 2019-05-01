@@ -4,7 +4,11 @@ from ..steps_base import CMove, CSetStirRate, CStir, Confirm
 from ..base_step import Step, AbstractStep
 from ...utils.misc import get_port_str
 from ...constants import (
-    DEFAULT_AFTER_ADD_WAIT_TIME, DEFAULT_AIR_FLUSH_TUBE_VOLUME)
+    DEFAULT_AFTER_ADD_WAIT_TIME,
+    DEFAULT_AIR_FLUSH_TUBE_VOLUME,
+    TOP_PORT,
+    EVAPORATE_PORT
+)
 
 class Add(AbstractStep):
     """Add given volume of given reagent to given vessel.
@@ -129,9 +133,9 @@ class Add(AbstractStep):
         if self.port:
             return self.port
         elif self.vessel_type == 'filter':
-            return 'top'
+            return TOP_PORT
         elif self.vessel_type == 'separator':
-            return 'top'
+            return TOP_PORT
         elif self.vessel_type == 'rotavap':
-            return 'evaporate'
+            return EVAPORATE_PORT
         return None
