@@ -63,6 +63,7 @@ class XDL(object):
         self.dry_run = False
         self.filter_dead_volume_method = 'inert_gas'
         self.filter_dead_volume_solvent = None
+        self.prepared = False
         if xdl:
             parsed_xdl = {}
             if os.path.exists(xdl):
@@ -216,10 +217,11 @@ class XDL(object):
             scale (float): Number to scale all volumes by.
         """
         for step in self.steps:
-            for prop, val in step.properties.items():
-                if 'volume' in prop and type(val) == float:
-                    if val:
-                        step.properties[prop] = float(val) * scale
+            if step.name not in UNSCALED_STEPS:
+                for prop, val in step.properties.items():
+                    if 'volume' in prop and type(val) == float:
+                        if val:
+                            step.properties[prop] = float(val) * scale
 
     def prepare_for_execution(
         self, graph_file: str, interactive: bool = True) -> None:
@@ -232,7 +234,11 @@ class XDL(object):
                                         or dict containing graph in same format
                                         as JSON file.
         """
-        self.executor.prepare_for_execution(graph_file, interactive=interactive)
+        if not self.prepared:
+            self.executor.prepare_for_execution(graph_file, interactive=interactive)
+            self.prepared = True
+        else:
+            self.logger.warn('Cannot call prepare for execution twice on same XDL object.')
 
     def execute(self, chempiler: 'Chempiler') -> None:
         """Execute XDL using given Chempiler object. self.prepare_for_execution
@@ -242,11 +248,14 @@ class XDL(object):
             chempiler (chempiler.Chempiler): Chempiler object instantiated with
                 modules and graph to run XDL on.
         """
-        if hasattr(self, 'executor'):
-            self.executor.execute(chempiler)
+        if self.prepared:
+            if hasattr(self, 'executor'):
+                self.executor.execute(chempiler)
+            else:
+                raise RuntimeError(
+                    'XDL executor not available. Call prepare_for_execution before trying to execute.')
         else:
-            raise RuntimeError(
-                'XDL executor not available. Call prepare_for_execution before trying to execute.')
+            self.logger.warn('prepare_for_execution must be called before executing.')
 
     @property
     def base_steps(self):
