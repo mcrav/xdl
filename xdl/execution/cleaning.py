@@ -110,6 +110,7 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
                 j += 1
                 schedule[j] = reagent
         i = max(j, i + 1)
+
     # 2) Go forward applying last encountered solvent to every step in schedule.
     try:
         current_reagent = [item for item in schedule if item][0]

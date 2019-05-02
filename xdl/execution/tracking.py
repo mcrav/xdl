@@ -120,7 +120,12 @@ def iter_vessel_contents(
                     additions_l.extend(vessel_contents[from_vessel].reagents)
                     # Remove volume from from_vessel.
                     vessel_contents[from_vessel].volume -= volume
-                    if vessel_contents[from_vessel].volume <= 0:
+                    # Flasks should be treated as bottomless, i.e. even if they
+                    # hit negative volume they should still contain their
+                    # reagent.
+                    if (vessel_contents[from_vessel].volume <= 0
+                        and not from_vessel in [
+                            item.id for item in hardware.flasks]):
                         vessel_contents[from_vessel].reagents = []
                     # Extend list of reagents added in the step.
                     # Empty from_vessel if 'all' volume specified.
