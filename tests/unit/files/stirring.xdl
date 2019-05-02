@@ -1,0 +1,34 @@
+<Synthesis>
+  <Hardware>
+    <Component
+      id="rotavap"
+      type="rotavap"
+    />
+    <Component
+      id="filter"
+      type="filter"
+    />
+    <Component
+      id="reactor"
+      type="reactor"
+    />
+  </Hardware>
+
+  <Reagents />
+
+  <Procedure>
+    <StartStir
+      vessel="filter" />
+    <StopStir
+      vessel="filter" />
+    <StartStir
+      vessel="reactor" />
+    <StopStir
+      vessel="reactor" />
+    <StartStir
+      vessel="rotavap" />
+    <StopStir
+      vessel="rotavap" />
+  </Procedure>
+
+</Synthesis>

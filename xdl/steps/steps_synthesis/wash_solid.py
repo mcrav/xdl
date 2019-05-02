@@ -119,13 +119,15 @@ class WashSolid(AbstractStep):
             # solvent has been removed but before the vacuum is connected.
             if self.stir == True:
                 steps.insert(
-                    0, StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm))
+                    0, StartStir(vessel=self.vessel,
+                                 stir_rpm=self.stir_rpm))
                 steps.insert(-2, StopStir(vessel=self.vessel))
             # Only stir after solvent is added and stop stirring before it is
             # removed.
             elif self.stir == 'solvent':
                 steps.insert(
-                    1, StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm))
+                    1, StartStir(vessel=self.vessel,
+                                 stir_rpm=self.stir_rpm))
                 steps.insert(-3, StopStir(vessel=self.vessel))
 
             steps.extend(get_vacuum_valve_reconnect_steps(
