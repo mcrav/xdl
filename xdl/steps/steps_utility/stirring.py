@@ -118,19 +118,22 @@ class Stir(AbstractStep):
     Args:
         vessel (str): Vessel to stir.
         time (float): Time to stir for.
+        stir_rpm (float): Stir rate in RPM.
+        vessel_type (str): Given internally. 'reactor', 'filter', 'rotavap',
+            'flask' or 'separator'.
     """
     def __init__(
         self,
         vessel: str,
         time: float,
         stir_rpm: Optional[float] = 'default',
-        vessel_is_rotavap: Optional[str] = False,
+        vessel_type: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
-        if self.vessel_is_rotavap:
+        if self.vessel_type == 'rotavap':
             # Limit stir_rpm as rotavap can't rotate as fast as stirrer.
             stir_rpm = min(
                 self.stir_rpm, DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED)

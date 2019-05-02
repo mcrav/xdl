@@ -167,14 +167,6 @@ class XDLExecutor(object):
                 step.vacuum_device = vacuum_device_attached_to_flask(
                     graph=self._graph, flask_node=step.vacuum)
 
-            if 'vessel_is_rotavap' in step.properties:
-                step.vessel_is_rotavap = step.vessel in [
-                    item.id for item in self._graph_hardware.rotavaps] 
-
-            if 'vessel_is_filter' in step.properties:
-                step.vessel_is_filter = step.vessel in [
-                    item.id for item in self._graph_hardware.filters] 
-
             if 'vessel_has_stirrer' in step.properties:
                 step.vessel_has_stirrer = not step.vessel in [
                     item.id
@@ -226,6 +218,7 @@ class XDLExecutor(object):
             ('rotavap', self._graph_hardware.rotavaps),
             ('reactor', self._graph_hardware.reactors),
             ('separator', self._graph_hardware.separators),
+            ('flask', self._graph_hardware.flasks)
         ]
         for vessel_type, hardware_list in vessel_types:
             if vessel in [item.id for item in hardware_list]:
