@@ -1,9 +1,9 @@
-from typing import Optional
-from ..base_step import Step
+from typing import Optional, List, Dict, Any
+from ..base_step import Step, AbstractStep
 from ..steps_utility import Wait, HeatChillToTemp, StopHeatChill
 from ..steps_base import CSetStirRate, CStir, CStopStir
 
-class HeatChill(Step):
+class HeatChill(AbstractStep):
     """Heat or chill vessel to given temp for given time.
     
     Args:
@@ -26,7 +26,9 @@ class HeatChill(Step):
         **kwargs
     ) -> None:
         super().__init__(locals())
-        self.steps = [
+
+    def get_steps(self) -> List[Step]:
+        steps = [
             HeatChillToTemp(
                 vessel=self.vessel,
                 temp=self.temp,
@@ -37,20 +39,25 @@ class HeatChill(Step):
             StopHeatChill(vessel=self.vessel, vessel_type=self.vessel_type),
         ]
         if self.stir:
-            self.steps.insert(0, CStir(vessel=self.vessel))
+            steps.insert(0, CStir(vessel=self.vessel))
             if self.stir_rpm:
-                self.steps.insert(
+                steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm))
             else:
-                self.steps.insert(
+                steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
         else:
-            self.steps.insert(0, CStopStir(vessel=self.vessel))
+            steps.insert(0, CStopStir(vessel=self.vessel))
+        return steps
 
-        self.human_readable = 'Heat/Chill {vessel} to {temp} °C for {time} s.'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Heat/Chill {vessel} to {temp} °C for {time} s.'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'vessel': {
                 'heatchill': True,
                 'temp': [self.temp],

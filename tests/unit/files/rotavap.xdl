@@ -18,7 +18,7 @@
     <Add
       reagent="water"
       vessel="rotavap"
-      mass="1g" />
+      mass="500 mL" />
     <Rotavap
       rotavap_name="rotavap"
       temp="40"

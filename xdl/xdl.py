@@ -5,6 +5,7 @@ import logging
 import inspect
 import copy
 from typing import List
+from math import ceil
 
 from .constants import *
 from .graph.generator import GraphGenerator
@@ -63,6 +64,7 @@ class XDL(object):
         self.dry_run = False
         self.filter_dead_volume_method = 'inert_gas'
         self.filter_dead_volume_solvent = None
+        self.prepared = False
         if xdl:
             parsed_xdl = {}
             if os.path.exists(xdl):
@@ -122,16 +124,15 @@ class XDL(object):
                         base steps.
         """
         indent = '  '
-        base_steps = list(BASE_STEP_OBJ_DICT.values())
         tree = [step]
         if print_tree:
             self.logger.info('{0}{1}'.format(indent*lvl, step.name))
-        if type(step) in base_steps:
+        if isinstance(step, AbstractBaseStep):
             return tree
         else:
             lvl += 1
             for step in step.steps:
-                if type(step) in base_steps:
+                if isinstance(step, AbstractBaseStep):
                     if print_tree:
                         self.logger.info('{0}{1}'.format(indent*lvl, step.name))
                     tree.append(step)
@@ -216,10 +217,134 @@ class XDL(object):
             scale (float): Number to scale all volumes by.
         """
         for step in self.steps:
-            for prop, val in step.properties.items():
-                if 'volume' in prop and type(val) == float:
-                    if val:
-                        step.properties[prop] = float(val) * scale
+            if step.name not in UNSCALED_STEPS:
+                for prop, val in step.properties.items():
+                    if 'volume' in prop and type(val) == float:
+                        if val:
+                            step.properties[prop] = float(val) * scale
+
+    @property
+    def estimated_duration(self) -> float:
+        """Estimated duration of procedure. It is approximate but should give a
+        give a rough idea how long the procedure should take.
+        
+        Returns:
+            float: Estimated runtime of procedure in seconds.
+        """
+        if not self.prepared:
+            self.logger.warning(
+                'prepare_for_execution must be called before estimated duration can be calculated.')
+            return
+        total_time = 0
+        temps = {}
+        heatchill_time_per_degree = 60 # seconds. Pretty random guess.
+        fallback_wait_for_temp_time = 60 * 30 # seconds. Again random guess.
+        for step in self.base_steps:
+            time = 0
+            if type(step) == CMove:
+                rate_seconds = (step.move_speed * 60
+                                + step.aspiration_speed * 60
+                                + step.dispense_speed * 60) / 3
+                time += step.volume / rate_seconds
+            elif type(step) == CWait:
+                time += step.time
+            elif type(step) == CSetRecordingSpeed:
+                pass
+            elif type(step) == CSeparatePhases:
+                # VERY APPROXIMATE. Assumes 250 mL separation funnel and
+                # 35 mL / min move speed (defined in Chempiler 481b10a1527280fa51a2134e536211614f8108e8).
+                volume = 250
+                move_speed = 35 * 60 # mL / s
+                time += (volume / 2) / move_speed
+                if step.upper_phase_vessel != step.separation_vessel:
+                    time += (volume / 2) / move_speed
+            elif type(step) == CRotavapAutoEvaporation:
+                time += step.time_limit
+            elif type(step) == CRampChiller:
+                time += step.ramp_duration
+            # EXTREMELY APPROXIMATE. Don't know what temp is in base steps or 
+            elif type(step) in [CChillerWaitForTemp, CStirrerWaitForTemp]:
+                if step.vessel in temps:
+                    abs_delta = abs(
+                        temps[step.vessel][-1] - temps[step.vessel][-2])
+                    time += abs_delta * heatchill_time_per_degree
+                else:
+                    time += fallback_wait_for_temp_time
+            elif type(step) in [CChillerSetTemp, CStirrerSetTemp]:
+                temps.setdefault(step.vessel, [25, step.temp])
+                time += 1
+            else:
+                time += 1
+            repeat = 1
+            if 'repeat' in step.properties:
+                repeat = step.repeat
+            total_time += time * repeat
+        return total_time
+
+    def print_estimated_duration(self) -> None:
+        """Format estimated duration into hours, minutes and seconds and log it
+        like "Estimated duration: 19 hrs 30 mins".
+        """
+        s = ''
+        seconds = self.estimated_duration
+        if seconds < 60:
+            s = f'{ceil(seconds):.0f} seconds'
+        else:
+            seconds_remainder = seconds % 60
+            minutes = (seconds - seconds_remainder) / 60
+            if minutes < 60:
+                s = f'{minutes+1:.0f} mins'
+            else:
+                minutes_remainder = minutes % 60
+                hours = (minutes - minutes_remainder) / 60
+                minutes = minutes - (hours * 60)
+                s = f'{hours:.0f} hrs {minutes+1:.0f} mins'
+        self.logger.info(f'    Estimated duration: {s}')
+
+    @property
+    def reagent_volumes(self) -> None:
+        """Compute volumes used of all liquid reagents in procedure and return
+        as dict.
+
+        Returns:
+            Dict[str, float]: Dict of { reagent_name: volume_used... }
+        """
+        if not self.prepared:
+            self.logger.warning(
+                'prepare_for_execution must be called before reagent volumes can be calculated.')
+            return
+        reagent_volumes = {}
+        flasks = self.executor._graph_hardware.flasks
+        flask_ids = [item.id for item in flasks]
+        for step in self.base_steps:
+            if type(step) == CMove and step.from_vessel in flask_ids:
+                reagent = self.executor._graph_hardware[
+                    step.from_vessel].chemical
+                if not reagent in reagent_volumes:
+                    reagent_volumes[reagent] = 0
+                reagent_volumes[reagent] += step.volume
+        return reagent_volumes
+
+    def print_reagent_volumes(self) -> None:
+        """Pretty print table of reagent volumes used in procedure.
+        """
+        reagent_volumes = self.reagent_volumes
+        reagent_volumes = [
+            (reagent, volume)
+            for reagent, volume in reagent_volumes.items()]
+        reagent_volumes = sorted(reagent_volumes, key=lambda x: 1 / x[1])
+        reagent_volumes = [
+            (reagent, f'{volume:.2f}'.rstrip('0').rstrip('0').rstrip('.'))
+            for reagent, volume in reagent_volumes]
+        if reagent_volumes:
+            max_reagent_name_length = max(
+                [len(reagent) for reagent, _ in reagent_volumes])
+            max_volume_length = max([len(volume) + 3 for _, volume in reagent_volumes])
+            self.logger.info(f'    {"Reagent Volumes":^{max_reagent_name_length + max_volume_length + 3}}')
+            self.logger.info(f'    {"-" * (max_reagent_name_length + max_volume_length + 3)}')
+            for reagent, volume in reagent_volumes:
+                self.logger.info(f'    {reagent:^{max_reagent_name_length}} | {volume} mL')
+            self.logger.info('\n')
 
     def prepare_for_execution(
         self, graph_file: str, interactive: bool = True) -> None:
@@ -232,7 +357,15 @@ class XDL(object):
                                         or dict containing graph in same format
                                         as JSON file.
         """
-        self.executor.prepare_for_execution(graph_file, interactive=interactive)
+        if not self.prepared:
+            self.executor.prepare_for_execution(graph_file, interactive=interactive)
+            self.prepared = True
+            self.logger.info('    Experiment Details\n')
+            self.print_reagent_volumes()
+            self.print_estimated_duration()
+            
+        else:
+            self.logger.warning('Cannot call prepare for execution twice on same XDL object.')
 
     def execute(self, chempiler: 'Chempiler') -> None:
         """Execute XDL using given Chempiler object. self.prepare_for_execution
@@ -242,14 +375,17 @@ class XDL(object):
             chempiler (chempiler.Chempiler): Chempiler object instantiated with
                 modules and graph to run XDL on.
         """
-        if hasattr(self, 'executor'):
-            self.executor.execute(chempiler)
+        if self.prepared:
+            if hasattr(self, 'executor'):
+                self.executor.execute(chempiler)
+            else:
+                raise RuntimeError(
+                    'XDL executor not available. Call prepare_for_execution before trying to execute.')
         else:
-            raise RuntimeError(
-                'XDL executor not available. Call prepare_for_execution before trying to execute.')
+            self.logger.warn('prepare_for_execution must be called before executing.')
 
     @property
     def base_steps(self):
         return [step
                 for step in self._get_full_xdl_tree()
-                if not hasattr(step, 'steps')]
+                if isinstance(step, AbstractBaseStep)]

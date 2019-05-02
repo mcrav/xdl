@@ -5,23 +5,33 @@ from ..steps import *
 ### CLEANING ###
 ################
 
+#: Fraction of vessel max volume to use as solvent volume in CleanVessel step.
+CLEAN_VESSEL_VOLUME_FRACTION: float = 0.5
+
 #: Solvents that shouldn't be used for cleaning backbone.
 #: Toluene tends to dissolve glue in syringe pumps.
 CLEANING_SOLVENT_BLACKLIST: List[str] = ['toluene']
 
+#: Solvents that can be used but aren't ideal. Used to decide what solvent to
+#: use for final CleanBackbone step at end of procedure.
+CLEANING_SOLVENT_PREFER_NOT_TO_USE: List[str] = ['ether']
+
 SOLVENT_CONTAINING_STEPS: List[type] = [
-    Add, Dissolve, WashFilterCake, Separate, AddFilterDeadVolume]
+    Add, Dissolve, WashSolid, Separate, AddFilterDeadVolume]
 
 # Steps after which backbone should be cleaned
 CLEAN_BACKBONE_AFTER_STEPS: List[type] = [
     Add,
     Separate,
-    WashFilterCake,
     WashSolid,
     Filter,
     Dry,
     AddFilterDeadVolume,
     RemoveFilterDeadVolume,
+    Dissolve,
+    CleanVessel,
+    Transfer,
+    FilterThrough,
 ]
 
 COMMON_SOLVENT_NAMES = [
@@ -147,3 +157,6 @@ COMMON_SOLVENT_NAMES = [
     'm-xylene',
     'p-xylene',
 ]
+COMMON_SOLVENT_NAMES.extend(
+    [f'anhydrous {name}' for name in COMMON_SOLVENT_NAMES])
+INERT_GAS_SYNONYMS: List[str] = ['nitrogen', 'n2', 'ar', 'argon']

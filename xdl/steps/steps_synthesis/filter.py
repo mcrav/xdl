@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import Optional, List, Dict, Any
 from ..utils import get_vacuum_valve_reconnect_steps
-from ..base_step import Step
+from ..base_step import Step, AbstractStep
 from ..steps_base import CMove, CConnect, CVentVacuum
 from ..steps_utility import StopStir, Wait, StartVacuum, StopVacuum
 from ...constants import (
@@ -8,7 +8,7 @@ from ...constants import (
     DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
     DEFAULT_FILTER_VACUUM_PRESSURE)
 
-class Filter(Step):
+class Filter(AbstractStep):
     """Filter contents of filter vessel. Apply vacuum for given time.
     Assumes liquid is already in the top of the filter vessel.
 
@@ -49,10 +49,12 @@ class Filter(Step):
     ) -> None:
         super().__init__(locals())
 
+    def get_steps(self) -> List[Step]:
+        filtrate_vessel = self.filtrate_vessel
         if not filtrate_vessel:
             filtrate_vessel = self.waste_vessel
 
-        self.steps = [
+        steps = [
             StopStir(vessel=self.filter_vessel),
             # Move the filter top volume from the bottom to the waste.
             CMove(
@@ -73,30 +75,32 @@ class Filter(Step):
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
         if not self.vacuum_device:
-            self.steps.pop(-3)
+            steps.pop(-3)
 
         # Reconnect vacuum valve to inert gas or unconnected port after done
         # with vacuum.
-        self.steps.extend(get_vacuum_valve_reconnect_steps(
+        steps.extend(get_vacuum_valve_reconnect_steps(
             inert_gas=self.inert_gas,
             vacuum_valve=self.vacuum_valve,
             valve_unused_port=self.valve_unused_port,
-            filter_vessel=self.filter_vessel))
+            vessel=self.filter_vessel))
 
         if self.vacuum_device:
-            self.steps.extend([
+            steps.extend([
                 StopVacuum(vessel=self.vacuum),
                 CVentVacuum(vessel=self.vacuum)])
+        return steps
 
-        self.human_readable = 'Filter contents of {filter_vessel}.'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Filter contents of {filter_vessel}.'.format(
             **self.properties)
 
-        self.movements = [
-            (self.filter_vessel, self.waste_vessel, 'all'),
-        ]
-
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'filter_vessel': {
                 'filter': True
             }
         }
+        

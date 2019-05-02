@@ -3,9 +3,9 @@ if False:
     from chempiler import Chempiler
 from logging import Logger
 
-from ..base_step import Step
+from ..base_step import AbstractBaseStep
 
-class CValveMoveToPosition(Step):
+class CValveMoveToPosition(AbstractBaseStep):
     """Move valve to given position.
     
     Args:
@@ -23,4 +23,5 @@ class CValveMoveToPosition(Step):
     ) -> None:
         valve = chempiler[self.valve_name]
         valve.move_to_position(self.position)
+        return True
     

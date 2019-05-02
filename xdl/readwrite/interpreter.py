@@ -4,8 +4,6 @@ import copy
 from typing import Dict, List, Any, Optional, Union
 from lxml import etree
 from .validation import check_attrs_are_valid
-from .utils import (convert_time_str_to_seconds, convert_volume_str_to_ml, 
-                    convert_mass_str_to_g)
 from ..constants import SYNTHESIS_ATTRS
 from ..utils import parse_bool, XDLError, raise_error
 from ..steps import Step

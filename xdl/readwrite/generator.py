@@ -85,7 +85,7 @@ class XDLGenerator(object):
                             continue
                         
                         # Don't write internal properties.
-                        elif (step.name in INTERNAL_PROPERTIES
+                        if (step.name in INTERNAL_PROPERTIES
                              and prop in INTERNAL_PROPERTIES[step.name]):
                              continue
                     # Convert value to nice units and add to element attrib.
@@ -175,6 +175,8 @@ def format_volume(val_ml: float) -> str:
     Returns:
         str: Formatted volume in sensible units.
     """
+    if val_ml == 'all':
+        return val_ml
     # litres
     if val_ml > 1000:
         l = val_ml / 1000

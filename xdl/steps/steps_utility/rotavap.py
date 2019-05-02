@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import Optional, List, Dict, Any
 
-from ..base_step import Step
+from ..base_step import AbstractStep, Step
 from ..steps_base import (
     CRotavapSetRotationSpeed,
     CRotavapStartRotation,
@@ -16,7 +16,7 @@ from ..steps_base import (
 )
 from .general import Wait
 
-class RotavapStartRotation(Step):
+class RotavapStartRotation(AbstractStep):
     """Start stirring given vessel.
 
     Args:
@@ -31,23 +31,28 @@ class RotavapStartRotation(Step):
     ) -> None:
         super().__init__(locals())
 
-        self.steps = [
+    def get_steps(self) -> List[Step]:
+        return [
             CRotavapSetRotationSpeed(
                 rotavap_name=self.rotavap_name,
                 rotation_speed=self.rotation_speed),
             CRotavapStartRotation(rotavap_name=self.rotavap_name)
         ]
 
-        self.human_readable = 'Set rotation speed to {rotation_speed} RPM and start rotation for {rotavap_name}.'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Set rotation speed to {rotation_speed} RPM and start rotation for {rotavap_name}.'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'rotavap_name': {
                 'rotavap': True,
             }
         }
 
-class RotavapStopRotation(Step):
+class RotavapStopRotation(AbstractStep):
     """Stop stirring given vessel.
     
     Args:
@@ -57,18 +62,23 @@ class RotavapStopRotation(Step):
         self, rotavap_name: str, **kwargs) -> None:
         super().__init__(locals())
 
-        self.steps = [CRotavapStopRotation(rotavap_name=self.rotavap_name)]
+    def get_steps(self) -> List[Step]:
+        return [CRotavapStopRotation(rotavap_name=self.rotavap_name)]
 
-        self.human_readable = 'Stop rotation for {rotavap_name}.'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Stop rotation for {rotavap_name}.'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'rotavap_name': {
                 'rotavap': True,
             }
         }
 
-class RotavapStir(Step):
+class RotavapStir(AbstractStep):
     """Stir given vessel for given time at room temperature.
 
     Args:
@@ -85,7 +95,8 @@ class RotavapStir(Step):
     ) -> None:
         super().__init__(locals())
 
-        self.steps = [
+    def get_steps(self) -> List[Step]:
+        return [
             RotavapStartRotation(
                 rotavap_name=self.rotavap_name,
                 rotation_speed=self.stir_rpm
@@ -94,16 +105,20 @@ class RotavapStir(Step):
             RotavapStopRotation(rotavap_name=self.rotavap_name)
         ]
 
-        self.human_readable = 'Use rotavap rotation to stir {rotavap_name} for {time} s at {stir_rpm} RPM.'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Use rotavap rotation to stir {rotavap_name} for {time} s at {stir_rpm} RPM.'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'rotavap_name': {
                 'rotavap': True,
             }
         }
 
-class RotavapStopEverything(Step):
+class RotavapStopEverything(AbstractStep):
     """Stop vacuum, lift rotavap flask up, vent vacuum, stop heater and stop
     rotation.
     
@@ -113,7 +128,8 @@ class RotavapStopEverything(Step):
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
-        self.steps = [
+    def get_steps(self) -> List[Step]:
+        return [
             CStopVacuum(self.rotavap_name),
             CRotavapLiftUp(self.rotavap_name),
             CVentVacuum(self.rotavap_name),
@@ -121,16 +137,20 @@ class RotavapStopEverything(Step):
             CRotavapStopRotation(self.rotavap_name),
         ]
 
-        self.human_readable = 'Stop vacuum, lift rotavap flask up, vent vacuum, stop heater and stop rotation for {rotavap_name}'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Stop vacuum, lift rotavap flask up, vent vacuum, stop heater and stop rotation for {rotavap_name}'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'rotavap_name': {
                 'rotavap': True,
             }
         }
 
-class RotavapStartVacuum(Step):
+class RotavapStartVacuum(AbstractStep):
     """Start vacuum at given pressure.
     
     Args:
@@ -140,21 +160,26 @@ class RotavapStartVacuum(Step):
     def __init__(self, rotavap_name: str, pressure: float) -> None:
         super().__init__(locals())
 
-        self.steps = [
+    def get_steps(self) -> List[Step]:
+        return [
             CSetVacuumSetPoint(self.rotavap_name, self.pressure),
             CStartVacuum(self.rotavap_name),
         ]
 
-        self.human_readable = 'Start vacuum at {pressure} mbar for {rotavap_name}'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Start vacuum at {pressure} mbar for {rotavap_name}'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'rotavap_name': {
                 'rotavap': True,
             }
         }
 
-class RotavapHeatToTemp(Step):
+class RotavapHeatToTemp(AbstractStep):
     """Set rotavap temperature to given temp and start heater.
     
     Args:
@@ -164,15 +189,20 @@ class RotavapHeatToTemp(Step):
     def __init__(self, rotavap_name: str, temp: float) -> None:
         super().__init__(locals())
         
-        self.steps = [
+    def get_steps(self) -> List[Step]:
+        return [
             CRotavapSetTemp(self.rotavap_name, self.temp),
             CRotavapStartHeater(self.rotavap_name),
         ]
 
-        self.human_readable = 'Set rotavap temperature to {temp} and start heater for {rotavap_name}'.format(
+    @property
+    def human_readable(self) -> str:
+        return 'Set rotavap temperature to {temp} and start heater for {rotavap_name}'.format(
             **self.properties)
 
-        self.requirements = {
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
             'rotavap_name': {
                 'rotavap': True,
             }

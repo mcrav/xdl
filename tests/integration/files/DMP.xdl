@@ -55,20 +55,20 @@
       stir_rpm="50" />
     <Filter
       filter_vessel="filter" />
-    <WashFilterCake
-      filter_vessel="filter"
+    <WashSolid
+      vessel="filter"
       solvent="water"
       volume="100.0"
       stir="solvent"
       repeat="6" />
-    <WashFilterCake
-      filter_vessel="filter"
+    <WashSolid
+      vessel="filter"
       solvent="acetone"
       volume="100.0"
       stir="solvent"
       repeat="2" />
     <Dry
-      filter_vessel="filter"
+      vessel="filter"
       time="300.0"
       temp="25.0" />
     <!-- <Add
@@ -103,14 +103,14 @@
       time="86400.0" />
     <Filter
       filter_vessel="filter" />
-    <WashFilterCake
-      filter_vessel="filter"
+    <WashSolid
+      vessel="filter"
       solvent="anhydrous ether"
       volume="80.0"
       stir="solvent"
       repeat="3" />
     <Dry
-      filter_vessel="filter" />
+      vessel="filter" />
   </Procedure>
 
 </Synthesis>

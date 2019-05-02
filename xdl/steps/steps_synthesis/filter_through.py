@@ -1,8 +1,8 @@
-from typing import Optional
-from ..base_step import Step
+from typing import Optional, List
+from ..base_step import Step, AbstractStep
 from ..steps_utility import Transfer
 
-class FilterThrough(Step):
+class FilterThrough(AbstractStep):
     """Filter contents of from_vessel through a cartridge,
     e.g. a Celite cartridge, and optionally elute with a solvent as well.
     
@@ -10,15 +10,19 @@ class FilterThrough(Step):
         from_vessel (str): Vessel with contents to filter.
         to_vessel (str): Vessel to pass filtered contents to.
         through_cartridge (str): Cartridge to pass from_vessel contents through.
-        eluting_solvent (Optional[str]): Optional. Solvent to elute with after
-            filtering.
-        eluting_volume (Optional[float]): Optional. Volume of solvent to elute
-            with after filtering.
-        eluting_repeats (Optional[float]): Optional. Number of times to elute
-            with eluting_solvent and eluting_volume. Defaults to 1.
-        move_speed (Optional[float]): Optional. Move speed in mL / min.
-        aspiration_speed (Optional[float]): Optional. Aspiration speed in
-            mL / min.
+        eluting_solvent (str): Solvent to elute with after filtering.
+        eluting_volume (float): Volume of solvent to elute with after filtering.
+        eluting_repeats (float): Number of times to elute with eluting_solvent
+            and eluting_volume. Defaults to 1.
+        move_speed (float): Move speed in mL / min.
+        aspiration_speed (float): Aspiration speed in mL / min.
+        eluting_solvent_vessel (str): Given internally. Flask containing eluting
+            solvent.
+        flush_cartridge_vessel (str): Given internally. Flask to flush dead
+            volume of cartridge with after main transfers are done. Order of
+            preference is nitrogen > air > nothing.
+        cartridge_dead_volume (float): Volume of gas to push through if flushing
+            cartridge dead volume.
     """
     def __init__(
         self,
@@ -30,10 +34,15 @@ class FilterThrough(Step):
         eluting_repeats: Optional[float] = 'default',
         move_speed: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
+        eluting_solvent_vessel: Optional[str] = None,
+        flush_cartridge_vessel: Optional[str] = None,
+        cartridge_dead_volume: Optional[float] = 'default',
+        **kwargs
     ):
         super().__init__(locals())
 
-        self.steps = [
+    def get_steps(self) -> List[Step]:
+        steps = [
             Transfer(
                 from_vessel=self.from_vessel,
                 to_vessel=self.to_vessel,
@@ -43,7 +52,7 @@ class FilterThrough(Step):
                 aspiration_speed=self.aspiration_speed)
         ]
         if self.eluting_solvent:
-            self.steps.append(Transfer(
+            steps.append(Transfer(
                 from_vessel=self.eluting_solvent_vessel,
                 to_vessel=self.to_vessel,
                 through=self.through_cartridge,
@@ -51,11 +60,25 @@ class FilterThrough(Step):
                 move_speed=self.move_speed,
                 aspiration_speed=self.aspiration_speed,
                 repeat=self.eluting_repeats))
+        
+        if self.flush_cartridge_vessel:
+            steps.append(
+                Transfer(
+                    from_vessel=self.flush_cartridge_vessel,
+                    to_vessel=self.to_vessel,
+                    through=self.through_cartridge,
+                    volume=self.cartridge_dead_volume,
+                    move_speed=self.move_speed,
+                    aspiration_speed=self.aspiration_speed))
+        return steps
 
-        self.human_readable = 'Contents of {from_vessel} was filtered through {through_cartridge} into {to_vessel}'.format(
+    @property
+    def human_readable(self) -> str:
+        human_readable = 'Contents of {from_vessel} was filtered through {through_cartridge} into {to_vessel}'.format(
             **self.properties)
         if self.eluting_solvent:
-            self.human_readable += ', eluting with {eluting_repeats} x {eluting_volume} mL of {eluting_solvent}.'.format(
+            human_readable += ', eluting with {eluting_repeats} x {eluting_volume} mL of {eluting_solvent}.'.format(
                 **self.properties)
         else:
-            self.human_readable += '.'
+            human_readable += '.'
+        return human_readable

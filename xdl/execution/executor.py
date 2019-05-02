@@ -17,11 +17,18 @@ from .graph import (
     hardware_from_graph,
     get_graph,
     make_vessel_map,
-    make_filter_inert_gas_map,
+    make_inert_gas_map,
     get_unused_valve_port,
-    flask_attached_to_vacuum)
+    vacuum_device_attached_to_flask,
+)
 from .utils import VesselContents
-from .cleaning import add_cleaning_steps, verify_cleaning_steps
+from .cleaning import (
+    add_cleaning_steps,
+    add_vessel_cleaning_steps,
+    verify_cleaning_steps,
+    get_cleaning_schedule
+)
+from .constants import INERT_GAS_SYNONYMS, CLEAN_VESSEL_VOLUME_FRACTION
 
 class XDLExecutor(object):
  
@@ -115,6 +122,11 @@ class XDLExecutor(object):
             if 'solvent_vessel' in step.properties and not step.solvent_vessel:
                 step.solvent_vessel = self._get_reagent_vessel(step.solvent)
 
+            if ('eluting_solvent_vessel' in step.properties
+                and step.eluting_solvent):
+                step.eluting_solvent_vessel = self._get_reagent_vessel(
+                    step.eluting_solvent)
+
             if 'reagent_vessel' in step.properties and not step.reagent_vessel:
                 step.reagent_vessel = self._get_reagent_vessel(step.reagent)
 
@@ -122,21 +134,27 @@ class XDLExecutor(object):
                 and not step.flush_tube_vessel):
                 step.flush_tube_vessel = self._get_flush_tube_vessel()
 
+            # FilterThrough step flushes cartridge with inert gas/air
+            if ('flush_cartridge_vessel' in step.properties
+                and not step.flush_cartridge_vessel):
+                step.flush_cartridge_vessel = self._get_flush_tube_vessel()
+
+            # FilterThrough needs to know what dead volume of cartridge is. If
+            # it is not provided in the graph it falls back to default.
+            if 'cartridge_dead_volume' in step.properties:
+                cartridge = self._graph_hardware[step.through_cartridge]
+                if 'dead_volume' in cartridge.properties:
+                    step.cartridge_dead_volume = cartridge.dead_volume
+
             if 'vacuum' in step.properties and not step.vacuum:
-                step.vacuum = self._get_vacuum(step.filter_vessel)
+                step.vacuum = self._get_vacuum(step)
 
-            # Used by HeatChill step to know whether to Heat or Chill depending
-            # on whether vessel is a ChemputerReactor or ChemputerFilter.
-            if 'vessel_type' in step.properties:
-                step.vessel_type = self._graph_hardware[
-                    step.vessel].component_type
-
-            # Filter, WashFilterCake, Dry need this filled in if inert gas
+            # Filter, WashSolid, Dry need this filled in if inert gas
             # filter dead volume method being used.
             if ('inert_gas' in step.properties
                 and self._xdl.filter_dead_volume_method
                     == FILTER_DEAD_VOLUME_INERT_GAS_METHOD):
-                step.inert_gas = self._filter_inert_gas_map[step.filter_vessel]
+                step.inert_gas = self._get_inert_gas(step)
 
             if ('vacuum_valve' in step.properties
                   and self._xdl.filter_dead_volume_method
@@ -146,12 +164,8 @@ class XDLExecutor(object):
                     graph=self._graph, valve_node=step.vacuum_valve)
 
             if 'vacuum_device' in step.properties:
-                step.vacuum_device = flask_attached_to_vacuum(
+                step.vacuum_device = vacuum_device_attached_to_flask(
                     graph=self._graph, flask_node=step.vacuum)
-
-            if 'vessel_is_rotavap' in step.properties:
-                step.vessel_is_rotavap = step.vessel in [
-                    item.id for item in self._graph_hardware.rotavaps] 
 
             if 'vessel_has_stirrer' in step.properties:
                 step.vessel_has_stirrer = not step.vessel in [
@@ -159,12 +173,21 @@ class XDLExecutor(object):
                     for item in self._graph_hardware.rotavaps 
                                 + self._graph_hardware.flasks]
 
+            if 'vessel_type' in step.properties:
+                step.vessel_type = self._get_vessel_type(step.vessel)
+
             if 'volume' in step.properties and type(step) == CleanVessel:
                 if step.volume == None:
                     step.volume = self._graph_hardware[
-                        step.vessel].max_volume * 0.8
+                        step.vessel].max_volume * CLEAN_VESSEL_VOLUME_FRACTION
 
-            if step.name not in BASE_STEP_OBJ_DICT:
+            if ('collection_flask_volume' in step.properties
+                 and not step.collection_flask_volume):
+                rotavap = self._graph_hardware[step.rotavap_name]
+                if 'collection_flask_volume' in rotavap.properties:
+                    step.collection_flask_volume = rotavap.collection_flask_volume
+
+            if not isinstance(step, AbstractBaseStep):
                 self._map_hardware_to_step_list(step.steps)
 
     def _map_hardware_to_steps(self) -> None:
@@ -179,8 +202,46 @@ class XDLExecutor(object):
             if type(step) == CleanBackbone and not step.waste_vessels:
                 step.waste_vessels = self._graph_hardware.waste_xids
 
-    def _get_vacuum(self, filter_vessel: str) -> str:
-        return self._vacuum_map[filter_vessel]
+    def _get_vessel_type(self, vessel: str) -> str:
+        """Given vessel return type of vessel from options 'filter', 'rotavap',
+        'reactor', 'separator' or None if it isn't any of those options.
+        
+        Args:
+            vessel (str): Vessel to get type of.
+        
+        Returns:
+            str: Type of vessel, 'filter', 'reactor', 'rotavap', 'separator' or
+                None
+        """
+        vessel_types = [
+            ('filter', self._graph_hardware.filters),
+            ('rotavap', self._graph_hardware.rotavaps),
+            ('reactor', self._graph_hardware.reactors),
+            ('separator', self._graph_hardware.separators),
+            ('flask', self._graph_hardware.flasks)
+        ]
+        for vessel_type, hardware_list in vessel_types:
+            if vessel in [item.id for item in hardware_list]:
+                return vessel_type
+        return None
+
+    def _get_vacuum(self, step: Step) -> str:
+        if hasattr(step, 'filter_vessel'):
+            if step.filter_vessel in self._vacuum_map:
+                return self._vacuum_map[step.filter_vessel]
+        elif hasattr(step, 'vessel'):
+            if step.vessel in self._vacuum_map:
+                return self._vacuum_map[step.vessel]
+        return None
+
+    def _get_inert_gas(self, step: Step) -> str:
+        if hasattr(step, 'filter_vessel'):
+            if step.filter_vessel in self._inert_gas_map:
+                return self._inert_gas_map[step.filter_vessel]
+        elif hasattr(step, 'vessel'):
+            if step.vessel in self._inert_gas_map:
+                return self._inert_gas_map[step.vessel]
+        return None
 
     def _get_flush_tube_vessel(self) -> Optional[str]:
         """Look for gas vessel to flush tube with after Add steps.
@@ -189,15 +250,15 @@ class XDLExecutor(object):
             str: Flask to use for flushing tube.
                 Preference is nitrogen > air > None.
         """
-        nitrogen_flask = None
+        inert_gas_flask = None
         air_flask = None
         for flask in self._graph_hardware.flasks:
-            if flask.chemical.lower() == 'nitrogen':
-                nitrogen_flask = flask.id
+            if flask.chemical.lower() in INERT_GAS_SYNONYMS:
+                inert_gas_flask = flask.id
             elif flask.chemical.lower() == 'air':
                 air_flask = flask.id
-        if nitrogen_flask:
-            return nitrogen_flask
+        if inert_gas_flask:
+            return inert_gas_flask
         elif air_flask:
             return air_flask
         return None
@@ -221,13 +282,11 @@ class XDLExecutor(object):
         Get nearest waste node to given step. 
         """
         nearest_node = None
-        if type(step) in [Add, WashSolid, CleanVessel]:
+        if type(step) in [Add, WashSolid, CleanVessel, Dry]:
             nearest_node = step.vessel
                 
         elif type(step) in [
             Filter,
-            Dry,
-            WashFilterCake,
             AddFilterDeadVolume,
             RemoveFilterDeadVolume
         ]:
@@ -236,6 +295,9 @@ class XDLExecutor(object):
         elif type(step) == Separate:
             nearest_node = step.separation_vessel
 
+        elif type(step) == Rotavap:
+            nearest_node = step.rotavap_name
+            
         if not nearest_node:
             return None
         else:
@@ -250,10 +312,9 @@ class XDLExecutor(object):
         """Add extra steps implied by explicit XDL steps."""
         self._add_filter_dead_volume_handling_steps()
         if self._xdl.auto_clean:
+            self._add_implied_clean_vessel_steps()
             self._add_implied_clean_backbone_steps(interactive=interactive)
         
-
-
     def _add_implied_clean_backbone_steps(
         self, interactive: bool = True) -> None:
         """Add CleanBackbone steps after certain steps which will contaminate 
@@ -271,6 +332,10 @@ class XDLExecutor(object):
                 verify_cleaning_steps(self._xdl)
         self._map_hardware_to_steps()
 
+    def _add_implied_clean_vessel_steps(self) -> None:
+        """Add CleanVessel steps after steps which completely empty a vessel."""
+        add_vessel_cleaning_steps(self._xdl, self._graph_hardware)
+        self._map_hardware_to_steps()
 
 ###################################
 ### FILTER DEAD VOLUME HANDLING ###
@@ -364,6 +429,7 @@ class XDLExecutor(object):
             AttributeError: If filter_dead_volume_method is liquid, but
                 self._xdl has no filter_dead_volume_solvent attribute.
         """
+        cleaning_solvents = get_cleaning_schedule(self._xdl)
         # Find steps at which a filter vessel is emptied. Can't just look for
         # Filter steps as liquid may be transferred to filter flask for other
         # reasons i.e. using the chiller.
@@ -378,13 +444,7 @@ class XDLExecutor(object):
                    and full_vessel_contents[j-1][filter_vessel].reagents):
                 j -= 1
 
-            if self._xdl.filter_dead_volume_solvent:
-                solvent = self._xdl.filter_dead_volume_solvent
-            else:
-                raise_error(
-                    AttributeError,
-                    'No filter_dead_volume_solvent specified in <Synthesis> tag'
-                )
+            solvent = cleaning_solvents[j]
 
             # Insert AddFilterDeadVolume step into self._xdl.steps.
             self._xdl.steps.insert(j, AddFilterDeadVolume(
@@ -412,7 +472,7 @@ class XDLExecutor(object):
         for filter_vessel in self._graph_hardware.filters:
             self._xdl.steps.insert(
                 0, CConnect(
-                    from_vessel=self._filter_inert_gas_map[filter_vessel.id],
+                    from_vessel=self._inert_gas_map[filter_vessel.id],
                     to_vessel=filter_vessel.id,
                     to_port=BOTTOM_PORT))
 
@@ -472,15 +532,21 @@ class XDLExecutor(object):
         Returns:
             List[str]: List of vessels being stirred after step.
         """            
-        for sub_step in step.steps:
-            if not hasattr(sub_step, 'execute'):
-                self.find_stirring_schedule(sub_step, stirring)
-            else:
-                if type(sub_step) == CStir:
-                    stirring.append(sub_step.vessel)
-                elif type(sub_step) == CStopStir:
-                    if sub_step.vessel in stirring:
-                        stirring.remove(sub_step.vessel)
+        if type(step) == CStir:
+            stirring.append(step.vessel)
+        elif type(step) == CStopStir:
+            if step.vessel in stirring:
+                stirring.remove(step.vessel)
+        elif not isinstance(step, AbstractBaseStep):
+            for sub_step in step.steps:
+                if isinstance(sub_step, AbstractStep):
+                    self.find_stirring_schedule(sub_step, stirring)
+                else:
+                    if type(sub_step) == CStir:
+                        stirring.append(sub_step.vessel)
+                    elif type(sub_step) == CStopStir:
+                        if sub_step.vessel in stirring:
+                            stirring.remove(sub_step.vessel)
         return stirring
 
     def _stop_stirring_when_vessels_lose_scope(self) -> None:
@@ -534,7 +600,7 @@ class XDLExecutor(object):
         for step in step.steps:
             if type(step) == Wait:
                 step.time = 1
-            elif hasattr(step, 'steps'):
+            elif step.steps:
                 self._set_all_waits_to_one(step)
             
     def _remove_pointless_backbone_cleaning(self) -> None:
@@ -611,8 +677,7 @@ class XDLExecutor(object):
                     self._graph, CHEMPUTER_WASTE_CLASS_NAME)
                 self._vacuum_map = make_vessel_map(
                     self._graph, CHEMPUTER_VACUUM_CLASS_NAME)
-                self._filter_inert_gas_map = make_filter_inert_gas_map(
-                    self._graph)
+                self._inert_gas_map = make_inert_gas_map(self._graph)
                 self._valve_map = make_vessel_map(
                     self._graph, CHEMPUTER_VALVE_CLASS_NAME)
 
@@ -627,10 +692,8 @@ class XDLExecutor(object):
                     # during _add_implied_steps.
                     self._get_hardware_map()
                     self._map_hardware_to_steps() 
-
                     # Add in steps implied by explicit steps.
                     self._add_implied_steps(interactive=interactive)
-
                     # Convert implied properties to concrete values.
                     self._add_all_volumes()
                     self._add_filter_volumes()

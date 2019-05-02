@@ -69,7 +69,6 @@ DEFAULT_CLEAN_VESSEL_STIR_TIME: int = 60
 #############
 ## Rotavap ##
 #############
-
 #: Default time in seconds for evaporating mixture to dryness.
 DEFAULT_ROTAVAP_DRYING_TIME: int = 2* 60 * 60
 
@@ -77,7 +76,10 @@ DEFAULT_ROTAVAP_DRYING_TIME: int = 2* 60 * 60
 DEFAULT_ROTAVAP_ROTATION_SPEED: int = 150
 
 #: Default rotation speed in RPM for the rotavap when dissolving something.
-DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED: int = 300
+DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED: int = 250
+
+#: Default time to wait for bath to heat up with rotavap.
+DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME: int = 60 * 5
 
 ###############
 ## Filtering ##
@@ -117,10 +119,13 @@ DEFAULT_DRY_WASTE_VOLUME: int = 5
 #: Default move speed in mL for transferring liquid through filtering cartridge.
 DEFAULT_FILTER_THROUGH_MOVE_SPEED: int = 5
 
+#: Default amount of nitrogen (or air) to push through cartridge after
+#: FilterThrough step to push out any remaining liquid.
+DEFAULT_CARTRIDGE_DEAD_VOLUME: int = 25
+
 #################
 ### WashSolid ###
 #################
-
 DEFAULT_WASH_SOLID_STIR_RPM: int = 400
 
 DEFAULT_WASH_SOLID_STIR_TIME: int = 60 * 5
@@ -139,6 +144,15 @@ DEFAULT_STIR_RPM: int = 250
 
 #: Default speed in RPM to stir at when dissolving.
 DEFAULT_DISSOLVE_STIR_RPM: int = 400
+
+#####################
+### Precipitation ###
+#####################
+#: Default time to stir for after precipitation temperature is reached.
+DEFAULT_PRECIPITATION_TIME = 60 * 60
+
+#: Default temp in celsius to chill to for precipitation.
+DEFAULT_PRECIPITATION_TEMP = 25
 
 ###########
 ## Video ##
@@ -167,8 +181,9 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'Dry': {
         'time': DEFAULT_DRY_TIME,
         'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
+        'vacuum_pressure': DEFAULT_FILTER_VACUUM_PRESSURE,
     },
-    'WashFilterCake': {
+    'WashSolid': {
         'volume': DEFAULT_WASHFILTERCAKE_VOLUME,
         'move_speed': DEFAULT_MOVE_SPEED,
         'vacuum_time': DEFAULT_WASHFILTERCAKE_VACUUM_TIME,
@@ -233,13 +248,10 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'move_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
         'aspiration_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
         'eluting_repeats': 1,
+        'cartridge_dead_volume': DEFAULT_CARTRIDGE_DEAD_VOLUME,
     },
     'StartVacuum': {
         'pressure': DEFAULT_FILTER_VACUUM_PRESSURE,
-    },
-    'WashSolid': {
-        'stir_rpm': DEFAULT_WASH_SOLID_STIR_RPM,
-        'stir_time': DEFAULT_WASH_SOLID_STIR_TIME,
     },
     'RotavapStartRotation': {
         'rotation_speed': DEFAULT_ROTAVAP_ROTATION_SPEED,
@@ -249,15 +261,45 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     },
     'CleanVessel': {
         'stir_time': DEFAULT_CLEAN_VESSEL_STIR_TIME,
-    }
+    },
+    'SetStirRate': {
+        'stir_rpm': DEFAULT_STIR_RPM,
+    },
+    'Precipitate': {
+        'time': DEFAULT_PRECIPITATION_TIME,
+        'temp': DEFAULT_PRECIPITATION_TEMP,
+    },
 }
 
 INTERNAL_PROPERTIES = {
     'Add': ['reagent_vessel', 'waste_vessel', 'flush_tube_vessel'],
     'AddCorrosive': ['reagent_vessel', 'air_vessel'],
-    'Filter': ['waste_vessel', 'vacuum', 'inert_gas', 'filter_top_volume'],
-    'WashFilterCake': ['waste_vessel', 'vacuum', 'inert_gas'],
-    'Dry': ['waste_vessel', 'vacuum', 'inert_gas'],
+    'Filter': [
+        'waste_vessel',
+        'vacuum',
+        'inert_gas',
+        'filter_top_volume',
+        'vacuum_device'
+    ],
+    'WashSolid': [
+        'waste_vessel',
+        'vacuum',
+        'inert_gas',
+        'vacuum_device',
+        'vessel_type',
+        'valve_unused_port',
+        'vacuum_valve',
+    ],
+    'Dry': [
+        'waste_vessel',
+        'vacuum',
+        'inert_gas',
+        'vacuum_device',
+        'vacuum_valve',
+        'valve_unused_port',
+        'vessel_type',
+        'vessel_has_stirrer'
+    ],
     'Separate': ['waste_vessel'],
     'HeatChill': ['vessel_type'],
     'PrimePumpForAdd': ['reagent_vessel', 'waste_vessel'],
@@ -267,6 +309,7 @@ INTERNAL_PROPERTIES = {
     'CleanBackbone': ['solvent_vessel', 'waste_vessels'],
     'AddFilterDeadVolume': ['waste_vessel', 'solvent_vessel'],
     'RemoveFilterDeadVolume': ['waste_vessel'],
+    'Stir': ['vessel_type'],
 }
 
 
@@ -337,3 +380,8 @@ SYNTHESIS_ATTRS = [
         'default': None,
     },
 ]
+
+#: Steps for which the volume shouldn't be scaled if XDL.scale_procedure is
+# called.
+UNSCALED_STEPS = [
+    'CleanVessel', 'AddFilterDeadVolume', 'RemoveFilterDeadVolume']
