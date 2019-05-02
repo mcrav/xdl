@@ -145,6 +145,15 @@ DEFAULT_STIR_RPM: int = 250
 #: Default speed in RPM to stir at when dissolving.
 DEFAULT_DISSOLVE_STIR_RPM: int = 400
 
+#####################
+### Precipitation ###
+#####################
+#: Default time to stir for after precipitation temperature is reached.
+DEFAULT_PRECIPITATION_TIME = 60 * 60
+
+#: Default temp in celsius to chill to for precipitation.
+DEFAULT_PRECIPITATION_TEMP = 25
+
 ###########
 ## Video ##
 ###########
@@ -255,7 +264,11 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     },
     'SetStirRate': {
         'stir_rpm': DEFAULT_STIR_RPM,
-    }
+    },
+    'Precipitate': {
+        'time': DEFAULT_PRECIPITATION_TIME,
+        'temp': DEFAULT_PRECIPITATION_TEMP,
+    },
 }
 
 INTERNAL_PROPERTIES = {
