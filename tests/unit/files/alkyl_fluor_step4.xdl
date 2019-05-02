@@ -21,6 +21,11 @@
   </Reagents>
 
   <Procedure>
+    <Add
+      reagent="KF"
+      mass="5 g"
+      vessel="filter2"
+    />
     <Dry
       vessel="filter2"
       temp="40"

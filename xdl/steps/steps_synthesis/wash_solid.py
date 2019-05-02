@@ -76,11 +76,11 @@ class WashSolid(AbstractStep):
             steps = [
                 Add(vessel=self.vessel, reagent=self.solvent, volume=self.volume),
                 Stir(vessel=self.vessel,
-                    time=self.stir_time,
-                    stir_rpm=self.stir_rpm),
+                     time=self.stir_time,
+                     stir_rpm=self.stir_rpm),
                 Transfer(from_vessel=self.vessel,
-                        to_vessel=self.waste_vessel,
-                        volume='all'),
+                         to_vessel=self.waste_vessel,
+                         volume='all'),
             ]
         # Filter WashSolid steps
         else:
@@ -106,7 +106,7 @@ class WashSolid(AbstractStep):
                 StartVacuum(
                     vessel=self.vacuum, pressure=DEFAULT_FILTER_VACUUM_PRESSURE),
                 CConnect(from_vessel=self.vessel, to_vessel=self.vacuum,
-                        from_port=BOTTOM_PORT),
+                         from_port=BOTTOM_PORT),
                 Wait(self.vacuum_time),
             ]
 
