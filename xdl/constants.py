@@ -69,7 +69,6 @@ DEFAULT_CLEAN_VESSEL_STIR_TIME: int = 60
 #############
 ## Rotavap ##
 #############
-
 #: Default time in seconds for evaporating mixture to dryness.
 DEFAULT_ROTAVAP_DRYING_TIME: int = 2* 60 * 60
 
@@ -253,6 +252,9 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     },
     'CleanVessel': {
         'stir_time': DEFAULT_CLEAN_VESSEL_STIR_TIME,
+    },
+    'SetStirRate': {
+        'stir_rpm': DEFAULT_STIR_RPM,
     }
 }
 

@@ -22,7 +22,7 @@ from ..steps_base import (
     CRotavapStopRotation,
 )
 from .general import Wait
-from .stirring import StopStir
+from .stirring import StopStir, StartStir, SetStirRate
 from ...constants import ROOM_TEMPERATURE, DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME
 from ...utils.errors import XDLError
 
@@ -77,13 +77,20 @@ class HeatChillToTemp(AbstractStep):
             ]
 
         if self.stir:
-            steps.insert(0, CStir(vessel=self.vessel))
+            steps.insert(0, StartStir(
+                vessel=self.vessel, vessel_type=self.vessel_type))
             if self.stir_rpm:
                 steps.insert(
-                    0, CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm))
+                    0, SetStirRate(
+                        vessel=self.vessel,
+                        vessel_type=self.vessel_type,
+                        stir_rpm=self.stir_rpm))
             else:
                 steps.insert(
-                    0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+                    0, SetStirRate(
+                        vessel=self.vessel,
+                        vessel_type=self.vessel_type,
+                        stir_rpm='default'))
         else:
             steps.insert(0, StopStir(
                 vessel=self.vessel, vessel_type=self.vessel_type))
@@ -183,13 +190,20 @@ class HeatChillReturnToRT(AbstractStep):
             ]
 
         if self.stir:
-            steps.insert(0, CStir(vessel=self.vessel))
+            steps.insert(0, StartStir(
+                vessel=self.vessel, vessel_type=self.vessel_type))
             if self.stir_rpm:
                 steps.insert(
-                    0, CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm))
+                    0, SetStirRate(
+                        vessel=self.vessel,
+                        vessel_type=self.vessel_type,
+                        stir_rpm=self.stir_rpm))
             else:
                 steps.insert(
-                    0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+                    0, SetStirRate(
+                        vessel=self.vessel,
+                        vessel_type=self.vessel_type,
+                        stir_rpm='default'))
         else:
             steps.insert(0, StopStir(
                 vessel=self.vessel, vessel_type=self.vessel_type))
