@@ -7,7 +7,7 @@ from ..steps_base import (
     CStopStir)
 from .general import Wait
 from .rotavap import RotavapStir
-
+from ...constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
 class StartStir(AbstractStep):
     """Start stirring given vessel.
 
@@ -92,10 +92,13 @@ class Stir(AbstractStep):
 
     def get_steps(self) -> List[Step]:
         if self.vessel_is_rotavap:
+            # Limit stir_rpm as rotavap can't rotate as fast as stirrer.
+            stir_rpm = min(
+                self.stir_rpm, DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED)
             return [
                 RotavapStir(
                     rotavap_name=self.vessel,
-                    stir_rpm=self.stir_rpm,
+                    stir_rpm=stir_rpm,
                     time=self.time),
             ]
         else:

@@ -64,7 +64,7 @@ class CleanVessel(AbstractStep):
                     to_vessel=self.vessel,
                     volume=self.volume),
                 Stir(vessel=self.vessel,
-                    time=self.stir_time),
+                     time=self.stir_time),
                 Transfer(from_vessel=self.vessel,
                         to_vessel=self.waste_vessel,
                         volume='all'),

@@ -46,3 +46,12 @@ def test_rotavap_collection_volume():
         if type(step) == Rotavap:
             # collection_flask_volume in graph
             assert step.steps[-1].volume == 50
+
+def test_rotavap_rotation_speed():
+    xdl_f = os.path.join(FOLDER, 'alkyl_fluor_step4.xdl')
+    graph_f = os.path.join(FOLDER, 'alkyl_fluor_step4.graphml')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)
+    for step in x.base_steps:
+        if step.name == 'CRotavapSetRotationSpeed':
+            assert step.rotation_speed <= 300

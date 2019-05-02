@@ -77,7 +77,7 @@ DEFAULT_ROTAVAP_DRYING_TIME: int = 2* 60 * 60
 DEFAULT_ROTAVAP_ROTATION_SPEED: int = 150
 
 #: Default rotation speed in RPM for the rotavap when dissolving something.
-DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED: int = 300
+DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED: int = 250
 
 ###############
 ## Filtering ##
