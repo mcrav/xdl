@@ -273,7 +273,7 @@ INTERNAL_PROPERTIES = {
         'vacuum',
         'inert_gas',
         'vacuum_device',
-        'vessel_is_filter',
+        'vessel_type',
         'valve_unused_port',
         'vacuum_valve',
     ],
@@ -284,8 +284,7 @@ INTERNAL_PROPERTIES = {
         'vacuum_device',
         'vacuum_valve',
         'valve_unused_port',
-        'vessel_is_filter',
-        'vessel_is_rotavap',
+        'vessel_type',
         'vessel_has_stirrer'
     ],
     'Separate': ['waste_vessel'],
@@ -297,7 +296,7 @@ INTERNAL_PROPERTIES = {
     'CleanBackbone': ['solvent_vessel', 'waste_vessels'],
     'AddFilterDeadVolume': ['waste_vessel', 'solvent_vessel'],
     'RemoveFilterDeadVolume': ['waste_vessel'],
-    'Stir': ['vessel_is_rotavap'],
+    'Stir': ['vessel_type'],
 }
 
 

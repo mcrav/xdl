@@ -27,9 +27,8 @@ class Dissolve(AbstractStep):
         temp (float): Temperature to stir at. Optional.
         time (float): Time to stir for. Optional.
         solvent_vessel (str): Given internally. Flask containing solvent.
-        vessel_is_rotavap (bool): Given internally. True is vessel is a rotavap.
-            Needed as different procedure used for dissolving a solid in a
-            rotavap.
+        vessel_type (str): Given internally. 'reactor', 'filter', 'rotavap',
+            'flask' or 'separator'.
     """
     def __init__(
         self,
@@ -41,12 +40,12 @@ class Dissolve(AbstractStep):
         time: Optional[float] = 'default',
         stir_rpm: Optional[float] = 'default',
         solvent_vessel: Optional[str] = None,
-        vessel_is_rotavap: Optional[bool] = False,
+        vessel_type: Optional[str] = None,
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
-        if self.vessel_is_rotavap:
+        if self.vessel_type == 'rotavap':
             steps = [
                 Add(reagent=self.solvent,
                     volume=self.volume,

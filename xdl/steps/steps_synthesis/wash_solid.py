@@ -47,6 +47,8 @@ class WashSolid(AbstractStep):
             bottom to vacuum.
         valve_unused_port (str): Given internally. Random unused position on
             valve.
+        vessel_type (str): Given internally. 'reactor', 'filter', 'rotavap',
+            'flask' or 'separator'.
     """
     def __init__(
         self,
@@ -65,14 +67,14 @@ class WashSolid(AbstractStep):
         inert_gas: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
         valve_unused_port: Optional[str] = None,
-        vessel_is_filter: Optional[bool] = True,
+        vessel_type: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
         # Rotavap/reactor WashSolid steps
-        if not self.vessel_is_filter:
+        if not self.vessel_type == 'filter':
             steps = [
                 Add(vessel=self.vessel, reagent=self.solvent, volume=self.volume),
                 Stir(vessel=self.vessel,

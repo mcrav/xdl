@@ -33,10 +33,8 @@ class Dry(AbstractStep):
             bottom to vacuum.
         valve_unused_port (str): Given internally. Random unused position on
             valve.
-        vessel_is_filter (bool): Given internally. True if vessel is a filter,
-            otherwise False. Determines drying method.
-        vessel_is_rotavap (bool): Given internally. True if vessel is a rotavap,
-            otherwise False.
+        vessel_type (str): Given internally. 'reactor', 'filter', 'rotavap',
+            'flask' or 'separator'.
         vessel_has_stirrer (bool): Given internally. True if vessel is connected
             to a stirrer.
     """
@@ -53,8 +51,7 @@ class Dry(AbstractStep):
         inert_gas: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
         valve_unused_port: Optional[str] = None,
-        vessel_is_filter: Optional[bool] = True,
-        vessel_is_rotavap: Optional[bool] = False,
+        vessel_type: Optional[str] = None,
         vessel_has_stirrer: Optional[bool] = True,
         **kwargs
     ) -> None:
@@ -62,18 +59,18 @@ class Dry(AbstractStep):
 
     def get_steps(self) -> List[Step]:
         steps = []
-        if self.vessel_has_stirrer or self.vessel_is_rotavap:
+        if self.vessel_has_stirrer or self.vessel_type == 'rotavap':
             steps.append(StopStir(vessel=self.vessel))
         # Normally vacuum is a vacuum flask, but in the case of the rotavap,
         # the node attached to the vacuum is the rotavap itself.
         vacuum_vessel = self.vacuum
         from_port = None
-        if self.vessel_is_rotavap:
+        if self.vessel_type == 'rotavap':
             vacuum_vessel = self.vessel
             from_port='collect'
         # from_port should be None unless drying is in a filter in which case
         # use bottom port, or for a rotavap port 'collect' is used.
-        if self.vessel_is_filter:
+        if self.vessel_type == 'filter':
             from_port = BOTTOM_PORT
             
         steps.extend([
@@ -108,7 +105,7 @@ class Dry(AbstractStep):
                 vessel_type='ChemputerFilter',
                 stir=False))
 
-        if not self.vessel_is_rotavap:
+        if not self.vessel_type == 'rotavap':
             steps.extend(get_vacuum_valve_reconnect_steps(
                 inert_gas=self.inert_gas,
                 vacuum_valve=self.vacuum_valve,
