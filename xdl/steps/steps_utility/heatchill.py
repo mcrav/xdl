@@ -15,8 +15,15 @@ from ..steps_base import (
     CSetStirRate,
     CStopStir,
     CStopHeat,
+
+    CRotavapStartHeater,
+    CRotavapStopHeater,
+    CRotavapSetTemp,
+    CRotavapStopRotation,
 )
-from ...constants import ROOM_TEMPERATURE
+from .general import Wait
+from .stirring import StopStir
+from ...constants import ROOM_TEMPERATURE, DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME
 from ...utils.errors import XDLError
 
 class HeatChillToTemp(AbstractStep):
@@ -56,11 +63,17 @@ class HeatChillToTemp(AbstractStep):
             ]
         elif self.vessel_type == 'reactor':
             steps = [
-                CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+                CStirrerSetTemp(vessel=self.vessel, temp=self.temp),
                 CStirrerHeat(vessel=self.vessel),
                 CSetRecordingSpeed(self.wait_recording_speed),
                 CStirrerWaitForTemp(vessel=self.vessel),
                 CSetRecordingSpeed(self.after_recording_speed),
+            ]
+        elif self.vessel_type == 'rotavap':
+            steps = [
+                CRotavapSetTemp(rotavap_name=self.vessel, temp=self.temp),
+                CRotavapStartHeater(rotavap_name=self.vessel),
+                Wait(time=DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME),
             ]
 
         if self.stir:
@@ -72,7 +85,8 @@ class HeatChillToTemp(AbstractStep):
                 steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
         else:
-            steps.insert(0, CStopStir(vessel=self.vessel))
+            steps.insert(0, StopStir(
+                vessel=self.vessel, vessel_type=self.vessel_type))
         return steps
     
     @property
@@ -104,13 +118,13 @@ class StopHeatChill(AbstractStep):
     
     def get_steps(self) -> List[Step]:
         if self.vessel_type == 'filter':
-            return [
-                CStopChiller(self.vessel)
-            ]
+            return [CStopChiller(self.vessel)]
+
         elif self.vessel_type == 'reactor':
-            return [
-                CStopHeat(self.vessel)
-            ]
+            return [CStopHeat(self.vessel)]
+
+        elif self.vessel_type == 'rotavap':
+            return [CRotavapStopHeater(self.vessel)]
 
     @property
     def human_readable(self) -> str:
@@ -162,6 +176,11 @@ class HeatChillReturnToRT(AbstractStep):
                 CStirrerWaitForTemp(vessel=self.vessel),
                 CStopHeat(self.vessel),
             ]
+        elif self.vessel_type == 'rotavap':
+            steps = [
+                CRotavapStopHeater(rotavap_name=self.vessel),
+                Wait(time=DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME),
+            ]
 
         if self.stir:
             steps.insert(0, CStir(vessel=self.vessel))
@@ -172,7 +191,8 @@ class HeatChillReturnToRT(AbstractStep):
                 steps.insert(
                     0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
         else:
-            steps.insert(0, CStopStir(vessel=self.vessel))
+            steps.insert(0, StopStir(
+                vessel=self.vessel, vessel_type=self.vessel_type))
         return steps
 
     @property

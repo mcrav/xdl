@@ -21,6 +21,7 @@
       vessel="rotavap"
       vacuum_pressure="600"
       time="2 hrs"
+      temp="50"
     />
 
   </Procedure>

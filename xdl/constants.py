@@ -79,6 +79,9 @@ DEFAULT_ROTAVAP_ROTATION_SPEED: int = 150
 #: Default rotation speed in RPM for the rotavap when dissolving something.
 DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED: int = 250
 
+#: Default time to wait for bath to heat up with rotavap.
+DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME: int = 60 * 5
+
 ###############
 ## Filtering ##
 ###############

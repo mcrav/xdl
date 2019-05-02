@@ -23,4 +23,5 @@ class CValveMoveToPosition(AbstractBaseStep):
     ) -> None:
         valve = chempiler[self.valve_name]
         valve.move_to_position(self.position)
+        return True
     

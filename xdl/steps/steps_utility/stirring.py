@@ -4,7 +4,9 @@ from ..base_step import AbstractStep, Step
 from ..steps_base import (
     CStir,
     CSetStirRate,
-    CStopStir)
+    CStopStir,
+    CRotavapStopRotation,
+)
 from .general import Wait
 from .rotavap import RotavapStir
 from ...constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
@@ -52,26 +54,24 @@ class StopStir(AbstractStep):
             stirrer then it is just ignored rather than an error being raised.
     """
     def __init__(
-        self, vessel: str, vessel_has_stirrer: bool = True, **kwargs) -> None:
+        self,
+        vessel:str,
+        vessel_type: str = None,
+        vessel_has_stirrer: bool = True,
+        **kwargs
+    ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
         if self.vessel_has_stirrer:
             return [CStopStir(vessel=self.vessel)]
+        elif self.vessel_type == 'rotavap':
+            return [CRotavapStopRotation(rotavap_name=self.vessel)]
         return []
 
     @property
     def human_readable(self) -> str:
         return 'Stop stirring {0}.'.format(self.vessel)
-
-    @property
-    def requirements(self) -> Dict[str, Dict[str, Any]]:
-        return {
-            'vessel': {
-                'stir': True
-            }
-        }
-
 
 class Stir(AbstractStep):
     """Stir given vessel for given time at room temperature.
