@@ -33,11 +33,10 @@ class SetStirRate(AbstractStep):
         else:
             return [CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm)]
 
+    @property
     def human_readable(self) -> str:
         return 'Set stir rate of {vessel} to {stir_rpm} RPM.'.format(
             **self.properties)
-
-
 
 class StartStir(AbstractStep):
     """Start stirring given vessel.

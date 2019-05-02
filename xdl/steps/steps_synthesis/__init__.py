@@ -3,6 +3,7 @@ from .add_corrosive import AddCorrosive
 from .dissolve import Dissolve
 
 from .heatchill import HeatChill
+from .precipitate import Precipitate
 
 from .filter import Filter
 from .filter_through import FilterThrough
