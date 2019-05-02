@@ -36,6 +36,7 @@ class CleanVessel(AbstractStep):
         solvent: str,
         stir_time: Optional[float] = 'default',
         volume: Optional[float] = None,
+        repeat: Optional[float] = 2,
         solvent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
         **kwargs
@@ -48,6 +49,7 @@ class CleanVessel(AbstractStep):
             stir_time (float): Time to stir for after solvent is added.
             volume (float): Volume of solvent to use. If not supplied will be
                 given internally according to vessel max volume.
+            repeat (int): Number of cleans to do.
             solvent_vessel (str): Given internally. Flask containing solvent.
             waste_vessel (str): Given internally. Vessel to send waste solvent
                 to.
@@ -55,16 +57,19 @@ class CleanVessel(AbstractStep):
         super().__init__(locals())
 
     def get_steps(self):
-        return [
-            CMove(from_vessel=self.solvent_vessel,
-                  to_vessel=self.vessel,
-                  volume=self.volume),
-            Stir(vessel=self.vessel,
-                 time=self.stir_time),
-            Transfer(from_vessel=self.vessel,
-                     to_vessel=self.waste_vessel,
-                     volume='all'),
-        ]
+        steps = []
+        for _ in range(self.repeat):
+            steps.extend([
+                CMove(from_vessel=self.solvent_vessel,
+                    to_vessel=self.vessel,
+                    volume=self.volume),
+                Stir(vessel=self.vessel,
+                    time=self.stir_time),
+                Transfer(from_vessel=self.vessel,
+                        to_vessel=self.waste_vessel,
+                        volume='all'),
+            ])
+        return steps
 
     @property
     def human_readable(self) -> str:

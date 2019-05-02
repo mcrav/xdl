@@ -94,6 +94,10 @@ def test_clean_vessel_scheduling():
         emptying_step_passed = False
         legit = True
         if type(x.steps[i]) == CleanVessel:
+            # Check default double clean is being done.
+            assert (len([step
+                         for step in x.steps[i].steps
+                         if step.name == 'CMove']) == 2)
             legit = False
             j = i
             while j > 0:
