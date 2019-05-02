@@ -161,7 +161,9 @@ def get_clean_backbone_steps(steps: List[Step]) -> List[int]:
     clean_backbone_steps = []
     for i, step in enumerate(steps):
         if type(step) in CLEAN_BACKBONE_AFTER_STEPS:
-            clean_backbone_steps.append(i)
+            # Don't clean after solid additions
+            if not (type(step) == Add and step.mass):
+                clean_backbone_steps.append(i)
     return clean_backbone_steps
 
 def get_clean_backbone_sequence(xdl_obj) -> List[Tuple[int, str]]:
