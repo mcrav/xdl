@@ -5,6 +5,9 @@ from ..steps import *
 ### CLEANING ###
 ################
 
+#: Fraction of vessel max volume to use as solvent volume in CleanVessel step.
+CLEAN_VESSEL_VOLUME_FRACTION: float = 0.5
+
 #: Solvents that shouldn't be used for cleaning backbone.
 #: Toluene tends to dissolve glue in syringe pumps.
 CLEANING_SOLVENT_BLACKLIST: List[str] = ['toluene']

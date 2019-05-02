@@ -28,7 +28,7 @@ from .cleaning import (
     verify_cleaning_steps,
     get_cleaning_schedule
 )
-from .constants import INERT_GAS_SYNONYMS
+from .constants import INERT_GAS_SYNONYMS, CLEAN_VESSEL_VOLUME_FRACTION
 
 class XDLExecutor(object):
  
@@ -187,7 +187,7 @@ class XDLExecutor(object):
             if 'volume' in step.properties and type(step) == CleanVessel:
                 if step.volume == None:
                     step.volume = self._graph_hardware[
-                        step.vessel].max_volume * 0.8
+                        step.vessel].max_volume * CLEAN_VESSEL_VOLUME_FRACTION
 
             if ('collection_flask_volume' in step.properties
                  and not step.collection_flask_volume):
