@@ -310,6 +310,7 @@ INTERNAL_PROPERTIES = {
     'AddFilterDeadVolume': ['waste_vessel', 'solvent_vessel'],
     'RemoveFilterDeadVolume': ['waste_vessel'],
     'Stir': ['vessel_type'],
+    'StopStir': ['vessel_has_stirrer'],
 }
 
 
