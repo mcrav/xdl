@@ -29,6 +29,8 @@ class Separate(AbstractStep):
         solvent (str): Solvent to extract with.
         solvent_volume (float): Volume of solvent to extract with.
         product_bottom (bool): True if product in bottom phase, otherwise False.
+        through (str): Optional. Cartridge to transfer product phrase through
+            on way to to_vessel.
         n_separations (int): Number of separations to perform.
         waste_phase_to_vessel (str): Vessel to send waste phase to.
         waste_phase_to_port (str): waste_phase_to_vessel port to use.
@@ -42,6 +44,7 @@ class Separate(AbstractStep):
         to_vessel: str,
         solvent: str,
         product_bottom: bool,
+        through: Optional[str] = None,
         from_port: Optional[str] = None,
         to_port: Optional[str] = None,
         solvent_volume: Optional[float] = 'default',
