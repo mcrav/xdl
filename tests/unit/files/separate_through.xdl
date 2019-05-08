@@ -1,0 +1,70 @@
+
+<Synthesis>
+  <Hardware>
+    <Component
+      id="rotavap"
+      type="rotavap"
+    />
+    <Component
+      id="filter"
+      type="filter"
+    />
+    <Component
+      id="reactor"
+      type="reactor"
+    />
+  </Hardware>
+
+  <Reagents>
+    <Reagent id="water" />
+    <Reagent id="ether" />
+  </Reagents>
+
+  <Procedure>
+    <Separate
+      purpose="wash"
+      from_vessel="flask_water"
+      separation_vessel="separator"
+      to_vessel="rotavap"
+      through="cartridge_mgso4"
+      solvent="ether"
+      product_bottom="False"
+      to_port="evaporate"
+      solvent_volume="50 mL"
+      n_separations="1" />
+    <Separate
+      purpose="wash"
+      from_vessel="flask_water"
+      separation_vessel="separator"
+      to_vessel="rotavap"
+      through="cartridge_mgso4"
+      solvent="ether"
+      product_bottom="True"
+      to_port="evaporate"
+      solvent_volume="50 mL"
+      n_separations="1" />
+    <Separate
+      purpose="wash"
+      from_vessel="flask_water"
+      separation_vessel="separator"
+      to_vessel="rotavap"
+      through="cartridge_mgso4"
+      solvent="ether"
+      product_bottom="False"
+      to_port="evaporate"
+      solvent_volume="50 mL"
+      n_separations="2" />
+    <Separate
+      purpose="wash"
+      from_vessel="flask_water"
+      separation_vessel="separator"
+      to_vessel="rotavap"
+      through="cartridge_mgso4"
+      solvent="ether"
+      product_bottom="True"
+      to_port="evaporate"
+      solvent_volume="50 mL"
+      n_separations="2" />
+  </Procedure>
+
+</Synthesis>

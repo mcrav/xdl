@@ -25,7 +25,12 @@ class CSeparatePhases(AbstractBaseStep):
         separation_vessel: str,
         dead_volume_target: str,
         lower_phase_port: Optional[str] = None,
-        upper_phase_port: Optional[str] = None
+        upper_phase_port: Optional[str] = None,
+        dead_volume_port: Optional[str] = None,
+        lower_phase_through: Optional[str] = None,
+        upper_phase_through: Optional[str] = None,
+        dead_volume_through: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -34,8 +39,12 @@ class CSeparatePhases(AbstractBaseStep):
             separator_flask=self.separation_vessel,
             lower_phase_target=self.lower_phase_vessel,
             lower_phase_port=self.lower_phase_port,
+            lower_phase_through=self.lower_phase_through,
             upper_phase_target=self.upper_phase_vessel,
             upper_phase_port=self.upper_phase_port,
+            upper_phase_through=self.upper_phase_through,
             dead_volume_target=self.dead_volume_target,
+            dead_volume_port=self.dead_volume_port,
+            dead_volume_through=self.dead_volume_through,
         )
         return True
