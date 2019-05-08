@@ -102,11 +102,12 @@ class Separate(AbstractStep):
                                  to_vessel=self.waste_vessel, 
                                  volume=remove_volume),
                         CSeparatePhases(lower_phase_vessel=self.to_vessel, 
-                                  lower_phase_port=self.to_port,
-                                  upper_phase_vessel=self.waste_phase_to_vessel,
-                                  upper_phase_port=self.waste_phase_to_port,
-                                  separation_vessel=self.separation_vessel, 
-                                  dead_volume_target=self.waste_vessel),
+                                        lower_phase_port=self.to_port,
+                                        upper_phase_vessel=self.waste_phase_to_vessel,
+                                        upper_phase_port=self.waste_phase_to_port,
+                                        separation_vessel=self.separation_vessel, 
+                                        dead_volume_target=self.waste_vessel,
+                                        lower_phase_through=self.through),
                         # Move to_vessel to separation_vessel
                         CMove(from_vessel=self.to_vessel, 
                               to_vessel=self.separation_vessel, volume='all'),
@@ -138,7 +139,8 @@ class Separate(AbstractStep):
                     lower_phase_port=self.to_port,
                     upper_phase_vessel=self.waste_phase_to_vessel,
                     upper_phase_port=self.waste_phase_to_port,
-                    dead_volume_target=self.waste_vessel),
+                    dead_volume_target=self.waste_vessel,
+                    lower_phase_through=self.through),
             ])
         else:
             if n_separations > 1:
@@ -178,7 +180,8 @@ class Separate(AbstractStep):
                                 upper_phase_vessel=self.to_vessel,
                                 upper_phase_port=self.to_port,
                                 separation_vessel=self.separation_vessel,
-                                dead_volume_target=self.waste_vessel)
+                                dead_volume_target=self.waste_vessel,
+                                upper_phase_through=self.through)
             ])
         return steps
 

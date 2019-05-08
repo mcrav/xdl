@@ -74,8 +74,8 @@
     {
       "id": "vacuum_rotavap",
       "type": "vacuum",
-      "x": 280,
-      "y": 240,
+      "x": 360,
+      "y": 120,
       "internalId": 11,
       "label": "vacuum_rotavap",
       "class": "CVC3000",
@@ -366,14 +366,14 @@
       "necks": 1
     },
     {
-      "id": 69,
+      "id": "separator",
       "type": "separator",
       "x": -480,
       "y": 280,
       "internalId": 69,
-      "label": 69,
+      "label": "separator",
       "class": "ChemputerSeparator",
-      "name": "",
+      "name": "separator",
       "current_volume": 0,
       "max_volume": 100,
       "necks": 1
@@ -394,24 +394,53 @@
       "type": "chiller",
       "x": -360,
       "y": 440,
+      "internalId": 75,
+      "label": "filter_chiller",
       "class": "JULABOCF41",
       "name": "filter_chiller",
       "min_temp": -40,
       "max_temp": 90,
-      "port": "",
-      "internalId": 75,
-      "label": "filter_chiller"
+      "port": ""
     },
     {
       "id": "reactor_heater",
       "type": "heater",
       "x": -120,
       "y": 360,
+      "internalId": 77,
+      "label": "reactor_heater",
       "class": "IKARCTDigital",
       "name": "reactor_heater",
+      "port": ""
+    },
+    {
+      "id": 79,
+      "type": "conductivity_sensor",
+      "x": -560,
+      "y": 280,
+      "class": "ConductivitySensor",
+      "name": "",
       "port": "",
-      "internalId": 77,
-      "label": "reactor_heater"
+      "internalId": 79,
+      "label": 79
+    },
+    {
+      "id": "cartridge_mgso4",
+      "type": "custom",
+      "x": 200,
+      "y": 400,
+      "customProperties": {
+        "name": {
+          "name": "name",
+          "id": "name",
+          "units": "",
+          "type": "str"
+        }
+      },
+      "class": "ChemputerCartridge",
+      "name": "cartridge_mgso4",
+      "internalId": 81,
+      "label": "cartridge_mgso4"
     }
   ],
   "links": [
@@ -748,14 +777,14 @@
       "sourceInternal": 61,
       "targetInternal": 69,
       "source": "valve_separator",
-      "target": 69,
+      "target": "separator",
       "port": "(0,top)"
     },
     {
       "id": 71,
       "sourceInternal": 69,
       "targetInternal": 61,
-      "source": 69,
+      "source": "separator",
       "target": "valve_separator",
       "port": "(bottom,1)"
     },
@@ -764,7 +793,7 @@
       "sourceInternal": 61,
       "targetInternal": 69,
       "source": "valve_separator",
-      "target": 69,
+      "target": "separator",
       "port": "(1,bottom)"
     },
     {
@@ -772,7 +801,7 @@
       "sourceInternal": 73,
       "targetInternal": 69,
       "source": 73,
-      "target": 69,
+      "target": "separator",
       "port": "(,)"
     },
     {
@@ -790,6 +819,30 @@
       "source": "reactor_heater",
       "target": "reactor",
       "port": "(,)"
+    },
+    {
+      "id": 80,
+      "sourceInternal": 79,
+      "targetInternal": 69,
+      "source": 79,
+      "target": "separator",
+      "port": "(,)"
+    },
+    {
+      "id": 82,
+      "sourceInternal": 69,
+      "targetInternal": 81,
+      "source": "separator",
+      "target": "cartridge_mgso4",
+      "port": "(bottom,in)"
+    },
+    {
+      "id": 83,
+      "sourceInternal": 81,
+      "targetInternal": 3,
+      "source": "cartridge_mgso4",
+      "target": "rotavap",
+      "port": "(out,evaporate)"
     }
   ]
 }
