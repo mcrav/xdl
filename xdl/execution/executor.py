@@ -458,10 +458,13 @@ class XDLExecutor(object):
         # Look for filter emptying steps and add RemoveFilterDeadVolume step
         # just before them.
         for i, vessel, _ in reversed(self._get_filter_emptying_steps()):
-            self._xdl.steps.insert(i,
-                RemoveFilterDeadVolume(
-                    filter_vessel=vessel, 
-                    dead_volume=self._get_filter_dead_volume(vessel)))
+            # Only move to waste after Filter step. For any other step should
+            # become part of the reaction mixture. 
+            if self._xdl.steps[i].name == 'Filter':
+                self._xdl.steps.insert(i,
+                    RemoveFilterDeadVolume(
+                        filter_vessel=vessel, 
+                        dead_volume=self._get_filter_dead_volume(vessel)))
 
     def _add_filter_inert_gas_connect_steps(self) -> None:
         """Add steps to self._xdl.steps to implement the following:
