@@ -11,21 +11,10 @@
   </Reagents>
 
   <Procedure>
-    <Add
-      vessel="filter"
-      reagent="ether"
-      volume="15 mL"
-      port="top"
-    />
-    <Filter filter_vessel="filter" />
     <WashSolid
       vessel="filter"
       solvent="ether"
-    />
-    <Dry
-      vessel="filter"
-      vacuum_pressure="600"
-      time="2 hrs"
+      temp="10"
     />
 
   </Procedure>

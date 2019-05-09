@@ -9,7 +9,9 @@ from ..steps_utility import (
     StartVacuum,
     StopVacuum,
     Stir,
-    Transfer
+    Transfer,
+    HeatChillToTemp,
+    StopHeatChill,
 )
 from ..steps_base import CMove, CConnect, CVentVacuum
 from ...constants import (
@@ -25,6 +27,7 @@ class WashSolid(AbstractStep):
         vessel (str): Vessel containing contents to wash.
         solvent (str): Solvent to wash with.
         volume (float): Volume of solvent to wash with.
+        temp (float): Optional. Temperature to perform wash at.
         vacuum_time (float): Time to wait after vacuum connected.
         stir (Union[float, str]): True, 'solvent' or False. True means stir from
             the start until the solvent has been removed. 'solvent' means stir
@@ -55,6 +58,7 @@ class WashSolid(AbstractStep):
         vessel: str,
         solvent: str,
         volume: Optional[float] = 'default',
+        temp: Optional[float] = None,
         vacuum_time: Optional[float] = 'default',
         stir: Optional[Union[bool, str]] = 'solvent', 
         stir_time: Optional[float] = 'default',
@@ -73,9 +77,10 @@ class WashSolid(AbstractStep):
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
+        steps = []
         # Rotavap/reactor WashSolid steps
         if not self.vessel_type == 'filter':
-            steps = [
+            steps.extend([
                 Add(vessel=self.vessel, reagent=self.solvent, volume=self.volume),
                 Stir(vessel=self.vessel,
                      time=self.stir_time,
@@ -83,14 +88,14 @@ class WashSolid(AbstractStep):
                 Transfer(from_vessel=self.vessel,
                          to_vessel=self.waste_vessel,
                          volume='all'),
-            ]
+            ])
         # Filter WashSolid steps
         else:
             filtrate_vessel = self.filtrate_vessel
             if not filtrate_vessel:
                 filtrate_vessel = self.waste_vessel
 
-            steps = [
+            steps.extend([
                 # Add solvent
                 Add(reagent=self.solvent, volume=self.volume,
                     vessel=self.vessel, port=TOP_PORT, 
@@ -110,7 +115,7 @@ class WashSolid(AbstractStep):
                 CConnect(from_vessel=self.vessel, to_vessel=self.vacuum,
                          from_port=BOTTOM_PORT),
                 Wait(self.vacuum_time),
-            ]
+            ])
 
             # If vacuum is just from vacuum line not device remove Start/Stop vacuum
             # steps.
@@ -141,7 +146,14 @@ class WashSolid(AbstractStep):
             if self.vacuum_device:
                 steps.extend([
                     StopVacuum(vessel=self.vacuum),
-                    CVentVacuum(vessel=self.vacuum)])
+                    CVentVacuum(vessel=self.vacuum)
+                ])
+
+            # If self.temp isn't None add HeatChill steps at beginning and end.
+            if self.temp != None:
+                steps.insert(
+                    0, HeatChillToTemp(vessel=self.vessel, temp=self.temp))
+                steps.append(StopHeatChill(vessel=self.vessel))
             
         return steps
 
