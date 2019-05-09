@@ -32,10 +32,8 @@ ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE = [
     'acetonitrile',
     # CleanVessel
     'acetonitrile',
-    # HeatChill, HeatChillReturnToRT
-    # RemoveFilterDeadVolume
-    'acetonitrile',
     'dcm',
+    # HeatChill, HeatChillReturnToRT
     # FilterThrough
     'dcm',
     # Rotavap
@@ -63,6 +61,8 @@ def test_cleaning_schedule():
     x.prepare_for_execution(graph_f, interactive=False)
     cleaning_solvents = [
         step.solvent for step in x.steps if type(step) == CleanBackbone]
+    for solvent in cleaning_solvents:
+        print(solvent)
     for i in range(len(cleaning_solvents)):
         assert (ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE[i].lower()
                 == cleaning_solvents[i].lower())
