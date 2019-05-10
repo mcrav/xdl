@@ -143,7 +143,7 @@ class XDLExecutor(object):
             # it is not provided in the graph it falls back to default.
             if 'cartridge_dead_volume' in step.properties:
                 cartridge = self._graph_hardware[step.through_cartridge]
-                if 'dead_volume' in cartridge.properties:
+                if cartridge and 'dead_volume' in cartridge.properties:
                     step.cartridge_dead_volume = cartridge.dead_volume
 
             if 'vacuum' in step.properties and not step.vacuum:
