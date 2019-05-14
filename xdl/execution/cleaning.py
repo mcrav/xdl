@@ -309,11 +309,20 @@ def get_clean_vessel_sequence(
             [(index_to_insert_clean_vessel_step, vessel, solvent_to_use)...]
     """
     step_solvents = get_cleaning_schedule(xdl_obj)
+    steps = xdl_obj.steps
     cleaning_sequence = []
-    for i, vessel in get_vessel_emptying_steps(xdl_obj.steps, hardware):
+    for i, vessel in get_vessel_emptying_steps(steps, hardware):
         if i > 0:
-            before_step = xdl_obj.steps[i-1]
+            before_step = steps[i-1]
+            # Dissolve, followed by emptying step
             if type(before_step) == Dissolve and before_step.vessel == vessel:
+                cleaning_sequence.append((i+1, vessel, step_solvents[i]))
+
+            # Separate step where from_vessel is not separation_vessel or 
+            # to_vessel
+            elif (type(steps[i]) == Separate
+                  and steps[i].from_vessel not in [
+                      steps[i].separation_vessel, steps[i].to_vessel]):
                 cleaning_sequence.append((i+1, vessel, step_solvents[i]))
     return cleaning_sequence
 
