@@ -23,8 +23,9 @@ class Filter(AbstractStep):
         filtrate_vessel (str): Optional. Vessel to send filtrate to. Defaults to
             waste_vessel.
         vacuum (str): Given internally. Name of vacuum flask.
-        vacuum_device (bool): True if vacuum device is node in graph, False if
-            not i.e. vacuum is just vacuum line in fumehood.
+        vacuum_device (str): Given internally. Name of vacuum device attached to
+            vacuum flask. Can be None if vacuum is just from fumehood vacuum
+            line.
         inert_gas (str): Given internally. Name of node supplying inert gas.
             Only used if inert gas filter dead volume method is being used.
         vacuum_valve (str): Given internally. Name of valve connecting filter
@@ -41,7 +42,7 @@ class Filter(AbstractStep):
         waste_vessel: Optional[str] = None,
         filtrate_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
-        vacuum_device: Optional[bool] = False,
+        vacuum_device: Optional[str] = None,
         inert_gas: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
         valve_unused_port: Optional[str] = None,
