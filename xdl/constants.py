@@ -346,7 +346,7 @@ FILTER_DEAD_VOLUME_LIQUID_METHOD: str = 'solvent'
 ROOM_TEMPERATURE: int = 25
 
 #: Keywords that if found in reagent name signify that the reagent is aqueous.
-AQUEOUS_KEYWORDS: List[str] = ['water', 'aqueous', 'acid', '_m_']
+AQUEOUS_KEYWORDS: List[str] = ['water', 'aqueous', 'acid', ' m ', 'hydroxide']
 
 #: Attributes of the <Synthesis> element.
 SYNTHESIS_ATTRS = [
