@@ -77,13 +77,15 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
             Solvents are selected for every step regardless of whether an
             organic clean should be performed at that step.
     """
-    available_solvents = get_available_solvents(xdl_obj.reagents)
+    graph_hardware = xdl_obj.executor._graph_hardware
+    reagents = [Reagent(flask.chemical) for flask in graph_hardware.flasks]
+    available_solvents = get_available_solvents(reagents)
     if not available_solvents:
         return None
     schedule = [None for step in xdl_obj.steps]
     # Add solvents to schedule at solvent addition steps.
     for i, _, _, additions in iter_vessel_contents(
-        xdl_obj.steps, xdl_obj.executor._graph_hardware, additions=True):
+        xdl_obj.steps, graph_hardware, additions=True):
         for reagent in additions:
             cleaning_solvent = get_reagent_cleaning_solvent(
                 reagent, xdl_obj.reagents, available_solvents)
