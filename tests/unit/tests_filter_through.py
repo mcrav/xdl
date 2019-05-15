@@ -17,7 +17,7 @@ def test_filter_through_buffer_flask():
     xdl_f = os.path.join(FOLDER, 'filter_through_buffer_flask.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, interactive=False)
     for step in x.steps:
         if type(step) == FilterThrough:
             assert step.buffer_flask == 'buffer_flask'
