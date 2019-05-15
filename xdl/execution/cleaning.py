@@ -11,6 +11,8 @@ from ..hardware import Hardware
 from ..reagents import Reagent
 from ..constants import AQUEOUS_KEYWORDS
 
+GENERIC_ORGANIC = 0
+
 """
 Backbone Cleaning Rules
 -----------------------
@@ -61,6 +63,7 @@ def get_available_solvents(reagents: List[Reagent]) -> List[str]:
             # Look for stuff like 'X in THF' as well as plain 'THF'.
             if (re.match(r'[ _]?' + solvent, reagent.id.lower())
                 or re.match(r'[ _]?' + solvent, reagent.id.lower())):
+                print('FOUND SOLVENT', solvent)
                 # Don't want to use solvents that damage parts of Chemputer.
                 if not reagent.id.lower() in CLEANING_SOLVENT_BLACKLIST:
                     solvents.append(reagent.id)
@@ -77,21 +80,41 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
             Solvents are selected for every step regardless of whether an
             organic clean should be performed at that step.
     """
-    available_solvents = get_available_solvents(xdl_obj.reagents)
+    graph_hardware = xdl_obj.executor._graph_hardware
+    reagents = [Reagent(flask.chemical) for flask in graph_hardware.flasks]
+    available_solvents = get_available_solvents(reagents)
     if not available_solvents:
         return None
     schedule = [None for step in xdl_obj.steps]
     # Add solvents to schedule at solvent addition steps.
     for i, _, _, additions in iter_vessel_contents(
-        xdl_obj.steps, xdl_obj.executor._graph_hardware, additions=True):
+        xdl_obj.steps, graph_hardware, additions=True):
         for reagent in additions:
             cleaning_solvent = get_reagent_cleaning_solvent(
                 reagent, xdl_obj.reagents, available_solvents)
-            if cleaning_solvent:
+            # Explicit None check as cleaning_solvent can be GENERIC_ORGANIC (0)
+            if cleaning_solvent != None:
                 schedule[i] = cleaning_solvent
-
+    
     # Fill in blanks in schedule.
-    # 1) Treat consecutive SOLVENT_CONTAINING_STEPS as groups and if one step in
+    # 1) Add organic solvents to steps that add a solvent blacklisted for
+    # cleaning.
+    organic_solvents = [(i, item)
+                         for i, item in enumerate(schedule)
+                         if item and item != 'water']
+    for i in range(len(schedule)):
+        if schedule[i] == GENERIC_ORGANIC:
+            if organic_solvents:
+                # Get closest organic solvent in schedule
+                schedule[i] = sorted(
+                    organic_solvents, key=lambda x: abs(x[0] - i))[0][1]
+            else:
+                # Choose random organic solvent.
+                for solvent in available_solvents:
+                    if solvent != 'water':
+                        schedule[i] = solvent
+
+    # 2) Treat consecutive SOLVENT_CONTAINING_STEPS as groups and if one step in
     #    group has a solvent apply that to all steps in the group.
     i = 0
     while i < len(schedule):
@@ -111,7 +134,7 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
                 schedule[j] = reagent
         i = max(j, i + 1)
 
-    # 2) Go forward applying last encountered solvent to every step in schedule.
+    # 3) Go forward applying last encountered solvent to every step in schedule.
     try:
         current_reagent = [item for item in schedule if item][0]
     except IndexError:
@@ -147,9 +170,13 @@ def get_reagent_cleaning_solvent(
     for xdl_reagent in xdl_reagents:
         if xdl_reagent.id == reagent_name and xdl_reagent.cleaning_solvent:
             return xdl_reagent.cleaning_solvent
+
     for word in AQUEOUS_KEYWORDS:
         if word in reagent_name:
             return 'water'
+
+    if reagent_name in CLEANING_SOLVENT_BLACKLIST:
+        return GENERIC_ORGANIC
     return None
 
 def get_clean_backbone_steps(steps: List[Step]) -> List[int]:
