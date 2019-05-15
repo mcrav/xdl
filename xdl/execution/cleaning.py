@@ -48,25 +48,29 @@ CleanVessel rotavap
 
 """
 
-def get_available_solvents(reagents: List[Reagent]) -> List[str]:
-    """Get list of common available solvents in list of Reagent objects given. 
+def get_available_solvents(xdl_obj: 'XDL') -> List[str]:
+    """Get list of common available solvents in XDL object.
+    Reagents list and graph are searched for available solvents. 
     
     Args:
-        reagents (List[Reagent]): List of reagent objects.
+        reagents (XDL): XDL object to get available solvents from.
     
     Returns:
         List[str]: List of common solvents contained in reagents.
     """
     solvents = []
+    reagents = [reagent.id for reagent in xdl_obj.reagents]
+    graph_hardware = xdl_obj.executor._graph_hardware
+    reagents.extend([flask.chemical for flask in graph_hardware.flasks])
+    reagents = list(set(reagents))
     for reagent in reagents:
         for solvent in COMMON_SOLVENT_NAMES:
             # Look for stuff like 'X in THF' as well as plain 'THF'.
-            if (re.match(r'[ _]?' + solvent, reagent.id.lower())
-                or re.match(r'[ _]?' + solvent, reagent.id.lower())):
-                print('FOUND SOLVENT', solvent)
+            if (re.match(r'[ _]?' + solvent, reagent.lower())
+                or re.match(r'[ _]?' + solvent, reagent.lower())):
                 # Don't want to use solvents that damage parts of Chemputer.
-                if not reagent.id.lower() in CLEANING_SOLVENT_BLACKLIST:
-                    solvents.append(reagent.id)
+                if not reagent.lower() in CLEANING_SOLVENT_BLACKLIST:
+                    solvents.append(reagent)
     return solvents
 
 def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
@@ -81,8 +85,7 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
             organic clean should be performed at that step.
     """
     graph_hardware = xdl_obj.executor._graph_hardware
-    reagents = [Reagent(flask.chemical) for flask in graph_hardware.flasks]
-    available_solvents = get_available_solvents(reagents)
+    available_solvents = get_available_solvents(xdl_obj)
     if not available_solvents:
         return None
     schedule = [None for step in xdl_obj.steps]
@@ -259,7 +262,7 @@ def add_cleaning_steps_at_beginning_and_end(xdl_obj: 'XDL') -> 'XDL':
             appropriate solvents.
     """
     # Set default solvents to use if nothing better found.
-    available_solvents = get_available_solvents(xdl_obj.reagents)
+    available_solvents = get_available_solvents(xdl_obj)
     start_solvent, end_solvent = None, None
     if len(available_solvents) > 0:
         start_solvent, end_solvent = (
@@ -393,7 +396,7 @@ def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
     """
     print('\nVerifying Cleaning Steps\n------------------------\n')
     print('* CleanBackbone solvent indicates the step which is being verified. Other steps are shown for context.\n\n')
-    available_solvents = get_available_solvents(xdl_obj.reagents)
+    available_solvents = get_available_solvents(xdl_obj)
     chunks = get_cleaning_chunks(xdl_obj)
     print('Procedure Start')
     for chunk in chunks:
