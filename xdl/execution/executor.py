@@ -195,7 +195,6 @@ class XDLExecutor(object):
                  and step.from_vessel == step.to_vessel
                  and not step.buffer_flask):
                 step.buffer_flask = self._get_buffer_flask(step.from_vessel)
-                print('BUF', step.buffer_flask, step.from_vessel)
 
             if not isinstance(step, AbstractBaseStep):
                 self._map_hardware_to_step_list(step.steps)
