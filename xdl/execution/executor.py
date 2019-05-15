@@ -195,6 +195,7 @@ class XDLExecutor(object):
                  and step.from_vessel == step.to_vessel
                  and not step.buffer_flask):
                 step.buffer_flask = self._get_buffer_flask(step.from_vessel)
+                print('BUF', step.buffer_flask, step.from_vessel)
 
             if not isinstance(step, AbstractBaseStep):
                 self._map_hardware_to_step_list(step.steps)
@@ -246,7 +247,6 @@ class XDLExecutor(object):
         # Get all reactor IDs
         reactors = [reactor.id
                     for reactor in self._graph_hardware.reactors]
-
         # Remove reactor IDs used in procedure.
         for step in self._xdl.base_steps:
             if type(step) == CMove and step.to_vessel in reactors:
@@ -255,7 +255,7 @@ class XDLExecutor(object):
         # From remaining reactor IDs, return nearest to vessel.
         if reactors:
             if len(reactors) == 1:
-                step.buffer_flask = reactors[0]
+                return reactors[0]
             else:
                 shortest_paths = []
                 for reactor in reactors:

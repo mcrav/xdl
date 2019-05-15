@@ -34,6 +34,11 @@ class GraphGenerator(object):
                 'reactor',
                 'separator',
                 'rotavap']]
+        for step in xdl.steps:
+            if (step.name == 'FilterThrough'
+                and step.from_vessel == step.to_vessel):
+                self._components.append(
+                    Component(id='buffer_flask', component_type='reactor'))
         self._reagents = copy.deepcopy([reagent.id for reagent in xdl.reagents])
         if xdl.filter_dead_volume_method == 'inert_gas':
             self._reagents.append('nitrogen')
@@ -113,6 +118,7 @@ class GraphGenerator(object):
                 elif component['type'] == 'rotavap':
                     self._add_edge(valve, component, 1, 'evaporate')
                     self._add_edge(component, valve, 'collect', 2)
+                    valve_connections += 2
                 
             # Add connection to previous valve in backbone.
             if backbone_i > 0:
@@ -216,6 +222,7 @@ class GraphGenerator(object):
                 'current_volume': DEFAULT_ROTAVAP_CURRENT_VOLUME,
                 'max_volume': DEFAULT_ROTAVAP_MAX_VOLUME,
                 'port': PORT,
+                'type': 'rotavap',
             }
         }
         for k, v in params[
