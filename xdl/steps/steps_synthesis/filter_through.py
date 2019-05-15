@@ -23,6 +23,9 @@ class FilterThrough(AbstractStep):
             preference is nitrogen > air > nothing.
         cartridge_dead_volume (float): Volume of gas to push through if flushing
             cartridge dead volume.
+        buffer_flask (str): Given internally. If from_vessel and to_vessel are
+            the same buffer_flask will be used to push contents of from_vessel
+            to temporarily, before moving to to_vessel.
     """
     def __init__(
         self,
@@ -37,39 +40,45 @@ class FilterThrough(AbstractStep):
         eluting_solvent_vessel: Optional[str] = None,
         flush_cartridge_vessel: Optional[str] = None,
         cartridge_dead_volume: Optional[float] = 'default',
+        buffer_flask: Optional[str] = None,
         **kwargs
     ):
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
-        steps = [
-            Transfer(
-                from_vessel=self.from_vessel,
-                to_vessel=self.to_vessel,
-                through=self.through_cartridge,
-                volume='all',
-                move_speed=self.move_speed,
-                aspiration_speed=self.aspiration_speed)
-        ]
+        filter_through_to_vessel = self.to_vessel
+        if self.to_vessel == self.from_vessel:
+            filter_through_to_vessel = self.buffer_flask
+        steps = [Transfer(from_vessel=self.from_vessel,
+                          to_vessel=filter_through_to_vessel,
+                          through=self.through_cartridge,
+                          volume='all',
+                          move_speed=self.move_speed,
+                          aspiration_speed=self.aspiration_speed)]
+
         if self.eluting_solvent:
-            steps.append(Transfer(
-                from_vessel=self.eluting_solvent_vessel,
-                to_vessel=self.to_vessel,
-                through=self.through_cartridge,
-                volume=self.eluting_volume,
-                move_speed=self.move_speed,
-                aspiration_speed=self.aspiration_speed,
-                repeat=self.eluting_repeats))
+            steps.append(Transfer(from_vessel=self.eluting_solvent_vessel,
+                                  to_vessel=filter_through_to_vessel,
+                                  through=self.through_cartridge,
+                                  volume=self.eluting_volume,
+                                  move_speed=self.move_speed,
+                                  aspiration_speed=self.aspiration_speed,
+                                  repeat=self.eluting_repeats))
         
         if self.flush_cartridge_vessel:
-            steps.append(
-                Transfer(
-                    from_vessel=self.flush_cartridge_vessel,
-                    to_vessel=self.to_vessel,
-                    through=self.through_cartridge,
-                    volume=self.cartridge_dead_volume,
-                    move_speed=self.move_speed,
-                    aspiration_speed=self.aspiration_speed))
+            steps.append(Transfer(from_vessel=self.flush_cartridge_vessel,
+                                  to_vessel=filter_through_to_vessel,
+                                  through=self.through_cartridge,
+                                  volume=self.cartridge_dead_volume,
+                                  move_speed=self.move_speed,
+                                  aspiration_speed=self.aspiration_speed))
+
+        if self.to_vessel == self.from_vessel:
+            steps.append(Transfer(from_vessel=self.buffer_flask,
+                                  to_vessel=self.to_vessel,
+                                  volume='all',
+                                  move_speed=self.move_speed,
+                                  aspiration_speed=self.aspiration_speed))
         return steps
 
     @property
