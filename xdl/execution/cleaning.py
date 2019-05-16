@@ -100,8 +100,8 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
     # 1) Add organic solvents to steps that add a solvent blacklisted for
     # cleaning.
     organic_solvents = [(i, item)
-                         for i, item in enumerate(schedule)
-                         if item and item != 'water']
+                        for i, item in enumerate(schedule)
+                        if item and item != 'water']
     for i in range(len(schedule)):
         if schedule[i] == GENERIC_ORGANIC:
             if organic_solvents:
