@@ -160,12 +160,26 @@ def format_property(prop: str, val: Any) -> str:
 
     elif 'temp' in prop:
         return format_temp(val)
+    
+    elif 'pressure' in prop:
+        return format_pressure(val)
 
     elif type(val) == list:
         return ' '.join([str(item) for item in val])
 
     return str(val)
     
+def format_pressure(val_mbar: float)  -> str:
+    """Return formatted pressure in sensible units.
+    
+    Args:
+        val_mbar (float): Pressure in mbar.
+    
+    Returns:
+        str: Formatted pressure in sensible units.
+    """
+    return f'{val_mbar} mbar'
+
 def format_volume(val_ml: float) -> str:
     """Return formatted volume in sensible units.
     

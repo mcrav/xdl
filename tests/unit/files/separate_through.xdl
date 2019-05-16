@@ -1,5 +1,5 @@
 
-<Synthesis>
+<Synthesis autoClean="false">
   <Hardware>
     <Component
       id="rotavap"
@@ -23,7 +23,7 @@
   <Procedure>
     <Separate
       purpose="wash"
-      from_vessel="flask_water"
+      from_vessel="filter"
       separation_vessel="separator"
       to_vessel="rotavap"
       through="cartridge_mgso4"
@@ -34,7 +34,7 @@
       n_separations="1" />
     <Separate
       purpose="wash"
-      from_vessel="flask_water"
+      from_vessel="filter"
       separation_vessel="separator"
       to_vessel="rotavap"
       through="cartridge_mgso4"
@@ -45,7 +45,7 @@
       n_separations="1" />
     <Separate
       purpose="wash"
-      from_vessel="flask_water"
+      from_vessel="filter"
       separation_vessel="separator"
       to_vessel="rotavap"
       through="cartridge_mgso4"
@@ -56,7 +56,7 @@
       n_separations="2" />
     <Separate
       purpose="wash"
-      from_vessel="flask_water"
+      from_vessel="filter"
       separation_vessel="separator"
       to_vessel="rotavap"
       through="cartridge_mgso4"

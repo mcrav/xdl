@@ -2,6 +2,8 @@ import statistics
 import copy
 import logging
 from typing import List, Union, Tuple
+
+from networkx.algorithms.shortest_paths.generic import shortest_path_length
 if False:
     from ..xdl import XDL
     from chempiler import Chempiler
@@ -143,7 +145,7 @@ class XDLExecutor(object):
             # it is not provided in the graph it falls back to default.
             if 'cartridge_dead_volume' in step.properties:
                 cartridge = self._graph_hardware[step.through_cartridge]
-                if 'dead_volume' in cartridge.properties:
+                if cartridge and 'dead_volume' in cartridge.properties:
                     step.cartridge_dead_volume = cartridge.dead_volume
 
             if 'vacuum' in step.properties and not step.vacuum:
@@ -187,6 +189,13 @@ class XDLExecutor(object):
                 if 'collection_flask_volume' in rotavap.properties:
                     step.collection_flask_volume = rotavap.collection_flask_volume
 
+            # When doing FilterThrough and from_vessel and to_vessel are the
+            # same, find an unused reactor to use as a buffer flask.
+            if ('buffer_flask' in step.properties
+                 and step.from_vessel == step.to_vessel
+                 and not step.buffer_flask):
+                step.buffer_flask = self._get_buffer_flask(step.from_vessel)
+
             if not isinstance(step, AbstractBaseStep):
                 self._map_hardware_to_step_list(step.steps)
 
@@ -225,6 +234,37 @@ class XDLExecutor(object):
                 return vessel_type
         return None
 
+    def _get_buffer_flask(self, vessel: str) -> str:
+        """Get buffer flask closest to given vessel.
+        
+        Args:
+            vessel (str): Node name in graph.
+        
+        Returns:
+            str: Node name of buffer flask (unused reactor) nearest vessel.
+        """
+        # Get all reactor IDs
+        reactors = [reactor.id
+                    for reactor in self._graph_hardware.reactors]
+        # Remove reactor IDs used in procedure.
+        for step in self._xdl.base_steps:
+            if type(step) == CMove and step.to_vessel in reactors:
+                reactors.remove(step.to_vessel)
+
+        # From remaining reactor IDs, return nearest to vessel.
+        if reactors:
+            if len(reactors) == 1:
+                return reactors[0]
+            else:
+                shortest_paths = []
+                for reactor in reactors:
+                    shortest_paths.append((
+                        reactor,
+                        shortest_path_length(
+                            self._graph, source=vessel, target=reactor)))
+                return sorted(shortest_paths, key=lambda x: x[1])[0][0]
+        return None
+                    
     def _get_vacuum(self, step: Step) -> str:
         if hasattr(step, 'filter_vessel'):
             if step.filter_vessel in self._vacuum_map:
@@ -458,10 +498,13 @@ class XDLExecutor(object):
         # Look for filter emptying steps and add RemoveFilterDeadVolume step
         # just before them.
         for i, vessel, _ in reversed(self._get_filter_emptying_steps()):
-            self._xdl.steps.insert(i,
-                RemoveFilterDeadVolume(
-                    filter_vessel=vessel, 
-                    dead_volume=self._get_filter_dead_volume(vessel)))
+            # Only move to waste after Filter step. For any other step should
+            # become part of the reaction mixture. 
+            if self._xdl.steps[i].name == 'Filter':
+                self._xdl.steps.insert(i,
+                    RemoveFilterDeadVolume(
+                        filter_vessel=vessel, 
+                        dead_volume=self._get_filter_dead_volume(vessel)))
 
     def _add_filter_inert_gas_connect_steps(self) -> None:
         """Add steps to self._xdl.steps to implement the following:
@@ -491,7 +534,6 @@ class XDLExecutor(object):
                     base_step.volume = self._graph_hardware[
                         base_step.from_vessel].max_volume
 
-
     def _add_filter_volumes(self) -> None:
         """
         Add volume of filter bottom (aka dead_volume) and volume of material
@@ -502,13 +544,12 @@ class XDLExecutor(object):
             self._xdl.steps, self._graph_hardware):
             if type(step) == Filter:
                 if step.filter_vessel in prev_vessel_contents:
-                    step.filter_top_volume = prev_vessel_contents[
-                        step.filter_vessel].volume
+                    step.filter_top_volume = max(prev_vessel_contents[
+                        step.filter_vessel].volume, 0)
                 else:
                     step.filter_top_volume = 0
 
             prev_vessel_contents = vessel_contents
-
 
     ##########################
     ### OPTIMISE PROCEDURE ###

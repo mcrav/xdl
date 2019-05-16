@@ -1,5 +1,4 @@
-
-<Synthesis autoClean="false">
+<Synthesis auto_clean="false">
   <Hardware>
     <Component
       id="rotavap"
@@ -17,16 +16,15 @@
   <Procedure>
     <Add
       reagent="water"
-      vessel="reactor"
+      vessel="rotavap"
       volume="300 mL" />
     <FilterThrough
-      from_vessel="reactor"
+      from_vessel="rotavap"
       to_vessel="rotavap"
       through_cartridge="celite_cartridge"
       eluting_solvent="ether"
       eluting_volume="50 mL"
       eluting_repeats="3" />
-
   </Procedure>
 
 </Synthesis>

@@ -418,11 +418,11 @@
       "type": "conductivity_sensor",
       "x": -560,
       "y": 280,
+      "internalId": 79,
+      "label": 79,
       "class": "ConductivitySensor",
       "name": "",
-      "port": "",
-      "internalId": 79,
-      "label": 79
+      "port": ""
     },
     {
       "id": "cartridge_mgso4",
@@ -437,10 +437,23 @@
           "type": "str"
         }
       },
-      "class": "ChemputerCartridge",
-      "name": "cartridge_mgso4",
       "internalId": 81,
-      "label": "cartridge_mgso4"
+      "label": "cartridge_mgso4",
+      "class": "ChemputerCartridge",
+      "name": "cartridge_mgso4"
+    },
+    {
+      "id": "buffer_flask",
+      "type": "reactor",
+      "x": 240,
+      "y": 80,
+      "class": "ChemputerReactor",
+      "name": "buffer_flask",
+      "current_volume": 0,
+      "max_volume": 100,
+      "necks": 1,
+      "internalId": 84,
+      "label": "buffer_flask"
     }
   ],
   "links": [
@@ -482,7 +495,7 @@
       "targetInternal": 8,
       "source": "valve_rotavap",
       "target": "waste_rotavap",
-      "port": "(2,0)"
+      "port": "(3,0)"
     },
     {
       "id": 10,
@@ -843,6 +856,22 @@
       "source": "cartridge_mgso4",
       "target": "rotavap",
       "port": "(out,evaporate)"
+    },
+    {
+      "id": 85,
+      "sourceInternal": 1,
+      "targetInternal": 84,
+      "source": "valve_rotavap",
+      "target": "buffer_flask",
+      "port": "(4,0)"
+    },
+    {
+      "id": 86,
+      "sourceInternal": 84,
+      "targetInternal": 1,
+      "source": "buffer_flask",
+      "target": "valve_rotavap",
+      "port": "(0,4)"
     }
   ]
 }
