@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict, Any
 from ..base_step import Step, AbstractStep
-from ..steps_utility import Wait, HeatChillToTemp
+from ..steps_utility import Wait, HeatChillToTemp, StopHeatChill
 from ..steps_base import (
     CRotavapSetRotationSpeed,
     CRotavapStartRotation,
@@ -77,6 +77,7 @@ class Dissolve(AbstractStep):
                     stir=True,
                     stir_rpm=self.stir_rpm),
                 Wait(self.time),
+                StopHeatChill(vessel=self.vessel),
             ]
         return steps
 
