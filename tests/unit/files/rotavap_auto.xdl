@@ -1,5 +1,5 @@
 
-<Synthesis>
+<Synthesis autoClean="false">
   <Hardware>
     <Component
       id="rotavap"
@@ -23,8 +23,7 @@
       rotavap_name="rotavap"
       mode="auto"
       temp="40"
-      time="30mins"
-      pressure="50mbar" />
+      time="30mins" />
 
   </Procedure>
 
