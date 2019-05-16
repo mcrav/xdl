@@ -32,7 +32,8 @@ class Rotavap(AbstractStep):
     Args:
         rotavap_name (str): Name of rotavap vessel.
         temp (float): Temperature to set rotavap water bath to in °C.
-        vacuum_pressure (float): Pressure to set rotavap vacuum to in mbar.
+        pressure (float): Pressure to set rotavap vacuum to in mbar. Has no
+            effect if mode == 'auto', otherwise must be passed.
         time (float): Time to rotavap for in seconds.
         rotation_speed (float): Speed in RPM to rotate flask at.
         mode (str): 'manual' or 'auto'. If 'manual', given time/temp/pressure
@@ -45,7 +46,7 @@ class Rotavap(AbstractStep):
         self,
         rotavap_name: str,
         temp: float,
-        pressure: float,
+        pressure: Optional[float] = None,
         time: Optional[float] = 'default',
         rotation_speed: Optional[float] = 'default',
         mode: Optional[str] = 'manual',
@@ -82,14 +83,11 @@ class Rotavap(AbstractStep):
             ]
 
         elif self.mode == 'auto':
-            HIGH_SENSITIVITY = 2 # Slower
-            NORMAL_SENSITIVITY = 1
-            LOW_SENSITIVITY = 0 # Faster
             steps = [
                 CRotavapAutoEvaporation(
                     rotavap_name=self.rotavap_name,
-                    sensitivity=HIGH_SENSITIVITY,
-                    vacuum_limit=self.pressure,
+                    sensitivity=2, # High sensitivity
+                    vacuum_limit=1, # Auto pressure
                     time_limit=self.time,
                     vent_after=True),
                 # Empty collect flask
