@@ -1,0 +1,36 @@
+<Synthesis auto_clean="false">
+  <Hardware>
+    <Component
+      id="column"
+      type="column"
+    />
+    <Component
+      id="reactor"
+      type="reactor"
+    />
+    <Component
+      id="filter"
+      type="filter"
+    />
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="NaCl" />
+    <Reagent
+      id="water" />
+  </Reagents>
+
+  <Procedure>
+    <Add
+      reagent="water"
+      vessel="reactor"
+      volume="300 mL" />
+    <RunColumn
+      from_vessel="reactor"
+      to_vessel="rotavap"
+      column="celite_cartridge" />
+
+  </Procedure>
+
+</Synthesis>

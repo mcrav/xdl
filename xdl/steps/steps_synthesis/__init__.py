@@ -15,3 +15,5 @@ from .separate import Separate
 from .evaporate import Evaporate
 
 from .clean_vessel import CleanVessel
+
+from .column import RunColumn
