@@ -338,23 +338,90 @@ def get_clean_vessel_sequence(
         List[Tuple[int, str, str]]: List of tuples like below.
             [(index_to_insert_clean_vessel_step, vessel, solvent_to_use)...]
     """
-    step_solvents = get_cleaning_schedule(xdl_obj)
+    # Get all solvents available for cleaning.
+    available_solvents = get_available_solvents(xdl_obj)
     steps = xdl_obj.steps
     cleaning_sequence = []
-    for i, vessel in get_vessel_emptying_steps(steps, hardware):
-        if i > 0:
-            before_step = steps[i-1]
-            # Dissolve, followed by emptying step
-            if type(before_step) == Dissolve and before_step.vessel == vessel:
-                cleaning_sequence.append((i+1, vessel, step_solvents[i]))
-
-            # Separate step where from_vessel is not separation_vessel or 
-            # to_vessel
-            elif (type(steps[i]) == Separate
-                  and steps[i].from_vessel not in [
-                      steps[i].separation_vessel, steps[i].to_vessel]):
-                cleaning_sequence.append((i+1, vessel, step_solvents[i]))
+    prev_vessel_contents = {}
+    # Go through and find conditions where CleanVessel steps should be added.
+    # Find solvents to clean with as well.
+    for i, step, vessel_contents in iter_vessel_contents(steps, hardware):
+        cleaning_solvents = []
+        # Clean separation from_vessel
+        if (type(step) == Separate
+            and step.from_vessel not in [step.separation_vessel, step.to_vessel]):
+            cleaning_solvents = get_clean_vessel_solvents(xdl_obj,
+                                                          step.from_vessel,
+                                                          prev_vessel_contents,
+                                                          available_solvents)
+        # Clean if vessel is empty the step after a dissolve step. This rule is
+        # used as it guarantees that any solid is also gone from the vessel.
+        elif (i > 0 and type(steps[i-1]) == Dissolve
+              and not vessel_contents[steps[i-1].vessel].reagents):
+            cleaning_solvents = get_clean_vessel_solvents(xdl_obj,
+                                                          steps[-1].vessel,
+                                                          prev_vessel_contents,
+                                                          available_solvents)
+        # For all cleaning solvents found add them to the sequence along with
+        # the vessel and position in procedure.
+        for cleaning_solvent in cleaning_solvents:
+            cleaning_sequence.append((
+                i+1, step.from_vessel, cleaning_solvent))
+        prev_vessel_contents = vessel_contents
     return cleaning_sequence
+        
+def get_clean_vessel_solvents(
+    xdl_obj: 'XDL',
+    vessel: str,
+    prev_vessel_contents: Dict[str, VesselContents],
+    available_solvents: List[str]
+) -> List[str]:
+    """Given empty vessel name and previous step vessel contents find what
+    solvents should be used to clean the vessel.
+
+    Args:
+        xdl_obj (XDL): XDL object. Needed to access reagents list and check if
+            any reagents have a specified cleaning reagent.
+        vessel (str): Vessel to be cleaned.
+        prev_vessel_contents (Dict[str, VesselContents]): All vessel contents at
+            step before vessel is emptied and should be cleaned.
+        available_solvents (List[str]): Solvents available for cleaning the
+            vessel.
+
+    Returns:
+        List[str]: List of solvents that the vessel should be cleaned with.
+    """
+    solvents = []
+    # Only clean vessel if it has had previous contents.
+    if vessel in prev_vessel_contents:
+        # Get all cleaning solvents associated with reagents that were in vessel.
+        cleaning_solvents = [
+            get_reagent_cleaning_solvent(
+                reagent, xdl_obj.reagents, available_solvents)
+            for reagent in prev_vessel_contents[vessel]
+        ]
+        for cleaning_solvent in cleaning_solvents:
+            # If solvent found add it
+            if cleaning_solvent:
+                solvents.append(cleaning_solvent)
+            # If unknown organic solvent found
+            elif cleaning_solvent == GENERIC_ORGANIC:
+                organic_solvents = [solvent
+                                    for solvent in cleaning_solvents
+                                    if solvent and solvent != 'water']
+                # If there is another organic solvent associated with another
+                # reagent from vessel contents, use this.
+                if organic_solvents:
+                    solvents.append(organic_solvents[0])
+                # If there are no other organic solvents associated with the
+                # reagents in vessel contents, use a random organic solvent.
+                else:
+                    organic_solvents = [solvent
+                                        for solvent in  available_solvents
+                                        if solvent != 'water']
+                    if organic_solvents:
+                        solvents.append(organic_solvents[0])
+    return solvents
 
 def add_vessel_cleaning_steps(xdl_obj: 'XDL', hardware: Hardware) -> 'XDL':
     """Add CleanVessel steps to xdl_obj at appropriate places. Rule is that a

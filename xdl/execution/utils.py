@@ -10,3 +10,10 @@ class VesselContents(object):
     def __init__(self, reagents: List[str] = [], volume: float = 0) -> None:
         self.reagents = reagents
         self.volume = volume
+
+    def __str__(self):
+        return f'Reagents: {", ".join(self.reagents)}\nVolume {self.volume} mL'
+
+    def __iter__(self):
+        for item in self.reagents:
+            yield item
