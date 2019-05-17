@@ -246,6 +246,15 @@ def add_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
             # synthesis.
             if solvent != 'water' and xdl_obj.organic_cleaning_solvent:
                 solvent = xdl_obj.organic_cleaning_solvent
+            if i-1 >= 0:
+                prev_step = xdl_obj.steps[i-1]
+                clean = True
+                for item in ['reagent', 'solvent']:
+                    if item in prev_step.properties:
+                        if prev_step.properties[item] == solvent:
+                            clean = False
+                if not clean:
+                    continue
             xdl_obj.steps.insert(i, CleanBackbone(solvent=solvent))
         xdl_obj = add_cleaning_steps_at_beginning_and_end(xdl_obj)
     return xdl_obj
