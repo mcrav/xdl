@@ -249,10 +249,14 @@ def add_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
             if i-1 >= 0:
                 prev_step = xdl_obj.steps[i-1]
                 clean = True
-                for item in ['reagent', 'solvent']:
-                    if item in prev_step.properties:
-                        if prev_step.properties[item] == solvent:
-                            clean = False
+                # Don't clean certain steps if the solvent used for cleaning
+                # is the same as the solvent being added.
+                for step_type in NO_DUPLICATE_CLEAN_STEPS:
+                    if type(prev_step) == step_type:
+                        for item in ['reagent', 'solvent']:
+                            if item in prev_step.properties:
+                                if prev_step.properties[item] == solvent:
+                                    clean = False
                 if not clean:
                     continue
             xdl_obj.steps.insert(i, CleanBackbone(solvent=solvent))

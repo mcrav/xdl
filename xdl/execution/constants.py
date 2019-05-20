@@ -34,6 +34,14 @@ CLEAN_BACKBONE_AFTER_STEPS: List[type] = [
     FilterThrough,
 ]
 
+#: Steps which should not trigger a backbone clean if the solvent used in the
+# step is the same as the solvent used for cleaning.
+NO_DUPLICATE_CLEAN_STEPS: List[type] = [
+    Add,
+    Dissolve,
+    AddFilterDeadVolume,
+]
+
 COMMON_SOLVENT_NAMES = [
     'acetic acid',
     'acetone',
