@@ -24,7 +24,7 @@ ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE = [
     # Transfer
     'acetonitrile',
     # CleanVessel
-    # 'acetonitrile',
+    'acetonitrile',
     'dcm',
     # HeatChill, HeatChillReturnToRT
     # FilterThrough
@@ -35,7 +35,7 @@ ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE = [
     # FilterThrough DCM
     'dcm',
     # CleanVessel
-    # 'dcm',
+    'dcm',
     # Transfer
     'dcm',
     'ether',
