@@ -15,6 +15,7 @@
       vessel="filter"
       solvent="ether"
       temp="10"
+      stir="True"
     />
 
   </Procedure>
