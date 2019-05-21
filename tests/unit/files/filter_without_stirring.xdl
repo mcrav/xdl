@@ -1,0 +1,21 @@
+<Synthesis auto_clean="false">
+  <Hardware>
+    <Component
+      id="rotavap"
+      type="rotavap"
+    />
+  </Hardware>
+
+  <Reagents>
+    <Reagent id="ether" />
+  </Reagents>
+
+  <Procedure>
+    <Filter
+      filter_vessel="filter"
+      stir="False"
+    />
+
+  </Procedure>
+
+</Synthesis>
