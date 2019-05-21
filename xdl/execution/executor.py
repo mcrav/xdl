@@ -546,8 +546,12 @@ class XDLExecutor(object):
                 if step.filter_vessel in prev_vessel_contents:
                     step.filter_top_volume = max(prev_vessel_contents[
                         step.filter_vessel].volume, 0)
+                    if step.filter_top_volume <= 0:
+                        step.filter_top_volume = self._graph_hardware[
+                            step.filter_vessel].max_volume
                 else:
-                    step.filter_top_volume = 0
+                    step.filter_top_volume = self._graph_hardware[
+                        step.filter_vessel.max_volume]
 
             prev_vessel_contents = vessel_contents
 

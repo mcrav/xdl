@@ -4,6 +4,7 @@ from .utils import VesselContents
 from ..steps import Step, Filter, WashSolid, Dry, Separate, CMove
 from ..hardware import Hardware
 from ..utils import raise_error
+from .constants import INERT_GAS_SYNONYMS
 
 def iter_vessel_contents(
     steps: List[Step], hardware: Hardware, additions: bool = False
@@ -57,16 +58,17 @@ def iter_vessel_contents(
                 # and from_vessel volume to waste_phase_to_vessel.
                 if step.purpose == 'extract':
                     vessel_contents[step.to_vessel].reagents.append(step.solvent)
-                    vessel_contents[step.to_vessel].volume += step.solvent_volume
+                    vessel_contents[step.to_vessel].volume += step.solvent_volume * step.n_separations
                     vessel_contents[
                         step.waste_phase_to_vessel].volume += from_volume
+
                 # If wash add solvent to waste_phase_to_vessel
                 # and from_vessel volume to to_vessel.
                 elif step.purpose == 'wash':
                     vessel_contents[
                         step.waste_phase_to_vessel].reagents.append(step.solvent)
                     vessel_contents[
-                        step.waste_phase_to_vessel].volume += step.solvent_volume
+                        step.waste_phase_to_vessel].volume += step.solvent_volume * step.n_separations
                     vessel_contents[step.to_vessel].volume += from_volume
 
             elif type(step) == Filter:
@@ -98,12 +100,15 @@ def iter_vessel_contents(
                 # This is necessary to stop move command putting filter into
                 # negative volume
                 pass
+            
 
             # Handle normal Move steps.
             else:
                 for from_vessel, to_vessel, volume in get_movements(step):
                     empty_from_vessel = False
                     # Add vessels to vessel_contents if they aren't there.
+                    if 'chemical' in hardware[from_vessel].properties and hardware[from_vessel].chemical in INERT_GAS_SYNONYMS:
+                        continue
                     for vessel in [from_vessel, to_vessel]:
                         vessel_contents.setdefault(
                             vessel,
