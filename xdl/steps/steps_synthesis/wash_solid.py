@@ -61,7 +61,7 @@ class WashSolid(AbstractStep):
         volume: Optional[float] = 'default',
         temp: Optional[float] = None,
         vacuum_time: Optional[float] = 'default',
-        stir: Optional[Union[bool, str]] = 'solvent', 
+        stir: Optional[Union[bool, str]] = 'default', 
         stir_time: Optional[float] = 'default',
         stir_rpm: Optional[float] =  'default',
         waste_vessel: Optional[str] = None,

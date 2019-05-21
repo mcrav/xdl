@@ -177,6 +177,8 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'Filter': {
         'wait_time': DEFAULT_FILTER_WAIT_TIME,
         'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
+        'stir': True,
+        'stir_rpm': DEFAULT_WASHFILTERCAKE_STIR_RPM,
     },
     'Dry': {
         'time': DEFAULT_DRY_TIME,
@@ -187,6 +189,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'volume': DEFAULT_WASHFILTERCAKE_VOLUME,
         'move_speed': DEFAULT_MOVE_SPEED,
         'vacuum_time': DEFAULT_WASHFILTERCAKE_VACUUM_TIME,
+        'stir': True,
         'stir_time': DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME,
         'stir_rpm': DEFAULT_WASHFILTERCAKE_STIR_RPM,
         'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
