@@ -52,6 +52,7 @@ class Separate(AbstractStep):
         waste_phase_to_vessel: Optional[str] = None,
         waste_phase_to_port: Optional[str] = None,
         waste_vessel: Optional[str] = None,
+        remove_dead_volume: Optional[bool] = True,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -64,6 +65,10 @@ class Separate(AbstractStep):
             n_separations = 1
         else:
             n_separations = int(self.n_separations)
+
+        dead_volume_target = None
+        if self.remove_dead_volume:
+            dead_volume_target = self.waste_vessel
 
         steps = []
         steps.extend([
@@ -106,7 +111,7 @@ class Separate(AbstractStep):
                                         upper_phase_vessel=self.waste_phase_to_vessel,
                                         upper_phase_port=self.waste_phase_to_port,
                                         separation_vessel=self.separation_vessel, 
-                                        dead_volume_target=self.waste_vessel,
+                                        dead_volume_target=None,
                                         lower_phase_through=self.through),
                         # Move to_vessel to separation_vessel
                         CMove(from_vessel=self.to_vessel, 
@@ -139,7 +144,7 @@ class Separate(AbstractStep):
                     lower_phase_port=self.to_port,
                     upper_phase_vessel=self.waste_phase_to_vessel,
                     upper_phase_port=self.waste_phase_to_port,
-                    dead_volume_target=self.waste_vessel,
+                    dead_volume_target=dead_volume_target,
                     lower_phase_through=self.through),
             ])
         else:
@@ -155,7 +160,7 @@ class Separate(AbstractStep):
                             lower_phase_port=self.waste_phase_to_port,
                             upper_phase_vessel=self.separation_vessel,
                             separation_vessel=self.separation_vessel,
-                            dead_volume_target=self.waste_vessel),
+                            dead_volume_target=None),
                         # Move solvent to separation_vessel
                         Add(reagent=self.solvent, vessel=self.separation_vessel, 
                             port=BOTTOM_PORT, volume=self.solvent_volume, 
@@ -180,7 +185,7 @@ class Separate(AbstractStep):
                                 upper_phase_vessel=self.to_vessel,
                                 upper_phase_port=self.to_port,
                                 separation_vessel=self.separation_vessel,
-                                dead_volume_target=self.waste_vessel,
+                                dead_volume_target=dead_volume_target,
                                 upper_phase_through=self.through)
             ])
         return steps

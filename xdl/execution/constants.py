@@ -255,3 +255,6 @@ for solvent, bp in list(SOLVENT_BOILING_POINTS.items()):
 #: Factor to multiplty solvent boiling point by when working out temperature to
 # perform CleanVessel at.
 CLEAN_VESSEL_BOILING_POINT_FACTOR: float = 0.8
+
+#: Keywords that if found in a reagent name indicate that it is aqueous
+AQUEOUS_KEYWORDS: List[str] = ['aqueous', ' m ', 'acid', 'hydroxide', 'water']

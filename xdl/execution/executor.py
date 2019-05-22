@@ -23,7 +23,7 @@ from .graph import (
     get_unused_valve_port,
     vacuum_device_attached_to_flask,
 )
-from .utils import VesselContents
+from .utils import VesselContents, is_aqueous
 from .cleaning import (
     add_cleaning_steps,
     add_vessel_cleaning_steps,
@@ -588,11 +588,42 @@ class XDLExecutor(object):
     ##########################
 
     def _tidy_up_procedure(self) -> None:
-        """Remove steps that are pointless."""
+        """Remove steps that are pointless and optimise procedure."""
         self._set_all_stir_rpms()
         self._stop_stirring_when_vessels_lose_scope()
         self._remove_pointless_backbone_cleaning()
         self._no_waiting_if_dry_run()
+
+    def _optimise_separation_steps(self) -> None:
+        """Optimise separation steps to reduce risk of backbone contamination.
+        The issue this addresses is that if a product is extracted into the
+        aqueous phase, but the organic phase ends up in the backbone, the product
+        can redissolve in the organic phase when transferred out of the separator.
+
+        Rules implemented here:
+            If: 1) to_vessel of one Separate step is the separation_vessel
+                2) Next Separate step uses same kind of solvent (organic or aqueous)
+            Then the separation step shouldn't remove the dead volume as you
+            run the risk of contaminating the backbone, and there is no need to
+            remove the dead volume to risk contaminating the product phase as
+            more solvent is going to be added anyway in the next step.
+        """
+        steps = self._xdl.steps
+        for i in range(len(steps)):
+            step = steps[i]
+            if type(step) == Separate:
+                if (step.to_vessel == step.separation_vessel
+                    or step.waste_phase_to_vessel == step.separation_vessel):
+                    j = i + 1
+                    next_solvent = None
+                    while j < len(steps):
+                        if type(steps[j]) == Separate:
+                            next_solvent = steps[j].solvent
+                            break
+                        j += 1
+                    if (next_solvent
+                        and is_aqueous(next_solvent) == is_aqueous(step.solvent)):
+                        step.remove_dead_volume = False
 
     def find_stirring_schedule(
         self, step: Step, stirring: List[str]) -> List[str]:
@@ -769,6 +800,7 @@ class XDLExecutor(object):
                     self._add_implied_steps(interactive=interactive)
                     # Convert implied properties to concrete values.
                     self._add_clean_vessel_temps()
+                    self._optimise_separation_steps()
                     self._map_hardware_to_steps()
                     self._add_all_volumes()
                     self._add_filter_volumes()
@@ -776,7 +808,6 @@ class XDLExecutor(object):
                     # Optimise procedure.
                     self._tidy_up_procedure()
 
-                    # Check safety of procedure
                     self._check_safety()
 
                     self._print_warnings()
