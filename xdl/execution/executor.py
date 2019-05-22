@@ -158,14 +158,10 @@ class XDLExecutor(object):
 
             # Filter, WashSolid, Dry need this filled in if inert gas
             # filter dead volume method being used.
-            if ('inert_gas' in step.properties
-                and self._xdl.filter_dead_volume_method
-                    == FILTER_DEAD_VOLUME_INERT_GAS_METHOD):
+            if ('inert_gas' in step.properties):
                 step.inert_gas = self._get_inert_gas(step)
 
-            if ('vacuum_valve' in step.properties
-                  and self._xdl.filter_dead_volume_method
-                      == FILTER_DEAD_VOLUME_LIQUID_METHOD):
+            if ('vacuum_valve' in step.properties):
                 step.vacuum_valve = self._valve_map[step.vacuum]
                 step.valve_unused_port = get_unused_valve_port(
                     graph=self._graph, valve_node=step.vacuum_valve)
