@@ -105,7 +105,7 @@ class Dry(AbstractStep):
                 vessel_type='ChemputerFilter',
                 stir=False))
 
-        if not self.vessel_type == 'rotavap':
+        if self.vessel_type not in ['rotavap', 'reactor']:
             steps.extend(get_vacuum_valve_reconnect_steps(
                 inert_gas=self.inert_gas,
                 vacuum_valve=self.vacuum_valve,
