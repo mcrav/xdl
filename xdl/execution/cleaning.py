@@ -456,7 +456,33 @@ def add_vessel_cleaning_steps(xdl_obj: 'XDL', hardware: Hardware) -> 'XDL':
             if solvent != 'water' and xdl_obj.organic_cleaning_solvent:
                 solvent = xdl_obj.organic_cleaning_solvent
             xdl_obj.steps.insert(i, CleanVessel(vessel=vessel, solvent=solvent))
+    xdl_obj.steps = add_clean_vessel_temps(xdl_obj.steps)
     return xdl_obj
+
+def add_clean_vessel_temps(steps: List[List[Step]]) -> List[List[Step]]:
+    """Add temperatures to CleanVessel steps. Priority is:
+    1) Use explicitly given temperature.
+    2) If solvent boiling point known use 80% of the boiling point.
+    3) Use 30°C.
+    
+    Args:
+        steps (List[List[Step]]): List of steps to add temperatures to
+            CleanVessel steps
+    
+    Returns:
+        List[List[Step]]: List of steps with temperatures added to CleanVessel
+            steps.
+    """
+    for step in steps:
+        if type(step) == CleanVessel:
+            if step.temp == None:
+                solvent = step.solvent.lower()
+                if solvent in SOLVENT_BOILING_POINTS:
+                    step.temp = (SOLVENT_BOILING_POINTS[solvent]
+                                 * CLEAN_VESSEL_BOILING_POINT_FACTOR)
+                else:
+                    step.temp = 30
+    return steps
 
 
 ########################################
@@ -547,4 +573,3 @@ def get_cleaning_chunks(xdl_obj: 'XDL') -> List[List[Step]]:
             i = chunk_end
         i += 1
     return chunks
-

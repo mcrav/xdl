@@ -3,7 +3,15 @@ import os
 from ..utils import generic_chempiler_test
 
 from xdl import XDL
-from xdl.steps import CleanBackbone, Dissolve, CleanVessel, Separate
+from xdl.steps import (
+    CleanBackbone,
+    Dissolve,
+    CleanVessel,
+    Separate,
+    HeatChillToTemp,
+    HeatChillReturnToRT
+)
+from xdl.execution.constants import CLEAN_VESSEL_BOILING_POINT_FACTOR
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')
@@ -17,17 +25,23 @@ def test_clean_vessel():
 CLEAN_VESSEL_TESTS = [
     (os.path.join(FOLDER, 'alkyl_fluor_step4.xdl'),
      os.path.join(FOLDER, 'alkyl_fluor_step4.graphml'),
-     2, ['acetonitrile', 'dcm']),
+     2,
+     ['acetonitrile', 'dcm'],
+     [81.65 * CLEAN_VESSEL_BOILING_POINT_FACTOR,
+      39.8 * CLEAN_VESSEL_BOILING_POINT_FACTOR]),
 
     (os.path.join(FOLDER, 'lidocaine.xdl'),
      os.path.join(FOLDER, 'lidocaine_graph.json'),
-     1, ['ether']),
+     1,
+     ['ether'],
+     [34.5 * CLEAN_VESSEL_BOILING_POINT_FACTOR]),
 ]
 
 def test_clean_vessel_scheduling():
     """Test that all CleanVessel steps are added at correct places, i.e. 
     ...Dissolve, emptying_step, CleanVessel,..."""
-    for xdl_f, graph_f, n_clean_vessels, clean_vessel_solvents in CLEAN_VESSEL_TESTS:
+    for (xdl_f, graph_f, n_clean_vessels, clean_vessel_solvents,
+         clean_vessel_temps) in CLEAN_VESSEL_TESTS:
         x = XDL(xdl_f)
         x.prepare_for_execution(graph_f, interactive=False)
 
@@ -38,6 +52,11 @@ def test_clean_vessel_scheduling():
         for i in reversed(range(len(clean_vessel_steps))):
             assert(clean_vessel_steps[i].solvent.lower()
                    == clean_vessel_solvents.pop().lower())
+            correct_temp = clean_vessel_temps.pop()
+            assert clean_vessel_steps[i].temp == correct_temp
+            assert type(clean_vessel_steps[i].steps[1]) == HeatChillToTemp
+            assert clean_vessel_steps[i].steps[1].temp == correct_temp
+            assert type(clean_vessel_steps[i].steps[-1]) == HeatChillReturnToRT
 
         # Check all CleanVessel steps come after Dissolve + filter_emptying step
         # or after Separate step.
