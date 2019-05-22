@@ -1,4 +1,5 @@
 from typing import List
+from .constants import AQUEOUS_KEYWORDS
 
 class VesselContents(object):
     """Convenience class to represents contents of one vessel.
@@ -17,3 +18,10 @@ class VesselContents(object):
     def __iter__(self):
         for item in self.reagents:
             yield item
+
+def is_aqueous(reagent_name):
+    reagent_name = reagent_name.lower()
+    for keyword in AQUEOUS_KEYWORDS:
+        if keyword in reagent_name:
+            return True
+    return False
