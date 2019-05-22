@@ -22,26 +22,26 @@ before_script:
   # - conda -V
   - python -V
   - pip -V
-  # - pip install virtualenv
   - python -m venv venv 
   - . venv/bin/activate
   - pip install wheel
-  # # Install xdl requirements
+  # Install xdl requirements
   - pip install pytest
   - pip install -r requirements.txt
 
-  # # Install Chempiler, SerialLabware and ChemputerAPI for simulations
+  # Install Chempiler, SerialLabware and ChemputerAPI for simulations
   - pip install git+http://gitlab+deploy-token-2:u5KWxsk2hAU75o31rZUe@datalore.chem.gla.ac.uk/Chemputer/Chempiler.git@develop
 
   - pip install git+http://gitlab+deploy-token-3:sNsCFqh2szkE_AXkN3Vm@datalore.chem.gla.ac.uk/Chemputer/SerialLabware.git
 
   - pip install git+http://gitlab+deploy-token-4:NjJny1c5xxvnxMDXmpfB@datalore.chem.gla.ac.uk/Chemputer/ChemputerAPI.git@develop
 
-  # # Install xdl
+  # Install xdl
   - pip install .
   - pip freeze
+  
 test:
   script:
-  - pytest tests/all_tests.py -x
-#   - pip3 install tox flake8 # you can also use tox
-#   - tox -e py36,flake8
+  - pytest tests/integration/test_prepare_for_execution.py -x
+  - pytest tests/unit/all_unit_tests.py -x
+  - pytest tests/integration/test_chempiler.py -x
