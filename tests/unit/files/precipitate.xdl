@@ -1,4 +1,4 @@
-<Synthesis autoClean="false">
+<Synthesis auto_clean="false">
   <Hardware>
     <Component
       id="rotavap"

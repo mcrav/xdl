@@ -447,13 +447,26 @@
       "type": "reactor",
       "x": 240,
       "y": 80,
+      "internalId": 84,
+      "label": "buffer_flask",
       "class": "ChemputerReactor",
       "name": "buffer_flask",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1,
-      "internalId": 84,
-      "label": "buffer_flask"
+      "necks": 1
+    },
+    {
+      "id": "flask_chloroacetyl_chloride",
+      "type": "flask",
+      "x": -360,
+      "y": 240,
+      "class": "ChemputerFlask",
+      "name": "flask_chloroacetyl_chloride",
+      "chemical": "chloroacetyl chloride",
+      "current_volume": 100,
+      "max_volume": 100,
+      "internalId": 87,
+      "label": "flask_chloroacetyl_chloride"
     }
   ],
   "links": [
@@ -872,6 +885,14 @@
       "source": "buffer_flask",
       "target": "valve_rotavap",
       "port": "(0,4)"
+    },
+    {
+      "id": 88,
+      "sourceInternal": 87,
+      "targetInternal": 33,
+      "source": "flask_chloroacetyl_chloride",
+      "target": "valve_filter",
+      "port": "(0,3)"
     }
   ]
 }

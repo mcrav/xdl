@@ -30,7 +30,12 @@ from .cleaning import (
     verify_cleaning_steps,
     get_cleaning_schedule
 )
-from .constants import INERT_GAS_SYNONYMS, CLEAN_VESSEL_VOLUME_FRACTION
+from .constants import (
+    INERT_GAS_SYNONYMS,
+    CLEAN_VESSEL_VOLUME_FRACTION,
+    SOLVENT_BOILING_POINTS,
+    CLEAN_VESSEL_BOILING_POINT_FACTOR
+)
 
 class XDLExecutor(object):
  
@@ -175,7 +180,7 @@ class XDLExecutor(object):
                     for item in self._graph_hardware.rotavaps 
                                 + self._graph_hardware.flasks]
 
-            if 'vessel_type' in step.properties:
+            if 'vessel_type' in step.properties and not step.vessel_type:
                 step.vessel_type = self._get_vessel_type(step.vessel)
 
             if 'volume' in step.properties and type(step) == CleanVessel:
@@ -197,6 +202,8 @@ class XDLExecutor(object):
                 step.buffer_flask = self._get_buffer_flask(step.from_vessel)
 
             if not isinstance(step, AbstractBaseStep):
+                if step.steps is None:
+                    print(step.name, step.steps)
                 self._map_hardware_to_step_list(step.steps)
 
     def _map_hardware_to_steps(self) -> None:
@@ -555,6 +562,31 @@ class XDLExecutor(object):
 
             prev_vessel_contents = vessel_contents
 
+    def _add_clean_vessel_temps(self) -> None:
+
+        """Add temperatures to CleanVessel steps. Priority is:
+        1) Use explicitly given temperature.
+        2) If solvent boiling point known use 80% of the boiling point.
+        3) Use 30°C.
+
+        Args:
+            steps (List[List[Step]]): List of steps to add temperatures to
+                CleanVessel steps
+        
+        Returns:
+            List[List[Step]]: List of steps with temperatures added to CleanVessel
+                steps.
+        """
+        for step in self._xdl.steps:
+            if type(step) == CleanVessel:
+                if step.temp == None:
+                    solvent = step.solvent.lower()
+                    if solvent in SOLVENT_BOILING_POINTS:
+                        step.temp = (SOLVENT_BOILING_POINTS[solvent]
+                                    * CLEAN_VESSEL_BOILING_POINT_FACTOR)
+                    else:
+                        step.temp = 30
+
     ##########################
     ### OPTIMISE PROCEDURE ###
     ##########################
@@ -740,6 +772,8 @@ class XDLExecutor(object):
                     # Add in steps implied by explicit steps.
                     self._add_implied_steps(interactive=interactive)
                     # Convert implied properties to concrete values.
+                    self._add_clean_vessel_temps()
+                    self._map_hardware_to_steps()
                     self._add_all_volumes()
                     self._add_filter_volumes()
 

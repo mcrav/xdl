@@ -124,14 +124,17 @@ class StopHeatChill(AbstractStep):
         super().__init__(locals())
     
     def get_steps(self) -> List[Step]:
+        steps = []
         if self.vessel_type == 'filter':
-            return [CStopChiller(self.vessel)]
+            steps = [CStopChiller(self.vessel)]
 
         elif self.vessel_type == 'reactor':
-            return [CStopHeat(self.vessel)]
+            steps = [CStopHeat(self.vessel)]
 
         elif self.vessel_type == 'rotavap':
-            return [CRotavapStopHeater(self.vessel)]
+            steps = [CRotavapStopHeater(self.vessel)]
+
+        return steps
 
     @property
     def human_readable(self) -> str:

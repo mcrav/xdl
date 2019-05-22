@@ -66,6 +66,9 @@ DEFAULT_CLEAN_VESSEL_VOLUME: int = 10 # mL
 #: Default time in seconds to stir vessel during CleanVessel step.
 DEFAULT_CLEAN_VESSEL_STIR_TIME: int = 60
 
+#: Default stir rate in RPM for CleanVessel step.
+DEFAULT_CLEAN_VESSEL_STIR_RPM: int = 500
+
 #############
 ## Rotavap ##
 #############
@@ -264,6 +267,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     },
     'CleanVessel': {
         'stir_time': DEFAULT_CLEAN_VESSEL_STIR_TIME,
+        'stir_rpm': DEFAULT_CLEAN_VESSEL_STIR_RPM,
     },
     'SetStirRate': {
         'stir_rpm': DEFAULT_STIR_RPM,
