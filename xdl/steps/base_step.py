@@ -25,6 +25,15 @@ class Step(XDLBase):
                 if kwarg in param_dict['kwargs']:
                     self.properties[kwarg] = param_dict['kwargs'][kwarg]
 
+    def human_readable(self, language='en'):
+        human_readable = self.get_human_readable()
+        if type(human_readable) == dict:
+            if language in human_readable:
+                return human_readable[language]
+            elif type(human_readable) == str:
+                return human_readable
+        return self.__class__.__name__
+        
 class AbstractStep(Step, ABC):
     """Abstract base class for all steps that contain other steps.
     Subclasses must implement steps and human_readable, and can also override
@@ -43,10 +52,9 @@ class AbstractStep(Step, ABC):
     def get_steps(self):
         return []
 
-    @property
     @abstractmethod
-    def human_readable(self):
-        return self.__class__.__name__
+    def get_human_readable(self):
+        return {'en': self.__class__.__name__}
 
     @property
     def requirements(self):
@@ -101,8 +109,7 @@ class AbstractBaseStep(Step, ABC):
         super().__init__(param_dict)
         self.steps = []
 
-    @property
-    def human_readable(self):
+    def get_human_readable(self):
         return self.__class__.__name__
 
     @abstractmethod

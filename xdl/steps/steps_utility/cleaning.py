@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 from ..base_step import AbstractStep, Step
 from ..steps_base import CMove
@@ -25,6 +25,8 @@ class CleanBackbone(AbstractStep):
                       volume=DEFAULT_CLEAN_BACKBONE_VOLUME)
                 for waste_vessel in self.waste_vessels]
 
-    @property
-    def human_readable(self) -> str:
-        return 'Clean backbone with {solvent}.'.format(**self.properties)
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Clean backbone with {solvent}.'.format(**self.properties)
+        return {
+            'en': en,
+        }

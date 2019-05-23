@@ -81,10 +81,12 @@ class Dissolve(AbstractStep):
             ]
         return steps
 
-    @property
-    def human_readable(self) -> str:
-        return 'Dissolve contents of {vessel} in {solvent} ({volume} mL) at {temp} °C over {time} seconds.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Dissolve contents of {vessel} in {solvent} ({volume} mL) at {temp} °C over {time} seconds.'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

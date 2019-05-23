@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
 from ..base_step import Step, AbstractStep
 from ..steps_utility import Transfer
 from ..steps_base import CStir, CStopStir
@@ -40,7 +40,9 @@ class AddCorrosive(AbstractStep):
             steps.insert(0, CStopStir(vessel=self.vessel))
         return steps
 
-    @property
-    def human_readable(self) -> str:
-        return 'Transfer corrosive reagent {0} ({1} mL) to {2}.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Transfer corrosive reagent {0} ({1} mL) to {2}.'.format(
             self.reagent, self.volume, self.vessel,)
+        return {
+            'en': en,
+        }

@@ -98,10 +98,12 @@ class Rotavap(AbstractStep):
             ]
         return steps
 
-    @property
-    def human_readable(self) -> str:
-        return 'Rotavap contents of {rotavap_name} at {temp} °C and {pressure} mbar for {time}.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Rotavap contents of {rotavap_name} at {temp} °C and {pressure} mbar for {time}.'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

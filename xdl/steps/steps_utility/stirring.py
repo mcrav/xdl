@@ -14,12 +14,12 @@ from .rotavap import RotavapStir
 from ...constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
 
 class SetStirRate(AbstractStep):
-    """[summary]
+    """Set stir rate. Works on rotavap, reactor or filter.
     
     Args:
-        vessel (str): [description]
-        stir_rpm (float): [description]
-        vessel_type (Optional[str], optional): [description]. Defaults to None.
+        vessel (str): Vessel to set stir rate for.
+        stir_rpm (float): Stir rate in RPM
+        vessel_type (str): Given internally. 'filter', 'rotavap' or 'reactor'.
     """
     def __init__(
         self, vessel: str, stir_rpm: float, vessel_type: Optional[str] = None
@@ -33,10 +33,12 @@ class SetStirRate(AbstractStep):
         else:
             return [CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm)]
 
-    @property
-    def human_readable(self) -> str:
-        return 'Set stir rate of {vessel} to {stir_rpm} RPM.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Set stir rate of {vessel} to {stir_rpm} RPM.'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
 class StartStir(AbstractStep):
     """Start stirring given vessel.
@@ -69,10 +71,12 @@ class StartStir(AbstractStep):
             CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm),
         ]
 
-    @property
-    def human_readable(self) -> str:
-        return 'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
@@ -107,9 +111,11 @@ class StopStir(AbstractStep):
             return [CRotavapStopRotation(rotavap_name=self.vessel)]
         return []
 
-    @property
-    def human_readable(self) -> str:
-        return 'Stop stirring {0}.'.format(self.vessel)
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Stop stirring {0}.'.format(self.vessel)
+        return {
+            'en': en,
+        }
 
 class Stir(AbstractStep):
     """Stir given vessel for given time at room temperature.
@@ -149,10 +155,12 @@ class Stir(AbstractStep):
                 StopStir(vessel=self.vessel),
             ]
 
-    @property
-    def human_readable(self) -> str:
-        return 'Stir {vessel} for {time} s at {stir_rpm} RPM.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Stir {vessel} for {time} s at {stir_rpm} RPM.'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

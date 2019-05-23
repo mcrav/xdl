@@ -180,9 +180,8 @@ class Separate(AbstractStep):
             ])
         return steps
 
-    @property
-    def human_readable(self) -> str:
-        return 'Separate contents of {0} {1} with {2} ({3}x{4} mL). Transfer waste phase to {5} {6} and product phase to {7} {8}.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Separate contents of {0} {1} with {2} ({3}x{4} mL). Transfer waste phase to {5} {6} and product phase to {7} {8}.'.format(
             self.from_vessel,
             get_port_str(self.from_port),
             self.solvent,
@@ -192,6 +191,9 @@ class Separate(AbstractStep):
             get_port_str(self.waste_phase_to_port),
             self.to_vessel,
             self.to_port)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

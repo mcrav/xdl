@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
 from ..base_step import Step, AbstractStep
 from ..steps_utility import Transfer
 
@@ -81,13 +81,14 @@ class FilterThrough(AbstractStep):
                                   aspiration_speed=self.aspiration_speed))
         return steps
 
-    @property
-    def human_readable(self) -> str:
-        human_readable = 'Contents of {from_vessel} was filtered through {through_cartridge} into {to_vessel}'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Contents of {from_vessel} was filtered through {through_cartridge} into {to_vessel}'.format(
             **self.properties)
         if self.eluting_solvent:
-            human_readable += ', eluting with {eluting_repeats} x {eluting_volume} mL of {eluting_solvent}.'.format(
+            en += ', eluting with {eluting_repeats} x {eluting_volume} mL of {eluting_solvent}.'.format(
                 **self.properties)
         else:
-            human_readable += '.'
-        return human_readable
+            en += '.'
+        return {
+            'en': en,
+        }

@@ -164,26 +164,56 @@ class XDL(object):
             self.climb_down_tree(step, print_tree=True)
         self.logger.info('\n')
             
-    def as_human_readable(self) -> str:
+    def human_readable(self, language='en') -> str:
         """Return human-readable English description of XDL procedure.
         
+        Arguments:
+            language (str): Language code corresponding to language that should
+                be used. If language code not supported error message will be
+                logged and no human_readable text will be logged.
+
         Returns:
             str: Human readable description of procedure.
         """
         s = ''
-        for i, step in enumerate(self.steps):
-            s += f'{i+1}) {step.human_readable}\n'
+        available_languages = self.get_available_languages()
+        if language in available_languages:
+            for i, step in enumerate(self.steps):
+                s += f'{i+1}) {step.human_readable(language=language)}\n'
+        else:
+            self.logger.error(f'Language {language} not supported. Available languages: {", ".join(available_languages)}')
         return s
 
-    def print_full_human_readable(self) -> None:
-        """Print human-readable English description of XDL procedure."""
+    def get_available_languages(self) -> List[str]:
+        """Get languages for which every step in human readable can output
+        human_readable text in that language.
+        
+        Returns:
+            List[str]: List of language codes, e.g. ['en', 'zh']
+        """
+        available_languages = []
+        for step in self.steps:
+            human_readable = step.get_human_readable()
+            if type(human_readable) == dict:
+                available_languages.extend(list(human_readable.keys()))
+        available_languages = list(set(available_languages))
+        for step in self.steps:
+            for i in reversed(range(len(available_languages))):
+                human_readable = step.get_human_readable()
+                if (type(human_readable) == dict
+                    and available_languages[i] not in human_readable):
+                    available_languages.pop(i)
+        return available_languages
+
+    def log_human_readable(self) -> None:
+        """Log human-readable English description of XDL procedure."""
         self.logger.info('Synthesis Description\n---------------------\n')
-        self.logger.info('{0}\n'.format(self.as_human_readable()))
+        self.logger.info('{0}\n'.format(self.human_readable()))
 
     def save_human_readable(self, save_file: str) -> None:
         """Save human readable description of procedure to given path."""
         with open(save_file, 'w') as fileobj:
-            fileobj.write(self.as_human_readable())
+            fileobj.write(self.human_readable())
 
     def as_string(self) -> str:
         """Return XDL str of procedure."""
