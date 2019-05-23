@@ -162,9 +162,10 @@ class XDLExecutor(object):
                 step.inert_gas = self._get_inert_gas(step)
 
             if ('vacuum_valve' in step.properties):
-                step.vacuum_valve = self._valve_map[step.vacuum]
-                step.valve_unused_port = get_unused_valve_port(
-                    graph=self._graph, valve_node=step.vacuum_valve)
+                if step.vacuum in self._valve_map:
+                    step.vacuum_valve = self._valve_map[step.vacuum]
+                    step.valve_unused_port = get_unused_valve_port(
+                        graph=self._graph, valve_node=step.vacuum_valve)
 
             if 'vacuum_device' in step.properties:
                 step.vacuum_device = vacuum_device_attached_to_flask(
