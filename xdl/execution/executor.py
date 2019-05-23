@@ -121,6 +121,21 @@ class XDLExecutor(object):
                     step.properties[prop] = self._xdl.hardware_map[val]
             step.update()
 
+            if not isinstance(step, AbstractBaseStep):
+                if step.steps is None:
+                    print(step.name, step.steps)
+                self._add_internal_properties_to_steps(step.steps)
+
+
+    def _add_internal_properties_to_steps(self, step_list: List[Step]) -> None:
+        """Recursively add internal properties to all steps and substeps in
+        given list of steps.
+        
+        Args:
+            step_list (List[Step]): List of steps to add internal properties to.
+        """
+        for step in step_list:
+
             # Set step.waste_vessel to nearest waste_vessel to vessel involved 
             # in step.
             if 'waste_vessel' in step.properties and not step.waste_vessel:
@@ -201,7 +216,7 @@ class XDLExecutor(object):
             if not isinstance(step, AbstractBaseStep):
                 if step.steps is None:
                     print(step.name, step.steps)
-                self._map_hardware_to_step_list(step.steps)
+                self._add_internal_properties_to_steps(step.steps)
 
     def _map_hardware_to_steps(self) -> None:
         """
@@ -209,6 +224,18 @@ class XDLExecutor(object):
         from the graph.
         """
         self._map_hardware_to_step_list(self._xdl.steps)
+
+        # Give IDs of all waste vessels to clean backbone steps.
+        for step in self._xdl.steps:
+            if type(step) == CleanBackbone and not step.waste_vessels:
+                step.waste_vessels = self._graph_hardware.waste_xids
+
+    def _add_internal_properties(self) -> None:
+        """
+        Go through steps in XDL and fill in internal properties for all steps
+        and substeps.
+        """
+        self._add_internal_properties_to_steps(self._xdl.steps)
 
         # Give IDs of all waste vessels to clean backbone steps.
         for step in self._xdl.steps:
@@ -374,12 +401,12 @@ class XDLExecutor(object):
                     'Verify solvents used in backbone cleaning? (y, [n])')
             if verify == 'y':
                 verify_cleaning_steps(self._xdl)
-        self._map_hardware_to_steps()
+        self._add_internal_properties()
 
     def _add_implied_clean_vessel_steps(self) -> None:
         """Add CleanVessel steps after steps which completely empty a vessel."""
         add_vessel_cleaning_steps(self._xdl, self._graph_hardware)
-        self._map_hardware_to_steps()
+        self._add_internal_properties()
 
 ###################################
 ### FILTER DEAD VOLUME HANDLING ###
@@ -413,9 +440,9 @@ class XDLExecutor(object):
         appropriate places to deal with the filter dead volume.
         """
         self._add_implied_add_dead_volume_steps()
-        self._map_hardware_to_steps()
+        self._add_internal_properties()
         self._add_implied_remove_dead_volume_steps()
-        self._map_hardware_to_steps()
+        self._add_internal_properties()
 
     def _get_filter_emptying_steps(
         self) -> List[Tuple[int, str, Dict[str, VesselContents]]]:
@@ -796,13 +823,14 @@ class XDLExecutor(object):
                     # _xdl.iter_vessel_contents has all vessels to play with
                     # during _add_implied_steps.
                     self._get_hardware_map()
-                    self._map_hardware_to_steps() 
+                    self._map_hardware_to_steps()
+                    self._add_internal_properties()
                     # Add in steps implied by explicit steps.
                     self._add_implied_steps(interactive=interactive)
                     # Convert implied properties to concrete values.
                     self._add_clean_vessel_temps()
                     self._optimise_separation_steps()
-                    self._map_hardware_to_steps()
+                    self._add_internal_properties()
                     self._add_all_volumes()
                     self._add_filter_volumes()
 
