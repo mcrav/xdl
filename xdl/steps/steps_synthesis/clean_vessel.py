@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict
 from ..base_step import AbstractStep
 from ..steps_utility import (
     StartStir, StopStir, Wait, HeatChillToTemp, HeatChillReturnToRT)
@@ -56,7 +56,9 @@ class CleanVessel(AbstractStep):
             steps.append(HeatChillReturnToRT(vessel=self.vessel))
         return steps
 
-    @property
-    def human_readable(self) -> str:
-        return 'Clean {vessel} with {solvent} ({volume} mL).'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Clean {vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
+        return {
+            'en': en,
+        }

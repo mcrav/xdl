@@ -100,10 +100,12 @@ class Filter(AbstractStep):
                 CVentVacuum(vessel=self.vacuum)])
         return steps
 
-    @property
-    def human_readable(self) -> str:
-        return 'Filter contents of {filter_vessel}.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Filter contents of {filter_vessel}.'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

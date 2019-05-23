@@ -107,14 +107,16 @@ class Add(AbstractStep):
                 steps.insert(0, StopStir(vessel=self.vessel))
         return steps
 
-    @property
-    def human_readable(self) -> str:
+    def get_human_readable(self) -> Dict[str, str]:
         # Solid addition
         if self.mass != None:
-            return 'Add {0} ({1} g) to {2} {3}.'.format(
+            en = 'Add {0} ({1} g) to {2} {3}.'.format(
                 self.reagent, self.mass, self.vessel, get_port_str(self.port))
-        return 'Add {0} ({1} mL) to {2} {3}.'.format(
+        en = 'Add {0} ({1} mL) to {2} {3}.'.format(
             self.reagent, self.volume, self.vessel, get_port_str(self.port))
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

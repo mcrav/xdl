@@ -123,10 +123,12 @@ class Dry(AbstractStep):
 
         return steps
 
-    @property
-    def human_readable(self) -> str:
-        return 'Dry substance in {vessel} for {time} s.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Dry substance in {vessel} for {time} s.'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
