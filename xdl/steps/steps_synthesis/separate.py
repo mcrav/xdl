@@ -52,7 +52,7 @@ class Separate(AbstractStep):
         waste_phase_to_vessel: Optional[str] = None,
         waste_phase_to_port: Optional[str] = None,
         waste_vessel: Optional[str] = None,
-        remove_dead_volume: Optional[bool] = True,
+        remove_dead_volume: Optional[bool] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
