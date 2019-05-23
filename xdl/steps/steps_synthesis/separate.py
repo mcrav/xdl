@@ -102,10 +102,6 @@ class Separate(AbstractStep):
             if n_separations > 1:
                 for _ in range(n_separations - 1):
                     steps.extend([
-                        Transfer(from_vessel=self.separation_vessel, 
-                                 from_port=BOTTOM_PORT, 
-                                 to_vessel=self.waste_vessel, 
-                                 volume=remove_volume),
                         # dead_volume_target is None as there is no point wasting
                         # when there is still solvent to come.
                         CSeparatePhases(lower_phase_vessel=self.to_vessel, 
@@ -137,9 +133,6 @@ class Separate(AbstractStep):
 
 
             steps.extend([
-                Transfer(from_vessel=self.separation_vessel, 
-                         from_port=BOTTOM_PORT, to_vessel=self.waste_vessel, 
-                         volume=remove_volume),
                 CSeparatePhases(
                     separation_vessel=self.separation_vessel,
                     lower_phase_vessel=self.to_vessel,
@@ -153,10 +146,6 @@ class Separate(AbstractStep):
             if n_separations > 1:
                 for _ in range(n_separations - 1):
                     steps.extend([
-                        Transfer(from_vessel=self.separation_vessel, 
-                                 from_port=BOTTOM_PORT, 
-                                 to_vessel=self.waste_vessel,
-                                 volume=remove_volume),
                         # dead_volume_target is None as there is no point wasting
                         # when there is still solvent to come.
                         CSeparatePhases(
@@ -181,9 +170,6 @@ class Separate(AbstractStep):
                     ])
 
             steps.extend([
-                Transfer(from_vessel=self.separation_vessel, 
-                         from_port=BOTTOM_PORT, to_vessel=self.waste_vessel, 
-                         volume=remove_volume),
                 CSeparatePhases(lower_phase_vessel=self.waste_phase_to_vessel, 
                                 lower_phase_port=self.waste_phase_to_port, 
                                 upper_phase_vessel=self.to_vessel,
