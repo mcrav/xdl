@@ -27,10 +27,12 @@ class Precipitate(AbstractStep):
             Stir(vessel=self.vessel, time=self.time),
         ]
 
-    @property
-    def human_readable(self) -> str:
-        return 'Precipitation in {vessel} by chilling to {temp}°C for {time} s.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Precipitation in {vessel} by chilling to {temp}°C for {time} s.'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

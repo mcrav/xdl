@@ -1,10 +1,14 @@
 
 
-<Synthesis autoClean="false">
+<Synthesis auto_clean="false">
   <Hardware>
     <Component
       id="rotavap"
       type="rotavap"
+    />
+    <Component
+      id="reactor"
+      type="reactor"
     />
   </Hardware>
 
@@ -20,7 +24,7 @@
       solvent="water"
       vessel="rotavap" />
     <CleanVessel
-      solvent="ether"
+      solvent="chloroacetyl chloride"
       vessel="reactor"
       volume="50 mL"
       stir_time="5 mins" />

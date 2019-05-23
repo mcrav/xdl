@@ -11,11 +11,9 @@
   </Reagents>
 
   <Procedure>
-    <WashSolid
-      vessel="filter"
-      solvent="ether"
-      temp="10"
-      stir="True"
+    <Filter
+      filter_vessel="filter"
+      stir="False"
     />
 
   </Procedure>

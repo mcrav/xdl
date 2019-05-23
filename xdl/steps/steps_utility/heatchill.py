@@ -96,10 +96,12 @@ class HeatChillToTemp(AbstractStep):
                 vessel=self.vessel, vessel_type=self.vessel_type))
         return steps
     
-    @property
-    def human_readable(self) -> str:
-        return 'Heat/Chill {vessel} to {temp} °C.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Heat/Chill {vessel} to {temp} °C.'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
@@ -124,18 +126,23 @@ class StopHeatChill(AbstractStep):
         super().__init__(locals())
     
     def get_steps(self) -> List[Step]:
+        steps = []
         if self.vessel_type == 'filter':
-            return [CStopChiller(self.vessel)]
+            steps = [CStopChiller(self.vessel)]
 
         elif self.vessel_type == 'reactor':
-            return [CStopHeat(self.vessel)]
+            steps = [CStopHeat(self.vessel)]
 
         elif self.vessel_type == 'rotavap':
-            return [CRotavapStopHeater(self.vessel)]
+            steps = [CRotavapStopHeater(self.vessel)]
 
-    @property
-    def human_readable(self) -> str:
-        return 'Stop heater/chiller for {vessel}.'.format(**self.properties)
+        return steps
+
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Stop heater/chiller for {vessel}.'.format(**self.properties)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
@@ -209,10 +216,12 @@ class HeatChillReturnToRT(AbstractStep):
                 vessel=self.vessel, vessel_type=self.vessel_type))
         return steps
 
-    @property
-    def human_readable(self) -> str:
-        return 'Stop heater/chiller for {vessel} and wait for it to return to room temperature'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Stop heater/chiller for {vessel} and wait for it to return to room temperature'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

@@ -1,18 +1,28 @@
 import os
 import pytest
-
 from xdl import XDL
+from ..utils import generic_chempiler_test
 
 HERE = os.path.abspath(os.path.dirname(__file__))
+FOLDER = os.path.join(HERE, 'files')
 
-def test_prepare_for_execution():
-    """Test by instantiating XDL objects on files known to work
-    and calling prepare_for_execution on graph known to work.
-    """
-    folder = os.path.join(HERE, 'files')
-    files = [os.path.join(folder, f) for f in sorted(os.listdir(folder))]
-    i = 0
-    while i + 1 < len(files):
-        x = XDL(files[i])
-        x.prepare_for_execution(files[i+1], interactive=False) 
-        i += 2
+@pytest.mark.integration
+def test_lidocaine_prepare_for_execution():
+    xdl_f = os.path.join(FOLDER, 'lidocaine.xdl')
+    graph_f = os.path.join(FOLDER, 'lidocaine_graph.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)
+
+@pytest.mark.integration
+def test_dmp_prepare_for_execution():
+    xdl_f = os.path.join(FOLDER, 'DMP.xdl')
+    graph_f = os.path.join(FOLDER, 'DMP_graph.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)
+
+@pytest.mark.integration
+def test_alkyl_fluor_prepare_for_execution():
+    xdl_f = os.path.join(FOLDER, 'AlkylFluor.xdl')
+    graph_f = os.path.join(FOLDER, 'AlkylFluor_graph.graphml')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)

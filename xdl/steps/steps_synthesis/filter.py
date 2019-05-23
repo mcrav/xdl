@@ -2,7 +2,7 @@ from typing import Optional, List, Dict, Any
 from ..utils import get_vacuum_valve_reconnect_steps
 from ..base_step import Step, AbstractStep
 from ..steps_base import CMove, CConnect, CVentVacuum
-from ..steps_utility import StopStir, Wait, StartVacuum, StopVacuum
+from ..steps_utility import StopStir, StartStir, Wait, StartVacuum, StopVacuum
 from ...constants import (
     BOTTOM_PORT,
     DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
@@ -39,6 +39,8 @@ class Filter(AbstractStep):
         filter_top_volume: Optional[float] = 0,
         wait_time: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
+        stir: Optional[bool] = 'default',
+        stir_rpm: Optional[float] = 'default',
         waste_vessel: Optional[str] = None,
         filtrate_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
@@ -56,7 +58,6 @@ class Filter(AbstractStep):
             filtrate_vessel = self.waste_vessel
 
         steps = [
-            StopStir(vessel=self.filter_vessel),
             # Move the filter top volume from the bottom to the waste.
             CMove(
                 from_vessel=self.filter_vessel,
@@ -72,6 +73,13 @@ class Filter(AbstractStep):
                      from_port=BOTTOM_PORT),
             Wait(time=self.wait_time),
         ]
+
+        if not self.stir:
+            steps.insert(0, StopStir(vessel=self.filter_vessel))
+        else:
+            steps.insert(1, StopStir(vessel=self.filter_vessel))
+            steps.insert(0, StartStir(
+                vessel=self.filter_vessel, stir_rpm=self.stir_rpm))
 
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
@@ -92,10 +100,12 @@ class Filter(AbstractStep):
                 CVentVacuum(vessel=self.vacuum)])
         return steps
 
-    @property
-    def human_readable(self) -> str:
-        return 'Filter contents of {filter_vessel}.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Filter contents of {filter_vessel}.'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

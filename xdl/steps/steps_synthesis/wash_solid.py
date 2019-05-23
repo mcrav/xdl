@@ -61,7 +61,7 @@ class WashSolid(AbstractStep):
         volume: Optional[float] = 'default',
         temp: Optional[float] = None,
         vacuum_time: Optional[float] = 'default',
-        stir: Optional[Union[bool, str]] = 'solvent', 
+        stir: Optional[Union[bool, str]] = 'default', 
         stir_time: Optional[float] = 'default',
         stir_rpm: Optional[float] =  'default',
         waste_vessel: Optional[str] = None,
@@ -158,10 +158,12 @@ class WashSolid(AbstractStep):
             
         return steps
 
-    @property
-    def human_readable(self) -> str:
-        return 'Wash solid in {vessel} with {solvent} ({volume} mL).'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Wash solid in {vessel} with {solvent} ({volume} mL).'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

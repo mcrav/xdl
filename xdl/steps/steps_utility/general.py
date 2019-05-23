@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 from ..base_step import AbstractStep, Step
 from ..steps_base import CSetRecordingSpeed, CWait
@@ -27,6 +27,8 @@ class Wait(AbstractStep):
             CSetRecordingSpeed(self.after_recording_speed),
         ]
 
-    @property
-    def human_readable(self) -> str:
-       return 'Wait for {time} s.'.format(**self.properties) 
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Wait for {time} s.'.format(**self.properties) 
+        return {
+           'en': en,
+        }

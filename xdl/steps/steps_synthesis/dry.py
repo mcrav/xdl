@@ -105,7 +105,7 @@ class Dry(AbstractStep):
                 vessel_type='ChemputerFilter',
                 stir=False))
 
-        if not self.vessel_type == 'rotavap':
+        if self.vessel_type not in ['rotavap', 'reactor']:
             steps.extend(get_vacuum_valve_reconnect_steps(
                 inert_gas=self.inert_gas,
                 vacuum_valve=self.vacuum_valve,
@@ -123,10 +123,12 @@ class Dry(AbstractStep):
 
         return steps
 
-    @property
-    def human_readable(self) -> str:
-        return 'Dry substance in {vessel} for {time} s.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Dry substance in {vessel} for {time} s.'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

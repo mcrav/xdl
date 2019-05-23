@@ -23,14 +23,19 @@ from .graph import (
     get_unused_valve_port,
     vacuum_device_attached_to_flask,
 )
-from .utils import VesselContents
+from .utils import VesselContents, is_aqueous
 from .cleaning import (
     add_cleaning_steps,
     add_vessel_cleaning_steps,
     verify_cleaning_steps,
     get_cleaning_schedule
 )
-from .constants import INERT_GAS_SYNONYMS, CLEAN_VESSEL_VOLUME_FRACTION
+from .constants import (
+    INERT_GAS_SYNONYMS,
+    CLEAN_VESSEL_VOLUME_FRACTION,
+    SOLVENT_BOILING_POINTS,
+    CLEAN_VESSEL_BOILING_POINT_FACTOR
+)
 
 class XDLExecutor(object):
  
@@ -116,6 +121,21 @@ class XDLExecutor(object):
                     step.properties[prop] = self._xdl.hardware_map[val]
             step.update()
 
+            if not isinstance(step, AbstractBaseStep):
+                if step.steps is None:
+                    print(step.name, step.steps)
+                self._add_internal_properties_to_steps(step.steps)
+
+
+    def _add_internal_properties_to_steps(self, step_list: List[Step]) -> None:
+        """Recursively add internal properties to all steps and substeps in
+        given list of steps.
+        
+        Args:
+            step_list (List[Step]): List of steps to add internal properties to.
+        """
+        for step in step_list:
+
             # Set step.waste_vessel to nearest waste_vessel to vessel involved 
             # in step.
             if 'waste_vessel' in step.properties and not step.waste_vessel:
@@ -153,17 +173,14 @@ class XDLExecutor(object):
 
             # Filter, WashSolid, Dry need this filled in if inert gas
             # filter dead volume method being used.
-            if ('inert_gas' in step.properties
-                and self._xdl.filter_dead_volume_method
-                    == FILTER_DEAD_VOLUME_INERT_GAS_METHOD):
+            if ('inert_gas' in step.properties):
                 step.inert_gas = self._get_inert_gas(step)
 
-            if ('vacuum_valve' in step.properties
-                  and self._xdl.filter_dead_volume_method
-                      == FILTER_DEAD_VOLUME_LIQUID_METHOD):
-                step.vacuum_valve = self._valve_map[step.vacuum]
-                step.valve_unused_port = get_unused_valve_port(
-                    graph=self._graph, valve_node=step.vacuum_valve)
+            if ('vacuum_valve' in step.properties):
+                if step.vacuum in self._valve_map:
+                    step.vacuum_valve = self._valve_map[step.vacuum]
+                    step.valve_unused_port = get_unused_valve_port(
+                        graph=self._graph, valve_node=step.vacuum_valve)
 
             if 'vacuum_device' in step.properties:
                 step.vacuum_device = vacuum_device_attached_to_flask(
@@ -175,7 +192,7 @@ class XDLExecutor(object):
                     for item in self._graph_hardware.rotavaps 
                                 + self._graph_hardware.flasks]
 
-            if 'vessel_type' in step.properties:
+            if 'vessel_type' in step.properties and not step.vessel_type:
                 step.vessel_type = self._get_vessel_type(step.vessel)
 
             if 'volume' in step.properties and type(step) == CleanVessel:
@@ -197,7 +214,9 @@ class XDLExecutor(object):
                 step.buffer_flask = self._get_buffer_flask(step.from_vessel)
 
             if not isinstance(step, AbstractBaseStep):
-                self._map_hardware_to_step_list(step.steps)
+                if step.steps is None:
+                    print(step.name, step.steps)
+                self._add_internal_properties_to_steps(step.steps)
 
     def _map_hardware_to_steps(self) -> None:
         """
@@ -205,6 +224,18 @@ class XDLExecutor(object):
         from the graph.
         """
         self._map_hardware_to_step_list(self._xdl.steps)
+
+        # Give IDs of all waste vessels to clean backbone steps.
+        for step in self._xdl.steps:
+            if type(step) == CleanBackbone and not step.waste_vessels:
+                step.waste_vessels = self._graph_hardware.waste_xids
+
+    def _add_internal_properties(self) -> None:
+        """
+        Go through steps in XDL and fill in internal properties for all steps
+        and substeps.
+        """
+        self._add_internal_properties_to_steps(self._xdl.steps)
 
         # Give IDs of all waste vessels to clean backbone steps.
         for step in self._xdl.steps:
@@ -370,12 +401,12 @@ class XDLExecutor(object):
                     'Verify solvents used in backbone cleaning? (y, [n])')
             if verify == 'y':
                 verify_cleaning_steps(self._xdl)
-        self._map_hardware_to_steps()
+        self._add_internal_properties()
 
     def _add_implied_clean_vessel_steps(self) -> None:
         """Add CleanVessel steps after steps which completely empty a vessel."""
         add_vessel_cleaning_steps(self._xdl, self._graph_hardware)
-        self._map_hardware_to_steps()
+        self._add_internal_properties()
 
 ###################################
 ### FILTER DEAD VOLUME HANDLING ###
@@ -409,9 +440,9 @@ class XDLExecutor(object):
         appropriate places to deal with the filter dead volume.
         """
         self._add_implied_add_dead_volume_steps()
-        self._map_hardware_to_steps()
+        self._add_internal_properties()
         self._add_implied_remove_dead_volume_steps()
-        self._map_hardware_to_steps()
+        self._add_internal_properties()
 
     def _get_filter_emptying_steps(
         self) -> List[Tuple[int, str, Dict[str, VesselContents]]]:
@@ -546,21 +577,81 @@ class XDLExecutor(object):
                 if step.filter_vessel in prev_vessel_contents:
                     step.filter_top_volume = max(prev_vessel_contents[
                         step.filter_vessel].volume, 0)
+                    if step.filter_top_volume <= 0:
+                        step.filter_top_volume = self._graph_hardware[
+                            step.filter_vessel].max_volume
                 else:
-                    step.filter_top_volume = 0
+                    step.filter_top_volume = self._graph_hardware[
+                        step.filter_vessel.max_volume]
 
             prev_vessel_contents = vessel_contents
+
+    def _add_clean_vessel_temps(self) -> None:
+
+        """Add temperatures to CleanVessel steps. Priority is:
+        1) Use explicitly given temperature.
+        2) If solvent boiling point known use 80% of the boiling point.
+        3) Use 30°C.
+
+        Args:
+            steps (List[List[Step]]): List of steps to add temperatures to
+                CleanVessel steps
+        
+        Returns:
+            List[List[Step]]: List of steps with temperatures added to CleanVessel
+                steps.
+        """
+        for step in self._xdl.steps:
+            if type(step) == CleanVessel:
+                if step.temp == None:
+                    solvent = step.solvent.lower()
+                    if solvent in SOLVENT_BOILING_POINTS:
+                        step.temp = (SOLVENT_BOILING_POINTS[solvent]
+                                    * CLEAN_VESSEL_BOILING_POINT_FACTOR)
+                    else:
+                        step.temp = 30
 
     ##########################
     ### OPTIMISE PROCEDURE ###
     ##########################
 
     def _tidy_up_procedure(self) -> None:
-        """Remove steps that are pointless."""
+        """Remove steps that are pointless and optimise procedure."""
         self._set_all_stir_rpms()
         self._stop_stirring_when_vessels_lose_scope()
         self._remove_pointless_backbone_cleaning()
         self._no_waiting_if_dry_run()
+
+    def _optimise_separation_steps(self) -> None:
+        """Optimise separation steps to reduce risk of backbone contamination.
+        The issue this addresses is that if a product is extracted into the
+        aqueous phase, but the organic phase ends up in the backbone, the product
+        can redissolve in the organic phase when transferred out of the separator.
+
+        Rules implemented here:
+            If: 1) to_vessel of one Separate step is the separation_vessel
+                2) Next Separate step uses same kind of solvent (organic or aqueous)
+            Then the separation step shouldn't remove the dead volume as you
+            run the risk of contaminating the backbone, and there is no need to
+            remove the dead volume to risk contaminating the product phase as
+            more solvent is going to be added anyway in the next step.
+        """
+        steps = self._xdl.steps
+        for i in range(len(steps)):
+            step = steps[i]
+            if type(step) == Separate:
+                if (step.to_vessel == step.separation_vessel
+                    or step.waste_phase_to_vessel == step.separation_vessel):
+                    j = i + 1
+                    next_solvent = None
+                    while j < len(steps):
+                        if type(steps[j]) == Separate:
+                            next_solvent = steps[j].solvent
+                            break
+                        j += 1
+                    if (next_solvent
+                        and is_aqueous(next_solvent) == is_aqueous(step.solvent)):
+                        step.remove_dead_volume = False
 
     def find_stirring_schedule(
         self, step: Step, stirring: List[str]) -> List[str]:
@@ -732,17 +823,20 @@ class XDLExecutor(object):
                     # _xdl.iter_vessel_contents has all vessels to play with
                     # during _add_implied_steps.
                     self._get_hardware_map()
-                    self._map_hardware_to_steps() 
+                    self._map_hardware_to_steps()
+                    self._add_internal_properties()
                     # Add in steps implied by explicit steps.
                     self._add_implied_steps(interactive=interactive)
                     # Convert implied properties to concrete values.
+                    self._add_clean_vessel_temps()
+                    self._optimise_separation_steps()
+                    self._add_internal_properties()
                     self._add_all_volumes()
                     self._add_filter_volumes()
 
                     # Optimise procedure.
                     self._tidy_up_procedure()
 
-                    # Check safety of procedure
                     self._check_safety()
 
                     self._print_warnings()
@@ -762,7 +856,7 @@ class XDLExecutor(object):
         """
         if self._prepared_for_execution:
             self._xdl.print_full_xdl_tree()
-            self._xdl.print_full_human_readable()
+            self._xdl.log_human_readable()
             self.logger.info('Execution\n---------\n')
             for step in self._xdl.steps:
                 self.logger.info(step.name)

@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 from ..base_step import AbstractStep, Step
 from ..steps_base import CMove
@@ -26,10 +26,12 @@ class PrimePumpForAdd(AbstractStep):
                       to_vessel=self.waste_vessel,
                       volume=self.volume)]
 
-    @property
-    def human_readable(self) -> str:
-        return 'Move {volume} mL of {reagent} to waste to prime pump'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Move {volume} mL of {reagent} to waste to prime pump'.format(
             **self.properties)
+        return {
+            'en': en,
+        }
 
 class Transfer(AbstractStep):
     """Transfer contents of one vessel to another.
@@ -73,8 +75,10 @@ class Transfer(AbstractStep):
                       move_speed=self.move_speed,
                       dispense_speed=self.dispense_speed)]
 
-    @property
-    def human_readable(self) -> str:
-        return 'Transfer {0} mL from {1} {2} to {3} {4}.'.format(
+    def get_human_readable(self) -> Dict[str, str]:
+        en = 'Transfer {0} mL from {1} {2} to {3} {4}.'.format(
             self.volume, self.from_vessel, get_port_str(self.from_port),
             self.to_vessel, get_port_str(self.to_port))
+        return {
+            'en': en,
+        }

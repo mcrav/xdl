@@ -11,11 +11,14 @@
   </Reagents>
 
   <Procedure>
-    <WashSolid
-      vessel="filter"
-      solvent="ether"
-      temp="10"
+    <Filter
+      filter_vessel="filter"
+      stir_rpm="565"
+    />
+    <Filter
+      filter_vessel="filter"
       stir="True"
+      stir_rpm="565"
     />
 
   </Procedure>

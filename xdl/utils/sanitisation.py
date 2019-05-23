@@ -12,12 +12,15 @@ def parse_bool(s: str) -> bool:
 
     Returns:
         bool: True is s lower case is 'true' or '1', otherwise False.
+
+    Raises:
+        ValueError: If s.lower() is not 'true' or 'false'.
     """
     if s.lower() == 'true':
         return True
     elif s.lower() == 'false':
         return False
-    return None
+    raise ValueError(f'{s} cannot be parsed as a bool.')
 
 minutes_to_seconds = lambda x: x * 60
 hours_to_seconds = lambda x: x * 60 * 60
@@ -112,6 +115,14 @@ def clean_properties(xdl_class, properties):
         elif prop_type in [bool, Optional[bool]]:
             if type(val) == str:
                 properties[prop] = parse_bool(val)
+
+        #  Used by 3 option stir property in WashSolid
+        elif prop_type == Optional[Union[bool, str]]:
+            if type(val) == str:
+                try:
+                    properties[prop] = parse_bool(val)
+                except ValueError:
+                    pass
 
         elif prop_type == Union[str, List[str]]:
             if type(val) == str:
