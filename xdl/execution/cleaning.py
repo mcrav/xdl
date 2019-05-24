@@ -372,7 +372,7 @@ def get_clean_vessel_sequence(
         elif (i > 0 and type(steps[i-1]) == Dissolve
               and not vessel_contents[steps[i-1].vessel].reagents):
             cleaning_solvents = get_clean_vessel_solvents(xdl_obj,
-                                                          steps[-1].vessel,
+                                                          steps[i-1].vessel,
                                                           prev_vessel_contents,
                                                           available_solvents)
         # For all cleaning solvents found add them to the sequence along with
