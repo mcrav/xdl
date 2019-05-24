@@ -213,6 +213,13 @@ class XDLExecutor(object):
                  and not step.buffer_flask):
                 step.buffer_flask = self._get_buffer_flask(step.from_vessel)
 
+            # Add filter dead volume to WashSolid steps
+            if ('filter_dead_volume' in step.properties
+                and not step.filter_dead_volume):
+                vessel = self._graph_hardware[step.vessel]
+                if 'dead_volume' in vessel.properties:
+                    step.filter_dead_volume = vessel.dead_volume
+
             if not isinstance(step, AbstractBaseStep):
                 if step.steps is None:
                     print(step.name, step.steps)
