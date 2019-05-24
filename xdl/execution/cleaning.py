@@ -515,7 +515,7 @@ def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
                     elif type(step) == CleanBackbone:
                         print(f'CleanBackbone {step.solvent}')
                     else:
-                        print(step.human_readable)
+                        print(step.human_readable())
                 answer = None
                 # Get appropriate answer.
                 while answer not in ['', 'y', 'n']:
