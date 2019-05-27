@@ -53,6 +53,8 @@ class WashSolid(AbstractStep):
             valve.
         vessel_type (str): Given internally. 'reactor', 'filter', 'rotavap',
             'flask' or 'separator'.
+        filter_dead_volume (float): Given internally. Dead volume of filter if
+            vessel_type == 'filter' otherwise None.
     """
     def __init__(
         self,
@@ -73,12 +75,20 @@ class WashSolid(AbstractStep):
         vacuum_valve: Optional[str] = None,
         valve_unused_port: Optional[str] = None,
         vessel_type: Optional[str] = None,
+        filter_dead_volume: Optional[float] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
         steps = []
+        # Volume to withdraw after solvent is added.
+        withdraw_volume = self.volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR
+
+        # If filter dead volume given internally, add it to withdraw volume
+        if self.filter_dead_volume:
+            withdraw_volume += self.filter_dead_volume
+
         # Rotavap/reactor WashSolid steps
         if not self.vessel_type == 'filter':
             steps.extend([
@@ -108,7 +118,7 @@ class WashSolid(AbstractStep):
                     from_vessel=self.vessel,
                     from_port=BOTTOM_PORT,
                     to_vessel=filtrate_vessel,
-                    volume=self.volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
+                    volume=withdraw_volume,
                     aspiration_speed=self.aspiration_speed),
                 # Briefly dry under vacuum.
                 StartVacuum(
