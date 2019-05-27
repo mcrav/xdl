@@ -191,6 +191,7 @@ SOLVENT_BOILING_POINTS = {
     'cyclohexane': 80.7,
     'dcm': 39.8,
     'dichloromethane': 39.8,
+    'ch2cl2': 39.8,
     'methylene dichloride': 39.8,
     'methylene chloride': 39.8,
     'diethyl ether': 34.5,
