@@ -222,7 +222,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
         'after_recording_speed': DEFAULT_RECORDING_SPEED,
     },
-    'Rotavap': {
+    'Evaporate': {
         'time': DEFAULT_ROTAVAP_DRYING_TIME,
         'rotation_speed': DEFAULT_ROTAVAP_ROTATION_SPEED,
     },

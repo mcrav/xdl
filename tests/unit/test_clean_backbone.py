@@ -29,7 +29,7 @@ ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE = [
     # HeatChill, HeatChillReturnToRT
     # FilterThrough
     'dcm',
-    # Rotavap
+    # Evaporate 
     # Dissolve DCM
     # 'dcm',
     # FilterThrough DCM

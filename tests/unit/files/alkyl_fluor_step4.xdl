@@ -64,7 +64,7 @@
       eluting_solvent="DCM"
       eluting_volume="25ml"
       eluting_repeats="3" />
-    <Rotavap
+    <Evaporate
       rotavap_name="rotavap"
       temp="40"
       pressure="750"
