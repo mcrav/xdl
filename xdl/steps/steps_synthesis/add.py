@@ -1,14 +1,17 @@
 from typing import Optional, List, Dict, Any
+import copy
+
 from ..steps_utility import PrimePumpForAdd, Wait, StopStir, StartStir
 from ..steps_base import CMove, Confirm
 from ..base_step import Step, AbstractStep
-from ...utils.misc import get_port_str
+from ...utils.misc import get_port_str, format_property
 from ...constants import (
     DEFAULT_AFTER_ADD_WAIT_TIME,
     DEFAULT_AIR_FLUSH_TUBE_VOLUME,
     TOP_PORT,
     EVAPORATE_PORT
 )
+from ...localisation import HUMAN_READABLE_STEPS
 
 class Add(AbstractStep):
     """Add given volume of given reagent to given vessel.
@@ -102,16 +105,18 @@ class Add(AbstractStep):
                 steps.insert(0, StopStir(vessel=self.vessel))
         return steps
 
-    def get_human_readable(self) -> Dict[str, str]:
-        # Solid addition
-        if self.mass != None:
-            en = 'Add {0} ({1} g) to {2} {3}.'.format(
-                self.reagent, self.mass, self.vessel, get_port_str(self.port))
-        en = 'Add {0} ({1} mL) to {2} {3}.'.format(
-            self.reagent, self.volume, self.vessel, get_port_str(self.port))
-        return {
-            'en': en,
-        }
+    def human_readable(self, language: str = 'en') -> str:
+        try:
+            if self.mass != None:
+                return HUMAN_READABLE_STEPS['Add (mass)'][language].format(
+                    **self.formatted_properties())
+            elif self.volume != None:
+                return HUMAN_READABLE_STEPS['Add (volume)'][language].format(
+                    **self.formatted_properties())
+            else:
+                return self.name
+        except KeyError:
+            return self.name
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

@@ -1,29 +1,32 @@
 
 import os
 from xdl import XDL
+from xdl.steps import AbstractBaseStep
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')
 
+files = [
+    (os.path.join(FOLDER, 'lidocaine.xdl'),
+     os.path.join(FOLDER, 'lidocaine_graph.json')),
+     
+    (os.path.join(FOLDER, 'alkyl_fluor_step4.xdl'),
+     os.path.join(FOLDER, 'alkyl_fluor_step4.graphml'))
+]
+
 def test_human_readable():
     """Test that human_readable generation works."""
-    xdl_f = os.path.join(FOLDER, 'lidocaine.xdl')
-    graph_f = os.path.join(FOLDER, 'lidocaine_graph.json')
-    x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f, interactive=False)
-    assert len(x.human_readable()) > 0 # No language given
-    assert len(x.human_readable(language='en')) > 0 # Default language
-    assert x.human_readable(language='cz') == '' # Unsupported language
-    # assert len(x.human_readable(language='zh')) > 0 # Non default language
-
-def test_human_readable_step():
-    """Test that human_readable generation works for individual steps."""
-    xdl_f = os.path.join(FOLDER, 'lidocaine.xdl')
-    graph_f = os.path.join(FOLDER, 'lidocaine_graph.json')
-    x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f, interactive=False)
-    for step in x.steps:
-        assert len(step.human_readable()) > 0 # No language given
-        assert len(step.human_readable(language='en')) > 0 # Default language
-        assert step.human_readable(language='cz') == step.__class__.__name__ # Unsupported language
-        # assert len(x.human_readable(language='zh')) > 0 # Non default language
+    for xdl_f, graph_f in files:
+        x = XDL(xdl_f)
+        x.prepare_for_execution(graph_f, interactive=False)
+        for step in x.steps:
+            if not isinstance(step, AbstractBaseStep):
+                assert step.human_readable() not in  [step.name, None] # No language given
+                assert step.human_readable(language='en') not in [step.name, None] # Default language
+                assert step.human_readable(language='cz') == step.__class__.__name__ # Unsupported language
+                assert step.human_readable(language='zh') not in  [step.name, None] # Non default language
+                for prop in step.properties:
+                    assert not '{' + prop + '}' in step.human_readable('en')
+                    assert not '{' + prop + '}' in step.human_readable('zh')
+        x.human_readable()
+        x.human_readable('zh')

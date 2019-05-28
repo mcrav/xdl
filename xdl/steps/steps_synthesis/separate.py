@@ -1,9 +1,10 @@
 from typing import Optional, Dict, Any, List
+import copy
 from ..base_step import Step, AbstractStep
 from .add import Add
 from ..steps_utility import Transfer, Wait, Stir
 from ..steps_base import CSeparatePhases, CMove
-from ...utils.misc import get_port_str
+from ...utils.misc import get_port_str, format_property
 from ...constants import (
     BOTTOM_PORT,
     TOP_PORT,
@@ -13,6 +14,7 @@ from ...constants import (
     DEFAULT_SEPARATION_SLOW_STIR_SPEED,
     DEFAULT_SEPARATION_SETTLE_TIME,
 )
+from ...localisation import HUMAN_READABLE_STEPS
 
 class Separate(AbstractStep):
     """Extract contents of from_vessel using given amount of given solvent.
@@ -180,20 +182,22 @@ class Separate(AbstractStep):
             ])
         return steps
 
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Separate contents of {0} {1} with {2} ({3}x{4} mL). Transfer waste phase to {5} {6} and product phase to {7} {8}.'.format(
-            self.from_vessel,
-            get_port_str(self.from_port),
-            self.solvent,
-            self.n_separations,
-            self.solvent_volume,
-            self.waste_phase_to_vessel,
-            get_port_str(self.waste_phase_to_port),
-            self.to_vessel,
-            self.to_port)
-        return {
-            'en': en,
-        }
+    def human_readable(self,  language='en') -> str:
+        props = self.formatted_properties()
+        
+        phases = ['bottom', 'top']
+        # Remember True == 1 and False == 0
+        props['waste_phase'] = phases[self.product_bottom]
+        props['product_phase'] = phases[not self.product_bottom]
+
+        try:
+            if self.purpose == 'wash':
+                s = HUMAN_READABLE_STEPS['Separate (wash)'][language].format(**props)
+            elif self.purpose == 'extract':
+                s = HUMAN_READABLE_STEPS['Separate (extract)'][language].format(**props)
+            return s[0].upper() + s[1:]
+        except KeyError:
+            return self.name
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

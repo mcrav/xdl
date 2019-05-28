@@ -19,12 +19,6 @@ class StartVacuum(AbstractStep):
             CStartVacuum(vessel=self.vessel)
         ]
 
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Start vacuum for {vessel}.'.format(**self.properties)
-        return {
-            'en': en,
-        }
-
 class StopVacuum(AbstractStep):
     """Stop vacuum pump attached to given vessel.
 
@@ -36,9 +30,3 @@ class StopVacuum(AbstractStep):
 
     def get_steps(self) -> List[Step]:
         return [CStopVacuum(vessel=self.vessel)]
-
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Stop vacuum for {vessel}.'.format(**self.properties)
-        return {
-            'en': en,
-        }

@@ -47,13 +47,6 @@ class HeatChill(AbstractStep):
                 vessel=self.vessel, vessel_type=self.vessel_type))
         return steps
 
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Heat/Chill {vessel} to {temp} °C for {time} s.'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
-
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {
