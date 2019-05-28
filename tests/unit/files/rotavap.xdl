@@ -19,7 +19,7 @@
       reagent="water"
       vessel="rotavap"
       mass="500 mL" />
-    <Rotavap
+    <Evaporate
       rotavap_name="rotavap"
       temp="40"
       pressure="50" />

@@ -40,7 +40,7 @@ was a dissolve step. This is to make sure that no vessels are cleaned after
 emptying steps when they actually still contain solids.
 e.g.
 ...
-Rotavap rotavap
+Evaporate rotavap
 Dissolve rotavap
 Transfer rotavap -> reactor
 CleanVessel rotavap

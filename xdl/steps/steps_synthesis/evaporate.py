@@ -25,8 +25,8 @@ from ..steps_utility import (
 )
 from ...constants import COLLECT_PORT
 
-class Rotavap(AbstractStep):
-    """Rotavap contents of given vessel at given temp and given pressure for
+class Evaporate(AbstractStep):
+    """Evaporate contents of given vessel at given temp and given pressure for
     given time.
 
     Args:
@@ -99,7 +99,7 @@ class Rotavap(AbstractStep):
         return steps
 
     def get_human_readable(self) -> Dict[str, str]:
-        en = 'Rotavap contents of {rotavap_name} at {temp} °C and {pressure} mbar for {time}.'.format(
+        en = 'Evaporate contents of {rotavap_name} at {temp} °C and {pressure} mbar for {time}.'.format(
             **self.properties)
         return {
             'en': en,

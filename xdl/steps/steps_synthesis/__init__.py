@@ -12,6 +12,6 @@ from .dry import Dry
 
 from .separate import Separate
 
-from .rotavap import Rotavap
+from .evaporate import Evaporate
 
 from .clean_vessel import CleanVessel

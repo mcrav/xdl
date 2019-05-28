@@ -373,7 +373,7 @@ class XDLExecutor(object):
         elif type(step) == Separate:
             nearest_node = step.separation_vessel
 
-        elif type(step) == Rotavap:
+        elif type(step) == Evaporate:
             nearest_node = step.rotavap_name
             
         if not nearest_node:
