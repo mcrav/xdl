@@ -1,6 +1,7 @@
 from typing import Optional, List, Dict
 from ..base_step import Step, AbstractStep
 from ..steps_utility import Transfer
+from .clean_vessel import CleanVessel
 
 class FilterThrough(AbstractStep):
     """Filter contents of from_vessel through a cartridge,
@@ -74,11 +75,15 @@ class FilterThrough(AbstractStep):
                                   aspiration_speed=self.aspiration_speed))
 
         if self.to_vessel == self.from_vessel:
-            steps.append(Transfer(from_vessel=self.buffer_flask,
-                                  to_vessel=self.to_vessel,
-                                  volume='all',
-                                  move_speed=self.move_speed,
-                                  aspiration_speed=self.aspiration_speed))
+            steps.extend([
+                CleanVessel(vessel=self.from_vessel,
+                            solvent=self.eluting_solvent),
+                Transfer(from_vessel=self.buffer_flask,
+                         to_vessel=self.to_vessel,
+                         volume='all',
+                         move_speed=self.move_speed,
+                         aspiration_speed=self.aspiration_speed),
+            ])
         return steps
 
     def get_human_readable(self) -> Dict[str, str]:
