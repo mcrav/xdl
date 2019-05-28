@@ -245,6 +245,10 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
         'after_recording_speed': DEFAULT_RECORDING_SPEED,
     },
+    'HeatChillReturnToRT': {
+        'stir': True,
+        'stir_rpm': DEFAULT_STIR_RPM,
+    },
     'Dissolve': {
         'time': 20 * 60,
         'temp': 25,
