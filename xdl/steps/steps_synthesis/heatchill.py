@@ -1,7 +1,7 @@
 from typing import Optional, List, Dict, Any
 from ..base_step import Step, AbstractStep
-from ..steps_utility import Wait, HeatChillToTemp, StopHeatChill
-from ..steps_base import CSetStirRate, CStir, CStopStir
+from ..steps_utility import (
+    Wait, HeatChillToTemp, StopHeatChill, StartStir, StopStir)
 
 class HeatChill(AbstractStep):
     """Heat or chill vessel to given temp for given time.
@@ -39,15 +39,12 @@ class HeatChill(AbstractStep):
             StopHeatChill(vessel=self.vessel, vessel_type=self.vessel_type),
         ]
         if self.stir:
-            steps.insert(0, CStir(vessel=self.vessel))
-            if self.stir_rpm:
-                steps.insert(
-                    0, CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm))
-            else:
-                steps.insert(
-                    0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+            steps.insert(0, StartStir(vessel=self.vessel,
+                                      vessel_type=self.vessel_type,
+                                      stir_rpm=self.stir_rpm))
         else:
-            steps.insert(0, CStopStir(vessel=self.vessel))
+            steps.insert(0, StopStir(
+                vessel=self.vessel, vessel_type=self.vessel_type))
         return steps
 
     def get_human_readable(self) -> Dict[str, str]:

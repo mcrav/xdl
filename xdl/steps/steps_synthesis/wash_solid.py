@@ -138,6 +138,7 @@ class WashSolid(AbstractStep):
             if self.stir == True:
                 steps.insert(
                     0, StartStir(vessel=self.vessel,
+                                 vessel_type=self.vessel_type,
                                  stir_rpm=self.stir_rpm))
                 steps.insert(-2, StopStir(vessel=self.vessel))
             # Only stir after solvent is added and stop stirring before it is
@@ -145,6 +146,7 @@ class WashSolid(AbstractStep):
             elif self.stir == 'solvent':
                 steps.insert(
                     1, StartStir(vessel=self.vessel,
+                                 vessel_type=self.vessel_type,
                                  stir_rpm=self.stir_rpm))
                 steps.insert(-3, StopStir(vessel=self.vessel))
 

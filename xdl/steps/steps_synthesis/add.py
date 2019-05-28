@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict, Any
-from ..steps_utility import PrimePumpForAdd, Wait, StopStir
-from ..steps_base import CMove, CSetStirRate, CStir, Confirm
+from ..steps_utility import PrimePumpForAdd, Wait, StopStir, StartStir
+from ..steps_base import CMove, Confirm
 from ..base_step import Step, AbstractStep
 from ...utils.misc import get_port_str
 from ...constants import (
@@ -46,7 +46,7 @@ class Add(AbstractStep):
         dispense_speed: Optional[float] = 'default',
         time: Optional[float] = None,
         stir: Optional[bool] = False,
-        stir_rpm: Optional[float] = None,
+        stir_rpm: Optional[float] = 'default',
         reagent_vessel: Optional[str] = None, 
         waste_vessel: Optional[str] = None,
         flush_tube_vessel: Optional[str] = None,
@@ -95,14 +95,9 @@ class Add(AbstractStep):
                     volume=DEFAULT_AIR_FLUSH_TUBE_VOLUME))
 
             if self.stir:
-                steps.insert(0, CStir(vessel=self.vessel))
-                if self.stir_rpm:
-                    steps.insert(
-                        0, CSetStirRate(
-                            vessel=self.vessel, stir_rpm=self.stir_rpm))
-                else:
-                    steps.insert(
-                        0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+                steps.insert(0, StartStir(vessel=self.vessel,
+                                          vessel_type=self.vessel_type,
+                                          stir_rpm=self.stir_rpm))
             else:
                 steps.insert(0, StopStir(vessel=self.vessel))
         return steps
