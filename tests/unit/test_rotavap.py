@@ -32,7 +32,7 @@ def test_rotavap_auto_mode():
     x.prepare_for_execution(graph_f, interactive=False)
     for step in x.steps:
         if type(step) == Evaporate:
-            assert type(step.steps[0]) == CRotavapAutoEvaporation
+            assert type(step.steps[-3]) == CRotavapAutoEvaporation
             break
     generic_chempiler_test(xdl_f, graph_f)
 
