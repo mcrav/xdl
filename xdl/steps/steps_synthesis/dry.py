@@ -67,9 +67,9 @@ class Dry(AbstractStep):
         from_port = None
         if self.vessel_type == 'rotavap':
             vacuum_vessel = self.vessel
-            from_port='collect'
+            from_port='evaporate'
         # from_port should be None unless drying is in a filter in which case
-        # use bottom port, or for a rotavap port 'collect' is used.
+        # use bottom port, or for a rotavap port 'evaporate' is used.
         if self.vessel_type == 'filter':
             from_port = BOTTOM_PORT
             
