@@ -78,13 +78,13 @@ class CSetStirRate(AbstractBaseStep):
 
     Args:
         vessel (str): Vessel name to set stir speed.
-        stir_rpm (float): Stir speed in RPM.
+        stir_speed (float): Stir speed in RPM.
     """
-    def __init__(self, vessel: str, stir_rpm: float) -> None:
+    def __init__(self, vessel: str, stir_speed: float) -> None:
         super().__init__(locals())
 
     def execute(self, chempiler, logger=None, level=0):
-        chempiler.stirrer.set_stir_rate(self.vessel, self.stir_rpm)
+        chempiler.stirrer.set_stir_rate(self.vessel, self.stir_speed)
         return True
 
 class CStirrerWaitForTemp(AbstractBaseStep):

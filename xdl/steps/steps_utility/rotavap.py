@@ -88,13 +88,13 @@ class RotavapStir(AbstractStep):
     Args:
         rotavap_name (str): Rotavap name to start rotation for.
         time (float): Time to stir for.
-        stir_rpm (float): Speed to rotate rotavap flask at.
+        stir_speed (float): Speed to rotate rotavap flask at.
     """
     def __init__(
         self,
         rotavap_name: str,
         time: float,
-        stir_rpm: Optional[float] = 'default',
+        stir_speed: Optional[float] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -103,14 +103,14 @@ class RotavapStir(AbstractStep):
         return [
             RotavapStartRotation(
                 rotavap_name=self.rotavap_name,
-                rotation_speed=self.stir_rpm
+                rotation_speed=self.stir_speed
             ),
             Wait(time=self.time),
             RotavapStopRotation(rotavap_name=self.rotavap_name)
         ]
 
     def get_human_readable(self) -> Dict[str, str]:
-        en = 'Use rotavap rotation to stir {rotavap_name} for {time} s at {stir_rpm} RPM.'.format(
+        en = 'Use rotavap rotation to stir {rotavap_name} for {time} s at {stir_speed} RPM.'.format(
             **self.properties)
         return {
             'en': en,

@@ -52,7 +52,7 @@
       vessel="filter"
       temp="5.0"
       time="5400.0"
-      stir_rpm="50" />
+      stir_speed="50" />
     <Filter
       filter_vessel="filter" />
     <WashSolid

@@ -35,7 +35,7 @@ class WashSolid(AbstractStep):
             False means don't stir.
         stir_time (float): Time to stir for after solvent has been added. Only
             relevant if stir is True or 'solvent'.
-        stir_rpm (float): Speed to stir at in RPM. Only relevant if stir is True
+        stir_speed (float): Speed to stir at in RPM. Only relevant if stir is True
             or 'solvent'.
         waste_vessel (str): Given internally. Vessel to send waste to.
         filtrate_vessel (str): Optional. Vessel to send filtrate to. Defaults to
@@ -65,7 +65,7 @@ class WashSolid(AbstractStep):
         vacuum_time: Optional[float] = 'default',
         stir: Optional[Union[bool, str]] = 'default', 
         stir_time: Optional[float] = 'default',
-        stir_rpm: Optional[float] =  'default',
+        stir_speed: Optional[float] =  'default',
         waste_vessel: Optional[str] = None,
         filtrate_vessel: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
@@ -95,7 +95,7 @@ class WashSolid(AbstractStep):
                 Add(vessel=self.vessel, reagent=self.solvent, volume=self.volume),
                 Stir(vessel=self.vessel,
                      time=self.stir_time,
-                     stir_rpm=self.stir_rpm),
+                     stir_speed=self.stir_speed),
                 Transfer(from_vessel=self.vessel,
                          to_vessel=self.waste_vessel,
                          volume='all'),
@@ -139,7 +139,7 @@ class WashSolid(AbstractStep):
                 steps.insert(
                     0, StartStir(vessel=self.vessel,
                                  vessel_type=self.vessel_type,
-                                 stir_rpm=self.stir_rpm))
+                                 stir_speed=self.stir_speed))
                 steps.insert(-2, StopStir(vessel=self.vessel))
             # Only stir after solvent is added and stop stirring before it is
             # removed.
@@ -147,7 +147,7 @@ class WashSolid(AbstractStep):
                 steps.insert(
                     1, StartStir(vessel=self.vessel,
                                  vessel_type=self.vessel_type,
-                                 stir_rpm=self.stir_rpm))
+                                 stir_speed=self.stir_speed))
                 steps.insert(-3, StopStir(vessel=self.vessel))
 
             steps.extend(get_vacuum_valve_reconnect_steps(
