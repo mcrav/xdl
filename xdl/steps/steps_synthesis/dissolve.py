@@ -26,6 +26,7 @@ class Dissolve(AbstractStep):
         port (str): Port to add solvent to.
         temp (float): Temperature to stir at. Optional.
         time (float): Time to stir for. Optional.
+        stir_speed (float): Speed to stir at in RPM.
         solvent_vessel (str): Given internally. Flask containing solvent.
         vessel_type (str): Given internally. 'reactor', 'filter', 'rotavap',
             'flask' or 'separator'.
@@ -38,7 +39,7 @@ class Dissolve(AbstractStep):
         port: Optional[str] = None,
         temp: Optional[float] = 'default',
         time: Optional[float] = 'default',
-        stir_rpm: Optional[float] = 'default',
+        stir_speed: Optional[float] = 'default',
         solvent_vessel: Optional[str] = None,
         vessel_type: Optional[str] = None,
     ) -> None:
@@ -75,7 +76,7 @@ class Dissolve(AbstractStep):
                     vessel=self.vessel,
                     temp=self.temp,
                     stir=True,
-                    stir_rpm=self.stir_rpm),
+                    stir_speed=self.stir_speed),
                 Wait(self.time),
                 StopHeatChill(vessel=self.vessel),
             ]

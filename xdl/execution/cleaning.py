@@ -40,7 +40,7 @@ was a dissolve step. This is to make sure that no vessels are cleaned after
 emptying steps when they actually still contain solids.
 e.g.
 ...
-Rotavap rotavap
+Evaporate rotavap
 Dissolve rotavap
 Transfer rotavap -> reactor
 CleanVessel rotavap
@@ -372,7 +372,7 @@ def get_clean_vessel_sequence(
         elif (i > 0 and type(steps[i-1]) == Dissolve
               and not vessel_contents[steps[i-1].vessel].reagents):
             cleaning_solvents = get_clean_vessel_solvents(xdl_obj,
-                                                          steps[-1].vessel,
+                                                          steps[i-1].vessel,
                                                           prev_vessel_contents,
                                                           available_solvents)
         # For all cleaning solvents found add them to the sequence along with
@@ -515,7 +515,7 @@ def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
                     elif type(step) == CleanBackbone:
                         print(f'CleanBackbone {step.solvent}')
                     else:
-                        print(step.human_readable)
+                        print(step.human_readable())
                 answer = None
                 # Get appropriate answer.
                 while answer not in ['', 'y', 'n']:

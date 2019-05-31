@@ -8,9 +8,9 @@ from ...constants import (
     BOTTOM_PORT,
     TOP_PORT,
     DEFAULT_SEPARATION_FAST_STIR_TIME,
-    DEFAULT_SEPARATION_FAST_STIR_RPM,
+    DEFAULT_SEPARATION_FAST_STIR_SPEED,
     DEFAULT_SEPARATION_SLOW_STIR_TIME,
-    DEFAULT_SEPARATION_SLOW_STIR_RPM,
+    DEFAULT_SEPARATION_SLOW_STIR_SPEED,
     DEFAULT_SEPARATION_SETTLE_TIME,
 )
 
@@ -84,10 +84,10 @@ class Separate(AbstractStep):
             # Stir separation_vessel
             Stir(vessel=self.separation_vessel, 
                  time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
-                 stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+                 stir_speed=DEFAULT_SEPARATION_FAST_STIR_SPEED),
             Stir(vessel=self.separation_vessel, 
                  time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
-                 stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
+                 stir_speed=DEFAULT_SEPARATION_SLOW_STIR_SPEED),
             # Wait for phases to separate
             Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
         ])
@@ -123,10 +123,10 @@ class Separate(AbstractStep):
                         # Stir separation_vessel
                         Stir(vessel=self.separation_vessel, 
                              time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
-                             stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+                             stir_speed=DEFAULT_SEPARATION_FAST_STIR_SPEED),
                         Stir(vessel=self.separation_vessel, 
                              time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
-                             stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
+                             stir_speed=DEFAULT_SEPARATION_SLOW_STIR_SPEED),
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME)
                     ])
@@ -161,10 +161,10 @@ class Separate(AbstractStep):
                         # Stir separation_vessel
                         Stir(vessel=self.separation_vessel, 
                              time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
-                             stir_rpm=DEFAULT_SEPARATION_FAST_STIR_RPM),
+                             stir_speed=DEFAULT_SEPARATION_FAST_STIR_SPEED),
                         Stir(vessel=self.separation_vessel, 
                              time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
-                             stir_rpm=DEFAULT_SEPARATION_SLOW_STIR_RPM),
+                             stir_speed=DEFAULT_SEPARATION_SLOW_STIR_SPEED),
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])

@@ -86,12 +86,12 @@
       vessel="jacketed_filter"
       volume="all"
       stir="true"
-      stir_rpm="500"
+      stir_speed="500"
     />
     <Stir
       vessel="jacketed_filter"
       time="15min"
-      stir_rpm="500" />
+      stir_speed="500" />
     <HeatChill
       vessel="jacketed_filter"
       temp="23"
@@ -105,7 +105,7 @@
       volume="100mL"
       stir="solvent"
       stir_time="5min"
-      stir_rpm="800"
+      stir_speed="800"
       vacuum_time="1min"
       repeat="3" />
     <!-- Second step -->
@@ -133,24 +133,24 @@
       volume="100 mL"
       time="45min"
       stir="True"
-      stir_rpm="500"
+      stir_speed="500"
     />
     <HeatChill
       vessel="jacketed_filter"
       temp="70"
       time="2h"
       stir="true"
-      stir_rpm="400" />
+      stir_speed="400" />
     <HeatChillToTemp
       vessel="jacketed_filter"
       temp="10"
       stir="True"
-      stir_rpm="400" />
+      stir_speed="400" />
     <!-- For better crystallization -->
     <Stir
       vessel="jacketed_filter"
       time="1h"
-      stir_rpm="250" />
+      stir_speed="250" />
     <Filter
       filter_vessel="jacketed_filter" />
     <WashSolid
@@ -158,7 +158,7 @@
       solvent="EtOAc"
       volume="500mL"
       stir_time="15min"
-      stir_rpm="500"
+      stir_speed="500"
       repeat="3" />
     <Dry
       vessel="jacketed_filter"
@@ -181,45 +181,45 @@
       vessel="jacketed_filter"
       temp="23"
       stir="True"
-      stir_rpm="400" />
+      stir_speed="400" />
     <Add
       reagent="KOtBu_solution"
       volume="423mL"
       vessel="jacketed_filter"
       dispense_speed="5"
       stir="True"
-      stir_rpm="250"
+      stir_speed="250"
     />
     <HeatChill
       vessel="jacketed_filter"
       temp="23"
       time="4h"
       stir="true"
-      stir_rpm="400" />
+      stir_speed="400" />
     <HeatChillToTemp
       vessel="jacketed_filter"
       temp="-40"
       stir="True"
-      stir_rpm="400" />
+      stir_speed="400" />
     <Add
       reagent="HCE_solution"
       volume="423ml"
       vessel="jacketed_filter"
       dispense_speed="1"
       stir="True"
-      stir_rpm="500"
+      stir_speed="500"
     />
     <HeatChill
       vessel="jacketed_filter"
       temp="23"
       time="24h"
       stir="True"
-      stir_rpm="300" />
+      stir_speed="300" />
     <HeatChillToTemp
       vessel="jacketed_filter"
       temp="-40"
       stir="True"
-      stir_rpm="400" />
+      stir_speed="400" />
     <!-- For better precipitation -->
     <Stir
       vessel="jacketed_filter"
@@ -231,7 +231,7 @@
       solvent="THF"
       volume="100mL"
       stir="solvent"
-      stir_rpm="700"
+      stir_speed="700"
       stir_time="5min"
       vacuum_time="5 min"
       repeat="3" />
@@ -240,7 +240,7 @@
       solvent="toluene"
       volume="100ml"
       stir="solvent"
-      stir_rpm="500"
+      stir_speed="500"
       stir_time="5min"
       repeat="6" />
     <HeatChillReturnToRT
@@ -259,7 +259,7 @@
       eluting_solvent="DCM"
       eluting_volume="50ml"
       eluting_repeats="3" />
-    <Rotavap
+    <Evaporate
       rotavap_name="rotavap"
       temp="40"
       pressure="750"
@@ -306,13 +306,13 @@
   	  volume="200mL"
   	  vessel="jacketed_filter"
   	  stir="True"
-      stir_rpm="250"
+      stir_speed="250"
     />
     <Dissolve
       vessel="rotavap"
       solvent="acetonitrile"
       volume="100ml"
-      stir_rpm="250"
+      stir_speed="250"
       time="10min" />
     <Transfer
       from_vessel="rotavap"
@@ -330,7 +330,7 @@
       temp="80"
       time="16h"
       stir="True"
-      stir_rpm="500" />
+      stir_speed="500" />
     <HeatChillReturnToRT
       vessel="jacketed_filter"
       stir="True" />
@@ -341,7 +341,7 @@
       eluting_solvent="DCM"
       eluting_volume="25ml"
       eluting_repeats="3" />
-    <Rotavap
+    <Evaporate
       rotavap_name="rotavap"
       temp="40"
       pressure="200"
@@ -350,7 +350,7 @@
       vessel="rotavap"
       solvent="DCM"
       volume="200ml"
-      stir_rpm="250"
+      stir_speed="250"
       time="10min" />
     <FilterThrough
       from_vessel="rotavap"
@@ -370,7 +370,7 @@
       volume="all" />
     <WashSolid
       vessel="rotavap"
-      stir_rpm="250"
+      stir_speed="250"
       stir_time="10min"
       solvent="ether"
       volume="15ml"
@@ -382,6 +382,6 @@
       vacuum_pressure="100mbar"
     />
       <!-- stir="True"
-      stir_rpm="50" -->
+      stir_speed="50" -->
   </Procedure>
 </Synthesis>

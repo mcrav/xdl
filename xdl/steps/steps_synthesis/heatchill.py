@@ -1,7 +1,7 @@
 from typing import Optional, List, Dict, Any
 from ..base_step import Step, AbstractStep
-from ..steps_utility import Wait, HeatChillToTemp, StopHeatChill
-from ..steps_base import CSetStirRate, CStir, CStopStir
+from ..steps_utility import (
+    Wait, HeatChillToTemp, StopHeatChill, StartStir, StopStir)
 
 class HeatChill(AbstractStep):
     """Heat or chill vessel to given temp for given time.
@@ -11,7 +11,7 @@ class HeatChill(AbstractStep):
         temp (float): Temperature to heat/chill vessel to in °C.
         time (float): Time to heat/chill vessel for in seconds.
         stir (bool): True if step should be stirred, otherwise False.
-        stir_rpm (float): Speed to stir at in RPM. Only use if stir == True.
+        stir_speed (float): Speed to stir at in RPM. Only use if stir == True.
         vessel_type (str): Given internally. Vessel type so the step knows what
             base steps to use. 'ChemputerFilter' or 'ChemputerReactor'.
     """
@@ -21,7 +21,7 @@ class HeatChill(AbstractStep):
         temp: float,
         time: float,
         stir: bool = True, 
-        stir_rpm: float = 'default',
+        stir_speed: float = 'default',
         vessel_type: Optional[str] = None,
         **kwargs
     ) -> None:
@@ -33,21 +33,18 @@ class HeatChill(AbstractStep):
                 vessel=self.vessel,
                 temp=self.temp,
                 stir=self.stir,
-                stir_rpm=self.stir_rpm,
+                stir_speed=self.stir_speed,
                 vessel_type=self.vessel_type),
             Wait(time=self.time),
             StopHeatChill(vessel=self.vessel, vessel_type=self.vessel_type),
         ]
         if self.stir:
-            steps.insert(0, CStir(vessel=self.vessel))
-            if self.stir_rpm:
-                steps.insert(
-                    0, CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm))
-            else:
-                steps.insert(
-                    0, CSetStirRate(vessel=self.vessel, stir_rpm='default'))
+            steps.insert(0, StartStir(vessel=self.vessel,
+                                      vessel_type=self.vessel_type,
+                                      stir_speed=self.stir_speed))
         else:
-            steps.insert(0, CStopStir(vessel=self.vessel))
+            steps.insert(0, StopStir(
+                vessel=self.vessel, vessel_type=self.vessel_type))
         return steps
 
     def get_human_readable(self) -> Dict[str, str]:

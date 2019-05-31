@@ -35,7 +35,7 @@ class WashSolid(AbstractStep):
             False means don't stir.
         stir_time (float): Time to stir for after solvent has been added. Only
             relevant if stir is True or 'solvent'.
-        stir_rpm (float): Speed to stir at in RPM. Only relevant if stir is True
+        stir_speed (float): Speed to stir at in RPM. Only relevant if stir is True
             or 'solvent'.
         waste_vessel (str): Given internally. Vessel to send waste to.
         filtrate_vessel (str): Optional. Vessel to send filtrate to. Defaults to
@@ -53,6 +53,8 @@ class WashSolid(AbstractStep):
             valve.
         vessel_type (str): Given internally. 'reactor', 'filter', 'rotavap',
             'flask' or 'separator'.
+        filter_dead_volume (float): Given internally. Dead volume of filter if
+            vessel_type == 'filter' otherwise None.
     """
     def __init__(
         self,
@@ -63,7 +65,7 @@ class WashSolid(AbstractStep):
         vacuum_time: Optional[float] = 'default',
         stir: Optional[Union[bool, str]] = 'default', 
         stir_time: Optional[float] = 'default',
-        stir_rpm: Optional[float] =  'default',
+        stir_speed: Optional[float] =  'default',
         waste_vessel: Optional[str] = None,
         filtrate_vessel: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
@@ -73,19 +75,27 @@ class WashSolid(AbstractStep):
         vacuum_valve: Optional[str] = None,
         valve_unused_port: Optional[str] = None,
         vessel_type: Optional[str] = None,
+        filter_dead_volume: Optional[float] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
         steps = []
+        # Volume to withdraw after solvent is added.
+        withdraw_volume = self.volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR
+
+        # If filter dead volume given internally, add it to withdraw volume
+        if self.filter_dead_volume:
+            withdraw_volume += self.filter_dead_volume
+
         # Rotavap/reactor WashSolid steps
         if not self.vessel_type == 'filter':
             steps.extend([
                 Add(vessel=self.vessel, reagent=self.solvent, volume=self.volume),
                 Stir(vessel=self.vessel,
                      time=self.stir_time,
-                     stir_rpm=self.stir_rpm),
+                     stir_speed=self.stir_speed),
                 Transfer(from_vessel=self.vessel,
                          to_vessel=self.waste_vessel,
                          volume='all'),
@@ -108,7 +118,7 @@ class WashSolid(AbstractStep):
                     from_vessel=self.vessel,
                     from_port=BOTTOM_PORT,
                     to_vessel=filtrate_vessel,
-                    volume=self.volume * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
+                    volume=withdraw_volume,
                     aspiration_speed=self.aspiration_speed),
                 # Briefly dry under vacuum.
                 StartVacuum(
@@ -128,14 +138,16 @@ class WashSolid(AbstractStep):
             if self.stir == True:
                 steps.insert(
                     0, StartStir(vessel=self.vessel,
-                                 stir_rpm=self.stir_rpm))
+                                 vessel_type=self.vessel_type,
+                                 stir_speed=self.stir_speed))
                 steps.insert(-2, StopStir(vessel=self.vessel))
             # Only stir after solvent is added and stop stirring before it is
             # removed.
             elif self.stir == 'solvent':
                 steps.insert(
                     1, StartStir(vessel=self.vessel,
-                                 stir_rpm=self.stir_rpm))
+                                 vessel_type=self.vessel_type,
+                                 stir_speed=self.stir_speed))
                 steps.insert(-3, StopStir(vessel=self.vessel))
 
             steps.extend(get_vacuum_valve_reconnect_steps(

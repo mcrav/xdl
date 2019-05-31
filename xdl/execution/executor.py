@@ -213,6 +213,13 @@ class XDLExecutor(object):
                  and not step.buffer_flask):
                 step.buffer_flask = self._get_buffer_flask(step.from_vessel)
 
+            # Add filter dead volume to WashSolid steps
+            if ('filter_dead_volume' in step.properties
+                and not step.filter_dead_volume):
+                vessel = self._graph_hardware[step.vessel]
+                if 'dead_volume' in vessel.properties:
+                    step.filter_dead_volume = vessel.dead_volume
+
             if not isinstance(step, AbstractBaseStep):
                 if step.steps is None:
                     print(step.name, step.steps)
@@ -366,7 +373,7 @@ class XDLExecutor(object):
         elif type(step) == Separate:
             nearest_node = step.separation_vessel
 
-        elif type(step) == Rotavap:
+        elif type(step) == Evaporate:
             nearest_node = step.rotavap_name
             
         if not nearest_node:
@@ -582,7 +589,7 @@ class XDLExecutor(object):
                             step.filter_vessel].max_volume
                 else:
                     step.filter_top_volume = self._graph_hardware[
-                        step.filter_vessel.max_volume]
+                        step.filter_vessel].max_volume
 
             prev_vessel_contents = vessel_contents
 
@@ -617,7 +624,7 @@ class XDLExecutor(object):
 
     def _tidy_up_procedure(self) -> None:
         """Remove steps that are pointless and optimise procedure."""
-        self._set_all_stir_rpms()
+        self._set_all_stir_speeds()
         self._stop_stirring_when_vessels_lose_scope()
         self._remove_pointless_backbone_cleaning()
         self._no_waiting_if_dry_run()
@@ -704,7 +711,7 @@ class XDLExecutor(object):
 
                         insertions.append((i + 1, StopStir(vessel=val)))
 
-    def _set_all_stir_rpms(self) -> None:
+    def _set_all_stir_speeds(self) -> None:
         """Set stir RPM to default at start of procedure for all stirrers
         used in procedure.
         """
@@ -715,7 +722,7 @@ class XDLExecutor(object):
                     stir_vessels.append(step.vessel)
         for vessel in stir_vessels:
             self._xdl.steps.insert(
-                0, CSetStirRate(vessel=vessel, stir_rpm=DEFAULT_STIR_RPM))
+                0, CSetStirRate(vessel=vessel, stir_speed=DEFAULT_STIR_SPEED))
 
     def _no_waiting_if_dry_run(self) -> None:
         """Set all Wait step times to 1 second if the dry run flag is True."""

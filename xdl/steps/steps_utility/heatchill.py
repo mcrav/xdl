@@ -22,7 +22,7 @@ from ..steps_base import (
     CRotavapStopRotation,
 )
 from .general import Wait
-from .stirring import StopStir, StartStir, SetStirRate
+from .stirring import StopStir, StartStir
 from ...constants import ROOM_TEMPERATURE, DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME
 from ...utils.errors import XDLError
 
@@ -33,7 +33,7 @@ class HeatChillToTemp(AbstractStep):
         vessel (str): Vessel to heat/chill.
         temp (float): Temperature to heat/chill to in degrees C.
         stir (bool): If True, step will be stirred, otherwise False.
-        stir_rpm (float): Speed to stir at, only used if stir == True.
+        stir_speed (float): Speed to stir at, only used if stir == True.
         vessel_type (str): Given internally. Used to know whether to use
             heater or chiller base steps. 'ChemputerFilter' or
             'ChemputerReactor'.
@@ -43,7 +43,7 @@ class HeatChillToTemp(AbstractStep):
         vessel: str,
         temp: float,
         stir: Optional[bool] = True,
-        stir_rpm: Optional[float] = None,
+        stir_speed: Optional[float] = 'default',
         vessel_type: Optional[str] = None,
         wait_recording_speed: Optional[float] = 'default',
         after_recording_speed: Optional[float] = 'default',
@@ -77,20 +77,9 @@ class HeatChillToTemp(AbstractStep):
             ]
 
         if self.stir:
-            steps.insert(0, StartStir(
-                vessel=self.vessel, vessel_type=self.vessel_type))
-            if self.stir_rpm:
-                steps.insert(
-                    0, SetStirRate(
-                        vessel=self.vessel,
-                        vessel_type=self.vessel_type,
-                        stir_rpm=self.stir_rpm))
-            else:
-                steps.insert(
-                    0, SetStirRate(
-                        vessel=self.vessel,
-                        vessel_type=self.vessel_type,
-                        stir_rpm='default'))
+            steps.insert(0, StartStir(vessel=self.vessel,
+                                      vessel_type=self.vessel_type,
+                                      stir_speed=self.stir_speed))
         else:
             steps.insert(0, StopStir(
                 vessel=self.vessel, vessel_type=self.vessel_type))
@@ -160,7 +149,7 @@ class HeatChillReturnToRT(AbstractStep):
         vessel (str): Vessel to attached to heater/chiller to return to room
             temperature.
         stir (bool): If True, step will be stirred, otherwise False.
-        stir_rpm (float): Speed to stir at, only used if stir == True.
+        stir_speed (float): Speed to stir at, only used if stir == True.
         vessel_type (str): Given internally. Used to know whether to use
             heater or chiller base steps. 'ChemputerFilter' or
             'ChemputerReactor'.
@@ -169,7 +158,7 @@ class HeatChillReturnToRT(AbstractStep):
         self,
         vessel: str,
         stir: Optional[bool] = True,
-        stir_rpm: Optional[float] = None,
+        stir_speed: Optional[float] = 'default',
         vessel_type: Optional[str] = None,
         **kwargs) -> None:
         super().__init__(locals())
@@ -197,20 +186,9 @@ class HeatChillReturnToRT(AbstractStep):
             ]
 
         if self.stir:
-            steps.insert(0, StartStir(
-                vessel=self.vessel, vessel_type=self.vessel_type))
-            if self.stir_rpm:
-                steps.insert(
-                    0, SetStirRate(
-                        vessel=self.vessel,
-                        vessel_type=self.vessel_type,
-                        stir_rpm=self.stir_rpm))
-            else:
-                steps.insert(
-                    0, SetStirRate(
-                        vessel=self.vessel,
-                        vessel_type=self.vessel_type,
-                        stir_rpm='default'))
+            steps.insert(0, StartStir(vessel=self.vessel,
+                                      vessel_type=self.vessel_type,
+                                      stir_speed=self.stir_speed))
         else:
             steps.insert(0, StopStir(
                 vessel=self.vessel, vessel_type=self.vessel_type))

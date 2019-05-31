@@ -12,7 +12,7 @@ class CleanVessel(AbstractStep):
         vessel: str,
         solvent: str,
         stir_time: Optional[float] = 'default',
-        stir_rpm: Optional[float] = 'default',
+        stir_speed: Optional[float] = 'default',
         temp: Optional[float] = None,
         volume: Optional[float] = None,
         cleans: Optional[float] = 2,
@@ -26,6 +26,7 @@ class CleanVessel(AbstractStep):
             vessel (str): Vessel to clean.
             solvent (str): Solvent to clean vessel with.
             stir_time (float): Time to stir for after solvent is added.
+            stir_speed (float): Speed to stir at in RPM.
             volume (float): Volume of solvent to use. If not supplied will be
                 given internally according to vessel max volume.
             cleans (int): Number of cleans to do.

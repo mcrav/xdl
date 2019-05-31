@@ -2,6 +2,7 @@ from .test_rotavap import *
 from .test_clean_backbone import *
 from .test_clean_vessel import *
 from .test_filter_through import *
+from .test_filter import *
 from .test_dry import *
 from .test_unit_conversion import *
 from .test_repeat import *

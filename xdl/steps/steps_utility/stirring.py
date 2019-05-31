@@ -18,23 +18,23 @@ class SetStirRate(AbstractStep):
     
     Args:
         vessel (str): Vessel to set stir rate for.
-        stir_rpm (float): Stir rate in RPM
+        stir_speed (float): Stir rate in RPM
         vessel_type (str): Given internally. 'filter', 'rotavap' or 'reactor'.
     """
     def __init__(
-        self, vessel: str, stir_rpm: float, vessel_type: Optional[str] = None
+        self, vessel: str, stir_speed: float, vessel_type: Optional[str] = None
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
         if self.vessel_type == 'rotavap':
             return [CRotavapSetRotationSpeed(rotavap_name=self.vessel,
-                                             rotation_speed=self.stir_rpm)]
+                                             rotation_speed=self.stir_speed)]
         else:
-            return [CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm)]
+            return [CSetStirRate(vessel=self.vessel, stir_speed=self.stir_speed)]
 
     def get_human_readable(self) -> Dict[str, str]:
-        en = 'Set stir rate of {vessel} to {stir_rpm} RPM.'.format(
+        en = 'Set stir rate of {vessel} to {stir_speed} RPM.'.format(
             **self.properties)
         return {
             'en': en,
@@ -45,13 +45,13 @@ class StartStir(AbstractStep):
 
     Args:
         vessel (str): Vessel name to stir.
-        stir_rpm (int, optional): Speed in RPM to stir at.
+        stir_speed (int, optional): Speed in RPM to stir at.
     """
     def __init__(
         self,
         vessel: str,
         vessel_type: Optional[str] = None,
-        stir_rpm: Optional[float] = 'default',
+        stir_speed: Optional[float] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -59,20 +59,20 @@ class StartStir(AbstractStep):
     def get_steps(self) -> List[Step]:
         if self.vessel_type == 'rotavap':
             #  Limit RPM if high one meant for stirrer passed in by accident.
-            stir_rpm = min(
-                self.stir_rpm, DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED)
+            stir_speed = min(
+                self.stir_speed, DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED)
             return [
                 CRotavapSetRotationSpeed(rotavap_name=self.vessel,
-                                         rotation_speed=stir_rpm),
+                                         rotation_speed=stir_speed),
                 CRotavapStartRotation(rotavap_name=self.vessel)
             ]
         return [
             CStir(vessel=self.vessel),
-            CSetStirRate(vessel=self.vessel, stir_rpm=self.stir_rpm),
+            CSetStirRate(vessel=self.vessel, stir_speed=self.stir_speed),
         ]
 
     def get_human_readable(self) -> Dict[str, str]:
-        en = 'Set stir rate to {stir_rpm} RPM and start stirring {vessel}.'.format(
+        en = 'Set stir rate to {stir_speed} RPM and start stirring {vessel}.'.format(
             **self.properties)
         return {
             'en': en,
@@ -123,7 +123,7 @@ class Stir(AbstractStep):
     Args:
         vessel (str): Vessel to stir.
         time (float): Time to stir for.
-        stir_rpm (float): Stir rate in RPM.
+        stir_speed (float): Stir rate in RPM.
         vessel_type (str): Given internally. 'reactor', 'filter', 'rotavap',
             'flask' or 'separator'.
     """
@@ -131,7 +131,7 @@ class Stir(AbstractStep):
         self,
         vessel: str,
         time: float,
-        stir_rpm: Optional[float] = 'default',
+        stir_speed: Optional[float] = 'default',
         vessel_type: Optional[str] = None,
         **kwargs
     ) -> None:
@@ -139,24 +139,24 @@ class Stir(AbstractStep):
 
     def get_steps(self) -> List[Step]:
         if self.vessel_type == 'rotavap':
-            # Limit stir_rpm as rotavap can't rotate as fast as stirrer.
-            stir_rpm = min(
-                self.stir_rpm, DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED)
+            # Limit stir_speed as rotavap can't rotate as fast as stirrer.
+            stir_speed = min(
+                self.stir_speed, DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED)
             return [
                 RotavapStir(
                     rotavap_name=self.vessel,
-                    stir_rpm=stir_rpm,
+                    stir_speed=stir_speed,
                     time=self.time),
             ]
         else:
             return [
-                StartStir(vessel=self.vessel, stir_rpm=self.stir_rpm),
+                StartStir(vessel=self.vessel, stir_speed=self.stir_speed),
                 Wait(time=self.time),
                 StopStir(vessel=self.vessel),
             ]
 
     def get_human_readable(self) -> Dict[str, str]:
-        en = 'Stir {vessel} for {time} s at {stir_rpm} RPM.'.format(
+        en = 'Stir {vessel} for {time} s at {stir_speed} RPM.'.format(
             **self.properties)
         return {
             'en': en,

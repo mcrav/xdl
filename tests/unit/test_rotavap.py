@@ -1,6 +1,6 @@
 import os
 from xdl import XDL
-from xdl.steps import Rotavap, CRotavapAutoEvaporation
+from xdl.steps import Evaporate, CRotavapAutoEvaporation
 from ..utils import generic_chempiler_test
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -31,8 +31,8 @@ def test_rotavap_auto_mode():
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f, interactive=False)
     for step in x.steps:
-        if type(step) == Rotavap:
-            assert type(step.steps[0]) == CRotavapAutoEvaporation
+        if type(step) == Evaporate:
+            assert type(step.steps[-3]) == CRotavapAutoEvaporation
             break
     generic_chempiler_test(xdl_f, graph_f)
 
@@ -43,7 +43,7 @@ def test_rotavap_collection_volume():
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f, interactive=False)
     for step in x.steps:
-        if type(step) == Rotavap:
+        if type(step) == Evaporate:
             # collection_flask_volume in graph
             assert step.steps[-1].volume == 50
 
