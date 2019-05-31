@@ -28,7 +28,7 @@ class Add(AbstractStep):
             execution time, it will be the total time spent dispensing from the
             pump into self.vessel during the addition.
         stir (bool): If True, stirring will be started before addition.
-        stir_rpm (float): RPM to stir at, only relevant if stir = True.
+        stir_speed (float): RPM to stir at, only relevant if stir = True.
         reagent_vessel (str): Given internally. Vessel containing reagent.
         waste_vessel (str): Given internally. Vessel to send waste to.
         flush_tube_vessel (str): Given internally. Air/nitrogen vessel to use to 
@@ -46,7 +46,7 @@ class Add(AbstractStep):
         dispense_speed: Optional[float] = 'default',
         time: Optional[float] = None,
         stir: Optional[bool] = False,
-        stir_rpm: Optional[float] = 'default',
+        stir_speed: Optional[float] = 'default',
         reagent_vessel: Optional[str] = None, 
         waste_vessel: Optional[str] = None,
         flush_tube_vessel: Optional[str] = None,
@@ -97,7 +97,7 @@ class Add(AbstractStep):
             if self.stir:
                 steps.insert(0, StartStir(vessel=self.vessel,
                                           vessel_type=self.vessel_type,
-                                          stir_rpm=self.stir_rpm))
+                                          stir_speed=self.stir_speed))
             else:
                 steps.insert(0, StopStir(vessel=self.vessel))
         return steps

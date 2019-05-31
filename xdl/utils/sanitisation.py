@@ -64,6 +64,8 @@ UNIT_CONVERTERS = {
     'mmhg': lambda x: x * 1.33322,
     'atm': lambda x: x * 1013.25,
     'pa': lambda x: x * 0.01,
+
+    'rpm': lambda x: x,
 }
 
 def convert_val_to_std_units(val: str) -> float:

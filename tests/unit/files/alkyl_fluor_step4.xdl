@@ -35,13 +35,13 @@
   	  volume="100mL"
   	  vessel="filter2"
   	  stir="True"
-      stir_rpm="250"
+      stir_speed="250"
       port="top" />
     <Dissolve
       vessel="rotavap"
       solvent="acetonitrile"
       volume="200ml"
-      stir_rpm="250"
+      stir_speed="250"
       time="10min" />
     <Transfer
       from_vessel="rotavap"
@@ -53,7 +53,7 @@
       temp="80"
       time="16h"
       stir="True"
-      stir_rpm="500" />
+      stir_speed="500" />
     <HeatChillReturnToRT
       vessel="filter2"
       stir="True" />
@@ -73,7 +73,7 @@
       vessel="rotavap"
       solvent="DCM"
       volume="200ml"
-      stir_rpm="250"
+      stir_speed="250"
       time="10min" />
     <FilterThrough
       from_vessel="rotavap"
@@ -88,7 +88,7 @@
       volume="all" />
     <WashSolid
       vessel="rotavap"
-      stir_rpm="250"
+      stir_speed="250"
       stir_time="10min"
       solvent="ether"
       volume="15ml"
@@ -99,6 +99,6 @@
       time="1h" />
       <!-- pressure="100mbar"
       stir="True"
-      stir_rpm="50" /> -->
+      stir_speed="50" /> -->
   </Procedure>
 </Synthesis>

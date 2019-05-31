@@ -35,10 +35,10 @@ DEFAULT_SEPARATION_FAST_STIR_TIME: int = 5 * 60
 DEFAULT_SEPARATION_SLOW_STIR_TIME: int = 2 * 60
 
 #: Default speed in RPM to stir separation mixture during fast stir.
-DEFAULT_SEPARATION_FAST_STIR_RPM: int = 600
+DEFAULT_SEPARATION_FAST_STIR_SPEED: int = 600
 
 #: Default speed in RPM to stir separation mixture during slow stir.
-DEFAULT_SEPARATION_SLOW_STIR_RPM: int = 30
+DEFAULT_SEPARATION_SLOW_STIR_SPEED: int = 30
 
 #: Default time to allow separation mixture to settle after stirring.
 DEFAULT_SEPARATION_SETTLE_TIME: int = 60 * 5
@@ -67,7 +67,7 @@ DEFAULT_CLEAN_VESSEL_VOLUME: int = 10 # mL
 DEFAULT_CLEAN_VESSEL_STIR_TIME: int = 60
 
 #: Default stir rate in RPM for CleanVessel step.
-DEFAULT_CLEAN_VESSEL_STIR_RPM: int = 500
+DEFAULT_CLEAN_VESSEL_STIR_SPEED: int = 500
 
 #############
 ## Rotavap ##
@@ -103,7 +103,7 @@ DEFAULT_WASHFILTERCAKE_VOLUME: int = 20
 DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME: int = 30
 
 #: Default speed in RPM to stir mixture after adding solvent but before filtering.
-DEFAULT_WASHFILTERCAKE_STIR_RPM: int = 500
+DEFAULT_WASHFILTERCAKE_STIR_SPEED: int = 500
 
 #: Default time in seconds to wait for with vacuum on when washing a filter cake.
 DEFAULT_WASHFILTERCAKE_VACUUM_TIME: int = 10 
@@ -129,7 +129,7 @@ DEFAULT_CARTRIDGE_DEAD_VOLUME: int = 25
 #################
 ### WashSolid ###
 #################
-DEFAULT_WASH_SOLID_STIR_RPM: int = 400
+DEFAULT_WASH_SOLID_STIR_SPEED: int = 400
 
 DEFAULT_WASH_SOLID_STIR_TIME: int = 60 * 5
 
@@ -143,10 +143,10 @@ DEFAULT_AFTER_ADD_WAIT_TIME: int = 10
 ## Stirring ##
 ##############
 #: Default speed in RPM to stir at.
-DEFAULT_STIR_RPM: int = 250
+DEFAULT_STIR_SPEED: int = 250
 
 #: Default speed in RPM to stir at when dissolving.
-DEFAULT_DISSOLVE_STIR_RPM: int = 400
+DEFAULT_DISSOLVE_STIR_SPEED: int = 400
 
 #####################
 ### Precipitation ###
@@ -181,7 +181,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'wait_time': DEFAULT_FILTER_WAIT_TIME,
         'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
         'stir': True,
-        'stir_rpm': DEFAULT_WASHFILTERCAKE_STIR_RPM,
+        'stir_speed': DEFAULT_WASHFILTERCAKE_STIR_SPEED,
     },
     'Dry': {
         'time': DEFAULT_DRY_TIME,
@@ -194,11 +194,11 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'vacuum_time': DEFAULT_WASHFILTERCAKE_VACUUM_TIME,
         'stir': True,
         'stir_time': DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME,
-        'stir_rpm': DEFAULT_WASHFILTERCAKE_STIR_RPM,
+        'stir_speed': DEFAULT_WASHFILTERCAKE_STIR_SPEED,
         'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
     },
     'Transfer': {
-        'stir_rpm': DEFAULT_STIR_RPM,
+        'stir_speed': DEFAULT_STIR_SPEED,
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
         'dispense_speed': DEFAULT_DISPENSE_SPEED,
         'move_speed': DEFAULT_MOVE_SPEED,
@@ -207,13 +207,13 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'move_speed': DEFAULT_MOVE_SPEED,
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
         'dispense_speed': DEFAULT_DISPENSE_SPEED,
-        'stir_rpm': DEFAULT_STIR_RPM,
+        'stir_speed': DEFAULT_STIR_SPEED,
     },
     'CStir': {
-        'stir_rpm': DEFAULT_STIR_RPM,
+        'stir_speed': DEFAULT_STIR_SPEED,
     },
     'CSetStirRate': {
-        'stir_rpm': DEFAULT_STIR_RPM,
+        'stir_speed': DEFAULT_STIR_SPEED,
     },
     'PrimePumpForAdd': {
         'volume': DEFAULT_PUMP_PRIME_VOLUME,
@@ -227,32 +227,32 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'rotation_speed': DEFAULT_ROTAVAP_ROTATION_SPEED,
     },
     'StirAtRT': {
-        'stir_rpm': DEFAULT_STIR_RPM,
+        'stir_speed': DEFAULT_STIR_SPEED,
     },
     'StartStir': {
-        'stir_rpm': DEFAULT_STIR_RPM,
+        'stir_speed': DEFAULT_STIR_SPEED,
     },
     'Stir': {
-        'stir_rpm': DEFAULT_STIR_RPM,
+        'stir_speed': DEFAULT_STIR_SPEED,
     },
     'HeatChill': {
         'stir': True,
-        'stir_rpm': DEFAULT_STIR_RPM,
+        'stir_speed': DEFAULT_STIR_SPEED,
     },
     'HeatChillToTemp': {
         'stir': True,
-        'stir_rpm': DEFAULT_STIR_RPM,
+        'stir_speed': DEFAULT_STIR_SPEED,
         'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
         'after_recording_speed': DEFAULT_RECORDING_SPEED,
     },
     'HeatChillReturnToRT': {
         'stir': True,
-        'stir_rpm': DEFAULT_STIR_RPM,
+        'stir_speed': DEFAULT_STIR_SPEED,
     },
     'Dissolve': {
         'time': 20 * 60,
         'temp': 25,
-        'stir_rpm': DEFAULT_DISSOLVE_STIR_RPM,
+        'stir_speed': DEFAULT_DISSOLVE_STIR_SPEED,
     },
     'FilterThrough': {
         'move_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
@@ -271,10 +271,10 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     },
     'CleanVessel': {
         'stir_time': DEFAULT_CLEAN_VESSEL_STIR_TIME,
-        'stir_rpm': DEFAULT_CLEAN_VESSEL_STIR_RPM,
+        'stir_speed': DEFAULT_CLEAN_VESSEL_STIR_SPEED,
     },
     'SetStirRate': {
-        'stir_rpm': DEFAULT_STIR_RPM,
+        'stir_speed': DEFAULT_STIR_SPEED,
     },
     'Precipitate': {
         'time': DEFAULT_PRECIPITATION_TIME,

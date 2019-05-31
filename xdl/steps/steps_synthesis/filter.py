@@ -19,6 +19,8 @@ class Filter(AbstractStep):
             have been moved. (optional)
         aspiration_speed (float): Speed in mL / min to draw liquid from
             filter_vessel.
+        stir (bool): True to stir, False to stop stirring.
+        stir_speed (float): Speed to stir at in RPM.
         waste_vessel (float): Given internally. Vessel to move waste material to.
         filtrate_vessel (str): Optional. Vessel to send filtrate to. Defaults to
             waste_vessel.
@@ -40,7 +42,7 @@ class Filter(AbstractStep):
         wait_time: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
         stir: Optional[bool] = 'default',
-        stir_rpm: Optional[float] = 'default',
+        stir_speed: Optional[float] = 'default',
         waste_vessel: Optional[str] = None,
         filtrate_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
@@ -79,7 +81,7 @@ class Filter(AbstractStep):
         else:
             steps.insert(1, StopStir(vessel=self.filter_vessel))
             steps.insert(0, StartStir(
-                vessel=self.filter_vessel, stir_rpm=self.stir_rpm))
+                vessel=self.filter_vessel, stir_speed=self.stir_speed))
 
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
