@@ -4,6 +4,8 @@ import copy
 import sys
 from abc import ABC, abstractmethod
 from ..utils import initialise_logger
+from ..utils.misc import format_property
+from ..localisation import HUMAN_READABLE_STEPS
 
 if False:
     from chempiler import Chempiler
@@ -25,14 +27,23 @@ class Step(XDLBase):
                 if kwarg in param_dict['kwargs']:
                     self.properties[kwarg] = param_dict['kwargs'][kwarg]
 
+    def formatted_properties(self):
+        formatted_props = copy.deepcopy(self.properties)
+        for prop, val in formatted_props.items():
+            formatted_props[prop] = format_property(prop, val)
+        return formatted_props
+
     def human_readable(self, language='en'):
-        human_readable = self.get_human_readable()
-        if type(human_readable) == dict:
-            if language in human_readable:
-                return human_readable[language]
-            elif type(human_readable) == str:
-                return human_readable
-        return self.__class__.__name__
+        if self.name in HUMAN_READABLE_STEPS:
+            step_human_readables = HUMAN_READABLE_STEPS[self.name]
+            if language in step_human_readables:
+                human_readable = HUMAN_READABLE_STEPS[self.name][language].format(
+                    **self.formatted_properties())
+            else:
+                human_readable = self.name
+        else:
+            human_readable = self.name
+        return human_readable
         
 class AbstractStep(Step, ABC):
     """Abstract base class for all steps that contain other steps.
@@ -51,10 +62,6 @@ class AbstractStep(Step, ABC):
     @abstractmethod
     def get_steps(self):
         return []
-
-    @abstractmethod
-    def get_human_readable(self):
-        return {'en': self.__class__.__name__}
 
     @property
     def requirements(self):
@@ -109,7 +116,7 @@ class AbstractBaseStep(Step, ABC):
         super().__init__(param_dict)
         self.steps = []
 
-    def get_human_readable(self):
+    def human_readable(self, language='en'):
         return self.__class__.__name__
 
     @abstractmethod

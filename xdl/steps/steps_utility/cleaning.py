@@ -24,9 +24,3 @@ class CleanBackbone(AbstractStep):
                       to_vessel=waste_vessel,
                       volume=DEFAULT_CLEAN_BACKBONE_VOLUME)
                 for waste_vessel in self.waste_vessels]
-
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Clean backbone with {solvent}.'.format(**self.properties)
-        return {
-            'en': en,
-        }

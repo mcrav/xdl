@@ -8,6 +8,7 @@ from typing import List
 from math import ceil
 
 from .constants import *
+from .localisation import HUMAN_READABLE_STEPS
 from .graph.generator import GraphGenerator
 from .steps import *
 from .steps import steps_synthesis
@@ -191,19 +192,13 @@ class XDL(object):
         Returns:
             List[str]: List of language codes, e.g. ['en', 'zh']
         """
-        available_languages = []
-        for step in self.steps:
-            human_readable = step.get_human_readable()
-            if type(human_readable) == dict:
-                available_languages.extend(list(human_readable.keys()))
-        available_languages = list(set(available_languages))
-        for step in self.steps:
-            for i in reversed(range(len(available_languages))):
-                human_readable = step.get_human_readable()
-                if (type(human_readable) == dict
-                    and available_languages[i] not in human_readable):
-                    available_languages.pop(i)
+        available_languages = [] 
+        for _, human_readables in HUMAN_READABLE_STEPS.items():
+            for language in human_readables:
+                if language not in available_languages:
+                    available_languages.append(language)
         return available_languages
+
 
     def log_human_readable(self) -> None:
         """Log human-readable English description of XDL procedure."""

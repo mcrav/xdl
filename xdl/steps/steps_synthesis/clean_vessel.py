@@ -56,10 +56,3 @@ class CleanVessel(AbstractStep):
                 1, HeatChillToTemp(vessel=self.vessel, temp=self.temp))
             steps.append(HeatChillReturnToRT(vessel=self.vessel))
         return steps
-
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Clean {vessel} with {solvent} ({volume} mL).'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
