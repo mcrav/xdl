@@ -92,7 +92,9 @@ class WashSolid(AbstractStep):
         # Rotavap/reactor WashSolid steps
         if not self.vessel_type == 'filter':
             steps.extend([
-                Add(vessel=self.vessel, reagent=self.solvent, volume=self.volume),
+                Add(vessel=self.vessel,
+                    reagent=self.solvent,
+                    volume=self.volume),
                 Stir(vessel=self.vessel,
                      time=self.stir_time,
                      stir_speed=self.stir_speed),
@@ -110,7 +112,9 @@ class WashSolid(AbstractStep):
                 # Add solvent
                 Add(reagent=self.solvent, volume=self.volume,
                     vessel=self.vessel, port=TOP_PORT, 
-                    waste_vessel=self.waste_vessel, stir=self.stir == True),
+                    waste_vessel=self.waste_vessel,
+                    stir=self.stir == True,
+                    stir_speed=self.stir_speed),
                 # Stir (or not if stir=False) filter cake and solvent briefly.
                 Wait(self.stir_time),
                 # Remove solvent.
