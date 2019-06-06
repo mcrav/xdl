@@ -33,13 +33,6 @@ class SetStirRate(AbstractStep):
         else:
             return [CSetStirRate(vessel=self.vessel, stir_speed=self.stir_speed)]
 
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Set stir rate of {vessel} to {stir_speed} RPM.'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
-
 class StartStir(AbstractStep):
     """Start stirring given vessel.
 
@@ -70,13 +63,6 @@ class StartStir(AbstractStep):
             CStir(vessel=self.vessel),
             CSetStirRate(vessel=self.vessel, stir_speed=self.stir_speed),
         ]
-
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Set stir rate to {stir_speed} RPM and start stirring {vessel}.'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
@@ -110,12 +96,6 @@ class StopStir(AbstractStep):
         elif self.vessel_type == 'rotavap':
             return [CRotavapStopRotation(rotavap_name=self.vessel)]
         return []
-
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Stop stirring {0}.'.format(self.vessel)
-        return {
-            'en': en,
-        }
 
 class Stir(AbstractStep):
     """Stir given vessel for given time at room temperature.
@@ -154,13 +134,6 @@ class Stir(AbstractStep):
                 Wait(time=self.time),
                 StopStir(vessel=self.vessel),
             ]
-
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Stir {vessel} for {time} s at {stir_speed} RPM.'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

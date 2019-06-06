@@ -51,13 +51,6 @@ class AddFilterDeadVolume(AbstractStep):
             vessel=self.filter_vessel))
         return steps
 
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Fill bottom of {filter_vessel} with {solvent} ({volume} mL).'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
-
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {
@@ -105,13 +98,6 @@ class RemoveFilterDeadVolume(AbstractStep):
             valve_unused_port=self.valve_unused_port,
             vessel=self.filter_vessel))
         return steps
-
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Remove dead volume ({dead_volume} mL) from bottom of {filter_vessel}'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
             
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

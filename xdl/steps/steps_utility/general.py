@@ -26,9 +26,4 @@ class Wait(AbstractStep):
             CWait(self.time),
             CSetRecordingSpeed(self.after_recording_speed),
         ]
-
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Wait for {time} s.'.format(**self.properties) 
-        return {
-           'en': en,
-        }
+        

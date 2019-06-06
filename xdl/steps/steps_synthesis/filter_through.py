@@ -1,7 +1,8 @@
 from typing import Optional, List, Dict
+from .clean_vessel import CleanVessel
 from ..base_step import Step, AbstractStep
 from ..steps_utility import Transfer
-from .clean_vessel import CleanVessel
+from ...localisation import HUMAN_READABLE_STEPS
 
 class FilterThrough(AbstractStep):
     """Filter contents of from_vessel through a cartridge,
@@ -86,14 +87,13 @@ class FilterThrough(AbstractStep):
             ])
         return steps
 
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Contents of {from_vessel} was filtered through {through_cartridge} into {to_vessel}'.format(
-            **self.properties)
-        if self.eluting_solvent:
-            en += ', eluting with {eluting_repeats} x {eluting_volume} mL of {eluting_solvent}.'.format(
-                **self.properties)
-        else:
-            en += '.'
-        return {
-            'en': en,
-        }
+    def human_readable(self, language='en'):
+        try:
+            if self.eluting_solvent:
+                return HUMAN_READABLE_STEPS['FilterThrough (eluting)'][language].format(
+                    **self.formatted_properties())
+            else:
+                return HUMAN_READABLE_STEPS['FilterThrough (not eluting)'][language].format(
+                    **self.formatted_properties())
+        except KeyError:
+            return self.name

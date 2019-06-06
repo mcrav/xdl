@@ -39,10 +39,3 @@ class AddCorrosive(AbstractStep):
         else:
             steps.insert(0, CStopStir(vessel=self.vessel))
         return steps
-
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Transfer corrosive reagent {0} ({1} mL) to {2}.'.format(
-            self.reagent, self.volume, self.vessel,)
-        return {
-            'en': en,
-        }

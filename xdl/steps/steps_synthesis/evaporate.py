@@ -91,13 +91,6 @@ class Evaporate(AbstractStep):
             )            
         return steps
 
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Evaporate contents of {rotavap_name} at {temp} °C and {pressure} mbar for {time}.'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
-
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {

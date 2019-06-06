@@ -39,13 +39,6 @@ class RotavapStartRotation(AbstractStep):
             CRotavapStartRotation(rotavap_name=self.rotavap_name)
         ]
 
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Set rotation speed to {rotation_speed} RPM and start rotation for {rotavap_name}.'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
-
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {
@@ -66,13 +59,6 @@ class RotavapStopRotation(AbstractStep):
 
     def get_steps(self) -> List[Step]:
         return [CRotavapStopRotation(rotavap_name=self.rotavap_name)]
-
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Stop rotation for {rotavap_name}.'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
@@ -109,13 +95,6 @@ class RotavapStir(AbstractStep):
             RotavapStopRotation(rotavap_name=self.rotavap_name)
         ]
 
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Use rotavap rotation to stir {rotavap_name} for {time} s at {stir_speed} RPM.'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
-
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {
@@ -143,13 +122,6 @@ class RotavapStopEverything(AbstractStep):
             CRotavapStopRotation(self.rotavap_name),
         ]
 
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Stop vacuum, lift rotavap flask up, vent vacuum, stop heater and stop rotation for {rotavap_name}'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
-
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {
@@ -174,13 +146,6 @@ class RotavapStartVacuum(AbstractStep):
             CStartVacuum(self.rotavap_name),
         ]
 
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Start vacuum at {pressure} mbar for {rotavap_name}'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
-
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {
@@ -204,13 +169,6 @@ class RotavapHeatToTemp(AbstractStep):
             CRotavapSetTemp(self.rotavap_name, self.temp),
             CRotavapStartHeater(self.rotavap_name),
         ]
-
-    def get_human_readable(self) -> Dict[str, str]:
-        en = 'Set rotavap temperature to {temp} and start heater for {rotavap_name}'.format(
-            **self.properties)
-        return {
-            'en': en,
-        }
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
