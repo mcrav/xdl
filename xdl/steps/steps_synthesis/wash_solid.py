@@ -2,6 +2,7 @@ from typing import Optional, Union, List, Dict, Any
 from ..base_step import Step, AbstractStep
 from .add import Add
 from ..utils import get_vacuum_valve_reconnect_steps
+from ...localisation import HUMAN_READABLE_STEPS
 from ..steps_utility import (
     Wait,
     StartStir,
@@ -173,6 +174,16 @@ class WashSolid(AbstractStep):
                 steps.append(StopHeatChill(vessel=self.vessel))
             
         return steps
+
+    def human_readable(self, language='en'):
+        """Show repeats in solvent volume like 'ethanol (3 × 50 mL)'."""
+        props = self.formatted_properties()
+        if 'repeat' in props and int(self.repeat) > 1:
+            props['volume'] = f"{self.repeat} × {props['volume']}"
+        try:
+            return HUMAN_READABLE_STEPS['WashSolid'][language].format(**props)
+        except KeyError:
+            return self.name
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
