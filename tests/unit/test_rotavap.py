@@ -1,6 +1,7 @@
 import os
 from xdl import XDL
-from xdl.steps import Evaporate, CRotavapAutoEvaporation
+from xdl.steps import (
+    Evaporate, CRotavapAutoEvaporation, RotavapHeatToTemp, RotavapStopEverything)
 from ..utils import generic_chempiler_test
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -32,7 +33,9 @@ def test_rotavap_auto_mode():
     x.prepare_for_execution(graph_f, interactive=False)
     for step in x.steps:
         if type(step) == Evaporate:
+            assert type(step.steps[-2]) == RotavapStopEverything
             assert type(step.steps[-3]) == CRotavapAutoEvaporation
+            assert type(step.steps[-4]) == RotavapHeatToTemp
             break
     generic_chempiler_test(xdl_f, graph_f)
 
