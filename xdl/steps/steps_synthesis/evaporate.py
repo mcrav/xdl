@@ -82,13 +82,14 @@ class Evaporate(AbstractStep):
         ]
 
         if self.mode == 'auto':
-            steps[-3] = CRotavapAutoEvaporation(
+            del steps[-4:-2]
+            steps.insert(-2, CRotavapAutoEvaporation(
                 rotavap_name=self.rotavap_name,
                 sensitivity=2, # High sensitivity
                 vacuum_limit=1, # Auto pressure
                 time_limit=self.time,
                 vent_after=True
-            )            
+            ))
         return steps
 
     @property
