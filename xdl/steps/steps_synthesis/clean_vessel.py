@@ -54,5 +54,5 @@ class CleanVessel(AbstractStep):
         if self.temp != None and (self.temp < 20 or self.temp > 25):
             steps.insert(
                 1, HeatChillToTemp(vessel=self.vessel, temp=self.temp))
-            steps.append(HeatChillReturnToRT(vessel=self.vessel))
+            steps.append(HeatChillReturnToRT(vessel=self.vessel, stir=False))
         return steps
