@@ -141,8 +141,12 @@ def clean_properties(xdl_class, properties):
         elif prop_type == Union[bool, str]:
             bool_val = parse_bool(val)
             if bool_val != None:
-                return bool_val
-            else:
-                return val
+                properties[prop] = bool_val
+
+        elif prop_type in [int, Optional[int]]:
+            try:
+                properties[prop] = int(val)
+            except TypeError:
+                pass
 
     return properties

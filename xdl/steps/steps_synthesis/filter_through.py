@@ -36,7 +36,7 @@ class FilterThrough(AbstractStep):
         through_cartridge: str,
         eluting_solvent: Optional[str] = None,
         eluting_volume: Optional[float] = None,
-        eluting_repeats: Optional[float] = 'default',
+        eluting_repeats: Optional[int] = 'default',
         move_speed: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
         eluting_solvent_vessel: Optional[str] = None,
@@ -59,13 +59,21 @@ class FilterThrough(AbstractStep):
                           aspiration_speed=self.aspiration_speed)]
 
         if self.eluting_solvent:
-            steps.append(Transfer(from_vessel=self.eluting_solvent_vessel,
-                                  to_vessel=filter_through_to_vessel,
-                                  through=self.through_cartridge,
-                                  volume=self.eluting_volume,
-                                  move_speed=self.move_speed,
-                                  aspiration_speed=self.aspiration_speed,
-                                  repeat=self.eluting_repeats))
+            for _ in range(self.eluting_repeats):
+                # Transfer to from_vessel to rinse any residual product, then
+                # transfer through cartridge to target vessel.
+                steps.extend([
+                    Transfer(from_vessel=self.eluting_solvent_vessel,
+                             to_vessel=self.from_vessel,
+                             volume=self.eluting_volume),
+
+                    Transfer(from_vessel=self.from_vessel,
+                             to_vessel=filter_through_to_vessel,
+                             through=self.through_cartridge,
+                             volume=self.eluting_volume,
+                             move_speed=self.move_speed,
+                             aspiration_speed=self.aspiration_speed)
+                ])
         
         if self.flush_cartridge_vessel:
             steps.append(Transfer(from_vessel=self.flush_cartridge_vessel,
