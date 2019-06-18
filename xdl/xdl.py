@@ -414,3 +414,19 @@ class XDL(object):
         return [step
                 for step in self._get_full_xdl_tree()
                 if isinstance(step, AbstractBaseStep)]
+
+    def __deepcopy__(self, memo):
+        """Needed for deepcopy on Python 3.6 as Logger object can't be pickled.
+        """
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo[id(self)] = result
+        for k, v in self.__dict__.items():
+            if k != 'logger':
+                setattr(result, k, copy.deepcopy(v, memo))
+            else:
+                logger = logging.getLogger('xdl_logger')
+                if not self.logger.hasHandlers():
+                    logger = initialise_logger(logger)
+                setattr(result, k, logger)
+        return result
