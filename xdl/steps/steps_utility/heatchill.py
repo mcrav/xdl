@@ -23,7 +23,10 @@ from ..steps_base import (
 )
 from .general import Wait
 from .stirring import StopStir, StartStir
-from ...constants import ROOM_TEMPERATURE, DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME
+from ...constants import (
+    ROOM_TEMPERATURE,
+    DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME
+)
 from ...utils.errors import XDLError
 from ...localisation import HUMAN_READABLE_STEPS
 
@@ -160,6 +163,8 @@ class HeatChillReturnToRT(AbstractStep):
         stir: Optional[bool] = True,
         stir_speed: Optional[float] = 'default',
         vessel_type: Optional[str] = None,
+        wait_recording_speed: Optional[float] = 'default',
+        after_recording_speed: Optional[float] = 'default',
         **kwargs) -> None:
         super().__init__(locals())
             
@@ -169,14 +174,18 @@ class HeatChillReturnToRT(AbstractStep):
             steps = [
                 CChillerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
                 CStartChiller(vessel=self.vessel),
+                CSetRecordingSpeed(self.wait_recording_speed),
                 CChillerWaitForTemp(vessel=self.vessel),
+                CSetRecordingSpeed(self.after_recording_speed),
                 CStopChiller(self.vessel)
             ]
         elif self.vessel_type == 'reactor':
             steps = [
                 CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
                 CStirrerHeat(vessel=self.vessel),
+                CSetRecordingSpeed(self.wait_recording_speed),
                 CStirrerWaitForTemp(vessel=self.vessel),
+                CSetRecordingSpeed(self.after_recording_speed),
                 CStopHeat(self.vessel),
             ]
         elif self.vessel_type == 'rotavap':
