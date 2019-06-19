@@ -6,41 +6,43 @@ from ..reagents import Reagent
 from ..steps import AbstractBaseStep, AbstractStep, Step
 from ..utils import XDLError
 
-def get_valid_attrs(class_: type) -> List[str]:
-    """Get valid attrs for passing to class_ __init__ methods.
+def get_valid_attrs(target_class: type) -> List[str]:
+    """Get valid attrs for passing to target_class __init__ methods.
     
     Args:
-        class_ (type): Class to get valid attrs for __init__ method.
+        target_class (type): Class to get valid attrs for __init__ method.
     
     Returns:
-        List[str]: List of arg names for class_ __init__ method.
+        List[str]: List of arg names for target_class __init__ method.
     """
-    valid_attrs = [k for k in class_.__init__.__annotations__ if k  != 'return']
-    if (AbstractStep in class_.__bases__
-        or AbstractBaseStep in class_.__bases__):
+    valid_attrs = [k for k in target_class.__init__.__annotations__ if k  != 'return']
+    if (AbstractStep in target_class.__bases__
+        or AbstractBaseStep in target_class.__bases__):
         valid_attrs.append('repeat')
-    elif class_ == Component:
+    elif target_class == Component:
         valid_attrs.remove('component_type')
         valid_attrs.append('type')
     return valid_attrs
 
-def check_attrs_are_valid(attrs: Dict[str, str], class_: type) -> None:
-    """Check that attrs can be passed into class_ like `class_(**attrs)`.
+def check_attrs_are_valid(attrs: Dict[str, str], target_class: type) -> None:
+    """Check that attrs can be passed into target_class like
+    `target_class(**attrs)`.
     
     Args:
         attrs (Dict[str, str]): Attribute dict to check all keys are args of
-            class_ __init__ method.
-        class_ (type): class_ to check attrs are args of __init__ method.
+            target_class __init__ method.
+        target_class (type): target_class to check attrs are args of
+            __init__ method.
     
     Raises:
-        XDLError: Error raised if any of attrs aren't args of class_ __init__
+        XDLError: Error raised if any of attrs aren't args of target_class __init__
             method.
     """
-    valid_attrs = get_valid_attrs(class_)
+    valid_attrs = get_valid_attrs(target_class)
     for attr, _ in attrs.items():
         if not attr in valid_attrs:
             raise XDLError(
-                f'{attr} is not a valid attribute for {class_.__name__}.')
+                f'{attr} is not a valid attribute for {target_class.__name__}.')
 
 def check_reagents_are_all_declared(
     steps: List[Step], reagents: List[Reagent]) -> None:

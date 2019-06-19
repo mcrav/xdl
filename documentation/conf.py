@@ -163,3 +163,5 @@ texinfo_documents = [
 autodoc_default_options = {
     'private-members': True, # Include _methods in autodoc class.
 }
+
+html_static_path = []

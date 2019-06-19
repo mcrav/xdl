@@ -2,30 +2,73 @@
 Making Custom Steps
 ===================
 
-All step classes inherit the class :class:`xdl.utils.Step`.
+Any custom steps should inherit `xdl.steps.AbstractStep`.
 
-Three member variables must be set in the `__init__` function: `properties`, `steps` and `human_readable`.
+Methods to implement:
+
+- `__init__`: Take `properties` argument and call `super().__init__(locals())`
+- `get_steps`: Return a list of steps to be executed when the step is executed.
+- `requirements` (optional): Override this property method if step requires anything listed in table below. Returns dictionary of requirement and value.
+- `human_readable` (optional): If not overridden the class name will be returned as human_readable. Method should take `language='en'` keyword argument and return human_readable based on language code.
+
+Requirements options are as follows:
+
++------------+------------+
+| Requirement|   Default  |
++============+============+
+| heatchill  |   False    |
++------------+------------+
+| filter     |   False    |
++------------+------------+
+| separator  |   False    |
++------------+------------+
+| rotavap    |   False    |
++------------+------------+
+| temp       |      []    |
++------------+------------+
+
+Examples
+--------
 
 .. code-block:: python
 
-    from xdl import Step
-    from xdl.steps import Add, StirAtRT
+    from xdl.steps import AbstractStep, Add, Stir
 
-    class AddAndStir(Step):
+    class AddAndStir(AbstractStep):
         
-        def __init__(self):
-        
-            self.properties = {
-                'volume': volume,
-                'vessel': vessel,
-                'reagent': reagent,
-                'stir_time': stir_time,
-            }
+        def __init__(self, properties: Dict[str, Any]):
+            super().__init__(locals())
 
-            self.steps = [
-                Add(reagent=reagent, vessel=vessel, volume=volume),
-                StirAtRT(vessel=vessel, time=stir_time)
+        def get_steps(self):
+            return [
+                Add(reagent=self.reagent, vessel=self.vessel, volume=self.volume),
+                Stir(vessel=self.vessel, time=self.stir_time)
             ]
 
-            self.human_readable = 'Add {0} ({1} mL) to {2} and stir for {3} minutes.'.format(
-                add_vessel, volume, stir_vessel, stir_time / 60)
+.. code-block:: python
+
+    from xdl.steps import AbstractStep, Add, HeatChill 
+
+    class AddAndHeat(AbstractStep):
+        
+        def __init__(self, properties: Dict[str, Any]):
+            super().__init__(locals())
+
+        def get_steps(self):
+            return [
+                Add(reagent=self.reagent, vessel=self.vessel, volume=self.volume),
+                HeatChill(vessel=self.vessel, temp=self.temp, time=self.time)
+            ]
+
+        @property
+        def requirements(self):
+            return {
+                'heatchill': True,
+                'temp': [self.temp]
+            }
+
+        def human_readable(self, language: str = 'en'):
+            return f'Add {self.reagent} ({self.volume} mL) to {self.vessel} and heat {self.vessel} at {self.temp} °C for {self.time / 60} mins.'
+
+
+

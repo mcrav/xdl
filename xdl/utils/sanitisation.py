@@ -71,12 +71,14 @@ UNIT_CONVERTERS = {
 def convert_val_to_std_units(val: str) -> float:
     """Given str of value with/without units, convert it into standard unit and
     return float value.
+    
     Standard units:
-        time      seconds
-        volume    mL
-        pressure  mbar
-        temp      °c
-        mass      g
+
+    time      seconds
+    volume    mL
+    pressure  mbar
+    temp      °c
+    mass      g
     
     Arguments:
         val (str): Value (and units) as str. If no units are specified it is
