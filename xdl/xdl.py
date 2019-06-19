@@ -415,18 +415,29 @@ class XDL(object):
                 for step in self._get_full_xdl_tree()
                 if isinstance(step, AbstractBaseStep)]
 
-    def __deepcopy__(self, memo):
-        """Needed for deepcopy on Python 3.6 as Logger object can't be pickled.
-        """
-        cls = self.__class__
-        result = cls.__new__(cls)
-        memo[id(self)] = result
-        for k, v in self.__dict__.items():
-            if k != 'logger':
-                setattr(result, k, copy.deepcopy(v, memo))
-            else:
-                logger = logging.getLogger('xdl_logger')
-                if not self.logger.hasHandlers():
-                    logger = initialise_logger(logger)
-                setattr(result, k, logger)
-        return result
+def xdl_copy(xdl_obj: XDL) -> XDL:
+    """Returns a deepcopy of a XDL object. copy.deepcopy can be used with
+    Python 3.7, but for Python 3.6 you have to use this.
+
+    Args:
+        xdl_obj (XDL): XDL object to copy.
+
+    Returns:
+        XDL: Deep copy of xdl_obj.
+    """
+    copy_steps = []
+    copy_reagents = []
+    copy_hardware = []
+
+    for step in xdl_obj.steps:
+        copy_steps.append(type(step)(**step.properties))
+
+    for reagent in xdl_obj.reagents:
+        copy_reagents.append(type(reagent)(**reagent.properties))
+
+    for component in xdl_obj.hardware:
+        copy_hardware.append(type(component)(**component.properties))
+
+    return XDL(steps=copy_steps,
+               reagents=copy_reagents,
+               hardware=Hardware(copy_hardware))
