@@ -1,1 +1,1 @@
-from .xdl import XDL
+from .xdl import XDL, xdl_copy
