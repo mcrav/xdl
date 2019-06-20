@@ -1,10 +1,9 @@
 =========
 xdl.steps
 =========
-
 .. toctree::
-    
-   base_step
-   steps_base
-   steps_utility
-   steps_synthesis
+
+   steps_synthesis/index
+   steps_utility/index
+   steps_base/index
+

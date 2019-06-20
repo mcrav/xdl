@@ -18,7 +18,6 @@ from .utils.namespace import BASE_STEP_OBJ_DICT
 from .utils import parse_bool, initialise_logger
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 from .readwrite import XDLGenerator
-from .safety import procedure_is_safe
 from .execution import XDLExecutor
 from .hardware import Hardware
 from .reagents import Reagent

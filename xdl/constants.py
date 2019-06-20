@@ -176,6 +176,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     },
     'Separate': {
         'solvent_volume': DEFAULT_SEPARATION_SOLVENT_VOLUME,
+        'remove_dead_volume': True,
     },
     'Filter': {
         'wait_time': DEFAULT_FILTER_WAIT_TIME,
@@ -282,9 +283,6 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'time': DEFAULT_PRECIPITATION_TIME,
         'temp': DEFAULT_PRECIPITATION_TEMP,
     },
-    'Separate': {
-        'remove_dead_volume': True,
-    }
 }
 
 INTERNAL_PROPERTIES = {

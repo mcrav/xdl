@@ -5,6 +5,9 @@ from ..steps import *
 ### CLEANING ###
 ################
 
+#: Code for generic organic reagent when determining cleaning schedules
+GENERIC_ORGANIC: int = 0
+
 #: Fraction of vessel max volume to use as solvent volume in CleanVessel step.
 CLEAN_VESSEL_VOLUME_FRACTION: float = 0.5
 

@@ -2,5 +2,7 @@
 xdl.hardware
 ============
 
-.. automodule:: xdl.hardware.components
-   :members:
+.. toctree::
+
+   components
+   constants

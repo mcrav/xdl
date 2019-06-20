@@ -3,8 +3,9 @@ xdl.readwrite
 =============
 
 .. toctree::
-    
-   interpreter
+
+   constants 
    generator
-   syntax_validation
+   interpreter
    utils
+   validation
