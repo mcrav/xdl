@@ -1,10 +1,10 @@
 from typing import List, Dict, Generator, Optional, Union, Tuple
 import copy
 from .utils import VesselContents
-from ..steps import Step, Filter, WashSolid, Dry, Separate, CMove
+from ..steps import Step, Filter, WashSolid, Dry, Separate, CMove,  Evaporate
 from ..hardware import Hardware
 from ..utils import raise_error
-from .constants import INERT_GAS_SYNONYMS
+from .constants import INERT_GAS_SYNONYMS, COMMON_SOLVENT_NAMES
 
 def iter_vessel_contents(
     steps: List[Step], hardware: Hardware, additions: bool = False
@@ -100,8 +100,21 @@ def iter_vessel_contents(
                 # This is necessary to stop move command putting filter into
                 # negative volume
                 pass
-            
 
+            elif type(step) == Evaporate:
+                if step.rotavap_name in vessel_contents:
+                    for j in reversed(range(len(
+                        vessel_contents[step.rotavap_name].reagents))):
+
+                        # Remove all common solvents during evaporation
+                        reagent = vessel_contents[step.rotavap_name].reagents[j]
+                        if reagent.lower() in COMMON_SOLVENT_NAMES:
+                            vessel_contents[step.rotavap_name].reagents.pop(j)
+
+                    vessel_contents[step.rotavap_name].volume = 0
+                else:
+                    vessel_contents[step.rotavap_name] = VesselContents([], 0)
+            
             # Handle normal Move steps.
             else:
                 for from_vessel, to_vessel, volume in get_movements(step):

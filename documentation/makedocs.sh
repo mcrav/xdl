@@ -1,0 +1,2 @@
+python generate_steps_docs.py
+make html

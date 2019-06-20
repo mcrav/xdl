@@ -12,7 +12,6 @@ from ..constants import *
 from ..utils.namespace import BASE_STEP_OBJ_DICT
 from ..utils.errors import raise_error
 from ..steps import *
-from ..safety import procedure_is_safe
 from ..reagents import Reagent
 from .tracking import iter_vessel_contents
 from .graph import (
@@ -458,11 +457,7 @@ class XDLExecutor(object):
         
         Returns:
             List[Tuple[int, str, Dict[str, VesselContents]]]: List of tuples,
-                format:
-                [(step_index,
-                  filter_vessel_name,
-                  {vessel: VesselContents, ...},
-                  ...]
+                format: [(step_index, filter_vessel_name, {vessel: VesselContents, ...},...]
         """
         filter_emptying_steps = []
         full_vessel_contents = []
@@ -636,12 +631,16 @@ class XDLExecutor(object):
         can redissolve in the organic phase when transferred out of the separator.
 
         Rules implemented here:
-            If: 1) to_vessel of one Separate step is the separation_vessel
-                2) Next Separate step uses same kind of solvent (organic or aqueous)
-            Then the separation step shouldn't remove the dead volume as you
-            run the risk of contaminating the backbone, and there is no need to
-            remove the dead volume to risk contaminating the product phase as
-            more solvent is going to be added anyway in the next step.
+
+        If:
+        1) to_vessel of one Separate step is the separation_vessel
+        2) Next Separate step uses same kind of solvent (organic or aqueous)
+
+        Then:
+        the separation step shouldn't remove the dead volume as you
+        run the risk of contaminating the backbone, and there is no need to
+        remove the dead volume to risk contaminating the product phase as
+        more solvent is going to be added anyway in the next step.
         """
         steps = self._xdl.steps
         for i in range(len(steps)):
@@ -744,9 +743,11 @@ class XDLExecutor(object):
             
     def _remove_pointless_backbone_cleaning(self) -> None:
         """Remove pointless CleanBackbone steps.
+        
         Rules are:
-            1) No point cleaning between Filter and Dry steps.
-            2) No point cleaning between consecutive additions of the same 
+
+        1) No point cleaning between Filter and Dry steps.
+        2) No point cleaning between consecutive additions of the same 
                reagent.
         """
         i = len(self._xdl.steps) - 1
@@ -770,22 +771,6 @@ class XDLExecutor(object):
     def _print_warnings(self) -> None:
         for warning in self._warnings:
             self.logger.info(warning)
-
-
-    ####################
-    ### CHECK SAFETY ###
-    ####################
-
-    def _check_safety(self) -> bool:
-        """
-        Check if the procedure is safe.
-        Any issues will be printed.
-
-        Returns:
-            bool: True if no safety issues are found, False otherwise.
-        """
-        return procedure_is_safe(self._xdl.steps, self._xdl.reagents)
-
 
     ######################
     ### PUBLIC METHODS ###
@@ -843,8 +828,6 @@ class XDLExecutor(object):
 
                     # Optimise procedure.
                     self._tidy_up_procedure()
-
-                    self._check_safety()
 
                     self._print_warnings()
                     self._prepared_for_execution = True

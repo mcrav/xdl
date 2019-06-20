@@ -11,8 +11,6 @@ from ..hardware import Hardware
 from ..reagents import Reagent
 from ..constants import AQUEOUS_KEYWORDS
 
-GENERIC_ORGANIC = 0
-
 """
 Backbone Cleaning Rules
 -----------------------
@@ -316,11 +314,7 @@ def get_vessel_emptying_steps(
     
     Returns:
         List[Tuple[int, str, Dict[str, VesselContents]]]: List of tuples,
-            format:
-            [(step_index,
-                filter_vessel_name,
-                {vessel: VesselContents, ...},
-                ...]
+            format: [(step_index, filter_vessel_name, {vessel: VesselContents, ...}...]
     """
     vessel_emptying_steps = []
     full_vessel_contents = []

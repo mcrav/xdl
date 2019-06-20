@@ -2,15 +2,15 @@
 Installation
 ============
 
-This package has been tested with Python 3.6.
+This package has been tested with Python 3.6 and Python 3.7 on Ubuntu 18.04
+and Windows 10.
 
-Install with pip from PyPI::
+Install from PyPI::
 
    pip install xdl
 
 Install from source::
 
    git clone https://github.com/croningp/xdl.git
-   cd XDL
-   python setup.py install
+   pip install XDL
 

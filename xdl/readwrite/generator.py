@@ -3,7 +3,7 @@ from lxml import etree
 from ..reagents import Reagent
 from ..hardware import Hardware
 from ..steps import Add, Step
-from ..constants import DEFAULT_VALS, INTERNAL_PROPERTIES
+from ..constants import DEFAULT_VALS, INTERNAL_PROPERTIES, XDL_VERSION
 from ..utils.misc import format_property
 
 class XDLGenerator(object):   
@@ -116,7 +116,8 @@ def get_xdl_string(xdltree: etree._ElementTree) -> str:
     """
     indent = '  '
     # Synthesis tag
-    s = '<Synthesis>\n'
+    s = f'<?xdl version="{XDL_VERSION}" ?>\n\n'
+    s += '<Synthesis>\n'
     indent_level = 1
     # Hardware, Reagents and Procedure tags
     for element in xdltree.findall('*'):

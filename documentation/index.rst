@@ -15,9 +15,6 @@ Usage
 
    install
    tutorial
-   synthesis_steps
-   utility_steps
-   base_steps
    custom_steps
    reference/index
 

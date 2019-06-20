@@ -18,7 +18,6 @@ from .utils.namespace import BASE_STEP_OBJ_DICT
 from .utils import parse_bool, initialise_logger
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 from .readwrite import XDLGenerator
-from .safety import procedure_is_safe
 from .execution import XDLExecutor
 from .hardware import Hardware
 from .reagents import Reagent
@@ -414,3 +413,30 @@ class XDL(object):
         return [step
                 for step in self._get_full_xdl_tree()
                 if isinstance(step, AbstractBaseStep)]
+
+def xdl_copy(xdl_obj: XDL) -> XDL:
+    """Returns a deepcopy of a XDL object. copy.deepcopy can be used with
+    Python 3.7, but for Python 3.6 you have to use this.
+
+    Args:
+        xdl_obj (XDL): XDL object to copy.
+
+    Returns:
+        XDL: Deep copy of xdl_obj.
+    """
+    copy_steps = []
+    copy_reagents = []
+    copy_hardware = []
+
+    for step in xdl_obj.steps:
+        copy_steps.append(type(step)(**step.properties))
+
+    for reagent in xdl_obj.reagents:
+        copy_reagents.append(type(reagent)(**reagent.properties))
+
+    for component in xdl_obj.hardware:
+        copy_hardware.append(type(component)(**component.properties))
+
+    return XDL(steps=copy_steps,
+               reagents=copy_reagents,
+               hardware=Hardware(copy_hardware))
