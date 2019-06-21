@@ -88,7 +88,7 @@ def convert_val_to_std_units(val: str) -> float:
         float: Value in default units.
     """
     float_regex_pattern = r'([-]?[0-9]+(?:[.][0-9]+)?)' 
-    unit_search = re.search(r'[a-zA-Z°]+', val)
+    unit_search = re.search(r'[a-zA-Z°]+[3]?', val)
     val_search = re.search(float_regex_pattern, val)
     if val_search:
         val = float(val_search[0])
