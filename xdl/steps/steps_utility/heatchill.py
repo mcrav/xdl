@@ -30,6 +30,53 @@ from ...constants import (
 from ...utils.errors import XDLError
 from ...localisation import HUMAN_READABLE_STEPS
 
+class StartHeatChill(AbstractStep):
+    """Start heating/chilling vessel to given temp and leave heater/chiller on.
+    Don't wait to reach temp.
+    
+    Args:
+        vessel (str): Vessel to heat/chill.
+        temp (float): Temperature to heat/chill to in degrees C.
+        vessel_type (str): Given internally. Used to know whether to use
+            heater or chiller base steps. 'filter', 'rotavap' or 'reactor'
+    """
+    def __init__(
+        self,
+        vessel: str,
+        temp: float,
+        vessel_type: Optional[str] = None,
+        **kwargs
+    ) -> None:
+        super().__init__(locals())
+
+    def get_steps(self) -> List[Step]:
+        steps = []
+        if self.vessel_type == 'filter':
+            steps = [
+                CChillerSetTemp(vessel=self.vessel, temp=self.temp),
+                CStartChiller(vessel=self.vessel),
+            ]
+        elif self.vessel_type == 'reactor':
+            steps = [
+                CStirrerSetTemp(vessel=self.vessel, temp=self.temp),
+                CStirrerHeat(vessel=self.vessel),
+            ]
+        elif self.vessel_type == 'rotavap':
+            steps = [
+                CRotavapSetTemp(rotavap_name=self.vessel, temp=self.temp),
+                CRotavapStartHeater(rotavap_name=self.vessel),
+            ]
+        return steps
+    
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
+            'vessel': {
+                'heatchill': True,
+                'temp': [self.temp]
+            }
+        }
+
 class HeatChillToTemp(AbstractStep):
     """Heat/Chill vessel to given temp and leave heater/chiller on.
     
@@ -39,8 +86,7 @@ class HeatChillToTemp(AbstractStep):
         stir (bool): If True, step will be stirred, otherwise False.
         stir_speed (float): Speed to stir at, only used if stir == True.
         vessel_type (str): Given internally. Used to know whether to use
-            heater or chiller base steps. 'ChemputerFilter' or
-            'ChemputerReactor'.
+            heater or chiller base steps. 'filter', 'rotavap' or 'reactor'
     """
     def __init__(
         self,
@@ -59,24 +105,24 @@ class HeatChillToTemp(AbstractStep):
         steps = []
         if self.vessel_type == 'filter':
             steps = [
-                CChillerSetTemp(vessel=self.vessel, temp=self.temp),
-                CStartChiller(vessel=self.vessel),
+                StartHeatChill(vessel=self.vessel, temp=self.temp),
+
                 CSetRecordingSpeed(self.wait_recording_speed),
                 CChillerWaitForTemp(vessel=self.vessel),
                 CSetRecordingSpeed(self.after_recording_speed),
             ]
         elif self.vessel_type == 'reactor':
             steps = [
-                CStirrerSetTemp(vessel=self.vessel, temp=self.temp),
-                CStirrerHeat(vessel=self.vessel),
+                StartHeatChill(vessel=self.vessel, temp=self.temp),
+
                 CSetRecordingSpeed(self.wait_recording_speed),
                 CStirrerWaitForTemp(vessel=self.vessel),
                 CSetRecordingSpeed(self.after_recording_speed),
             ]
         elif self.vessel_type == 'rotavap':
             steps = [
-                CRotavapSetTemp(rotavap_name=self.vessel, temp=self.temp),
-                CRotavapStartHeater(rotavap_name=self.vessel),
+                StartHeatChill(vessel=self.vessel, temp=self.temp),
+
                 Wait(time=DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME),
             ]
 
