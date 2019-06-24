@@ -35,7 +35,7 @@ class GraphGenerator(object):
                 'separator',
                 'rotavap']]
         for step in xdl.steps:
-            if (step.name == 'FilterThrough'
+            if (step.name in ['FilterThrough', 'RunColumn']
                 and step.from_vessel == step.to_vessel):
                 self._components.append(
                     Component(id='buffer_flask', component_type='reactor'))
