@@ -52,10 +52,12 @@ UNIT_CONVERTERS = {
     'm': minutes_to_seconds,
     'min': minutes_to_seconds,
     'mins': minutes_to_seconds,
+    'minute': minutes_to_seconds,
     'minutes': minutes_to_seconds,
     's': no_conversion,
     'sec': no_conversion,
     'secs': no_conversion,
+    'second': no_conversion,
     'seconds': no_conversion,
 
     'mbar': no_conversion,
