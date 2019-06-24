@@ -283,10 +283,16 @@ class XDLExecutor(object):
         # Get all reactor IDs
         reactors = [reactor.id
                     for reactor in self._graph_hardware.reactors]
-        # Remove reactor IDs used in procedure.
-        for step in self._xdl.base_steps:
-            if type(step) == CMove and step.to_vessel in reactors:
-                reactors.remove(step.to_vessel)
+
+        # Remove reactor IDs that are actually used as reactors not just
+        # buffer flasks.
+        for i in reversed(range(len(reactors))):
+            reactor = reactors[i]
+            reactor_neighbours = self._graph.neighbors(reactor)
+            for neighbour in reactor_neighbours:
+                if self._graph.nodes[neighbour]['type'] != 'ChemputerValve':
+                    reactors.pop(i)
+                    break
 
         # From remaining reactor IDs, return nearest to vessel.
         if reactors:
@@ -562,8 +568,10 @@ class XDLExecutor(object):
         these to max_volume of vessel.
         """
         for step in self._xdl.steps:
+            print(step.name, step.properties)
             for base_step in self._xdl.climb_down_tree(step):
                 if type(base_step) == CMove and base_step.volume == 'all':
+                    print(base_step.name, base_step.properties)
                     base_step.volume = self._graph_hardware[
                         base_step.from_vessel].max_volume
 
