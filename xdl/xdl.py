@@ -370,6 +370,48 @@ class XDL(object):
                 self.logger.info(f'    {reagent:^{max_reagent_name_length}} | {volume} mL')
             self.logger.info('\n')
 
+    def print_hardware_requirements(self) -> None:
+        """Print new modules needed, and requirements of hardware in procedure.
+        """
+        vessel_requirements = {}
+        new_modules_needed = []
+        for step in self.steps:
+            if isinstance(step, UnimplementedStep):
+                new_modules_needed.extend(list(step.requirements))
+            else:
+                for vessel, requirements in step.requirements.items():
+                    if step.properties[vessel] in vessel_requirements:
+                        for req, val in requirements.items():
+                            if req == 'temp' and req in vessel_requirements[step.properties[vessel]]:
+                                vessel_requirements[step.properties[vessel]][req].extend(val)
+                            else:
+                                vessel_requirements[step.properties[vessel]][req] = val
+
+                    else:
+                        vessel_requirements[step.properties[vessel]] = requirements
+
+        self.logger.info('')
+        if new_modules_needed:
+            self.logger.info(f'  New Modules Needed\n{22*"-"}')
+            for new_module in list(set(new_modules_needed)):
+                self.logger.info(f'  -- {new_module.capitalize()}')
+            self.logger.info('')
+
+        if vessel_requirements:
+            self.logger.info(f'  Hardware Requirements\n{25*"-"}')
+            for vessel, reqs in vessel_requirements.items():
+                self.logger.info(f'  -- {vessel}')
+                self.logger.info('')
+                for req, val in reqs.items():
+                    if req == 'temp':
+                        self.logger.info(f'    * Max temp: {max(val)} °C')
+                        self.logger.info(f'    * Min temp: {min(val)} °C')
+                    else:
+                        self.logger.info(f'    * {req.capitalize()}')
+                self.logger.info('')
+            self.logger.info('')
+
+
     def prepare_for_execution(
         self, graph_file: str, interactive: bool = True) -> None:
         """Check hardware compatibility and prepare XDL for execution on given 
