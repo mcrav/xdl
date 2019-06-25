@@ -20,8 +20,11 @@ class VesselContents(object):
             yield item
 
 def is_aqueous(reagent_name):
-    reagent_name = reagent_name.lower()
-    for keyword in AQUEOUS_KEYWORDS:
-        if keyword in reagent_name:
-            return True
-    return False
+    if not reagent_name:
+        return False
+    else:
+        reagent_name = reagent_name.lower()
+        for keyword in AQUEOUS_KEYWORDS:
+            if keyword in reagent_name:
+                return True
+        return False
