@@ -13,6 +13,9 @@ class RunColumn(AbstractStep):
         move_speed (float): Optional. Speed with which to move liquid through
             the column.
         waste_vessel (str): Given internally. Vessel to send waste to.
+        buffer_flask (str): Given internally. Vessel to use to temporarily
+            transfer reaction mixture to if from_vessel and to_vessel are the
+            same.
     """
     def __init__(
         self,
@@ -20,6 +23,7 @@ class RunColumn(AbstractStep):
         to_vessel: str,
         column: str,
         move_speed: Optional[float] = 'default',
+        buffer_flask: Optional[str] = None,
     ) -> None:
         super().__init__(locals())
 
@@ -29,7 +33,8 @@ class RunColumn(AbstractStep):
                 from_vessel=self.from_vessel,
                 to_vessel=self.to_vessel,
                 through_cartridge=self.column,
-                move_speed=self.move_speed
+                move_speed=self.move_speed,
+                buffer_flask=self.buffer_flask,
             )
         ]   
     

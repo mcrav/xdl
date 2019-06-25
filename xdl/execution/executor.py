@@ -205,8 +205,8 @@ class XDLExecutor(object):
                 if 'collection_flask_volume' in rotavap.properties:
                     step.collection_flask_volume = rotavap.collection_flask_volume
 
-            # When doing FilterThrough and from_vessel and to_vessel are the
-            # same, find an unused reactor to use as a buffer flask.
+            # When doing FilterThrough or RunColumn and from_vessel and to_vessel
+            # are the same, find an unused reactor to use as a buffer flask.
             if ('buffer_flask' in step.properties
                  and step.from_vessel == step.to_vessel
                  and not step.buffer_flask):
