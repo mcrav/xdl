@@ -120,7 +120,8 @@ def iter_vessel_contents(
                 for from_vessel, to_vessel, volume in get_movements(step):
                     empty_from_vessel = False
                     # Add vessels to vessel_contents if they aren't there.
-                    if 'chemical' in hardware[from_vessel].properties and hardware[from_vessel].chemical in INERT_GAS_SYNONYMS:
+                    if ('chemical' in hardware[from_vessel].properties
+                        and hardware[from_vessel].chemical in INERT_GAS_SYNONYMS):
                         continue
                     for vessel in [from_vessel, to_vessel]:
                         vessel_contents.setdefault(
