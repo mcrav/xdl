@@ -121,8 +121,6 @@ class XDLExecutor(object):
             step.update()
 
             if not isinstance(step, AbstractBaseStep):
-                if step.steps is None:
-                    print(step.name, step.steps)
                 self._add_internal_properties_to_steps(step.steps)
 
 
@@ -220,8 +218,6 @@ class XDLExecutor(object):
                     step.filter_dead_volume = vessel.dead_volume
 
             if not isinstance(step, AbstractBaseStep):
-                if step.steps is None:
-                    print(step.name, step.steps)
                 self._add_internal_properties_to_steps(step.steps)
 
     def _map_hardware_to_steps(self) -> None:
@@ -568,10 +564,8 @@ class XDLExecutor(object):
         these to max_volume of vessel.
         """
         for step in self._xdl.steps:
-            print(step.name, step.properties)
             for base_step in self._xdl.climb_down_tree(step):
                 if type(base_step) == CMove and base_step.volume == 'all':
-                    print(base_step.name, base_step.properties)
                     base_step.volume = self._graph_hardware[
                         base_step.from_vessel].max_volume
 
