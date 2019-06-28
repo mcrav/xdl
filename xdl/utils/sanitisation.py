@@ -22,40 +22,89 @@ def parse_bool(s: str) -> bool:
         return False
     raise ValueError(f'{s} cannot be parsed as a bool.')
 
+days_to_seconds = lambda x: x * 60 * 60 * 24
 minutes_to_seconds = lambda x: x * 60
 hours_to_seconds = lambda x: x * 60 * 60
 no_conversion = lambda x: x
 
+cl_to_ml = lambda x: x * 10
+dl_to_ml = lambda x: x * 10**2
+l_to_ml = lambda x: x * 10**3
+ul_to_ml = lambda x: x * 10**-3
+
+kilogram_to_grams = lambda x: x * 10**3
+milligram_to_grams = lambda x: x * 10**-3
+microgram_to_grams = lambda x: x * 10**-6
+
 UNIT_CONVERTERS = {
     'ml': no_conversion,
+    'millilitre': no_conversion,
+    'milliliter': no_conversion,
+    'milliliters': no_conversion,
+    'millilitres': no_conversion,
     'cm3': no_conversion,
     'cc': no_conversion,
-    'cl': lambda x: x * 10,
-    'dl': lambda x: x * 10**2,
-    'l': lambda x: x * 10**3,
-    'ul': lambda x: x * 10**-3,
 
-    'kg': lambda x: x * 10**3,
-    'g': lambda x: x,
-    'mg': lambda x: x * 10**-3,
-    'ug': lambda x: x * 10**-6,
+    'cl': cl_to_ml,
+    'centilitre': cl_to_ml,
+    'centiliter': cl_to_ml,
+    'centilitres': cl_to_ml,
+    'centiliters': cl_to_ml,
+
+    'dl': dl_to_ml,
+    'decilitre': dl_to_ml,
+    'deciliter': dl_to_ml,
+    'decilitres': dl_to_ml,
+    'deciliters': dl_to_ml,
+
+    'l': l_to_ml,
+    'liter': l_to_ml,
+    'litre': l_to_ml,
+    'liters': l_to_ml,
+    'litres': l_to_ml,
+
+    'ul': ul_to_ml,
+    'microlitre': ul_to_ml,
+    'microliter': ul_to_ml,
+    'microlitres': ul_to_ml,
+    'microliters': ul_to_ml,
+
+    'kg': kilogram_to_grams,
+    'kilogram': kilogram_to_grams,
+    'kilograms': kilogram_to_grams,
+    'g': no_conversion,
+    'gram': no_conversion,
+    'grams': no_conversion,
+    'mg': milligram_to_grams,
+    'milligram': milligram_to_grams,
+    'milligrams': milligram_to_grams,
+    'ug': microgram_to_grams,
+    'microgram': microgram_to_grams,
+    'micrograms': microgram_to_grams,
 
     '°c': lambda x: x,
     'k': lambda x: x - 273.15,
     'f': lambda x: (x - 32) / 1.8,
+
+    'days': days_to_seconds,
+    'day': days_to_seconds,
 
     'h': hours_to_seconds,
     'hour': hours_to_seconds,
     'hours': hours_to_seconds,
     'hr': hours_to_seconds,
     'hrs': hours_to_seconds,
+
     'm': minutes_to_seconds,
     'min': minutes_to_seconds,
     'mins': minutes_to_seconds,
+    'minute': minutes_to_seconds,
     'minutes': minutes_to_seconds,
+    
     's': no_conversion,
     'sec': no_conversion,
     'secs': no_conversion,
+    'second': no_conversion,
     'seconds': no_conversion,
 
     'mbar': no_conversion,
@@ -67,6 +116,7 @@ UNIT_CONVERTERS = {
 
     'rpm': lambda x: x,
 }
+
 
 def convert_val_to_std_units(val: str) -> float:
     """Given str of value with/without units, convert it into standard unit and
@@ -88,7 +138,7 @@ def convert_val_to_std_units(val: str) -> float:
         float: Value in default units.
     """
     float_regex_pattern = r'([-]?[0-9]+(?:[.][0-9]+)?)' 
-    unit_search = re.search(r'[a-zA-Z°]+', val)
+    unit_search = re.search(r'[a-zA-Z°]+[3]?', val)
     val_search = re.search(float_regex_pattern, val)
     if val_search:
         val = float(val_search[0])

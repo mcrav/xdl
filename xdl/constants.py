@@ -214,12 +214,6 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'dispense_speed': DEFAULT_DISPENSE_SPEED,
         'stir_speed': DEFAULT_STIR_SPEED,
     },
-    'CStir': {
-        'stir_speed': DEFAULT_STIR_SPEED,
-    },
-    'CSetStirRate': {
-        'stir_speed': DEFAULT_STIR_SPEED,
-    },
     'PrimePumpForAdd': {
         'volume': DEFAULT_PUMP_PRIME_VOLUME,
     },
@@ -286,6 +280,9 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'Precipitate': {
         'time': DEFAULT_PRECIPITATION_TIME,
         'temp': DEFAULT_PRECIPITATION_TEMP,
+    },
+    'RunColumn': {
+        'move_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
     },
 }
 

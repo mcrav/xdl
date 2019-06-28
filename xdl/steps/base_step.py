@@ -122,3 +122,19 @@ class AbstractBaseStep(Step, ABC):
     @abstractmethod
     def execute(self, chempiler):
         return False
+
+class UnimplementedStep(Step):
+    """Abstract base class for steps that have no implementation but are included
+    either as stubs or for the purpose of showing requirements / human_readable.
+    """
+    def __init__(self, param_dict):
+        super().__init__(param_dict)
+        self.steps = []
+
+    def execute(self, chempiler):
+        raise NotImplementedError(
+            f'{self.__class__.__name__} step is unimplemented.')
+
+    @property
+    def requirements(self):
+        return {}

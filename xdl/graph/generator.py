@@ -35,7 +35,7 @@ class GraphGenerator(object):
                 'separator',
                 'rotavap']]
         for step in xdl.steps:
-            if (step.name == 'FilterThrough'
+            if (step.name in ['FilterThrough', 'RunColumn']
                 and step.from_vessel == step.to_vessel):
                 self._components.append(
                     Component(id='buffer_flask', component_type='reactor'))
@@ -187,12 +187,6 @@ class GraphGenerator(object):
             "type": "filter",
             "x": x,
             "y": y,
-            "properties": {
-                "class": TYPE_COMPONENT_DICT[component.component_type],
-                "name": component.id,
-                "current_volume": 0,
-                "max_volume": 0,
-            },
             "class": TYPE_COMPONENT_DICT[component.component_type],
             "name": component.id,
             "current_volume": 0,
@@ -228,7 +222,6 @@ class GraphGenerator(object):
         for k, v in params[
             COMPONENT_TYPE_DICT[component.component_type]].items():
             cdict[k] = v
-            cdict['properties'][k] = v
         return cdict
 
     def _get_valve(self, id: str, backbone_i: int) -> Dict[str, Any]:
@@ -250,12 +243,6 @@ class GraphGenerator(object):
             'type': 'valve',
             'x': x,
             'y': y,
-            'properties': {
-                'class': 'ChemputerValve',
-                'name': id,
-                'address': IP_ADDRESS,
-                'internalId': internal_id,
-            },
             'class': 'ChemputerValve',
             'name': id,
             'address': IP_ADDRESS,
@@ -283,12 +270,6 @@ class GraphGenerator(object):
             'type': 'waste',
             'x': x,
             'y': y,
-            'properties': {
-                'class': 'ChemputerWaste',
-                'name': id,
-                'current_volume': DEFAULT_WASTE_CURRENT_VOLUME,
-                'max_volume': DEFAULT_WASTE_MAX_VOLUME,
-            },
             'class': 'ChemputerWaste',
             'name': id,
             'current_volume': DEFAULT_WASTE_CURRENT_VOLUME,
@@ -316,12 +297,6 @@ class GraphGenerator(object):
             'type': 'pump',
             'x': x,
             'y': y,
-            'properties': {
-                'class': 'ChemputerPump',
-                'name': id,
-                'address': IP_ADDRESS,
-                'max_volume': DEFAULT_PUMP_MAX_VOLUME,
-            },
             'class': 'ChemputerPump',
             'name': id,
             'address': IP_ADDRESS,
@@ -355,13 +330,6 @@ class GraphGenerator(object):
             'type': 'flask',
             'x': x,
             'y': y,
-            'properties': {
-                'class': 'ChemputerFlask',
-                'name': id,
-                'chemical': chemical,
-                'current_volume': DEFAULT_FLASK_CURRENT_VOLUME,
-                'max_volume': DEFAULT_FLASK_MAX_VOLUME,
-            },
             'class': 'ChemputerFlask',
             'name': id,
             'chemical': chemical,

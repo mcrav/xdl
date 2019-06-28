@@ -84,9 +84,12 @@ class FilterThrough(AbstractStep):
                                   aspiration_speed=self.aspiration_speed))
 
         if self.to_vessel == self.from_vessel:
+            if self.eluting_solvent:
+                steps.extend([
+                    CleanVessel(vessel=self.from_vessel,
+                                solvent=self.eluting_solvent),
+                ])
             steps.extend([
-                CleanVessel(vessel=self.from_vessel,
-                            solvent=self.eluting_solvent),
                 Transfer(from_vessel=self.buffer_flask,
                          to_vessel=self.to_vessel,
                          volume='all',
