@@ -37,7 +37,7 @@ from .constants import (
 )
 
 class XDLExecutor(object):
- 
+
     """Class to execute XDL objects. To execute first call prepare_for_execution
     then execute.
 
@@ -57,16 +57,16 @@ class XDLExecutor(object):
     ####################################
 
     def _hardware_is_compatible(self) -> bool:
-        """Determine if XDL hardware object can be mapped to hardware available 
+        """Determine if XDL hardware object can be mapped to hardware available
         in graph.
         """
-        enough_reactors = (len(self._xdl.hardware.reactors) <= 
+        enough_reactors = (len(self._xdl.hardware.reactors) <=
                            len(self._graph_hardware.reactors))
-        enough_filters = (len(self._xdl.hardware.filters) <= 
+        enough_filters = (len(self._xdl.hardware.filters) <=
                           len(self._graph_hardware.filters))
-        enough_separators = (len(self._xdl.hardware.separators) <= 
+        enough_separators = (len(self._xdl.hardware.separators) <=
                              len(self._graph_hardware.separators))
-        return enough_reactors and enough_filters and enough_separators 
+        return enough_reactors and enough_filters and enough_separators
 
     def _check_all_flasks_present(self) -> bool:
         """Check that there is flask containing every reagent described in xdl.
@@ -102,9 +102,9 @@ class XDLExecutor(object):
         """
         self._xdl.hardware_map = {}
         for xdl_hardware_list, graphml_hardware_list in zip(
-            [self._xdl.hardware.reactors, self._xdl.hardware.filters, 
+            [self._xdl.hardware.reactors, self._xdl.hardware.filters,
              self._xdl.hardware.separators],
-            [self._graph_hardware.reactors, self._graph_hardware.filters, 
+            [self._graph_hardware.reactors, self._graph_hardware.filters,
              self._graph_hardware.separators]
         ):
             for i in range(len(xdl_hardware_list)):
@@ -127,13 +127,13 @@ class XDLExecutor(object):
     def _add_internal_properties_to_steps(self, step_list: List[Step]) -> None:
         """Recursively add internal properties to all steps and substeps in
         given list of steps.
-        
+
         Args:
             step_list (List[Step]): List of steps to add internal properties to.
         """
         for step in step_list:
 
-            # Set step.waste_vessel to nearest waste_vessel to vessel involved 
+            # Set step.waste_vessel to nearest waste_vessel to vessel involved
             # in step.
             if 'waste_vessel' in step.properties and not step.waste_vessel:
                 step.waste_vessel = self._get_waste_vessel(step)
@@ -186,7 +186,7 @@ class XDLExecutor(object):
             if 'vessel_has_stirrer' in step.properties:
                 step.vessel_has_stirrer = not step.vessel in [
                     item.id
-                    for item in self._graph_hardware.rotavaps 
+                    for item in self._graph_hardware.rotavaps
                                 + self._graph_hardware.flasks]
 
             if 'vessel_type' in step.properties and not step.vessel_type:
@@ -247,10 +247,10 @@ class XDLExecutor(object):
     def _get_vessel_type(self, vessel: str) -> str:
         """Given vessel return type of vessel from options 'filter', 'rotavap',
         'reactor', 'separator' or None if it isn't any of those options.
-        
+
         Args:
             vessel (str): Vessel to get type of.
-        
+
         Returns:
             str: Type of vessel, 'filter', 'reactor', 'rotavap', 'separator' or
                 None
@@ -269,10 +269,10 @@ class XDLExecutor(object):
 
     def _get_buffer_flask(self, vessel: str) -> str:
         """Get buffer flask closest to given vessel.
-        
+
         Args:
             vessel (str): Node name in graph.
-        
+
         Returns:
             str: Node name of buffer flask (unused reactor) nearest vessel.
         """
@@ -303,7 +303,7 @@ class XDLExecutor(object):
                             self._graph, source=vessel, target=reactor)))
                 return sorted(shortest_paths, key=lambda x: x[1])[0][0]
         return None
-                    
+
     def _get_vacuum(self, step: Step) -> str:
         if hasattr(step, 'filter_vessel'):
             if step.filter_vessel in self._vacuum_map:
@@ -344,10 +344,10 @@ class XDLExecutor(object):
 
     def _get_reagent_vessel(self, reagent: str) -> Union[str, None]:
         """Get vessel containing given reagent.
-        
+
         Args:
             reagent (str): Name of reagent to find vessel for.
-        
+
         Returns:
             str: ID of vessel containing given reagent.
         """
@@ -358,12 +358,12 @@ class XDLExecutor(object):
 
     def _get_waste_vessel(self, step: Step) -> Union[None, str]:
         """
-        Get nearest waste node to given step. 
+        Get nearest waste node to given step.
         """
         nearest_node = None
         if type(step) in [Add, WashSolid, CleanVessel, Dry]:
             nearest_node = step.vessel
-                
+
         elif type(step) in [
             Filter,
             AddFilterDeadVolume,
@@ -376,7 +376,7 @@ class XDLExecutor(object):
 
         elif type(step) == Evaporate:
             nearest_node = step.rotavap_name
-            
+
         if not nearest_node:
             return None
         else:
@@ -393,12 +393,12 @@ class XDLExecutor(object):
         if self._xdl.auto_clean:
             self._add_implied_clean_vessel_steps()
             self._add_implied_clean_backbone_steps(interactive=interactive)
-        
+
     def _add_implied_clean_backbone_steps(
         self, interactive: bool = True) -> None:
-        """Add CleanBackbone steps after certain steps which will contaminate 
-        the backbone. 
-        Takes into account when organic and aqueous reagents have been used to 
+        """Add CleanBackbone steps after certain steps which will contaminate
+        the backbone.
+        Takes into account when organic and aqueous reagents have been used to
         determine what solvents to clean the backbone with.
         """
         add_cleaning_steps(self._xdl)
@@ -456,7 +456,7 @@ class XDLExecutor(object):
         self) -> List[Tuple[int, str, Dict[str, VesselContents]]]:
         """Get steps at which a filter vessel is emptied. Also return full
         list of vessel contents dict at every step.
-        
+
         Returns:
             List[Tuple[int, str, Dict[str, VesselContents]]]: List of tuples,
                 format: [(step_index, filter_vessel_name, {vessel: VesselContents, ...},...]
@@ -468,7 +468,7 @@ class XDLExecutor(object):
             self._xdl.steps, self._graph_hardware):
             full_vessel_contents.append(vessel_contents)
             for vessel, contents in vessel_contents.items():
-                if (self._graph_hardware[vessel].type 
+                if (self._graph_hardware[vessel].type
                     == CHEMPUTER_FILTER_CLASS_NAME
                     and vessel in prev_vessel_contents):
                     # If filter vessel has just been emptied, append to filters.
@@ -476,16 +476,16 @@ class XDLExecutor(object):
                         and prev_vessel_contents[vessel].reagents):
                         filter_emptying_steps.append(
                             (i, vessel, full_vessel_contents))
-                        
+
             prev_vessel_contents = vessel_contents
         return filter_emptying_steps
 
     def _get_filter_dead_volume(self, filter_vessel: str) -> float:
         """Return dead volume (volume below filter) of given filter vessel.
-        
+
         Args:
             filter_vessel (str): ID of filter vessel.
-        
+
         Returns:
             float: Dead volume of given filter vessel.
         """
@@ -496,8 +496,8 @@ class XDLExecutor(object):
 
     def _add_implied_add_dead_volume_steps(self) -> None:
         """
-        Add PrepareFilter steps if filter top is being used, to fill up the 
-        bottom of the filter with solvent, so material added to the top doesn't 
+        Add PrepareFilter steps if filter top is being used, to fill up the
+        bottom of the filter with solvent, so material added to the top doesn't
         drip through.
 
         Raises:
@@ -514,7 +514,7 @@ class XDLExecutor(object):
 
             # Find point at which first reagent is added to filter vessel.
             # This is the point at which to insert the PrepareFilter step.
-            while (j > 0 
+            while (j > 0
                    and filter_vessel in full_vessel_contents[j-1]
                    and full_vessel_contents[j-1][filter_vessel].reagents):
                 j -= 1
@@ -523,7 +523,7 @@ class XDLExecutor(object):
 
             # Insert AddFilterDeadVolume step into self._xdl.steps.
             self._xdl.steps.insert(j, AddFilterDeadVolume(
-                filter_vessel=filter_vessel, solvent=solvent, 
+                filter_vessel=filter_vessel, solvent=solvent,
                 volume=self._get_filter_dead_volume(filter_vessel)))
 
     def _add_implied_remove_dead_volume_steps(self) -> None:
@@ -534,11 +534,11 @@ class XDLExecutor(object):
         # just before them.
         for i, vessel, _ in reversed(self._get_filter_emptying_steps()):
             # Only move to waste after Filter step. For any other step should
-            # become part of the reaction mixture. 
+            # become part of the reaction mixture.
             if self._xdl.steps[i].name == 'Filter':
                 self._xdl.steps.insert(i,
                     RemoveFilterDeadVolume(
-                        filter_vessel=vessel, 
+                        filter_vessel=vessel,
                         dead_volume=self._get_filter_dead_volume(vessel)))
 
     def _add_filter_inert_gas_connect_steps(self) -> None:
@@ -600,7 +600,7 @@ class XDLExecutor(object):
         Args:
             steps (List[List[Step]]): List of steps to add temperatures to
                 CleanVessel steps
-        
+
         Returns:
             List[List[Step]]: List of steps with temperatures added to CleanVessel
                 steps.
@@ -671,7 +671,7 @@ class XDLExecutor(object):
 
         Returns:
             List[str]: List of vessels being stirred after step.
-        """            
+        """
         if type(step) == CStir:
             stirring.append(step.vessel)
         elif type(step) == CStopStir:
@@ -696,12 +696,12 @@ class XDLExecutor(object):
         stirring_schedule = []
         stirred_vessels = []
         insertions = []
-        
+
         # Find stirring state after every step.
         for i, step in enumerate(self._xdl.steps):
             stirred_vessels = self.find_stirring_schedule(step, stirred_vessels)
             stirring_schedule.append(stirred_vessels)
-            
+
         # Look for vessels out of scope that need stirring stopped
         for i, step, vessel_contents in iter_vessel_contents(
             self._xdl.steps, self._graph_hardware):
@@ -733,7 +733,7 @@ class XDLExecutor(object):
 
     def _set_all_waits_to_one(self, step: Step) -> None:
         """Recursive function setting all nested Wait step times to 1 second.
-        
+
         Args:
             step (Step): step to set all nested Wait step times to 1 second.
         """
@@ -742,14 +742,14 @@ class XDLExecutor(object):
                 step.time = 1
             elif step.steps:
                 self._set_all_waits_to_one(step)
-            
+
     def _remove_pointless_backbone_cleaning(self) -> None:
         """Remove pointless CleanBackbone steps.
-        
+
         Rules are:
 
         1) No point cleaning between Filter and Dry steps.
-        2) No point cleaning between consecutive additions of the same 
+        2) No point cleaning between consecutive additions of the same
                reagent.
         """
         i = len(self._xdl.steps) - 1
@@ -783,7 +783,7 @@ class XDLExecutor(object):
         """
         Prepare the XDL for execution on a Chemputer corresponding to the given
         graph. Any one of graphml_file, json_data, or json_file must be given.
-        
+
         Args:
             graph_file (str, optional): Path to graph file. May be GraphML file,
                                         JSON file with graph in node link format,
@@ -813,7 +813,7 @@ class XDLExecutor(object):
                     self._check_all_flasks_present()
 
                     # Map graph hardware to steps.
-                    # _map_hardware_to_steps is called twice so that 
+                    # _map_hardware_to_steps is called twice so that
                     # _xdl.iter_vessel_contents has all vessels to play with
                     # during _add_implied_steps.
                     self._get_hardware_map()
@@ -833,7 +833,7 @@ class XDLExecutor(object):
 
                     self._print_warnings()
                     self._prepared_for_execution = True
-                
+
                 else:
                     self.logger.error(
                         "Hardware is not compatible. Can't execute.")
@@ -864,7 +864,7 @@ class XDLExecutor(object):
         else:
             self.logger.error(
                 'Not prepared for execution. Prepare by calling xdlexecutor.prepare_for_execution with your graph.')
-                
+
 
 def should_remove_clean_backbone_step(
     before_step: Step, after_step: Step) -> bool:
@@ -873,9 +873,9 @@ def should_remove_clean_backbone_step(
     Args:
         before_step (Step): Step object of first step of pair.
         after_step (Step): Step object of second step of pair.
-    
+
     Returns:
-        bool: True if backbone cleaning is pointless between given two steps, 
+        bool: True if backbone cleaning is pointless between given two steps,
             otherwise False.
     """
     # Don't clean between filter and subsequent dry.

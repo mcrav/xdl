@@ -33,7 +33,7 @@ from ...localisation import HUMAN_READABLE_STEPS
 class StartHeatChill(AbstractStep):
     """Start heating/chilling vessel to given temp and leave heater/chiller on.
     Don't wait to reach temp.
-    
+
     Args:
         vessel (str): Vessel to heat/chill.
         temp (float): Temperature to heat/chill to in degrees C.
@@ -67,7 +67,7 @@ class StartHeatChill(AbstractStep):
                 CRotavapStartHeater(rotavap_name=self.vessel),
             ]
         return steps
-    
+
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {
@@ -79,7 +79,7 @@ class StartHeatChill(AbstractStep):
 
 class HeatChillToTemp(AbstractStep):
     """Heat/Chill vessel to given temp and leave heater/chiller on.
-    
+
     Args:
         vessel (str): Vessel to heat/chill.
         temp (float): Temperature to heat/chill to in degrees C.
@@ -134,7 +134,7 @@ class HeatChillToTemp(AbstractStep):
             steps.insert(0, StopStir(
                 vessel=self.vessel, vessel_type=self.vessel_type))
         return steps
-    
+
     def human_readable(self, language='en') -> str:
         try:
             if self.stir:
@@ -158,7 +158,7 @@ class HeatChillToTemp(AbstractStep):
 
 class StopHeatChill(AbstractStep):
     """Stop heater/chiller on given vessel..
-    
+
     Args:
         vessel (str): Name of vessel attached to heater/chiller..
         vessel_type (str): Given internally. Used to know whether to use
@@ -168,7 +168,7 @@ class StopHeatChill(AbstractStep):
     def __init__(
         self, vessel: str, vessel_type: Optional[str] = None, **kwargs) -> None:
         super().__init__(locals())
-    
+
     def get_steps(self) -> List[Step]:
         steps = []
         if self.vessel_type == 'filter':
@@ -193,7 +193,7 @@ class StopHeatChill(AbstractStep):
 class HeatChillReturnToRT(AbstractStep):
     """Let heater/chiller return to room temperatre and then stop
     heating/chilling.
-    
+
     Args:
         vessel (str): Vessel to attached to heater/chiller to return to room
             temperature.
@@ -213,7 +213,7 @@ class HeatChillReturnToRT(AbstractStep):
         after_recording_speed: Optional[float] = 'default',
         **kwargs) -> None:
         super().__init__(locals())
-            
+
     def get_steps(self) -> List[Step]:
         steps = []
         if self.vessel_type == 'filter':

@@ -6,7 +6,7 @@ from ..steps import Add, Step
 from ..constants import DEFAULT_VALS, INTERNAL_PROPERTIES, XDL_VERSION
 from ..utils.misc import format_property
 
-class XDLGenerator(object):   
+class XDLGenerator(object):
     """
     Class for generating XDL from lists of hardware, reagents and steps.
     """
@@ -20,7 +20,7 @@ class XDLGenerator(object):
     ) -> None:
         """
         Generate XDL from steps, hardware and reagents.
-        
+
         Args:
             steps (List[xdl.steps.Step]): List of Step objects
             hardware (xdl.hardware.Hardware): Hardware object.
@@ -84,7 +84,7 @@ class XDLGenerator(object):
                             and prop in DEFAULT_VALS[step.name]
                             and DEFAULT_VALS[step.name][prop] == val):
                             continue
-                        
+
                         # Don't write internal properties.
                         if (step.name in INTERNAL_PROPERTIES
                             and prop in INTERNAL_PROPERTIES[step.name]):
@@ -107,7 +107,7 @@ class XDLGenerator(object):
 
 def get_xdl_string(xdltree: etree._ElementTree) -> str:
     """Convert XDL etree to pretty XML string.
-    
+
     Args:
         xdltree (etree.ElementTree): etree of XDL
 

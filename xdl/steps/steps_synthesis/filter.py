@@ -109,4 +109,4 @@ class Filter(AbstractStep):
                 'filter': True
             }
         }
-        
+

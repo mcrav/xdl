@@ -3,7 +3,7 @@ xdl.utils
 =========
 
 .. toctree::
-    
+
    errors
    misc
    namespace

@@ -172,7 +172,7 @@ class CRotavapAutoEvaporation(AbstractBaseStep):
         vent_after: Optional[bool] = True
     ):
         super().__init__(locals())
-    
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.auto_evaporation(
             node_name=self.rotavap_name,

@@ -13,10 +13,10 @@ from ..utils.namespace import (STEP_OBJ_DICT, BASE_STEP_OBJ_DICT)
 
 def xdl_file_to_objs(xdl_file: str, logger: logging.Logger) -> Dict[str, Any]:
     """Given XDL file return steps, hardware and reagents.
-    
+
     Arguments:
         xdl_file (str): Path to XDL file.
-    
+
     Returns:
         Dict: (steps, hardware, reagents)
                   steps: List of Step objects.
@@ -28,10 +28,10 @@ def xdl_file_to_objs(xdl_file: str, logger: logging.Logger) -> Dict[str, Any]:
 
 def xdl_str_to_objs(xdl_str: str, logger: logging.Logger) -> Dict[str, Any]:
     """Given XDL str return steps, hardware and reagents.
-    
+
     Arguments:
         xdl_str (str): XDL str.
-    
+
     Returns:
         Tuple: (steps, hardware, reagents)
                   steps: List of Step objects.
@@ -68,7 +68,7 @@ def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
     """
     raw_attr = etree.fromstring(xdl_str).attrib
     processed_attr = {}
-    for attr in SYNTHESIS_ATTRS: 
+    for attr in SYNTHESIS_ATTRS:
         if attr['name'] in raw_attr:
            processed_attr[attr['name']] = raw_attr[attr['name']]
            if attr['type'] == bool:
@@ -77,10 +77,10 @@ def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
 
 def steps_from_xdl(xdl_str: str) -> List[Step]:
     """Given XDL str return list of Step objects.
-    
+
     Arguments:
         xdl_str (str): XDL str.
-    
+
     Returns:
         List[Step]: List of Step objects corresponding to procedure described
                       in xdl_str.
@@ -95,10 +95,10 @@ def steps_from_xdl(xdl_str: str) -> List[Step]:
 
 def hardware_from_xdl(xdl_str: str) -> Hardware:
     """Given XDL str return Hardware object.
-    
+
     Arguments:
         xdl_str (str): XDL str.
-    
+
     Returns:
         Hardware: Hardware object containing all Component objects described
                     by XDL.
@@ -107,12 +107,12 @@ def hardware_from_xdl(xdl_str: str) -> Hardware:
 
 def components_from_xdl(xdl_str: str) -> List[Component]:
     """Given XDL str return list of Component objects.
-    
+
     Arguments:
         xdl_str (str): XDL str.
-    
+
     Returns:
-        List[Component]: List of Component objects corresponding to 
+        List[Component]: List of Component objects corresponding to
                            components described in xdl_str.
     """
     components = []
@@ -125,10 +125,10 @@ def components_from_xdl(xdl_str: str) -> List[Component]:
 
 def reagents_from_xdl(xdl_str: str) -> List[Reagent]:
     """Given XDL str return list of Reagent objects.
-    
+
     Arguments:
         xdl_str (str): XDL str.
-    
+
     Returns:
         List[Reagent]: List of Reagent objects corresponding to reagents
                          described in xdl_str.
@@ -139,11 +139,11 @@ def reagents_from_xdl(xdl_str: str) -> List[Reagent]:
         if element.tag == 'Reagents':
             for reagent_xdl in element.findall('*'):
                 reagents.append(xdl_to_reagent(reagent_xdl))
-    return reagents 
+    return reagents
 
 def xdl_to_step(xdl_step_element: etree._Element) -> Step:
     """Given XDL step element return corresponding Step object.
-    
+
     Arguments:
        xdl_step_element (lxml.etree._Element): XDL step lxml element.
 
@@ -169,13 +169,13 @@ def xdl_to_step(xdl_step_element: etree._Element) -> Step:
 
 def xdl_to_component(xdl_component_element: etree._Element) -> Component:
     """Given XDL component element return corresponding Component object.
-    
+
     Arguments:
-       xdl_component_element (lxml.etree._Element): XDL component lxml 
+       xdl_component_element (lxml.etree._Element): XDL component lxml
                                                       element.
 
     Returns:
-        Component: Component object corresponding to component in 
+        Component: Component object corresponding to component in
                      xdl_component_element.
     """
     attrs = dict(xdl_component_element.attrib)
@@ -205,12 +205,12 @@ def xdl_to_component(xdl_component_element: etree._Element) -> Component:
 
 def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
     """Given XDL reagent element return corresponding Reagent object.
-    
+
     Arguments:
         xdl_reagent_element (lxml.etree._Element): XDL reagent lxml element.
-        
+
     Returns:
-        Reagent: Reagent object corresponding to reagent in 
+        Reagent: Reagent object corresponding to reagent in
                    xdl_reagent_element.
     """
     # Check attrs are valid for Reagent

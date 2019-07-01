@@ -106,7 +106,7 @@ class CMove(AbstractBaseStep):
 
 class CConnect(AbstractBaseStep):
     """Connect two nodes together.
-    
+
     Args:
         from_vessel (str): Node name to connect from.
         to_vessel (str): Node name to connect to.
@@ -123,7 +123,7 @@ class CConnect(AbstractBaseStep):
         unique: Optional[bool] = True
     ) -> None:
         super().__init__(locals())
-        
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.connect(
             src_node=self.from_vessel,

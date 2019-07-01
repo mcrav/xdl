@@ -15,7 +15,7 @@ from ...constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
 
 class SetStirRate(AbstractStep):
     """Set stir rate. Works on rotavap, reactor or filter.
-    
+
     Args:
         vessel (str): Vessel to set stir rate for.
         stir_speed (float): Stir rate in RPM
@@ -48,7 +48,7 @@ class StartStir(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
-        
+
     def get_steps(self) -> List[Step]:
         if self.vessel_type == 'rotavap':
             #  Limit RPM if high one meant for stirrer passed in by accident.
@@ -74,7 +74,7 @@ class StartStir(AbstractStep):
 
 class StopStir(AbstractStep):
     """Stop stirring given vessel.
-    
+
     Args:
         vessel (str): Vessel name to stop stirring.
         vessel_has_stirrer (bool): True if vessel has stirrer, otherwise False.
@@ -142,4 +142,4 @@ class Stir(AbstractStep):
                 'stir': True,
             }
         }
- 
+

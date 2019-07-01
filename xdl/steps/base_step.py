@@ -14,7 +14,7 @@ from ..utils import XDLBase
 
 class Step(XDLBase):
     """Base class for all step objects.
-    
+
     Attributes:
         properties (dict): Dictionary of step properties. Should be implemented
             in step __init__.
@@ -44,12 +44,12 @@ class Step(XDLBase):
         else:
             human_readable = self.name
         return human_readable
-        
+
 class AbstractStep(Step, ABC):
     """Abstract base class for all steps that contain other steps.
     Subclasses must implement steps and human_readable, and can also override
     requirements if necessary.
-    
+
     Attributes:
         properties (dict): Dictionary of step properties.
         steps (list): List of Step objects.
@@ -58,7 +58,7 @@ class AbstractStep(Step, ABC):
     def __init__(self, param_dict):
         super().__init__(param_dict)
         self.steps = self.get_steps()
-        
+
     @abstractmethod
     def get_steps(self):
         return []
@@ -75,7 +75,7 @@ class AbstractStep(Step, ABC):
     ) -> bool:
         """
         Execute self with given Chempiler object.
-        
+
         Args:
             chempiler (chempiler.Chempiler): Initialised Chempiler object.
             logger (logging.Logger): Logger to handle output step output.
@@ -109,7 +109,7 @@ class AbstractStep(Step, ABC):
 class AbstractBaseStep(Step, ABC):
     """Abstract base class for all steps that do not contain other steps and
     instead have an execute method that takes a chempiler object.
-    
+
     Subclasses must implement execute.
     """
     def __init__(self, param_dict):

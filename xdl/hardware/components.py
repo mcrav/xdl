@@ -7,7 +7,7 @@ from .constants import (
     FLASK_TYPES,
     WASTE_TYPES,
 )
-from ..utils.xdl_base import XDLBase 
+from ..utils.xdl_base import XDLBase
 from ..constants import *
 
 class Component(XDLBase):
@@ -42,7 +42,7 @@ class Hardware(object):
         for component in self.components:
             if component.component_type in REACTOR_TYPES:
                 self.reactors.append(component)
-            elif component.component_type in SEPARATOR_TYPES: 
+            elif component.component_type in SEPARATOR_TYPES:
                 self.separators.append(component)
             elif component.component_type in FILTER_TYPES:
                 self.filters.append(component)
@@ -65,4 +65,4 @@ class Hardware(object):
 
     def __iter__(self) -> Generator[Component, None, None]:
         for item in self.components:
-            yield item 
+            yield item

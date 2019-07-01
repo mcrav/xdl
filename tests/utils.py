@@ -9,9 +9,9 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 def generic_chempiler_test(xdl_file: str, graph_file: str) -> None:
     """Given XDL file and graph file, try and execute Chempiler simulation
     of XDL.
-    
+
     Args:
-        xdl_file (str): Path to XDL file. 
+        xdl_file (str): Path to XDL file.
         graph_file (str): Path to graph file.
     """
     x = XDL(xdl_file)
@@ -25,12 +25,12 @@ def generic_chempiler_test(xdl_file: str, graph_file: str) -> None:
         graph_file=graph_file,
         device_modules=[ChemputerAPI])
     x.execute(chempiler)
-    
+
 def remove_confirm_steps(step: Step) -> None:
     """Recursively remove Confirm steps from given step, going all the way down
     step tree. This needs to be done as you can't ask for input during an
     automated test.
-    
+
     Args:
         step (Step): Step to remove Confirm steps from.
     """

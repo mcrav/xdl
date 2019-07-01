@@ -40,11 +40,11 @@ class XDL(object):
     ) -> None:
         """Init method for XDL object.
         One of xdl or (steps, hardware and reagents) must be given.
-        
+
         Args:
             xdl(str, optional): Path to XDL file or XDL str.
             steps (List[Step], optional): List of Step objects.
-            hardware (Hardware, optional): Hardware object containing all 
+            hardware (Hardware, optional): Hardware object containing all
                 components in XDL.
             reagents (List[Reagent], optional): List of Reagent objects.
 
@@ -56,10 +56,10 @@ class XDL(object):
             self.logger = logging.getLogger('xdl_logger')
             if not self.logger.hasHandlers():
                 self.logger = initialise_logger(self.logger)
-                
+
         self._xdl_file = None
         self.auto_clean = DEFAULT_AUTO_CLEAN
-        self.organic_cleaning_solvent = None 
+        self.organic_cleaning_solvent = None
         self.aqueous_cleaning_solvent = DEFAULT_AQUEOUS_CLEANING_SOLVENT
         self.dry_run = False
         self.filter_dead_volume_method = 'inert_gas'
@@ -85,10 +85,10 @@ class XDL(object):
                 for k, v in parsed_xdl['procedure_attrs'].items():
                     setattr(self, k, v)
                 self.executor = XDLExecutor(self)
-            
+
             else:
                 self.logger.info('Invalid XDL given.')
-                
+
         elif (steps is not None
               and reagents is not None
               and hardware is not None):
@@ -110,17 +110,17 @@ class XDL(object):
         """Go through given step's sub steps recursively until base steps are
         reached. Return list containing the step, all sub steps and all base
         steps.
-        
+
         Args:
             step (Step): step to find all sub steps for.
             print_tree (bool, optional): Defaults to False.
                 Print tree as well as returning it.
-            lvl (int, optional): Level of recursion. Defaults to 0. 
+            lvl (int, optional): Level of recursion. Defaults to 0.
                 Used to determine indent level when print_tree=True.
-        
+
         Returns:
-            List[Step]: List of all Steps involved with given step. 
-                        Includes given step, and all sub steps all the way down to 
+            List[Step]: List of all Steps involved with given step.
+                        Includes given step, and all sub steps all the way down to
                         base steps.
         """
         indent = '  '
@@ -146,7 +146,7 @@ class XDL(object):
     def _get_full_xdl_tree(self) -> List[Step]:
         """
         Return list of all steps after unpacking nested steps.
-        Root steps are included followed by all their children in order, 
+        Root steps are included followed by all their children in order,
         recursively.
 
         Returns:
@@ -163,10 +163,10 @@ class XDL(object):
         for step in self.steps:
             self.climb_down_tree(step, print_tree=True)
         self.logger.info('\n')
-            
+
     def human_readable(self, language='en') -> str:
         """Return human-readable English description of XDL procedure.
-        
+
         Arguments:
             language (str): Language code corresponding to language that should
                 be used. If language code not supported error message will be
@@ -187,11 +187,11 @@ class XDL(object):
     def get_available_languages(self) -> List[str]:
         """Get languages for which every step in human readable can output
         human_readable text in that language.
-        
+
         Returns:
             List[str]: List of language codes, e.g. ['en', 'zh']
         """
-        available_languages = [] 
+        available_languages = []
         for _, human_readables in HUMAN_READABLE_STEPS.items():
             for language in human_readables:
                 if language not in available_languages:
@@ -218,7 +218,7 @@ class XDL(object):
 
     def save(self, save_file: str, full_properties: bool = False) -> str:
         """Save as XDL file.
-        
+
         Args:
             save_file (str): File path to save XDL to.
             full_properties (bool): If True, all properties will be included.
@@ -251,7 +251,7 @@ class XDL(object):
     def estimated_duration(self) -> float:
         """Estimated duration of procedure. It is approximate but should give a
         give a rough idea how long the procedure should take.
-        
+
         Returns:
             float: Estimated runtime of procedure in seconds.
         """
@@ -286,7 +286,7 @@ class XDL(object):
                 time += step.time_limit
             elif type(step) == CRampChiller:
                 time += step.ramp_duration
-            # EXTREMELY APPROXIMATE. Don't know what temp is in base steps or 
+            # EXTREMELY APPROXIMATE. Don't know what temp is in base steps or
             elif type(step) in [CChillerWaitForTemp, CStirrerWaitForTemp]:
                 if step.vessel in temps:
                     abs_delta = abs(
@@ -414,9 +414,9 @@ class XDL(object):
 
     def prepare_for_execution(
         self, graph_file: str, interactive: bool = True) -> None:
-        """Check hardware compatibility and prepare XDL for execution on given 
+        """Check hardware compatibility and prepare XDL for execution on given
         setup.
-        
+
         Args:
             graph_file (str, optional): Path to graph file. May be GraphML file,
                                         JSON file with graph in node link format,
@@ -429,14 +429,14 @@ class XDL(object):
             self.logger.info('    Experiment Details\n')
             self.print_reagent_volumes()
             self.print_estimated_duration()
-            
+
         else:
             self.logger.warning('Cannot call prepare for execution twice on same XDL object.')
 
     def execute(self, chempiler: 'Chempiler') -> None:
         """Execute XDL using given Chempiler object. self.prepare_for_execution
         must have been called before calling thie method.
-        
+
         Args:
             chempiler (chempiler.Chempiler): Chempiler object instantiated with
                 modules and graph to run XDL on.

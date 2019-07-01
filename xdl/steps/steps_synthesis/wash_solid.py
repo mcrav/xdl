@@ -64,7 +64,7 @@ class WashSolid(AbstractStep):
         volume: Optional[float] = 'default',
         temp: Optional[float] = None,
         vacuum_time: Optional[float] = 'default',
-        stir: Optional[Union[bool, str]] = 'default', 
+        stir: Optional[Union[bool, str]] = 'default',
         stir_time: Optional[float] = 'default',
         stir_speed: Optional[float] =  'default',
         waste_vessel: Optional[str] = None,
@@ -112,7 +112,7 @@ class WashSolid(AbstractStep):
             steps.extend([
                 # Add solvent
                 Add(reagent=self.solvent, volume=self.volume,
-                    vessel=self.vessel, port=TOP_PORT, 
+                    vessel=self.vessel, port=TOP_PORT,
                     waste_vessel=self.waste_vessel,
                     stir=self.stir == True,
                     stir_speed=self.stir_speed),
@@ -172,7 +172,7 @@ class WashSolid(AbstractStep):
                 steps.insert(
                     0, HeatChillToTemp(vessel=self.vessel, temp=self.temp))
                 steps.append(StopHeatChill(vessel=self.vessel))
-            
+
         return steps
 
     def human_readable(self, language='en'):

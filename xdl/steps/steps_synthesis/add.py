@@ -34,7 +34,7 @@ class Add(AbstractStep):
         stir_speed (float): RPM to stir at, only relevant if stir = True.
         reagent_vessel (str): Given internally. Vessel containing reagent.
         waste_vessel (str): Given internally. Vessel to send waste to.
-        flush_tube_vessel (str): Given internally. Air/nitrogen vessel to use to 
+        flush_tube_vessel (str): Given internally. Air/nitrogen vessel to use to
             flush liquid out of the valve -> vessel tube.
     """
     def __init__(
@@ -50,7 +50,7 @@ class Add(AbstractStep):
         time: Optional[float] = None,
         stir: Optional[bool] = False,
         stir_speed: Optional[float] = 'default',
-        reagent_vessel: Optional[str] = None, 
+        reagent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
         flush_tube_vessel: Optional[str] = None,
         vessel_type: Optional[str] = None,
@@ -81,7 +81,7 @@ class Add(AbstractStep):
                     waste_vessel=self.waste_vessel),
                 CMove(
                     from_vessel=self.reagent_vessel,
-                    to_vessel=self.vessel, 
+                    to_vessel=self.vessel,
                     to_port=port,
                     volume=self.volume,
                     move_speed=self.move_speed,
@@ -128,7 +128,7 @@ class Add(AbstractStep):
 
     def get_port(self) -> str:
         """If self.port is None, return default port for different vessel types.
-        
+
         Returns:
             str: Vessel port to add to.
         """

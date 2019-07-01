@@ -25,7 +25,7 @@ class AddCorrosive(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
-        
+
     def get_steps(self) -> List[Step]:
         steps = [
             Transfer(
