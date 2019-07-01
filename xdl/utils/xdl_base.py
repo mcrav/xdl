@@ -20,7 +20,7 @@ class XDLBase(object):
 
     def load_properties(self, properties: Dict[str, Any]) -> None:
         """Load dict of properties.
-        
+
         Arguments:
             properties (dict): dict of property names and values.
         """
@@ -39,7 +39,7 @@ class XDLBase(object):
         for k in self.properties:
             if self.properties[k] == 'default':
                 self.properties[k] = DEFAULT_VALS[self.name][k]
-        
+
     def set_property(self, property: str, value: Any) -> None:
         self.__setattr__(property, value)
 

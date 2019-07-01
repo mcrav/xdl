@@ -12,7 +12,7 @@ from ..hardware import Component
 class GraphGenerator(object):
     """Class to generate a basic graph from a XDL object that should be
     sufficient for passing to xdl.prepare_for_execution.
-    
+
     Args:
         xdl (XDL): XDL object to generate graph from.
     """
@@ -45,7 +45,7 @@ class GraphGenerator(object):
         elif (xdl.filter_dead_volume_method == 'solvent'
               and xdl.filter_dead_volume_solvent):
             self._reagents.append(xdl.filter_dead_volume_solvent)
-            
+
         if xdl.organic_cleaning_solvent not in self._reagents:
             self._reagents.append(xdl.organic_cleaning_solvent)
         # ID number incremented by 1 for every node/edge added in
@@ -78,7 +78,7 @@ class GraphGenerator(object):
         """Generate the graph, and save it if save_path is specified. This
         method is destructive and can only be called once per GraphGenerator
         object.
-        
+
         Args:
             save_path (str): Optional. Path to save node link JSON graph to.
         """
@@ -101,7 +101,7 @@ class GraphGenerator(object):
             self._nodes.append(pump)
             self._add_edge(valve, pump, -1, 0, both_ways=True)
             valve_connections += 1
-            
+
             # Add special component, i.e. 'filter', 'separator
             if len(self._components) > 0:
                 component = self._get_component(self._components.pop(), backbone_i)
@@ -119,7 +119,7 @@ class GraphGenerator(object):
                     self._add_edge(valve, component, 1, 'evaporate')
                     self._add_edge(component, valve, 'collect', 2)
                     valve_connections += 2
-                
+
             # Add connection to previous valve in backbone.
             if backbone_i > 0:
                 self._add_edge(
@@ -167,12 +167,12 @@ class GraphGenerator(object):
         self, component: Component, backbone_i: int) -> Dict[str, Any]:
         """Given Component object, return dict ready to save as node in JSON
         graph file.
-        
+
         Args:
             component (Component): Component to convert to node dict.
             backbone_i (int): Position of valve component is attached to in
                 backbone. i.e. first valve, backbone_i == 0.
-        
+
         Returns:
             Dict[str, Any]: Node dict ready for saving in node list in JSON
                 graph file.
@@ -226,12 +226,12 @@ class GraphGenerator(object):
 
     def _get_valve(self, id: str, backbone_i: int) -> Dict[str, Any]:
         """Given id and backbone position, return node dict for valve.
-        
+
         Args:
             id (str): Name of valve i.e. 'valve1'.
             backbone_i (int): Position in backbone, i.e. for the first valve
                 backbone_i == 0.
-        
+
         Returns:
             Dict[str, Any]: Node dict ready for saving in node list in JSON
                 graph file.
@@ -253,12 +253,12 @@ class GraphGenerator(object):
 
     def _get_waste(self, id: str, backbone_i: int) -> Dict[str, Any]:
         """Given id and backbone position, return node dict for waste.
-        
+
         Args:
             id (str): Name of waste i.e. 'waste1'.
             backbone_i (int): Position of attached valve in backbone, i.e. for
                 the first valve backbone_i == 0.
-        
+
         Returns:
             Dict[str, Any]: Node dict ready for saving in node list in JSON
                 graph file.
@@ -280,12 +280,12 @@ class GraphGenerator(object):
 
     def _get_pump(self, id: str, backbone_i: int) -> Dict[str, Any]:
         """Given id and backbone position, return node dict for pump.
-        
+
         Args:
             id (str): Name of pump i.e. 'pump1'.
             backbone_i (int): Position of attached valve in backbone, i.e. for
                 the first valve backbone_i == 0.
-        
+
         Returns:
             Dict[str, Any]: Node dict ready for saving in node list in JSON
                 graph file.
@@ -313,12 +313,12 @@ class GraphGenerator(object):
         flask_i: int
     ) -> Dict[str, Any]:
         """Given id and backbone position, return node dict for flask.
-        
+
         Args:
             id (str): Name of flask i.e. 'flask1'.
             backbone_i (int): Position of attached valve in backbone, i.e. for
                 the first valve backbone_i == 0.
-        
+
         Returns:
             Dict[str, Any]: Node dict ready for saving in node list in JSON
                 graph file.
@@ -354,7 +354,7 @@ class GraphGenerator(object):
     ) -> None:
         """Add edge to self._edges between from_node (from_port) and to_node
         (to_port). Add reverse edge as well if both_ways is True.
-        
+
         Args:
             from_node (Dict[str, Any]): Node dict for source node.
             to_node (Dict[str, Any]): Node dict for target node.
@@ -389,11 +389,11 @@ class GraphGenerator(object):
 
     def _get_valve_position(self, backbone_i: int) -> Tuple[int, int]:
         """Get position of valve based on backbone position.
-        
+
         Args:
             backbone_i (int): Index of valve in backbone, i.e. first valve
                 backbone_i == 0.
-        
+
         Returns:
             Tuple[int, int]: (x, y) position of valve.
         """
@@ -401,11 +401,11 @@ class GraphGenerator(object):
 
     def _get_pump_position(self, backbone_i: int) -> Tuple[int, int]:
         """Get position of pump based on backbone position.
-        
+
         Args:
             backbone_i (int): Index of attached valve in backbone, i.e.
                 first valve backbone_i == 0.
-        
+
         Returns:
             Tuple[int, int]: (x, y) position of pump.
         """
@@ -415,11 +415,11 @@ class GraphGenerator(object):
 
     def _get_waste_position(self, backbone_i: int) -> Tuple[int, int]:
         """Get position of waste based on backbone position.
-        
+
         Args:
             backbone_i (int): Index of attached valve in backbone, i.e.
                 first valve backbone_i == 0.
-        
+
         Returns:
             Tuple[int, int]: (x, y) position of waste.
         """
@@ -431,11 +431,11 @@ class GraphGenerator(object):
     def _get_component_position(self, backbone_i: int) -> Tuple[int, int]:
         """Get position of component (filter, reactor, separator or rotavap)
         based on backbone position.
-        
+
         Args:
             backbone_i (int): Index of attached valve in backbone, i.e.
                 first valve backbone_i == 0.
-        
+
         Returns:
             Tuple[int, int]: (x, y) position of component.
         """
@@ -447,7 +447,7 @@ class GraphGenerator(object):
         self, backbone_i: int, flask_i: int) -> Tuple[int, int]:
         """Get position of flask based on backbone position and number of flasks
         already attached to valve.
-        
+
         Args:
             backbone_i (int): Index of attached valve in backbone, i.e.
                 first valve backbone_i == 0.
@@ -457,7 +457,7 @@ class GraphGenerator(object):
                 throw an error as only 4 flask positions are specified. This
                 should be fine as you'll never be able to attach more than 4
                 flasks to a valve if it also has pump/valve/waste connections.
-        
+
         Returns:
             Tuple[int, int]: (x, y) position of waste.
         """
@@ -474,7 +474,7 @@ class GraphGenerator(object):
     def _get_internal_id(self) -> None:
         """Increment self._internal_id by 1 and return it. Internal ID is
         a unique ID used by ChemputerApp for nodes/edges.
-        
+
         Returns:
             int: Unique ID to use for internalId attribute of nodes/edges.
         """
@@ -484,10 +484,10 @@ class GraphGenerator(object):
     def save(self, save_path: str) -> None:
         """Save JSON node link graph to save_path. Must be called after
         generate_graph.
-        
+
         Args:
             save_path (str): Path to save graph JSON file to.
         """
         with open(save_path, 'w') as fileobj:
             json.dump(self.graph, fileobj)
-            
+

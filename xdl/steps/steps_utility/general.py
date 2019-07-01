@@ -26,4 +26,4 @@ class Wait(AbstractStep):
             CWait(self.time),
             CSetRecordingSpeed(self.after_recording_speed),
         ]
-        
+

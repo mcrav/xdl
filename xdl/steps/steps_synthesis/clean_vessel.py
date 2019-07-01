@@ -21,7 +21,7 @@ class CleanVessel(AbstractStep):
         **kwargs
     ) -> None:
         """Clean given vessel with given solvent.
-        
+
         Args:
             vessel (str): Vessel to clean.
             solvent (str): Solvent to clean vessel with.

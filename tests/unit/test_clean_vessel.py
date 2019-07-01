@@ -38,7 +38,7 @@ CLEAN_VESSEL_TESTS = [
 ]
 
 def test_clean_vessel_scheduling():
-    """Test that all CleanVessel steps are added at correct places, i.e. 
+    """Test that all CleanVessel steps are added at correct places, i.e.
     ...Dissolve, emptying_step, CleanVessel,..."""
     for (xdl_f, graph_f, n_clean_vessels, clean_vessel_solvents,
          clean_vessel_temps) in CLEAN_VESSEL_TESTS:
@@ -48,7 +48,7 @@ def test_clean_vessel_scheduling():
         # Check right number of steps with right vessel/solvent have been added.
         clean_vessel_steps = [
             step for step in x.steps if type(step) == CleanVessel]
-        assert len(clean_vessel_steps) == n_clean_vessels 
+        assert len(clean_vessel_steps) == n_clean_vessels
         for i in reversed(range(len(clean_vessel_steps))):
             assert(clean_vessel_steps[i].solvent.lower()
                    == clean_vessel_solvents.pop().lower())

@@ -11,7 +11,7 @@ def load_human_readable_steps():
 
     current_step = None
     for i in range(len(lines)):
-        
+
         if lines[i].startswith('en'):
             current_step = lines[i-1]
             human_readable_steps[current_step] = {}

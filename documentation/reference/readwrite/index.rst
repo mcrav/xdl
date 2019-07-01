@@ -4,7 +4,7 @@ xdl.readwrite
 
 .. toctree::
 
-   constants 
+   constants
    generator
    interpreter
    utils

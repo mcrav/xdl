@@ -17,10 +17,10 @@ def raise_error(e, msg=''):
 def initialise_logger(logger: logging.Logger) -> logging.Logger:
     """Initialise logger. Should only be called if handler hasn't already been
     added,
-    
+
     Args:
         logger (logging.Logger): Logger to add handler to.
-    
+
     Returns:
        logging.Logger: Logger with handler added.
     """

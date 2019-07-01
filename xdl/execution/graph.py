@@ -15,7 +15,7 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
         graph_file (str, optional): Path to graph file. May be GraphML file,
             JSON file with graph in node link format, or dict containing graph
             in same format as JSON file.
-    
+
     Returns:
         networkx.classes.multidigraph: MultiDiGraph object.
     """
@@ -49,7 +49,7 @@ def hardware_from_graph(graph: MultiDiGraph) -> Hardware:
 
     Args:
         graph (networkx.MultiDiGraph): networx graph of setup.
-    
+
     Returns:
         Hardware: Hardware object containing graph described in input given.
     """
@@ -64,12 +64,12 @@ def hardware_from_graph(graph: MultiDiGraph) -> Hardware:
 
 def make_vessel_map(
     graph: MultiDiGraph, target_vessel_class: str) -> Dict[str, str]:
-    """Given graph, make dict with nodes as keys and nearest waste vessels to 
+    """Given graph, make dict with nodes as keys and nearest waste vessels to
     each node as values, i.e. {node: nearest_waste_vessel}.
-    
+
     Args:
         graph (networkx.MultiDiGraph): networkx graph of setup.
-    
+
     Returns:
         Dict[str, str]: dict with nodes as keys and nearest waste vessels as
                         values.
@@ -80,8 +80,8 @@ def make_vessel_map(
     undirected_graph = graph.to_undirected()
     vessel_map = {}
     target_vessels = [
-        node for node in undirected_graph.nodes() 
-        if (undirected_graph.node[node]['type'] 
+        node for node in undirected_graph.nodes()
+        if (undirected_graph.node[node]['type']
             == target_vessel_class)
     ]
     for node in undirected_graph.nodes():
@@ -106,10 +106,10 @@ def make_vessel_map(
 def make_inert_gas_map(graph: MultiDiGraph):
     """Given graph, make dict with filter_vessel IDs as keys and nearest
     inert gas flasks as values. i.e. { 'filter1': 'flask_nitrogen' }.
-    
+
     Args:
         graph (networkx.MultiDiGraph): networkx graph of setup.
-    
+
     Returns:
         Dict[str, str]: dict with filter vessels as keys and nearest nitrogen
             flasks as values.
@@ -142,17 +142,17 @@ def make_inert_gas_map(graph: MultiDiGraph):
 def get_unused_valve_port(valve_node: str, graph: MultiDiGraph) -> int:
     """Given a valve, return a position where the valve isn't connected to
     anything.
-    
+
     Args:
         valve_node (str): Name of the valve on which to find an unused port.
         graph (MultiDiGraph): Graph that contains valve.
-    
+
     Returns:
         int: Valve position which is not connected to anything. If there is no
             unconnected position then None is returned.
     """
     used_ports = []
-    # Get connected valve positions. 
+    # Get connected valve positions.
     for _, _, edge_data in graph.in_edges(valve_node, data=True):
         if 'port' in edge_data:
             used_ports.append(int(edge_data['port'][1]))
@@ -171,16 +171,16 @@ def vacuum_device_attached_to_flask(
     flask_node: str, graph: MultiDiGraph) -> bool:
     """Return True if given vacuum flask is attached to a vacuum device. If it
     is attached to nothing (i.e. vacuum line in fumehood) return False.
-    
+
     Args:
         flask_node (str): Name of vacuum flask node.
         graph (MultiDiGraph): Graph containing flask_node.
-    
+
     Returns:
         bool: True if vacuum flask is attached to vacuum device not just vacuum
             line in fumehood.
     """
     for src_node, _ in graph.in_edges(flask_node):
         if graph.nodes[src_node]['class'] == 'CVC3000':
-            return src_node 
+            return src_node
     return None

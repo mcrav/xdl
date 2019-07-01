@@ -18,9 +18,9 @@ from ...constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED, EVAPORATE_PORT
 
 class Dissolve(AbstractStep):
     """Dissolve contents of vessel in given solvent.
-    
+
     Args:
-        vessel (str): Vessel to dissolve contents of. 
+        vessel (str): Vessel to dissolve contents of.
         solvent (str): Solvent to dissolve contents of vessel with.
         volume (float): Volume of solvent to use.
         port (str): Port to add solvent to.
@@ -91,4 +91,4 @@ class Dissolve(AbstractStep):
                 'stir': True,
             }
         }
-        
+

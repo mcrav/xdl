@@ -7,7 +7,7 @@ from ...localisation import HUMAN_READABLE_STEPS
 class FilterThrough(AbstractStep):
     """Filter contents of from_vessel through a cartridge,
     e.g. a Celite cartridge, and optionally elute with a solvent as well.
-    
+
     Args:
         from_vessel (str): Vessel with contents to filter.
         to_vessel (str): Vessel to pass filtered contents to.
@@ -74,7 +74,7 @@ class FilterThrough(AbstractStep):
                              move_speed=self.move_speed,
                              aspiration_speed=self.aspiration_speed)
                 ])
-        
+
         if self.flush_cartridge_vessel:
             steps.append(Transfer(from_vessel=self.flush_cartridge_vessel,
                                   to_vessel=filter_through_to_vessel,

@@ -4,7 +4,7 @@ class Recrystallize(UnimplementedStep):
 
     def __init__(self):
         super().__init__(locals())
-        
+
 class Distill(UnimplementedStep):
 
     def __init__(self):

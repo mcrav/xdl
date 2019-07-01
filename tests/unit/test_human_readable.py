@@ -9,7 +9,7 @@ FOLDER = os.path.join(HERE, 'files')
 files = [
     (os.path.join(FOLDER, 'lidocaine.xdl'),
      os.path.join(FOLDER, 'lidocaine_graph.json')),
-     
+
     (os.path.join(FOLDER, 'alkyl_fluor_step4.xdl'),
      os.path.join(FOLDER, 'alkyl_fluor_step4.graphml'))
 ]

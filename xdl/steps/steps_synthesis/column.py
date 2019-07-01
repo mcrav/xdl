@@ -5,7 +5,7 @@ from .filter_through import FilterThrough
 
 class RunColumn(AbstractStep):
     """Purify using column chromatography.
-    
+
     Args:
         from_vessel (str): Vessel containing mixture to purify.
         to_vessel (str): Vessel to send purified mixture to.
@@ -36,6 +36,6 @@ class RunColumn(AbstractStep):
                 move_speed=self.move_speed,
                 buffer_flask=self.buffer_flask,
             )
-        ]   
-    
+        ]
+
         return steps
