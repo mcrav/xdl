@@ -4,7 +4,7 @@ if False:
     from chempiler import Chempiler
 from logging import Logger
 
-from ..base_step import AbstractBaseStep
+from ..base_steps import AbstractBaseStep
 
 class CRotavapStartHeater(AbstractBaseStep):
     """Starts the heating bath of a rotary evaporator.

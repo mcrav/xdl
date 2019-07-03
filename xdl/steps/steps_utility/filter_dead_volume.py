@@ -1,7 +1,7 @@
 from typing import Optional, List, Dict, Any
 
 from ..utils import get_vacuum_valve_reconnect_steps
-from ..base_step import AbstractStep, Step
+from ..base_steps import AbstractStep, Step
 from ..steps_base import CMove, CValveMoveToPosition
 from ...constants import BOTTOM_PORT
 

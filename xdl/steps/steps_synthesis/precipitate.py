@@ -1,6 +1,6 @@
 from typing import List, Dict, Any, Optional
 
-from ..base_step import AbstractStep, Step
+from ..base_steps import AbstractStep, Step
 from ..steps_utility import Stir, HeatChillToTemp
 
 class Precipitate(AbstractStep):

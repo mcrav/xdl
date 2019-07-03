@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any
-from ..base_step import Step, AbstractStep
+from ..base_steps import Step, AbstractStep
 from ..steps_utility import (
     Wait, HeatChillToTemp, StopHeatChill, StartStir, StopStir)
 

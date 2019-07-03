@@ -1,5 +1,5 @@
 from typing import List, Dict, Any
-from ..base_step import Step, AbstractStep
+from ..base_steps import Step, AbstractStep
 from ..steps_base import CStartVacuum, CStopVacuum, CSetVacuumSetPoint
 
 class StartVacuum(AbstractStep):

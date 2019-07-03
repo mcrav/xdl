@@ -187,4 +187,3 @@ def format_val(val: float) -> str:
     """
     hours_str = f'{val:.2f}'
     return hours_str.rstrip('0').rstrip('0').rstrip('.')
-

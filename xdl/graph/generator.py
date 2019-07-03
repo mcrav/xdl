@@ -490,4 +490,3 @@ class GraphGenerator(object):
         """
         with open(save_path, 'w') as fileobj:
             json.dump(self.graph, fileobj)
-

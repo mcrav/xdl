@@ -86,4 +86,3 @@ def check_vessels_are_all_declared(
                 if step_vessel and not step_vessel in component_ids:
                     raise XDLError(
                         f'{step_vessel} for {step.name} step not declared in Hardware section.')
-

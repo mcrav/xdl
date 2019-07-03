@@ -1,5 +1,5 @@
 from typing import Optional, Dict
-from ..base_step import AbstractStep
+from ..base_steps import AbstractStep
 from ..steps_utility import (
     StartStir, StopStir, Wait, HeatChillToTemp, HeatChillReturnToRT)
 from ..steps_base import CMove

@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict, Any
 from ..utils import get_vacuum_valve_reconnect_steps
-from ..base_step import Step, AbstractStep
+from ..base_steps import Step, AbstractStep
 from ..steps_utility import (
     StopStir,
     HeatChillToTemp,

@@ -44,4 +44,3 @@ def test_wash_solid_dead_volume():
                                     == 10 + (DEFAULT_FILTER_EXCESS_REMOVE_FACTOR * step.volume))
                 else:
                     assert step.filter_dead_volume is None
-

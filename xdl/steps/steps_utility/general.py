@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict
 
-from ..base_step import AbstractStep, Step
+from ..base_steps import AbstractStep, Step
 from ..steps_base import CSetRecordingSpeed, CWait
 
 class Wait(AbstractStep):
@@ -26,4 +26,3 @@ class Wait(AbstractStep):
             CWait(self.time),
             CSetRecordingSpeed(self.after_recording_speed),
         ]
-
