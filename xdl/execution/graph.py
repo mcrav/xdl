@@ -58,6 +58,8 @@ def hardware_from_graph(graph: MultiDiGraph) -> Hardware:
         props = graph.node[node]
         props['type'] = props['class']
         component = Component(node, props['type'])
+        if props['type'] == 'ChemputerFlask' and not 'chemical' in props:
+            props['chemical'] = ''
         component.properties.update(props)
         components.append(component)
     return Hardware(components)
@@ -119,6 +121,7 @@ def make_inert_gas_map(graph: MultiDiGraph):
         node
         for node in graph.nodes()
         if (graph.node[node]['type'] == 'ChemputerFlask'
+            and 'chemical' in graph.node[node]
             and graph.node[node]['chemical'].lower() in ['nitrogen', 'argon',
                                                          'n2', 'ar'])
     ]

@@ -277,26 +277,17 @@ class XDLExecutor(object):
             str: Node name of buffer flask (unused reactor) nearest vessel.
         """
         # Get all reactor IDs
-        reactors = [reactor.id
-                    for reactor in self._graph_hardware.reactors]
-
-        # Remove reactor IDs that are actually used as reactors not just
-        # buffer flasks.
-        for i in reversed(range(len(reactors))):
-            reactor = reactors[i]
-            reactor_neighbours = self._graph.neighbors(reactor)
-            for neighbour in reactor_neighbours:
-                if self._graph.nodes[neighbour]['type'] != 'ChemputerValve':
-                    reactors.pop(i)
-                    break
+        flasks = [flask.id
+                  for flask in self._graph_hardware.flasks
+                  if not flask.chemical]
 
         # From remaining reactor IDs, return nearest to vessel.
-        if reactors:
-            if len(reactors) == 1:
-                return reactors[0]
+        if flasks:
+            if len(flasks) == 1:
+                return flasks[0]
             else:
                 shortest_paths = []
-                for reactor in reactors:
+                for reactor in flasks:
                     shortest_paths.append((
                         reactor,
                         shortest_path_length(
