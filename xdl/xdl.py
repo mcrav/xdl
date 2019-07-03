@@ -71,7 +71,7 @@ class XDL(object):
                 self._xdl_file = xdl
                 parsed_xdl = xdl_file_to_objs(xdl, self.logger)
             # Check XDL is XDL str and not just mistyped XDL file path.
-            elif '<Synthesis>' in xdl and '<Procedure>' in xdl:
+            elif '<Synthesis' in xdl and '<Procedure>' in xdl:
                 parsed_xdl = xdl_str_to_objs(xdl, self.logger)
             else:
                 raise ValueError(
