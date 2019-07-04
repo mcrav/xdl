@@ -2466,3 +2466,224 @@
 2019-07-04 11:25:58,852 ; INFO ; chempiler ; MainThread ; WAIT - Waiting for 2
 2019-07-04 11:25:58,852 ; INFO ; chempiler ; MainThread ; WAIT - Waiting for 2
 2019-07-04 11:25:58,852 ; INFO ; chempiler ; MainThread ; WAIT - Waiting for 3
+2019-07-04 15:50:34,136 ; DEBUG ; chempiler ; MainThread ; Instantiating node pump_rotavap:
+	class = SimChemputerPump,
+	params = ['self', 'address', 'name'],
+	graph attrs = {'type': 'pump', 'internalId': 0, 'name': 'pump_rotavap', 'address': '', 'max_volume': 100}.
+2019-07-04 15:50:34,136 ; INFO ; pump_valve_api ; MainThread ; Received Pump "pump_rotavap" Address:
+2019-07-04 15:50:34,136 ; DEBUG ; chempiler ; MainThread ; Node pump_rotavap instantiated.
+2019-07-04 15:50:34,136 ; DEBUG ; chempiler ; MainThread ; Instantiating node valve_rotavap:
+	class = SimChemputerValve,
+	params = ['self', 'address', 'name'],
+	graph attrs = {'type': 'valve', 'internalId': 1, 'name': 'valve_rotavap', 'address': ''}.
+2019-07-04 15:50:34,136 ; INFO ; pump_valve_api ; MainThread ; Received Valve "valve_rotavap" Address:
+2019-07-04 15:50:34,136 ; DEBUG ; chempiler ; MainThread ; Node valve_rotavap instantiated.
+2019-07-04 15:50:34,136 ; DEBUG ; chempiler ; MainThread ; Instantiating node flask_water:
+	class = ChemputerFlask,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'flask', 'internalId': 2, 'name': 'flask_water', 'chemical': 'water', 'current_volume': 100, 'max_volume': 100}.
+2019-07-04 15:50:34,136 ; DEBUG ; chempiler ; MainThread ; Node flask_water instantiated.
+2019-07-04 15:50:34,137 ; DEBUG ; chempiler ; MainThread ; Instantiating node rotavap:
+	class = SimIKARV10,
+	params = ['self', 'port', 'device_name'],
+	graph attrs = {'type': 'rotavap', 'internalId': 3, 'customProperties': {'collection_flask_volume': {'name': 'Collection flask volume', 'id': 'collection_flask_volume', 'units': 'mL', 'type': 'number'}}, 'name': 'rotavap', 'port': 'evaporate', 'current_volume': 0, 'max_volume': 100, 'collection_flask_volume': '50'}.
+2019-07-04 15:50:34,137 ; INFO ; sim_devices ; MainThread ; Received SimIKARV10 None (port = evaporate)
+2019-07-04 15:50:34,137 ; DEBUG ; chempiler ; MainThread ; Node rotavap instantiated.
+2019-07-04 15:50:34,137 ; DEBUG ; chempiler ; MainThread ; Instantiating node waste_rotavap:
+	class = ChemputerWaste,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'waste', 'internalId': 8, 'name': 'waste_rotavap', 'current_volume': 0, 'max_volume': 100, 'necks': 1}.
+2019-07-04 15:50:34,137 ; DEBUG ; chempiler ; MainThread ; Node waste_rotavap instantiated.
+2019-07-04 15:50:34,137 ; DEBUG ; chempiler ; MainThread ; Instantiating node vacuum_rotavap:
+	class = SimCVC3000,
+	params = ['self', 'port', 'address', 'name'],
+	graph attrs = {'type': 'vacuum', 'internalId': 11, 'current_volume': 0, 'max_volume': 100, 'necks': 1, 'name': 'vacuum_rotavap'}.
+2019-07-04 15:50:34,137 ; INFO ; sim_devices ; MainThread ; Received SimCVC3000 vacuum_rotavap (port = None)
+2019-07-04 15:50:34,137 ; DEBUG ; chempiler ; MainThread ; Node vacuum_rotavap instantiated.
+2019-07-04 15:50:34,137 ; DEBUG ; chempiler ; MainThread ; Instantiating node valve_reactor:
+	class = SimChemputerValve,
+	params = ['self', 'address', 'name'],
+	graph attrs = {'type': 'valve', 'internalId': 13, 'name': 'valve_reactor', 'address': ''}.
+2019-07-04 15:50:34,137 ; INFO ; pump_valve_api ; MainThread ; Received Valve "valve_reactor" Address:
+2019-07-04 15:50:34,137 ; DEBUG ; chempiler ; MainThread ; Node valve_reactor instantiated.
+2019-07-04 15:50:34,138 ; DEBUG ; chempiler ; MainThread ; Instantiating node pump_reactor:
+	class = SimChemputerPump,
+	params = ['self', 'address', 'name'],
+	graph attrs = {'type': 'pump', 'internalId': 14, 'name': 'pump_reactor', 'address': '', 'max_volume': 100}.
+2019-07-04 15:50:34,138 ; INFO ; pump_valve_api ; MainThread ; Received Pump "pump_reactor" Address:
+2019-07-04 15:50:34,138 ; DEBUG ; chempiler ; MainThread ; Node pump_reactor instantiated.
+2019-07-04 15:50:34,138 ; DEBUG ; chempiler ; MainThread ; Instantiating node waste_reactor:
+	class = ChemputerWaste,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'waste', 'internalId': 15, 'name': 'waste_reactor', 'current_volume': 0, 'max_volume': 100, 'necks': 1}.
+2019-07-04 15:50:34,138 ; DEBUG ; chempiler ; MainThread ; Node waste_reactor instantiated.
+2019-07-04 15:50:34,138 ; DEBUG ; chempiler ; MainThread ; Instantiating node flask_ether:
+	class = ChemputerFlask,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'flask', 'internalId': 19, 'name': 'flask_ether', 'chemical': 'ether', 'current_volume': 100, 'max_volume': 100}.
+2019-07-04 15:50:34,138 ; DEBUG ; chempiler ; MainThread ; Node flask_ether instantiated.
+2019-07-04 15:50:34,138 ; DEBUG ; chempiler ; MainThread ; Instantiating node reactor:
+	class = ChemputerReactor,
+	params = ['self', 'name', 'current_volume', 'max_volume', 'necks'],
+	graph attrs = {'type': 'reactor', 'internalId': 21, 'name': 'reactor', 'current_volume': 0, 'max_volume': 100, 'necks': 1}.
+2019-07-04 15:50:34,138 ; DEBUG ; chempiler ; MainThread ; Node reactor instantiated.
+2019-07-04 15:50:34,138 ; DEBUG ; chempiler ; MainThread ; Instantiating node stirrer_reactor:
+	class = SimIKAmicrostar75,
+	params = ['self', 'port', 'device_name'],
+	graph attrs = {'type': 'stirrer', 'internalId': 26, 'name': 'stirrer_reactor', 'port': ''}.
+2019-07-04 15:50:34,138 ; INFO ; sim_devices ; MainThread ; Received SimIKAmicrostar75 None (port = )
+2019-07-04 15:50:34,139 ; DEBUG ; chempiler ; MainThread ; Node stirrer_reactor instantiated.
+2019-07-04 15:50:34,139 ; DEBUG ; chempiler ; MainThread ; Instantiating node celite_cartridge:
+	class = ChemputerCartridge,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'custom', 'internalId': 28, 'customProperties': {'name': {'name': 'name', 'id': 'name', 'units': '', 'type': 'str'}, 'dead_volume': {'name': 'Dead volume', 'id': 'dead_volume', 'units': 'mL', 'type': 'number'}}, 'name': 'celite_cartridge', 'dead_volume': '50'}.
+2019-07-04 15:50:34,139 ; DEBUG ; chempiler ; MainThread ; Node celite_cartridge instantiated.
+2019-07-04 15:50:34,139 ; DEBUG ; chempiler ; MainThread ; Instantiating node flask_nitrogen:
+	class = ChemputerFlask,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'flask', 'internalId': 31, 'name': 'flask_nitrogen', 'chemical': 'nitrogen', 'current_volume': 100, 'max_volume': 100}.
+2019-07-04 15:50:34,139 ; DEBUG ; chempiler ; MainThread ; Node flask_nitrogen instantiated.
+2019-07-04 15:50:34,139 ; DEBUG ; chempiler ; MainThread ; Instantiating node valve_filter:
+	class = SimChemputerValve,
+	params = ['self', 'address', 'name'],
+	graph attrs = {'type': 'valve', 'internalId': 33, 'name': 'valve_filter', 'address': ''}.
+2019-07-04 15:50:34,139 ; INFO ; pump_valve_api ; MainThread ; Received Valve "valve_filter" Address:
+2019-07-04 15:50:34,139 ; DEBUG ; chempiler ; MainThread ; Node valve_filter instantiated.
+2019-07-04 15:50:34,139 ; DEBUG ; chempiler ; MainThread ; Instantiating node pump_filter:
+	class = SimChemputerPump,
+	params = ['self', 'address', 'name'],
+	graph attrs = {'type': 'pump', 'internalId': 36, 'name': 'pump_filter', 'address': '', 'max_volume': 100}.
+2019-07-04 15:50:34,139 ; INFO ; pump_valve_api ; MainThread ; Received Pump "pump_filter" Address:
+2019-07-04 15:50:34,139 ; DEBUG ; chempiler ; MainThread ; Node pump_filter instantiated.
+2019-07-04 15:50:34,139 ; DEBUG ; chempiler ; MainThread ; Instantiating node filter:
+	class = ChemputerFilter,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'filter', 'internalId': 39, 'name': 'filter', 'current_volume': 0, 'max_volume': 100, 'dead_volume': 10}.
+2019-07-04 15:50:34,140 ; DEBUG ; chempiler ; MainThread ; Node filter instantiated.
+2019-07-04 15:50:34,140 ; DEBUG ; chempiler ; MainThread ; Instantiating node vacuum_flask:
+	class = ChemputerVacuum,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'vacuum', 'internalId': 43, 'current_volume': 0, 'max_volume': 100, 'necks': 1, 'name': 'vacuum_flask'}.
+2019-07-04 15:50:34,140 ; DEBUG ; chempiler ; MainThread ; Node vacuum_flask instantiated.
+2019-07-04 15:50:34,140 ; DEBUG ; chempiler ; MainThread ; Instantiating node vacuum_device:
+	class = SimCVC3000,
+	params = ['self', 'port', 'address', 'name'],
+	graph attrs = {'type': 'vacuum', 'internalId': 45, 'current_volume': 0, 'max_volume': 100, 'necks': 1, 'name': 'vacuum_device'}.
+2019-07-04 15:50:34,140 ; INFO ; sim_devices ; MainThread ; Received SimCVC3000 vacuum_device (port = None)
+2019-07-04 15:50:34,140 ; DEBUG ; chempiler ; MainThread ; Node vacuum_device instantiated.
+2019-07-04 15:50:34,140 ; DEBUG ; chempiler ; MainThread ; Instantiating node waste_filter:
+	class = ChemputerWaste,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'waste', 'internalId': 47, 'name': 'waste_filter', 'current_volume': 0, 'max_volume': 100, 'necks': 1}.
+2019-07-04 15:50:34,140 ; DEBUG ; chempiler ; MainThread ; Node waste_filter instantiated.
+2019-07-04 15:50:34,140 ; DEBUG ; chempiler ; MainThread ; Instantiating node stirrer:
+	class = SimIKAmicrostar75,
+	params = ['self', 'port', 'device_name'],
+	graph attrs = {'type': 'stirrer', 'internalId': 49, 'name': 'stirrer', 'port': ''}.
+2019-07-04 15:50:34,140 ; INFO ; sim_devices ; MainThread ; Received SimIKAmicrostar75 None (port = )
+2019-07-04 15:50:34,140 ; DEBUG ; chempiler ; MainThread ; Node stirrer instantiated.
+2019-07-04 15:50:34,141 ; DEBUG ; chempiler ; MainThread ; Instantiating node valve_vacuum:
+	class = SimChemputerValve,
+	params = ['self', 'address', 'name'],
+	graph attrs = {'type': 'valve', 'internalId': 51, 'name': 'valve_vacuum', 'address': ''}.
+2019-07-04 15:50:34,141 ; INFO ; pump_valve_api ; MainThread ; Received Valve "valve_vacuum" Address:
+2019-07-04 15:50:34,141 ; DEBUG ; chempiler ; MainThread ; Node valve_vacuum instantiated.
+2019-07-04 15:50:34,141 ; DEBUG ; chempiler ; MainThread ; Instantiating node vacuum_reactor_device:
+	class = SimCVC3000,
+	params = ['self', 'port', 'address', 'name'],
+	graph attrs = {'type': 'vacuum', 'internalId': 55, 'current_volume': 0, 'max_volume': 100, 'necks': 1, 'name': 'vacuum_reactor_device'}.
+2019-07-04 15:50:34,141 ; INFO ; sim_devices ; MainThread ; Received SimCVC3000 vacuum_reactor_device (port = None)
+2019-07-04 15:50:34,141 ; DEBUG ; chempiler ; MainThread ; Node vacuum_reactor_device instantiated.
+2019-07-04 15:50:34,141 ; DEBUG ; chempiler ; MainThread ; Instantiating node vacuum_reactor_flask:
+	class = ChemputerVacuum,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'vacuum', 'internalId': 57, 'current_volume': 0, 'max_volume': 100, 'necks': 1, 'name': 'vacuum_reactor_flask'}.
+2019-07-04 15:50:34,141 ; DEBUG ; chempiler ; MainThread ; Node vacuum_reactor_flask instantiated.
+2019-07-04 15:50:34,141 ; DEBUG ; chempiler ; MainThread ; Instantiating node valve_reactor_vacuum:
+	class = SimChemputerValve,
+	params = ['self', 'address', 'name'],
+	graph attrs = {'type': 'valve', 'internalId': 56, 'name': 'valve_reactor_vacuum', 'address': ''}.
+2019-07-04 15:50:34,141 ; INFO ; pump_valve_api ; MainThread ; Received Valve "valve_reactor_vacuum" Address:
+2019-07-04 15:50:34,141 ; DEBUG ; chempiler ; MainThread ; Node valve_reactor_vacuum instantiated.
+2019-07-04 15:50:34,141 ; DEBUG ; chempiler ; MainThread ; Instantiating node valve_separator:
+	class = SimChemputerValve,
+	params = ['self', 'address', 'name'],
+	graph attrs = {'type': 'valve', 'internalId': 61, 'name': 'valve_separator', 'address': ''}.
+2019-07-04 15:50:34,142 ; INFO ; pump_valve_api ; MainThread ; Received Valve "valve_separator" Address:
+2019-07-04 15:50:34,142 ; DEBUG ; chempiler ; MainThread ; Node valve_separator instantiated.
+2019-07-04 15:50:34,142 ; DEBUG ; chempiler ; MainThread ; Instantiating node pump_separator:
+	class = SimChemputerPump,
+	params = ['self', 'address', 'name'],
+	graph attrs = {'type': 'pump', 'internalId': 62, 'name': 'pump_separator', 'address': '', 'max_volume': 100}.
+2019-07-04 15:50:34,142 ; INFO ; pump_valve_api ; MainThread ; Received Pump "pump_separator" Address:
+2019-07-04 15:50:34,142 ; DEBUG ; chempiler ; MainThread ; Node pump_separator instantiated.
+2019-07-04 15:50:34,142 ; DEBUG ; chempiler ; MainThread ; Instantiating node waste_separator:
+	class = ChemputerWaste,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'waste', 'internalId': 67, 'name': 'waste_separator', 'current_volume': 0, 'max_volume': 100, 'necks': 1}.
+2019-07-04 15:50:34,142 ; DEBUG ; chempiler ; MainThread ; Node waste_separator instantiated.
+2019-07-04 15:50:34,142 ; DEBUG ; chempiler ; MainThread ; Instantiating node separator:
+	class = ChemputerSeparator,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'separator', 'internalId': 69, 'name': 'separator', 'current_volume': 0, 'max_volume': 100, 'necks': 1}.
+2019-07-04 15:50:34,142 ; DEBUG ; chempiler ; MainThread ; Node separator instantiated.
+2019-07-04 15:50:34,142 ; DEBUG ; chempiler ; MainThread ; Instantiating node 73:
+	class = SimIKAmicrostar75,
+	params = ['self', 'port', 'device_name'],
+	graph attrs = {'type': 'stirrer', 'internalId': 73, 'name': 73, 'port': ''}.
+2019-07-04 15:50:34,142 ; INFO ; sim_devices ; MainThread ; Received SimIKAmicrostar75 None (port = )
+2019-07-04 15:50:34,142 ; DEBUG ; chempiler ; MainThread ; Node 73 instantiated.
+2019-07-04 15:50:34,142 ; DEBUG ; chempiler ; MainThread ; Instantiating node filter_chiller:
+	class = SimJULABOCF41,
+	params = ['self', 'port', 'address', 'name'],
+	graph attrs = {'type': 'chiller', 'internalId': 75, 'name': 'filter_chiller', 'min_temp': -40, 'max_temp': 90, 'port': ''}.
+2019-07-04 15:50:34,143 ; INFO ; sim_devices ; MainThread ; Received SimJULABOCF41 filter_chiller (port = )
+2019-07-04 15:50:34,143 ; DEBUG ; chempiler ; MainThread ; Node filter_chiller instantiated.
+2019-07-04 15:50:34,143 ; DEBUG ; chempiler ; MainThread ; Instantiating node reactor_heater:
+	class = SimIKARCTDigital,
+	params = ['self', 'port', 'address', 'name'],
+	graph attrs = {'type': 'heater', 'internalId': 77, 'name': 'reactor_heater', 'port': ''}.
+2019-07-04 15:50:34,143 ; INFO ; sim_devices ; MainThread ; Received SimIKARCTDigital reactor_heater (port = )
+2019-07-04 15:50:34,143 ; DEBUG ; chempiler ; MainThread ; Node reactor_heater instantiated.
+2019-07-04 15:50:34,143 ; DEBUG ; chempiler ; MainThread ; Instantiating node 79:
+	class = SimConductivitySensor,
+	params = ['self', 'port', 'device_name'],
+	graph attrs = {'type': 'conductivity_sensor', 'internalId': 79, 'name': 79, 'port': ''}.
+2019-07-04 15:50:34,143 ; INFO ; sim_devices ; MainThread ; Received SimConductivitySensor None (port = )
+2019-07-04 15:50:34,143 ; DEBUG ; chempiler ; MainThread ; Node 79 instantiated.
+2019-07-04 15:50:34,143 ; DEBUG ; chempiler ; MainThread ; Instantiating node cartridge_mgso4:
+	class = ChemputerCartridge,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'custom', 'customProperties': {'name': {'name': 'name', 'id': 'name', 'units': '', 'type': 'str'}}, 'internalId': 81, 'name': 'cartridge_mgso4'}.
+2019-07-04 15:50:34,143 ; DEBUG ; chempiler ; MainThread ; Node cartridge_mgso4 instantiated.
+2019-07-04 15:50:34,143 ; DEBUG ; chempiler ; MainThread ; Instantiating node flask_chloroacetyl_chloride:
+	class = ChemputerFlask,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'flask', 'internalId': 87, 'name': 'flask_chloroacetyl_chloride', 'chemical': 'chloroacetyl chloride', 'current_volume': 100, 'max_volume': 100}.
+2019-07-04 15:50:34,143 ; DEBUG ; chempiler ; MainThread ; Node flask_chloroacetyl_chloride instantiated.
+2019-07-04 15:50:34,144 ; DEBUG ; chempiler ; MainThread ; Instantiating node buffer_flask:
+	class = ChemputerFlask,
+	params = ['self', 'name', 'current_volume', 'max_volume'],
+	graph attrs = {'type': 'flask', 'name': 'buffer_flask', 'chemical': '', 'current_volume': 0, 'max_volume': 100, 'internalId': 84}.
+2019-07-04 15:50:34,144 ; DEBUG ; chempiler ; MainThread ; Node buffer_flask instantiated.
+2019-07-04 15:50:34,144 ; DEBUG ; pump_valve_api ; MainThread ; Pump "pump_rotavap" - Waiting until ready...
+2019-07-04 15:50:34,144 ; DEBUG ; pump_valve_api ; MainThread ; Valve "valve_rotavap" - Waiting until ready...
+2019-07-04 15:50:34,144 ; DEBUG ; sim_devices ; MainThread ; SimIKARV10 None - Waiting until ready.
+2019-07-04 15:50:34,144 ; DEBUG ; sim_devices ; MainThread ; SimCVC3000 vacuum_rotavap - Waiting until ready.
+2019-07-04 15:50:34,144 ; DEBUG ; pump_valve_api ; MainThread ; Valve "valve_reactor" - Waiting until ready...
+2019-07-04 15:50:34,144 ; DEBUG ; pump_valve_api ; MainThread ; Pump "pump_reactor" - Waiting until ready...
+2019-07-04 15:50:34,144 ; DEBUG ; sim_devices ; MainThread ; SimIKAmicrostar75 None - Waiting until ready.
+2019-07-04 15:50:34,144 ; DEBUG ; pump_valve_api ; MainThread ; Valve "valve_filter" - Waiting until ready...
+2019-07-04 15:50:34,144 ; DEBUG ; pump_valve_api ; MainThread ; Pump "pump_filter" - Waiting until ready...
+2019-07-04 15:50:34,144 ; DEBUG ; sim_devices ; MainThread ; SimCVC3000 vacuum_device - Waiting until ready.
+2019-07-04 15:50:34,144 ; DEBUG ; sim_devices ; MainThread ; SimIKAmicrostar75 None - Waiting until ready.
+2019-07-04 15:50:34,144 ; DEBUG ; pump_valve_api ; MainThread ; Valve "valve_vacuum" - Waiting until ready...
+2019-07-04 15:50:34,144 ; DEBUG ; sim_devices ; MainThread ; SimCVC3000 vacuum_reactor_device - Waiting until ready.
+2019-07-04 15:50:34,144 ; DEBUG ; pump_valve_api ; MainThread ; Valve "valve_reactor_vacuum" - Waiting until ready...
+2019-07-04 15:50:34,144 ; DEBUG ; pump_valve_api ; MainThread ; Valve "valve_separator" - Waiting until ready...
+2019-07-04 15:50:34,144 ; DEBUG ; pump_valve_api ; MainThread ; Pump "pump_separator" - Waiting until ready...
+2019-07-04 15:50:34,144 ; DEBUG ; sim_devices ; MainThread ; SimIKAmicrostar75 None - Waiting until ready.
+2019-07-04 15:50:34,145 ; DEBUG ; sim_devices ; MainThread ; SimJULABOCF41 filter_chiller - Waiting until ready.
+2019-07-04 15:50:34,145 ; DEBUG ; sim_devices ; MainThread ; SimIKARCTDigital reactor_heater - Waiting until ready.
+2019-07-04 15:50:34,145 ; DEBUG ; sim_devices ; MainThread ; SimConductivitySensor None - Waiting until ready.
+2019-07-04 15:50:34,145 ; DEBUG ; chempiler ; MainThread ; All devices ready!
