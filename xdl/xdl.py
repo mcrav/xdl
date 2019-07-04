@@ -9,7 +9,7 @@ from math import ceil
 
 from .constants import *
 from .localisation import HUMAN_READABLE_STEPS
-from .graph.generator import GraphGenerator
+from .graphgen import get_graph
 from .steps import *
 from .steps import steps_synthesis
 from .steps import steps_utility
@@ -411,6 +411,20 @@ class XDL(object):
                 self.logger.info('')
             self.logger.info('')
 
+    def graph(self):
+        """Return graph to run procedure with, built on template.
+
+        Returns:
+            Dict: JSON node link graph as dictionary.
+        """
+        liquid_reagents = [reagent.id for reagent in self.reagents]
+
+        for step in self.steps:
+            if type(step) == Add and step.mass:
+                if step.reagent in liquid_reagents:
+                    liquid_reagents.remove(step.reagent)
+
+        return get_graph(liquid_reagents)
 
     def prepare_for_execution(
         self, graph_file: str, interactive: bool = True) -> None:

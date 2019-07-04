@@ -99,7 +99,9 @@ def iter_vessel_contents(
             elif type(step) == Dry:
                 # This is necessary to stop move command putting filter into
                 # negative volume
-                pass
+                vessel_contents.setdefault(
+                    step.vessel, VesselContents([], hardware[step.vessel].current_volume))
+                vessel_contents[step.vessel].volume = 0
 
             elif type(step) == Evaporate:
                 if step.rotavap_name in vessel_contents:
@@ -146,6 +148,7 @@ def iter_vessel_contents(
                         and not from_vessel in [
                             item.id for item in hardware.flasks]):
                         vessel_contents[from_vessel].reagents = []
+                        vessel_contents[from_vessel].volume = 0
                     # Extend list of reagents added in the step.
                     # Empty from_vessel if 'all' volume specified.
                     if empty_from_vessel:
