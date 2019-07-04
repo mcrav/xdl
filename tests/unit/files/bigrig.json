@@ -78,11 +78,11 @@
       "y": 120,
       "internalId": 11,
       "label": "vacuum_rotavap",
-      "class": "CVC3000",
-      "name": "vacuum_rotavap",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "class": "CVC3000",
+      "name": "vacuum_rotavap"
     },
     {
       "id": "valve_reactor",
@@ -238,11 +238,11 @@
       "y": 480,
       "internalId": 43,
       "label": "vacuum_flask",
-      "class": "ChemputerVacuum",
-      "name": "vacuum_flask",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "class": "ChemputerVacuum",
+      "name": "vacuum_flask"
     },
     {
       "id": "vacuum_device",
@@ -251,11 +251,11 @@
       "y": 480,
       "internalId": 45,
       "label": "vacuum_device",
-      "class": "CVC3000",
-      "name": "vacuum_device",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "class": "CVC3000",
+      "name": "vacuum_device"
     },
     {
       "id": "waste_filter",
@@ -299,11 +299,11 @@
       "y": 560,
       "internalId": 55,
       "label": "vacuum_reactor_device",
-      "class": "CVC3000",
-      "name": "vacuum_reactor_device",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "class": "CVC3000",
+      "name": "vacuum_reactor_device"
     },
     {
       "id": "vacuum_reactor_flask",
@@ -312,11 +312,11 @@
       "y": 480,
       "internalId": 57,
       "label": "vacuum_reactor_flask",
-      "class": "ChemputerVacuum",
-      "name": "vacuum_reactor_flask",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "class": "ChemputerVacuum",
+      "name": "vacuum_reactor_flask"
     },
     {
       "id": "valve_reactor_vacuum",
@@ -443,19 +443,6 @@
       "name": "cartridge_mgso4"
     },
     {
-      "id": "buffer_flask",
-      "type": "reactor",
-      "x": 240,
-      "y": 80,
-      "internalId": 84,
-      "label": "buffer_flask",
-      "class": "ChemputerReactor",
-      "name": "buffer_flask",
-      "current_volume": 0,
-      "max_volume": 100,
-      "necks": 1
-    },
-    {
       "id": "flask_chloroacetyl_chloride",
       "type": "flask",
       "x": -360,
@@ -467,6 +454,19 @@
       "chemical": "chloroacetyl chloride",
       "current_volume": 100,
       "max_volume": 100
+    },
+    {
+      "id": "buffer_flask",
+      "type": "flask",
+      "x": 240,
+      "y": 80,
+      "class": "ChemputerFlask",
+      "name": "buffer_flask",
+      "chemical": "",
+      "current_volume": 0,
+      "max_volume": 100,
+      "internalId": 84,
+      "label": "buffer_flask"
     }
   ],
   "links": [
@@ -871,22 +871,6 @@
       "port": "(out,evaporate)"
     },
     {
-      "id": 85,
-      "sourceInternal": 1,
-      "targetInternal": 84,
-      "source": "valve_rotavap",
-      "target": "buffer_flask",
-      "port": "(4,0)"
-    },
-    {
-      "id": 86,
-      "sourceInternal": 84,
-      "targetInternal": 1,
-      "source": "buffer_flask",
-      "target": "valve_rotavap",
-      "port": "(0,4)"
-    },
-    {
       "id": 88,
       "sourceInternal": 87,
       "targetInternal": 33,
@@ -901,6 +885,22 @@
       "source": "rotavap",
       "target": "valve_rotavap",
       "port": "(evaporate,1)"
+    },
+    {
+      "id": 85,
+      "sourceInternal": 1,
+      "targetInternal": 84,
+      "source": "valve_rotavap",
+      "target": "buffer_flask",
+      "port": "(4,0)"
+    },
+    {
+      "id": 86,
+      "sourceInternal": 84,
+      "targetInternal": 1,
+      "source": "buffer_flask",
+      "target": "valve_rotavap",
+      "port": "(0,4)"
     }
   ]
 }

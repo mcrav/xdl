@@ -11,3 +11,4 @@ from .test_scale_procedure  import *
 from .test_wash_solid import *
 from .test_separate_through import *
 from .test_filter_dead_volume import *
+from .test_buffer_flask import *
