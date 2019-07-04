@@ -33,6 +33,8 @@ COMPONENT_TYPE_DICT = {
     'reactor': 'reactor',
     'rotavap': 'rotavap',
     'separator': 'separator',
+    'flask': 'flask',
+    'ChemputerFlask': 'flask',
 }
 
 TYPE_COMPONENT_DICT = {
@@ -40,4 +42,5 @@ TYPE_COMPONENT_DICT = {
     'reactor': 'ChemputerReactor',
     'rotavap': 'IKARV10',
     'separator': 'ChemputerSeparator',
+    'flask': 'ChemputerFlask',
 }
