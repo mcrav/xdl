@@ -38,7 +38,7 @@ class GraphGenerator(object):
             if (step.name in ['FilterThrough', 'RunColumn']
                 and step.from_vessel == step.to_vessel):
                 self._components.append(
-                    Component(id='buffer_flask', component_type='reactor'))
+                    Component(id='buffer_flask', component_type='flask'))
         self._reagents = copy.deepcopy([reagent.id for reagent in xdl.reagents])
         if xdl.filter_dead_volume_method == 'inert_gas':
             self._reagents.append('nitrogen')
@@ -217,6 +217,11 @@ class GraphGenerator(object):
                 'max_volume': DEFAULT_ROTAVAP_MAX_VOLUME,
                 'port': PORT,
                 'type': 'rotavap',
+            },
+            'flask': {
+                'current_volume': 0,
+                'max_volume': 100,
+                'chemical': '',
             }
         }
         for k, v in params[
