@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict
 
-from ..base_step import AbstractStep, Step
+from ..base_steps import AbstractStep, Step
 from ..steps_base import CMove
 from .stirring import Stir, StartStir,  StopStir
 from .heatchill import HeatChillToTemp, HeatChillReturnToRT

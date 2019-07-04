@@ -5,7 +5,7 @@ if False:
     from chempiler import Chempiler
 from logging import Logger
 
-from ..base_step import Step, AbstractBaseStep
+from ..base_steps import Step, AbstractBaseStep
 
 class Confirm(AbstractBaseStep):
     """Get the user to confirm something before execution continues.

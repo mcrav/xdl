@@ -3,7 +3,7 @@ import copy
 
 from ..steps_utility import PrimePumpForAdd, Wait, StopStir, StartStir
 from ..steps_base import CMove, Confirm
-from ..base_step import Step, AbstractStep
+from ..base_steps import Step, AbstractStep
 from ...utils.misc import get_port_str, format_property
 from ...constants import (
     DEFAULT_AFTER_ADD_WAIT_TIME,

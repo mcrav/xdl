@@ -1,5 +1,5 @@
 from typing import Optional
-from ..base_step import AbstractStep
+from ..base_steps import AbstractStep
 from ..steps_utility import Transfer
 from .filter_through import FilterThrough
 

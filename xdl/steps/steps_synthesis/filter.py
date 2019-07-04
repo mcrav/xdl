@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict, Any
 from ..utils import get_vacuum_valve_reconnect_steps
-from ..base_step import Step, AbstractStep
+from ..base_steps import Step, AbstractStep
 from ..steps_base import CMove, CConnect, CVentVacuum
 from ..steps_utility import StopStir, StartStir, Wait, StartVacuum, StopVacuum
 from ...constants import (
@@ -109,4 +109,3 @@ class Filter(AbstractStep):
                 'filter': True
             }
         }
-

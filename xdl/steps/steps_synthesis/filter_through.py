@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict
 from .clean_vessel import CleanVessel
-from ..base_step import Step, AbstractStep
+from ..base_steps import Step, AbstractStep
 from ..steps_utility import Transfer
 from ...localisation import HUMAN_READABLE_STEPS
 

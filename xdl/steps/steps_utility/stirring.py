@@ -1,6 +1,6 @@
 from typing import Optional, Dict, Any, List
 
-from ..base_step import AbstractStep, Step
+from ..base_steps import AbstractStep, Step
 from ..steps_base import (
     CStir,
     CSetStirRate,
@@ -142,4 +142,3 @@ class Stir(AbstractStep):
                 'stir': True,
             }
         }
-
