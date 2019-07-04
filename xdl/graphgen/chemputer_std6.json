@@ -406,104 +406,90 @@
       "necks": 1
     },
     {
-      "id": "cartridge",
-      "type": "custom",
-      "x": 1120,
-      "y": 280,
-      "customProperties": {
-        "name": {
-          "name": "name",
-          "id": "name",
-          "units": "",
-          "type": "str"
-        },
-        "chemical": {
-          "name": "chemical",
-          "id": "chemical",
-          "units": "",
-          "type": "str"
-        }
-      },
-      "class": "ChemputerCartridge",
-      "name": "cartridge",
-      "chemical": "",
-      "internalId": 41,
-      "label": "cartridge"
-    },
-    {
       "id": "valve_reagents0",
       "type": "valve",
       "x": -200,
       "y": 160,
+      "internalId": 44,
+      "label": "valve_reagents0",
       "class": "ChemputerValve",
       "name": "valve_reagents0",
-      "address": "",
-      "internalId": 44,
-      "label": "valve_reagents0"
+      "address": ""
     },
     {
       "id": "pump_reagents0",
       "type": "pump",
       "x": -200,
       "y": 40,
+      "internalId": 38,
+      "label": "pump_reagents0",
       "class": "ChemputerPump",
       "name": "pump_reagents0",
       "address": "",
-      "max_volume": 100,
-      "internalId": 38,
-      "label": "pump_reagents0"
+      "max_volume": 100
     },
     {
       "id": "flask_0c",
       "type": "flask",
       "x": -320,
       "y": 280,
+      "internalId": 49,
+      "label": "flask_0c",
       "class": "ChemputerFlask",
       "name": "flask_0c",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 100,
-      "internalId": 49,
-      "label": "flask_0c"
+      "max_volume": 100
     },
     {
       "id": "flask_0b",
       "type": "flask",
       "x": -320,
       "y": 160,
+      "internalId": 51,
+      "label": "flask_0b",
       "class": "ChemputerFlask",
       "name": "flask_0b",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 100,
-      "internalId": 51,
-      "label": "flask_0b"
+      "max_volume": 100
     },
     {
       "id": "flask_0a",
       "type": "flask",
       "x": -320,
       "y": 40,
+      "internalId": 53,
+      "label": "flask_0a",
       "class": "ChemputerFlask",
       "name": "flask_0a",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 100,
-      "internalId": 53,
-      "label": "flask_0a"
+      "max_volume": 100
     },
     {
       "id": "flask_0d",
       "type": "flask",
       "x": -200,
       "y": 280,
+      "internalId": 77,
+      "label": "flask_0d",
       "class": "ChemputerFlask",
       "name": "flask_0d",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 100,
-      "internalId": 77,
-      "label": "flask_0d"
+      "max_volume": 100
+    },
+    {
+      "id": "cartridge",
+      "type": "cartridge",
+      "x": 1120,
+      "y": 280,
+      "internalId": 41,
+      "label": "cartridge",
+      "class": "ChemputerCartridge",
+      "name": "cartridge",
+      "chemical": ""
     }
   ],
   "links": [
@@ -948,22 +934,6 @@
       "port": "(0,0)"
     },
     {
-      "id": 42,
-      "sourceInternal": 3,
-      "targetInternal": 41,
-      "source": "valve_separator",
-      "target": "cartridge",
-      "port": "(3,in)"
-    },
-    {
-      "id": 43,
-      "sourceInternal": 41,
-      "targetInternal": 5,
-      "source": "cartridge",
-      "target": "valve_rotavap",
-      "port": "(out,3)"
-    },
-    {
       "id": 45,
       "sourceInternal": 44,
       "targetInternal": 4,
@@ -1034,6 +1004,22 @@
       "source": "valve_reagents0",
       "target": "waste",
       "port": "(0,0)"
+    },
+    {
+      "id": 42,
+      "sourceInternal": 3,
+      "targetInternal": 41,
+      "source": "valve_separator",
+      "target": "cartridge",
+      "port": "(3,in)"
+    },
+    {
+      "id": 43,
+      "sourceInternal": 41,
+      "targetInternal": 5,
+      "source": "cartridge",
+      "target": "valve_rotavap",
+      "port": "(out,3)"
     }
   ]
 }
