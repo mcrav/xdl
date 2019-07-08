@@ -1,22 +1,48 @@
+from typing import Dict, List
 import json
 import os
 import copy
+from ..steps import FilterThrough
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
-def load_template():
+def load_template() -> Dict:
+    """Load template JSON from file.
+
+    Returns:
+        Dictionary of form {'nodes': [...], 'edges': [...]}
+    """
     with open(os.path.join(HERE, 'chemputer_std6.json')) as fd:
         return json.load(fd)
 
-def get_n_reagent_flasks(template):
+def get_n_reagent_flasks(template: Dict) -> int:
+    """Get the number of reagent flasks contained in the template, ignoring
+    buffer flasks or flasks where the chemical is already specified, e.g. inert
+    gas flasks.
+
+    Returns:
+        int: Number of reagent flasks contained in the template.
+    """
     i = 0
     for node in template['nodes']:
         if (node['type'] == 'flask'
-            and not node['name'] == 'buffer_flask'):
+            and not node['name'] == 'buffer_flask'
+            and not node['chemical']):
             i += 1
     return i
 
-def add_reagents(template, reagents):
+def add_reagents(template: Dict, reagents: List[str]) -> Dict:
+    """Add reagents to reagent flasks in template.
+
+    Args:
+        template (Dict): Loaded template to add chemical property to reagent
+            flasks.
+        reagents (List[str]): List of reagents to add to reagent flasks in
+            template.
+
+    Returns:
+        Dict: Template with reagents added to reagent flasks.
+    """
     max_n_reagents = get_n_reagent_flasks(template)
     if len(reagents) > max_n_reagents:
         raise(
@@ -28,15 +54,29 @@ def add_reagents(template, reagents):
             and not node['name'] == 'buffer_flask'):
             if reagents:
                 node['chemical'] = reagents.pop()
-            else:
+            elif not node['chemical']:
                 # Need this so flasks aren't used as buffer flask
                 node['chemical'] = 'None'
 
     return template
 
-def get_graph(reagents):
+def get_graph(reagents: List[str]) -> Dict:
+    """Get a template graph with all passed reagents added to reagent flasks.
+
+    Args:
+        reagents (List[str]): List of reagents to add to template.
+
+    Returns:
+        Dict: Graph with all passed reagents in reagent flasks.
+    """
     return add_reagents(load_template(), reagents)
 
-def save_graph(reagents, save_file):
+def save_graph(reagents: List[str], save_file: str) -> None:
+    """Save template graph with all passed reagents added to reagent flasks.
+
+    Args:
+        reagents (List[str]): List of reagents to add to template.
+        save_file (str): File path to save JSON graph to.
+    """
     with open(save_file, 'w') as fd:
         json.dump(get_graph(reagents), fd)
