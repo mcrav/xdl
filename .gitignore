@@ -16,6 +16,7 @@ logs
 lidocaine
 tests/chempiler_output/
 tests/unit/chempiler_output
+chempiler_output
 
 # other shite
 .vscode

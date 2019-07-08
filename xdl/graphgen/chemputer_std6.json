@@ -194,7 +194,7 @@
     {
       "id": "flask_1b",
       "type": "flask",
-      "x": -80,
+      "x": -40,
       "y": 280,
       "internalId": 39,
       "label": "flask_1b",
@@ -220,7 +220,7 @@
     {
       "id": "flask_2a",
       "type": "flask",
-      "x": 160,
+      "x": 200,
       "y": 280,
       "internalId": 56,
       "label": "flask_2a",
@@ -246,7 +246,7 @@
     {
       "id": "flask_2c",
       "type": "flask",
-      "x": 400,
+      "x": 360,
       "y": 280,
       "internalId": 60,
       "label": "flask_2c",
@@ -259,7 +259,7 @@
     {
       "id": "buffer_flask",
       "type": "flask",
-      "x": 640,
+      "x": 680,
       "y": 280,
       "internalId": 65,
       "label": "buffer_flask",
@@ -298,8 +298,8 @@
     {
       "id": "valve_vacuum",
       "type": "valve",
-      "x": 520,
-      "y": 400,
+      "x": 400,
+      "y": 280,
       "internalId": 82,
       "label": "valve_vacuum",
       "class": "ChemputerValve",
@@ -309,14 +309,23 @@
     {
       "id": "vacuum_flask",
       "type": "vacuum",
-      "x": 520,
-      "y": 520,
+      "x": 440,
+      "y": 400,
       "internalId": 85,
       "label": "vacuum_flask",
+      "customProperties": {
+        "max_volume": {
+          "name": "Max volume",
+          "id": "max_volume",
+          "units": "mL",
+          "type": "number"
+        }
+      },
       "class": "ChemputerVacuum",
       "name": "vacuum_flask",
       "port": "",
-      "address": ""
+      "address": "",
+      "max_volume": 25
     },
     {
       "id": "stirrer_reactor",
@@ -371,7 +380,7 @@
     {
       "id": "stirrer_filter",
       "type": "stirrer",
-      "x": 440,
+      "x": 520,
       "y": 360,
       "internalId": 95,
       "label": "stirrer_filter",
@@ -490,6 +499,32 @@
       "class": "ChemputerCartridge",
       "name": "cartridge",
       "chemical": ""
+    },
+    {
+      "id": "flask_argon",
+      "type": "flask",
+      "x": 360,
+      "y": 400,
+      "class": "ChemputerFlask",
+      "name": "flask_argon",
+      "chemical": "argon",
+      "current_volume": 100,
+      "max_volume": 100,
+      "internalId": 110,
+      "label": "flask_argon"
+    },
+    {
+      "id": "flask_nitrogen",
+      "type": "flask",
+      "x": 120,
+      "y": 280,
+      "class": "ChemputerFlask",
+      "name": "flask_nitrogen",
+      "chemical": "nitrogen",
+      "current_volume": 100,
+      "max_volume": 100,
+      "internalId": 108,
+      "label": "flask_nitrogen"
     }
   ],
   "links": [
@@ -1020,6 +1055,38 @@
       "source": "cartridge",
       "target": "valve_rotavap",
       "port": "(out,3)"
+    },
+    {
+      "id": 106,
+      "sourceInternal": 82,
+      "targetInternal": 1,
+      "source": "valve_vacuum",
+      "target": "valve_filter",
+      "port": "(1,2)"
+    },
+    {
+      "id": 107,
+      "sourceInternal": 1,
+      "targetInternal": 82,
+      "source": "valve_filter",
+      "target": "valve_vacuum",
+      "port": "(2,1)"
+    },
+    {
+      "id": 111,
+      "sourceInternal": 110,
+      "targetInternal": 82,
+      "source": "flask_argon",
+      "target": "valve_vacuum",
+      "port": "(0,2)"
+    },
+    {
+      "id": 109,
+      "sourceInternal": 108,
+      "targetInternal": 4,
+      "source": "flask_nitrogen",
+      "target": "valve_reagents1",
+      "port": "(0,1)"
     }
   ]
 }
