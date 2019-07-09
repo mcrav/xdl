@@ -64,8 +64,7 @@ def get_available_solvents(xdl_obj: 'XDL') -> List[str]:
     for reagent in reagents:
         for solvent in COMMON_SOLVENT_NAMES:
             # Look for stuff like 'X in THF' as well as plain 'THF'.
-            if (re.match(r'[ _]?' + solvent, reagent.lower())
-                or re.match(r'[ _]?' + solvent, reagent.lower())):
+            if re.match(r'(?:[ _]|^)' + solvent + r'(?:[ _]|$)', reagent.lower()):
                 # Don't want to use solvents that damage parts of Chemputer.
                 if not reagent.lower() in CLEANING_SOLVENT_BLACKLIST:
                     solvents.append(reagent)
@@ -93,6 +92,7 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
         for reagent in additions:
             cleaning_solvent = get_reagent_cleaning_solvent(
                 reagent, xdl_obj.reagents, available_solvents)
+
             # Explicit None check as cleaning_solvent can be GENERIC_ORGANIC (0)
             if cleaning_solvent != None:
                 schedule[i] = cleaning_solvent
@@ -164,9 +164,8 @@ def get_reagent_cleaning_solvent(
 
     # Look for stuff like 'X in THF'
     for solvent in available_solvents:
-        if (re.match(r'[ ]?' + solvent, reagent_name)
-            or re.match(r'[ ]?' + solvent, reagent_name)):
-            return reagent_name
+        if re.match(r'(?:[ _]|^)' + solvent + r'(?:[ _]|$)', reagent_name):
+            return solvent
 
     for xdl_reagent in xdl_reagents:
         if xdl_reagent.id == reagent_name and xdl_reagent.cleaning_solvent:
