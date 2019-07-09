@@ -91,6 +91,23 @@ class XDLExecutor(object):
                 flasks_ok = False
         return flasks_ok
 
+    def _check_all_cartridges_present(self) -> bool:
+        """Check that there is a cartridge present for every FilterThrough step
+        in the procedure.
+
+        Returns:
+            bool: True if all FilterThrough cartridges are present, otherwise
+                False
+        """
+        cartridge_chemicals_in_graph = [
+            cartridge.chemical for cartridge in self._graph_hardware.cartridges]
+        for step in self._xdl.steps:
+            if type(step) == FilterThrough:
+                if not step.through in cartridge_chemicals_in_graph:
+                    raise XDLError(
+                        f'No cartridge present containing {step.through}')
+        return True
+
 
     ###################################
     ### MAP GRAPH HARDWARE TO STEPS ###
@@ -216,6 +233,12 @@ class XDLExecutor(object):
                 vessel = self._graph_hardware[step.vessel]
                 if 'dead_volume' in vessel.properties:
                     step.filter_dead_volume = vessel.dead_volume
+
+            if ('through_cartridge' in step.properties
+                and not step.through_cartridge):
+                for cartridge in self._graph_hardware.cartridges:
+                    if cartridge.chemical == step.through:
+                        step.through_cartridge = cartridge.id
 
             if not isinstance(step, AbstractBaseStep):
                 self._add_internal_properties_to_steps(step.steps)
@@ -802,6 +825,7 @@ class XDLExecutor(object):
                 if self._hardware_is_compatible():
                     self.logger.info('Hardware is compatible')
                     self._check_all_flasks_present()
+                    self._check_all_cartridges_present()
 
                     # Map graph hardware to steps.
                     # _map_hardware_to_steps is called twice so that
