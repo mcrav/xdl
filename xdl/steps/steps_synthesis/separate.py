@@ -31,8 +31,11 @@ class Separate(AbstractStep):
         solvent (str): Solvent to extract with.
         solvent_volume (float): Volume of solvent to extract with.
         product_bottom (bool): True if product in bottom phase, otherwise False.
-        through (str): Optional. Cartridge to transfer product phrase through
+        through (str): Optional. Chemical to transfer product phase through
             on way to to_vessel.
+        through_cartridge (str): Optional. Node name of cartridge to transfer
+            product phase through on way to to_vessel. Supplied internally if
+            through is given.
         n_separations (int): Number of separations to perform.
         waste_phase_to_vessel (str): Vessel to send waste phase to.
         waste_phase_to_port (str): waste_phase_to_vessel port to use.
@@ -47,6 +50,7 @@ class Separate(AbstractStep):
         solvent: str,
         product_bottom: bool,
         through: Optional[str] = None,
+        through_cartridge: Optional[str] = None,
         from_port: Optional[str] = None,
         to_port: Optional[str] = None,
         solvent_volume: Optional[float] = 'default',
@@ -112,7 +116,7 @@ class Separate(AbstractStep):
                                         upper_phase_port=self.waste_phase_to_port,
                                         separation_vessel=self.separation_vessel,
                                         dead_volume_target=None,
-                                        lower_phase_through=self.through),
+                                        lower_phase_through=self.through_cartridge),
                         # Move to_vessel to separation_vessel
                         CMove(from_vessel=self.to_vessel,
                               to_vessel=self.separation_vessel, volume='all'),
@@ -142,7 +146,7 @@ class Separate(AbstractStep):
                     upper_phase_vessel=self.waste_phase_to_vessel,
                     upper_phase_port=self.waste_phase_to_port,
                     dead_volume_target=dead_volume_target,
-                    lower_phase_through=self.through),
+                    lower_phase_through=self.through_cartridge),
             ])
         else:
             if n_separations > 1:
@@ -178,7 +182,7 @@ class Separate(AbstractStep):
                                 upper_phase_port=self.to_port,
                                 separation_vessel=self.separation_vessel,
                                 dead_volume_target=dead_volume_target,
-                                upper_phase_through=self.through)
+                                upper_phase_through=self.through_cartridge)
             ])
         return steps
 

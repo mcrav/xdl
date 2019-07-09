@@ -31,7 +31,8 @@ def get_n_reagent_flasks(template: Dict) -> int:
             i += 1
     return i
 
-def add_reagents(template: Dict, reagents: List[str]) -> Dict:
+def add_reagents(
+    template: Dict, reagents: List[str], cartridge_reagent: str) -> Dict:
     """Add reagents to reagent flasks in template.
 
     Args:
@@ -58,9 +59,12 @@ def add_reagents(template: Dict, reagents: List[str]) -> Dict:
                 # Need this so flasks aren't used as buffer flask
                 node['chemical'] = 'None'
 
+        elif node['type'] == 'cartridge':
+            node['chemical'] = cartridge_reagent
+
     return template
 
-def get_graph(reagents: List[str]) -> Dict:
+def get_graph(reagents: List[str], cartridge_reagent: str = None) -> Dict:
     """Get a template graph with all passed reagents added to reagent flasks.
 
     Args:
@@ -69,7 +73,7 @@ def get_graph(reagents: List[str]) -> Dict:
     Returns:
         Dict: Graph with all passed reagents in reagent flasks.
     """
-    return add_reagents(load_template(), reagents)
+    return add_reagents(load_template(), reagents, cartridge_reagent)
 
 def save_graph(reagents: List[str], save_file: str) -> None:
     """Save template graph with all passed reagents added to reagent flasks.

@@ -168,6 +168,7 @@
     </node>
     <node id="n8">
       <data key="d4" xml:space="preserve"><![CDATA[ChemputerCartridge]]></data>
+      <data key="d7" xml:space="preserve"><![CDATA[celite]]></data>
       <data key="d13" xml:space="preserve"/>
       <data key="d15">
         <y:ImageNode>
@@ -1035,7 +1036,6 @@
     </edge>
     <edge id="e36" source="n22" target="n24">
       <data key="d19" xml:space="preserve"><![CDATA[(0,4)]]></data>
-      <data key="d22"/>
       <data key="d23">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -1049,7 +1049,6 @@
     </edge>
     <edge id="e37" source="n22" target="n0">
       <data key="d19" xml:space="preserve"><![CDATA[(0,-1)]]></data>
-      <data key="d22"/>
       <data key="d23">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
