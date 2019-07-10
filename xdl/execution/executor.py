@@ -407,6 +407,7 @@ class XDLExecutor(object):
         if self._xdl.auto_clean:
             self._add_implied_clean_vessel_steps()
             self._add_implied_clean_backbone_steps(interactive=interactive)
+        self._add_reagent_stirring_steps()
 
     def _add_implied_clean_backbone_steps(
         self, interactive: bool = True) -> None:
@@ -429,6 +430,25 @@ class XDLExecutor(object):
         """Add CleanVessel steps after steps which completely empty a vessel."""
         add_vessel_cleaning_steps(self._xdl, self._graph_hardware)
         self._add_internal_properties()
+
+    def _add_reagent_stirring_steps(self) -> None:
+        """Add stirring steps at start and end to flasks where reagent has stir
+        set to True in Reagents section of XDL.
+        """
+        for reagent in self._xdl.reagents:
+            if reagent.stir:
+                reagent_flask = None
+                for flask in self._graph_hardware.flasks:
+                    if flask.chemical == reagent.id:
+                        reagent_flask = flask.id
+                if reagent_flask:
+                    self._xdl.steps.insert(
+                        0,
+                        StartStir(vessel=reagent_flask,
+                                  stir_speed=DEFAULT_STIR_REAGENT_FLASK_SPEED))
+
+                    self._xdl.steps.append(StopStir(vessel=reagent_flask))
+
 
 ###################################
 ### FILTER DEAD VOLUME HANDLING ###
@@ -806,52 +826,51 @@ class XDLExecutor(object):
         """
         if not self._prepared_for_execution:
             # Check XDL is not empty.
-            if self._xdl.steps:
-                self.logger.info('XDL is valid')
+            self.logger.info('XDL is valid')
 
-                self._graph = get_graph(graph_file)
-                # Load graph, make Hardware object from graph, and map nearest
-                # waste vessels to every node.
-                self._graph_hardware = hardware_from_graph(self._graph)
-                self._waste_map = make_vessel_map(
-                    self._graph, CHEMPUTER_WASTE_CLASS_NAME)
-                self._vacuum_map = make_vessel_map(
-                    self._graph, CHEMPUTER_VACUUM_CLASS_NAME)
-                self._inert_gas_map = make_inert_gas_map(self._graph)
-                self._valve_map = make_vessel_map(
-                    self._graph, CHEMPUTER_VALVE_CLASS_NAME)
+            self._graph = get_graph(graph_file)
+            # Load graph, make Hardware object from graph, and map nearest
+            # waste vessels to every node.
+            self._graph_hardware = hardware_from_graph(self._graph)
+            self._waste_map = make_vessel_map(
+                self._graph, CHEMPUTER_WASTE_CLASS_NAME)
+            self._vacuum_map = make_vessel_map(
+                self._graph, CHEMPUTER_VACUUM_CLASS_NAME)
+            self._inert_gas_map = make_inert_gas_map(self._graph)
+            self._valve_map = make_vessel_map(
+                self._graph, CHEMPUTER_VALVE_CLASS_NAME)
 
-                # Check hardware compatibility
-                if self._hardware_is_compatible():
-                    self.logger.info('Hardware is compatible')
-                    self._check_all_flasks_present()
-                    self._check_all_cartridges_present()
+            # Check hardware compatibility
+            if self._hardware_is_compatible():
+                self.logger.info('Hardware is compatible')
+                self._check_all_flasks_present()
+                self._check_all_cartridges_present()
 
-                    # Map graph hardware to steps.
-                    # _map_hardware_to_steps is called twice so that
-                    # _xdl.iter_vessel_contents has all vessels to play with
-                    # during _add_implied_steps.
-                    self._get_hardware_map()
-                    self._map_hardware_to_steps()
-                    self._add_internal_properties()
-                    # Add in steps implied by explicit steps.
-                    self._add_implied_steps(interactive=interactive)
-                    # Convert implied properties to concrete values.
-                    self._add_clean_vessel_temps()
-                    self._optimise_separation_steps()
-                    self._add_internal_properties()
-                    self._add_all_volumes()
-                    self._add_filter_volumes()
+                # Map graph hardware to steps.
+                # _map_hardware_to_steps is called twice so that
+                # _xdl.iter_vessel_contents has all vessels to play with
+                # during _add_implied_steps.
+                self._get_hardware_map()
+                self._map_hardware_to_steps()
+                self._add_internal_properties()
+                # Add in steps implied by explicit steps.
+                self._add_implied_steps(interactive=interactive)
+                # Convert implied properties to concrete values.
+                self._add_clean_vessel_temps()
+                self._optimise_separation_steps()
+                self._add_internal_properties()
+                self._add_all_volumes()
+                self._add_filter_volumes()
 
-                    # Optimise procedure.
-                    self._tidy_up_procedure()
+                # Optimise procedure.
+                self._tidy_up_procedure()
 
-                    self._print_warnings()
-                    self._prepared_for_execution = True
+                self._print_warnings()
+                self._prepared_for_execution = True
 
-                else:
-                    self.logger.error(
-                        "Hardware is not compatible. Can't execute.")
+            else:
+                self.logger.error(
+                    "Hardware is not compatible. Can't execute.")
 
     def execute(self, chempiler: 'Chempiler') -> None:
         """Execute XDL procedure with given chempiler. The same graph must be
