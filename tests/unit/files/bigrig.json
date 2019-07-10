@@ -430,22 +430,34 @@
       "type": "cartridge",
       "x": 80,
       "y": 320,
+      "internalId": 28,
+      "label": "cartridge_celite",
       "class": "ChemputerCartridge",
       "name": "cartridge_celite",
-      "chemical": "celite",
-      "internalId": 28,
-      "label": "cartridge_celite"
+      "chemical": "celite"
     },
     {
       "id": "cartridge_mgso4",
       "type": "cartridge",
       "x": 160,
       "y": 440,
+      "internalId": 81,
+      "label": "cartridge_mgso4",
       "class": "ChemputerCartridge",
       "name": "cartridge_mgso4",
-      "chemical": "mgso4",
-      "internalId": 81,
-      "label": "cartridge_mgso4"
+      "chemical": "mgso4"
+    },
+    {
+      "id": "flask_stirrer",
+      "type": "stirrer",
+      "x": -40,
+      "y": 240,
+      "class": "IKAmicrostar75",
+      "name": "flask_stirrer",
+      "port": "",
+      "address": "",
+      "internalId": 90,
+      "label": "flask_stirrer"
     }
   ],
   "links": [
@@ -880,6 +892,14 @@
       "source": "cartridge_mgso4",
       "target": "rotavap",
       "port": "(out,evaporate)"
+    },
+    {
+      "id": 91,
+      "sourceInternal": 90,
+      "targetInternal": 2,
+      "source": "flask_stirrer",
+      "target": "flask_water",
+      "port": "(,)"
     }
   ]
 }

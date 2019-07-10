@@ -152,6 +152,9 @@ DEFAULT_STIR_SPEED: int = 250
 #: Default speed in RPM to stir at when dissolving.
 DEFAULT_DISSOLVE_STIR_SPEED: int = 400
 
+#: Default speed to stir reagents that specify stirring in reagent flask.
+DEFAULT_STIR_REAGENT_FLASK_SPEED: int = 200
+
 #####################
 ### Precipitation ###
 #####################
