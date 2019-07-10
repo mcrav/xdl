@@ -407,7 +407,8 @@ class XDLExecutor(object):
         if self._xdl.auto_clean:
             self._add_implied_clean_vessel_steps()
             self._add_implied_clean_backbone_steps(interactive=interactive)
-        self._add_reagent_stirring_steps()
+        self._add_reagent_storage_steps()
+        self._add_reagent_last_minute_addition_steps()
 
     def _add_implied_clean_backbone_steps(
         self, interactive: bool = True) -> None:
@@ -431,23 +432,76 @@ class XDLExecutor(object):
         add_vessel_cleaning_steps(self._xdl, self._graph_hardware)
         self._add_internal_properties()
 
-    def _add_reagent_stirring_steps(self) -> None:
-        """Add stirring steps at start and end to flasks where reagent has stir
-        set to True in Reagents section of XDL.
+    def _add_reagent_storage_steps(self) -> None:
+        """Add stirring and heating steps at start and end to flasks where
+        reagent has stirring or temperature control specified in Reagents
+        section of XDL.
         """
         for reagent in self._xdl.reagents:
-            if reagent.stir:
+            if reagent.stir or reagent.temp:
                 reagent_flask = None
                 for flask in self._graph_hardware.flasks:
                     if flask.chemical == reagent.id:
                         reagent_flask = flask.id
                 if reagent_flask:
-                    self._xdl.steps.insert(
-                        0,
-                        StartStir(vessel=reagent_flask,
-                                  stir_speed=DEFAULT_STIR_REAGENT_FLASK_SPEED))
+                    if reagent.stir:
+                        self._xdl.steps.insert(
+                            0,
+                            StartStir(
+                                vessel=reagent_flask,
+                                stir_speed=DEFAULT_STIR_REAGENT_FLASK_SPEED)
+                            )
 
-                    self._xdl.steps.append(StopStir(vessel=reagent_flask))
+                        self._xdl.steps.append(StopStir(vessel=reagent_flask))
+
+                    if reagent.temp != None:
+                        self._xdl.steps.insert(
+                            0,
+                            StartHeatChill(vessel=reagent_flask,
+                                           temp=reagent.temp),
+                        )
+                        self._xdl.steps.append(
+                            StopHeatChill(
+                                vessel=reagent_flask,
+                            ))
+
+    def _add_reagent_last_minute_addition_steps(self) -> None:
+        """Add addition steps where reagent specify that something must be added
+        to them just before use with last_minute_addition property.
+        """
+        for reagent in self._xdl.reagents:
+            addition, volume = (
+                reagent.last_minute_addition,
+                reagent.last_minute_addition_volume
+            )
+
+            if addition and volume:
+
+                reagent_flask = None
+                for flask in self._graph_hardware.flasks:
+                    if flask.chemical == reagent.id:
+                        reagent_flask = flask.id
+                if reagent_flask:
+                    first_use = -1
+
+                    for i, step in enumerate(self._xdl.steps):
+                        base_steps = step.base_steps
+
+                        for base_step in base_steps:
+                            if (type(base_step) == CMove
+                                and base_step.from_vessel == reagent_flask):
+                                first_use = i
+                                break
+
+                        if first_use >= 0:
+                            break
+
+                    if first_use >= 0:
+                        self._xdl.steps.insert(
+                            first_use,
+                            Add(vessel=reagent_flask,
+                                reagent=addition,
+                                volume=volume))
 
 
 ###################################
