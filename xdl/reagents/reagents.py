@@ -16,5 +16,6 @@ class Reagent(XDLBase):
         cleaning_solvent: str = None,
         stir: bool = False,
         cas: int = None,
-    **kwargs) -> None:
+        temp: float = None,
+        **kwargs) -> None:
         super().__init__(locals())
