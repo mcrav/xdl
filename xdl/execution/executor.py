@@ -408,6 +408,7 @@ class XDLExecutor(object):
             self._add_implied_clean_vessel_steps()
             self._add_implied_clean_backbone_steps(interactive=interactive)
         self._add_reagent_storage_steps()
+        self._add_reagent_last_minute_addition_steps()
 
     def _add_implied_clean_backbone_steps(
         self, interactive: bool = True) -> None:
@@ -463,6 +464,44 @@ class XDLExecutor(object):
                             StopHeatChill(
                                 vessel=reagent_flask,
                             ))
+
+    def _add_reagent_last_minute_addition_steps(self) -> None:
+        """Add addition steps where reagent specify that something must be added
+        to them just before use with last_minute_addition property.
+        """
+        for reagent in self._xdl.reagents:
+            addition, volume = (
+                reagent.last_minute_addition,
+                reagent.last_minute_addition_volume
+            )
+
+            if addition and volume:
+
+                reagent_flask = None
+                for flask in self._graph_hardware.flasks:
+                    if flask.chemical == reagent.id:
+                        reagent_flask = flask.id
+                if reagent_flask:
+                    first_use = -1
+
+                    for i, step in enumerate(self._xdl.steps):
+                        base_steps = step.base_steps
+
+                        for base_step in base_steps:
+                            if (type(base_step) == CMove
+                                and base_step.from_vessel == reagent_flask):
+                                first_use = i
+                                break
+
+                        if first_use >= 0:
+                            break
+
+                    if first_use >= 0:
+                        self._xdl.steps.insert(
+                            first_use,
+                            Add(vessel=reagent_flask,
+                                reagent=addition,
+                                volume=volume))
 
 
 ###################################

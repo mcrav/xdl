@@ -17,5 +17,7 @@ class Reagent(XDLBase):
         stir: bool = False,
         cas: int = None,
         temp: float = None,
-        **kwargs) -> None:
+        last_minute_addition: str = None,
+        last_minute_addition_volume: float = None,
+    ) -> None:
         super().__init__(locals())
