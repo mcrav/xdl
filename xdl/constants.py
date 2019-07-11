@@ -143,6 +143,12 @@ DEFAULT_WASH_SOLID_STIR_TIME: int = 60 * 5
 #: Default time in seconds to wait with stirring after addition of a reagent.
 DEFAULT_AFTER_ADD_WAIT_TIME: int = 10
 
+#: Default portion of reagent to transfer in each loop cycle of anticlogging add
+DEFAULT_ANTICLOGGING_REAGENT_VOLUME: int = 10
+
+#: Default portion of solvent to transfer in each loop cycle of anticlogging add
+DEFAULT_ANTICLOGGING_SOLVENT_VOLUME: int = 2
+
 ##############
 ## Stirring ##
 ##############
@@ -216,6 +222,8 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
         'dispense_speed': DEFAULT_DISPENSE_SPEED,
         'stir_speed': DEFAULT_STIR_SPEED,
+        'anticlogging_solvent_volume': DEFAULT_ANTICLOGGING_SOLVENT_VOLUME,
+        'anticlogging_reagent_volume': DEFAULT_ANTICLOGGING_REAGENT_VOLUME,
     },
     'PrimePumpForAdd': {
         'volume': DEFAULT_PUMP_PRIME_VOLUME,

@@ -159,6 +159,12 @@ class XDLExecutor(object):
             if 'solvent_vessel' in step.properties and not step.solvent_vessel:
                 step.solvent_vessel = self._get_reagent_vessel(step.solvent)
 
+            if ('anticlogging_solvent_vessel' in step.properties
+                and step.anticlogging_solvent):
+
+                step.anticlogging_solvent_vessel = self._get_reagent_vessel(
+                    step.anticlogging_solvent)
+
             if ('eluting_solvent_vessel' in step.properties
                 and step.eluting_solvent):
                 step.eluting_solvent_vessel = self._get_reagent_vessel(
