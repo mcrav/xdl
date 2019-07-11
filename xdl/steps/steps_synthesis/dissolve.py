@@ -42,6 +42,7 @@ class Dissolve(AbstractStep):
         stir_speed: Optional[float] = 'default',
         solvent_vessel: Optional[str] = None,
         vessel_type: Optional[str] = None,
+        **kwargs,
     ) -> None:
         super().__init__(locals())
 

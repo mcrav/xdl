@@ -21,7 +21,8 @@ class SwitchVacuum(AbstractStep):
         vessel: str,
         port: str = None,
         pneumatic_controller: str = None,
-        pneumatic_controller_port: str = None
+        pneumatic_controller_port: str = None,
+        **kwargs,
     ) -> None:
         super().__init__(locals())
 
@@ -52,7 +53,8 @@ class SwitchArgon(AbstractStep):
         port: str = None,
         pressure: str = 'low',
         pneumatic_controller: str = None,
-        pneumatic_controller_port: str = None
+        pneumatic_controller_port: str = None,
+        **kwargs,
     ) -> None:
         super().__init__(locals())
 
