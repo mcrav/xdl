@@ -47,8 +47,8 @@ class Separate(AbstractStep):
         from_vessel: str,
         separation_vessel: str,
         to_vessel: str,
-        solvent: str,
         product_bottom: bool,
+        solvent: Optional[str] = None,
         through: Optional[str] = None,
         through_cartridge: Optional[str] = None,
         from_port: Optional[str] = None,
@@ -77,16 +77,23 @@ class Separate(AbstractStep):
             dead_volume_target = self.waste_vessel
 
         steps = []
-        steps.extend([
+        steps.append(
             # Move from from_vessel to separation_vessel
             Transfer(
                 from_vessel=self.from_vessel, from_port=self.from_port,
                 to_vessel=self.separation_vessel, to_port=TOP_PORT,
-                volume='all'),
-            # Move solvent to separation_vessel.
-            Add(reagent=self.solvent, volume=self.solvent_volume,
-                vessel=self.separation_vessel, port=BOTTOM_PORT,
-                waste_vessel=self.waste_vessel),
+                volume='all')
+        )
+
+        if self.solvent:
+            steps.append(
+                # Move solvent to separation_vessel.
+                Add(reagent=self.solvent, volume=self.solvent_volume,
+                    vessel=self.separation_vessel, port=BOTTOM_PORT,
+                    waste_vessel=self.waste_vessel)
+            )
+
+        steps.extend([
             # Stir separation_vessel
             Stir(vessel=self.separation_vessel,
                  time=DEFAULT_SEPARATION_FAST_STIR_TIME,
@@ -120,12 +127,19 @@ class Separate(AbstractStep):
                         # Move to_vessel to separation_vessel
                         CMove(from_vessel=self.to_vessel,
                               to_vessel=self.separation_vessel, volume='all'),
-                        # Move solvent to separation_vessel.
-                        # Bottom port as washes any reagent from previous
-                        # separation back into funnel.
-                        Add(reagent=self.solvent, volume=self.solvent_volume,
-                            vessel=self.separation_vessel, port=BOTTOM_PORT,
-                            waste_vessel=self.waste_vessel),
+                    ])
+
+                    if self.solvent:
+                        steps.append(
+                            # Move solvent to separation_vessel.
+                            # Bottom port as washes any reagent from previous
+                            # separation back into funnel.
+                            Add(reagent=self.solvent, volume=self.solvent_volume,
+                                vessel=self.separation_vessel, port=BOTTOM_PORT,
+                                waste_vessel=self.waste_vessel)
+                        )
+
+                    steps.extend([
                         # Stir separation_vessel
                         Stir(vessel=self.separation_vessel,
                              time=DEFAULT_SEPARATION_FAST_STIR_TIME,
@@ -151,7 +165,7 @@ class Separate(AbstractStep):
         else:
             if n_separations > 1:
                 for _ in range(n_separations - 1):
-                    steps.extend([
+                    steps.append(
                         # dead_volume_target is None as there is no point wasting
                         # when there is still solvent to come.
                         CSeparatePhases(
@@ -159,11 +173,18 @@ class Separate(AbstractStep):
                             lower_phase_port=self.waste_phase_to_port,
                             upper_phase_vessel=self.separation_vessel,
                             separation_vessel=self.separation_vessel,
-                            dead_volume_target=None),
-                        # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, vessel=self.separation_vessel,
-                            port=BOTTOM_PORT, volume=self.solvent_volume,
-                            waste_vessel=self.waste_vessel),
+                            dead_volume_target=None)
+                    )
+
+                    if self.solvent:
+                        steps.append(
+                            # Move solvent to separation_vessel
+                            Add(reagent=self.solvent, vessel=self.separation_vessel,
+                                port=BOTTOM_PORT, volume=self.solvent_volume,
+                                waste_vessel=self.waste_vessel)
+                        )
+
+                    steps.extend([
                         # Stir separation_vessel
                         Stir(vessel=self.separation_vessel,
                              time=DEFAULT_SEPARATION_FAST_STIR_TIME,
