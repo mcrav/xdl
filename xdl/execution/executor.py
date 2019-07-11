@@ -21,6 +21,7 @@ from .graph import (
     make_inert_gas_map,
     get_unused_valve_port,
     vacuum_device_attached_to_flask,
+    get_pneumatic_controller,
 )
 from .utils import VesselContents, is_aqueous
 from .cleaning import (
@@ -233,6 +234,13 @@ class XDLExecutor(object):
                 vessel = self._graph_hardware[step.vessel]
                 if 'dead_volume' in vessel.properties:
                     step.filter_dead_volume = vessel.dead_volume
+
+            # Add pneumatic_controller to SwitchVacuum but not to CSwitchVacuum
+            # as it is not an internal property in CSwitchVacuum
+            if ('pneumatic_controller' in step.properties
+                and 'vessel' in step.properties):
+                step.pneumatic_controller, step.pneumatic_controller_port = (
+                    get_pneumatic_controller(step.vessel, step.port, self._graph))
 
             if ('through_cartridge' in step.properties
                 and not step.through_cartridge):
