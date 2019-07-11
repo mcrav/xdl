@@ -1,7 +1,7 @@
 from typing import Optional, List, Dict, Any
 
 from ..utils import get_vacuum_valve_reconnect_steps
-from ..base_step import AbstractStep, Step
+from ..base_steps import AbstractStep, Step
 from ..steps_base import CMove, CValveMoveToPosition
 from ...constants import BOTTOM_PORT
 
@@ -27,7 +27,7 @@ class AddFilterDeadVolume(AbstractStep):
         self,
         filter_vessel: str,
         solvent: str,
-        volume: float, 
+        volume: float,
         waste_vessel: Optional[str] = None,
         solvent_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
@@ -61,7 +61,7 @@ class AddFilterDeadVolume(AbstractStep):
 
 class RemoveFilterDeadVolume(AbstractStep):
     """Remove dead volume (volume below filter) from filter vessel.
-    
+
     Args:
         filter_vessel (str): Filter vessel to remove dead volume from.
         dead_volume (float): Volume in mL to remove from bottom of filter vessel.
@@ -98,7 +98,7 @@ class RemoveFilterDeadVolume(AbstractStep):
             valve_unused_port=self.valve_unused_port,
             vessel=self.filter_vessel))
         return steps
-            
+
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {

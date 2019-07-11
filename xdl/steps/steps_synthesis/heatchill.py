@@ -1,11 +1,11 @@
 from typing import Optional, List, Dict, Any
-from ..base_step import Step, AbstractStep
+from ..base_steps import Step, AbstractStep
 from ..steps_utility import (
     Wait, HeatChillToTemp, StopHeatChill, StartStir, StopStir)
 
 class HeatChill(AbstractStep):
     """Heat or chill vessel to given temp for given time.
-    
+
     Args:
         vessel (str): Vessel to heat/chill.
         temp (float): Temperature to heat/chill vessel to in °C.
@@ -20,7 +20,7 @@ class HeatChill(AbstractStep):
         vessel: str,
         temp: float,
         time: float,
-        stir: bool = True, 
+        stir: bool = True,
         stir_speed: float = 'default',
         vessel_type: Optional[str] = None,
         **kwargs

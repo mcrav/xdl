@@ -1,6 +1,6 @@
 from typing import Optional, Dict, Any, List
 import copy
-from ..base_step import Step, AbstractStep
+from ..base_steps import Step, AbstractStep
 from .add import Add
 from ..steps_utility import Transfer, Wait, Stir
 from ..steps_base import CSeparatePhases, CMove
@@ -31,8 +31,11 @@ class Separate(AbstractStep):
         solvent (str): Solvent to extract with.
         solvent_volume (float): Volume of solvent to extract with.
         product_bottom (bool): True if product in bottom phase, otherwise False.
-        through (str): Optional. Cartridge to transfer product phrase through
+        through (str): Optional. Chemical to transfer product phase through
             on way to to_vessel.
+        through_cartridge (str): Optional. Node name of cartridge to transfer
+            product phase through on way to to_vessel. Supplied internally if
+            through is given.
         n_separations (int): Number of separations to perform.
         waste_phase_to_vessel (str): Vessel to send waste phase to.
         waste_phase_to_port (str): waste_phase_to_vessel port to use.
@@ -44,9 +47,10 @@ class Separate(AbstractStep):
         from_vessel: str,
         separation_vessel: str,
         to_vessel: str,
-        solvent: str,
         product_bottom: bool,
+        solvent: Optional[str] = None,
         through: Optional[str] = None,
+        through_cartridge: Optional[str] = None,
         from_port: Optional[str] = None,
         to_port: Optional[str] = None,
         solvent_volume: Optional[float] = 'default',
@@ -73,22 +77,29 @@ class Separate(AbstractStep):
             dead_volume_target = self.waste_vessel
 
         steps = []
-        steps.extend([
+        steps.append(
             # Move from from_vessel to separation_vessel
             Transfer(
-                from_vessel=self.from_vessel, from_port=self.from_port, 
-                to_vessel=self.separation_vessel, to_port=TOP_PORT, 
-                volume='all'),
-            # Move solvent to separation_vessel.
-            Add(reagent=self.solvent, volume=self.solvent_volume, 
-                vessel=self.separation_vessel, port=BOTTOM_PORT, 
-                waste_vessel=self.waste_vessel),
+                from_vessel=self.from_vessel, from_port=self.from_port,
+                to_vessel=self.separation_vessel, to_port=TOP_PORT,
+                volume='all')
+        )
+
+        if self.solvent:
+            steps.append(
+                # Move solvent to separation_vessel.
+                Add(reagent=self.solvent, volume=self.solvent_volume,
+                    vessel=self.separation_vessel, port=BOTTOM_PORT,
+                    waste_vessel=self.waste_vessel)
+            )
+
+        steps.extend([
             # Stir separation_vessel
-            Stir(vessel=self.separation_vessel, 
-                 time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
+            Stir(vessel=self.separation_vessel,
+                 time=DEFAULT_SEPARATION_FAST_STIR_TIME,
                  stir_speed=DEFAULT_SEPARATION_FAST_STIR_SPEED),
-            Stir(vessel=self.separation_vessel, 
-                 time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
+            Stir(vessel=self.separation_vessel,
+                 time=DEFAULT_SEPARATION_SLOW_STIR_TIME,
                  stir_speed=DEFAULT_SEPARATION_SLOW_STIR_SPEED),
             # Wait for phases to separate
             Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
@@ -106,28 +117,35 @@ class Separate(AbstractStep):
                     steps.extend([
                         # dead_volume_target is None as there is no point wasting
                         # when there is still solvent to come.
-                        CSeparatePhases(lower_phase_vessel=self.to_vessel, 
+                        CSeparatePhases(lower_phase_vessel=self.to_vessel,
                                         lower_phase_port=self.to_port,
                                         upper_phase_vessel=self.waste_phase_to_vessel,
                                         upper_phase_port=self.waste_phase_to_port,
-                                        separation_vessel=self.separation_vessel, 
+                                        separation_vessel=self.separation_vessel,
                                         dead_volume_target=None,
-                                        lower_phase_through=self.through),
+                                        lower_phase_through=self.through_cartridge),
                         # Move to_vessel to separation_vessel
-                        CMove(from_vessel=self.to_vessel, 
+                        CMove(from_vessel=self.to_vessel,
                               to_vessel=self.separation_vessel, volume='all'),
-                        # Move solvent to separation_vessel. 
-                        # Bottom port as washes any reagent from previous 
-                        # separation back into funnel.
-                        Add(reagent=self.solvent, volume=self.solvent_volume, 
-                            vessel=self.separation_vessel, port=BOTTOM_PORT, 
-                            waste_vessel=self.waste_vessel),
+                    ])
+
+                    if self.solvent:
+                        steps.append(
+                            # Move solvent to separation_vessel.
+                            # Bottom port as washes any reagent from previous
+                            # separation back into funnel.
+                            Add(reagent=self.solvent, volume=self.solvent_volume,
+                                vessel=self.separation_vessel, port=BOTTOM_PORT,
+                                waste_vessel=self.waste_vessel)
+                        )
+
+                    steps.extend([
                         # Stir separation_vessel
-                        Stir(vessel=self.separation_vessel, 
-                             time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
+                        Stir(vessel=self.separation_vessel,
+                             time=DEFAULT_SEPARATION_FAST_STIR_TIME,
                              stir_speed=DEFAULT_SEPARATION_FAST_STIR_SPEED),
-                        Stir(vessel=self.separation_vessel, 
-                             time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
+                        Stir(vessel=self.separation_vessel,
+                             time=DEFAULT_SEPARATION_SLOW_STIR_TIME,
                              stir_speed=DEFAULT_SEPARATION_SLOW_STIR_SPEED),
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME)
@@ -142,12 +160,12 @@ class Separate(AbstractStep):
                     upper_phase_vessel=self.waste_phase_to_vessel,
                     upper_phase_port=self.waste_phase_to_port,
                     dead_volume_target=dead_volume_target,
-                    lower_phase_through=self.through),
+                    lower_phase_through=self.through_cartridge),
             ])
         else:
             if n_separations > 1:
                 for _ in range(n_separations - 1):
-                    steps.extend([
+                    steps.append(
                         # dead_volume_target is None as there is no point wasting
                         # when there is still solvent to come.
                         CSeparatePhases(
@@ -155,36 +173,43 @@ class Separate(AbstractStep):
                             lower_phase_port=self.waste_phase_to_port,
                             upper_phase_vessel=self.separation_vessel,
                             separation_vessel=self.separation_vessel,
-                            dead_volume_target=None),
-                        # Move solvent to separation_vessel
-                        Add(reagent=self.solvent, vessel=self.separation_vessel, 
-                            port=BOTTOM_PORT, volume=self.solvent_volume, 
-                            waste_vessel=self.waste_vessel),
+                            dead_volume_target=None)
+                    )
+
+                    if self.solvent:
+                        steps.append(
+                            # Move solvent to separation_vessel
+                            Add(reagent=self.solvent, vessel=self.separation_vessel,
+                                port=BOTTOM_PORT, volume=self.solvent_volume,
+                                waste_vessel=self.waste_vessel)
+                        )
+
+                    steps.extend([
                         # Stir separation_vessel
-                        Stir(vessel=self.separation_vessel, 
-                             time=DEFAULT_SEPARATION_FAST_STIR_TIME, 
+                        Stir(vessel=self.separation_vessel,
+                             time=DEFAULT_SEPARATION_FAST_STIR_TIME,
                              stir_speed=DEFAULT_SEPARATION_FAST_STIR_SPEED),
-                        Stir(vessel=self.separation_vessel, 
-                             time=DEFAULT_SEPARATION_SLOW_STIR_TIME, 
+                        Stir(vessel=self.separation_vessel,
+                             time=DEFAULT_SEPARATION_SLOW_STIR_TIME,
                              stir_speed=DEFAULT_SEPARATION_SLOW_STIR_SPEED),
                         # Wait for phases to separate
                         Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
                     ])
 
             steps.extend([
-                CSeparatePhases(lower_phase_vessel=self.waste_phase_to_vessel, 
-                                lower_phase_port=self.waste_phase_to_port, 
+                CSeparatePhases(lower_phase_vessel=self.waste_phase_to_vessel,
+                                lower_phase_port=self.waste_phase_to_port,
                                 upper_phase_vessel=self.to_vessel,
                                 upper_phase_port=self.to_port,
                                 separation_vessel=self.separation_vessel,
                                 dead_volume_target=dead_volume_target,
-                                upper_phase_through=self.through)
+                                upper_phase_through=self.through_cartridge)
             ])
         return steps
 
     def human_readable(self,  language='en') -> str:
         props = self.formatted_properties()
-        
+
         phases = ['bottom', 'top']
         # Remember True == 1 and False == 0
         props['waste_phase'] = phases[self.product_bottom]

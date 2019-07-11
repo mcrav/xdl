@@ -2,7 +2,7 @@ from typing import Dict, List, Any
 
 #: XDL version number. Remember to increment after merging into master. Used
 # in header at top of outputted XDL files.
-XDL_VERSION: str = '0.1.9'
+XDL_VERSION: str = '0.1.10'
 
 ##########################
 ### DEFAULT PARAMETERS ###
@@ -110,7 +110,7 @@ DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME: int = 30
 DEFAULT_WASHFILTERCAKE_STIR_SPEED: int = 500
 
 #: Default time in seconds to wait for with vacuum on when washing a filter cake.
-DEFAULT_WASHFILTERCAKE_VACUUM_TIME: int = 10 
+DEFAULT_WASHFILTERCAKE_VACUUM_TIME: int = 10
 
 #: Default volume factor to remove solvent after washing filter cake,
 # i.e. 1.5 means remove 1.5x the solvent volume.
@@ -143,6 +143,12 @@ DEFAULT_WASH_SOLID_STIR_TIME: int = 60 * 5
 #: Default time in seconds to wait with stirring after addition of a reagent.
 DEFAULT_AFTER_ADD_WAIT_TIME: int = 10
 
+#: Default portion of reagent to transfer in each loop cycle of anticlogging add
+DEFAULT_ANTICLOGGING_REAGENT_VOLUME: int = 10
+
+#: Default portion of solvent to transfer in each loop cycle of anticlogging add
+DEFAULT_ANTICLOGGING_SOLVENT_VOLUME: int = 2
+
 ##############
 ## Stirring ##
 ##############
@@ -151,6 +157,9 @@ DEFAULT_STIR_SPEED: int = 250
 
 #: Default speed in RPM to stir at when dissolving.
 DEFAULT_DISSOLVE_STIR_SPEED: int = 400
+
+#: Default speed to stir reagents that specify stirring in reagent flask.
+DEFAULT_STIR_REAGENT_FLASK_SPEED: int = 200
 
 #####################
 ### Precipitation ###
@@ -213,6 +222,8 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
         'dispense_speed': DEFAULT_DISPENSE_SPEED,
         'stir_speed': DEFAULT_STIR_SPEED,
+        'anticlogging_solvent_volume': DEFAULT_ANTICLOGGING_SOLVENT_VOLUME,
+        'anticlogging_reagent_volume': DEFAULT_ANTICLOGGING_REAGENT_VOLUME,
     },
     'PrimePumpForAdd': {
         'volume': DEFAULT_PUMP_PRIME_VOLUME,

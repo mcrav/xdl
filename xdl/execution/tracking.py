@@ -19,9 +19,9 @@ def iter_vessel_contents(
     throughout the steps.
 
     Args:
-        additions (bool, optional): Defaults to False. 
+        additions (bool, optional): Defaults to False.
             If True, list of what contents were added that step is yielded.
-    
+
     Yields:
         Tuple: (i, step, contents, {additions})
                 i -- Index of step.
@@ -99,7 +99,9 @@ def iter_vessel_contents(
             elif type(step) == Dry:
                 # This is necessary to stop move command putting filter into
                 # negative volume
-                pass
+                vessel_contents.setdefault(
+                    step.vessel, VesselContents([], hardware[step.vessel].current_volume))
+                vessel_contents[step.vessel].volume = 0
 
             elif type(step) == Evaporate:
                 if step.rotavap_name in vessel_contents:
@@ -114,7 +116,7 @@ def iter_vessel_contents(
                     vessel_contents[step.rotavap_name].volume = 0
                 else:
                     vessel_contents[step.rotavap_name] = VesselContents([], 0)
-            
+
             # Handle normal Move steps.
             else:
                 for from_vessel, to_vessel, volume in get_movements(step):
@@ -133,7 +135,7 @@ def iter_vessel_contents(
                         volume = vessel_contents[from_vessel].volume
                         empty_from_vessel = True
                     # Add volume to to_vessel
-                    vessel_contents[to_vessel].volume += volume 
+                    vessel_contents[to_vessel].volume += volume
                     vessel_contents[to_vessel].reagents.extend(
                         vessel_contents[from_vessel].reagents)
                     additions_l.extend(vessel_contents[from_vessel].reagents)
@@ -146,12 +148,13 @@ def iter_vessel_contents(
                         and not from_vessel in [
                             item.id for item in hardware.flasks]):
                         vessel_contents[from_vessel].reagents = []
+                        vessel_contents[from_vessel].volume = 0
                     # Extend list of reagents added in the step.
                     # Empty from_vessel if 'all' volume specified.
                     if empty_from_vessel:
                         vessel_contents[from_vessel].volume = 0
                         vessel_contents[from_vessel].reagents = []
-        
+
             if additions:
                 yield (
                     i,
@@ -168,12 +171,12 @@ def get_movements(step: Step) -> List[Tuple[str, str, float]]:
     """Get all liquid movements associated with given step. Works recursively
     going down step tree until a CMove step is encountered and then the
     liquid movement from the CMove step is added to the movements list.
-    
+
     Args:
         step (Step): Step to get liquid movements from.
-    
+
     Returns:
-        List[Tuple]: List of tuples (from_vessel, to_vessel, volume) 
+        List[Tuple]: List of tuples (from_vessel, to_vessel, volume)
     """
     movements = []
     # All movements are obtained from CMove.

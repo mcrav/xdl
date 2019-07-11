@@ -100,7 +100,7 @@ UNIT_CONVERTERS = {
     'mins': minutes_to_seconds,
     'minute': minutes_to_seconds,
     'minutes': minutes_to_seconds,
-    
+
     's': no_conversion,
     'sec': no_conversion,
     'secs': no_conversion,
@@ -121,7 +121,7 @@ UNIT_CONVERTERS = {
 def convert_val_to_std_units(val: str) -> float:
     """Given str of value with/without units, convert it into standard unit and
     return float value.
-    
+
     Standard units:
 
     time      seconds
@@ -129,15 +129,15 @@ def convert_val_to_std_units(val: str) -> float:
     pressure  mbar
     temp      °c
     mass      g
-    
+
     Arguments:
         val (str): Value (and units) as str. If no units are specified it is
             assumed value is already in default units.
-    
+
     Returns:
         float: Value in default units.
     """
-    float_regex_pattern = r'([-]?[0-9]+(?:[.][0-9]+)?)' 
+    float_regex_pattern = r'([-]?[0-9]+(?:[.][0-9]+)?)'
     unit_search = re.search(r'[a-zA-Z°]+[3]?', val)
     val_search = re.search(float_regex_pattern, val)
     if val_search:
@@ -147,15 +147,20 @@ def convert_val_to_std_units(val: str) -> float:
             return UNIT_CONVERTERS[unit.lower()](val)
         else:
             return val
-    return val 
+    return val
 
 def clean_properties(xdl_class, properties):
     annotations = xdl_class.__init__.__annotations__
     for prop, val in properties.items():
         if val == 'default' or prop == 'kwargs':
             continue
+
         elif prop == 'repeat':
             properties[prop] = int(val)
+            continue
+
+        elif prop == 'children':
+            properties[prop] = val
             continue
 
         prop_type = annotations[prop]

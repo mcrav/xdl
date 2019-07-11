@@ -1,11 +1,11 @@
 
-from typing import Optional
+from typing import Optional, List
 # For type annotations
 if False:
     from chempiler import Chempiler
 from logging import Logger
 
-from ..base_step import Step, AbstractBaseStep
+from ..base_steps import Step, AbstractBaseStep
 
 class Confirm(AbstractBaseStep):
     """Get the user to confirm something before execution continues.
@@ -86,27 +86,28 @@ class CMove(AbstractBaseStep):
         from_port: Optional[str] = None,
         to_port: Optional[str] = None,
         unique: Optional[bool] = False,
-        through: Optional[str] = None
+        through: Optional[List[str]] = []
     ) -> None:
         super().__init__(locals())
 
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.move(
-            src_node=self.from_vessel,
-            dst_node=self.to_vessel,
+            src=self.from_vessel,
+            dest=self.to_vessel,
             volume=self.volume,
-            speed=(self.aspiration_speed, self.move_speed, self.dispense_speed),
+            initial_pump_speed=self.aspiration_speed,
+            mid_pump_speed=self.move_speed,
+            end_pump_speed=self.dispense_speed,
             src_port=self.from_port,
-            dst_port=self.to_port,
-            unique=self.unique,
-            through_node=self.through,
+            dest_port=self.to_port,
+            through_nodes=self.through,
         )
         return True
 
 class CConnect(AbstractBaseStep):
     """Connect two nodes together.
-    
+
     Args:
         from_vessel (str): Node name to connect from.
         to_vessel (str): Node name to connect to.
@@ -123,13 +124,12 @@ class CConnect(AbstractBaseStep):
         unique: Optional[bool] = True
     ) -> None:
         super().__init__(locals())
-        
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.connect(
-            src_node=self.from_vessel,
-            dst_node=self.to_vessel,
+            src=self.from_vessel,
+            dest=self.to_vessel,
             src_port=self.from_port,
-            dst_port=self.to_port,
-            unique=self.unique,
+            dest_port=self.to_port,
         )
         return True

@@ -1,12 +1,12 @@
 from typing import List, Dict, Any, Optional
 
-from ..base_step import AbstractStep, Step
+from ..base_steps import AbstractStep, Step
 from ..steps_utility import Stir, HeatChillToTemp
 
 class Precipitate(AbstractStep):
     """Step to cause precipitation by changing temperature and stirring for some
     time.
-    
+
     Args:
         vessel (str): Vessel to trigger precipitation in.
         temp (float): Optional. Temperature to chill to to cause precipitation.

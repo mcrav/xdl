@@ -1,10 +1,15 @@
-from .base_step import UnimplementedStep
+from .base_steps import UnimplementedStep
 
 class Recrystallize(UnimplementedStep):
 
     def __init__(self):
         super().__init__(locals())
-        
+
+class Sonicate(UnimplementedStep):
+
+    def __init__(self):
+        super().__init__(locals())
+
 class Distill(UnimplementedStep):
 
     def __init__(self):

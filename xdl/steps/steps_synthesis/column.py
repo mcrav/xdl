@@ -1,11 +1,11 @@
 from typing import Optional
-from ..base_step import AbstractStep
+from ..base_steps import AbstractStep
 from ..steps_utility import Transfer
 from .filter_through import FilterThrough
 
 class RunColumn(AbstractStep):
     """Purify using column chromatography.
-    
+
     Args:
         from_vessel (str): Vessel containing mixture to purify.
         to_vessel (str): Vessel to send purified mixture to.
@@ -36,6 +36,6 @@ class RunColumn(AbstractStep):
                 move_speed=self.move_speed,
                 buffer_flask=self.buffer_flask,
             )
-        ]   
-    
+        ]
+
         return steps

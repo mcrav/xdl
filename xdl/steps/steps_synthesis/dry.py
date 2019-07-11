@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict, Any
 from ..utils import get_vacuum_valve_reconnect_steps
-from ..base_step import Step, AbstractStep
+from ..base_steps import Step, AbstractStep
 from ..steps_utility import (
     StopStir,
     HeatChillToTemp,
@@ -72,7 +72,7 @@ class Dry(AbstractStep):
         # use bottom port, or for a rotavap port 'evaporate' is used.
         if self.vessel_type == 'filter':
             from_port = BOTTOM_PORT
-            
+
         steps.extend([
             # Move bulk of liquid to waste.
             CMove(from_vessel=self.vessel,
@@ -92,7 +92,7 @@ class Dry(AbstractStep):
                         from_port=from_port))
 
         steps.append(Wait(self.time))
-        
+
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
         if not self.vacuum_device:

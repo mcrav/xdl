@@ -5,3 +5,4 @@ from .chiller import *
 from .stirrer import *
 from .rotavap import *
 from .valve import *
+from .pneumatic_controller import *

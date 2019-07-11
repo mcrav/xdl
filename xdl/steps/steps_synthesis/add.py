@@ -3,7 +3,7 @@ import copy
 
 from ..steps_utility import PrimePumpForAdd, Wait, StopStir, StartStir
 from ..steps_base import CMove, Confirm
-from ..base_step import Step, AbstractStep
+from ..base_steps import Step, AbstractStep
 from ...utils.misc import get_port_str, format_property
 from ...constants import (
     DEFAULT_AFTER_ADD_WAIT_TIME,
@@ -32,9 +32,22 @@ class Add(AbstractStep):
             pump into self.vessel during the addition.
         stir (bool): If True, stirring will be started before addition.
         stir_speed (float): RPM to stir at, only relevant if stir = True.
+
+        anticlogging (bool): If True, a technique will be used to avoid clogging
+            where reagent is added in small portions, each one followed by a
+            small portion of solvent.
+        anticlogging_solvent (str): Solvent to add between reagent additions
+            during anticlogging routine.
+        anticlogging_solvent_volume (float): Optional. Portion of solvent to add
+            in each cycle of anticlogging add routine.
+        anticlogging_reagent_volume (float): Optional. Portion of reagent to add
+            in each cycle of anticlogging add routine.
+        anticlogging_solvent_vessel (str): Given internally. Vessel containing
+            anticlogging solvent.
+
         reagent_vessel (str): Given internally. Vessel containing reagent.
         waste_vessel (str): Given internally. Vessel to send waste to.
-        flush_tube_vessel (str): Given internally. Air/nitrogen vessel to use to 
+        flush_tube_vessel (str): Given internally. Air/nitrogen vessel to use to
             flush liquid out of the valve -> vessel tube.
     """
     def __init__(
@@ -50,7 +63,14 @@ class Add(AbstractStep):
         time: Optional[float] = None,
         stir: Optional[bool] = False,
         stir_speed: Optional[float] = 'default',
-        reagent_vessel: Optional[str] = None, 
+
+        anticlogging: Optional[bool] = False,
+        anticlogging_solvent: Optional[str] = '',
+        anticlogging_solvent_volume: Optional[float] = 'default',
+        anticlogging_reagent_volume: Optional[float] = 'default',
+        anticlogging_solvent_vessel: Optional[str] = None,
+
+        reagent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
         flush_tube_vessel: Optional[str] = None,
         vessel_type: Optional[str] = None,
@@ -67,28 +87,11 @@ class Add(AbstractStep):
                 **self.properties))]
         # Liquid addition
         else:
-            if self.time:
-                # dispense_speed (mL / min) = volume (mL) / time (min)
-                dispense_speed = self.volume / (self.time / 60)
-            else:
-                dispense_speed = self.dispense_speed
+            if self.anticlogging:
+                return self.get_anticlogging_add_steps()
 
-            # Liquid addition
-            steps = [
-                PrimePumpForAdd(
-                    reagent=self.reagent,
-                    volume='default',
-                    waste_vessel=self.waste_vessel),
-                CMove(
-                    from_vessel=self.reagent_vessel,
-                    to_vessel=self.vessel, 
-                    to_port=port,
-                    volume=self.volume,
-                    move_speed=self.move_speed,
-                    aspiration_speed=self.aspiration_speed,
-                    dispense_speed=dispense_speed),
-                Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME)
-            ]
+            else:
+                return self.get_add_steps()
 
             if self.flush_tube_vessel:
                 steps.append(CMove(
@@ -104,6 +107,57 @@ class Add(AbstractStep):
             else:
                 steps.insert(0, StopStir(vessel=self.vessel))
         return steps
+
+    def get_add_steps(self):
+        return [
+            PrimePumpForAdd(
+                reagent=self.reagent,
+                volume='default',
+                waste_vessel=self.waste_vessel),
+            CMove(
+                from_vessel=self.reagent_vessel,
+                to_vessel=self.vessel,
+                to_port=self.get_port(),
+                volume=self.volume,
+                move_speed=self.move_speed,
+                aspiration_speed=self.aspiration_speed,
+                dispense_speed=self.get_dispense_speed()),
+            Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME)
+        ]
+
+    def get_anticlogging_add_steps(self):
+        dispense_speed = self.get_dispense_speed()
+        port = self.get_port()
+        steps = [
+            PrimePumpForAdd(
+                reagent=self.reagent,
+                volume='default',
+                waste_vessel=self.waste_vessel
+            )
+        ]
+        n_adds = int(self.volume / self.anticlogging_reagent_volume) + 1
+        for _ in range(n_adds):
+            steps.extend([
+                CMove(
+                    from_vessel=self.reagent_vessel,
+                    to_vessel=self.vessel,
+                    to_port=port,
+                    volume=self.anticlogging_reagent_volume,
+                    move_speed=self.move_speed,
+                    aspiration_speed=self.aspiration_speed,
+                    dispense_speed=dispense_speed),
+                CMove(
+                    from_vessel=self.anticlogging_solvent_vessel,
+                    to_vessel=self.vessel,
+                    to_port=port,
+                    volume=self.anticlogging_solvent_volume,
+                    move_speed=self.move_speed,
+                    aspiration_speed=self.aspiration_speed,
+                    dispense_speed=dispense_speed),
+            ])
+        steps.append(Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
+        return steps
+
 
     def human_readable(self, language: str = 'en') -> str:
         try:
@@ -128,7 +182,7 @@ class Add(AbstractStep):
 
     def get_port(self) -> str:
         """If self.port is None, return default port for different vessel types.
-        
+
         Returns:
             str: Vessel port to add to.
         """
@@ -141,3 +195,9 @@ class Add(AbstractStep):
         elif self.vessel_type == 'rotavap':
             return EVAPORATE_PORT
         return None
+
+    def get_dispense_speed(self) -> float:
+        if self.time:
+            # dispense_speed (mL / min) = volume (mL) / time (min)
+            return self.volume / (self.time / 60)
+        return self.dispense_speed

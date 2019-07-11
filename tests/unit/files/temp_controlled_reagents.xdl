@@ -1,0 +1,15 @@
+<Synthesis auto_clean="false">
+  <Hardware>
+
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="water"
+      temp="5" />
+  </Reagents>
+
+  <Procedure>
+  </Procedure>
+
+</Synthesis>

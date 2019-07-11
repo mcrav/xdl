@@ -1,0 +1,15 @@
+<Synthesis auto_clean="false">
+  <Hardware>
+
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="water"
+      stir="true" />
+  </Reagents>
+
+  <Procedure>
+  </Procedure>
+
+</Synthesis>

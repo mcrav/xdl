@@ -6,19 +6,21 @@ from .constants import (
     SEPARATOR_TYPES,
     FLASK_TYPES,
     WASTE_TYPES,
+    CARTRIDGE_TYPES,
 )
-from ..utils.xdl_base import XDLBase 
+from ..utils.xdl_base import XDLBase
 from ..constants import *
 
 class Component(XDLBase):
     """Base component class. At moment does nothing more than XDLBase.
 
     Args:
-        xid (str): ID for the component.
-        properties (dict): Property dict of the component.
-        type (str): Type of the component i.e. 'ChemputerFlask'
+        id (str): ID for the component.
+        component_type (str): Type of the component i.e. 'ChemputerFlask'
+        chemical (str): Optional. Chemical component contains.
     """
-    def __init__(self, id: str, component_type: str) -> None:
+    def __init__(
+        self, id: str, component_type: str, chemical: str = None) -> None:
         super().__init__(locals())
 
 class Hardware(object):
@@ -39,10 +41,12 @@ class Hardware(object):
         self.filters = []
         self.separators = []
         self.rotavaps = []
+        self.cartridges = []
+
         for component in self.components:
             if component.component_type in REACTOR_TYPES:
                 self.reactors.append(component)
-            elif component.component_type in SEPARATOR_TYPES: 
+            elif component.component_type in SEPARATOR_TYPES:
                 self.separators.append(component)
             elif component.component_type in FILTER_TYPES:
                 self.filters.append(component)
@@ -52,6 +56,8 @@ class Hardware(object):
                 self.wastes.append(component)
             elif component.component_type in ROTAVAP_TYPES:
                 self.rotavaps.append(component)
+            elif component.component_type in CARTRIDGE_TYPES:
+                self.cartridges.append(component)
         self.waste_xids = [waste.id for waste in self.wastes]
 
     def __getitem__(self, item: str) -> Union[Component, None]:
@@ -65,4 +71,4 @@ class Hardware(object):
 
     def __iter__(self) -> Generator[Component, None, None]:
         for item in self.components:
-            yield item 
+            yield item

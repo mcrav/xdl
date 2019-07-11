@@ -1,17 +1,18 @@
 from typing import Optional, List, Dict
 from .clean_vessel import CleanVessel
-from ..base_step import Step, AbstractStep
+from ..base_steps import Step, AbstractStep
 from ..steps_utility import Transfer
 from ...localisation import HUMAN_READABLE_STEPS
 
 class FilterThrough(AbstractStep):
     """Filter contents of from_vessel through a cartridge,
     e.g. a Celite cartridge, and optionally elute with a solvent as well.
-    
+
     Args:
         from_vessel (str): Vessel with contents to filter.
         to_vessel (str): Vessel to pass filtered contents to.
-        through_cartridge (str): Cartridge to pass from_vessel contents through.
+        through (str): Substrate to pass from_vessel contents through. Either
+            this or through_cartridge must be given.
         eluting_solvent (str): Solvent to elute with after filtering.
         eluting_volume (float): Volume of solvent to elute with after filtering.
         eluting_repeats (float): Number of times to elute with eluting_solvent
@@ -25,6 +26,8 @@ class FilterThrough(AbstractStep):
             preference is nitrogen > air > nothing.
         cartridge_dead_volume (float): Volume of gas to push through if flushing
             cartridge dead volume.
+        through_cartridge (str): Internal property. Cartridge to pass
+            from_vessel contents through.
         buffer_flask (str): Given internally. If from_vessel and to_vessel are
             the same buffer_flask will be used to push contents of from_vessel
             to temporarily, before moving to to_vessel.
@@ -33,7 +36,7 @@ class FilterThrough(AbstractStep):
         self,
         from_vessel: str,
         to_vessel: str,
-        through_cartridge: str,
+        through: Optional[str] = None,
         eluting_solvent: Optional[str] = None,
         eluting_volume: Optional[float] = None,
         eluting_repeats: Optional[int] = 'default',
@@ -41,6 +44,7 @@ class FilterThrough(AbstractStep):
         aspiration_speed: Optional[float] = 'default',
         eluting_solvent_vessel: Optional[str] = None,
         flush_cartridge_vessel: Optional[str] = None,
+        through_cartridge: Optional[str] = None,
         cartridge_dead_volume: Optional[float] = 'default',
         buffer_flask: Optional[str] = None,
         **kwargs
@@ -74,7 +78,7 @@ class FilterThrough(AbstractStep):
                              move_speed=self.move_speed,
                              aspiration_speed=self.aspiration_speed)
                 ])
-        
+
         if self.flush_cartridge_vessel:
             steps.append(Transfer(from_vessel=self.flush_cartridge_vessel,
                                   to_vessel=filter_through_to_vessel,

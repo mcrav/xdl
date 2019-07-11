@@ -15,6 +15,9 @@ xdl.egg-info
 logs
 lidocaine
 tests/chempiler_output/
+tests/unit/chempiler_output
 
 # other shite
 .vscode
+test.py
+chempiler_output/

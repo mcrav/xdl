@@ -35,7 +35,7 @@ Examples
     from xdl.steps import AbstractStep, Add, Stir
 
     class AddAndStir(AbstractStep):
-        
+
         def __init__(self, properties: Dict[str, Any]):
             super().__init__(locals())
 
@@ -47,10 +47,10 @@ Examples
 
 .. code-block:: python
 
-    from xdl.steps import AbstractStep, Add, HeatChill 
+    from xdl.steps import AbstractStep, Add, HeatChill
 
     class AddAndHeat(AbstractStep):
-        
+
         def __init__(self, properties: Dict[str, Any]):
             super().__init__(locals())
 

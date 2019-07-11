@@ -11,5 +11,13 @@ class Reagent(XDLBase):
         cas (int, optional): Defaults to None. CAS number of reagent as int.
     """
     def __init__(
-        self, id: str, cleaning_solvent: str = None, cas: int = None) -> None:
+        self,
+        id: str,
+        cleaning_solvent: str = None,
+        stir: bool = False,
+        cas: int = None,
+        temp: float = None,
+        last_minute_addition: str = None,
+        last_minute_addition_volume: float = None,
+    ) -> None:
         super().__init__(locals())

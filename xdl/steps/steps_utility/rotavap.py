@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict, Any
 
-from ..base_step import AbstractStep, Step
+from ..base_steps import AbstractStep, Step
 from ..steps_base import (
     CRotavapSetRotationSpeed,
     CRotavapStartRotation,
@@ -49,7 +49,7 @@ class RotavapStartRotation(AbstractStep):
 
 class RotavapStopRotation(AbstractStep):
     """Stop stirring given vessel.
-    
+
     Args:
         rotavap_name (str): Rotavap name to start rotation for.
     """
@@ -106,7 +106,7 @@ class RotavapStir(AbstractStep):
 class RotavapStopEverything(AbstractStep):
     """Stop vacuum, lift rotavap flask up, vent vacuum, stop heater and stop
     rotation.
-    
+
     Args:
         rotavap_name (str): Name of rotavap to stop evaporating with.
     """
@@ -132,7 +132,7 @@ class RotavapStopEverything(AbstractStep):
 
 class RotavapStartVacuum(AbstractStep):
     """Start vacuum at given pressure.
-    
+
     Args:
         rotavap_name (str): Name of rotavap to start vacuum.
         pressure (float): Pressure in mbar to set vacuum to.
@@ -156,14 +156,14 @@ class RotavapStartVacuum(AbstractStep):
 
 class RotavapHeatToTemp(AbstractStep):
     """Set rotavap temperature to given temp and start heater.
-    
+
     Args:
         rotavap_name (str): Name of rotavap to start heating.
         temp (float): Temperature to heat rotavap to.
     """
     def __init__(self, rotavap_name: str, temp: float) -> None:
         super().__init__(locals())
-        
+
     def get_steps(self) -> List[Step]:
         return [
             CRotavapSetTemp(self.rotavap_name, self.temp),

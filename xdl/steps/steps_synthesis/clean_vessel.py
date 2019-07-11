@@ -1,5 +1,5 @@
 from typing import Optional, Dict
-from ..base_step import AbstractStep
+from ..base_steps import AbstractStep
 from ..steps_utility import (
     StartStir, StopStir, Wait, HeatChillToTemp, HeatChillReturnToRT)
 from ..steps_base import CMove
@@ -21,7 +21,7 @@ class CleanVessel(AbstractStep):
         **kwargs
     ) -> None:
         """Clean given vessel with given solvent.
-        
+
         Args:
             vessel (str): Vessel to clean.
             solvent (str): Solvent to clean vessel with.

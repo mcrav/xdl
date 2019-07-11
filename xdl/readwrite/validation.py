@@ -8,10 +8,10 @@ from ..utils import XDLError
 
 def get_valid_attrs(target_class: type) -> List[str]:
     """Get valid attrs for passing to target_class __init__ methods.
-    
+
     Args:
         target_class (type): Class to get valid attrs for __init__ method.
-    
+
     Returns:
         List[str]: List of arg names for target_class __init__ method.
     """
@@ -27,13 +27,13 @@ def get_valid_attrs(target_class: type) -> List[str]:
 def check_attrs_are_valid(attrs: Dict[str, str], target_class: type) -> None:
     """Check that attrs can be passed into target_class like
     `target_class(**attrs)`.
-    
+
     Args:
         attrs (Dict[str, str]): Attribute dict to check all keys are args of
             target_class __init__ method.
         target_class (type): target_class to check attrs are args of
             __init__ method.
-    
+
     Raises:
         XDLError: Error raised if any of attrs aren't args of target_class __init__
             method.
@@ -47,11 +47,11 @@ def check_attrs_are_valid(attrs: Dict[str, str], target_class: type) -> None:
 def check_reagents_are_all_declared(
     steps: List[Step], reagents: List[Reagent]) -> None:
     """Check all reagents used in steps are declared in Reagents section.
-    
+
     Args:
         steps (List[Step]): List of steps to check.
         reagents (List[Reagent]): List of reagents to check steps against.
-    
+
     Raises:
         XDLError: Error raised if reagent used in step but not declared in
             Reagents section.
@@ -64,19 +64,19 @@ def check_reagents_are_all_declared(
                 if not step_reagent in reagent_ids:
                     raise XDLError(
                         f'{step_reagent} for {step.name} step not declared in Reagents section.')
-    
+
 
 def check_vessels_are_all_declared(
     steps: List[Step], components: List[Component]) -> None:
     """Check all components used in steps are declared in Hardware section.
-    
+
     Args:
         steps (List[Step]): List of steps to check.
         components (List[Component]): List of components to check steps against.
-    
+
     Raises:
         XDLError: Error raised if component used in step but not declared in
-            Hardware section. 
+            Hardware section.
     """
     component_ids = [component.id for component in components]
     for step in steps:
@@ -86,4 +86,3 @@ def check_vessels_are_all_declared(
                 if step_vessel and not step_vessel in component_ids:
                     raise XDLError(
                         f'{step_vessel} for {step.name} step not declared in Hardware section.')
-

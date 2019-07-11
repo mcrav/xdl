@@ -4,7 +4,7 @@ if False:
     from chempiler import Chempiler
 from logging import Logger
 
-from ..base_step import AbstractBaseStep
+from ..base_steps import AbstractBaseStep
 
 class CRotavapStartHeater(AbstractBaseStep):
     """Starts the heating bath of a rotary evaporator.
@@ -172,7 +172,7 @@ class CRotavapAutoEvaporation(AbstractBaseStep):
         vent_after: Optional[bool] = True
     ):
         super().__init__(locals())
-    
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.auto_evaporation(
             node_name=self.rotavap_name,

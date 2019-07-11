@@ -29,7 +29,7 @@ ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE = [
     # HeatChill, HeatChillReturnToRT
     # FilterThrough
     'dcm',
-    # Evaporate 
+    # Evaporate
     # Dissolve DCM
     # 'dcm',
     # FilterThrough DCM
@@ -65,4 +65,3 @@ def test_cleaning_no_solvents():
     xdl_f = os.path.join(FOLDER, 'no_cleaning_solvents.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     generic_chempiler_test(xdl_f, graph_f)
-

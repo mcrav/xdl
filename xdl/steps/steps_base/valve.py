@@ -3,11 +3,11 @@ if False:
     from chempiler import Chempiler
 from logging import Logger
 
-from ..base_step import AbstractBaseStep
+from ..base_steps import AbstractBaseStep
 
 class CValveMoveToPosition(AbstractBaseStep):
     """Move valve to given position.
-    
+
     Args:
         valve_name (str): Node name of the valve to move.
         position (int): Position to move valve to.
@@ -24,4 +24,3 @@ class CValveMoveToPosition(AbstractBaseStep):
         valve = chempiler[self.valve_name]
         valve.move_to_position(self.position)
         return True
-    

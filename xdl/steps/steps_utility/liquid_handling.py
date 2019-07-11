@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict
 
-from ..base_step import AbstractStep, Step
+from ..base_steps import AbstractStep, Step
 from ..steps_base import CMove
 from ...utils.misc import get_port_str
 from ...localisation import HUMAN_READABLE_STEPS
@@ -21,7 +21,7 @@ class PrimePumpForAdd(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
-    
+
     def get_steps(self) -> List[Step]:
         return [CMove(from_vessel=self.reagent_vessel,
                       to_vessel=self.waste_vessel,
@@ -48,8 +48,8 @@ class Transfer(AbstractStep):
         from_vessel: str,
         to_vessel: str,
         volume: float,
-        from_port: Optional[str] = None, 
-        to_port: Optional[str] = None, 
+        from_port: Optional[str] = None,
+        to_port: Optional[str] = None,
         through: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
         move_speed: Optional[float] = 'default',
@@ -62,7 +62,7 @@ class Transfer(AbstractStep):
         return [CMove(from_vessel=self.from_vessel,
                       from_port=self.from_port,
                       to_vessel=self.to_vessel,
-                      to_port=self.to_port, 
+                      to_port=self.to_port,
                       volume=self.volume,
                       through=self.through,
                       aspiration_speed=self.aspiration_speed,
