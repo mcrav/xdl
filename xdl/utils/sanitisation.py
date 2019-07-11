@@ -154,8 +154,13 @@ def clean_properties(xdl_class, properties):
     for prop, val in properties.items():
         if val == 'default' or prop == 'kwargs':
             continue
+
         elif prop == 'repeat':
             properties[prop] = int(val)
+            continue
+
+        elif prop == 'children':
+            properties[prop] = val
             continue
 
         prop_type = annotations[prop]

@@ -1,0 +1,14 @@
+<Synthesis auto_clean="false">
+  <Hardware>
+  </Hardware>
+
+  <Reagents />
+
+  <Procedure>
+    <Repeat repeats="2">
+      <Wait time="5" />
+      <Wait time="10" />
+    </Repeat>
+  </Procedure>
+
+</Synthesis>
