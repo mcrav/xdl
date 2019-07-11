@@ -2,7 +2,7 @@ from typing import Dict, List, Any
 
 #: XDL version number. Remember to increment after merging into master. Used
 # in header at top of outputted XDL files.
-XDL_VERSION: str = '0.1.9'
+XDL_VERSION: str = '0.1.10'
 
 ##########################
 ### DEFAULT PARAMETERS ###
