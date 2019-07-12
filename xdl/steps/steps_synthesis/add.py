@@ -64,8 +64,8 @@ class Add(AbstractStep):
         stir: Optional[bool] = False,
         stir_speed: Optional[float] = 'default',
 
-        anticlogging: Optional[bool] = False,
-        anticlogging_solvent: Optional[str] = '',
+        anticlogging: Optional[bool] = 'default',
+        anticlogging_solvent: Optional[str] = None,
         anticlogging_solvent_volume: Optional[float] = 'default',
         anticlogging_reagent_volume: Optional[float] = 'default',
         anticlogging_solvent_vessel: Optional[str] = None,

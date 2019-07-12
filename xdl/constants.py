@@ -222,6 +222,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
         'dispense_speed': DEFAULT_DISPENSE_SPEED,
         'stir_speed': DEFAULT_STIR_SPEED,
+        'anticlogging': False,
         'anticlogging_solvent_volume': DEFAULT_ANTICLOGGING_SOLVENT_VOLUME,
         'anticlogging_reagent_volume': DEFAULT_ANTICLOGGING_REAGENT_VOLUME,
     },
@@ -298,7 +299,12 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
 }
 
 INTERNAL_PROPERTIES = {
-    'Add': ['reagent_vessel', 'waste_vessel', 'flush_tube_vessel'],
+    'Add': [
+        'reagent_vessel',
+        'waste_vessel',
+        'flush_tube_vessel',
+        'anticlogging_solvent_vessel'
+    ],
     'AddCorrosive': ['reagent_vessel', 'air_vessel'],
     'Filter': [
         'waste_vessel',
