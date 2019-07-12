@@ -63,7 +63,7 @@ class XDLGenerator(object):
         for reagent in self.reagents:
             reagent_tree = etree.Element('Reagent')
             for prop, val in reagent.properties.items():
-                if val != None:
+                if val:
                     reagent_tree.attrib[prop] = str(val)
             reagents_tree.append(reagent_tree)
         self.xdltree.append(reagents_tree)
