@@ -4,7 +4,7 @@
         id="jacketed_filter"
         type="filter" />
   </Hardware>
- 
+
   <Reagents>
     <!-- First step chemicals -->
     <Reagent
@@ -281,7 +281,7 @@
       vessel="jacketed_filter"
       temp="50"
       time="1h"
-      vacuum_pressure="50mbar" />  
+      vacuum_pressure="50mbar" />
   	<!-- Forth step -->
     <!-- SOLID ADDITION -->
     <!--

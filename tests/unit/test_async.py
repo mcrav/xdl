@@ -2,6 +2,8 @@ from typing import Callable
 import time
 import os
 
+from ..utils import generic_chempiler_test
+
 from xdl.steps.base_steps import AsyncStep
 from xdl.steps.special_steps import Async
 from xdl.steps import Wait
@@ -10,6 +12,7 @@ import ChemputerAPI
 from chempiler import Chempiler
 
 HERE = os.path.abspath(os.path.dirname(__file__))
+FOLDER = os.path.join(HERE, 'files')
 
 class TestAsyncStep(AsyncStep):
     def __init__(self, callback: Callable, on_finish: Callable):
@@ -75,3 +78,7 @@ def test_async_wrapper():
     mgr.execute(chempiler)
     time.sleep(2)
     assert mgr.done == True
+
+    xdl_f = os.path.join(FOLDER, 'async.xdl')
+    graph_f = os.path.join(FOLDER, 'bigrig.json')
+    generic_chempiler_test(xdl_f, graph_f)

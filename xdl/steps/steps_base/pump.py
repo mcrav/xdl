@@ -1,4 +1,3 @@
-
 from typing import Optional
 # For type annotations
 if False:
