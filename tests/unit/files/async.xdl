@@ -16,26 +16,27 @@
   </Reagents>
 
   <Procedure>
-    <Async>
-      <HeatChillToTemp
-        vessel="reactor"
-        temp="60"
-      />
+    <Async pid="test">
       <Add
         vessel="reactor"
         reagent="water"
         volume="20"
       />
+      <Repeat repeats="200">
+        <Wait time="1" />
+      </Repeat>
     </Async>
-    <Add
+
+    <HeatChillToTemp
       vessel="filter"
-      reagent="ether"
-      volume="30"
+      temp="60"
     />
-    <Add
-      vessel="filter"
-      reagent="water"
-      volume="30"
+
+    <Await pid="test" />
+
+    <HeatChillToTemp
+      vessel="reactor"
+      temp="100"
     />
   </Procedure>
 

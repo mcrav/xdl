@@ -952,10 +952,25 @@ class XDLExecutor(object):
             self._xdl.print_full_xdl_tree()
             self._xdl.log_human_readable()
             self.logger.info('Execution\n---------\n')
+            async_steps = []
+
             for step in self._xdl.steps:
+
+                # Store all Async steps so that they can be awaited.
+                if type(step) == Async:
+                    async_steps.append(step)
+
                 self.logger.info(step.name)
                 try:
-                    keep_going = step.execute(chempiler, self.logger)
+                    # Wait for async step to finish executing
+                    if type(step) == Await:
+                        keep_going = step.execute(async_steps, self.logger)
+
+                    # Normal step execution
+                    else:
+                        keep_going = step.execute(chempiler, self.logger)
+
+                # Raise any errors during step execution.
                 except Exception as e:
                     self.logger.info(
                         'Step failed {0} {1}'.format(
