@@ -1,0 +1,42 @@
+<Synthesis auto_clean="false">
+  <Hardware>
+    <Component
+      id="reactor"
+      type="reactor" />
+    <Component
+      id="filter"
+      type="filter" />
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="water" />
+    <Reagent
+      id="ether" />
+  </Reagents>
+
+  <Procedure>
+    <Async>
+      <HeatChillToTemp
+        vessel="reactor"
+        temp="60"
+      />
+      <Add
+        vessel="reactor"
+        reagent="water"
+        volume="20"
+      />
+    </Async>
+    <Add
+      vessel="filter"
+      reagent="ether"
+      volume="30"
+    />
+    <Add
+      vessel="filter"
+      reagent="water"
+      volume="30"
+    />
+  </Procedure>
+
+</Synthesis>

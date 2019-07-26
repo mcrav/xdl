@@ -28,6 +28,8 @@ class Async(AsyncStep):
         if type(children) != list:
             self.children = [children]
 
+        self.steps = self.children
+
         self._should_end = False
 
     def async_execute(
@@ -38,6 +40,12 @@ class Async(AsyncStep):
                 return
         if self.on_finish:
             self.on_finish()
+
+    def human_readable(self, language='en'):
+        human_readable = f'Asynchronous:\n'
+        for step in self.children:
+            human_readable += f'    {step.human_readable()}\n'
+        return human_readable
 
 class Repeat(AbstractStep):
     """Repeat children of this step self.repeats times.
