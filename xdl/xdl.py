@@ -474,6 +474,27 @@ class XDL(object):
                 for step in self._get_full_xdl_tree()
                 if isinstance(step, AbstractBaseStep)]
 
+    def __add__(self, other):
+        reagents, steps, components = [], [], []
+        for xdl_obj in [self, other]:
+            reagents.extend(xdl_obj.reagents)
+            steps.extend(xdl_obj.steps)
+            components.extend(list(xdl_obj.hardware))
+        new_xdl_obj = XDL(steps=steps, reagents=reagents, hardware=components)
+        if self.filter_dead_volume_method != other.filter_dead_volume_method:
+            raise ValueError(
+                "Can't combine two XDL objects with different filter_dead_volume_methods")
+        if self.filter_dead_volume_solvent != other.filter_dead_volume_solvent:
+            raise ValueError(
+                "Can't combine two XDL objects with different filter_dead_volume_solvents")
+        if self.auto_clean != other.auto_clean:
+            raise ValueError(
+                "Can't combine two XDL objects with different auto_clean flags")
+        new_xdl_obj.auto_clean = self.auto_clean
+        new_xdl_obj.filter_dead_volume_method = self.filter_dead_volume_method
+        new_xdl_obj.filter_dead_volume_solvent = self.filter_dead_volume_solvent
+        return new_xdl_obj
+
 def xdl_copy(xdl_obj: XDL) -> XDL:
     """Returns a deepcopy of a XDL object. copy.deepcopy can be used with
     Python 3.7, but for Python 3.6 you have to use this.
