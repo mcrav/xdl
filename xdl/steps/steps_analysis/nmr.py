@@ -19,6 +19,7 @@ class RunNMR(AbstractAsyncStep):
 
     def async_execute(self, chempiler, logger=None):
         nmr = chempiler[self.nmr]
+        nmr.shim()
         nmr.proton() # Run NMR experiment
 
         while True:
