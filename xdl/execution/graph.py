@@ -1,4 +1,4 @@
-from typing import Union, Dict
+from typing import Union, Dict, Tuple
 import json
 
 from networkx.readwrite import json_graph
@@ -117,13 +117,6 @@ def make_inert_gas_map(graph: MultiDiGraph):
             flasks as values.
     """
     vessels = graph.nodes()
-    for node in graph.nodes():
-        print(node, graph.node[node]['type'] == 'ChemputerFlask', 'chemical' in graph.node[node])
-
-        if 'chemical' in graph.node[node]:
-            print(graph.node[node]['chemical'].lower())
-            print(graph.node[node]['chemical'].lower() in ['nitrogen', 'argon', 'n2', 'ar'])
-        print('\n')
     nitrogen_flasks = [
         node
         for node in graph.nodes()
@@ -132,7 +125,6 @@ def make_inert_gas_map(graph: MultiDiGraph):
             and graph.node[node]['chemical'].lower() in ['nitrogen', 'argon',
                                                          'n2', 'ar'])
     ]
-    print(nitrogen_flasks)
     inert_gas_map = {}
     for vessel in vessels:
         shortest_path_found = 100000
@@ -148,7 +140,6 @@ def make_inert_gas_map(graph: MultiDiGraph):
                 pass
 
         inert_gas_map[vessel] = closest_nitrogen_flask
-    print(inert_gas_map)
     return inert_gas_map
 
 def get_unused_valve_port(valve_node: str, graph: MultiDiGraph) -> int:
@@ -196,3 +187,22 @@ def vacuum_device_attached_to_flask(
         if graph.nodes[src_node]['class'] == 'CVC3000':
             return src_node
     return None
+
+def get_pneumatic_controller(
+    vessel: str, port: str, graph: MultiDiGraph) -> Tuple[str, int]:
+    """Given vessel, return pneumatic controller node that is a direct neighbour
+    of the vessel in the graph, with the pneumatic controller port number.
+
+    Args:
+        vessel (str): Vessel to find attached pneumatic controller
+        graph (MultiDiGraph): Graph containing vessel
+
+    Returns:
+        Tuple[str, int]: (pneumatic_controller_node, pneumatic_controller_port)
+    """
+    for src_node, _, info in graph.in_edges(vessel, data=True):
+        if graph.nodes[src_node]['class'] == 'PneumaticController':
+            ports = info['port']
+            if not port or ports[1] == port:
+                return src_node, info['port'][0]
+    return None, None

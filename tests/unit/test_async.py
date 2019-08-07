@@ -2,7 +2,10 @@ from typing import Callable
 import time
 import os
 
-from xdl.steps.base_steps import AbstractAsyncStep
+from ..utils import generic_chempiler_test
+
+from xdl import XDL
+from xdl.steps.base_steps import AsyncStep
 from xdl.steps.special_steps import Async
 from xdl.steps import Wait
 
@@ -10,6 +13,7 @@ import ChemputerAPI
 from chempiler import Chempiler
 
 HERE = os.path.abspath(os.path.dirname(__file__))
+FOLDER = os.path.join(HERE, 'files')
 
 class TestAsyncStep(AbstractAsyncStep):
     def __init__(self, callback: Callable, on_finish: Callable):
@@ -49,7 +53,7 @@ def test_async_step():
 
 class TestAsyncWrapperManager(object):
     def __init__(self, steps):
-        self.async_steps = Async(steps, self.on_finish)
+        self.async_steps = Async(steps, on_finish=self.on_finish)
         self.done = False
 
     def execute(self, chempiler):
@@ -75,3 +79,15 @@ def test_async_wrapper():
     mgr.execute(chempiler)
     time.sleep(2)
     assert mgr.done == True
+
+def test_async_wrapper_in_file():
+    xdl_f = os.path.join(FOLDER, 'async.xdl')
+    graph_f = os.path.join(FOLDER, 'bigrig.json')
+
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f)
+    for step in x.steps:
+        if step.name == 'Async':
+            assert step.steps[0].reagent_vessel == 'flask_water'
+
+    generic_chempiler_test(xdl_f, graph_f)

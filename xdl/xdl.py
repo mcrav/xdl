@@ -418,13 +418,17 @@ class XDL(object):
             Dict: JSON node link graph as dictionary.
         """
         liquid_reagents = [reagent.id for reagent in self.reagents]
+        cartridge_reagent = ''
 
         for step in self.steps:
             if type(step) == Add and step.mass:
                 if step.reagent in liquid_reagents:
                     liquid_reagents.remove(step.reagent)
 
-        return get_graph(liquid_reagents)
+            elif type(step) == FilterThrough and step.through:
+                cartridge_reagent = step.through
+
+        return get_graph(liquid_reagents, cartridge_reagent)
 
     def prepare_for_execution(
         self, graph_file: str, interactive: bool = True) -> None:
@@ -469,6 +473,27 @@ class XDL(object):
         return [step
                 for step in self._get_full_xdl_tree()
                 if isinstance(step, AbstractBaseStep)]
+
+    def __add__(self, other):
+        reagents, steps, components = [], [], []
+        for xdl_obj in [self, other]:
+            reagents.extend(xdl_obj.reagents)
+            steps.extend(xdl_obj.steps)
+            components.extend(list(xdl_obj.hardware))
+        new_xdl_obj = XDL(steps=steps, reagents=reagents, hardware=components)
+        if self.filter_dead_volume_method != other.filter_dead_volume_method:
+            raise ValueError(
+                "Can't combine two XDL objects with different filter_dead_volume_methods")
+        if self.filter_dead_volume_solvent != other.filter_dead_volume_solvent:
+            raise ValueError(
+                "Can't combine two XDL objects with different filter_dead_volume_solvents")
+        if self.auto_clean != other.auto_clean:
+            raise ValueError(
+                "Can't combine two XDL objects with different auto_clean flags")
+        new_xdl_obj.auto_clean = self.auto_clean
+        new_xdl_obj.filter_dead_volume_method = self.filter_dead_volume_method
+        new_xdl_obj.filter_dead_volume_solvent = self.filter_dead_volume_solvent
+        return new_xdl_obj
 
 def xdl_copy(xdl_obj: XDL) -> XDL:
     """Returns a deepcopy of a XDL object. copy.deepcopy can be used with

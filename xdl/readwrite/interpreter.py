@@ -153,10 +153,19 @@ def xdl_to_step(xdl_step_element: etree._Element) -> Step:
     # Check if step name is valid and get step class.
     if not xdl_step_element.tag in STEP_OBJ_DICT:
         raise XDLError(f'{xdl_step_element.tag} is not a valid step type.')
+
+    children = xdl_step_element.findall('*')
+    children_steps = []
+    for child in children:
+        children_steps.append(xdl_to_step(child))
+
     step_type = STEP_OBJ_DICT[xdl_step_element.tag]
     # Check all attributes are valid.
     attrs = dict(xdl_step_element.attrib)
     check_attrs_are_valid(attrs, step_type)
+
+    attrs['children'] = children_steps
+
     # Try to instantiate step, any invalid values given will throw an error
     # here.
     try:

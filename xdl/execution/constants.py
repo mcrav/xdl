@@ -71,6 +71,7 @@ COMMON_SOLVENT_NAMES = [
     'cyclohexane',
     'dcm',
     'dichloromethane',
+    'ch2cl2',
     'methylene dichloride',
     'methylene chloride',
     '1,2-dichloroethane',

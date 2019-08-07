@@ -39,7 +39,8 @@ def iter_vessel_contents(
             # Handle separate step differently.
             if type(step) == Separate:
                 # Add vessels to vessel_contents if they aren't there.
-                additions_l.append(step.solvent)
+                if step.solvent:
+                    additions_l.append(step.solvent)
                 for vessel in [step.from_vessel, step.to_vessel,
                                 step.waste_phase_to_vessel]:
                     vessel_contents.setdefault(
@@ -54,22 +55,24 @@ def iter_vessel_contents(
                     from_reagents)
                 vessel_contents[step.waste_phase_to_vessel].reagents.extend(
                     from_reagents)
-                # If extraction add solvent to to_vessel
-                # and from_vessel volume to waste_phase_to_vessel.
-                if step.purpose == 'extract':
-                    vessel_contents[step.to_vessel].reagents.append(step.solvent)
-                    vessel_contents[step.to_vessel].volume += step.solvent_volume * step.n_separations
-                    vessel_contents[
-                        step.waste_phase_to_vessel].volume += from_volume
 
-                # If wash add solvent to waste_phase_to_vessel
-                # and from_vessel volume to to_vessel.
-                elif step.purpose == 'wash':
-                    vessel_contents[
-                        step.waste_phase_to_vessel].reagents.append(step.solvent)
-                    vessel_contents[
-                        step.waste_phase_to_vessel].volume += step.solvent_volume * step.n_separations
-                    vessel_contents[step.to_vessel].volume += from_volume
+                if step.solvent:
+                    # If extraction add solvent to to_vessel
+                    # and from_vessel volume to waste_phase_to_vessel.
+                    if step.purpose == 'extract':
+                        vessel_contents[step.to_vessel].reagents.append(step.solvent)
+                        vessel_contents[step.to_vessel].volume += step.solvent_volume * step.n_separations
+                        vessel_contents[
+                            step.waste_phase_to_vessel].volume += from_volume
+
+                    # If wash add solvent to waste_phase_to_vessel
+                    # and from_vessel volume to to_vessel.
+                    elif step.purpose == 'wash':
+                        vessel_contents[
+                            step.waste_phase_to_vessel].reagents.append(step.solvent)
+                        vessel_contents[
+                            step.waste_phase_to_vessel].volume += step.solvent_volume * step.n_separations
+                        vessel_contents[step.to_vessel].volume += from_volume
 
             elif type(step) == Filter:
                 for vessel in [step.filter_vessel, step.waste_vessel]:

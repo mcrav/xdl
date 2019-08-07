@@ -107,6 +107,25 @@ class AbstractStep(Step, ABC):
                 logger.exception(str(e), exc_info=1)
             raise(e)
 
+    @property
+    def base_steps(self):
+        base_steps = []
+        for step in self.steps:
+            if isinstance(step, AbstractBaseStep):
+                base_steps.append(step)
+            else:
+                base_steps.extend(self.get_base_steps(step))
+        return base_steps
+
+    def get_base_steps(self, step):
+        base_steps = []
+        for step in step.steps:
+            if isinstance(step, AbstractBaseStep):
+                base_steps.append(step)
+            else:
+                base_steps.extend(self.get_base_steps(step))
+        return base_steps
+
 class AbstractBaseStep(Step, ABC):
     """Abstract base class for all steps that do not contain other steps and
     instead have an execute method that takes a chempiler object.
@@ -124,7 +143,11 @@ class AbstractBaseStep(Step, ABC):
     def execute(self, chempiler: 'Chempiler'):
         return False
 
-class AbstractAsyncStep(XDLBase):
+    @property
+    def base_steps(self):
+        return [self]
+
+class AsyncStep(XDLBase):
     """For executing code asynchronously. Can only be used programtically,
     no way of encoding this in XDL files.
 
