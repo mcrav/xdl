@@ -7,7 +7,7 @@ from .base_steps import (
     Step,
     AbstractStep,
     AbstractBaseStep,
-    AbstractAsyncStep,
+    AsyncStep,
     AbstractDynamicStep,
     UnimplementedStep,
 )

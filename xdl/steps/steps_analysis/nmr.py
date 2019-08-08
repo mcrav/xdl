@@ -1,11 +1,11 @@
 from typing import Callable
 import time
 import queue
-from ..base_steps import AbstractAsyncStep
+from ..base_steps import AsyncStep
 
 CHECK_IF_COMPLETE_INTERVAL: int = 5 # seconds
 
-class RunNMR(AbstractAsyncStep):
+class RunNMR(AsyncStep):
     """Run NMR experiment asynchronously and pass obtained spectrum to
     callback function.
 
