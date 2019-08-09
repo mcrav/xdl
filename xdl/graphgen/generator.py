@@ -49,7 +49,7 @@ def add_reagents(
         raise(
             ValueError(f'{len(reagents)} in procedure. Not enough space in template for more than {max_n_reagents} reagents'))
 
-    reagents = copy.deepcopy(reagents)
+    reagents = copy.deepcopy(list(set(reagents)))
     for node in template['nodes']:
         if (node['type'] == 'flask'
             and not node['name'] == 'buffer_flask'):

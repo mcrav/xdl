@@ -102,7 +102,7 @@ class Dry(AbstractStep):
             steps.insert(0, HeatChillToTemp(
                 vessel=self.vessel,
                 temp=self.temp,
-                vessel_type='ChemputerFilter',
+                vessel_type='filter',
                 stir=False))
 
         if self.vessel_type not in ['rotavap', 'reactor']:

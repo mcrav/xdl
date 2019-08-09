@@ -117,13 +117,6 @@ def make_inert_gas_map(graph: MultiDiGraph):
             flasks as values.
     """
     vessels = graph.nodes()
-    for node in graph.nodes():
-        print(node, graph.node[node]['type'] == 'ChemputerFlask', 'chemical' in graph.node[node])
-
-        if 'chemical' in graph.node[node]:
-            print(graph.node[node]['chemical'].lower())
-            print(graph.node[node]['chemical'].lower() in ['nitrogen', 'argon', 'n2', 'ar'])
-        print('\n')
     nitrogen_flasks = [
         node
         for node in graph.nodes()
@@ -132,7 +125,6 @@ def make_inert_gas_map(graph: MultiDiGraph):
             and graph.node[node]['chemical'].lower() in ['nitrogen', 'argon',
                                                          'n2', 'ar'])
     ]
-    print(nitrogen_flasks)
     inert_gas_map = {}
     for vessel in vessels:
         shortest_path_found = 100000
@@ -148,7 +140,6 @@ def make_inert_gas_map(graph: MultiDiGraph):
                 pass
 
         inert_gas_map[vessel] = closest_nitrogen_flask
-    print(inert_gas_map)
     return inert_gas_map
 
 def get_unused_valve_port(valve_node: str, graph: MultiDiGraph) -> int:

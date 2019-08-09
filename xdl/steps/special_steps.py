@@ -1,7 +1,8 @@
 from typing import Union, List, Callable
 import logging
+import time
 
-from .base_steps import Step, AsyncStep, AbstractStep
+from .base_steps import Step, AsyncStep, AbstractStep, AbstractBaseStep
 
 class Async(AsyncStep):
     """Wrapper to execute a step or sequence of steps asynchronously.
@@ -13,14 +14,17 @@ class Async(AsyncStep):
     Can be stopped in between steps by calling async_stir_step.kill()
 
     Args:
-        steps (Union[Step, List[Step]]): Step object or list of Step objects to
-            execute asynchronously.
+        children (Union[Step, List[Step]]): Step object or list of Step objects
+            to execute asynchronously.
+        pid (str): Process ID. Optional, but must be given if using Await later
+            in procedure.
         on_finish (Callable): Callback function to call after execution of steps
             has finished.
     """
     def __init__(
         self,
         children: Union[Step, List[Step]],
+        pid: str = None,
         on_finish: Callable = None,
     ):
         super().__init__(locals())
@@ -28,16 +32,50 @@ class Async(AsyncStep):
         if type(children) != list:
             self.children = [children]
 
+        self.steps = self.children
+
         self._should_end = False
+        self.finished = False
 
     def async_execute(
         self, chempiler: 'Chempiler', logger: logging.Logger = None) -> None:
         for step in self.children:
             keep_going = step.execute(chempiler, logger)
             if not keep_going or self._should_end:
+                self.finished = True
                 return
+
+        self.finished = True
         if self.on_finish:
             self.on_finish()
+        return True
+
+    def human_readable(self, language='en'):
+        human_readable = f'Asynchronous:\n'
+        for step in self.children:
+            human_readable += f'    {step.human_readable()}\n'
+        return human_readable
+
+class Await(AbstractBaseStep):
+    """Wait for Async step with given pid to finish executing.
+
+    Args:
+        pid (str): pid of Async step to wait for.
+    """
+    def __init__(self, pid: str, **kwargs):
+        super().__init__(locals())
+        self.steps = []
+
+    def execute(
+        self,
+        async_steps: List[Async],
+        logger: logging.Logger = None
+    ) -> None:
+        for async_step in async_steps:
+            if async_step.pid == self.pid:
+                while not async_step.finished:
+                    time.sleep(1)
+        return True
 
 class Repeat(AbstractStep):
     """Repeat children of this step self.repeats times.
