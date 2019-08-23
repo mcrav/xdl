@@ -2,9 +2,9 @@ from typing import Union, List, Callable
 import logging
 import time
 
-from .base_steps import Step, AsyncStep, AbstractStep, AbstractBaseStep
+from .base_steps import Step, AbstractAsyncStep, AbstractStep, AbstractBaseStep
 
-class Async(AsyncStep):
+class Async(AbstractAsyncStep):
     """Wrapper to execute a step or sequence of steps asynchronously.
 
     Use like this:
