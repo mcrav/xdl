@@ -5,7 +5,7 @@ import os
 from ..utils import generic_chempiler_test
 
 from xdl import XDL
-from xdl.steps.base_steps import AsyncStep
+from xdl.steps.base_steps import AbstractAsyncStep
 from xdl.steps.special_steps import Async
 from xdl.steps import Wait
 
