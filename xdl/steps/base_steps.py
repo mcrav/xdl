@@ -147,7 +147,7 @@ class AbstractBaseStep(Step, ABC):
     def base_steps(self):
         return [self]
 
-class AsyncStep(XDLBase):
+class AbstractAsyncStep(XDLBase):
     """For executing code asynchronously. Can only be used programtically,
     no way of encoding this in XDL files.
 
