@@ -204,8 +204,14 @@ class XDLExecutor(object):
                         graph=self._graph, valve_node=step.vacuum_valve)
 
             if 'vacuum_device' in step.properties:
+                # Look for vacuum device attached to vacuum flask
                 step.vacuum_device = vacuum_device_attached_to_flask(
                     graph=self._graph, flask_node=step.vacuum)
+
+                # Look for vacuum device attached directly to vessel
+                if not step.vacuum_device and 'vessel' in step.properties:
+                    step.vacuum_device = vacuum_device_attached_to_flask(
+                        graph=self._graph, flask_node=step.vessel)
 
             if 'vessel_has_stirrer' in step.properties:
                 step.vessel_has_stirrer = not step.vessel in [
@@ -693,7 +699,6 @@ class XDLExecutor(object):
             prev_vessel_contents = vessel_contents
 
     def _add_clean_vessel_temps(self) -> None:
-
         """Add temperatures to CleanVessel steps. Priority is:
         1) Use explicitly given temperature.
         2) If solvent boiling point known use 80% of the boiling point.
