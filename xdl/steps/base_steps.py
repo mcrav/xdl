@@ -160,8 +160,11 @@ class AbstractAsyncStep(XDLBase):
         self._should_end = False
 
     def execute(self, chempiler, logger=None, level=0):
+        pid = self.pid if hasattr(self, 'pid') else None
         self.thread = threading.Thread(
-            target=self.async_execute, args=(chempiler, logger))
+            target=self.async_execute,
+            name=pid,
+            args=(chempiler, logger))
         self.thread.start()
         return True
 
