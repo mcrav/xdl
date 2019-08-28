@@ -1,1 +1,1 @@
-from .nmr import RunNMR
+from .nmr import Shim, RunCarbon, RunProton

@@ -1,11 +1,13 @@
-from typing import Callable
-import time
+import logging
 import queue
-from ..base_steps import AbstractAsyncStep
+import time
+from typing import Callable
+
+from ..base_steps import AbstractBaseStep
 
 CHECK_IF_COMPLETE_INTERVAL: int = 5 # seconds
 
-class RunNMR(AbstractAsyncStep):
+class RunCarbon(AbstractBaseStep):
     """Run NMR experiment asynchronously and pass obtained spectrum to
     callback function.
 
@@ -14,28 +16,68 @@ class RunNMR(AbstractAsyncStep):
         on_finish (Callable): Callback function. Must take spectrum as arg
             (spectrum is a list of numpy complex numbers).
     """
-    def __init__(self, experiment_name:str, nmr: str, on_finish: Callable) -> None:
+    def __init__(
+        self,
+        experiment_name:str,
+        scans: int,
+        repetition_time: float,
+        nmr: str) -> None:
         super().__init__(locals())
 
-    def async_execute(self, chempiler, logger=None):
+    def execute(self, chempiler: 'Chempiler', logger=None, level=0):
         nmr = chempiler[self.nmr]
         nmr.user_folder(data_path=self.experiment_name, data_folder_method="UserFolder")
-        nmr.shim()
-        nmr.proton() # Run NMR experiment
+        logger.info("Running carbon ...")
+        nmr.carbon(options={
+            "Number": str(self.scans),
+            "RepetitionTime": str(self.repetition_time)})
+        logger.info("Acquisition done.")
+        time.sleep(5)
+        return True
 
-        while True:
-            # Wait
-            time.sleep(CHECK_IF_COMPLETE_INTERVAL)
 
-            # Check if spectrum has been obtained
-            spectrum = nmr.get_spectrum()
+class RunProton(AbstractBaseStep):
+    """Run NMR experiment asynchronously and pass obtained spectrum to
+    callback function.
 
-            if spectrum != None:
-                # Pass spectrum to on_finish callback.
-                self.on_finish(spectrum)
-                return
+    Args:
+        nmr (str): Node name of NMR in graph.
+        on_finish (Callable): Callback function. Must take spectrum as arg
+            (spectrum is a list of numpy complex numbers).
+    """
+    def __init__(
+        self,
+        experiment_name:str,
+        nmr: str) -> None:
+        super().__init__(locals())
 
-            else:
-                # Check if should return
-                if self._kill:
-                    return
+    def execute(self, chempiler: "Chempiler", logger=None, level=0):
+        nmr = chempiler[self.nmr]
+        nmr.user_folder(data_path=self.experiment_name, data_folder_method="UserFolder")
+        logger.info("Running proton ...")
+        nmr.proton(option="PowerScan")
+        logger.info("Acquisition done.")
+        time.sleep(5)
+        return True
+
+
+class Shim(AbstractBaseStep):
+    """Run NMR experiment asynchronously and pass obtained spectrum to
+    callback function.
+
+    Args:
+        nmr (str): Node name of NMR in graph.
+        on_finish (Callable): Callback function. Must take spectrum as arg
+            (spectrum is a list of numpy complex numbers).
+    """
+    def __init__(
+        self,
+        reference_peak: float,
+        nmr: str) -> None:
+        super().__init__(locals())
+
+    def execute(self, chempiler: "Chempiler", logger=None, level=0):
+        nmr = chempiler[self.nmr]
+        logger.info("Shimming ...")
+        nmr.shim_on_sample(reference_peak=self.reference_peak, option="QuickShim1")
+        return True
