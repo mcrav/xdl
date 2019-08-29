@@ -147,7 +147,7 @@ class AbstractBaseStep(Step, ABC):
     def base_steps(self):
         return [self]
 
-class AsyncStep(XDLBase):
+class AbstractAsyncStep(XDLBase):
     """For executing code asynchronously. Can only be used programtically,
     no way of encoding this in XDL files.
 
@@ -160,8 +160,11 @@ class AsyncStep(XDLBase):
         self._should_end = False
 
     def execute(self, chempiler, logger=None, level=0):
+        pid = self.pid if hasattr(self, 'pid') else None
         self.thread = threading.Thread(
-            target=self.async_execute, args=(chempiler, logger))
+            target=self.async_execute,
+            name=pid,
+            args=(chempiler, logger))
         self.thread.start()
         return True
 
@@ -251,7 +254,7 @@ class AbstractDynamicStep(XDLBase):
         # Execute steps from on_start
         for step in self.start_block:
             step.execute(chempiler, logger=logger, level=level)
-            if isinstance(step, AsyncStep):
+            if isinstance(step, AbstractAsyncStep):
                 self.async_steps.append(step)
 
         # Repeatedly execute steps from on_continue until empty list returned
@@ -273,7 +276,7 @@ class AbstractDynamicStep(XDLBase):
 
         for step in finish_block:
             step.execute(chempiler, logger=logger, level=level)
-            if isinstance(step, AsyncStep):
+            if isinstance(step, AbstractAsyncStep):
                 self.async_steps.append(step)
 
         # Kill all threads
