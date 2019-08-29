@@ -2,6 +2,7 @@ import os
 import time
 
 from xdl.steps import Wait, AbstractDynamicStep
+from xdl.execution import XDLExecutor
 
 import ChemputerAPI
 from chempiler import Chempiler
@@ -36,6 +37,8 @@ chempiler = Chempiler(
 
 def test_abstract_dynamic_step():
     step = TestDynamicStep()
+    executor = XDLExecutor(None)
+    step.prepare_for_execution(os.path.join(HERE, 'files', 'bigrig.json'), executor)
     step.execute(chempiler)
 
     time.sleep(2)
