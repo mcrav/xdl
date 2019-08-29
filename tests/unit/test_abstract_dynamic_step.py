@@ -1,7 +1,7 @@
 import os
 import time
 
-from xdl.steps import Wait, AbstractDynamicStep
+from xdl.steps import Wait, AbstractDynamicStep, Add
 from xdl.execution import XDLExecutor
 
 import ChemputerAPI
@@ -16,7 +16,7 @@ class TestDynamicStep(AbstractDynamicStep):
         self.done = False
 
     def on_start(self):
-        return [Wait(1)]
+        return [Add(reagent='ether', vessel='filter', volume=5), Wait(1)]
 
     def on_continue(self):
         if self.state['i'] > 3:
@@ -39,6 +39,7 @@ def test_abstract_dynamic_step():
     step = TestDynamicStep()
     executor = XDLExecutor(None)
     step.prepare_for_execution(os.path.join(HERE, 'files', 'bigrig.json'), executor)
+    assert step.start_block[-2].reagent_vessel == 'flask_ether'
     step.execute(chempiler)
 
     time.sleep(2)
