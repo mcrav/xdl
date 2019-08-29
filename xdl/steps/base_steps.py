@@ -229,6 +229,12 @@ class AbstractDynamicStep(XDLBase):
         for async_step in self.async_steps:
             async_step.kill()
 
+    def prepare_for_execution(self, graph, executor):
+        self.executor = executor
+        self.graph = graph
+        self.start_block  = self.on_start()
+        self.executor.prepare_block_for_execution(self.graph, self.start_block)
+
     def execute(self, chempiler, logger=None, level=0):
         """Execute step lifecycle. on_start, followed by on_continue repeatedly
         until an empty list is returned, followed by on_finish, after which all
@@ -243,22 +249,29 @@ class AbstractDynamicStep(XDLBase):
             True: bool to indicate execution should continue after this step.
         """
         # Execute steps from on_start
-        for step in self.on_start():
+        for step in self.start_block:
             step.execute(chempiler, logger=logger, level=level)
             if isinstance(step, AsyncStep):
                 self.async_steps.append(step)
 
         # Repeatedly execute steps from on_continue until empty list returned
-        continue_steps = self.on_continue()
-        while continue_steps:
-            for step in continue_steps:
+        continue_block = self.on_continue()
+        self.executor.prepare_block_for_execution(self.graph, continue_block)
+
+        while continue_block:
+            for step in continue_block:
                 if isinstance(step, AsyncStep):
                     self.async_steps.append(step)
                 step.execute(chempiler, logger=logger, level=level)
-            continue_steps = self.on_continue()
+
+            continue_block = self.on_continue()
+            self.executor.prepare_block_for_execution(self.graph, continue_block)
 
         # Execute steps from on_finish
-        for step in self.on_finish():
+        finish_block = self.on_finish()
+        self.executor.prepare_block_for_execution(self.graph, finish_block)
+
+        for step in finish_block:
             step.execute(chempiler, logger=logger, level=level)
             if isinstance(step, AsyncStep):
                 self.async_steps.append(step)
