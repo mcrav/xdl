@@ -10,7 +10,7 @@
       "class": "ChemputerPump",
       "name": "pump_rotavap",
       "address": "",
-      "max_volume": 25
+      "max_volume": 100
     },
     {
       "id": "valve_rotavap",
@@ -105,7 +105,7 @@
       "class": "ChemputerPump",
       "name": "pump_reactor",
       "address": "",
-      "max_volume": 25
+      "max_volume": 100
     },
     {
       "id": "waste_reactor",
@@ -191,7 +191,7 @@
       "class": "ChemputerPump",
       "name": "pump_filter",
       "address": "",
-      "max_volume": 25
+      "max_volume": 100
     },
     {
       "id": "filter",
@@ -325,7 +325,7 @@
       "class": "ChemputerPump",
       "name": "pump_separator",
       "address": "",
-      "max_volume": 25
+      "max_volume": 100
     },
     {
       "id": "waste_separator",

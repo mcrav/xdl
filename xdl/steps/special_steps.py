@@ -1,11 +1,10 @@
 from typing import Union, List, Callable
 import logging
 import time
-import threading
 
-from .base_steps import Step, AbstractAsyncStep, AbstractStep, AbstractBaseStep
+from .base_steps import Step, AsyncStep, AbstractStep, AbstractBaseStep
 
-class Async(AbstractAsyncStep):
+class Async(AsyncStep):
     """Wrapper to execute a step or sequence of steps asynchronously.
 
     Use like this:
@@ -70,12 +69,12 @@ class Await(AbstractBaseStep):
     def execute(
         self,
         async_steps: List[Async],
-        logger: logging.Logger = None,
-        level = 0
+        logger: logging.Logger = None
     ) -> None:
-        for thread in threading.enumerate():
-            if thread.name == self.pid:
-                thread.join()
+        for async_step in async_steps:
+            if async_step.pid == self.pid:
+                while not async_step.finished:
+                    time.sleep(1)
         return True
 
 class Repeat(AbstractStep):
