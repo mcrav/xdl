@@ -1,4 +1,4 @@
-from typing import Union, List, Callable
+from typing import Union, List, Callable, Dict, Any
 import logging
 import time
 
@@ -102,3 +102,15 @@ class Repeat(AbstractStep):
         for step in self.children:
             human_readable += f'    {step.human_readable()}\n'
         return human_readable
+
+class Callback(AbstractBaseStep):
+    def __init__(
+        self,
+        fn: Callable,
+        args: List[Any] = [],
+        keyword_args: Dict[str, Any] = {}
+    ):
+        super().__init__(locals())
+
+    def execute(self, chempiler, logger, level=0):
+        self.fn(*self.args, **self.keyword_args)
