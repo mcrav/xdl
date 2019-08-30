@@ -6,6 +6,14 @@ import ChemputerAPI
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
+def get_chempiler(graph_file: str) -> Chempiler:
+    return Chempiler(
+        experiment_code='test',
+        output_dir=os.path.join(HERE, 'chempiler_output'),
+        simulation=True,
+        graph_file=graph_file,
+        device_modules=[ChemputerAPI])
+
 def generic_chempiler_test(xdl_file: str, graph_file: str) -> None:
     """Given XDL file and graph file, try and execute Chempiler simulation
     of XDL.
@@ -18,12 +26,7 @@ def generic_chempiler_test(xdl_file: str, graph_file: str) -> None:
     x.prepare_for_execution(graph_file, interactive=False)
     x.steps = [
         remove_confirm_steps(step) for step in x.steps]
-    chempiler = Chempiler(
-        experiment_code='test',
-        output_dir=os.path.join(HERE, 'chempiler_output'),
-        simulation=True,
-        graph_file=graph_file,
-        device_modules=[ChemputerAPI])
+    chempiler = get_chempiler(graph_file)
     x.execute(chempiler)
 
 def remove_confirm_steps(step: Step) -> None:
