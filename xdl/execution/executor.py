@@ -138,7 +138,7 @@ class XDLExecutor(object):
                     step.properties[prop] = self._xdl.hardware_map[val]
             step.update()
 
-            if not isinstance(step, AbstractBaseStep):
+            if not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
                 self._add_internal_properties_to_steps(step.steps)
 
 
@@ -260,7 +260,7 @@ class XDLExecutor(object):
                     if cartridge.chemical == step.through:
                         step.through_cartridge = cartridge.id
 
-            if not isinstance(step, AbstractBaseStep):
+            if not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
                 self._add_internal_properties_to_steps(step.steps)
 
     def _map_hardware_to_steps(self) -> None:
@@ -796,7 +796,7 @@ class XDLExecutor(object):
         elif type(step) == CStopStir:
             if step.vessel in stirring:
                 stirring.remove(step.vessel)
-        elif not isinstance(step, AbstractBaseStep):
+        elif not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
             for sub_step in step.steps:
                 if isinstance(sub_step, AbstractStep):
                     self.find_stirring_schedule(sub_step, stirring)
@@ -841,14 +841,15 @@ class XDLExecutor(object):
             List[str]: List of vessels being stirred in given step.
         """
         stir_vessels = []
-        if isinstance(step, AbstractBaseStep):
+        if isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
             if type(step) == CStir:
                 stir_vessels.append(step.vessel)
         else:
             for substep in step.steps:
                 if type(substep) == CStir:
                     stir_vessels.append(substep.vessel)
-                elif not isinstance(substep, AbstractBaseStep):
+                elif not isinstance(
+                    substep, (AbstractBaseStep, AbstractAsyncStep)):
                     stir_vessels.extend(self._get_stir_vessels(substep))
         return stir_vessels
 
