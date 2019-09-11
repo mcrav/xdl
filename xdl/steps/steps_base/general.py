@@ -52,6 +52,9 @@ class CWait(AbstractBaseStep):
         chempiler.wait(self.time)
         return True
 
+    def duration(self, chempiler):
+        return self.time
+
 class CBreakpoint(AbstractBaseStep):
     """Introduces a breakpoint in the script. The execution is halted until the operator
     resumes it.
@@ -62,6 +65,7 @@ class CBreakpoint(AbstractBaseStep):
     def execute(self, chempiler, logger=None, level=0):
         chempiler.breakpoint()
         return True
+
 class CMove(AbstractBaseStep):
     """Moves a specified volume from one node in the graph to another. Moving from and to
     the same node is supported.
@@ -104,6 +108,29 @@ class CMove(AbstractBaseStep):
         )
         return True
 
+    def duration(self, chempiler):
+        return chempiler.move_duration(
+            src=self.from_vessel,
+            dest=self.to_vessel,
+            volume=self.volume,
+            initial_pump_speed=self.aspiration_speed,
+            mid_pump_speed=self.move_speed,
+            end_pump_speed=self.dispense_speed,
+            src_port=self.from_port,
+            dest_port=self.to_port,
+            through_nodes=self.through,
+        )
+
+    def locks(self, chempiler):
+        return chempiler.move_locks(
+            src=self.from_vessel,
+            dest=self.to_vessel,
+            volume=self.volume,
+            src_port=self.from_port,
+            dest_port=self.to_port,
+            through_nodes=self.through,
+        )
+
 class CConnect(AbstractBaseStep):
     """Connect two nodes together.
 
@@ -132,3 +159,11 @@ class CConnect(AbstractBaseStep):
             dest_port=self.to_port,
         )
         return True
+
+    def locks(self, chempiler):
+        return chempiler.connect_locks(
+            src=self.from_vessel,
+            dest=self.to_vessel,
+            src_port=self.from_port,
+            dest_port=self.to_port,
+        )
