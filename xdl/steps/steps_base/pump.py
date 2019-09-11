@@ -47,3 +47,8 @@ class CSeparatePhases(AbstractBaseStep):
             dead_volume_through=self.dead_volume_through,
         )
         return True
+
+    @property
+    def duration(self, chempiler):
+        # 30 is abitrary atm
+        return 30 * chempiler[self.separation_vessel]['current_volume']

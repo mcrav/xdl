@@ -181,3 +181,6 @@ class CRotavapAutoEvaporation(AbstractBaseStep):
             duration=self.time_limit / 60,
             vent_after=self.vent_after)
         return True
+
+    def duration(self, chempiler):
+        return self.time_limit

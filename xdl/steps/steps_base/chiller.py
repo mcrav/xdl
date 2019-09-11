@@ -81,6 +81,9 @@ class CRampChiller(AbstractBaseStep):
         chempiler.chiller.ramp_chiller(self.vessel, self.ramp_duration, self.end_temperature)
         return True
 
+    def duration(self, chempiler):
+        return self.ramp_duration
+
 class CSetCoolingPower(AbstractBaseStep):
     """Sets the cooling power (0-100%). Only available for CF41.
 

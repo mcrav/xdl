@@ -374,6 +374,9 @@ FILTER_DEAD_VOLUME_LIQUID_METHOD: str = 'solvent'
 ### MISC ###
 ############
 
+#: Default duration for base steps when the command is basically instantaneous
+DEFAULT_INSTANT_DURATION = 1 # s
+
 #: Room temperature in °C
 ROOM_TEMPERATURE: int = 25
 

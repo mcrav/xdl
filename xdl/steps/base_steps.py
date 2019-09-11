@@ -3,6 +3,7 @@ import logging
 import threading
 import copy
 import sys
+import time
 from abc import ABC, abstractmethod
 from ..utils import initialise_logger
 from ..utils.misc import format_property
@@ -12,6 +13,7 @@ if False:
     from chempiler import Chempiler
 
 from ..utils import XDLBase
+from ..constants import DEFAULT_INSTANT_DURATION
 
 class Step(XDLBase):
     """Base class for all step objects.
@@ -67,6 +69,22 @@ class AbstractStep(Step, ABC):
     @property
     def requirements(self):
         return {}
+
+    def request_lock(self, chempiler, locking_pid):
+        can_lock = True
+        for step in self.base_steps:
+            if not step.request_lock(chempiler, locking_pid):
+                can_lock = False
+                break
+        return can_lock
+
+    def acquire_lock(self, chempiler, locking_pid):
+        for step in self.base_steps:
+            step.acquire_lock(chempiler, locking_pid)
+
+    def release_lock(self, chempiler, locking_pid):
+        for step in self.base_steps:
+            step.release_lock(chempiler, locking_pid)
 
     def execute(
         self,
@@ -126,6 +144,13 @@ class AbstractStep(Step, ABC):
                 base_steps.extend(self.get_base_steps(step))
         return base_steps
 
+    def duration(self, chempiler):
+        duration = 0
+        for step in self.base_steps:
+            print(step)
+            duration += step.duration(chempiler)
+        return duration
+
 class AbstractBaseStep(Step, ABC):
     """Abstract base class for all steps that do not contain other steps and
     instead have an execute method that takes a chempiler object.
@@ -146,6 +171,21 @@ class AbstractBaseStep(Step, ABC):
     @property
     def base_steps(self):
         return [self]
+
+    def duration(self, chempiler):
+        return DEFAULT_INSTANT_DURATION
+
+    def request_lock(self, chempiler, locking_pid):
+        locks, ongoing_locks, _ = self.locks(chempiler)
+        return chempiler.request_lock(locks + ongoing_locks, locking_pid)
+
+    def acquire_lock(self, chempiler, locking_pid):
+        locks, ongoing_locks, _ = self.locks(chempiler)
+        chempiler.acquire_lock(locks + ongoing_locks, locking_pid)
+
+    def release_lock(self, chempiler, locking_pid):
+        locks, _, unlocks = self.locks(chempiler)
+        chempiler.release_lock(locks + unlocks, locking_pid)
 
 class AbstractAsyncStep(XDLBase):
     """For executing code asynchronously. Can only be used programtically,
