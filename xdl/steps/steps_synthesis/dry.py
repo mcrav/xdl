@@ -73,6 +73,8 @@ class Dry(AbstractStep):
         if self.vessel_type == 'filter':
             from_port = BOTTOM_PORT
 
+        no_vacuum_device_remove_i = -2
+
         steps.extend([
             # Move bulk of liquid to waste.
             CMove(from_vessel=self.vessel,
@@ -86,6 +88,7 @@ class Dry(AbstractStep):
         ])
         # If using rotavap CConnect not needed.
         if vacuum_vessel != self.vessel:
+            no_vacuum_device_remove_i = -3
             steps.append(
                 CConnect(from_vessel=self.vessel,
                         to_vessel=vacuum_vessel,
@@ -96,7 +99,7 @@ class Dry(AbstractStep):
         # If vacuum is just from vacuum line not device remove Start/Stop vacuum
         # steps.
         if not self.vacuum_device:
-            steps.pop(-3)
+            steps.pop(no_vacuum_device_remove_i)
 
         if self.temp != None:
             steps.insert(0, HeatChillToTemp(

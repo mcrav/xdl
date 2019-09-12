@@ -3,6 +3,7 @@ import logging
 import threading
 import copy
 import sys
+import time
 from abc import ABC, abstractmethod
 from ..utils import initialise_logger
 from ..utils.misc import format_property
@@ -12,6 +13,7 @@ if False:
     from chempiler import Chempiler
 
 from ..utils import XDLBase
+from ..constants import DEFAULT_INSTANT_DURATION
 
 class Step(XDLBase):
     """Base class for all step objects.
@@ -67,6 +69,22 @@ class AbstractStep(Step, ABC):
     @property
     def requirements(self):
         return {}
+
+    def request_lock(self, chempiler, locking_pid):
+        can_lock = True
+        for step in self.base_steps:
+            if not step.request_lock(chempiler, locking_pid):
+                can_lock = False
+                break
+        return can_lock
+
+    def acquire_lock(self, chempiler, locking_pid):
+        for step in self.base_steps:
+            step.acquire_lock(chempiler, locking_pid)
+
+    def release_lock(self, chempiler, locking_pid):
+        for step in self.base_steps:
+            step.release_lock(chempiler, locking_pid)
 
     def execute(
         self,
@@ -126,6 +144,13 @@ class AbstractStep(Step, ABC):
                 base_steps.extend(self.get_base_steps(step))
         return base_steps
 
+    def duration(self, chempiler):
+        duration = 0
+        for step in self.base_steps:
+            print(step)
+            duration += step.duration(chempiler)
+        return duration
+
 class AbstractBaseStep(Step, ABC):
     """Abstract base class for all steps that do not contain other steps and
     instead have an execute method that takes a chempiler object.
@@ -147,7 +172,22 @@ class AbstractBaseStep(Step, ABC):
     def base_steps(self):
         return [self]
 
-class AsyncStep(XDLBase):
+    def duration(self, chempiler):
+        return DEFAULT_INSTANT_DURATION
+
+    def request_lock(self, chempiler, locking_pid):
+        locks, ongoing_locks, _ = self.locks(chempiler)
+        return chempiler.request_lock(locks + ongoing_locks, locking_pid)
+
+    def acquire_lock(self, chempiler, locking_pid):
+        locks, ongoing_locks, _ = self.locks(chempiler)
+        chempiler.acquire_lock(locks + ongoing_locks, locking_pid)
+
+    def release_lock(self, chempiler, locking_pid):
+        locks, _, unlocks = self.locks(chempiler)
+        chempiler.release_lock(locks + unlocks, locking_pid)
+
+class AbstractAsyncStep(XDLBase):
     """For executing code asynchronously. Can only be used programtically,
     no way of encoding this in XDL files.
 
@@ -184,7 +224,7 @@ class AbstractDynamicStep(XDLBase):
 
     What steps are to be returned should be decided base on the state attribute.
     The state can be updated from any of the three lifecycle methods or from
-    AsyncStep callback functions.
+    AbstractAsyncStep callback functions.
     """
     def __init__(self, param_dict):
         super().__init__(param_dict)
@@ -229,6 +269,12 @@ class AbstractDynamicStep(XDLBase):
         for async_step in self.async_steps:
             async_step.kill()
 
+    def prepare_for_execution(self, graph, executor):
+        self.executor = executor
+        self.graph = graph
+        self.start_block  = self.on_start()
+        self.executor.prepare_block_for_execution(self.graph, self.start_block)
+
     def execute(self, chempiler, logger=None, level=0):
         """Execute step lifecycle. on_start, followed by on_continue repeatedly
         until an empty list is returned, followed by on_finish, after which all
@@ -243,24 +289,31 @@ class AbstractDynamicStep(XDLBase):
             True: bool to indicate execution should continue after this step.
         """
         # Execute steps from on_start
-        for step in self.on_start():
+        for step in self.start_block:
             step.execute(chempiler, logger=logger, level=level)
-            if isinstance(step, AsyncStep):
+            if isinstance(step, AbstractAsyncStep):
                 self.async_steps.append(step)
 
         # Repeatedly execute steps from on_continue until empty list returned
-        continue_steps = self.on_continue()
-        while continue_steps:
-            for step in continue_steps:
-                if isinstance(step, AsyncStep):
+        continue_block = self.on_continue()
+        self.executor.prepare_block_for_execution(self.graph, continue_block)
+
+        while continue_block:
+            for step in continue_block:
+                if isinstance(step, AbstractAsyncStep):
                     self.async_steps.append(step)
                 step.execute(chempiler, logger=logger, level=level)
-            continue_steps = self.on_continue()
+
+            continue_block = self.on_continue()
+            self.executor.prepare_block_for_execution(self.graph, continue_block)
 
         # Execute steps from on_finish
-        for step in self.on_finish():
+        finish_block = self.on_finish()
+        self.executor.prepare_block_for_execution(self.graph, finish_block)
+
+        for step in finish_block:
             step.execute(chempiler, logger=logger, level=level)
-            if isinstance(step, AsyncStep):
+            if isinstance(step, AbstractAsyncStep):
                 self.async_steps.append(step)
 
         # Kill all threads

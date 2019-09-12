@@ -46,10 +46,10 @@ class XDLExecutor(object):
         xdl (XDL): XDL object to execute.
     """
 
-    def __init__(self, xdl: 'XDL') -> None:
-
-        self.logger = xdl.logger
-        self._xdl = xdl
+    def __init__(self, xdl: 'XDL' = None) -> None:
+        if xdl:
+            self.logger = xdl.logger
+            self._xdl = xdl
         self._warnings = []
         self._prepared_for_execution = False
 
@@ -138,7 +138,7 @@ class XDLExecutor(object):
                     step.properties[prop] = self._xdl.hardware_map[val]
             step.update()
 
-            if not isinstance(step, AbstractBaseStep):
+            if not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
                 self._add_internal_properties_to_steps(step.steps)
 
 
@@ -204,8 +204,14 @@ class XDLExecutor(object):
                         graph=self._graph, valve_node=step.vacuum_valve)
 
             if 'vacuum_device' in step.properties:
+                # Look for vacuum device attached to vacuum flask
                 step.vacuum_device = vacuum_device_attached_to_flask(
                     graph=self._graph, flask_node=step.vacuum)
+
+                # Look for vacuum device attached directly to vessel
+                if not step.vacuum_device and 'vessel' in step.properties:
+                    step.vacuum_device = vacuum_device_attached_to_flask(
+                        graph=self._graph, flask_node=step.vessel)
 
             if 'vessel_has_stirrer' in step.properties:
                 step.vessel_has_stirrer = not step.vessel in [
@@ -254,7 +260,7 @@ class XDLExecutor(object):
                     if cartridge.chemical == step.through:
                         step.through_cartridge = cartridge.id
 
-            if not isinstance(step, AbstractBaseStep):
+            if not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
                 self._add_internal_properties_to_steps(step.steps)
 
     def _map_hardware_to_steps(self) -> None:
@@ -269,15 +275,21 @@ class XDLExecutor(object):
             if type(step) == CleanBackbone and not step.waste_vessels:
                 step.waste_vessels = self._graph_hardware.waste_xids
 
-    def _add_internal_properties(self) -> None:
+    def _add_internal_properties(self, steps=None) -> None:
         """
         Go through steps in XDL and fill in internal properties for all steps
         and substeps.
+
+        Args:
+            steps (List[Step]): List of steps to add internal properties to. If
+                not specified self._xdl.steps used.
         """
-        self._add_internal_properties_to_steps(self._xdl.steps)
+        if steps is None:
+            steps = self._xdl.steps
+        self._add_internal_properties_to_steps(steps)
 
         # Give IDs of all waste vessels to clean backbone steps.
-        for step in self._xdl.steps:
+        for step in steps:
             if type(step) == CleanBackbone and not step.waste_vessels:
                 step.waste_vessels = self._graph_hardware.waste_xids
 
@@ -693,7 +705,6 @@ class XDLExecutor(object):
             prev_vessel_contents = vessel_contents
 
     def _add_clean_vessel_temps(self) -> None:
-
         """Add temperatures to CleanVessel steps. Priority is:
         1) Use explicitly given temperature.
         2) If solvent boiling point known use 80% of the boiling point.
@@ -721,14 +732,15 @@ class XDLExecutor(object):
     ### OPTIMISE PROCEDURE ###
     ##########################
 
-    def _tidy_up_procedure(self) -> None:
-        """Remove steps that are pointless and optimise procedure."""
+    def _tidy_up_procedure(self, steps=None) -> None:
+        """Remove steps that are pointless and optimise procedure.
+        """
         self._set_all_stir_speeds()
         self._stop_stirring_when_vessels_lose_scope()
         self._remove_pointless_backbone_cleaning()
         self._no_waiting_if_dry_run()
 
-    def _optimise_separation_steps(self) -> None:
+    def _optimise_separation_steps(self, steps=None) -> None:
         """Optimise separation steps to reduce risk of backbone contamination.
         The issue this addresses is that if a product is extracted into the
         aqueous phase, but the organic phase ends up in the backbone, the product
@@ -745,8 +757,13 @@ class XDLExecutor(object):
         run the risk of contaminating the backbone, and there is no need to
         remove the dead volume to risk contaminating the product phase as
         more solvent is going to be added anyway in the next step.
+
+        Args:
+            steps (List[Step]): List of steps to optimise separation steps in.
+                If not given self._xdl.steps used.
         """
-        steps = self._xdl.steps
+        if steps is None:
+            steps = self._xdl.steps
         for i in range(len(steps)):
             step = steps[i]
             if type(step) == Separate:
@@ -779,7 +796,7 @@ class XDLExecutor(object):
         elif type(step) == CStopStir:
             if step.vessel in stirring:
                 stirring.remove(step.vessel)
-        elif not isinstance(step, AbstractBaseStep):
+        elif not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
             for sub_step in step.steps:
                 if isinstance(sub_step, AbstractStep):
                     self.find_stirring_schedule(sub_step, stirring)
@@ -814,16 +831,38 @@ class XDLExecutor(object):
 
                         insertions.append((i + 1, StopStir(vessel=val)))
 
-    def _set_all_stir_speeds(self) -> None:
+    def _get_stir_vessels(self, step: Step):
+        """Get vessels being stirred using CStir in substeps of given step.
+
+        Args:
+            step (Step): Step to find vessels being stirred.
+
+        Returns:
+            List[str]: List of vessels being stirred in given step.
+        """
+        stir_vessels = []
+        if isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
+            if type(step) == CStir:
+                stir_vessels.append(step.vessel)
+        else:
+            for substep in step.steps:
+                if type(substep) == CStir:
+                    stir_vessels.append(substep.vessel)
+                elif not isinstance(
+                    substep, (AbstractBaseStep, AbstractAsyncStep)):
+                    stir_vessels.extend(self._get_stir_vessels(substep))
+        return stir_vessels
+
+    def _set_all_stir_speeds(self, steps: List[Step] = None) -> None:
         """Set stir RPM to default at start of procedure for all stirrers
         used in procedure.
         """
+        if steps is None:
+            steps = self._xdl.steps
         stir_vessels = []
-        for step in self._xdl.base_steps:
-            if type(step) == CStir:
-                if not step.vessel in stir_vessels:
-                    stir_vessels.append(step.vessel)
-        for vessel in stir_vessels:
+        for step in steps:
+            stir_vessels.extend(self._get_stir_vessels(step))
+        for vessel in set(stir_vessels):
             self._xdl.steps.insert(
                 0, CSetStirRate(vessel=vessel, stir_speed=DEFAULT_STIR_SPEED))
 
@@ -879,6 +918,35 @@ class XDLExecutor(object):
     ######################
     ### PUBLIC METHODS ###
     ######################
+
+    def prepare_block_for_execution(
+        self, graph_file: Union[str, Dict], block: List[Step]) -> None:
+        """Prepare block of AbstractDynamicStep for execution
+
+        Args:
+            graph_file (Union[str, Dict]): Path to graph file. May be GraphML file,
+                                           JSON file with graph in node link format,
+                                           or dict containing graph in same format
+                                           as JSON file.
+        """
+        self._graph = get_graph(graph_file)
+        self._graph_hardware = hardware_from_graph(self._graph)
+        self._waste_map = make_vessel_map(
+            self._graph, CHEMPUTER_WASTE_CLASS_NAME)
+        self._vacuum_map = make_vessel_map(
+            self._graph, CHEMPUTER_VACUUM_CLASS_NAME)
+        self._inert_gas_map = make_inert_gas_map(self._graph)
+        self._valve_map = make_vessel_map(
+            self._graph, CHEMPUTER_VALVE_CLASS_NAME)
+
+        self._add_internal_properties(steps=block)
+        # Convert implied properties to concrete values.
+        self._optimise_separation_steps(steps=block)
+
+        # Optimise procedure.
+        self._set_all_stir_speeds(steps=block)
+
+        self._print_warnings()
 
     def prepare_for_execution(
         self, graph_file: Union[str, Dict], interactive=True) -> None:
