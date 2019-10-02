@@ -133,3 +133,17 @@ class Dry(AbstractStep):
                 'temp': [item for item in [self.temp] if item != None],
             }
         }
+
+    def syntext(self) -> str:
+        formatted_properties = self.formatted_properties()
+        s = 'The solid was dried.'
+
+        #  Add temp modifier
+        if self.temp != None:
+            s += f"at {formatted_properties['temp']}"
+
+        # Add time modifier
+        elif self.time != None:
+            s += f"for {formatted_properties['time']}"
+
+        return f'{s}.'

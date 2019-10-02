@@ -172,6 +172,10 @@ class Add(AbstractStep):
         except KeyError:
             return self.name
 
+    def syntext(self) -> str:
+        formatted_properties = self.formatted_properties()
+        return f'{self.reagent} ({formatted_properties['volume']} mL) was added.'
+
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {
