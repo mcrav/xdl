@@ -139,7 +139,7 @@ class HeatChillToTemp(AbstractStep):
         self,
         vessel: str,
         temp: float,
-        active: bool = True,
+        active: bool = 'default',
         stir: Optional[bool] = True,
         stir_speed: Optional[float] = 'default',
         vessel_type: Optional[str] = None,

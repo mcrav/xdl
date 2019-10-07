@@ -251,6 +251,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'stir_speed': DEFAULT_STIR_SPEED,
     },
     'HeatChillToTemp': {
+        'active': True,
         'stir': True,
         'stir_speed': DEFAULT_STIR_SPEED,
         'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
