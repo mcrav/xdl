@@ -280,11 +280,10 @@ class HeatChillReturnToRT(AbstractStep):
         elif self.vessel_type == 'reactor':
             steps = [
                 CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
-                CStirrerHeat(vessel=self.vessel),
+                CStopHeat(vessel=self.vessel),
                 CSetRecordingSpeed(self.wait_recording_speed),
                 CStirrerWaitForTemp(vessel=self.vessel),
                 CSetRecordingSpeed(self.after_recording_speed),
-                CStopHeat(self.vessel),
             ]
         elif self.vessel_type == 'rotavap':
             steps = [
