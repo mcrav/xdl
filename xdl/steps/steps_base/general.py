@@ -13,7 +13,7 @@ class Confirm(AbstractBaseStep):
         msg (str): Message to get user to confirm experiment should continue.
     """
 
-    def __init__(self, msg: str, children=[]) -> None:
+    def __init__(self, msg: str, **kwargs) -> None:
         super().__init__(locals())
 
     def execute(
