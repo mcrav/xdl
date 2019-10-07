@@ -77,12 +77,59 @@ class StartHeatChill(AbstractStep):
             }
         }
 
+class HeatChillSetTemp(AbstractStep):
+    """Start heating/chilling vessel to given temp and leave heater/chiller on.
+    Don't wait to reach temp.
+
+    Args:
+        vessel (str): Vessel to set temp.
+        temp (float): Temperature to set in degrees C.
+        vessel_type (str): Given internally. Used to know whether to use
+            heater or chiller base steps. 'filter', 'rotavap' or 'reactor'
+    """
+    def __init__(
+        self,
+        vessel: str,
+        temp: float,
+        vessel_type: Optional[str] = None,
+        **kwargs
+    ) -> None:
+        super().__init__(locals())
+
+    def get_steps(self) -> List[Step]:
+        steps = []
+        if self.vessel_type == 'filter':
+            steps = [
+                CChillerSetTemp(vessel=self.vessel, temp=self.temp),
+            ]
+        elif self.vessel_type == 'reactor':
+            steps = [
+                CStirrerSetTemp(vessel=self.vessel, temp=self.temp),
+            ]
+        elif self.vessel_type == 'rotavap':
+            steps = [
+                CRotavapSetTemp(rotavap_name=self.vessel, temp=self.temp),
+            ]
+        return steps
+
+    @property
+    def requirements(self) -> Dict[str, Dict[str, Any]]:
+        return {
+            'vessel': {
+                'heatchill': True,
+                'temp': [self.temp]
+            }
+        }
+
 class HeatChillToTemp(AbstractStep):
-    """Heat/Chill vessel to given temp and leave heater/chiller on.
+    """Heat/Chill vessel to given temp.
 
     Args:
         vessel (str): Vessel to heat/chill.
         temp (float): Temperature to heat/chill to in degrees C.
+        active (bool): If True, will actively heat/chill to the desired temp and
+            leave heater/chiller on. If False, stop heating/chilling and wait
+            for the temp to be reached.
         stir (bool): If True, step will be stirred, otherwise False.
         stir_speed (float): Speed to stir at, only used if stir == True.
         vessel_type (str): Given internally. Used to know whether to use
@@ -92,6 +139,7 @@ class HeatChillToTemp(AbstractStep):
         self,
         vessel: str,
         temp: float,
+        active: bool = True,
         stir: Optional[bool] = True,
         stir_speed: Optional[float] = 'default',
         vessel_type: Optional[str] = None,
@@ -104,25 +152,21 @@ class HeatChillToTemp(AbstractStep):
     def get_steps(self) -> List[Step]:
         steps = []
         if self.vessel_type == 'filter':
-            steps = [
-                StartHeatChill(vessel=self.vessel, temp=self.temp),
-
+            steps = self.get_initial_heatchill_steps() + [
                 CSetRecordingSpeed(self.wait_recording_speed),
                 CChillerWaitForTemp(vessel=self.vessel),
                 CSetRecordingSpeed(self.after_recording_speed),
             ]
-        elif self.vessel_type == 'reactor':
-            steps = [
-                StartHeatChill(vessel=self.vessel, temp=self.temp),
 
+        elif self.vessel_type == 'reactor':
+            steps = self.get_initial_heatchill_steps() + [
                 CSetRecordingSpeed(self.wait_recording_speed),
                 CStirrerWaitForTemp(vessel=self.vessel),
                 CSetRecordingSpeed(self.after_recording_speed),
             ]
-        elif self.vessel_type == 'rotavap':
-            steps = [
-                StartHeatChill(vessel=self.vessel, temp=self.temp),
 
+        elif self.vessel_type == 'rotavap':
+            steps = self.get_initial_heatchill_steps() + [
                 Wait(time=DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME),
             ]
 
@@ -134,6 +178,14 @@ class HeatChillToTemp(AbstractStep):
             steps.insert(0, StopStir(
                 vessel=self.vessel, vessel_type=self.vessel_type))
         return steps
+
+    def get_initial_heatchill_steps(self) -> List[Step]:
+        if self.active:
+            return [StartHeatChill(vessel=self.vessel, temp=self.temp)]
+
+        else:
+            return [HeatChillSetTemp(vessel=self.vessel, temp=self.temp),
+                    StopHeatChill(vessel=self.vessel)]
 
     def human_readable(self, language='en') -> str:
         try:

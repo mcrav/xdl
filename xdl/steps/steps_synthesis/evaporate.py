@@ -45,7 +45,7 @@ class Evaporate(AbstractStep):
     def __init__(
         self,
         rotavap_name: str,
-        temp: float,
+        temp: float = 25,
         pressure: Optional[float] = None,
         time: Optional[float] = 'default',
         rotation_speed: Optional[float] = 'default',
