@@ -130,6 +130,8 @@ class HeatChillToTemp(AbstractStep):
         active (bool): If True, will actively heat/chill to the desired temp and
             leave heater/chiller on. If False, stop heating/chilling and wait
             for the temp to be reached.
+        continue_heatchill (bool): If True, heating/chilling will be left on
+            at end of step, even if active is False.
         stir (bool): If True, step will be stirred, otherwise False.
         stir_speed (float): Speed to stir at, only used if stir == True.
         vessel_type (str): Given internally. Used to know whether to use
@@ -140,6 +142,7 @@ class HeatChillToTemp(AbstractStep):
         vessel: str,
         temp: float,
         active: bool = 'default',
+        continue_heatchill: bool = 'default',
         stir: Optional[bool] = True,
         stir_speed: Optional[float] = 'default',
         vessel_type: Optional[str] = None,
@@ -156,19 +159,19 @@ class HeatChillToTemp(AbstractStep):
                 CSetRecordingSpeed(self.wait_recording_speed),
                 CChillerWaitForTemp(vessel=self.vessel),
                 CSetRecordingSpeed(self.after_recording_speed),
-            ]
+            ] + self.get_final_heatchill_steps()
 
         elif self.vessel_type == 'reactor':
             steps = self.get_initial_heatchill_steps() + [
                 CSetRecordingSpeed(self.wait_recording_speed),
                 CStirrerWaitForTemp(vessel=self.vessel),
                 CSetRecordingSpeed(self.after_recording_speed),
-            ]
+            ] + self.get_final_heatchill_steps()
 
         elif self.vessel_type == 'rotavap':
             steps = self.get_initial_heatchill_steps() + [
                 Wait(time=DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME),
-            ]
+            ] + self.get_final_heatchill_steps()
 
         if self.stir:
             steps.insert(0, StartStir(vessel=self.vessel,
@@ -186,6 +189,20 @@ class HeatChillToTemp(AbstractStep):
         else:
             return [HeatChillSetTemp(vessel=self.vessel, temp=self.temp),
                     StopHeatChill(vessel=self.vessel)]
+
+    def get_final_heatchill_steps(self) -> List[Step]:
+        # Inactive heatchilling, need to switch on at end
+        if self.continue_heatchill and not self.active:
+            return [StartHeatChill(vessel=self.vessel, temp=self.temp)]
+
+        # Active heatchilling, need to switch off at end
+        elif not self.continue_heatchill and self.active:
+            return [StopHeatChill(vessel=self.vessel)]
+
+        # Inactive leaving off, or active leaving on.
+        else:
+            return []
+
 
     def human_readable(self, language='en') -> str:
         try:
