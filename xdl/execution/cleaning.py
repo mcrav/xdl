@@ -64,7 +64,7 @@ def get_available_solvents(xdl_obj: 'XDL') -> List[str]:
     for reagent in reagents:
         for solvent in COMMON_SOLVENT_NAMES:
             # Look for stuff like 'X in THF' as well as plain 'THF'.
-            if re.match(r'(?:[ _]|^)' + solvent + r'(?:[ _]|$)', reagent.lower()):
+            if re.search(r'(?:[ _]|^)' + solvent + r'(?:[ _]|$)', reagent.lower()):
                 # Don't want to use solvents that damage parts of Chemputer.
                 if not reagent.lower() in CLEANING_SOLVENT_BLACKLIST:
                     solvents.append(reagent)
