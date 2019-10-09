@@ -173,7 +173,12 @@ def get_reagent_cleaning_solvent(
 
     for word in AQUEOUS_KEYWORDS:
         if word in reagent_name:
-            return 'water'
+            if 'water' in available_solvents:
+                return 'water'
+            else:
+                for solvent in available_solvents:
+                    if ' water' in solvent:
+                        return solvent
 
     if reagent_name in CLEANING_SOLVENT_BLACKLIST:
         return GENERIC_ORGANIC
