@@ -62,9 +62,10 @@ def get_available_solvents(xdl_obj: 'XDL') -> List[str]:
     reagents.extend([flask.chemical for flask in graph_hardware.flasks])
     reagents = list(set(reagents))
     for reagent in reagents:
+        print(reagent)
         for solvent in COMMON_SOLVENT_NAMES:
             # Look for stuff like 'X in THF' as well as plain 'THF'.
-            if re.match(r'(?:[ _]|^)' + solvent + r'(?:[ _]|$)', reagent.lower()):
+            if re.search(r'(?:[ _]|^)' + solvent + r'(?:[ _]|$)', reagent.lower()):
                 # Don't want to use solvents that damage parts of Chemputer.
                 if not reagent.lower() in CLEANING_SOLVENT_BLACKLIST:
                     solvents.append(reagent)
@@ -83,6 +84,7 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
     """
     graph_hardware = xdl_obj.executor._graph_hardware
     available_solvents = get_available_solvents(xdl_obj)
+    print('available solvents', available_solvents)
     if not available_solvents:
         return None
     schedule = [None for step in xdl_obj.steps]
