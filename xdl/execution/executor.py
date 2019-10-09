@@ -662,11 +662,12 @@ class XDLExecutor(object):
         """
         # Connect inert gas to bottom of filter flasks at start of procedure.
         for filter_vessel in self._graph_hardware.filters:
-            self._xdl.steps.insert(
-                0, CConnect(
-                    from_vessel=self._inert_gas_map[filter_vessel.id],
-                    to_vessel=filter_vessel.id,
-                    to_port=BOTTOM_PORT))
+            if filter_vessel.id in self._inert_gas_map:
+                self._xdl.steps.insert(
+                    0, CConnect(
+                        from_vessel=self._inert_gas_map[filter_vessel.id],
+                        to_vessel=filter_vessel.id,
+                        to_port=BOTTOM_PORT))
 
 
     ###################################
