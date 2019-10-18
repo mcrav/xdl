@@ -88,10 +88,10 @@ class Add(AbstractStep):
         # Liquid addition
         else:
             if self.anticlogging:
-                return self.get_anticlogging_add_steps()
+                steps = self.get_anticlogging_add_steps()
 
             else:
-                return self.get_add_steps()
+                steps = self.get_add_steps()
 
             if self.flush_tube_vessel:
                 steps.append(CMove(
