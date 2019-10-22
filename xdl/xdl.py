@@ -418,17 +418,16 @@ class XDL(object):
             Dict: JSON node link graph as dictionary.
         """
         liquid_reagents = [reagent.id for reagent in self.reagents]
-        cartridge_reagent = ''
-
+        cartridge_reagents = []
         for step in self.steps:
             if type(step) == Add and step.mass:
                 if step.reagent in liquid_reagents:
                     liquid_reagents.remove(step.reagent)
 
             elif type(step) == FilterThrough and step.through:
-                cartridge_reagent = step.through
+                cartridge_reagents.append(step.through)
 
-        return get_graph(liquid_reagents, cartridge_reagent)
+        return get_graph(liquid_reagents, cartridge_reagents)
 
     def prepare_for_execution(
         self, graph_file: str, interactive: bool = True) -> None:

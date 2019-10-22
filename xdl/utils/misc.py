@@ -87,7 +87,7 @@ def format_pressure(val_mbar: float)  -> str:
     Returns:
         str: Formatted pressure in sensible units.
     """
-    return f'{val_mbar} mbar'
+    return f'{format_val(val_mbar)} mbar'
 
 def format_volume(val_ml: float) -> str:
     """Return formatted volume in sensible units.
