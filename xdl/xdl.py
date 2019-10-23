@@ -426,8 +426,8 @@ class XDL(object):
 
             elif type(step) == FilterThrough and step.through:
                 cartridge_reagents.append(step.through)
-
-        return get_graph(liquid_reagents, cartridge_reagents)
+        print(cartridge_reagents)
+        return get_graph(liquid_reagents, list(set(cartridge_reagents)))
 
     def prepare_for_execution(
         self, graph_file: str, interactive: bool = True) -> None:

@@ -51,6 +51,7 @@ class Transfer(AbstractStep):
         from_port: Optional[str] = None,
         to_port: Optional[str] = None,
         through: Optional[str] = None,
+        time: Optional[float] = None,
         aspiration_speed: Optional[float] = 'default',
         move_speed: Optional[float] = 'default',
         dispense_speed: Optional[float] = 'default',
@@ -59,6 +60,7 @@ class Transfer(AbstractStep):
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
+        dispense_speed = self.get_dispense_speed()
         return [CMove(from_vessel=self.from_vessel,
                       from_port=self.from_port,
                       to_vessel=self.to_vessel,
@@ -67,7 +69,13 @@ class Transfer(AbstractStep):
                       through=self.through,
                       aspiration_speed=self.aspiration_speed,
                       move_speed=self.move_speed,
-                      dispense_speed=self.dispense_speed)]
+                      dispense_speed=dispense_speed)]
+
+    def get_dispense_speed(self) -> float:
+        if self.time and type(self.volume) != str:
+            # dispense_speed (mL / min) = volume (mL) / time (min)
+            return self.volume / (self.time / 60)
+        return self.dispense_speed
 
     def human_readable(self, language='en'):
         try:
