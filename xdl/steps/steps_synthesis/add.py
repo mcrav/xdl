@@ -176,7 +176,17 @@ class Add(AbstractStep):
 
     def syntext(self) -> str:
         formatted_properties = self.formatted_properties()
-        return f'{self.reagent} ({formatted_properties['volume']} mL) was added.'
+        s = ''
+        if self.volume:
+            s += f'{self.reagent} ({formatted_properties["volume"]}) was added'
+        elif self.mass:
+            s += f'{self.reagent} ({formatted_properties["mass"]}) was added'
+        if self.time != None:
+            s += f' over {formatted_properties["time"]}'
+        if self.stir:
+            s += f' with stirring ({self.stir_speed} RPM)'
+        if s: s += '.'
+        return s
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

@@ -55,3 +55,11 @@ class HeatChill(AbstractStep):
                 'temp': [self.temp],
             }
         }
+
+    def syntext(self):
+        verb = 'heated'
+        if self.temp < 25:
+            verb = 'chilled'
+        formatted_properties = self.formatted_properties()
+        s = f'{self.vessel} was {verb} to {formatted_properties["temp"]} for {formatted_properties["time"]}.'
+        return s

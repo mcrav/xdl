@@ -109,3 +109,7 @@ class Filter(AbstractStep):
                 'filter': True
             }
         }
+
+    def syntext(self) -> str:
+        s = 'The reaction mixture was filtered.'
+        return s
