@@ -12,3 +12,10 @@ def test_start_stop_heatchill():
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f, interactive=False)
     generic_chempiler_test(xdl_f, graph_f)
+
+def test_inactive_heatchill():
+    xdl_f = os.path.join(FOLDER, 'inactive_heatchill.xdl')
+    graph_f = os.path.join(FOLDER, 'bigrig.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)
+    generic_chempiler_test(xdl_f, graph_f)

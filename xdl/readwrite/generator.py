@@ -72,8 +72,17 @@ class XDLGenerator(object):
         """Create and add Procedure section to XDL tree."""
         procedure_tree = etree.Element('Procedure')
         for step in self.steps:
-            step_tree = etree.Element(step.name)
-            for prop, val in step.properties.items():
+            procedure_tree.append(self.get_step_tree(step))
+        self.xdltree.append(procedure_tree)
+
+    def get_step_tree(self, step):
+        step_tree = etree.Element(step.name)
+        for prop, val in step.properties.items():
+            if prop == 'children' and val:
+                for child in val:
+                    child_tree = self.get_step_tree(child)
+                    step_tree.append(child_tree)
+            else:
                 if val != None:
                     # if self.full_properties is False ignore some properties.
                     if not self.full_properties:
@@ -90,9 +99,7 @@ class XDLGenerator(object):
                     # Convert value to nice units and add to element attrib.
                     step_tree.attrib[prop] = format_property(
                         prop, val, human_readable=False)
-
-            procedure_tree.append(step_tree)
-        self.xdltree.append(procedure_tree)
+        return step_tree
 
     def save(self, save_file: str) -> None:
         """Save XDL tree to given file path."""
@@ -102,6 +109,28 @@ class XDLGenerator(object):
     def as_string(self) -> str:
         """Return XDL tree as XML string."""
         return get_xdl_string(self.xdltree)
+
+def get_element_xdl_string(
+    element: etree._ElementTree, indent_level=0, indent='  ') -> str:
+    s = ''
+    s += f'{indent * indent_level}<{element.tag}\n'
+    has_children = list(element)
+    indent_level += 1
+    # Element Properties
+    for attr, val in element.attrib.items():
+        if val != None:
+            s += f'{indent * indent_level}{attr}="{val}"\n'
+    if has_children:
+        s = s[:-1] + '>\n'
+    else:
+        s = s[:-1] + ' />\n'
+    for subelement in element:
+        s += get_element_xdl_string(subelement, indent_level=indent_level, indent=indent)
+    indent_level -= 1
+    if has_children:
+        s += f'{indent * indent_level}</{element.tag}>\n'
+    return s
+
 
 def get_xdl_string(xdltree: etree._ElementTree) -> str:
     """Convert XDL etree to pretty XML string.
@@ -123,14 +152,7 @@ def get_xdl_string(xdltree: etree._ElementTree) -> str:
         indent_level += 1
         # Component, Reagent and Step tags
         for element2 in element.findall('*'):
-            s += f'{indent * indent_level}<{element2.tag}\n'
-            indent_level += 1
-            # Element Properties
-            for attr, val in element2.attrib.items():
-                if val != None:
-                    s += f'{indent * indent_level}{attr}="{val}"\n'
-            s = s[:-1] + ' />\n'
-            indent_level -= 1
+            s += get_element_xdl_string(element2, indent_level, indent)
         indent_level -= 1
         s += f'{indent * indent_level}</{element.tag}>\n\n'
     s += '</Synthesis>\n'

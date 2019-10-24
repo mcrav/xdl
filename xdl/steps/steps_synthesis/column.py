@@ -21,9 +21,10 @@ class RunColumn(AbstractStep):
         self,
         from_vessel: str,
         to_vessel: str,
-        column: str,
+        column: str = None,
         move_speed: Optional[float] = 'default',
         buffer_flask: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
 
