@@ -40,3 +40,6 @@ class RunColumn(AbstractStep):
         ]
 
         return steps
+
+    def syntext(self) -> str:
+        return 'The product was purified by column chromatography.'

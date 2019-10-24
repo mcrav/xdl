@@ -99,3 +99,7 @@ class Evaporate(AbstractStep):
                 'rotavap': True,
             }
         }
+
+    def syntext(self) -> str:
+        formatted_properties = self.formatted_properties()
+        return f'Excess solvent was removed by rotary evaporation ({formatted_properties["pressure"]}, {formatted_properties["temp"]}, {formatted_properties["time"]}).'

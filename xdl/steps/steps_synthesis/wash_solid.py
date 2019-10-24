@@ -192,3 +192,9 @@ class WashSolid(AbstractStep):
                 'stir': self.stir != False,
             }
         }
+
+    def syntext(self) -> str:
+        formatted_properties = self.formatted_properties()
+        s = f'The contents of {self.vessel} are washed with {self.solvent} ({self.repeat} × {formatted_properties["volume"]})'
+        if self.temp:
+            s += f' at {self.temp} °C.'

@@ -6,11 +6,11 @@ from xdl.steps import FilterThrough
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')
 
-def test_filter_through():
-    """Test that dissolving a solid in the rotavap works."""
-    xdl_f = os.path.join(FOLDER, 'filter_through.xdl')
-    graph_f = os.path.join(FOLDER, 'bigrig.json')
-    generic_chempiler_test(xdl_f, graph_f)
+# def test_filter_through():
+#     """Test that dissolving a solid in the rotavap works."""
+#     xdl_f = os.path.join(FOLDER, 'filter_through.xdl')
+#     graph_f = os.path.join(FOLDER, 'bigrig.json')
+#     generic_chempiler_test(xdl_f, graph_f)
 
 def test_filter_through_buffer_flask():
     """Test that dissolving a solid in the rotavap works."""

@@ -60,7 +60,7 @@ def get_available_solvents(xdl_obj: 'XDL') -> List[str]:
     reagents = [reagent.id for reagent in xdl_obj.reagents]
     graph_hardware = xdl_obj.executor._graph_hardware
     reagents.extend([flask.chemical for flask in graph_hardware.flasks])
-    reagents = list(set(reagents))
+    reagents = sorted(list(set(reagents)))
     for reagent in reagents:
         for solvent in COMMON_SOLVENT_NAMES:
             # Look for stuff like 'X in THF' as well as plain 'THF'.

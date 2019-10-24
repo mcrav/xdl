@@ -224,6 +224,15 @@ class Separate(AbstractStep):
         except KeyError:
             return self.name
 
+    def syntext(self) -> str:
+        verb = 'washed'
+        formatted_properties = self.formatted_properties()
+        if self.purpose == 'extract': verb = 'extracted'
+        s = f'The reaction mixture was {verb} with {self.solvent} ({self.n_separations} × {formatted_properties["solvent_volume"]})'
+        if self.through:
+            s += f' and dried over {self.through}'
+        return s + '.'
+
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {
