@@ -14,6 +14,7 @@ class Reagent(XDLBase):
         self,
         id: str,
         cleaning_solvent: str = None,
+        use_for_cleaning: str = False,
         stir: bool = False,
         cas: int = None,
         temp: float = None,
