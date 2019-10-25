@@ -68,7 +68,8 @@ def get_available_solvents(xdl_obj: 'XDL') -> List[str]:
                 # Don't want to use solvents that damage parts of Chemputer.
                 if not reagent.lower() in CLEANING_SOLVENT_BLACKLIST:
                     solvents.append(reagent)
-    return solvents
+    solvents.extend([reagent.id for reagent in xdl_obj.reagents if reagent.use_for_cleaning])
+    return sorted(list(set(solvents)))
 
 def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
     """Get list of what solvent should be used to clean at every step.
