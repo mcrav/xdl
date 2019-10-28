@@ -5,6 +5,7 @@ from .add import Add
 from ..steps_utility import Transfer, Wait, Stir
 from ..steps_base import CSeparatePhases, CMove
 from ...utils.misc import get_port_str, format_property
+from ...utils.errors import XDLError
 from ...constants import (
     BOTTOM_PORT,
     TOP_PORT,
@@ -54,46 +55,81 @@ class Separate(AbstractStep):
         from_port: Optional[str] = None,
         to_port: Optional[str] = None,
         solvent_volume: Optional[float] = 'default',
-        n_separations: Optional[float] = 1,
+        n_separations: Optional[int] = 1,
         waste_phase_to_vessel: Optional[str] = None,
         waste_phase_to_port: Optional[str] = None,
         waste_vessel: Optional[str] = None,
+        buffer_flask: Optional[str] = None,
         remove_dead_volume: Optional[bool] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
 
+    @property
+    def dead_volume_target(self):
+        return self.waste_vessel if self.remove_dead_volume else None
+
     def get_steps(self) -> List[Step]:
+        """It may seem mental having this many methods with lots of duplicate
+        code but the condensed version with lots of if statements for different
+        scenarios was took too long to see what was going on. Better just to have
+        clear routines for every scenario.
+        """
         if not self.waste_phase_to_vessel and self.waste_vessel:
             self.waste_phase_to_vessel = self.waste_vessel
-
         if not self.n_separations:
-            n_separations = 1
+            self.n_separations = 1
+
+        if self.n_separations > 1:
+            if self.purpose == 'wash':
+                return self._get_multi_wash_steps()
+
+            elif self.purpose == 'extract':
+                return self._get_multi_extract_steps()
+
+            raise XDLError('Invalid purpose given to Separate step.\nValid purposes: "wash" or "extract"')
+
         else:
-            n_separations = int(self.n_separations)
+            return self._get_single_separation_steps()
 
-        dead_volume_target = None
-        if self.remove_dead_volume:
-            dead_volume_target = self.waste_vessel
 
+    #####################################
+    ### Separation Routine Components ###
+    #####################################
+
+    def _get_initial_reaction_mixture_transfer_step(self):
+        """Transfer reaction mixture to separator."""
         steps = []
-        steps.append(
-            # Move from from_vessel to separation_vessel
-            Transfer(
-                from_vessel=self.from_vessel, from_port=self.from_port,
-                to_vessel=self.separation_vessel, to_port=TOP_PORT,
-                volume='all')
-        )
+        if self.from_vessel != self.separation_vessel:
+            steps.append(
+                # Move from from_vessel to separation_vessel
+                Transfer(
+                    from_vessel=self.from_vessel,
+                    from_port=self.from_port,
+                    to_vessel=self.separation_vessel,
+                    to_port=TOP_PORT,
+                    volume='all'
+                )
+            )
+        return steps
 
+    def _get_add_solvent_step(self):
+        """Add washing/extraction solvent to separator."""
+        steps = []
         if self.solvent:
             steps.append(
-                # Move solvent to separation_vessel.
-                Add(reagent=self.solvent, volume=self.solvent_volume,
-                    vessel=self.separation_vessel, port=BOTTOM_PORT,
+                # Move solvent to separation_vessel
+                Add(reagent=self.solvent,
+                    vessel=self.separation_vessel,
+                    port=BOTTOM_PORT,
+                    volume=self.solvent_volume,
                     waste_vessel=self.waste_vessel)
             )
+        return steps
 
-        steps.extend([
+    def _get_stir_separator_before_separation_steps(self):
+        """Stir separator and wait for phases to appear."""
+        return [
             # Stir separation_vessel
             Stir(vessel=self.separation_vessel,
                  time=DEFAULT_SEPARATION_FAST_STIR_TIME,
@@ -103,55 +139,37 @@ class Separate(AbstractStep):
                  stir_speed=DEFAULT_SEPARATION_SLOW_STIR_SPEED),
             # Wait for phases to separate
             Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
-        ])
+        ]
 
-        if self.from_vessel == self.separation_vessel:
-            steps.pop(0)
-
-        remove_volume = 2
-
-        # If product in bottom phase
+    def _get_final_separate_phases_step(self):
+        """Get final CSeparatePhases step in separation routine."""
         if self.product_bottom:
-            if n_separations > 1:
-                for _ in range(n_separations - 1):
-                    steps.extend([
-                        # dead_volume_target is None as there is no point wasting
-                        # when there is still solvent to come.
-                        CSeparatePhases(lower_phase_vessel=self.to_vessel,
-                                        lower_phase_port=self.to_port,
-                                        upper_phase_vessel=self.waste_phase_to_vessel,
-                                        upper_phase_port=self.waste_phase_to_port,
-                                        separation_vessel=self.separation_vessel,
-                                        dead_volume_target=None,
-                                        lower_phase_through=self.through_cartridge),
-                        # Move to_vessel to separation_vessel
-                        CMove(from_vessel=self.to_vessel,
-                              to_vessel=self.separation_vessel, volume='all'),
-                    ])
+            return [CSeparatePhases(
+                separation_vessel=self.separation_vessel,
+                lower_phase_vessel=self.to_vessel,
+                lower_phase_port=self.to_port,
+                upper_phase_vessel=self.waste_phase_to_vessel,
+                upper_phase_port=self.waste_phase_to_port,
+                dead_volume_target = self.waste_vessel if self.remove_dead_volume else None,
+                lower_phase_through=self.through_cartridge
+            )]
+        else:
+            return [CSeparatePhases(
+                separation_vessel=self.separation_vessel,
+                lower_phase_vessel=self.waste_phase_to_vessel,
+                lower_phase_port=self.waste_phase_to_port,
+                upper_phase_vessel=self.to_vessel,
+                upper_phase_port=self.to_port,
+                dead_volume_target=self.dead_volume_target,
+                upper_phase_through=self.through_cartridge
+            )]
 
-                    if self.solvent:
-                        steps.append(
-                            # Move solvent to separation_vessel.
-                            # Bottom port as washes any reagent from previous
-                            # separation back into funnel.
-                            Add(reagent=self.solvent, volume=self.solvent_volume,
-                                vessel=self.separation_vessel, port=BOTTOM_PORT,
-                                waste_vessel=self.waste_vessel)
-                        )
-
-                    steps.extend([
-                        # Stir separation_vessel
-                        Stir(vessel=self.separation_vessel,
-                             time=DEFAULT_SEPARATION_FAST_STIR_TIME,
-                             stir_speed=DEFAULT_SEPARATION_FAST_STIR_SPEED),
-                        Stir(vessel=self.separation_vessel,
-                             time=DEFAULT_SEPARATION_SLOW_STIR_TIME,
-                             stir_speed=DEFAULT_SEPARATION_SLOW_STIR_SPEED),
-                        # Wait for phases to separate
-                        Wait(time=DEFAULT_SEPARATION_SETTLE_TIME)
-                    ])
-
-
+    def _get_multi_wash_loop_separate_phases(self):
+        """Get CSeparatePhases in wash routine, if there is another separation
+        to be performed after. Ensure product phase ends up in back in separator.
+        """
+        steps = []
+        if self.product_bottom:
             steps.extend([
                 CSeparatePhases(
                     separation_vessel=self.separation_vessel,
@@ -159,53 +177,138 @@ class Separate(AbstractStep):
                     lower_phase_port=self.to_port,
                     upper_phase_vessel=self.waste_phase_to_vessel,
                     upper_phase_port=self.waste_phase_to_port,
-                    dead_volume_target=dead_volume_target,
-                    lower_phase_through=self.through_cartridge),
+                    dead_volume_target=self.dead_volume_target,
+                ),
+                # Move to_vessel to separation_vessel
+                Transfer(
+                    from_vessel=self.to_vessel,
+                    to_vessel=self.separation_vessel,
+                    volume='all'
+                ),
             ])
         else:
-            if n_separations > 1:
-                for _ in range(n_separations - 1):
-                    steps.append(
-                        # dead_volume_target is None as there is no point wasting
-                        # when there is still solvent to come.
-                        CSeparatePhases(
-                            lower_phase_vessel=self.waste_phase_to_vessel,
-                            lower_phase_port=self.waste_phase_to_port,
-                            upper_phase_vessel=self.separation_vessel,
-                            separation_vessel=self.separation_vessel,
-                            dead_volume_target=None)
-                    )
+            steps.append(
+                CSeparatePhases(
+                    separation_vessel=self.separation_vessel,
+                    lower_phase_vessel=self.waste_phase_to_vessel,
+                    lower_phase_port=self.waste_phase_to_port,
+                    upper_phase_vessel=self.separation_vessel,
+                    dead_volume_target=self.dead_volume_target
+                )
+            )
+        return steps
 
-                    if self.solvent:
-                        steps.append(
-                            # Move solvent to separation_vessel
-                            Add(reagent=self.solvent, vessel=self.separation_vessel,
-                                port=BOTTOM_PORT, volume=self.solvent_volume,
-                                waste_vessel=self.waste_vessel)
-                        )
-
-                    steps.extend([
-                        # Stir separation_vessel
-                        Stir(vessel=self.separation_vessel,
-                             time=DEFAULT_SEPARATION_FAST_STIR_TIME,
-                             stir_speed=DEFAULT_SEPARATION_FAST_STIR_SPEED),
-                        Stir(vessel=self.separation_vessel,
-                             time=DEFAULT_SEPARATION_SLOW_STIR_TIME,
-                             stir_speed=DEFAULT_SEPARATION_SLOW_STIR_SPEED),
-                        # Wait for phases to separate
-                        Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
-                    ])
-
+    def _get_multi_extract_loop_separate_phases(self):
+        """Get CSeparatePhases in extract routine, if there is another separation
+        to be performed after. Ensure waste phase ends up in back in separator.
+        """
+        steps = []
+        if self.product_bottom:
+            steps.append(
+                CSeparatePhases(
+                    separation_vessel=self.separation_vessel,
+                    lower_phase_vessel=self.to_vessel,
+                    lower_phase_port=self.to_port,
+                    upper_phase_vessel=self.separation_vessel,
+                    dead_volume_target=self.dead_volume_target,
+                )
+            )
+        else:
             steps.extend([
-                CSeparatePhases(lower_phase_vessel=self.waste_phase_to_vessel,
-                                lower_phase_port=self.waste_phase_to_port,
-                                upper_phase_vessel=self.to_vessel,
-                                upper_phase_port=self.to_port,
-                                separation_vessel=self.separation_vessel,
-                                dead_volume_target=dead_volume_target,
-                                upper_phase_through=self.through_cartridge)
+                CSeparatePhases(
+                    separation_vessel=self.separation_vessel,
+                    lower_phase_vessel=self.buffer_flask,
+                    upper_phase_vessel=self.to_vessel,
+                    upper_phase_port=self.to_port,
+                    dead_volume_target=self.dead_volume_target
+                ),
+                # Move waste phase in buffer flask back to separation_vessel
+                Transfer(
+                    from_vessel=self.buffer_flask,
+                    to_vessel=self.separation_vessel,
+                    volume='all'
+                ),
             ])
         return steps
+
+
+    ####################################
+    ### Complete Separation Routines ###
+    ####################################
+
+    def _get_single_separation_steps(self):
+        """Get full separation routine for 1 wash/extraction.
+        """
+        # If necessary, Transfer from_vessel to separation_vessel
+        steps = self._get_initial_reaction_mixture_transfer_step()
+
+        steps.extend(self._get_add_solvent_step())
+
+        # Stir separator
+        steps.extend(self._get_stir_separator_before_separation_steps())
+
+        # Separate, vessels depending on self.product_bottom
+        steps.extend(self._get_final_separate_phases_step())
+
+        return steps
+
+    def _get_multi_wash_steps(self):
+        """Get full separation routine for >1 washes."""
+        # If necessary, Transfer from_vessel to separation_vessel
+        steps = self._get_initial_reaction_mixture_transfer_step()
+
+        # Add solvent
+        steps.extend(self._get_add_solvent_step())
+
+        # Stir separator
+        steps.extend(self._get_stir_separator_before_separation_steps())
+
+        for _ in range(self.n_separations - 1):
+            # Separate phases, and make sure product phase ends up back in
+            # separator
+            steps.extend(self._get_multi_wash_loop_separate_phases())
+
+            # Add more solvent
+            steps.extend(self._get_add_solvent_step())
+
+            # Stir
+            steps.extend(self._get_stir_separator_before_separation_steps())
+
+        steps.extend(self._get_final_separate_phases_step())
+        print('\n')
+        for step in steps:
+            print(type(step).__name__)
+        return steps
+
+    def _get_multi_extract_steps(self):
+        """Get full separation routine for >1 extractions."""
+        # If necessary, Transfer from_vessel to separation_vessel
+        steps = self._get_initial_reaction_mixture_transfer_step()
+
+        # Add solvent
+        steps.extend(self._get_add_solvent_step())
+
+        # Stir separator
+        steps.extend(self._get_stir_separator_before_separation_steps())
+
+        for _ in range(self.n_separations - 1):
+            # Separate phases, and make sure waste phase ends up back in
+            # separator
+            steps.extend(self._get_multi_extract_loop_separate_phases())
+
+            # Add more solvent
+            steps.extend(self._get_add_solvent_step())
+
+            # Stir
+            steps.extend(self._get_stir_separator_before_separation_steps())
+
+        steps.extend(self._get_final_separate_phases_step())
+        return steps
+
+
+    ########################################
+    ###  Abstract Method implementations ###
+    ########################################
 
     def human_readable(self,  language='en') -> str:
         props = self.formatted_properties()
