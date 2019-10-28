@@ -30,6 +30,7 @@ block1 = [
     # HeatChill(vessel='reactor', temp=60, time='1 hr'),
     # Transfer(from_vessel='reactor', to_vessel='filter', volume=5)
 ]
+
 block2 = [
     Transfer(from_vessel='flask_chloroacetyl_chloride', to_vessel='filter',
                 volume=5),
@@ -37,7 +38,7 @@ block2 = [
 executor.prepare_block_for_execution(graph_dict, block1)
 executor.prepare_block_for_execution(graph_dict, block2)
 
-p = Parallelizer(chempiler, graph, [block1, block2], time_step=5)
+p = Parallelizer(chempiler,  [block1, block2], time_step=5)
 
 @pytest.mark.unit
 def test_block_scheduling():
