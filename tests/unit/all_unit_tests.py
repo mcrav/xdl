@@ -18,3 +18,4 @@ from .test_pneumatic_controller import test_pneumatic_controller
 from .test_reagent_storage import *
 from .test_anticlogging_add import *
 from .test_heatchill import *
+from .test_separate import test_separate
