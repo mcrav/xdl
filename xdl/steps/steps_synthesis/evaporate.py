@@ -83,10 +83,16 @@ class Evaporate(AbstractStep):
 
         if self.mode == 'auto':
             del steps[-4:-2]
+            pressure = 1 # 1 == auto pressure
+            if self.pressure:
+                # Approximation. Pressure given should be pressure solvent
+                # evaporates at, but in auto evaporation, pressure is the limit
+                # of the pressure ramp, so actual pressure given needs to be lower.
+                pressure = self.pressure / 2
             steps.insert(-2, CRotavapAutoEvaporation(
                 rotavap_name=self.rotavap_name,
                 sensitivity=2, # High sensitivity
-                vacuum_limit=1, # Auto pressure
+                vacuum_limit=pressure,
                 time_limit=self.time,
                 vent_after=True
             ))
