@@ -83,7 +83,7 @@ class Add(AbstractStep):
         port = self.get_port()
         steps = []
         # Solid addition
-        if self.mass != None:
+        if self.volume == None and self.mass != None:
             steps = [Confirm('Is {reagent} ({mass} g) in {vessel}?'.format(
                 **self.properties))]
         # Liquid addition
