@@ -27,7 +27,7 @@ executor = XDLExecutor(None)
 block1 = [
     Transfer(from_vessel='flask_water', to_vessel='reactor', volume=5),
     Transfer(from_vessel='flask_ether', to_vessel='reactor', volume=5),
-    # HeatChill(vessel='reactor', temp=60, time='1 hr'),
+    HeatChill(vessel='reactor', temp=60, time='1 hr'),
     # Transfer(from_vessel='reactor', to_vessel='filter', volume=5)
 ]
 

@@ -867,7 +867,7 @@ class XDLExecutor(object):
         for step in steps:
             stir_vessels.extend(self._get_stir_vessels(step))
         for vessel in set(stir_vessels):
-            self._xdl.steps.insert(
+            steps.insert(
                 0, CSetStirRate(vessel=vessel, stir_speed=DEFAULT_STIR_SPEED))
 
     def _no_waiting_if_dry_run(self) -> None:
