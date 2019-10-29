@@ -1,7 +1,7 @@
 import os
 from xdl import XDL
 from xdl.steps import Transfer, Add, Stir, Wait, CSeparatePhases, Separate
-from ..utils import generic_chempiler_test
+from ..utils import generic_chempiler_test, test_step
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')
@@ -168,7 +168,5 @@ def test_separate():
         if type(step) == Separate:
             current_step_info = correct_step_info[i]
             for j, substep in enumerate(step.steps):
-                assert type(substep) == current_step_info[j][0]
-                for k, v in current_step_info[j][1].items():
-                    assert substep.properties[k] == v
+                test_step(substep, current_step_info[j])
             i += 1

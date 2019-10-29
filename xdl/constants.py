@@ -170,6 +170,19 @@ DEFAULT_PRECIPITATION_TIME = 60 * 60
 #: Default temp in celsius to chill to for precipitation.
 DEFAULT_PRECIPITATION_TEMP = 25
 
+##################
+### Evacuation ###
+##################
+
+#: Number of vacuum/inert gas cycles to do during Evacuate.
+DEFAULT_EVACUATE_N_EVACUTIONS: int = 3
+
+#: Time to wait for during Evacuate after vessel is connected to inert gas.
+DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME: float = 60
+
+#: Time to wait for during Evacuate after vessel is connected to vacuum.
+DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME: float = 60
+
 ###########
 ## Video ##
 ###########
@@ -298,6 +311,11 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'RunColumn': {
         'move_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
     },
+    'Evacuate': {
+        'after_inert_gas_wait_time': DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME,
+        'after_vacuum_wait_time': DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME,
+        'evacuations': DEFAULT_EVACUATE_N_EVACUTIONS,
+    }
 }
 
 INTERNAL_PROPERTIES = {
