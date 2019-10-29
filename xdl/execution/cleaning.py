@@ -196,7 +196,7 @@ def get_clean_backbone_steps(steps: List[Step]) -> List[int]:
     for i, step in enumerate(steps):
         if type(step) in CLEAN_BACKBONE_AFTER_STEPS:
             # Don't clean after solid additions
-            if not (type(step) == Add and step.mass):
+            if not (type(step) == Add and step.volume == None):
                 clean_backbone_steps.append(i)
     return clean_backbone_steps
 
@@ -209,9 +209,11 @@ def get_clean_backbone_sequence(xdl_obj) -> List[Tuple[int, str]]:
             [(step_to_insert_backbone_clean, cleaning_solvent)...]
     """
     step_solvents = get_cleaning_schedule(xdl_obj)
+    print('STEP_SOLVENTS', step_solvents)
     if step_solvents == None:
         return []
     clean_backbone_steps = get_clean_backbone_steps(xdl_obj.steps)
+    print('CLEAN BACKBONE STEPS', clean_backbone_steps)
     cleans = []
     for i, step_i in enumerate(clean_backbone_steps):
         # Get after_type and before_type
@@ -225,7 +227,7 @@ def get_clean_backbone_sequence(xdl_obj) -> List[Tuple[int, str]]:
         # If on last clean backbone step then there will be no after solvent.
         if not after_solvent:
             after_solvent = before_solvent
-
+        print(step_i, before_solvent, after_solvent)
         if before_solvent == after_solvent:
             cleans.append((step_i+1, before_solvent))
         elif before_solvent != after_solvent:
