@@ -236,11 +236,11 @@ class XDLExecutor(object):
             # When doing FilterThrough or RunColumn and from_vessel and to_vessel
             # are the same, find an unused reactor to use as a buffer flask.
             if 'buffer_flask' in step.properties:
-                if type(step) == FilterThrough:
+                if type(step) in [FilterThrough, RunColumn]:
                     if (step.from_vessel == step.to_vessel
                         and not step.buffer_flask):
                         step.buffer_flask = self._get_buffer_flask(step.from_vessel)
-                else:
+                elif type(step) == Separate:
                     step.buffer_flask = self._get_buffer_flask(step.separation_vessel)
 
             # Add filter dead volume to WashSolid steps
