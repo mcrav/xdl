@@ -284,7 +284,7 @@ def add_cleaning_steps_at_beginning_and_end(xdl_obj: 'XDL') -> 'XDL':
         start_solvent, end_solvent = (
             available_solvents[0], available_solvents[0])
     cleaning_solvents = [
-        step.solvent for step in xdl_obj.steps if type(step) == CleanBackbone]
+        step.reagent for step in xdl_obj.steps if type(step) == Add and step.reagent in available_solvents]
     # Set start solvent and end solvent to first used and last used cleaning
     # solvent if they exist.
     if len(cleaning_solvents) > 0:
