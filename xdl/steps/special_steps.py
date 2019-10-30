@@ -41,9 +41,7 @@ class Async(AbstractAsyncStep):
 
     def async_execute(
         self, chempiler: 'Chempiler', logger: logging.Logger = None) -> None:
-        print('CHILDREN', self.children)
         for step in self.children:
-            print('executing', step.name)
             keep_going = step.execute(chempiler, logger)
             if not keep_going or self._should_end:
                 self.finished = True
@@ -173,7 +171,6 @@ class Parallelizer(object):
                 # Get start and end time steps of step.
                 step_start = t
                 step_end = self.get_step_end(base_step, step_start)
-                print(step_end)
                 locks, ongoing_locks, unlocks = base_step.locks(self.chempiler)
 
                 # Create lockmatrix

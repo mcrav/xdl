@@ -413,14 +413,14 @@
       "max_volume": 100
     },
     {
-      "id": "buffer_flask",
+      "id": "buffer_flask2",
       "type": "flask",
       "x": 240,
       "y": 80,
       "internalId": 84,
-      "label": "buffer_flask",
+      "label": "buffer_flask2",
       "class": "ChemputerFlask",
-      "name": "buffer_flask",
+      "name": "buffer_flask2",
       "chemical": "",
       "current_volume": 0,
       "max_volume": 100
@@ -452,12 +452,25 @@
       "type": "stirrer",
       "x": -40,
       "y": 240,
+      "internalId": 90,
+      "label": "flask_stirrer",
       "class": "IKAmicrostar75",
       "name": "flask_stirrer",
       "port": "",
-      "address": "",
-      "internalId": 90,
-      "label": "flask_stirrer"
+      "address": ""
+    },
+    {
+      "id": "buffer_flask",
+      "type": "flask",
+      "x": -600,
+      "y": 160,
+      "class": "ChemputerFlask",
+      "name": "buffer_flask",
+      "chemical": "",
+      "current_volume": 100,
+      "max_volume": 100,
+      "internalId": 92,
+      "label": "buffer_flask"
     }
   ],
   "links": [
@@ -850,14 +863,14 @@
       "sourceInternal": 1,
       "targetInternal": 84,
       "source": "valve_rotavap",
-      "target": "buffer_flask",
+      "target": "buffer_flask2",
       "port": "(4,0)"
     },
     {
       "id": 86,
       "sourceInternal": 84,
       "targetInternal": 1,
-      "source": "buffer_flask",
+      "source": "buffer_flask2",
       "target": "valve_rotavap",
       "port": "(0,4)"
     },
@@ -900,6 +913,22 @@
       "source": "flask_stirrer",
       "target": "flask_water",
       "port": "(,)"
+    },
+    {
+      "id": 93,
+      "sourceInternal": 61,
+      "targetInternal": 92,
+      "source": "valve_separator",
+      "target": "buffer_flask",
+      "port": "(3,0)"
+    },
+    {
+      "id": 94,
+      "sourceInternal": 92,
+      "targetInternal": 61,
+      "source": "buffer_flask",
+      "target": "valve_separator",
+      "port": "(0,3)"
     }
   ]
 }

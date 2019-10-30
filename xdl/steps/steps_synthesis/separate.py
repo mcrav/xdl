@@ -59,7 +59,7 @@ class Separate(AbstractStep):
         waste_phase_to_vessel: Optional[str] = None,
         waste_phase_to_port: Optional[str] = None,
         waste_vessel: Optional[str] = None,
-        buffer_flask: Optional[str] = None,
+        buffer_flasks: Optional[List[str]] = [None, None],
         remove_dead_volume: Optional[bool] = 'default',
         **kwargs
     ) -> None:
@@ -144,16 +144,52 @@ class Separate(AbstractStep):
     def _get_final_separate_phases_step(self):
         """Get final CSeparatePhases step in separation routine."""
         if self.product_bottom:
-            return [CSeparatePhases(
-                separation_vessel=self.separation_vessel,
-                lower_phase_vessel=self.to_vessel,
-                lower_phase_port=self.to_port,
-                upper_phase_vessel=self.waste_phase_to_vessel,
-                upper_phase_port=self.waste_phase_to_port,
-                dead_volume_target = self.waste_vessel if self.remove_dead_volume else None,
-                lower_phase_through=self.through_cartridge
-            )]
+            if self.to_vessel != self.separation_vessel:
+                return [CSeparatePhases(
+                    separation_vessel=self.separation_vessel,
+                    lower_phase_vessel=self.to_vessel,
+                    lower_phase_port=self.to_port,
+                    upper_phase_vessel=self.waste_phase_to_vessel,
+                    upper_phase_port=self.waste_phase_to_port,
+                    dead_volume_target=self.dead_volume_target,
+                    lower_phase_through=self.through_cartridge
+                )]
+            else:
+                return [
+                    CSeparatePhases(
+                        separation_vessel=self.separation_vessel,
+                        lower_phase_vessel=self.buffer_flasks[0],
+                        upper_phase_vessel=self.waste_phase_to_vessel,
+                        upper_phase_port=self.waste_phase_to_port,
+                        dead_volume_target=self.dead_volume_target,
+                        lower_phase_through=self.through_cartridge
+                    ),
+                    Transfer(
+                        from_vessel=self.buffer_flasks[0],
+                        to_vessel=self.separation_vessel,
+                        volume='all'
+                    )
+                ]
+
         else:
+            if (self.n_separations > 1
+                and self.to_vessel == self.separation_vessel
+                and self.purpose == 'extract'):
+                return [
+                    CSeparatePhases(
+                        separation_vessel=self.separation_vessel,
+                        lower_phase_vessel=self.waste_phase_to_vessel,
+                        lower_phase_port=self.waste_phase_to_port,
+                        upper_phase_vessel=self.to_vessel,
+                        dead_volume_target=self.dead_volume_target,
+                    ),
+                    Transfer(
+                        from_vessel=self.buffer_flasks[1],
+                        to_vessel=self.separation_vessel,
+                        volume='all'
+                    )
+                ]
+
             return [CSeparatePhases(
                 separation_vessel=self.separation_vessel,
                 lower_phase_vessel=self.waste_phase_to_vessel,
@@ -170,22 +206,38 @@ class Separate(AbstractStep):
         """
         steps = []
         if self.product_bottom:
-            steps.extend([
-                CSeparatePhases(
-                    separation_vessel=self.separation_vessel,
-                    lower_phase_vessel=self.to_vessel,
-                    lower_phase_port=self.to_port,
-                    upper_phase_vessel=self.waste_phase_to_vessel,
-                    upper_phase_port=self.waste_phase_to_port,
-                    dead_volume_target=self.dead_volume_target,
-                ),
-                # Move to_vessel to separation_vessel
-                Transfer(
-                    from_vessel=self.to_vessel,
-                    to_vessel=self.separation_vessel,
-                    volume='all'
-                ),
-            ])
+            if self.to_vessel != self.separation_vessel:
+                steps.extend([
+                    CSeparatePhases(
+                        separation_vessel=self.separation_vessel,
+                        lower_phase_vessel=self.to_vessel,
+                        lower_phase_port=self.to_port,
+                        upper_phase_vessel=self.waste_phase_to_vessel,
+                        upper_phase_port=self.waste_phase_to_port,
+                        dead_volume_target=self.dead_volume_target,
+                    ),
+                    # Move to_vessel to separation_vessel
+                    Transfer(
+                        from_vessel=self.to_vessel,
+                        to_vessel=self.separation_vessel,
+                        volume='all'
+                    ),
+                ])
+            else:
+                steps.extend([
+                    CSeparatePhases(
+                        separation_vessel=self.separation_vessel,
+                        lower_phase_vessel=self.buffer_flasks[0],
+                        upper_phase_vessel=self.waste_phase_to_vessel,
+                        upper_phase_port=self.waste_phase_to_port,
+                        dead_volume_target=self.dead_volume_target,
+                    ),
+                    Transfer(
+                        from_vessel=self.buffer_flasks[0],
+                        to_vessel=self.separation_vessel,
+                        volume='all'
+                    ),
+                ])
         else:
             steps.append(
                 CSeparatePhases(
@@ -204,31 +256,56 @@ class Separate(AbstractStep):
         """
         steps = []
         if self.product_bottom:
-            steps.append(
-                CSeparatePhases(
-                    separation_vessel=self.separation_vessel,
-                    lower_phase_vessel=self.to_vessel,
-                    lower_phase_port=self.to_port,
-                    upper_phase_vessel=self.separation_vessel,
-                    dead_volume_target=self.dead_volume_target,
+            if self.to_vessel != self.separation_vessel:
+                steps.append(
+                    CSeparatePhases(
+                        separation_vessel=self.separation_vessel,
+                        lower_phase_vessel=self.to_vessel,
+                        lower_phase_port=self.to_port,
+                        upper_phase_vessel=self.separation_vessel,
+                        dead_volume_target=self.dead_volume_target,
+                    )
                 )
-            )
+            else:
+                steps.append(
+                    CSeparatePhases(
+                        separation_vessel=self.separation_vessel,
+                        lower_phase_vessel=self.buffer_flasks[0],
+                        upper_phase_vessel=self.separation_vessel,
+                        dead_volume_target=self.dead_volume_target,
+                    )
+                )
         else:
-            steps.extend([
-                CSeparatePhases(
-                    separation_vessel=self.separation_vessel,
-                    lower_phase_vessel=self.buffer_flask,
-                    upper_phase_vessel=self.to_vessel,
-                    upper_phase_port=self.to_port,
-                    dead_volume_target=self.dead_volume_target
-                ),
-                # Move waste phase in buffer flask back to separation_vessel
-                Transfer(
-                    from_vessel=self.buffer_flask,
-                    to_vessel=self.separation_vessel,
-                    volume='all'
-                ),
-            ])
+            if self.to_vessel != self.separation_vessel:
+                steps.extend([
+                    CSeparatePhases(
+                        separation_vessel=self.separation_vessel,
+                        lower_phase_vessel=self.buffer_flasks[0],
+                        upper_phase_vessel=self.to_vessel,
+                        upper_phase_port=self.to_port,
+                        dead_volume_target=self.dead_volume_target
+                    ),
+                    # Move waste phase in buffer flask back to separation_vessel
+                    Transfer(
+                        from_vessel=self.buffer_flasks[0],
+                        to_vessel=self.separation_vessel,
+                        volume='all'
+                    ),
+                ])
+            else:
+                steps.extend([
+                    CSeparatePhases(
+                        separation_vessel=self.separation_vessel,
+                        lower_phase_vessel=self.buffer_flasks[0],
+                        upper_phase_vessel=self.buffer_flasks[1],
+                        dead_volume_target=self.dead_volume_target,
+                    ),
+                    Transfer(
+                        from_vessel=self.buffer_flasks[0],
+                        to_vessel=self.separation_vessel,
+                        volume='all',
+                    )
+                ])
         return steps
 
 
@@ -275,9 +352,6 @@ class Separate(AbstractStep):
             steps.extend(self._get_stir_separator_before_separation_steps())
 
         steps.extend(self._get_final_separate_phases_step())
-        print('\n')
-        for step in steps:
-            print(type(step).__name__)
         return steps
 
     def _get_multi_extract_steps(self):
