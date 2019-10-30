@@ -26,7 +26,7 @@ def get_n_reagent_flasks(template: Dict) -> int:
     i = 0
     for node in template['nodes']:
         if (node['type'] == 'flask'
-            and not node['name'] == 'buffer_flask'
+            and not node['name'].startswith('buffer_flask')
             and not node['chemical']):
             i += 1
     return i
@@ -52,7 +52,7 @@ def add_reagents(
     reagents = copy.deepcopy(list(set(reagents)))
     for node in template['nodes']:
         if (node['type'] == 'flask'
-            and not node['name'] == 'buffer_flask'):
+            and not node['name'].startswith('buffer_flask')):
             if reagents:
                 node['chemical'] = reagents.pop()
             elif not node['chemical']:
