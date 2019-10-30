@@ -243,6 +243,10 @@ class XDLExecutor(object):
                 elif type(step) == Separate:
                     step.buffer_flask = self._get_buffer_flask(step.separation_vessel)
 
+            if 'buffer_flasks' in step.properties:
+                step.buffer_flasks = self._get_buffer_flask(
+                    step.separation_vessel, return_single=False)
+
             # Add filter dead volume to WashSolid steps
             if ('filter_dead_volume' in step.properties
                 and not step.filter_dead_volume):
@@ -319,7 +323,7 @@ class XDLExecutor(object):
                 return vessel_type
         return None
 
-    def _get_buffer_flask(self, vessel: str) -> str:
+    def _get_buffer_flask(self, vessel: str, return_single=True) -> str:
         """Get buffer flask closest to given vessel.
 
         Args:
@@ -344,7 +348,10 @@ class XDLExecutor(object):
                         reactor,
                         shortest_path_length(
                             self._graph, source=vessel, target=reactor)))
-                return sorted(shortest_paths, key=lambda x: x[1])[0][0]
+                if return_single:
+                    return sorted(shortest_paths, key=lambda x: x[1])[0][0]
+                else:
+                    return [item[0] for item in sorted(shortest_paths, key=lambda x: x[1])]
         return None
 
     def _get_vacuum(self, step: Step) -> str:

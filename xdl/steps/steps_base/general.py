@@ -16,6 +16,9 @@ class Confirm(AbstractBaseStep):
     def __init__(self, msg: str, **kwargs) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [], [], []
+
     def execute(
         self, chempiler: 'Chempiler', logger: Logger = None, level: int = 0
     ) -> bool:
@@ -32,6 +35,9 @@ class CSetRecordingSpeed(AbstractBaseStep):
     """
     def __init__(self, recording_speed: float) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.camera.change_recording_speed(self.recording_speed)
@@ -52,6 +58,9 @@ class CWait(AbstractBaseStep):
         chempiler.wait(self.time)
         return True
 
+    def locks(self, chempiler):
+        return [], [], []
+
     def duration(self, chempiler):
         return self.time
 
@@ -61,6 +70,9 @@ class CBreakpoint(AbstractBaseStep):
     """
     def __init__(self) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.breakpoint()

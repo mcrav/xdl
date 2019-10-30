@@ -48,7 +48,15 @@ class CSeparatePhases(AbstractBaseStep):
         )
         return True
 
-    @property
+    def locks(self, chempiler):
+        vessel_locks = [
+            self.lower_phase_vessel,
+            self.upper_phase_vessel,
+            self.separation_vessel,
+            self.dead_volume_target
+        ]
+        return [vessel_locks], [], []
+
     def duration(self, chempiler):
         # 30 is abitrary atm
         return 30 * chempiler[self.separation_vessel]['current_volume']

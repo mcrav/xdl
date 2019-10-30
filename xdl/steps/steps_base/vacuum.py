@@ -5,6 +5,7 @@ if False:
 from logging import Logger
 
 from ..base_steps import AbstractBaseStep
+from ...constants import DEFAULT_VACUUM_VENT_WAIT_TIME
 
 class CGetVacuumSetPoint(AbstractBaseStep):
     """Reads the current vacuum setpoint.
@@ -14,6 +15,9 @@ class CGetVacuumSetPoint(AbstractBaseStep):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.vessel], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.get_vacuum_set_point(self.vessel)
@@ -29,6 +33,9 @@ class CSetVacuumSetPoint(AbstractBaseStep):
     def __init__(self, vessel: str, vacuum_pressure: float) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.vessel], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.set_vacuum_set_point(
             self.vessel, self.vacuum_pressure)
@@ -43,6 +50,9 @@ class CStartVacuum(AbstractBaseStep):
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.vessel], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.start_vacuum(self.vessel)
         return True
@@ -55,6 +65,9 @@ class CStopVacuum(AbstractBaseStep):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.vessel], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.stop_vacuum(self.vessel)
@@ -69,6 +82,12 @@ class CVentVacuum(AbstractBaseStep):
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.vessel], [], []
+
+    def duration(self, chempiler):
+        return DEFAULT_VACUUM_VENT_WAIT_TIME
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.vent_vacuum(self.vessel)
         return True
@@ -82,6 +101,9 @@ class CSetSpeedSetPoint(AbstractBaseStep):
     """
     def __init__(self, vessel: str, vacuum_pump_speed: float) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.vessel], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.set_speed_set_point(self.vessel, self.set_point)
@@ -98,6 +120,9 @@ class CSetEndVacuumSetPoint(AbstractBaseStep):
     def __init__(self, vessel: str, vacuum_set_point: int) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.vessel], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.set_end_vacuum_set_point(
             self.vessel, self.vacuum_set_point)
@@ -112,6 +137,9 @@ class CGetEndVacuumSetPoint(AbstractBaseStep):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.vessel], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.get_end_vacuum_set_point(self.vessel)
@@ -128,6 +156,9 @@ class CSetRuntimeSetPoint(AbstractBaseStep):
     def __init__(self, vessel: str, time: float) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.vessel], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.set_runtime_set_point(self.vessel, self.time)
         return True
@@ -141,6 +172,9 @@ class CGetRuntimeSetPoint(AbstractBaseStep):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.vessel], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.vacuum.get_runtime_set_point(self.vessel)

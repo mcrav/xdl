@@ -2,7 +2,7 @@ from typing import Dict, List, Any
 
 #: XDL version number. Remember to increment after merging into master. Used
 # in header at top of outputted XDL files.
-XDL_VERSION: str = '0.1.10'
+XDL_VERSION: str = '0.1.13'
 
 ##########################
 ### DEFAULT PARAMETERS ###
@@ -441,3 +441,14 @@ SYNTHESIS_ATTRS = [
 # called.
 UNSCALED_STEPS = [
     'CleanVessel', 'AddFilterDeadVolume', 'RemoveFilterDeadVolume']
+
+
+#######################
+### Parallelisation ###
+#######################
+
+#: Time to wait during venting of vacuum to ambient pressure.
+DEFAULT_VACUUM_VENT_WAIT_TIME: float = 60
+
+#: Default time to wait for rotavap arm lift/descend.
+DEFAULT_ROTAVAP_WAIT_FOR_ARM_TIME: int = 5

@@ -15,6 +15,9 @@ class CValveMoveToPosition(AbstractBaseStep):
     def __init__(self, valve_name: str, position: int) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.valve_name], [], []
+
     def execute(
         self,
         chempiler: 'Chempiler',
