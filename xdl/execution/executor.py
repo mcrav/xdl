@@ -3,6 +3,7 @@ import copy
 import logging
 from typing import List, Union, Tuple
 
+from networkx import MultiDiGraph
 from networkx.algorithms.shortest_paths.generic import shortest_path_length
 if False:
     from ..xdl import XDL
@@ -940,7 +941,10 @@ class XDLExecutor(object):
                                            or dict containing graph in same format
                                            as JSON file.
         """
-        self._graph = get_graph(graph_file)
+        if not type(graph_file) == MultiDiGraph:
+            self._graph = get_graph(graph_file)
+        else:
+            self._graph = graph_file
         self._graph_hardware = hardware_from_graph(self._graph)
         self._waste_map = make_vessel_map(
             self._graph, CHEMPUTER_WASTE_CLASS_NAME)
