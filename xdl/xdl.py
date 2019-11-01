@@ -354,9 +354,10 @@ class XDL(object):
             if type(step) == CMove and step.from_vessel in flask_ids:
                 reagent = self.executor._graph_hardware[
                     step.from_vessel].chemical
-                if not reagent in reagent_volumes:
-                    reagent_volumes[reagent] = 0
-                reagent_volumes[reagent] += step.volume
+                if reagent:
+                    if not reagent in reagent_volumes:
+                        reagent_volumes[reagent] = 0
+                    reagent_volumes[reagent] += step.volume
         return reagent_volumes
 
     def print_reagent_volumes(self) -> None:
