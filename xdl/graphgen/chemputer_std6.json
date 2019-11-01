@@ -536,6 +536,17 @@
       "class": "ChemputerCartridge",
       "name": "cartridge2",
       "chemical": ""
+    },
+    {
+      "id": "cartridge3",
+      "type": "cartridge",
+      "x": 1120,
+      "y": 560,
+      "class": "ChemputerCartridge",
+      "name": "cartridge3",
+      "chemical": "",
+      "internalId": 116,
+      "label": "cartridge3"
     }
   ],
   "links": [
@@ -1122,6 +1133,22 @@
       "source": "valve_reactor",
       "target": "buffer_flask2",
       "port": "(3,0)"
+    },
+    {
+      "id": 117,
+      "sourceInternal": 3,
+      "targetInternal": 116,
+      "source": "valve_separator",
+      "target": "cartridge3",
+      "port": "(in,)"
+    },
+    {
+      "id": 118,
+      "sourceInternal": 116,
+      "targetInternal": 5,
+      "source": "cartridge3",
+      "target": "valve_rotavap",
+      "port": "(out,)"
     }
   ]
 }
