@@ -270,14 +270,14 @@
       "max_volume": 100
     },
     {
-      "id": "flask_4a",
+      "id": "buffer_flask2",
       "type": "flask",
-      "x": 880,
+      "x": 840,
       "y": 280,
       "internalId": 74,
-      "label": "flask_4a",
+      "label": "buffer_flask2",
       "class": "ChemputerFlask",
-      "name": "flask_4a",
+      "name": "buffer_flask2",
       "chemical": "",
       "current_volume": 100,
       "max_volume": 100
@@ -531,11 +531,11 @@
       "type": "cartridge",
       "x": 1120,
       "y": 440,
+      "internalId": 112,
+      "label": "cartridge2",
       "class": "ChemputerCartridge",
       "name": "cartridge2",
-      "chemical": "",
-      "internalId": 112,
-      "label": "cartridge2"
+      "chemical": ""
     }
   ],
   "links": [
@@ -847,7 +847,7 @@
       "id": 75,
       "sourceInternal": 74,
       "targetInternal": 2,
-      "source": "flask_4a",
+      "source": "buffer_flask2",
       "target": "valve_reactor",
       "port": "(0,3)"
     },
@@ -1114,6 +1114,14 @@
       "source": "cartridge2",
       "target": "valve_rotavap",
       "port": "(in,out)"
+    },
+    {
+      "id": 115,
+      "sourceInternal": 2,
+      "targetInternal": 74,
+      "source": "valve_reactor",
+      "target": "buffer_flask2",
+      "port": "(3,0)"
     }
   ]
 }
