@@ -170,7 +170,6 @@ class Separate(AbstractStep):
                         volume='all'
                     )
                 ]
-
         else:
             if (self.n_separations > 1
                 and self.to_vessel == self.separation_vessel
@@ -199,7 +198,6 @@ class Separate(AbstractStep):
                 dead_volume_target=self.dead_volume_target,
                 upper_phase_through=self.through_cartridge
             )]
-
     def _get_multi_wash_loop_separate_phases(self):
         """Get CSeparatePhases in wash routine, if there is another separation
         to be performed after. Ensure product phase ends up in back in separator.
@@ -383,6 +381,19 @@ class Separate(AbstractStep):
     ########################################
     ###  Abstract Method implementations ###
     ########################################
+
+    @property
+    def buffer_flasks_required(self):
+        if self.purpose == 'extract' and self.n_separations > 1 and not self.product_bottom and self.to_vessel == self.separation_vessel:
+            return 2
+        elif (
+            (self.product_bottom and self.n_separations == 1 and self.to_vessel == self.separation_vessel)
+            or (self.n_separations > 1 and self.product_bottom and self.to_vessel == self.separation_vessel and self.purpose == 'wash')
+            or (self.purpose == 'extract' and self.product_bottom and self.to_vessel == self.separation_vessel and self.n_separations > 1)
+            or (self.purpose == 'extract' and not self.product_bottom and self.n_separations > 1)
+        ):
+            return 1
+        return 0
 
     def human_readable(self,  language='en') -> str:
         props = self.formatted_properties()

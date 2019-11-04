@@ -102,6 +102,12 @@ class FilterThrough(AbstractStep):
             ])
         return steps
 
+    @property
+    def buffer_flasks_required(self):
+        if self.to_vessel == self.from_vessel:
+            return 1
+        return 0
+
     def human_readable(self, language='en'):
         try:
             if self.eluting_solvent:

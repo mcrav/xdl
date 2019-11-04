@@ -28,6 +28,12 @@ class RunColumn(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
+    @property
+    def buffer_flasks_required(self):
+        if self.to_vessel == self.from_vessel:
+            return 1
+        return 0
+
     def get_steps(self):
         steps = [
             FilterThrough(
