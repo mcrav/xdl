@@ -62,12 +62,13 @@ def get_available_solvents(xdl_obj: 'XDL') -> List[str]:
     reagents.extend([flask.chemical for flask in graph_hardware.flasks])
     reagents = sorted(list(set(reagents)))
     for reagent in reagents:
-        for solvent in COMMON_SOLVENT_NAMES:
-            # Look for stuff like 'X in THF' as well as plain 'THF'.
-            if re.search(r'(?:[ _]|^)' + solvent + r'(?:[ _]|$)', reagent.lower()):
-                # Don't want to use solvents that damage parts of Chemputer.
-                if not reagent.lower() in CLEANING_SOLVENT_BLACKLIST:
-                    solvents.append(reagent)
+        if not 'solution' in reagent.lower():
+            for solvent in COMMON_SOLVENT_NAMES:
+                # Look for stuff like 'X in THF' as well as plain 'THF'.
+                if re.search(r'(?:[ _]|^)' + solvent + r'(?:[ _]|$)', reagent.lower()):
+                    # Don't want to use solvents that damage parts of Chemputer.
+                    if not reagent.lower() in CLEANING_SOLVENT_BLACKLIST:
+                        solvents.append(reagent)
     solvents.extend([reagent.id for reagent in xdl_obj.reagents if reagent.use_for_cleaning])
     return sorted(list(set(solvents)))
 
