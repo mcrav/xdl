@@ -352,7 +352,7 @@ INTERNAL_PROPERTIES = {
         'vessel_type',
         'vessel_has_stirrer'
     ],
-    'Separate': ['waste_vessel'],
+    'Separate': ['waste_vessel', 'buffer_flasks'],
     'HeatChill': ['vessel_type'],
     'PrimePumpForAdd': ['reagent_vessel', 'waste_vessel'],
     'HeatChillToTemp': ['vessel_type'],

@@ -174,7 +174,6 @@ class Parallelizer(object):
                 # Get start and end time steps of step.
                 step_start = t
                 step_end = self.get_step_end(base_step, step_start)
-                #print(step_end)
                 locks, ongoing_locks, unlocks = base_step.locks(self.chempiler)
                 # Create lockmatrix
                 for _ in range(step_end - step_start):
