@@ -178,6 +178,10 @@ class AbstractBaseStep(Step, ABC):
     def duration(self, chempiler):
         return DEFAULT_INSTANT_DURATION
 
+    @abstractmethod
+    def locks(self, chempiler):
+        return [], [], []
+
     def request_lock(self, chempiler, locking_pid):
         locks, ongoing_locks, _ = self.locks(chempiler)
         return chempiler.request_lock(locks + ongoing_locks, locking_pid)

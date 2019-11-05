@@ -5,6 +5,7 @@ if False:
 from logging import Logger
 
 from ..base_steps import AbstractBaseStep
+from ...constants import DEFAULT_ROTAVAP_WAIT_FOR_ARM_TIME
 
 class CRotavapStartHeater(AbstractBaseStep):
     """Starts the heating bath of a rotary evaporator.
@@ -14,6 +15,9 @@ class CRotavapStartHeater(AbstractBaseStep):
     """
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.rotavap_name], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         rotavap = chempiler[self.rotavap_name]
@@ -29,6 +33,9 @@ class CRotavapStopHeater(AbstractBaseStep):
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.rotavap_name], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         rotavap = chempiler[self.rotavap_name]
         rotavap.stop_heater()
@@ -42,6 +49,9 @@ class CRotavapStartRotation(AbstractBaseStep):
     """
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.rotavap_name], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         rotavap = chempiler[self.rotavap_name]
@@ -57,6 +67,9 @@ class CRotavapStopRotation(AbstractBaseStep):
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.rotavap_name], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         rotavap = chempiler[self.rotavap_name]
         rotavap.stop_rotation()
@@ -71,6 +84,12 @@ class CRotavapLiftUp(AbstractBaseStep):
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
+    def locks(self, ):
+        return [self.rotavap_name], [], []
+
+    def duration(self, chempiler):
+        return DEFAULT_ROTAVAP_WAIT_FOR_ARM_TIME
+
     def execute(self, chempiler, logger=None, level=0):
         rotavap = chempiler[self.rotavap_name]
         rotavap.lift_up()
@@ -84,6 +103,12 @@ class CRotavapLiftDown(AbstractBaseStep):
     """
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
+
+    def locks(self, ):
+        return [self.rotavap_name], [], []
+
+    def duration(self, chempiler):
+        return DEFAULT_ROTAVAP_WAIT_FOR_ARM_TIME
 
     def execute(self, chempiler, logger=None, level=0):
         rotavap = chempiler[self.rotavap_name]
@@ -100,6 +125,9 @@ class CRotavapReset(AbstractBaseStep):
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.rotavap_name], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         rotavap = chempiler[self.rotavap_name]
         rotavap.reset_rotavap()
@@ -114,6 +142,9 @@ class CRotavapSetTemp(AbstractBaseStep):
     """
     def __init__(self, rotavap_name: str, temp: float) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.rotavap_name], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         rotavap = chempiler[self.rotavap_name]
@@ -130,6 +161,9 @@ class CRotavapSetRotationSpeed(AbstractBaseStep):
     def __init__(self, rotavap_name: str, rotation_speed: float) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.rotavap_name], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         rotavap = chempiler[self.rotavap_name]
         rotavap.rotation_speed_sp = self.rotation_speed
@@ -145,6 +179,9 @@ class CRotavapSetInterval(AbstractBaseStep):
     """
     def __init__(self, rotavap_name: str, interval: int) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.rotavap_name], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         rotavap = chempiler[self.rotavap_name]
@@ -181,6 +218,9 @@ class CRotavapAutoEvaporation(AbstractBaseStep):
             duration=self.time_limit / 60,
             vent_after=self.vent_after)
         return True
+
+    def locks(self, chempiler):
+        return [self.rotavap_name], [], []
 
     def duration(self, chempiler):
         return self.time_limit

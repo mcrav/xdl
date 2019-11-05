@@ -15,6 +15,9 @@ class CStartChiller(AbstractBaseStep):
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.vessel], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.start_chiller(self.vessel)
         return True
@@ -27,6 +30,9 @@ class CStopChiller(AbstractBaseStep):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.vessel], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.stop_chiller(self.vessel)
@@ -42,6 +48,9 @@ class CChillerSetTemp(AbstractBaseStep):
     def __init__(self, vessel: str, temp: float) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.vessel], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.set_temp(self.vessel, self.temp)
         return True
@@ -55,6 +64,12 @@ class CChillerWaitForTemp(AbstractBaseStep):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.vessel], [], []
+
+    def duration(self, chempiler):
+        return 2 * 60 # arbitrary value given for the moment
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.wait_for_temp(self.vessel)
@@ -77,6 +92,9 @@ class CRampChiller(AbstractBaseStep):
     ) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.vessel], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.ramp_chiller(self.vessel, self.ramp_duration, self.end_temperature)
         return True
@@ -93,6 +111,9 @@ class CSetCoolingPower(AbstractBaseStep):
     """
     def __init__(self, vessel: str, cooling_power: float) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.vessel], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.cooling_power(self.vessel, self.cooling_power)

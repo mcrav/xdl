@@ -15,6 +15,9 @@ class CStir(AbstractBaseStep):
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.vessel], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.stir(self.vessel)
         return True
@@ -27,6 +30,9 @@ class CStirrerHeat(AbstractBaseStep):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.vessel], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.heat(self.vessel)
@@ -41,6 +47,9 @@ class CStopStir(AbstractBaseStep):
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.vessel], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.stop_stir(self.vessel)
         return True
@@ -53,6 +62,9 @@ class CStopHeat(AbstractBaseStep):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.vessel], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.stop_heat(self.vessel)
@@ -69,6 +81,9 @@ class CStirrerSetTemp(AbstractBaseStep):
     def __init__(self, vessel: str, temp: float) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.vessel], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.set_temp(self.vessel, self.temp)
         return True
@@ -83,6 +98,9 @@ class CSetStirRate(AbstractBaseStep):
     def __init__(self, vessel: str, stir_speed: float) -> None:
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.vessel], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.set_stir_rate(self.vessel, self.stir_speed)
         return True
@@ -96,6 +114,12 @@ class CStirrerWaitForTemp(AbstractBaseStep):
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [], [self.vessel], []
+
+    def duration(self, chempiler):
+        return 2 # arbitrary value for the moment
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.wait_for_temp(self.vessel)

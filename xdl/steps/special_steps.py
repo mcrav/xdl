@@ -2,9 +2,12 @@ from typing import Union, List, Callable, Dict, Any
 import logging
 import time
 import math
+import os
 from functools import partial
 
 from .base_steps import Step, AbstractAsyncStep, AbstractStep, AbstractBaseStep
+
+os.system('color')
 
 class Async(AbstractAsyncStep):
     """Wrapper to execute a step or sequence of steps asynchronously.
@@ -172,7 +175,6 @@ class Parallelizer(object):
                 step_start = t
                 step_end = self.get_step_end(base_step, step_start)
                 locks, ongoing_locks, unlocks = base_step.locks(self.chempiler)
-
                 # Create lockmatrix
                 for _ in range(step_end - step_start):
                     lockmatrix.append([])
@@ -411,7 +413,10 @@ class Parallelizer(object):
                 # No lock
                 else:
                     s[i] += f'{str(item):2}'
+
         print('\n'.join(s))
+        print(f"    n_timesteps = {len(s[0].strip().split(' '))-1}")
+
 class Callback(AbstractBaseStep):
     def __init__(
         self,
