@@ -1,10 +1,5 @@
 from .base_steps import UnimplementedStep
 
-class Recrystallize(UnimplementedStep):
-
-    def __init__(self, **kwargs):
-        super().__init__(locals())
-
 class Sonicate(UnimplementedStep):
 
     def __init__(self, **kwargs):
