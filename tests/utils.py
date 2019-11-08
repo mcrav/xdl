@@ -46,3 +46,9 @@ def remove_confirm_steps(step: Step) -> None:
             else:
                 step.steps[i] = remove_confirm_steps(step.steps[i])
         return step
+
+def test_step(step, correct_step_info):
+    assert type(step) == correct_step_info[0]
+    for k, v in correct_step_info[1].items():
+        assert k in step.properties
+        assert step.properties[k] == v

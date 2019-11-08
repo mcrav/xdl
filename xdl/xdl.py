@@ -164,6 +164,16 @@ class XDL(object):
             self.climb_down_tree(step, print_tree=True)
         self.logger.info('\n')
 
+    def as_syntext(self):
+        joined_reagents = '\n'.join([reagent.id for reagent in self.reagents])
+        s = f'Reagents:\n{joined_reagents}\n\n'
+        for step in self.steps:
+            step_syntext = step.syntext()
+            if step_syntext:
+                step_syntext = step_syntext[0].upper() + step_syntext[1:]
+            s += step_syntext + '\n'
+        return s
+
     def human_readable(self, language='en') -> str:
         """Return human-readable English description of XDL procedure.
 
@@ -344,9 +354,10 @@ class XDL(object):
             if type(step) == CMove and step.from_vessel in flask_ids:
                 reagent = self.executor._graph_hardware[
                     step.from_vessel].chemical
-                if not reagent in reagent_volumes:
-                    reagent_volumes[reagent] = 0
-                reagent_volumes[reagent] += step.volume
+                if reagent:
+                    if not reagent in reagent_volumes:
+                        reagent_volumes[reagent] = 0
+                    reagent_volumes[reagent] += step.volume
         return reagent_volumes
 
     def print_reagent_volumes(self) -> None:
@@ -418,17 +429,16 @@ class XDL(object):
             Dict: JSON node link graph as dictionary.
         """
         liquid_reagents = [reagent.id for reagent in self.reagents]
-        cartridge_reagent = ''
-
+        cartridge_reagents = []
         for step in self.steps:
             if type(step) == Add and step.mass:
                 if step.reagent in liquid_reagents:
                     liquid_reagents.remove(step.reagent)
 
             elif type(step) == FilterThrough and step.through:
-                cartridge_reagent = step.through
-
-        return get_graph(liquid_reagents, cartridge_reagent)
+                cartridge_reagents.append(step.through)
+        print(cartridge_reagents)
+        return get_graph(liquid_reagents, list(set(cartridge_reagents)))
 
     def prepare_for_execution(
         self, graph_file: str, interactive: bool = True) -> None:

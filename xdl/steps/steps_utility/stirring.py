@@ -142,3 +142,7 @@ class Stir(AbstractStep):
                 'stir': True,
             }
         }
+
+    def syntext(self) -> str:
+        formatted_properties = self.formatted_properties()
+        return f'{self.vessel} was stirred at {self.stir_speed} RPM for {formatted_properties["time"]}.'

@@ -2,17 +2,17 @@ from .base_steps import UnimplementedStep
 
 class Recrystallize(UnimplementedStep):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__(locals())
 
 class Sonicate(UnimplementedStep):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__(locals())
 
 class Distill(UnimplementedStep):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__(locals())
 
     @property
@@ -23,7 +23,7 @@ class Distill(UnimplementedStep):
 
 class Sublimate(UnimplementedStep):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__(locals())
 
     @property
@@ -34,7 +34,7 @@ class Sublimate(UnimplementedStep):
 
 class Hydrogenate(UnimplementedStep):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__(locals())
 
     @property
@@ -45,7 +45,7 @@ class Hydrogenate(UnimplementedStep):
 
 class Irradiate(UnimplementedStep):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__(locals())
 
     @property
@@ -56,7 +56,7 @@ class Irradiate(UnimplementedStep):
 
 class Microwave(UnimplementedStep):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__(locals())
 
     @property

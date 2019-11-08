@@ -22,9 +22,10 @@
       from_vessel="reactor"
       to_vessel="rotavap"
       through="celite"
-      eluting_solvent="ether"
+    />
+      <!-- eluting_solvent="ether"
       eluting_volume="50 mL"
-      eluting_repeats="3" />
+      eluting_repeats="3" /> -->
 
   </Procedure>
 

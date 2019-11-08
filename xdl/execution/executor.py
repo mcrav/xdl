@@ -3,6 +3,7 @@ import copy
 import logging
 from typing import List, Union, Tuple
 
+from networkx import MultiDiGraph
 from networkx.algorithms.shortest_paths.generic import shortest_path_length
 if False:
     from ..xdl import XDL
@@ -68,6 +69,42 @@ class XDLExecutor(object):
         enough_separators = (len(self._xdl.hardware.separators) <=
                              len(self._graph_hardware.separators))
         return enough_reactors and enough_filters and enough_separators
+
+    def _check_enough_buffer_flasks(self) -> bool:
+        buffer_flasks_required = []
+        buffer_flasks_present = []
+        vessels_for_search = []
+        for step in self._xdl.steps:
+            if type(step) == Separate:
+                buffer_flasks_required.append(step.buffer_flasks_required)
+                if step.buffer_flasks_required:
+                    vessels_for_search.append(step.separation_vessel)
+
+            elif type(step) in [RunColumn, FilterThrough]:
+                buffer_flasks_required.append(step.buffer_flasks_required)
+                if step.buffer_flasks_required:
+                    vessels_for_search.append(step.from_vessel)
+
+        if buffer_flasks_required:
+            buffer_flasks_required = max(buffer_flasks_required)
+            for vessel in list(set(vessels_for_search)):
+                vessel_buffer_flasks = self._get_buffer_flask(vessel, return_single=False)
+                if vessel_buffer_flasks:
+                    buffer_flasks_present.extend(vessel_buffer_flasks)
+            buffer_flasks_present = len(buffer_flasks_present)
+            if buffer_flasks_present:
+                return (
+                    buffer_flasks_present >= buffer_flasks_required,
+                    buffer_flasks_required,
+                    buffer_flasks_present
+                )
+            else:
+                return (
+                    buffer_flasks_required == 0,
+                    buffer_flasks_required,
+                    0
+                )
+        return (True, 0, None)
 
     def _check_all_flasks_present(self) -> bool:
         """Check that there is flask containing every reagent described in xdl.
@@ -235,10 +272,17 @@ class XDLExecutor(object):
 
             # When doing FilterThrough or RunColumn and from_vessel and to_vessel
             # are the same, find an unused reactor to use as a buffer flask.
-            if ('buffer_flask' in step.properties
-                 and step.from_vessel == step.to_vessel
-                 and not step.buffer_flask):
-                step.buffer_flask = self._get_buffer_flask(step.from_vessel)
+            if 'buffer_flask' in step.properties:
+                if type(step) in [FilterThrough, RunColumn]:
+                    if (step.from_vessel == step.to_vessel
+                        and not step.buffer_flask):
+                        step.buffer_flask = self._get_buffer_flask(step.from_vessel)
+                elif type(step) == Separate:
+                    step.buffer_flask = self._get_buffer_flask(step.separation_vessel)
+
+            if 'buffer_flasks' in step.properties:
+                step.buffer_flasks = self._get_buffer_flask(
+                    step.separation_vessel, return_single=False)
 
             # Add filter dead volume to WashSolid steps
             if ('filter_dead_volume' in step.properties
@@ -316,7 +360,7 @@ class XDLExecutor(object):
                 return vessel_type
         return None
 
-    def _get_buffer_flask(self, vessel: str) -> str:
+    def _get_buffer_flask(self, vessel: str, return_single=True) -> str:
         """Get buffer flask closest to given vessel.
 
         Args:
@@ -333,7 +377,10 @@ class XDLExecutor(object):
         # From remaining reactor IDs, return nearest to vessel.
         if flasks:
             if len(flasks) == 1:
-                return flasks[0]
+                if return_single:
+                    return flasks[0]
+                else:
+                    return [flasks[0]]
             else:
                 shortest_paths = []
                 for reactor in flasks:
@@ -341,8 +388,14 @@ class XDLExecutor(object):
                         reactor,
                         shortest_path_length(
                             self._graph, source=vessel, target=reactor)))
-                return sorted(shortest_paths, key=lambda x: x[1])[0][0]
-        return None
+                if return_single:
+                    return sorted(shortest_paths, key=lambda x: x[1])[0][0]
+                else:
+                    return [item[0] for item in sorted(shortest_paths, key=lambda x: x[1])]
+        if return_single:
+            return None
+        else:
+            return [None, None]
 
     def _get_vacuum(self, step: Step) -> str:
         if hasattr(step, 'filter_vessel'):
@@ -662,11 +715,12 @@ class XDLExecutor(object):
         """
         # Connect inert gas to bottom of filter flasks at start of procedure.
         for filter_vessel in self._graph_hardware.filters:
-            self._xdl.steps.insert(
-                0, CConnect(
-                    from_vessel=self._inert_gas_map[filter_vessel.id],
-                    to_vessel=filter_vessel.id,
-                    to_port=BOTTOM_PORT))
+            if filter_vessel.id in self._inert_gas_map:
+                self._xdl.steps.insert(
+                    0, CConnect(
+                        from_vessel=self._inert_gas_map[filter_vessel.id],
+                        to_vessel=filter_vessel.id,
+                        to_port=BOTTOM_PORT))
 
 
     ###################################
@@ -680,8 +734,11 @@ class XDLExecutor(object):
         for step in self._xdl.steps:
             for base_step in self._xdl.climb_down_tree(step):
                 if type(base_step) == CMove and base_step.volume == 'all':
-                    base_step.volume = self._graph_hardware[
-                        base_step.from_vessel].max_volume
+                    try:
+                        base_step.volume = self._graph_hardware[
+                            base_step.from_vessel].max_volume
+                    except AttributeError:
+                        raise XDLError(f'Missing flask ("from_vessel": "{base_step.from_vessel}") in {step.name} step.\n{step.properties}\nBase step: {base_step.name}\n{base_step.properties}')
 
     def _add_filter_volumes(self) -> None:
         """
@@ -863,7 +920,7 @@ class XDLExecutor(object):
         for step in steps:
             stir_vessels.extend(self._get_stir_vessels(step))
         for vessel in set(stir_vessels):
-            self._xdl.steps.insert(
+            steps.insert(
                 0, CSetStirRate(vessel=vessel, stir_speed=DEFAULT_STIR_SPEED))
 
     def _no_waiting_if_dry_run(self) -> None:
@@ -929,7 +986,10 @@ class XDLExecutor(object):
                                            or dict containing graph in same format
                                            as JSON file.
         """
-        self._graph = get_graph(graph_file)
+        if not type(graph_file) == MultiDiGraph:
+            self._graph = get_graph(graph_file)
+        else:
+            self._graph = graph_file
         self._graph_hardware = hardware_from_graph(self._graph)
         self._waste_map = make_vessel_map(
             self._graph, CHEMPUTER_WASTE_CLASS_NAME)
@@ -988,6 +1048,11 @@ class XDLExecutor(object):
                 # during _add_implied_steps.
                 self._get_hardware_map()
                 self._map_hardware_to_steps()
+
+                enough_buffer_flasks, n_buffer_required, n_buffer_present = self._check_enough_buffer_flasks()
+                if not enough_buffer_flasks:
+                    raise XDLError(f'The procedure requires {n_buffer_required} empty buffer flasks but only {n_buffer_present} are present in the graph.')
+
                 self._add_internal_properties()
                 # Add in steps implied by explicit steps.
                 self._add_implied_steps(interactive=interactive)

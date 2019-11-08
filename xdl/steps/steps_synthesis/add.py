@@ -57,6 +57,7 @@ class Add(AbstractStep):
         volume: Optional[float] = None,
         mass: Optional[float] = None,
         port: Optional[str] = None,
+        through: Optional[str] = None,
         move_speed: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
         dispense_speed: Optional[float] = 'default',
@@ -82,16 +83,16 @@ class Add(AbstractStep):
         port = self.get_port()
         steps = []
         # Solid addition
-        if self.mass != None:
+        if self.volume == None and self.mass != None:
             steps = [Confirm('Is {reagent} ({mass} g) in {vessel}?'.format(
                 **self.properties))]
         # Liquid addition
         else:
             if self.anticlogging:
-                return self.get_anticlogging_add_steps()
+                steps = self.get_anticlogging_add_steps()
 
             else:
-                return self.get_add_steps()
+                steps = self.get_add_steps()
 
             if self.flush_tube_vessel:
                 steps.append(CMove(
@@ -119,6 +120,7 @@ class Add(AbstractStep):
                 to_vessel=self.vessel,
                 to_port=self.get_port(),
                 volume=self.volume,
+                through=self.through,
                 move_speed=self.move_speed,
                 aspiration_speed=self.aspiration_speed,
                 dispense_speed=self.get_dispense_speed()),
@@ -171,6 +173,20 @@ class Add(AbstractStep):
                 return self.name
         except KeyError:
             return self.name
+
+    def syntext(self) -> str:
+        formatted_properties = self.formatted_properties()
+        s = ''
+        if self.volume:
+            s += f'{self.reagent} ({formatted_properties["volume"]}) was added'
+        elif self.mass:
+            s += f'{self.reagent} ({formatted_properties["mass"]}) was added'
+        if self.time != None:
+            s += f' over {formatted_properties["time"]}'
+        if self.stir:
+            s += f' with stirring ({self.stir_speed} RPM)'
+        if s: s += '.'
+        return s
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

@@ -10,6 +10,9 @@ class CSwitchVacuum(AbstractBaseStep):
     def __init__(self, pneumatic_controller: str, port: int):
         super().__init__(locals())
 
+    def locks(self, chempiler):
+        return [self.pneumatic_controller], [], []
+
     def execute(self, chempiler, logger=None, level=0):
         pneumatic_controller = chempiler[self.pneumatic_controller]
         pneumatic_controller.switch_vacuum(self.port)
@@ -21,7 +24,7 @@ class CSwitchArgon(AbstractBaseStep):
     Args:
         pneumatic_controller (str): Name of PneumaticController node.
         port (int): Port of PneumaticController to supply argon from.
-        pressure (str): 'ow' or 'high'. Defaults to 'low'.
+        pressure (str): 'low' or 'high'. Defaults to 'low'.
     """
     def __init__(
         self,
@@ -30,6 +33,9 @@ class CSwitchArgon(AbstractBaseStep):
         pressure: str = 'low'
     ) -> None:
         super().__init__(locals())
+
+    def locks(self, chempiler):
+        return [self.pneumatic_controller], [], []
 
     def execute(self, chempiler, logger=None, level=0):
         pneumatic_controller = chempiler[self.pneumatic_controller]

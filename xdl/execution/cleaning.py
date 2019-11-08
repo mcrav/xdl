@@ -60,15 +60,17 @@ def get_available_solvents(xdl_obj: 'XDL') -> List[str]:
     reagents = [reagent.id for reagent in xdl_obj.reagents]
     graph_hardware = xdl_obj.executor._graph_hardware
     reagents.extend([flask.chemical for flask in graph_hardware.flasks])
-    reagents = list(set(reagents))
+    reagents = sorted(list(set(reagents)))
     for reagent in reagents:
-        for solvent in COMMON_SOLVENT_NAMES:
-            # Look for stuff like 'X in THF' as well as plain 'THF'.
-            if re.match(r'(?:[ _]|^)' + solvent + r'(?:[ _]|$)', reagent.lower()):
-                # Don't want to use solvents that damage parts of Chemputer.
-                if not reagent.lower() in CLEANING_SOLVENT_BLACKLIST:
-                    solvents.append(reagent)
-    return solvents
+        if not 'solution' in reagent.lower():
+            for solvent in COMMON_SOLVENT_NAMES:
+                # Look for stuff like 'X in THF' as well as plain 'THF'.
+                if re.search(r'(?:[ _]|^)' + solvent + r'(?:[ _]|$)', reagent.lower()):
+                    # Don't want to use solvents that damage parts of Chemputer.
+                    if not reagent.lower() in CLEANING_SOLVENT_BLACKLIST:
+                        solvents.append(reagent)
+    solvents.extend([reagent.id for reagent in xdl_obj.reagents if reagent.use_for_cleaning])
+    return sorted(list(set(solvents)))
 
 def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
     """Get list of what solvent should be used to clean at every step.
@@ -102,7 +104,7 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
     # cleaning.
     organic_solvents = [(i, item)
                         for i, item in enumerate(schedule)
-                        if item and item != 'water']
+                        if item and not 'water' in item]
     for i in range(len(schedule)):
         if schedule[i] == GENERIC_ORGANIC:
             if organic_solvents:
@@ -112,7 +114,7 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
             else:
                 # Choose random organic solvent.
                 for solvent in available_solvents:
-                    if solvent != 'water':
+                    if not 'water' in solvent:
                         schedule[i] = solvent
 
     # 2) Treat consecutive SOLVENT_CONTAINING_STEPS as groups and if one step in
@@ -142,7 +144,7 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
         current_reagent = available_solvents[0]
     for i, reagent in enumerate(schedule):
         if reagent:
-            if reagent != 'water':
+            if not 'water' in reagent:
                 current_reagent = reagent
         else:
             schedule[i] = current_reagent
@@ -173,7 +175,12 @@ def get_reagent_cleaning_solvent(
 
     for word in AQUEOUS_KEYWORDS:
         if word in reagent_name:
-            return 'water'
+            if 'water' in available_solvents:
+                return 'water'
+            else:
+                for solvent in available_solvents:
+                    if ' water' in solvent:
+                        return solvent
 
     if reagent_name in CLEANING_SOLVENT_BLACKLIST:
         return GENERIC_ORGANIC
@@ -190,7 +197,7 @@ def get_clean_backbone_steps(steps: List[Step]) -> List[int]:
     for i, step in enumerate(steps):
         if type(step) in CLEAN_BACKBONE_AFTER_STEPS:
             # Don't clean after solid additions
-            if not (type(step) == Add and step.mass):
+            if not (type(step) == Add and step.volume == None):
                 clean_backbone_steps.append(i)
     return clean_backbone_steps
 
@@ -219,7 +226,6 @@ def get_clean_backbone_sequence(xdl_obj) -> List[Tuple[int, str]]:
         # If on last clean backbone step then there will be no after solvent.
         if not after_solvent:
             after_solvent = before_solvent
-
         if before_solvent == after_solvent:
             cleans.append((step_i+1, before_solvent))
         elif before_solvent != after_solvent:
@@ -241,7 +247,7 @@ def add_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
         for i, solvent in reversed(clean_backbone_sequence):
             # If organic_cleaning_solvent is given use it otherwise use solvent in
             # synthesis.
-            if solvent != 'water' and xdl_obj.organic_cleaning_solvent:
+            if not 'water' in solvent and xdl_obj.organic_cleaning_solvent:
                 solvent = xdl_obj.organic_cleaning_solvent
             if i-1 >= 0:
                 prev_step = xdl_obj.steps[i-1]
@@ -278,7 +284,7 @@ def add_cleaning_steps_at_beginning_and_end(xdl_obj: 'XDL') -> 'XDL':
         start_solvent, end_solvent = (
             available_solvents[0], available_solvents[0])
     cleaning_solvents = [
-        step.solvent for step in xdl_obj.steps if type(step) == CleanBackbone]
+        step.reagent for step in xdl_obj.steps if type(step) == Add and step.reagent in available_solvents]
     # Set start solvent and end solvent to first used and last used cleaning
     # solvent if they exist.
     if len(cleaning_solvents) > 0:
@@ -414,7 +420,7 @@ def get_clean_vessel_solvents(
             elif cleaning_solvent == GENERIC_ORGANIC:
                 organic_solvents = [solvent
                                     for solvent in cleaning_solvents
-                                    if solvent and solvent != 'water']
+                                    if solvent and not 'water' in solvent]
                 # If there is another organic solvent associated with another
                 # reagent from vessel contents, use this.
                 if organic_solvents:
@@ -424,7 +430,7 @@ def get_clean_vessel_solvents(
                 else:
                     organic_solvents = [solvent
                                         for solvent in  available_solvents
-                                        if solvent != 'water']
+                                        if not 'water' in solvent]
                     if organic_solvents:
                         solvents.append(organic_solvents[0])
     return solvents
@@ -446,7 +452,7 @@ def add_vessel_cleaning_steps(xdl_obj: 'XDL', hardware: Hardware) -> 'XDL':
         for i, vessel, solvent in reversed(clean_vessel_sequence):
             # If organic_cleaning_solvent is given use it otherwise use solvent
             # in synthesis.
-            if solvent != 'water' and xdl_obj.organic_cleaning_solvent:
+            if not 'water' in solvent and xdl_obj.organic_cleaning_solvent:
                 solvent = xdl_obj.organic_cleaning_solvent
             xdl_obj.steps.insert(i, CleanVessel(vessel=vessel, solvent=solvent))
     xdl_obj.steps = add_clean_vessel_temps(xdl_obj.steps)

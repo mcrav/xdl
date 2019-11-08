@@ -26,13 +26,13 @@ def get_n_reagent_flasks(template: Dict) -> int:
     i = 0
     for node in template['nodes']:
         if (node['type'] == 'flask'
-            and not node['name'] == 'buffer_flask'
+            and not node['name'].startswith('buffer_flask')
             and not node['chemical']):
             i += 1
     return i
 
 def add_reagents(
-    template: Dict, reagents: List[str], cartridge_reagent: str) -> Dict:
+    template: Dict, reagents: List[str], cartridge_reagents: [List[str]]) -> Dict:
     """Add reagents to reagent flasks in template.
 
     Args:
@@ -52,7 +52,7 @@ def add_reagents(
     reagents = copy.deepcopy(list(set(reagents)))
     for node in template['nodes']:
         if (node['type'] == 'flask'
-            and not node['name'] == 'buffer_flask'):
+            and not node['name'].startswith('buffer_flask')):
             if reagents:
                 node['chemical'] = reagents.pop()
             elif not node['chemical']:
@@ -60,11 +60,12 @@ def add_reagents(
                 node['chemical'] = 'None'
 
         elif node['type'] == 'cartridge':
-            node['chemical'] = cartridge_reagent
+            if cartridge_reagents:
+                node['chemical'] = cartridge_reagents.pop()
 
     return template
 
-def get_graph(reagents: List[str], cartridge_reagent: str = None) -> Dict:
+def get_graph(reagents: List[str], cartridge_reagents: List[str] = []) -> Dict:
     """Get a template graph with all passed reagents added to reagent flasks.
 
     Args:
@@ -73,7 +74,7 @@ def get_graph(reagents: List[str], cartridge_reagent: str = None) -> Dict:
     Returns:
         Dict: Graph with all passed reagents in reagent flasks.
     """
-    return add_reagents(load_template(), reagents, cartridge_reagent)
+    return add_reagents(load_template(), reagents, cartridge_reagents)
 
 def save_graph(reagents: List[str], save_file: str) -> None:
     """Save template graph with all passed reagents added to reagent flasks.

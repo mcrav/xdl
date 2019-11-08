@@ -102,6 +102,12 @@ class FilterThrough(AbstractStep):
             ])
         return steps
 
+    @property
+    def buffer_flasks_required(self):
+        if self.to_vessel == self.from_vessel:
+            return 1
+        return 0
+
     def human_readable(self, language='en'):
         try:
             if self.eluting_solvent:
@@ -112,3 +118,11 @@ class FilterThrough(AbstractStep):
                     **self.formatted_properties())
         except KeyError:
             return self.name
+
+    def syntext(self) -> str:
+        formatted_properties = self.formatted_properties()
+        s = f'The contents of {self.from_vessel} were filtered through {self.through} to {self.to_vessel}'
+        if self.eluting_solvent:
+            s += f', eluting with {self.eluting_solvent} ({self.eluting_repeats} × {formatted_properties["eluting_volume"]})'
+        if s: s += '.'
+        return s

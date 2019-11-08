@@ -21,11 +21,18 @@ class RunColumn(AbstractStep):
         self,
         from_vessel: str,
         to_vessel: str,
-        column: str,
+        column: str = None,
         move_speed: Optional[float] = 'default',
         buffer_flask: Optional[str] = None,
+        **kwargs
     ) -> None:
         super().__init__(locals())
+
+    @property
+    def buffer_flasks_required(self):
+        if self.to_vessel == self.from_vessel:
+            return 1
+        return 0
 
     def get_steps(self):
         steps = [
@@ -39,3 +46,6 @@ class RunColumn(AbstractStep):
         ]
 
         return steps
+
+    def syntext(self) -> str:
+        return 'The product was purified by column chromatography.'

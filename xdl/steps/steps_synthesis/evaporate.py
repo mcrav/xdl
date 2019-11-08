@@ -45,7 +45,7 @@ class Evaporate(AbstractStep):
     def __init__(
         self,
         rotavap_name: str,
-        temp: float,
+        temp: float = 25,
         pressure: Optional[float] = None,
         time: Optional[float] = 'default',
         rotation_speed: Optional[float] = 'default',
@@ -83,10 +83,16 @@ class Evaporate(AbstractStep):
 
         if self.mode == 'auto':
             del steps[-4:-2]
+            pressure = 1 # 1 == auto pressure
+            if self.pressure:
+                # Approximation. Pressure given should be pressure solvent
+                # evaporates at, but in auto evaporation, pressure is the limit
+                # of the pressure ramp, so actual pressure given needs to be lower.
+                pressure = self.pressure / 2
             steps.insert(-2, CRotavapAutoEvaporation(
                 rotavap_name=self.rotavap_name,
                 sensitivity=2, # High sensitivity
-                vacuum_limit=1, # Auto pressure
+                vacuum_limit=pressure,
                 time_limit=self.time,
                 vent_after=True
             ))
@@ -99,3 +105,7 @@ class Evaporate(AbstractStep):
                 'rotavap': True,
             }
         }
+
+    def syntext(self) -> str:
+        formatted_properties = self.formatted_properties()
+        return f'Excess solvent was removed by rotary evaporation ({formatted_properties["pressure"]}, {formatted_properties["temp"]}, {formatted_properties["time"]}).'

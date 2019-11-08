@@ -2,7 +2,7 @@ from typing import Dict, List, Any
 
 #: XDL version number. Remember to increment after merging into master. Used
 # in header at top of outputted XDL files.
-XDL_VERSION: str = '0.1.10'
+XDL_VERSION: str = '0.1.13'
 
 ##########################
 ### DEFAULT PARAMETERS ###
@@ -170,6 +170,19 @@ DEFAULT_PRECIPITATION_TIME = 60 * 60
 #: Default temp in celsius to chill to for precipitation.
 DEFAULT_PRECIPITATION_TEMP = 25
 
+##################
+### Evacuation ###
+##################
+
+#: Number of vacuum/inert gas cycles to do during Evacuate.
+DEFAULT_EVACUATE_N_EVACUTIONS: int = 3
+
+#: Time to wait for during Evacuate after vessel is connected to inert gas.
+DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME: float = 60
+
+#: Time to wait for during Evacuate after vessel is connected to vacuum.
+DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME: float = 60
+
 ###########
 ## Video ##
 ###########
@@ -251,6 +264,8 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'stir_speed': DEFAULT_STIR_SPEED,
     },
     'HeatChillToTemp': {
+        'active': True,
+        'continue_heatchill': True,
         'stir': True,
         'stir_speed': DEFAULT_STIR_SPEED,
         'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
@@ -296,6 +311,11 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'RunColumn': {
         'move_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
     },
+    'Evacuate': {
+        'after_inert_gas_wait_time': DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME,
+        'after_vacuum_wait_time': DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME,
+        'evacuations': DEFAULT_EVACUATE_N_EVACUTIONS,
+    }
 }
 
 INTERNAL_PROPERTIES = {
@@ -332,7 +352,7 @@ INTERNAL_PROPERTIES = {
         'vessel_type',
         'vessel_has_stirrer'
     ],
-    'Separate': ['waste_vessel'],
+    'Separate': ['waste_vessel', 'buffer_flasks'],
     'HeatChill': ['vessel_type'],
     'PrimePumpForAdd': ['reagent_vessel', 'waste_vessel'],
     'HeatChillToTemp': ['vessel_type'],
@@ -421,3 +441,14 @@ SYNTHESIS_ATTRS = [
 # called.
 UNSCALED_STEPS = [
     'CleanVessel', 'AddFilterDeadVolume', 'RemoveFilterDeadVolume']
+
+
+#######################
+### Parallelisation ###
+#######################
+
+#: Time to wait during venting of vacuum to ambient pressure.
+DEFAULT_VACUUM_VENT_WAIT_TIME: float = 60
+
+#: Default time to wait for rotavap arm lift/descend.
+DEFAULT_ROTAVAP_WAIT_FOR_ARM_TIME: int = 5

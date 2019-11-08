@@ -48,6 +48,9 @@ class Step(XDLBase):
             human_readable = self.name
         return human_readable
 
+    def syntext(self):
+        return ''
+
 class AbstractStep(Step, ABC):
     """Abstract base class for all steps that contain other steps.
     Subclasses must implement steps and human_readable, and can also override
@@ -174,6 +177,10 @@ class AbstractBaseStep(Step, ABC):
 
     def duration(self, chempiler):
         return DEFAULT_INSTANT_DURATION
+
+    @abstractmethod
+    def locks(self, chempiler):
+        return [], [], []
 
     def request_lock(self, chempiler, locking_pid):
         locks, ongoing_locks, _ = self.locks(chempiler)
