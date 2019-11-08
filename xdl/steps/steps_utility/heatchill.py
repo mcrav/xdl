@@ -7,6 +7,8 @@ from ..steps_base import (
     CSetRecordingSpeed,
     CChillerWaitForTemp,
     CStopChiller,
+    CRampChiller,
+    CSetCoolingPower,
 
     CStirrerSetTemp,
     CStirrerHeat,
@@ -289,28 +291,18 @@ class HeatChillReturnToRT(AbstractStep):
         vessel_type: Optional[str] = None,
         wait_recording_speed: Optional[float] = 'default',
         after_recording_speed: Optional[float] = 'default',
-        **kwargs) -> None:
+        **kwargs
+    ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
         steps = []
         if self.vessel_type == 'filter':
-            steps = [
-                CChillerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
-                CStartChiller(vessel=self.vessel),
-                CSetRecordingSpeed(self.wait_recording_speed),
-                CChillerWaitForTemp(vessel=self.vessel),
-                CSetRecordingSpeed(self.after_recording_speed),
-                CStopChiller(self.vessel)
-            ]
+            steps = [ChillerReturnToRT(vessel=self.vessel)]
+
         elif self.vessel_type == 'reactor':
-            steps = [
-                CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
-                CStopHeat(vessel=self.vessel),
-                CSetRecordingSpeed(self.wait_recording_speed),
-                CStirrerWaitForTemp(vessel=self.vessel),
-                CSetRecordingSpeed(self.after_recording_speed),
-            ]
+            steps = [StirrerReturnToRT(vessel=self.vessel)]
+
         elif self.vessel_type == 'rotavap':
             steps = [
                 CRotavapStopHeater(rotavap_name=self.vessel),
@@ -333,3 +325,59 @@ class HeatChillReturnToRT(AbstractStep):
                 'heatchill': True,
             }
         }
+
+class StirrerReturnToRT(AbstractStep):
+    def __init__(
+        self,
+        vessel: str,
+        wait_recording_speed: Optional[float] = 'default',
+        after_recording_speed: Optional[float] = 'default',
+    ):
+        super().__init__(locals())
+
+    def get_steps(self):
+        return [
+            CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+            CStopHeat(vessel=self.vessel),
+            CSetRecordingSpeed(self.wait_recording_speed),
+            CStirrerWaitForTemp(vessel=self.vessel),
+            CSetRecordingSpeed(self.after_recording_speed),
+        ]
+
+class ChillerReturnToRT(AbstractStep):
+    def __init__(
+        self,
+        vessel: str,
+        vessel_class: str = None,
+        wait_recording_speed: Optional[float] = 'default',
+        after_recording_speed: Optional[float] = 'default',
+    ):
+        super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        self.properties['vessel_class'] = graph[self.vessel]['class']
+        self.update()
+
+    def get_steps(self):
+        if self.vessel_class == 'JULABOCF41':
+            return [
+                CChillerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+                CSetCoolingPower(vessel=self.vessel, cooling_power=0),
+                CStartChiller(vessel=self.vessel),
+                CSetRecordingSpeed(self.wait_recording_speed),
+                CChillerWaitForTemp(vessel=self.vessel),
+                CSetRecordingSpeed(self.after_recording_speed),
+                CSetCoolingPower(vessel=self.vessel, cooling_power=100),
+                CStopChiller(self.vessel)
+            ]
+
+        elif self.vessel_class == 'HuberPetiteFleur':
+            return [
+                CRampChiller(
+                    vessel=self.vessel,
+                    ramp_duration='1 hr',
+                    end_temperature=ROOM_TEMPERATURE
+                )
+            ]
+        else:
+            return []

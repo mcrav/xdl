@@ -89,6 +89,9 @@ class AbstractStep(Step, ABC):
         for step in self.base_steps:
             step.release_lock(chempiler, locking_pid)
 
+    def on_prepare_for_execution(self, graph):
+        pass
+
     def execute(
         self,
         chempiler: 'Chempiler',
@@ -166,6 +169,9 @@ class AbstractBaseStep(Step, ABC):
 
     def human_readable(self, language='en'):
         return self.__class__.__name__
+
+    def on_prepare_for_execution(self, graph):
+        pass
 
     @abstractmethod
     def execute(self, chempiler: 'Chempiler'):

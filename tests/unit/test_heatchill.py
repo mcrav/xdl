@@ -19,3 +19,10 @@ def test_inactive_heatchill():
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f, interactive=False)
     generic_chempiler_test(xdl_f, graph_f)
+
+def test_heatchill_return_to_rt():
+    xdl_f = os.path.join(FOLDER, 'heatchill_return_to_rt.xdl')
+    graph_f = os.path.join(FOLDER, 'heatchill_return_to_rt.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)
+    generic_chempiler_test(xdl_f, graph_f)

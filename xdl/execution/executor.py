@@ -1065,6 +1065,8 @@ class XDLExecutor(object):
 
                 # Optimise procedure.
                 self._tidy_up_procedure()
+                for step in self._xdl.steps:
+                    step.on_prepare_for_execution(self._graph)
 
                 self._print_warnings()
                 self._prepared_for_execution = True
