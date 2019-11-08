@@ -336,7 +336,7 @@ class UnimplementedStep(Step):
         super().__init__(param_dict)
         self.steps = []
 
-    def execute(self, chempiler):
+    def execute(self, chempiler, logger=None, level=0):
         raise NotImplementedError(
             f'{self.__class__.__name__} step is unimplemented.')
 
