@@ -170,6 +170,12 @@ DEFAULT_PRECIPITATION_TIME = 60 * 60
 #: Default temp in celsius to chill to for precipitation.
 DEFAULT_PRECIPITATION_TEMP = 25
 
+#########################
+### Recrystallization ###
+#########################
+
+DEFAULT_RECRYSTALLIZATION_WAIT_TIME: int = 60 * 60 * 2
+
 ##################
 ### Evacuation ###
 ##################
@@ -323,6 +329,9 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'after_inert_gas_wait_time': DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME,
         'after_vacuum_wait_time': DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME,
         'evacuations': DEFAULT_EVACUATE_N_EVACUTIONS,
+    },
+    'Recrystallize': {
+        'time': DEFAULT_RECRYSTALLIZATION_WAIT_TIME,
     }
 }
 
