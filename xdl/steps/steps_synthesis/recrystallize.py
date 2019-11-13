@@ -7,7 +7,7 @@ class Recrystallize(AbstractStep):
     def __init__(
         self,
         vessel: str,
-        time: float = None,
+        time: float = 'default',
         dissolve_temp: float = None,
         crystallize_temp: float = None,
         solvent: str = None,
