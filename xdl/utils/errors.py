@@ -1,7 +1,11 @@
 import logging
 import sys
+from ..constants import VALID_PORTS
 
 class XDLError(Exception):
+    pass
+
+class IllegalPortError(Exception):
     pass
 
 def raise_error(e, msg=''):
