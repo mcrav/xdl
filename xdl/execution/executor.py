@@ -1095,6 +1095,10 @@ class XDLExecutor(object):
                     raise XDLError(f'The procedure requires {n_buffer_required} empty buffer flasks but only {n_buffer_present} are present in the graph.')
 
                 self._add_internal_properties()
+
+                for step in self._xdl.steps:
+                    self.call_on_prepare_for_execution(step)
+
                 # Add in steps implied by explicit steps.
                 self._add_implied_steps(interactive=interactive)
                 # Convert implied properties to concrete values.
@@ -1106,8 +1110,6 @@ class XDLExecutor(object):
 
                 # Optimise procedure.
                 self._tidy_up_procedure()
-                for step in self._xdl.steps:
-                    self.call_on_prepare_for_execution(step)
 
                 self._print_warnings()
                 self._prepared_for_execution = True

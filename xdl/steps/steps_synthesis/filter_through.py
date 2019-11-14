@@ -47,46 +47,53 @@ class FilterThrough(AbstractStep):
         through_cartridge: Optional[str] = None,
         cartridge_dead_volume: Optional[float] = 'default',
         buffer_flask: Optional[str] = None,
+        buffer_flask_max_volume: Optional[float] = None,
+        to_vessel_max_volume: Optional[float] = None,
         **kwargs
     ):
         super().__init__(locals())
 
+    def on_prepare_for_execution(self, graph):
+        if self.buffer_flask:
+            self.buffer_flask_max_volume = graph.node[self.buffer_flask]['max_volume']
+
+        if self.to_vessel:
+            self.to_vessel_max_volume = graph.node[self.to_vessel]['max_volume']
+
     def get_steps(self) -> List[Step]:
         filter_through_to_vessel = self.to_vessel
+        filter_through_to_vessel_max_volume = self.to_vessel_max_volume
+
         if self.to_vessel == self.from_vessel:
             filter_through_to_vessel = self.buffer_flask
-        steps = [Transfer(from_vessel=self.from_vessel,
-                          to_vessel=filter_through_to_vessel,
-                          through=self.through_cartridge,
-                          volume='all',
-                          move_speed=self.move_speed,
-                          aspiration_speed=self.aspiration_speed)]
+            filter_through_to_vessel_max_volume = self.buffer_flask_max_volume
+
+        if filter_through_to_vessel_max_volume == None:
+            filter_through_to_vessel_max_volume = 100
+
+        steps = [self.get_initial_filter_through_step(filter_through_to_vessel)]
 
         if self.eluting_solvent:
             for _ in range(self.eluting_repeats):
-                # Transfer to from_vessel to rinse any residual product, then
-                # transfer through cartridge to target vessel.
-                steps.extend([
-                    Transfer(from_vessel=self.eluting_solvent_vessel,
-                             to_vessel=self.from_vessel,
-                             volume=self.eluting_volume),
-
-                    Transfer(from_vessel=self.from_vessel,
-                             to_vessel=filter_through_to_vessel,
-                             through=self.through_cartridge,
-                             volume=self.eluting_volume,
-                             move_speed=self.move_speed,
-                             aspiration_speed=self.aspiration_speed)
-                ])
+                # Done like this so if 1 l is being added to 250 mL flask, it is
+                # added in portions.
+                volume_added = 0
+                while volume_added < self.eluting_volume:
+                    volume_to_add = min(
+                        self.eluting_volume - volume_added,
+                        filter_through_to_vessel_max_volume
+                    )
+                    # Transfer to from_vessel to rinse any residual product, then
+                    # transfer through cartridge to target vess
+                    steps.extend(self.get_eluting_steps(
+                        filter_through_to_vessel, volume_to_add))
+                    volume_added += volume_to_add
 
         if self.flush_cartridge_vessel:
-            steps.append(Transfer(from_vessel=self.flush_cartridge_vessel,
-                                  to_vessel=filter_through_to_vessel,
-                                  through=self.through_cartridge,
-                                  volume=self.cartridge_dead_volume,
-                                  move_speed=self.move_speed,
-                                  aspiration_speed=self.aspiration_speed))
+            steps.append(
+                self.get_flush_cartridge_step(filter_through_to_vessel))
 
+        #  Clean from vessel and transfer back from buffer flask
         if self.to_vessel == self.from_vessel:
             if self.eluting_solvent:
                 steps.extend([
@@ -101,6 +108,41 @@ class FilterThrough(AbstractStep):
                          aspiration_speed=self.aspiration_speed),
             ])
         return steps
+
+    def get_initial_filter_through_step(self, filter_through_to_vessel):
+        return Transfer(
+            from_vessel=self.from_vessel,
+            to_vessel=filter_through_to_vessel,
+            through=self.through_cartridge,
+            volume='all',
+            move_speed=self.move_speed,
+            aspiration_speed=self.aspiration_speed)
+
+    def get_eluting_steps(self, filter_through_to_vessel,  volume):
+        return [
+            Transfer(
+                from_vessel=self.eluting_solvent_vessel,
+                to_vessel=self.from_vessel,
+                volume=volume),
+
+            Transfer(
+                from_vessel=self.from_vessel,
+                to_vessel=filter_through_to_vessel,
+                through=self.through_cartridge,
+                volume=volume,
+                move_speed=self.move_speed,
+                aspiration_speed=self.aspiration_speed)
+        ]
+
+    def get_flush_cartridge_step(self, filter_through_to_vessel):
+        return Transfer(
+            from_vessel=self.flush_cartridge_vessel,
+            to_vessel=filter_through_to_vessel,
+            through=self.through_cartridge,
+            volume=self.cartridge_dead_volume,
+            move_speed=self.move_speed,
+            aspiration_speed=self.aspiration_speed
+        )
 
     @property
     def buffer_flasks_required(self):
