@@ -410,6 +410,9 @@ VALID_PORTS: Dict[str, List[str]] = {
     'ChemputerPump': ['0'],
     'IKARV10': ['evaporate', 'collect'],
     'ChemputerValve': ['-1', '0', '1', '2', '3', '4', '5'],
+    'ChemputerWaste': ['0'],
+    'ChemputerFlask': ['0'],
+    'ChemputerCartridge': ['in', 'out'],
 }
 
 FILTER_DEAD_VOLUME_INERT_GAS_METHOD: str = 'inert_gas'
