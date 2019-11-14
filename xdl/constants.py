@@ -403,6 +403,15 @@ TOP_PORT: str = 'top'
 EVAPORATE_PORT: str = 'evaporate'
 COLLECT_PORT: str = 'collect'
 
+VALID_PORTS: Dict[str, List[str]] = {
+    'ChemputerSeparator': ['top', 'bottom'],
+    'ChemputerReactor': ['0'],
+    'ChemputerFilter': ['top', 'bottom'],
+    'ChemputerPump': ['0'],
+    'IKARV10': ['evaporate', 'collect'],
+    'ChemputerValve': ['-1', '0', '1', '2', '3', '4', '5'],
+}
+
 FILTER_DEAD_VOLUME_INERT_GAS_METHOD: str = 'inert_gas'
 FILTER_DEAD_VOLUME_LIQUID_METHOD: str = 'solvent'
 

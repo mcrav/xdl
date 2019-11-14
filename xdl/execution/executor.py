@@ -24,7 +24,7 @@ from .graph import (
     vacuum_device_attached_to_flask,
     get_pneumatic_controller,
 )
-from .utils import VesselContents, is_aqueous
+from .utils import VesselContents, is_aqueous, validate_port
 from .cleaning import (
     add_cleaning_steps,
     add_vessel_cleaning_steps,
@@ -146,6 +146,29 @@ class XDLExecutor(object):
                         f'No cartridge present containing {step.through}')
         return True
 
+    def _validate_ports(self, steps=None):
+        if steps is None:
+            steps = self._xdl.steps
+        for step in steps:
+            self._validate_ports_step(step)
+
+    def _validate_ports_step(self, step):
+        for vessel_keyword, port_keyword in [
+            ('from_vessel', 'from_port'),
+            ('to_vessel', 'to_port'),
+            ('vessel', 'port'),
+        ]:
+            if vessel_keyword in step.properties:
+                if port_keyword in step.properties:
+                    if step.properties[port_keyword] != None:
+                        validate_port(
+                            step.properties[vessel_keyword],
+                            self._graph.node[step.properties[vessel_keyword]]['class'],
+                            step.properties[port_keyword]
+                        )
+        if not isinstance(step, AbstractBaseStep):
+            for substep in step.steps:
+                self._validate_ports_step(substep)
 
     ###################################
     ### MAP GRAPH HARDWARE TO STEPS ###
@@ -1000,6 +1023,7 @@ class XDLExecutor(object):
             self._graph, CHEMPUTER_VALVE_CLASS_NAME)
 
         self._add_internal_properties(steps=block)
+        self._validate_ports(steps=block)
         # Convert implied properties to concrete values.
         self._optimise_separation_steps(steps=block)
 
@@ -1048,6 +1072,8 @@ class XDLExecutor(object):
                 # during _add_implied_steps.
                 self._get_hardware_map()
                 self._map_hardware_to_steps()
+
+                self._validate_ports()
 
                 enough_buffer_flasks, n_buffer_required, n_buffer_present = self._check_enough_buffer_flasks()
                 if not enough_buffer_flasks:

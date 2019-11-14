@@ -15,7 +15,7 @@
       vessel="reactor"
       reagent="NaCl"
       mass="5g"
-      port="top"
+      port="0"
     />
     <Dry
       vessel="filter"
