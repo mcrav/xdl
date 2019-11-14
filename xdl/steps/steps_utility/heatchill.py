@@ -1,5 +1,12 @@
 from typing import Optional, List, Dict, Any
-
+from  ...utils.graph import undirected_neighbors
+from ...constants import (
+    HEATER_CLASSES,
+    CHILLER_CLASSES,
+    CHILLER_MIN_TEMP,
+    CHILLER_MAX_TEMP,
+    HEATER_MAX_TEMP,
+)
 from ..base_steps import AbstractStep, Step
 from ..steps_base import (
     CChillerSetTemp,
@@ -7,6 +14,8 @@ from ..steps_base import (
     CSetRecordingSpeed,
     CChillerWaitForTemp,
     CStopChiller,
+    CRampChiller,
+    CSetCoolingPower,
 
     CStirrerSetTemp,
     CStirrerHeat,
@@ -30,6 +39,19 @@ from ...constants import (
 from ...utils.errors import XDLError
 from ...localisation import HUMAN_READABLE_STEPS
 
+
+
+def heater_chiller_sanity_check(heater, chiller, temp):
+    if not heater and chiller:
+        assert temp < CHILLER_MAX_TEMP
+        assert temp > CHILLER_MIN_TEMP
+
+    if not chiller and heater:
+        assert temp >= 25
+        assert temp <= HEATER_MAX_TEMP
+
+    assert CHILLER_MIN_TEMP <= temp <= HEATER_MAX_TEMP
+
 class StartHeatChill(AbstractStep):
     """Start heating/chilling vessel to given temp and leave heater/chiller on.
     Don't wait to reach temp.
@@ -45,28 +67,54 @@ class StartHeatChill(AbstractStep):
         vessel: str,
         temp: float,
         vessel_type: Optional[str] = None,
+        heater: Optional[str] = None,
+        chiller: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
         steps = []
-        if self.vessel_type == 'filter':
-            steps = [
-                CChillerSetTemp(vessel=self.vessel, temp=self.temp),
-                CStartChiller(vessel=self.vessel),
-            ]
-        elif self.vessel_type == 'reactor':
-            steps = [
-                CStirrerSetTemp(vessel=self.vessel, temp=self.temp),
-                CStirrerHeat(vessel=self.vessel),
-            ]
-        elif self.vessel_type == 'rotavap':
-            steps = [
-                CRotavapSetTemp(rotavap_name=self.vessel, temp=self.temp),
-                CRotavapStartHeater(rotavap_name=self.vessel),
-            ]
+        if self.vessel_type:
+            # Rotavap
+            if self.vessel_type == 'rotavap':
+                steps = self.get_rotavap_steps()
+
+            else:
+                # Temp less than 25, try use chiller
+                if self.chiller:
+                    if CHILLER_MIN_TEMP <= self.temp <= CHILLER_MAX_TEMP:
+                        steps = self.get_chiller_steps()
+                    elif self.heater and 18 <= self.temp <= HEATER_MAX_TEMP:
+                        steps = self.get_heater_steps()
+
+                # Temp greater than 25, try use heater, if not available try use chiller.
+                elif self.heater and 18 <= self.temp <= HEATER_MAX_TEMP:
+                    steps = self.get_heater_steps()
+
         return steps
+
+    def get_chiller_steps(self):
+        return [
+            CChillerSetTemp(vessel=self.vessel, temp=self.temp),
+            CStartChiller(vessel=self.vessel),
+        ]
+
+    def get_heater_steps(self):
+        return [
+            CStirrerSetTemp(vessel=self.vessel, temp=self.temp),
+            CStirrerHeat(vessel=self.vessel),
+        ]
+
+    def get_rotavap_steps(self):
+        return [
+            CRotavapSetTemp(rotavap_name=self.vessel, temp=self.temp),
+            CRotavapStartHeater(rotavap_name=self.vessel),
+        ]
+
+    def final_sanity_check(self):
+        assert self.steps
+        heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
@@ -78,8 +126,7 @@ class StartHeatChill(AbstractStep):
         }
 
 class HeatChillSetTemp(AbstractStep):
-    """Start heating/chilling vessel to given temp and leave heater/chiller on.
-    Don't wait to reach temp.
+    """Set temp on heater/chiller.
 
     Args:
         vessel (str): Vessel to set temp.
@@ -92,25 +139,33 @@ class HeatChillSetTemp(AbstractStep):
         vessel: str,
         temp: float,
         vessel_type: Optional[str] = None,
+        heater: Optional[str] = None,
+        chiller: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
         steps = []
-        if self.vessel_type == 'filter':
-            steps = [
-                CChillerSetTemp(vessel=self.vessel, temp=self.temp),
-            ]
-        elif self.vessel_type == 'reactor':
-            steps = [
-                CStirrerSetTemp(vessel=self.vessel, temp=self.temp),
-            ]
-        elif self.vessel_type == 'rotavap':
-            steps = [
-                CRotavapSetTemp(rotavap_name=self.vessel, temp=self.temp),
-            ]
+        if self.vessel_type:
+            if self.vessel_type == 'rotavap':
+                steps.append(
+                    CRotavapSetTemp(rotavap_name=self.vessel, temp=self.temp),
+                )
+            else:
+                if self.chiller:
+                    steps.append(
+                        CChillerSetTemp(vessel=self.vessel, temp=self.temp),
+                    )
+                if self.heater:
+                    steps.append(
+                        CStirrerSetTemp(vessel=self.vessel, temp=self.temp),
+                    )
         return steps
+
+    def final_sanity_check(self):
+        assert self.steps
+        heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
@@ -148,30 +203,32 @@ class HeatChillToTemp(AbstractStep):
         vessel_type: Optional[str] = None,
         wait_recording_speed: Optional[float] = 'default',
         after_recording_speed: Optional[float] = 'default',
+        heater: Optional[str] = None,
+        chiller: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
         steps = []
-        if self.vessel_type == 'filter':
-            steps = self.get_initial_heatchill_steps() + [
-                CSetRecordingSpeed(self.wait_recording_speed),
-                CChillerWaitForTemp(vessel=self.vessel),
-                CSetRecordingSpeed(self.after_recording_speed),
-            ] + self.get_final_heatchill_steps()
+        if self.vessel_type:
+            steps = self.get_initial_heatchill_steps()
+            if self.vessel_type == 'rotavap':
+                steps += [
+                    Wait(time=DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME),
+                ]
+            else:
+                if self.chiller:
+                    if CHILLER_MIN_TEMP <= self.temp <= CHILLER_MAX_TEMP:
+                        steps += self.get_chiller_steps()
 
-        elif self.vessel_type == 'reactor':
-            steps = self.get_initial_heatchill_steps() + [
-                CSetRecordingSpeed(self.wait_recording_speed),
-                CStirrerWaitForTemp(vessel=self.vessel),
-                CSetRecordingSpeed(self.after_recording_speed),
-            ] + self.get_final_heatchill_steps()
+                    elif self.heater and 18 <= self.temp <= HEATER_MAX_TEMP:
+                        steps += self.get_heater_steps()
 
-        elif self.vessel_type == 'rotavap':
-            steps = self.get_initial_heatchill_steps() + [
-                Wait(time=DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME),
-            ] + self.get_final_heatchill_steps()
+                elif self.heater and 18 <= self.temp <= HEATER_MAX_TEMP:
+                    steps += self.get_heater_steps()
+
+            steps += self.get_final_heatchill_steps()
 
         if self.stir:
             steps.insert(0, StartStir(vessel=self.vessel,
@@ -181,6 +238,23 @@ class HeatChillToTemp(AbstractStep):
             steps.insert(0, StopStir(
                 vessel=self.vessel, vessel_type=self.vessel_type))
         return steps
+
+    def final_sanity_check(self):
+        heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
+
+    def get_chiller_steps(self):
+        return [
+            CSetRecordingSpeed(self.wait_recording_speed),
+            CChillerWaitForTemp(vessel=self.vessel),
+            CSetRecordingSpeed(self.after_recording_speed),
+        ]
+
+    def get_heater_steps(self):
+        return [
+            CSetRecordingSpeed(self.wait_recording_speed),
+            CStirrerWaitForTemp(vessel=self.vessel),
+            CSetRecordingSpeed(self.after_recording_speed),
+        ]
 
     def get_initial_heatchill_steps(self) -> List[Step]:
         if self.active:
@@ -202,7 +276,6 @@ class HeatChillToTemp(AbstractStep):
         # Inactive leaving off, or active leaving on.
         else:
             return []
-
 
     def human_readable(self, language='en') -> str:
         try:
@@ -241,19 +314,26 @@ class StopHeatChill(AbstractStep):
             'ChemputerReactor'.
     """
     def __init__(
-        self, vessel: str, vessel_type: Optional[str] = None, **kwargs) -> None:
+        self,
+        vessel: str,
+        vessel_type: Optional[str] = None,
+        heater: str = None,
+        chiller: str = None,
+        **kwargs
+    ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
         steps = []
-        if self.vessel_type == 'filter':
-            steps = [CStopChiller(self.vessel)]
+        if self.vessel_type:
+            if self.vessel_type == 'rotavap':
+                steps.append(CRotavapStopHeater(self.vessel))
+            else:
+                if self.chiller:
+                    steps.append(CStopChiller(self.vessel))
 
-        elif self.vessel_type == 'reactor':
-            steps = [CStopHeat(self.vessel)]
-
-        elif self.vessel_type == 'rotavap':
-            steps = [CRotavapStopHeater(self.vessel)]
+                if self.heater:
+                    steps.append(CStopHeat(self.vessel))
 
         return steps
 
@@ -289,28 +369,18 @@ class HeatChillReturnToRT(AbstractStep):
         vessel_type: Optional[str] = None,
         wait_recording_speed: Optional[float] = 'default',
         after_recording_speed: Optional[float] = 'default',
-        **kwargs) -> None:
+        **kwargs
+    ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
         steps = []
         if self.vessel_type == 'filter':
-            steps = [
-                CChillerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
-                CStartChiller(vessel=self.vessel),
-                CSetRecordingSpeed(self.wait_recording_speed),
-                CChillerWaitForTemp(vessel=self.vessel),
-                CSetRecordingSpeed(self.after_recording_speed),
-                CStopChiller(self.vessel)
-            ]
+            steps = [ChillerReturnToRT(vessel=self.vessel)]
+
         elif self.vessel_type == 'reactor':
-            steps = [
-                CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
-                CStopHeat(vessel=self.vessel),
-                CSetRecordingSpeed(self.wait_recording_speed),
-                CStirrerWaitForTemp(vessel=self.vessel),
-                CSetRecordingSpeed(self.after_recording_speed),
-            ]
+            steps = [StirrerReturnToRT(vessel=self.vessel)]
+
         elif self.vessel_type == 'rotavap':
             steps = [
                 CRotavapStopHeater(rotavap_name=self.vessel),
@@ -333,3 +403,59 @@ class HeatChillReturnToRT(AbstractStep):
                 'heatchill': True,
             }
         }
+
+class StirrerReturnToRT(AbstractStep):
+    def __init__(
+        self,
+        vessel: str,
+        wait_recording_speed: Optional[float] = 'default',
+        after_recording_speed: Optional[float] = 'default',
+    ):
+        super().__init__(locals())
+
+    def get_steps(self):
+        return [
+            CStirrerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+            CStopHeat(vessel=self.vessel),
+            CSetRecordingSpeed(self.wait_recording_speed),
+            CStirrerWaitForTemp(vessel=self.vessel),
+            CSetRecordingSpeed(self.after_recording_speed),
+        ]
+
+class ChillerReturnToRT(AbstractStep):
+    def __init__(
+        self,
+        vessel: str,
+        vessel_class: str = None,
+        wait_recording_speed: Optional[float] = 'default',
+        after_recording_speed: Optional[float] = 'default',
+    ):
+        super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        self.properties['vessel_class'] = graph.node[self.vessel]['class']
+        self.update()
+
+    def get_steps(self):
+        if self.vessel_class == 'JULABOCF41':
+            return [
+                CChillerSetTemp(vessel=self.vessel, temp=ROOM_TEMPERATURE),
+                CSetCoolingPower(vessel=self.vessel, cooling_power=0),
+                CStartChiller(vessel=self.vessel),
+                CSetRecordingSpeed(self.wait_recording_speed),
+                CChillerWaitForTemp(vessel=self.vessel),
+                CSetRecordingSpeed(self.after_recording_speed),
+                CSetCoolingPower(vessel=self.vessel, cooling_power=100),
+                CStopChiller(self.vessel)
+            ]
+
+        elif self.vessel_class == 'HuberPetiteFleur':
+            return [
+                CRampChiller(
+                    vessel=self.vessel,
+                    ramp_duration='1 hr',
+                    end_temperature=ROOM_TEMPERATURE
+                )
+            ]
+        else:
+            return []

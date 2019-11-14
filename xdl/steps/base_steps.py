@@ -89,6 +89,12 @@ class AbstractStep(Step, ABC):
         for step in self.base_steps:
             step.release_lock(chempiler, locking_pid)
 
+    def final_sanity_check(self):
+        pass
+
+    def on_prepare_for_execution(self, graph):
+        pass
+
     def execute(
         self,
         chempiler: 'Chempiler',
@@ -166,6 +172,12 @@ class AbstractBaseStep(Step, ABC):
 
     def human_readable(self, language='en'):
         return self.__class__.__name__
+
+    def on_prepare_for_execution(self, graph):
+        pass
+
+    def final_sanity_check(self):
+        pass
 
     @abstractmethod
     def execute(self, chempiler: 'Chempiler'):
@@ -336,7 +348,7 @@ class UnimplementedStep(Step):
         super().__init__(param_dict)
         self.steps = []
 
-    def execute(self, chempiler):
+    def execute(self, chempiler, logger=None, level=0):
         raise NotImplementedError(
             f'{self.__class__.__name__} step is unimplemented.')
 

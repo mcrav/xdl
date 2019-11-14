@@ -170,6 +170,12 @@ DEFAULT_PRECIPITATION_TIME = 60 * 60
 #: Default temp in celsius to chill to for precipitation.
 DEFAULT_PRECIPITATION_TEMP = 25
 
+#########################
+### Recrystallization ###
+#########################
+
+DEFAULT_RECRYSTALLIZATION_WAIT_TIME: int = 60 * 60 * 2
+
 ##################
 ### Evacuation ###
 ##################
@@ -277,6 +283,14 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
         'after_recording_speed': DEFAULT_RECORDING_SPEED,
     },
+    'ChillerReturnToRT': {
+        'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
+        'after_recording_speed': DEFAULT_RECORDING_SPEED,
+    },
+    'StirrerReturnToRT': {
+        'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
+        'after_recording_speed': DEFAULT_RECORDING_SPEED,
+    },
     'Dissolve': {
         'time': 20 * 60,
         'temp': 25,
@@ -315,6 +329,9 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'after_inert_gas_wait_time': DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME,
         'after_vacuum_wait_time': DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME,
         'evacuations': DEFAULT_EVACUATE_N_EVACUTIONS,
+    },
+    'Recrystallize': {
+        'time': DEFAULT_RECRYSTALLIZATION_WAIT_TIME,
     }
 }
 
@@ -378,6 +395,17 @@ CHEMPUTER_WASTE_CLASS_NAME: str = 'ChemputerWaste'
 CHEMPUTER_VACUUM_CLASS_NAME: str = 'ChemputerVacuum'
 CHEMPUTER_PUMP_CLASS_NAME: str = 'ChemputerPump'
 CHEMPUTER_VALVE_CLASS_NAME: str = 'ChemputerValve'
+JULABO_CF41_CLASS_NAME: str = 'JULABOCF41'
+HUBER_PETITE_FLEUR_CLASS_NAME: str = 'Huber'
+IKA_RCT_DIGITAL_CLASS_NAME: str = 'IKARCTDigital'
+IKA_RET_CONTROL_VISC: str = 'IKARETControlVisc'
+
+HEATER_CLASSES: List[str] = [IKA_RCT_DIGITAL_CLASS_NAME, IKA_RET_CONTROL_VISC]
+CHILLER_CLASSES: List[str] = [JULABO_CF41_CLASS_NAME, HUBER_PETITE_FLEUR_CLASS_NAME]
+
+CHILLER_MIN_TEMP: int = -40
+CHILLER_MAX_TEMP: int = 110
+HEATER_MAX_TEMP: int = 360
 
 # Filter, separator ports
 BOTTOM_PORT: str = 'bottom'
@@ -385,6 +413,18 @@ TOP_PORT: str = 'top'
 # Rotavap ports
 EVAPORATE_PORT: str = 'evaporate'
 COLLECT_PORT: str = 'collect'
+
+VALID_PORTS: Dict[str, List[str]] = {
+    'ChemputerSeparator': ['top', 'bottom'],
+    'ChemputerReactor': ['0'],
+    'ChemputerFilter': ['top', 'bottom'],
+    'ChemputerPump': ['0'],
+    'IKARV10': ['evaporate', 'collect'],
+    'ChemputerValve': ['-1', '0', '1', '2', '3', '4', '5'],
+    'ChemputerWaste': ['0'],
+    'ChemputerFlask': ['0'],
+    'ChemputerCartridge': ['in', 'out'],
+}
 
 FILTER_DEAD_VOLUME_INERT_GAS_METHOD: str = 'inert_gas'
 FILTER_DEAD_VOLUME_LIQUID_METHOD: str = 'solvent'

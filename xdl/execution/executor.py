@@ -24,7 +24,7 @@ from .graph import (
     vacuum_device_attached_to_flask,
     get_pneumatic_controller,
 )
-from .utils import VesselContents, is_aqueous
+from .utils import VesselContents, is_aqueous, validate_port
 from .cleaning import (
     add_cleaning_steps,
     add_vessel_cleaning_steps,
@@ -146,6 +146,29 @@ class XDLExecutor(object):
                         f'No cartridge present containing {step.through}')
         return True
 
+    def _validate_ports(self, steps=None):
+        if steps is None:
+            steps = self._xdl.steps
+        for step in steps:
+            self._validate_ports_step(step)
+
+    def _validate_ports_step(self, step):
+        for vessel_keyword, port_keyword in [
+            ('from_vessel', 'from_port'),
+            ('to_vessel', 'to_port'),
+            ('vessel', 'port'),
+        ]:
+            if vessel_keyword in step.properties:
+                if port_keyword in step.properties:
+                    if step.properties[port_keyword] != None:
+                        validate_port(
+                            step.properties[vessel_keyword],
+                            self._graph.node[step.properties[vessel_keyword]]['class'],
+                            step.properties[port_keyword]
+                        )
+        if not isinstance(step, AbstractBaseStep):
+            for substep in step.steps:
+                self._validate_ports_step(substep)
 
     ###################################
     ### MAP GRAPH HARDWARE TO STEPS ###
@@ -304,8 +327,23 @@ class XDLExecutor(object):
                     if cartridge.chemical == step.through:
                         step.through_cartridge = cartridge.id
 
+            if 'heater' in step.properties and 'chiller' in step.properties:
+                step.heater, step.chiller = self._find_heater_chiller(
+                    self._graph, step.vessel)
+
             if not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
                 self._add_internal_properties_to_steps(step.steps)
+
+    def _find_heater_chiller(self, graph, node):
+        heater, chiller = None, None
+        neighbors = undirected_neighbors(graph, node)
+        for neighbor in neighbors:
+            print(graph.node[neighbor])
+            if graph.node[neighbor]['class'] in HEATER_CLASSES:
+                heater = neighbor
+            elif graph.node[neighbor]['class'] in CHILLER_CLASSES:
+                chiller = neighbor
+        return heater, chiller
 
     def _map_hardware_to_steps(self) -> None:
         """
@@ -1000,6 +1038,7 @@ class XDLExecutor(object):
             self._graph, CHEMPUTER_VALVE_CLASS_NAME)
 
         self._add_internal_properties(steps=block)
+        self._validate_ports(steps=block)
         # Convert implied properties to concrete values.
         self._optimise_separation_steps(steps=block)
 
@@ -1049,11 +1088,17 @@ class XDLExecutor(object):
                 self._get_hardware_map()
                 self._map_hardware_to_steps()
 
+                self._validate_ports()
+
                 enough_buffer_flasks, n_buffer_required, n_buffer_present = self._check_enough_buffer_flasks()
                 if not enough_buffer_flasks:
                     raise XDLError(f'The procedure requires {n_buffer_required} empty buffer flasks but only {n_buffer_present} are present in the graph.')
 
                 self._add_internal_properties()
+
+                for step in self._xdl.steps:
+                    self.call_on_prepare_for_execution(step)
+
                 # Add in steps implied by explicit steps.
                 self._add_implied_steps(interactive=interactive)
                 # Convert implied properties to concrete values.
@@ -1072,6 +1117,12 @@ class XDLExecutor(object):
             else:
                 self.logger.error(
                     "Hardware is not compatible. Can't execute.")
+
+    def call_on_prepare_for_execution(self, step):
+        step.on_prepare_for_execution(self._graph)
+        for substep in step.steps:
+            self.call_on_prepare_for_execution(substep)
+
 
     def execute(self, chempiler: 'Chempiler') -> None:
         """Execute XDL procedure with given chempiler. The same graph must be

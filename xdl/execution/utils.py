@@ -1,5 +1,7 @@
 from typing import List
 from .constants import AQUEOUS_KEYWORDS
+from ..constants import VALID_PORTS
+from ..utils.errors import IllegalPortError
 
 class VesselContents(object):
     """Convenience class to represents contents of one vessel.
@@ -28,3 +30,9 @@ def is_aqueous(reagent_name):
             if keyword in reagent_name:
                 return True
         return False
+
+def validate_port(vessel, vessel_class, port):
+    try:
+        assert str(port) in VALID_PORTS[vessel_class]
+    except AssertionError as e:
+        raise IllegalPortError(f'{port} is an illegal port for {vessel}. Valid ports: {", ".join(VALID_PORTS[vessel_class])}')

@@ -12,23 +12,27 @@
       id="reactor"
       type="reactor"
     />
+    <Component
+      id="filter2"
+      type="filter"
+    />
   </Hardware>
 
   <Reagents />
 
   <Procedure>
-    <HeatChillToTemp
-      temp="50"
+    <HeatChillReturnToRT
       vessel="filter"
-      active="false" />
-    <HeatChillToTemp
+    />
+    <HeatChillReturnToRT
+      vessel="filter2"
+    />
+    <HeatChillReturnToRT
       vessel="reactor"
-      active="false"
-      temp="50" />
-    <HeatChillToTemp
+    />
+    <HeatChillReturnToRT
       vessel="rotavap"
-      active="false"
-      temp="50" />
+    />
   </Procedure>
 
 </Synthesis>

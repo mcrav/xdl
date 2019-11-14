@@ -20,3 +20,5 @@ from .test_anticlogging_add import *
 from .test_heatchill import *
 from .test_separate import test_separate
 from .test_evacuate import test_evacuate
+from .test_recrystallize import test_recrystallization
+from .test_port_validation import test_port_validation

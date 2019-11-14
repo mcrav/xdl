@@ -46,7 +46,8 @@
       "class": "ChemputerPump",
       "name": "pump_dry",
       "address": "192.168.1.71",
-      "max_volume": 25
+      "max_volume": 25,
+      "current_volume": 0
     },
     {
       "id": "pump_filter",
@@ -58,7 +59,8 @@
       "class": "ChemputerPump",
       "name": "pump_filter",
       "address": "192.168.1.70",
-      "max_volume": 25
+      "max_volume": 25,
+      "current_volume": 0
     },
     {
       "id": "flask_dimethylaniline",
@@ -246,7 +248,8 @@
       "class": "ChemputerPump",
       "name": "pump_organic",
       "address": "192.168.1.72",
-      "max_volume": 25
+      "max_volume": 25,
+      "current_volume": 0
     },
     {
       "id": "waste_organic",
@@ -283,7 +286,8 @@
       "class": "ChemputerPump",
       "name": "pump_separator",
       "address": "192.168.1.73",
-      "max_volume": 25
+      "max_volume": 25,
+      "current_volume": 0
     },
     {
       "id": "flask_separator",
@@ -355,7 +359,8 @@
       "class": "ChemputerPump",
       "name": "pump_base",
       "address": "192.168.1.75",
-      "max_volume": 25
+      "max_volume": 25,
+      "current_volume": 0
     },
     {
       "id": "waste_base",
