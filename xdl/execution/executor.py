@@ -304,8 +304,23 @@ class XDLExecutor(object):
                     if cartridge.chemical == step.through:
                         step.through_cartridge = cartridge.id
 
+            if 'heater' in step.properties and 'chiller' in step.properties:
+                step.heater, step.chiller = self._find_heater_chiller(
+                    self._graph, step.vessel)
+
             if not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
                 self._add_internal_properties_to_steps(step.steps)
+
+    def _find_heater_chiller(self, graph, node):
+        heater, chiller = None, None
+        neighbors = undirected_neighbors(graph, node)
+        for neighbor in neighbors:
+            print(graph.node[neighbor])
+            if graph.node[neighbor]['class'] in HEATER_CLASSES:
+                heater = neighbor
+            elif graph.node[neighbor]['class'] in CHILLER_CLASSES:
+                chiller = neighbor
+        return heater, chiller
 
     def _map_hardware_to_steps(self) -> None:
         """
@@ -1066,7 +1081,7 @@ class XDLExecutor(object):
                 # Optimise procedure.
                 self._tidy_up_procedure()
                 for step in self._xdl.steps:
-                    step.on_prepare_for_execution(self._graph)
+                    self.call_on_prepare_for_execution(step)
 
                 self._print_warnings()
                 self._prepared_for_execution = True
@@ -1074,6 +1089,12 @@ class XDLExecutor(object):
             else:
                 self.logger.error(
                     "Hardware is not compatible. Can't execute.")
+
+    def call_on_prepare_for_execution(self, step):
+        step.on_prepare_for_execution(self._graph)
+        for substep in step.steps:
+            self.call_on_prepare_for_execution(substep)
+
 
     def execute(self, chempiler: 'Chempiler') -> None:
         """Execute XDL procedure with given chempiler. The same graph must be
