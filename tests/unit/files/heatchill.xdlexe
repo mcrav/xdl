@@ -20,10 +20,10 @@
 
   <Procedure>
     <CSetStirRate
-      vessel="reactor"
+      vessel="filter"
       stir_speed="250" />
     <CSetStirRate
-      vessel="filter"
+      vessel="reactor"
       stir_speed="250" />
     <CConnect
       from_vessel="flask_nitrogen"

@@ -23,13 +23,13 @@
 
   <Procedure>
     <CSetStirRate
-      vessel="reactor"
-      stir_speed="250" />
-    <CSetStirRate
       vessel="filter1"
       stir_speed="250" />
     <CSetStirRate
       vessel="filter2"
+      stir_speed="250" />
+    <CSetStirRate
+      vessel="reactor"
       stir_speed="250" />
     <CConnect
       from_vessel="flask_nitrogen"

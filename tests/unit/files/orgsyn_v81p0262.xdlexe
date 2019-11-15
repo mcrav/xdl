@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="ab7bb75738688728ece9e5044b7bef19dfd70ced8c71994b0da7ee46e9178968"
+  graph_sha256="df001ada13e1f9b630268723b0bd8856f60c310daf00fa749d38f5176847c3ad"
 >
   <Hardware>
     <Component
@@ -30,10 +30,10 @@
 
   <Procedure>
     <CSetStirRate
-      vessel="reactor"
+      vessel="filter"
       stir_speed="250" />
     <CSetStirRate
-      vessel="filter"
+      vessel="reactor"
       stir_speed="250" />
     <CleanBackbone
       solvent="toluene"

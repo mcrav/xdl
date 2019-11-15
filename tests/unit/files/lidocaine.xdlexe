@@ -35,10 +35,10 @@
 
   <Procedure>
     <CSetStirRate
-      vessel="filter1"
+      vessel="flask_separator"
       stir_speed="250" />
     <CSetStirRate
-      vessel="flask_separator"
+      vessel="filter1"
       stir_speed="250" />
     <CleanBackbone
       solvent="glacial acetic acid"

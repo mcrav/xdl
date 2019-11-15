@@ -1152,12 +1152,16 @@ class XDLExecutor(object):
         # Generate file in user data dir using hash of execution script
         # as file name.
         if not save_path:
-            exescript_hash = hashlib.sha256(
-                bytes(exescript, encoding='utf-8')).hexdigest()
-            self.exe_save_path = os.path.join(
-                appdirs.user_data_dir('xdl', 'croninlab'),
-                f'{exescript_hash}.xdlexe'
-            )
+            try:
+                save_folder = appdirs.user_data_dir('xdl', 'croninlab')
+                exescript_hash = hashlib.sha256(
+                    bytes(exescript, encoding='utf-8')).hexdigest()
+                self.exe_save_path = os.path.join(
+                    save_folder,
+                    f'{exescript_hash}.xdlexe'
+                )
+            except FileNotFoundError:
+                self.logger.warning(f'Unable to save execution script in {save_folder}.')
 
         # Save execution script file path for later
         else: self.exe_save_path = save_path

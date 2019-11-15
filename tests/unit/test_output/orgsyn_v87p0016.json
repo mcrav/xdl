@@ -461,10 +461,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "saturated NaCl solution",
-      "name": "flask_saturated NaCl solution",
-      "label": "flask_saturated NaCl solution",
-      "id": "flask_saturated NaCl solution",
+      "chemical": "methanol",
+      "name": "flask_methanol",
+      "label": "flask_methanol",
+      "id": "flask_methanol",
       "internalId": 7
     },
     {
@@ -474,10 +474,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "water",
-      "name": "flask_water",
-      "label": "flask_water",
-      "id": "flask_water",
+      "chemical": "saturated NaCl solution",
+      "name": "flask_saturated NaCl solution",
+      "label": "flask_saturated NaCl solution",
+      "id": "flask_saturated NaCl solution",
       "internalId": 8
     },
     {
@@ -487,10 +487,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "MTBE",
-      "name": "flask_MTBE",
-      "label": "flask_MTBE",
-      "id": "flask_MTBE",
+      "chemical": "water",
+      "name": "flask_water",
+      "label": "flask_water",
+      "id": "flask_water",
       "internalId": 9
     },
     {
@@ -500,10 +500,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "methanol",
-      "name": "flask_methanol",
-      "label": "flask_methanol",
-      "id": "flask_methanol",
+      "chemical": "MTBE",
+      "name": "flask_MTBE",
+      "label": "flask_MTBE",
+      "id": "flask_MTBE",
       "internalId": 21
     },
     {
@@ -1079,7 +1079,7 @@
     },
     {
       "port": "(0,4)",
-      "source": "flask_saturated NaCl solution",
+      "source": "flask_methanol",
       "target": "valve_Z",
       "sourceInternal": 7,
       "targetInternal": 13,
@@ -1088,7 +1088,7 @@
     },
     {
       "port": "(0,5)",
-      "source": "flask_water",
+      "source": "flask_saturated NaCl solution",
       "target": "valve_Z",
       "sourceInternal": 8,
       "targetInternal": 13,
@@ -1097,7 +1097,7 @@
     },
     {
       "port": "(0,5)",
-      "source": "flask_MTBE",
+      "source": "flask_water",
       "target": "valve_H",
       "sourceInternal": 9,
       "targetInternal": 16,
@@ -1106,7 +1106,7 @@
     },
     {
       "port": "(0,4)",
-      "source": "flask_methanol",
+      "source": "flask_MTBE",
       "target": "valve_G",
       "sourceInternal": 21,
       "targetInternal": 19,
