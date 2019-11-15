@@ -100,9 +100,15 @@ class Evaporate(AbstractStep):
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
+        if self.temp and self.temp > 25: heatchill = True
+        else: heatchill = False
+        temps = []
+        if self.temp: temps = [self.temp]
         return {
             'rotavap_name': {
                 'rotavap': True,
+                'heatchill': heatchill,
+                'temp': temps,
             }
         }
 

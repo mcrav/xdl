@@ -189,6 +189,14 @@ DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME: float = 60
 #: Time to wait for during Evacuate after vessel is connected to vacuum.
 DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME: float = 60
 
+#########################
+### Recrystallization ###
+#########################
+
+DEFAULT_RECRYSTALLIZE_WAIT_TIME = 60 * 120
+
+DEFAULT_RECRYSTALLIZE_TEMP = 25
+
 ###########
 ## Video ##
 ###########
@@ -331,7 +339,8 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'evacuations': DEFAULT_EVACUATE_N_EVACUTIONS,
     },
     'Recrystallize': {
-        'time': DEFAULT_RECRYSTALLIZATION_WAIT_TIME,
+        'time': DEFAULT_RECRYSTALLIZE_WAIT_TIME,
+        'crystallize_temp': DEFAULT_RECRYSTALLIZE_TEMP,
     }
 }
 
@@ -414,16 +423,17 @@ TOP_PORT: str = 'top'
 EVAPORATE_PORT: str = 'evaporate'
 COLLECT_PORT: str = 'collect'
 
-VALID_PORTS: Dict[str, List[str]] = {
-    'ChemputerSeparator': ['top', 'bottom'],
+VALID_PORTS = {
     'ChemputerReactor': ['0'],
+    'ChemputerSeparator': ['top', 'bottom'],
     'ChemputerFilter': ['top', 'bottom'],
-    'ChemputerPump': ['0'],
     'IKARV10': ['evaporate', 'collect'],
     'ChemputerValve': ['-1', '0', '1', '2', '3', '4', '5'],
+    'ChemputerPump': ['0'],
     'ChemputerWaste': ['0'],
     'ChemputerFlask': ['0'],
     'ChemputerCartridge': ['in', 'out'],
+    'ChemputerVacuum': ['0'],
 }
 
 FILTER_DEAD_VOLUME_INERT_GAS_METHOD: str = 'inert_gas'
@@ -433,6 +443,9 @@ FILTER_DEAD_VOLUME_LIQUID_METHOD: str = 'solvent'
 ############
 ### MISC ###
 ############
+
+#: Chemicals that will be recognised as inert gas.
+INERT_GAS_SYNONYMS: List[str] = ['nitrogen', 'n2', 'ar', 'argon']
 
 #: Default duration for base steps when the command is basically instantaneous
 DEFAULT_INSTANT_DURATION = 1 # s

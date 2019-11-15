@@ -8,6 +8,7 @@ from ...utils.misc import get_port_str, format_property
 from ...constants import (
     DEFAULT_AFTER_ADD_WAIT_TIME,
     DEFAULT_AIR_FLUSH_TUBE_VOLUME,
+    BOTTOM_PORT,
     TOP_PORT,
     BOTTOM_PORT,
     EVAPORATE_PORT

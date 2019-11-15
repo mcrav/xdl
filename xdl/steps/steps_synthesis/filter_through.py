@@ -73,7 +73,7 @@ class FilterThrough(AbstractStep):
 
         steps = [self.get_initial_filter_through_step(filter_through_to_vessel)]
 
-        if self.eluting_solvent:
+        if self.eluting_solvent and self.eluting_volume:
             for _ in range(self.eluting_repeats):
                 # Done like this so if 1 l is being added to 250 mL flask, it is
                 # added in portions.

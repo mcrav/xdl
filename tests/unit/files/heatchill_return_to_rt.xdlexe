@@ -1,4 +1,4 @@
-<?xdl version="0.1.13" ?>
+<?xdl version="0.2.0" ?>
 
 <Synthesis
   graph_sha256="52720a6f7d28233dcf34ae1ee30f2bd9ec318ffbfdef790be9e992824dd2d1eb"
@@ -26,10 +26,10 @@
       vessel="reactor"
       stir_speed="250" />
     <CSetStirRate
-      vessel="filter2"
+      vessel="filter1"
       stir_speed="250" />
     <CSetStirRate
-      vessel="filter1"
+      vessel="filter2"
       stir_speed="250" />
     <CConnect
       from_vessel="flask_nitrogen"

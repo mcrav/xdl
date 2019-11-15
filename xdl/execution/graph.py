@@ -41,6 +41,11 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
         graph = json_graph.node_link_graph(
             graph_file, directed=True, multigraph=True)
         raw_graph = copy.deepcopy(graph)
+
+    elif type(graph_file) == MultiDiGraph:
+        graph = graph_file
+        raw_graph = copy.deepcopy(graph)
+
     for edge in graph.edges:
         if 'port' in graph.edges[edge]:
             port_str = graph.edges[edge]['port']

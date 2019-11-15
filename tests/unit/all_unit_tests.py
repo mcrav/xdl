@@ -23,3 +23,6 @@ from .test_evacuate import test_evacuate
 from .test_recrystallize import test_recrystallization
 from .test_xdlexe import test_xdlexe, test_xdlexe_execute_wrong_graph
 from .test_port_validation import test_port_validation
+from .test_get_graph_spec import test_get_graph_spec
+from .test_check_graph_spec import test_check_template, test_check_graph_spec
+from .test_graphgen import test_graphgen

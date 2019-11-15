@@ -208,6 +208,7 @@ class HeatChillToTemp(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+        assert temp != None
 
     def get_steps(self) -> List[Step]:
         steps = []

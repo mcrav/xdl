@@ -167,7 +167,6 @@ COMMON_SOLVENT_NAMES = [
 ]
 COMMON_SOLVENT_NAMES.extend(
     [f'anhydrous {name}' for name in COMMON_SOLVENT_NAMES])
-INERT_GAS_SYNONYMS: List[str] = ['nitrogen', 'n2', 'ar', 'argon']
 
 SOLVENT_BOILING_POINTS = {
     'acetic acid': 118,
