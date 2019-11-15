@@ -448,10 +448,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "saturated sodium bicarbonate solution",
-      "name": "flask_saturated sodium bicarbonate solution",
-      "label": "flask_saturated sodium bicarbonate solution",
-      "id": "flask_saturated sodium bicarbonate solution",
+      "chemical": "hexane",
+      "name": "flask_hexane",
+      "label": "flask_hexane",
+      "id": "flask_hexane",
       "internalId": 4
     },
     {
@@ -461,10 +461,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "triethylamine",
-      "name": "flask_triethylamine",
-      "label": "flask_triethylamine",
-      "id": "flask_triethylamine",
+      "chemical": "saturated sodium bicarbonate solution",
+      "name": "flask_saturated sodium bicarbonate solution",
+      "label": "flask_saturated sodium bicarbonate solution",
+      "id": "flask_saturated sodium bicarbonate solution",
       "internalId": 7
     },
     {
@@ -474,10 +474,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "hexane",
-      "name": "flask_hexane",
-      "label": "flask_hexane",
-      "id": "flask_hexane",
+      "chemical": "triethylamine",
+      "name": "flask_triethylamine",
+      "label": "flask_triethylamine",
+      "id": "flask_triethylamine",
       "internalId": 8
     },
     {
@@ -1103,7 +1103,7 @@
     },
     {
       "port": "(0,2)",
-      "source": "flask_saturated sodium bicarbonate solution",
+      "source": "flask_hexane",
       "target": "valve_Z",
       "sourceInternal": 4,
       "targetInternal": 13,
@@ -1112,7 +1112,7 @@
     },
     {
       "port": "(0,4)",
-      "source": "flask_triethylamine",
+      "source": "flask_saturated sodium bicarbonate solution",
       "target": "valve_Z",
       "sourceInternal": 7,
       "targetInternal": 13,
@@ -1121,7 +1121,7 @@
     },
     {
       "port": "(0,5)",
-      "source": "flask_hexane",
+      "source": "flask_triethylamine",
       "target": "valve_Z",
       "sourceInternal": 8,
       "targetInternal": 13,
