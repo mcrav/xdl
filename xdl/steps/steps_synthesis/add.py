@@ -9,6 +9,7 @@ from ...constants import (
     DEFAULT_AFTER_ADD_WAIT_TIME,
     DEFAULT_AIR_FLUSH_TUBE_VOLUME,
     TOP_PORT,
+    BOTTOM_PORT,
     EVAPORATE_PORT
 )
 from ...localisation import HUMAN_READABLE_STEPS
@@ -207,7 +208,7 @@ class Add(AbstractStep):
         elif self.vessel_type == 'filter':
             return TOP_PORT
         elif self.vessel_type == 'separator':
-            return TOP_PORT
+            return BOTTOM_PORT
         elif self.vessel_type == 'rotavap':
             return EVAPORATE_PORT
         return None
