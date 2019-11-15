@@ -1,4 +1,4 @@
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Union
 from ..utils import get_vacuum_valve_reconnect_steps
 from ..base_steps import Step, AbstractStep
 from ..steps_base import CMove, CConnect, CVentVacuum
@@ -49,7 +49,7 @@ class Filter(AbstractStep):
         vacuum_device: Optional[str] = None,
         inert_gas: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
-        valve_unused_port: Optional[str] = None,
+        valve_unused_port: Optional[Union[str, int]] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())

@@ -1,10 +1,14 @@
 import statistics
 import copy
 import logging
+import hashlib
+import os
+import appdirs
 from typing import List, Union, Tuple
 
 from networkx import MultiDiGraph
 from networkx.algorithms.shortest_paths.generic import shortest_path_length
+from networkx.readwrite import node_link_data
 if False:
     from ..xdl import XDL
     from chempiler import Chempiler
@@ -14,6 +18,7 @@ from ..utils.namespace import BASE_STEP_OBJ_DICT
 from ..utils.errors import raise_error
 from ..steps import *
 from ..reagents import Reagent
+from ..readwrite import XDLGenerator
 from .tracking import iter_vessel_contents
 from .graph import (
     hardware_from_graph,
@@ -1025,7 +1030,7 @@ class XDLExecutor(object):
                                            as JSON file.
         """
         if not type(graph_file) == MultiDiGraph:
-            self._graph = get_graph(graph_file)
+            self._graph, self._raw_graph = get_graph(graph_file)
         else:
             self._graph = graph_file
         self._graph_hardware = hardware_from_graph(self._graph)
@@ -1048,7 +1053,11 @@ class XDLExecutor(object):
         self._print_warnings()
 
     def prepare_for_execution(
-        self, graph_file: Union[str, Dict], interactive=True) -> None:
+        self,
+        graph_file: Union[str, Dict],
+        interactive: bool = True,
+        save_path: str = ''
+    ) -> None:
         """
         Prepare the XDL for execution on a Chemputer corresponding to the given
         graph. Any one of graphml_file, json_data, or json_file must be given.
@@ -1060,10 +1069,9 @@ class XDLExecutor(object):
                                         as JSON file.
         """
         if not self._prepared_for_execution:
-            # Check XDL is not empty.
-            self.logger.info('XDL is valid')
+            self._xdl.original_steps = copy.deepcopy(self._xdl.steps)
 
-            self._graph = get_graph(graph_file)
+            self._graph, self._raw_graph = get_graph(graph_file)
             # Load graph, make Hardware object from graph, and map nearest
             # waste vessels to every node.
             self._graph_hardware = hardware_from_graph(self._graph)
@@ -1113,16 +1121,55 @@ class XDLExecutor(object):
 
                 self._print_warnings()
                 self._prepared_for_execution = True
+                self.save_execution_script(save_path)
 
             else:
                 self.logger.error(
                     "Hardware is not compatible. Can't execute.")
 
+    def _graph_hash(self, graph=None):
+        """Get SHA 256 hash of graph."""
+        if not graph: graph = self._raw_graph
+        return hashlib.sha256(
+            str(node_link_data(graph)).encode('utf-8')
+        ).hexdigest()
+
+    def save_execution_script(self, save_path: str = '') -> None:
+        """Generate and save execution script. Called at the end of
+        prepare_for_execution.
+        """
+        # Generate execution script
+
+        exescript = XDLGenerator(
+            self._xdl.steps,
+            self._xdl.hardware,
+            self._xdl.reagents,
+            graph_hash=self._graph_hash(),
+            full_properties=True,
+            full_tree=True
+        ).as_string()
+
+        # Generate file in user data dir using hash of execution script
+        # as file name.
+        if not save_path:
+            exescript_hash = hashlib.sha256(
+                bytes(exescript, encoding='utf-8')).hexdigest()
+            self.exe_save_path = os.path.join(
+                appdirs.user_data_dir('xdl', 'croninlab'),
+                f'{exescript_hash}.xdlexe'
+            )
+
+        # Save execution script file path for later
+        else: self.exe_save_path = save_path
+
+        # Save execution script
+        with open(self.exe_save_path, 'w')  as fd:
+            fd.write(exescript)
+
     def call_on_prepare_for_execution(self, step):
         step.on_prepare_for_execution(self._graph)
         for substep in step.steps:
             self.call_on_prepare_for_execution(substep)
-
 
     def execute(self, chempiler: 'Chempiler') -> None:
         """Execute XDL procedure with given chempiler. The same graph must be
@@ -1132,6 +1179,12 @@ class XDLExecutor(object):
             chempiler (chempiler.Chempiler): Chempiler object to execute XDL
                                              with.
         """
+        if hasattr(self._xdl, 'graph_sha256'):
+            if self._xdl.graph_sha256 == self._graph_hash(chempiler.graph.raw_graph):
+                self.logger.info('Executing xdlexe, graph hashes match.')
+                self._prepared_for_execution = True
+            else:
+                raise XDLError('Trying to execute xdlexe on different graph than it was made with.')
         if self._prepared_for_execution:
             self._xdl.print_full_xdl_tree()
             self._xdl.log_human_readable()

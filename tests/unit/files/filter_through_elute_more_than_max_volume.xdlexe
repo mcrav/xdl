@@ -1,0 +1,1936 @@
+<?xdl version="0.1.13" ?>
+
+<Synthesis
+  graph_sha256="84ace9b5cd92a420573b2efa6fdf8a213b60f686040cb91b379ca2dc670df556"
+>
+  <Hardware>
+    <Component
+      id="rotavap"
+      type="rotavap" />
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="NaCl" />
+    <Reagent
+      id="water" />
+  </Reagents>
+
+  <Procedure>
+    <CConnect
+      from_vessel="flask_nitrogen"
+      to_vessel="filter"
+      from_port="None"
+      to_port="bottom"
+      unique="True" />
+    <FilterThrough
+      from_vessel="reactor"
+      to_vessel="rotavap"
+      through="celite"
+      eluting_solvent="ether"
+      eluting_volume="1000 mL"
+      eluting_repeats="1"
+      move_speed="5"
+      aspiration_speed="5"
+      eluting_solvent_vessel="flask_ether"
+      flush_cartridge_vessel="flask_nitrogen"
+      through_cartridge="cartridge_celite"
+      cartridge_dead_volume="25 mL"
+      buffer_flask="None"
+      buffer_flask_max_volume="None"
+      to_vessel_max_volume="100 mL">
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="all"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_nitrogen"
+        to_vessel="rotavap"
+        volume="25 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_nitrogen"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+    </FilterThrough>
+    <FilterThrough
+      from_vessel="reactor"
+      to_vessel="rotavap"
+      through="celite"
+      eluting_solvent="ether"
+      eluting_volume="1000 mL"
+      eluting_repeats="2"
+      move_speed="5"
+      aspiration_speed="5"
+      eluting_solvent_vessel="flask_ether"
+      flush_cartridge_vessel="flask_nitrogen"
+      through_cartridge="cartridge_celite"
+      cartridge_dead_volume="25 mL"
+      buffer_flask="None"
+      buffer_flask_max_volume="None"
+      to_vessel_max_volume="100 mL">
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="all"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="100 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_nitrogen"
+        to_vessel="rotavap"
+        volume="25 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_nitrogen"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+    </FilterThrough>
+    <FilterThrough
+      from_vessel="reactor"
+      to_vessel="rotavap"
+      through="celite"
+      eluting_solvent="ether"
+      eluting_volume="25 mL"
+      eluting_repeats="3"
+      move_speed="5"
+      aspiration_speed="5"
+      eluting_solvent_vessel="flask_ether"
+      flush_cartridge_vessel="flask_nitrogen"
+      through_cartridge="cartridge_celite"
+      cartridge_dead_volume="25 mL"
+      buffer_flask="None"
+      buffer_flask_max_volume="None"
+      to_vessel_max_volume="100 mL">
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="all"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="25 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="25 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="25 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="25 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="25 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="25 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="25 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="25 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="25 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_nitrogen"
+        to_vessel="rotavap"
+        volume="25 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_nitrogen"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+    </FilterThrough>
+    <FilterThrough
+      from_vessel="reactor"
+      to_vessel="rotavap"
+      through="celite"
+      eluting_solvent="ether"
+      eluting_volume="50 mL"
+      eluting_repeats="3"
+      move_speed="5"
+      aspiration_speed="5"
+      eluting_solvent_vessel="flask_ether"
+      flush_cartridge_vessel="flask_nitrogen"
+      through_cartridge="cartridge_celite"
+      cartridge_dead_volume="25 mL"
+      buffer_flask="None"
+      buffer_flask_max_volume="None"
+      to_vessel_max_volume="100 mL">
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="all"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="50 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="50 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="50 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="50 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="50 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="50 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="50 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="50 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_ether"
+        to_vessel="reactor"
+        volume="50 mL"
+        from_port="None"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="reactor"
+          volume="50 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+      <Transfer
+        from_vessel="reactor"
+        to_vessel="rotavap"
+        volume="50 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="reactor"
+          to_vessel="rotavap"
+          volume="50 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+      <Transfer
+        from_vessel="flask_nitrogen"
+        to_vessel="rotavap"
+        volume="25 mL"
+        from_port="None"
+        to_port="None"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40">
+        <CMove
+          from_vessel="flask_nitrogen"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="cartridge_celite" />
+      </Transfer>
+    </FilterThrough>
+  </Procedure>
+
+</Synthesis>

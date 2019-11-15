@@ -1,0 +1,224 @@
+<?xdl version="0.1.13" ?>
+
+<Synthesis
+  graph_sha256="84ace9b5cd92a420573b2efa6fdf8a213b60f686040cb91b379ca2dc670df556"
+>
+  <Hardware>
+    <Component
+      id="reactor"
+      type="reactor" />
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="NaCl" />
+  </Reagents>
+
+  <Procedure>
+    <CleanBackbone
+      solvent="ether"
+      waste_vessels="waste_rotavap waste_reactor waste_filter waste_separator"
+      solvent_vessel="flask_ether">
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_rotavap"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_reactor"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_filter"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_separator"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+    </CleanBackbone>
+    <CConnect
+      from_vessel="flask_nitrogen"
+      to_vessel="filter"
+      from_port="None"
+      to_port="bottom"
+      unique="True" />
+    <Add
+      reagent="NaCl"
+      vessel="reactor"
+      volume="None"
+      mass="5 g"
+      port="0"
+      through="None"
+      move_speed="40"
+      aspiration_speed="10"
+      dispense_speed="40"
+      time="None"
+      stir="False"
+      stir_speed="250"
+      anticlogging="False"
+      anticlogging_solvent="None"
+      anticlogging_solvent_volume="2 mL"
+      anticlogging_reagent_volume="10 mL"
+      anticlogging_solvent_vessel="None"
+      reagent_vessel="None"
+      waste_vessel="waste_reactor"
+      flush_tube_vessel="flask_nitrogen"
+      vessel_type="reactor">
+      <Confirm
+        msg="Is NaCl (5.0 g) in reactor?" />
+    </Add>
+    <Dry
+      vessel="filter"
+      time="2 hrs"
+      temp="None"
+      waste_vessel="waste_filter"
+      aspiration_speed="5"
+      vacuum="vacuum_flask"
+      vacuum_device="vacuum_device"
+      vacuum_pressure="600 mbar"
+      inert_gas="flask_nitrogen"
+      vacuum_valve="valve_vacuum"
+      valve_unused_port="2"
+      vessel_type="filter"
+      vessel_has_stirrer="True">
+      <StopStir
+        vessel="filter"
+        vessel_type="filter"
+        vessel_has_stirrer="True">
+        <CStopStir
+          vessel="filter" />
+      </StopStir>
+      <CMove
+        from_vessel="filter"
+        to_vessel="waste_filter"
+        volume="5 mL"
+        move_speed="40"
+        aspiration_speed="5"
+        dispense_speed="40"
+        from_port="bottom"
+        to_port="None"
+        unique="False"
+        through="" />
+      <StartVacuum
+        vessel="vacuum_flask"
+        pressure="600 mbar">
+        <CSetVacuumSetPoint
+          vessel="vacuum_flask"
+          vacuum_pressure="600 mbar" />
+        <CStartVacuum
+          vessel="vacuum_flask" />
+      </StartVacuum>
+      <CConnect
+        from_vessel="filter"
+        to_vessel="vacuum_flask"
+        from_port="bottom"
+        to_port="None"
+        unique="True" />
+      <Wait
+        time="2 hrs"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="2 hrs" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <CConnect
+        from_vessel="flask_nitrogen"
+        to_vessel="filter"
+        from_port="None"
+        to_port="None"
+        unique="True" />
+      <StopVacuum
+        vessel="vacuum_flask">
+        <CStopVacuum
+          vessel="vacuum_flask" />
+      </StopVacuum>
+      <CVentVacuum
+        vessel="vacuum_flask" />
+      <CSetVacuumSetPoint
+        vessel="vacuum_flask"
+        vacuum_pressure="400 mbar" />
+    </Dry>
+    <CleanBackbone
+      solvent="ether"
+      waste_vessels="waste_rotavap waste_reactor waste_filter waste_separator"
+      solvent_vessel="flask_ether">
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_rotavap"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_reactor"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_filter"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_separator"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+    </CleanBackbone>
+  </Procedure>
+
+</Synthesis>

@@ -475,6 +475,11 @@ SYNTHESIS_ATTRS = [
         'type': str,
         'default': None,
     },
+    {
+        'name': 'graph_sha256',
+        'type': str,
+        'default': '',
+    }
 ]
 
 #: Steps for which the volume shouldn't be scaled if XDL.scale_procedure is

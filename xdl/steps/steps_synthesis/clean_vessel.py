@@ -15,7 +15,7 @@ class CleanVessel(AbstractStep):
         stir_speed: Optional[float] = 'default',
         temp: Optional[float] = None,
         volume: Optional[float] = None,
-        cleans: Optional[float] = 2,
+        cleans: Optional[int] = 2,
         solvent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
         **kwargs

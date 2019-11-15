@@ -1,4 +1,4 @@
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Union
 from ..utils import get_vacuum_valve_reconnect_steps
 from ..base_steps import Step, AbstractStep
 from ..steps_utility import (
@@ -50,7 +50,7 @@ class Dry(AbstractStep):
         vacuum_pressure: Optional[float] = 'default',
         inert_gas: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
-        valve_unused_port: Optional[str] = None,
+        valve_unused_port: Optional[Union[str, int]] = None,
         vessel_type: Optional[str] = None,
         vessel_has_stirrer: Optional[bool] = True,
         **kwargs
@@ -105,7 +105,7 @@ class Dry(AbstractStep):
             steps.insert(0, HeatChillToTemp(
                 vessel=self.vessel,
                 temp=self.temp,
-                vessel_type='filter',
+                vessel_type=self.vessel_type,
                 stir=False))
 
         if self.vessel_type not in ['rotavap', 'reactor']:

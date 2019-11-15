@@ -1,4 +1,4 @@
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Union
 
 from ..utils import get_vacuum_valve_reconnect_steps
 from ..base_steps import AbstractStep, Step
@@ -33,7 +33,7 @@ class AddFilterDeadVolume(AbstractStep):
         vacuum: Optional[str] = None,
         inert_gas: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
-        valve_unused_port: Optional[str] = None,
+        valve_unused_port: Optional[Union[str, int]] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -81,7 +81,7 @@ class RemoveFilterDeadVolume(AbstractStep):
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
-        valve_unused_port: Optional[str] = None,
+        valve_unused_port: Optional[Union[str, int]] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())

@@ -46,16 +46,22 @@ class Hardware(object):
         for component in self.components:
             if component.component_type in REACTOR_TYPES:
                 self.reactors.append(component)
+
             elif component.component_type in SEPARATOR_TYPES:
                 self.separators.append(component)
+
             elif component.component_type in FILTER_TYPES:
                 self.filters.append(component)
+
             elif component.component_type in FLASK_TYPES:
                 self.flasks.append(component)
+
             elif component.component_type in WASTE_TYPES:
                 self.wastes.append(component)
+
             elif component.component_type in ROTAVAP_TYPES:
                 self.rotavaps.append(component)
+
             elif component.component_type in CARTRIDGE_TYPES:
                 self.cartridges.append(component)
         self.waste_xids = [waste.id for waste in self.wastes]

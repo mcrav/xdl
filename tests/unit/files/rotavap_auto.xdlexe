@@ -1,0 +1,125 @@
+<?xdl version="0.1.13" ?>
+
+<Synthesis
+  graph_sha256="84ace9b5cd92a420573b2efa6fdf8a213b60f686040cb91b379ca2dc670df556"
+>
+  <Hardware>
+    <Component
+      id="rotavap"
+      type="rotavap" />
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="NaCl" />
+    <Reagent
+      id="water" />
+  </Reagents>
+
+  <Procedure>
+    <CConnect
+      from_vessel="flask_nitrogen"
+      to_vessel="filter"
+      from_port="None"
+      to_port="bottom"
+      unique="True" />
+    <Add
+      reagent="water"
+      vessel="rotavap"
+      volume="None"
+      mass="500 g"
+      port="None"
+      through="None"
+      move_speed="40"
+      aspiration_speed="10"
+      dispense_speed="40"
+      time="None"
+      stir="False"
+      stir_speed="250"
+      anticlogging="False"
+      anticlogging_solvent="None"
+      anticlogging_solvent_volume="2 mL"
+      anticlogging_reagent_volume="10 mL"
+      anticlogging_solvent_vessel="None"
+      reagent_vessel="flask_water"
+      waste_vessel="waste_rotavap"
+      flush_tube_vessel="flask_nitrogen"
+      vessel_type="rotavap">
+      <Confirm
+        msg="Is water (500.0 g) in rotavap?" />
+    </Add>
+    <Evaporate
+      rotavap_name="rotavap"
+      temp="40°C"
+      pressure="None"
+      time="30 mins"
+      rotation_speed="150"
+      mode="auto"
+      waste_vessel="waste_rotavap"
+      collection_flask_volume="50 mL">
+      <RotavapStartRotation
+        rotavap_name="rotavap"
+        rotation_speed="150">
+        <CRotavapSetRotationSpeed
+          rotavap_name="rotavap"
+          rotation_speed="150" />
+        <CRotavapStartRotation
+          rotavap_name="rotavap" />
+      </RotavapStartRotation>
+      <CRotavapLiftDown
+        rotavap_name="rotavap" />
+      <RotavapHeatToTemp
+        rotavap_name="rotavap"
+        temp="40°C">
+        <CRotavapSetTemp
+          rotavap_name="rotavap"
+          temp="40°C" />
+        <CRotavapStartHeater
+          rotavap_name="rotavap" />
+      </RotavapHeatToTemp>
+      <CRotavapAutoEvaporation
+        rotavap_name="rotavap"
+        sensitivity="2"
+        vacuum_limit="1"
+        time_limit="30 mins"
+        vent_after="True" />
+      <RotavapStopEverything
+        rotavap_name="rotavap">
+        <CStopVacuum
+          vessel="rotavap" />
+        <CRotavapLiftUp
+          rotavap_name="rotavap" />
+        <CVentVacuum
+          vessel="rotavap" />
+        <CRotavapStopHeater
+          rotavap_name="rotavap" />
+        <CRotavapStopRotation
+          rotavap_name="rotavap" />
+      </RotavapStopEverything>
+      <Transfer
+        from_vessel="rotavap"
+        to_vessel="waste_rotavap"
+        volume="50 mL"
+        from_port="collect"
+        to_port="None"
+        through="None"
+        time="None"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40">
+        <CMove
+          from_vessel="rotavap"
+          to_vessel="waste_rotavap"
+          volume="50 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="collect"
+          to_port="None"
+          unique="False"
+          through="None" />
+      </Transfer>
+    </Evaporate>
+  </Procedure>
+
+</Synthesis>
