@@ -27,7 +27,7 @@
       wait_time="2 mins"
       aspiration_speed="5"
       stir="False"
-      stir_speed="500"
+      stir_speed="500 RPM"
       waste_vessel="waste_filter"
       filtrate_vessel="None"
       vacuum="vacuum_flask"

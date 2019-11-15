@@ -1,16 +1,20 @@
-from .execution import XDLExecutor
+from .execution.chemputer import XDLExecutor
 import inspect
 import re
-from .steps import steps_synthesis
-from .steps import steps_utility
-from .steps import steps_base
+from .steps.chemputer import steps_synthesis
+from .steps.chemputer import steps_utility
+from .steps.chemputer import steps_base
 from .steps import Step, AbstractStep, AbstractBaseStep, AbstractAsyncStep, AbstractDynamicStep
+from .utils.errors import XDLError
 
-def make_xdl_controller():
+def make_xdl_controller(platform='chemputer'):
     """Generates XDLController class. This is a class that has methods corresponding
     to all the XDL steps,
     e.g. xdl_controller.add(reagent='water', vessel='reactor', volume='10 mL')
     """
+    if platform != 'chemputer':
+        raise XDLError('XDLController only supported for Chemputer.')
+
     class_name = 'XDLController'
     superclasses = ()
     attributes_dict = {

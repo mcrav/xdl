@@ -17,7 +17,7 @@
   <Procedure>
     <CSetStirRate
       vessel="filter"
-      stir_speed="250" />
+      stir_speed="250 RPM" />
     <CConnect
       from_vessel="flask_nitrogen"
       to_vessel="filter"
@@ -30,7 +30,7 @@
       wait_time="2 mins"
       aspiration_speed="5"
       stir="True"
-      stir_speed="565.0"
+      stir_speed="565.0 RPM"
       waste_vessel="waste_filter"
       filtrate_vessel="None"
       vacuum="vacuum_flask"
@@ -41,12 +41,12 @@
       <StartStir
         vessel="filter"
         vessel_type="None"
-        stir_speed="565.0">
+        stir_speed="565.0 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="565.0" />
+          stir_speed="565.0 RPM" />
       </StartStir>
       <CMove
         from_vessel="filter"
@@ -112,7 +112,7 @@
       wait_time="2 mins"
       aspiration_speed="5"
       stir="True"
-      stir_speed="565.0"
+      stir_speed="565.0 RPM"
       waste_vessel="waste_filter"
       filtrate_vessel="None"
       vacuum="vacuum_flask"
@@ -123,12 +123,12 @@
       <StartStir
         vessel="filter"
         vessel_type="None"
-        stir_speed="565.0">
+        stir_speed="565.0 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="565.0" />
+          stir_speed="565.0 RPM" />
       </StartStir>
       <CMove
         from_vessel="filter"

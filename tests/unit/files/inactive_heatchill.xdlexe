@@ -20,11 +20,11 @@
 
   <Procedure>
     <CSetStirRate
-      vessel="filter"
-      stir_speed="250" />
-    <CSetStirRate
       vessel="reactor"
-      stir_speed="250" />
+      stir_speed="250 RPM" />
+    <CSetStirRate
+      vessel="filter"
+      stir_speed="250 RPM" />
     <CConnect
       from_vessel="flask_nitrogen"
       to_vessel="filter"
@@ -37,7 +37,7 @@
       active="False"
       continue_heatchill="True"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="filter"
       wait_recording_speed="2000"
       after_recording_speed="14"
@@ -46,12 +46,12 @@
       <StartStir
         vessel="filter"
         vessel_type="filter"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <HeatChillSetTemp
         vessel="filter"
@@ -96,7 +96,7 @@
       active="False"
       continue_heatchill="True"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="reactor"
       wait_recording_speed="2000"
       after_recording_speed="14"
@@ -105,12 +105,12 @@
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <HeatChillSetTemp
         vessel="reactor"
@@ -155,7 +155,7 @@
       active="False"
       continue_heatchill="True"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="rotavap"
       wait_recording_speed="2000"
       after_recording_speed="14"
@@ -164,7 +164,7 @@
       <StartStir
         vessel="rotavap"
         vessel_type="rotavap"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
           rotation_speed="250" />

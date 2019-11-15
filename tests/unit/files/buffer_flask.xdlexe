@@ -38,7 +38,7 @@
       port="None"
       temp="25°C"
       time="20 mins"
-      stir_speed="400"
+      stir_speed="400 RPM"
       solvent_vessel="flask_dichloromethane"
       vessel_type="rotavap">
       <Add
@@ -53,7 +53,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -355,7 +355,7 @@
         vessel="rotavap"
         solvent="dichloromethane"
         stir_time="60 secs"
-        stir_speed="500"
+        stir_speed="500 RPM"
         temp="None"
         volume="125 mL"
         cleans="2"
@@ -364,7 +364,7 @@
         <StartStir
           vessel="rotavap"
           vessel_type="rotavap"
-          stir_speed="250">
+          stir_speed="250 RPM">
           <CRotavapSetRotationSpeed
             rotavap_name="rotavap"
             rotation_speed="250" />
@@ -414,7 +414,7 @@
         <StartStir
           vessel="rotavap"
           vessel_type="rotavap"
-          stir_speed="250">
+          stir_speed="250 RPM">
           <CRotavapSetRotationSpeed
             rotavap_name="rotavap"
             rotation_speed="250" />

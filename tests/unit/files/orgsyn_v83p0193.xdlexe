@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="88d5cc0d70395ef738dab86d4e96f8e955d4bf7b2c4a364f144ce265925ef3cb"
+  graph_sha256="24cf98ef963679d81137790ccd32c7f858e57e9cae995e050e56652ffff70bed"
 >
   <Hardware>
     <Component
@@ -43,10 +43,10 @@
   <Procedure>
     <CSetStirRate
       vessel="separator"
-      stir_speed="250" />
+      stir_speed="250 RPM" />
     <CSetStirRate
       vessel="reactor"
-      stir_speed="250" />
+      stir_speed="250 RPM" />
     <CleanBackbone
       solvent="hexane"
       waste_vessels="waste_Z waste_H waste_G waste_Y waste_K waste_X"
@@ -283,7 +283,7 @@
       dispense_speed="40"
       time="None"
       stir="False"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -434,7 +434,7 @@
       dispense_speed="40"
       time="None"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -447,12 +447,12 @@
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <PrimePumpForAdd
         reagent="triethylamine"
@@ -588,7 +588,7 @@
       dispense_speed="40"
       time="None"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -613,7 +613,7 @@
       dispense_speed="40"
       time="30 mins"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -626,12 +626,12 @@
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <PrimePumpForAdd
         reagent="sodium iodide acetonitrile solution"
@@ -760,17 +760,17 @@
       temp="50°C"
       time="18 hrs"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="reactor">
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <HeatChillToTemp
         vessel="reactor"
@@ -778,7 +778,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="250"
+        stir_speed="250 RPM"
         vessel_type="reactor"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -787,12 +787,12 @@
         <StartStir
           vessel="reactor"
           vessel_type="reactor"
-          stir_speed="250">
+          stir_speed="250 RPM">
           <CStir
             vessel="reactor" />
           <CSetStirRate
             vessel="reactor"
-            stir_speed="250" />
+            stir_speed="250 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="reactor"
@@ -845,7 +845,7 @@
       dispense_speed="40"
       time="None"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -858,12 +858,12 @@
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <PrimePumpForAdd
         reagent="saturated sodium bicarbonate solution"
@@ -1040,7 +1040,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -1111,17 +1111,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -1145,17 +1145,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -1233,7 +1233,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -1304,17 +1304,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -1338,17 +1338,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -1516,7 +1516,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -1587,17 +1587,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -1621,17 +1621,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"

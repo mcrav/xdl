@@ -444,6 +444,9 @@ FILTER_DEAD_VOLUME_LIQUID_METHOD: str = 'solvent'
 ### MISC ###
 ############
 
+#: Valid platforms for XDL
+VALID_PLATFORMS: List[str] = ['chemputer', 'chemobot']
+
 #: Chemicals that will be recognised as inert gas.
 INERT_GAS_SYNONYMS: List[str] = ['nitrogen', 'n2', 'ar', 'argon']
 

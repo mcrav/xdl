@@ -1,4 +1,4 @@
-from ..steps import FilterThrough, Separate, Add
+from ..steps.chemputer import FilterThrough, Separate, Add
 
 def get_graph_spec(xdl_obj):
     graph_spec = {

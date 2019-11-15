@@ -15,7 +15,7 @@
   <Procedure>
     <CSetStirRate
       vessel="filter"
-      stir_speed="250" />
+      stir_speed="250 RPM" />
     <CConnect
       from_vessel="flask_nitrogen"
       to_vessel="filter"
@@ -36,7 +36,7 @@
         port="None"
         temp="80°C"
         time="20 mins"
-        stir_speed="400"
+        stir_speed="400 RPM"
         solvent_vessel="flask_ether"
         vessel_type="filter">
         <Add
@@ -51,7 +51,7 @@
           dispense_speed="40"
           time="None"
           stir="False"
-          stir_speed="250"
+          stir_speed="250 RPM"
           anticlogging="False"
           anticlogging_solvent="None"
           anticlogging_solvent_volume="2 mL"
@@ -125,7 +125,7 @@
           active="True"
           continue_heatchill="True"
           stir="True"
-          stir_speed="400"
+          stir_speed="400 RPM"
           vessel_type="filter"
           wait_recording_speed="2000"
           after_recording_speed="14"
@@ -134,12 +134,12 @@
           <StartStir
             vessel="filter"
             vessel_type="filter"
-            stir_speed="400">
+            stir_speed="400 RPM">
             <CStir
               vessel="filter" />
             <CSetStirRate
               vessel="filter"
-              stir_speed="400" />
+              stir_speed="400 RPM" />
           </StartStir>
           <StartHeatChill
             vessel="filter"
@@ -185,17 +185,17 @@
         temp="10°C"
         time="18 hrs"
         stir="True"
-        stir_speed="250"
+        stir_speed="250 RPM"
         vessel_type="filter">
         <StartStir
           vessel="filter"
           vessel_type="filter"
-          stir_speed="250">
+          stir_speed="250 RPM">
           <CStir
             vessel="filter" />
           <CSetStirRate
             vessel="filter"
-            stir_speed="250" />
+            stir_speed="250 RPM" />
         </StartStir>
         <HeatChillToTemp
           vessel="filter"
@@ -203,7 +203,7 @@
           active="True"
           continue_heatchill="True"
           stir="True"
-          stir_speed="250"
+          stir_speed="250 RPM"
           vessel_type="filter"
           wait_recording_speed="2000"
           after_recording_speed="14"
@@ -212,12 +212,12 @@
           <StartStir
             vessel="filter"
             vessel_type="filter"
-            stir_speed="250">
+            stir_speed="250 RPM">
             <CStir
               vessel="filter" />
             <CSetStirRate
               vessel="filter"
-              stir_speed="250" />
+              stir_speed="250 RPM" />
           </StartStir>
           <StartHeatChill
             vessel="filter"

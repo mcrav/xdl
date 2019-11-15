@@ -15,7 +15,7 @@
   <Procedure>
     <CSetStirRate
       vessel="reactor"
-      stir_speed="250" />
+      stir_speed="250 RPM" />
     <StartHeatChill
       vessel="reactor"
       temp="150°C"
@@ -44,7 +44,7 @@
       active="True"
       continue_heatchill="True"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="reactor"
       wait_recording_speed="2000"
       after_recording_speed="14"
@@ -53,12 +53,12 @@
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <StartHeatChill
         vessel="reactor"
@@ -84,17 +84,17 @@
       temp="150°C"
       time="30 secs"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="reactor">
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <HeatChillToTemp
         vessel="reactor"
@@ -102,7 +102,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="250"
+        stir_speed="250 RPM"
         vessel_type="reactor"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -111,12 +111,12 @@
         <StartStir
           vessel="reactor"
           vessel_type="reactor"
-          stir_speed="250">
+          stir_speed="250 RPM">
           <CStir
             vessel="reactor" />
           <CSetStirRate
             vessel="reactor"
-            stir_speed="250" />
+            stir_speed="250 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="reactor"
@@ -187,7 +187,7 @@
       active="True"
       continue_heatchill="True"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="reactor"
       wait_recording_speed="2000"
       after_recording_speed="14"
@@ -196,12 +196,12 @@
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <StartHeatChill
         vessel="reactor"
@@ -227,17 +227,17 @@
       temp="50°C"
       time="30 secs"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="reactor">
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <HeatChillToTemp
         vessel="reactor"
@@ -245,7 +245,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="250"
+        stir_speed="250 RPM"
         vessel_type="reactor"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -254,12 +254,12 @@
         <StartStir
           vessel="reactor"
           vessel_type="reactor"
-          stir_speed="250">
+          stir_speed="250 RPM">
           <CStir
             vessel="reactor" />
           <CSetStirRate
             vessel="reactor"
-            stir_speed="250" />
+            stir_speed="250 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="reactor"
@@ -330,7 +330,7 @@
       active="True"
       continue_heatchill="True"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="reactor"
       wait_recording_speed="2000"
       after_recording_speed="14"
@@ -339,12 +339,12 @@
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <StartHeatChill
         vessel="reactor"
@@ -370,17 +370,17 @@
       temp="0°C"
       time="30 secs"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="reactor">
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <HeatChillToTemp
         vessel="reactor"
@@ -388,7 +388,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="250"
+        stir_speed="250 RPM"
         vessel_type="reactor"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -397,12 +397,12 @@
         <StartStir
           vessel="reactor"
           vessel_type="reactor"
-          stir_speed="250">
+          stir_speed="250 RPM">
           <CStir
             vessel="reactor" />
           <CSetStirRate
             vessel="reactor"
-            stir_speed="250" />
+            stir_speed="250 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="reactor"

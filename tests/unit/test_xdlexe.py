@@ -19,7 +19,8 @@ TESTS = [
 def test_xdlexe():
     for test_xdl_f, test_graph_f in TESTS:
         x = XDL(test_xdl_f)
-        x.prepare_for_execution(test_graph_f, interactive=False)
+        x.prepare_for_execution(
+            test_graph_f, interactive=False, save_path=test_xdl_f + 'exe')
         xexe = XDL(test_xdl_f + 'exe')
         assert len(x.steps) == len(xexe.steps)
         for i, step in enumerate(x.steps):

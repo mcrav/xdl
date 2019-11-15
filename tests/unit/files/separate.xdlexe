@@ -25,7 +25,7 @@
   <Procedure>
     <CSetStirRate
       vessel="separator"
-      stir_speed="250" />
+      stir_speed="250 RPM" />
     <CConnect
       from_vessel="flask_nitrogen"
       to_vessel="filter"
@@ -85,7 +85,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -156,17 +156,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -190,17 +190,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -297,7 +297,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -368,17 +368,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -402,17 +402,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -509,7 +509,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -580,17 +580,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -614,17 +614,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -721,7 +721,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -792,17 +792,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -826,17 +826,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -933,7 +933,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -1004,17 +1004,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -1038,17 +1038,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -1126,7 +1126,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -1197,17 +1197,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -1231,17 +1231,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -1338,7 +1338,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -1409,17 +1409,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -1443,17 +1443,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -1508,7 +1508,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -1579,17 +1579,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -1613,17 +1613,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -1720,7 +1720,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -1791,17 +1791,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -1825,17 +1825,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -1890,7 +1890,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -1961,17 +1961,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -1995,17 +1995,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -2102,7 +2102,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -2173,17 +2173,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -2207,17 +2207,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -2295,7 +2295,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -2366,17 +2366,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -2400,17 +2400,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -2507,7 +2507,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -2578,17 +2578,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -2612,17 +2612,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -2742,7 +2742,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -2813,17 +2813,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -2847,17 +2847,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -2977,7 +2977,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -3048,17 +3048,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -3082,17 +3082,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -3189,7 +3189,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -3260,17 +3260,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -3294,17 +3294,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -3401,7 +3401,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -3472,17 +3472,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -3506,17 +3506,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -3571,7 +3571,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -3642,17 +3642,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -3676,17 +3676,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -3783,7 +3783,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -3854,17 +3854,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -3888,17 +3888,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -3976,7 +3976,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -4047,17 +4047,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -4081,17 +4081,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -4211,7 +4211,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -4282,17 +4282,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -4316,17 +4316,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -4404,7 +4404,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -4475,17 +4475,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -4509,17 +4509,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -4639,7 +4639,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -4710,17 +4710,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -4744,17 +4744,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
@@ -4809,7 +4809,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -4880,17 +4880,17 @@
       <Stir
         vessel="separator"
         time="5 mins"
-        stir_speed="600"
+        stir_speed="600 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="600">
+          stir_speed="600 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="600" />
+            stir_speed="600 RPM" />
         </StartStir>
         <Wait
           time="5 mins"
@@ -4914,17 +4914,17 @@
       <Stir
         vessel="separator"
         time="2 mins"
-        stir_speed="30"
+        stir_speed="30 RPM"
         vessel_type="separator">
         <StartStir
           vessel="separator"
           vessel_type="separator"
-          stir_speed="30">
+          stir_speed="30 RPM">
           <CStir
             vessel="separator" />
           <CSetStirRate
             vessel="separator"
-            stir_speed="30" />
+            stir_speed="30 RPM" />
         </StartStir>
         <Wait
           time="2 mins"
