@@ -11,7 +11,8 @@ setup(
     package_data={
         'xdl': [
             'localisation/xdl_translations.txt',
-            'graphgen/chemputer_std6.json',
+            'graphgen_deprecated/chemputer_std6.json',
+            'graphgen/template.json'
         ]
     },
     include_package_data=True,
