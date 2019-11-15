@@ -1,0 +1,534 @@
+<?xdl version="0.1.13" ?>
+
+<Synthesis
+  graph_sha256="84ace9b5cd92a420573b2efa6fdf8a213b60f686040cb91b379ca2dc670df556"
+>
+  <Hardware>
+    <Component
+      id="rotavap"
+      type="rotavap" />
+    <Component
+      id="reactor"
+      type="reactor" />
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="NaCl" />
+    <Reagent
+      id="water" />
+  </Reagents>
+
+  <Procedure>
+    <CSetStirRate
+      vessel="reactor"
+      stir_speed="250" />
+    <CConnect
+      from_vessel="flask_nitrogen"
+      to_vessel="filter"
+      from_port="None"
+      to_port="bottom"
+      unique="True" />
+    <CleanVessel
+      vessel="rotavap"
+      solvent="water"
+      stir_time="60 secs"
+      stir_speed="500"
+      temp="80°C"
+      volume="50 mL"
+      cleans="2"
+      solvent_vessel="flask_water"
+      waste_vessel="waste_rotavap">
+      <StartStir
+        vessel="rotavap"
+        vessel_type="rotavap"
+        stir_speed="250">
+        <CRotavapSetRotationSpeed
+          rotavap_name="rotavap"
+          rotation_speed="250" />
+        <CRotavapStartRotation
+          rotavap_name="rotavap" />
+      </StartStir>
+      <HeatChillToTemp
+        vessel="rotavap"
+        temp="80°C"
+        active="True"
+        continue_heatchill="True"
+        stir="True"
+        stir_speed="250"
+        vessel_type="rotavap"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+        heater="None"
+        chiller="None">
+        <StartStir
+          vessel="rotavap"
+          vessel_type="rotavap"
+          stir_speed="250">
+          <CRotavapSetRotationSpeed
+            rotavap_name="rotavap"
+            rotation_speed="250" />
+          <CRotavapStartRotation
+            rotavap_name="rotavap" />
+        </StartStir>
+        <StartHeatChill
+          vessel="rotavap"
+          temp="80°C"
+          vessel_type="rotavap"
+          heater="None"
+          chiller="None">
+          <CRotavapSetTemp
+            rotavap_name="rotavap"
+            temp="80°C" />
+          <CRotavapStartHeater
+            rotavap_name="rotavap" />
+        </StartHeatChill>
+        <Wait
+          time="5 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="5 mins" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+      </HeatChillToTemp>
+      <CMove
+        from_vessel="flask_water"
+        to_vessel="rotavap"
+        volume="50 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <Wait
+        time="60 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="60 secs" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <CMove
+        from_vessel="rotavap"
+        to_vessel="waste_rotavap"
+        volume="50 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <StopStir
+        vessel="rotavap"
+        vessel_type="rotavap"
+        vessel_has_stirrer="False">
+        <CRotavapStopRotation
+          rotavap_name="rotavap" />
+      </StopStir>
+      <StartStir
+        vessel="rotavap"
+        vessel_type="rotavap"
+        stir_speed="250">
+        <CRotavapSetRotationSpeed
+          rotavap_name="rotavap"
+          rotation_speed="250" />
+        <CRotavapStartRotation
+          rotavap_name="rotavap" />
+      </StartStir>
+      <CMove
+        from_vessel="flask_water"
+        to_vessel="rotavap"
+        volume="50 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <Wait
+        time="60 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="60 secs" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <CMove
+        from_vessel="rotavap"
+        to_vessel="waste_rotavap"
+        volume="50 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <StopStir
+        vessel="rotavap"
+        vessel_type="rotavap"
+        vessel_has_stirrer="False">
+        <CRotavapStopRotation
+          rotavap_name="rotavap" />
+      </StopStir>
+      <Dry
+        vessel="rotavap"
+        time="60 mins"
+        temp="None"
+        waste_vessel="waste_rotavap"
+        aspiration_speed="5"
+        vacuum="vacuum_reactor_flask"
+        vacuum_device="vacuum_reactor_device"
+        vacuum_pressure="400 mbar"
+        inert_gas="flask_nitrogen"
+        vacuum_valve="valve_reactor_vacuum"
+        valve_unused_port="1"
+        vessel_type="rotavap"
+        vessel_has_stirrer="False">
+        <StopStir
+          vessel="rotavap"
+          vessel_type="rotavap"
+          vessel_has_stirrer="False">
+          <CRotavapStopRotation
+            rotavap_name="rotavap" />
+        </StopStir>
+        <CMove
+          from_vessel="rotavap"
+          to_vessel="waste_rotavap"
+          volume="5 mL"
+          move_speed="40"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="evaporate"
+          to_port="None"
+          unique="False"
+          through="" />
+        <StartVacuum
+          vessel="rotavap"
+          pressure="400 mbar">
+          <CSetVacuumSetPoint
+            vessel="rotavap"
+            vacuum_pressure="400 mbar" />
+          <CStartVacuum
+            vessel="rotavap" />
+        </StartVacuum>
+        <Wait
+          time="60 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="60 mins" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <StopVacuum
+          vessel="rotavap">
+          <CStopVacuum
+            vessel="rotavap" />
+        </StopVacuum>
+        <CVentVacuum
+          vessel="rotavap" />
+        <CSetVacuumSetPoint
+          vessel="rotavap"
+          vacuum_pressure="400 mbar" />
+      </Dry>
+      <HeatChillReturnToRT
+        vessel="rotavap"
+        stir="False"
+        stir_speed="250"
+        vessel_type="rotavap"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <StopStir
+          vessel="rotavap"
+          vessel_type="rotavap"
+          vessel_has_stirrer="False">
+          <CRotavapStopRotation
+            rotavap_name="rotavap" />
+        </StopStir>
+        <CRotavapStopHeater
+          rotavap_name="rotavap" />
+        <Wait
+          time="5 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="5 mins" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+      </HeatChillReturnToRT>
+    </CleanVessel>
+    <CleanVessel
+      vessel="reactor"
+      solvent="chloroacetyl chloride"
+      stir_time="5 mins"
+      stir_speed="500"
+      temp="30°C"
+      volume="50 mL"
+      cleans="2"
+      solvent_vessel="flask_chloroacetyl_chloride"
+      waste_vessel="waste_reactor">
+      <StartStir
+        vessel="reactor"
+        vessel_type="reactor"
+        stir_speed="250">
+        <CStir
+          vessel="reactor" />
+        <CSetStirRate
+          vessel="reactor"
+          stir_speed="250" />
+      </StartStir>
+      <HeatChillToTemp
+        vessel="reactor"
+        temp="30°C"
+        active="True"
+        continue_heatchill="True"
+        stir="True"
+        stir_speed="250"
+        vessel_type="reactor"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+        heater="reactor_heater"
+        chiller="None">
+        <StartStir
+          vessel="reactor"
+          vessel_type="reactor"
+          stir_speed="250">
+          <CStir
+            vessel="reactor" />
+          <CSetStirRate
+            vessel="reactor"
+            stir_speed="250" />
+        </StartStir>
+        <StartHeatChill
+          vessel="reactor"
+          temp="30°C"
+          vessel_type="reactor"
+          heater="reactor_heater"
+          chiller="None">
+          <CStirrerSetTemp
+            vessel="reactor"
+            temp="30°C" />
+          <CStirrerHeat
+            vessel="reactor" />
+        </StartHeatChill>
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CStirrerWaitForTemp
+          vessel="reactor" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </HeatChillToTemp>
+      <CMove
+        from_vessel="flask_chloroacetyl_chloride"
+        to_vessel="reactor"
+        volume="50 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <Wait
+        time="5 mins"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="5 mins" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <CMove
+        from_vessel="reactor"
+        to_vessel="waste_reactor"
+        volume="50 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <StopStir
+        vessel="reactor"
+        vessel_type="reactor"
+        vessel_has_stirrer="True">
+        <CStopStir
+          vessel="reactor" />
+      </StopStir>
+      <StartStir
+        vessel="reactor"
+        vessel_type="reactor"
+        stir_speed="250">
+        <CStir
+          vessel="reactor" />
+        <CSetStirRate
+          vessel="reactor"
+          stir_speed="250" />
+      </StartStir>
+      <CMove
+        from_vessel="flask_chloroacetyl_chloride"
+        to_vessel="reactor"
+        volume="50 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <Wait
+        time="5 mins"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="5 mins" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <CMove
+        from_vessel="reactor"
+        to_vessel="waste_reactor"
+        volume="50 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+      <StopStir
+        vessel="reactor"
+        vessel_type="reactor"
+        vessel_has_stirrer="True">
+        <CStopStir
+          vessel="reactor" />
+      </StopStir>
+      <Dry
+        vessel="reactor"
+        time="60 mins"
+        temp="None"
+        waste_vessel="waste_reactor"
+        aspiration_speed="5"
+        vacuum="vacuum_reactor_flask"
+        vacuum_device="vacuum_reactor_device"
+        vacuum_pressure="400 mbar"
+        inert_gas="flask_nitrogen"
+        vacuum_valve="valve_reactor_vacuum"
+        valve_unused_port="1"
+        vessel_type="reactor"
+        vessel_has_stirrer="True">
+        <StopStir
+          vessel="reactor"
+          vessel_type="reactor"
+          vessel_has_stirrer="True">
+          <CStopStir
+            vessel="reactor" />
+        </StopStir>
+        <CMove
+          from_vessel="reactor"
+          to_vessel="waste_reactor"
+          volume="5 mL"
+          move_speed="40"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="" />
+        <StartVacuum
+          vessel="vacuum_reactor_flask"
+          pressure="400 mbar">
+          <CSetVacuumSetPoint
+            vessel="vacuum_reactor_flask"
+            vacuum_pressure="400 mbar" />
+          <CStartVacuum
+            vessel="vacuum_reactor_flask" />
+        </StartVacuum>
+        <CConnect
+          from_vessel="reactor"
+          to_vessel="vacuum_reactor_flask"
+          from_port="None"
+          to_port="None"
+          unique="True" />
+        <Wait
+          time="60 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="60 mins" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <StopVacuum
+          vessel="vacuum_reactor_flask">
+          <CStopVacuum
+            vessel="vacuum_reactor_flask" />
+        </StopVacuum>
+        <CVentVacuum
+          vessel="vacuum_reactor_flask" />
+        <CSetVacuumSetPoint
+          vessel="vacuum_reactor_flask"
+          vacuum_pressure="400 mbar" />
+      </Dry>
+      <HeatChillReturnToRT
+        vessel="reactor"
+        stir="False"
+        stir_speed="250"
+        vessel_type="reactor"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <StopStir
+          vessel="reactor"
+          vessel_type="reactor"
+          vessel_has_stirrer="True">
+          <CStopStir
+            vessel="reactor" />
+        </StopStir>
+        <StirrerReturnToRT
+          vessel="reactor"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CStirrerSetTemp
+            vessel="reactor"
+            temp="25°C" />
+          <CStopHeat
+            vessel="reactor" />
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CStirrerWaitForTemp
+            vessel="reactor" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </StirrerReturnToRT>
+      </HeatChillReturnToRT>
+    </CleanVessel>
+  </Procedure>
+
+</Synthesis>

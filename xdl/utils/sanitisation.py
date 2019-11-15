@@ -156,6 +156,10 @@ def clean_properties(xdl_class, properties):
         if val == 'default' or prop == 'kwargs':
             continue
 
+        if val == 'None':
+            properties[prop] = None
+            continue
+
         elif prop == 'repeat':
             properties[prop] = int(val)
             continue
@@ -165,6 +169,7 @@ def clean_properties(xdl_class, properties):
             continue
 
         prop_type = annotations[prop]
+
         if prop_type in [str, Optional[str]]:
             pass
 
@@ -206,5 +211,21 @@ def clean_properties(xdl_class, properties):
                 properties[prop] = int(val)
             except TypeError:
                 pass
+
+        elif prop_type in [List[str], Optional[List[str]]]:
+            if type(val) == str:
+                split_list = val.split()
+                for i in range(len(split_list)):
+                    if (type(split_list[i]) == str
+                        and split_list[i].lower() == 'none'):
+                        split_list[i] = None
+                properties[prop] = split_list
+            elif type(val) == list:
+                pass
+
+        elif prop_type in [Union[str, int], Optional[Union[str, int]]]:
+            if type(val) == str:
+                if re.match(r'[0-9]+', val):
+                    properties[prop] = int(val)
 
     return properties

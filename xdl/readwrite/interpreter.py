@@ -6,7 +6,7 @@ from lxml import etree
 from .validation import check_attrs_are_valid
 from ..constants import SYNTHESIS_ATTRS
 from ..utils import parse_bool, XDLError, raise_error
-from ..steps import Step
+from ..steps import Step, AbstractBaseStep
 from ..reagents import Reagent
 from ..hardware import Hardware, Component
 from ..utils.namespace import (STEP_OBJ_DICT, BASE_STEP_OBJ_DICT)
@@ -40,10 +40,15 @@ def xdl_str_to_objs(xdl_str: str, logger: logging.Logger) -> Dict[str, Any]:
     """
     if xdl_str:
         try:
-            steps = steps_from_xdl(xdl_str)
+            steps, step_record = steps_from_xdl(xdl_str)
             hardware = hardware_from_xdl(xdl_str)
             reagents = reagents_from_xdl(xdl_str)
             synthesis_attrs = synthesis_attrs_from_xdl(xdl_str)
+            if 'graph_sha256' in synthesis_attrs:
+                assert len(steps) == len(step_record)
+                for i, step in enumerate(steps):
+                    apply_step_record(step, step_record[i])
+
             parsed_xdl = {
                 'steps': steps,
                 'hardware': hardware,
@@ -56,6 +61,16 @@ def xdl_str_to_objs(xdl_str: str, logger: logging.Logger) -> Dict[str, Any]:
     else:
         raise XDLError('Empty XDL given.')
     return None
+
+def apply_step_record(step, step_record_step):
+    assert step.name == step_record_step[0]
+    for prop, val in step.properties.items():
+        step.properties[prop] = step_record_step[1][prop]
+    step.update()
+    if not isinstance(step, AbstractBaseStep):
+        assert len(step.steps) == len(step_record_step[2])
+        for j, substep in enumerate(step.steps):
+            apply_step_record(substep, step_record_step[2][j])
 
 def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
     """Return attrs from <Synthesis> tag.
@@ -89,9 +104,20 @@ def steps_from_xdl(xdl_str: str) -> List[Step]:
     xdl_tree = etree.fromstring(xdl_str)
     for element in xdl_tree.findall('*'):
         if element.tag == 'Procedure':
+            step_record = get_full_step_record(element)
             for step_xdl in element.findall('*'):
                 steps.append(xdl_to_step(step_xdl))
-    return steps
+    return steps, step_record
+
+def get_base_steps(step):
+    base_steps = []
+    children = step.findall('*')
+    if children:
+        for child in children:
+            base_steps.extend(get_base_steps(child))
+    else:
+        return [step]
+    return base_steps
 
 def hardware_from_xdl(xdl_str: str) -> Hardware:
     """Given XDL str return Hardware object.
@@ -163,8 +189,12 @@ def xdl_to_step(xdl_step_element: etree._Element) -> Step:
     # Check all attributes are valid.
     attrs = dict(xdl_step_element.attrib)
     check_attrs_are_valid(attrs, step_type)
+    for attr in attrs:
+        if attrs[attr].lower() == 'none':
+            attrs[attr] = None
 
-    attrs['children'] = children_steps
+    if not issubclass(step_type, AbstractBaseStep) and 'children' in step_type.__init__.__annotations__:
+        attrs['children'] = children_steps
 
     # Try to instantiate step, any invalid values given will throw an error
     # here.
@@ -237,3 +267,20 @@ def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
             f'Error instantiating Reagent with following attributes: \n{attrs}'
         )
     return reagent
+
+
+##############################
+### ChemEXE interpretation ###
+##############################
+
+def get_full_step_record(procedure_tree):
+    step_record = []
+    for step in procedure_tree.findall('*'):
+        step_record.append(get_single_step_record(step))
+    return step_record
+
+def get_single_step_record(step_element):
+    children = []
+    for step in step_element.findall('*'):
+        children.append(get_single_step_record(step))
+    return (step_element.tag, step_element.attrib, children)

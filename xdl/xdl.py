@@ -452,7 +452,11 @@ class XDL(object):
                                         as JSON file.
         """
         if not self.prepared:
-            self.executor.prepare_for_execution(graph_file, interactive=interactive)
+            save_path = None
+            if self._xdl_file:
+                save_path = self._xdl_file.replace('.xdl', '.xdlexe')
+            self.executor.prepare_for_execution(
+                graph_file, interactive=interactive, save_path=save_path)
             self.prepared = True
             self.logger.info('    Experiment Details\n')
             self.print_reagent_volumes()
@@ -469,7 +473,7 @@ class XDL(object):
             chempiler (chempiler.Chempiler): Chempiler object instantiated with
                 modules and graph to run XDL on.
         """
-        if self.prepared:
+        if self.prepared or (hasattr(self, 'graph_sha256') and self.graph_sha256):
             if hasattr(self, 'executor'):
                 self.executor.execute(chempiler)
             else:

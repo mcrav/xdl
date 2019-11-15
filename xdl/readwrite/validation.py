@@ -15,7 +15,7 @@ def get_valid_attrs(target_class: type) -> List[str]:
     Returns:
         List[str]: List of arg names for target_class __init__ method.
     """
-    valid_attrs = [k for k in target_class.__init__.__annotations__ if k  != 'return']
+    valid_attrs = [k for k in target_class.__init__.__annotations__ if k != 'return']
     if (AbstractStep in target_class.__bases__
         or AbstractBaseStep in target_class.__bases__):
         valid_attrs.append('repeat')
@@ -38,7 +38,7 @@ def check_attrs_are_valid(attrs: Dict[str, str], target_class: type) -> None:
         XDLError: Error raised if any of attrs aren't args of target_class __init__
             method.
     """
-    valid_attrs = get_valid_attrs(target_class)
+    valid_attrs = get_valid_attrs(target_class) + ['children', 'repeat']
     for attr, _ in attrs.items():
         if not attr in valid_attrs:
             raise XDLError(

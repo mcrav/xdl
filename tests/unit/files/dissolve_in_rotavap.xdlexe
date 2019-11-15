@@ -1,0 +1,173 @@
+<?xdl version="0.1.13" ?>
+
+<Synthesis
+  graph_sha256="84ace9b5cd92a420573b2efa6fdf8a213b60f686040cb91b379ca2dc670df556"
+>
+  <Hardware>
+    <Component
+      id="rotavap"
+      type="rotavap" />
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="NaCl" />
+    <Reagent
+      id="water" />
+  </Reagents>
+
+  <Procedure>
+    <CConnect
+      from_vessel="flask_nitrogen"
+      to_vessel="filter"
+      from_port="None"
+      to_port="bottom"
+      unique="True" />
+    <Add
+      reagent="NaCl"
+      vessel="rotavap"
+      volume="None"
+      mass="1 g"
+      port="None"
+      through="None"
+      move_speed="40"
+      aspiration_speed="10"
+      dispense_speed="40"
+      time="None"
+      stir="False"
+      stir_speed="250"
+      anticlogging="False"
+      anticlogging_solvent="None"
+      anticlogging_solvent_volume="2 mL"
+      anticlogging_reagent_volume="10 mL"
+      anticlogging_solvent_vessel="None"
+      reagent_vessel="None"
+      waste_vessel="waste_rotavap"
+      flush_tube_vessel="flask_nitrogen"
+      vessel_type="rotavap">
+      <Confirm
+        msg="Is NaCl (1.0 g) in rotavap?" />
+    </Add>
+    <Dissolve
+      vessel="rotavap"
+      solvent="water"
+      volume="100 mL"
+      port="None"
+      temp="25°C"
+      time="20 mins"
+      stir_speed="400"
+      solvent_vessel="flask_water"
+      vessel_type="rotavap">
+      <Add
+        reagent="water"
+        vessel="rotavap"
+        volume="100 mL"
+        mass="None"
+        port="evaporate"
+        through="None"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        time="None"
+        stir="False"
+        stir_speed="250"
+        anticlogging="False"
+        anticlogging_solvent="None"
+        anticlogging_solvent_volume="2 mL"
+        anticlogging_reagent_volume="10 mL"
+        anticlogging_solvent_vessel="None"
+        reagent_vessel="flask_water"
+        waste_vessel="waste_rotavap"
+        flush_tube_vessel="flask_nitrogen"
+        vessel_type="rotavap">
+        <StopStir
+          vessel="rotavap"
+          vessel_type="rotavap"
+          vessel_has_stirrer="False">
+          <CRotavapStopRotation
+            rotavap_name="rotavap" />
+        </StopStir>
+        <PrimePumpForAdd
+          reagent="water"
+          volume="3 mL"
+          reagent_vessel="flask_water"
+          waste_vessel="waste_rotavap">
+          <CMove
+            from_vessel="flask_water"
+            to_vessel="waste_rotavap"
+            volume="3 mL"
+            move_speed="40"
+            aspiration_speed="10"
+            dispense_speed="40"
+            from_port="None"
+            to_port="None"
+            unique="False"
+            through="" />
+        </PrimePumpForAdd>
+        <CMove
+          from_vessel="flask_water"
+          to_vessel="rotavap"
+          volume="100 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="evaporate"
+          unique="False"
+          through="None" />
+        <Wait
+          time="10 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="10 secs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <CMove
+          from_vessel="flask_nitrogen"
+          to_vessel="rotavap"
+          volume="5 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="evaporate"
+          unique="False"
+          through="" />
+      </Add>
+      <CRotavapSetTemp
+        rotavap_name="rotavap"
+        temp="25°C" />
+      <CRotavapStartHeater
+        rotavap_name="rotavap" />
+      <CRotavapSetRotationSpeed
+        rotavap_name="rotavap"
+        rotation_speed="250" />
+      <CRotavapStartRotation
+        rotavap_name="rotavap" />
+      <CRotavapLiftDown
+        rotavap_name="rotavap" />
+      <Wait
+        time="20 mins"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="20 mins" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <CRotavapStopRotation
+        rotavap_name="rotavap" />
+      <CRotavapStopHeater
+        rotavap_name="rotavap" />
+      <CRotavapLiftUp
+        rotavap_name="rotavap" />
+    </Dissolve>
+  </Procedure>
+
+</Synthesis>

@@ -1,0 +1,90 @@
+<?xdl version="0.1.13" ?>
+
+<Synthesis
+  graph_sha256="84ace9b5cd92a420573b2efa6fdf8a213b60f686040cb91b379ca2dc670df556"
+>
+  <Hardware>
+  </Hardware>
+
+  <Reagents>
+  </Reagents>
+
+  <Procedure>
+    <CConnect
+      from_vessel="flask_nitrogen"
+      to_vessel="filter"
+      from_port="None"
+      to_port="bottom"
+      unique="True" />
+    <Repeat
+      repeats="2">
+      <Wait
+        time="5 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="5 secs" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <Wait
+        time="10 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="10 secs" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <Wait
+        time="5 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="5 secs" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <Wait
+        time="10 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="10 secs" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <Wait
+        time="5 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="5 secs" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <Wait
+        time="10 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="10 secs" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+    </Repeat>
+  </Procedure>
+
+</Synthesis>

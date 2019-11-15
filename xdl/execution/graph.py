@@ -1,5 +1,6 @@
 from typing import Union, Dict, Tuple
 import json
+import copy
 
 from networkx.readwrite import json_graph
 from networkx import MultiDiGraph, read_graphml, NetworkXNoPath, relabel_nodes
@@ -23,6 +24,7 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
     if type(graph_file) == str:
         if graph_file.lower().endswith('.graphml'):
             graph = MultiDiGraph(read_graphml(graph_file))
+            raw_graph = copy.deepcopy(graph)
             name_mapping = {}
             for node in graph.nodes():
                 name_mapping[node] = graph.node[node]['label']
@@ -33,15 +35,17 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
                 json_data = json.load(fileobj)
                 graph = json_graph.node_link_graph(
                     json_data, directed=True, multigraph=True)
+            raw_graph = copy.deepcopy(graph)
 
     elif type(graph_file) == dict:
         graph = json_graph.node_link_graph(
             graph_file, directed=True, multigraph=True)
+        raw_graph = copy.deepcopy(graph)
     for edge in graph.edges:
         if 'port' in graph.edges[edge]:
             port_str = graph.edges[edge]['port']
             graph.edges[edge]['port'] = port_str[1:-1].split(',')
-    return graph
+    return graph, raw_graph
 
 def hardware_from_graph(graph: MultiDiGraph) -> Hardware:
     """Given networkx graph return a Hardware object corresponding to

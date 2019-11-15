@@ -74,7 +74,7 @@ class WashSolid(AbstractStep):
         vacuum_device: Optional[str] = None,
         inert_gas: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
-        valve_unused_port: Optional[str] = None,
+        valve_unused_port: Optional[Union[str, int]] = None,
         vessel_type: Optional[str] = None,
         filter_dead_volume: Optional[float] = None,
         **kwargs
