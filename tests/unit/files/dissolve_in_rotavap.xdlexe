@@ -35,7 +35,7 @@
       dispense_speed="40"
       time="None"
       stir="False"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -55,7 +55,7 @@
       port="None"
       temp="25°C"
       time="20 mins"
-      stir_speed="400"
+      stir_speed="400 RPM"
       solvent_vessel="flask_water"
       vessel_type="rotavap">
       <Add
@@ -70,7 +70,7 @@
         dispense_speed="40"
         time="None"
         stir="False"
-        stir_speed="250"
+        stir_speed="250 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"

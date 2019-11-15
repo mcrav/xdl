@@ -56,7 +56,7 @@ def format_property(
     elif 'port' in prop and human_readable:
         return get_port_str(val)
 
-    elif 'stir_rpm' in prop:
+    elif 'stir_speed' in prop:
         return format_stir_rpm(val)
 
     elif prop in ['n_separations', 'repeat', 'cleans', 'eluting_repeats']:

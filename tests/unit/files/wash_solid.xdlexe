@@ -17,7 +17,7 @@
   <Procedure>
     <CSetStirRate
       vessel="filter"
-      stir_speed="250" />
+      stir_speed="250 RPM" />
     <CConnect
       from_vessel="flask_nitrogen"
       to_vessel="filter"
@@ -32,7 +32,7 @@
       vacuum_time="10 secs"
       stir="True"
       stir_time="30 secs"
-      stir_speed="500"
+      stir_speed="500 RPM"
       waste_vessel="waste_filter"
       filtrate_vessel="None"
       aspiration_speed="5"
@@ -49,7 +49,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="250"
+        stir_speed="250 RPM"
         vessel_type="filter"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -58,12 +58,12 @@
         <StartStir
           vessel="filter"
           vessel_type="filter"
-          stir_speed="250">
+          stir_speed="250 RPM">
           <CStir
             vessel="filter" />
           <CSetStirRate
             vessel="filter"
-            stir_speed="250" />
+            stir_speed="250 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="filter"
@@ -87,12 +87,12 @@
       <StartStir
         vessel="filter"
         vessel_type="filter"
-        stir_speed="500">
+        stir_speed="500 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="500" />
+          stir_speed="500 RPM" />
       </StartStir>
       <Add
         reagent="ether"
@@ -106,7 +106,7 @@
         dispense_speed="40"
         time="None"
         stir="True"
-        stir_speed="500"
+        stir_speed="500 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -119,12 +119,12 @@
         <StartStir
           vessel="filter"
           vessel_type="filter"
-          stir_speed="500">
+          stir_speed="500 RPM">
           <CStir
             vessel="filter" />
           <CSetStirRate
             vessel="filter"
-            stir_speed="500" />
+            stir_speed="500 RPM" />
         </StartStir>
         <PrimePumpForAdd
           reagent="ether"

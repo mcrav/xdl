@@ -15,16 +15,16 @@
   <Procedure>
     <CSetStirRate
       vessel="flask_water"
-      stir_speed="250" />
+      stir_speed="250 RPM" />
     <StartStir
       vessel="flask_water"
       vessel_type="flask"
-      stir_speed="200">
+      stir_speed="200 RPM">
       <CStir
         vessel="flask_water" />
       <CSetStirRate
         vessel="flask_water"
-        stir_speed="200" />
+        stir_speed="200 RPM" />
     </StartStir>
     <CConnect
       from_vessel="flask_nitrogen"

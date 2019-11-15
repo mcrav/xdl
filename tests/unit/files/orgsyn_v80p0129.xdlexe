@@ -23,7 +23,7 @@
   <Procedure>
     <CSetStirRate
       vessel="filter"
-      stir_speed="250" />
+      stir_speed="250 RPM" />
     <CleanBackbone
       solvent="distilled water"
       waste_vessels="waste_Z waste_H waste_G waste_Y waste_K waste_X"
@@ -113,7 +113,7 @@
       dispense_speed="40"
       time="None"
       stir="False"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -138,7 +138,7 @@
       dispense_speed="40"
       time="None"
       stir="False"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -289,7 +289,7 @@
       dispense_speed="40"
       time="60 secs"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -302,12 +302,12 @@
       <StartStir
         vessel="filter"
         vessel_type="filter"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <PrimePumpForAdd
         reagent="propiolic acid"
@@ -437,7 +437,7 @@
       active="True"
       continue_heatchill="True"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="filter"
       wait_recording_speed="2000"
       after_recording_speed="14"
@@ -446,12 +446,12 @@
       <StartStir
         vessel="filter"
         vessel_type="filter"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <StartHeatChill
         vessel="filter"
@@ -463,17 +463,17 @@
     <Stir
       vessel="filter"
       time="30 mins"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="filter">
       <StartStir
         vessel="filter"
         vessel_type="filter"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <Wait
         time="30 mins"
@@ -500,7 +500,7 @@
       active="False"
       continue_heatchill="True"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="filter"
       wait_recording_speed="2000"
       after_recording_speed="14"
@@ -509,12 +509,12 @@
       <StartStir
         vessel="filter"
         vessel_type="filter"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <HeatChillSetTemp
         vessel="filter"
@@ -558,17 +558,17 @@
       temp="25°C"
       time="15 mins"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="filter">
       <StartStir
         vessel="filter"
         vessel_type="filter"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <HeatChillToTemp
         vessel="filter"
@@ -576,7 +576,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="250"
+        stir_speed="250 RPM"
         vessel_type="filter"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -585,12 +585,12 @@
         <StartStir
           vessel="filter"
           vessel_type="filter"
-          stir_speed="250">
+          stir_speed="250 RPM">
           <CStir
             vessel="filter" />
           <CSetStirRate
             vessel="filter"
-            stir_speed="250" />
+            stir_speed="250 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="filter"
@@ -637,7 +637,7 @@
       wait_time="2 mins"
       aspiration_speed="5"
       stir="True"
-      stir_speed="500"
+      stir_speed="500 RPM"
       waste_vessel="waste_Z"
       filtrate_vessel="None"
       vacuum="vacuum_filter"
@@ -648,12 +648,12 @@
       <StartStir
         vessel="filter"
         vessel_type="None"
-        stir_speed="500">
+        stir_speed="500 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="500" />
+          stir_speed="500 RPM" />
       </StartStir>
       <CMove
         from_vessel="filter"
@@ -792,7 +792,7 @@
       vacuum_time="10 secs"
       stir="True"
       stir_time="30 secs"
-      stir_speed="500"
+      stir_speed="500 RPM"
       waste_vessel="waste_Z"
       filtrate_vessel="None"
       aspiration_speed="5"
@@ -807,12 +807,12 @@
       <StartStir
         vessel="filter"
         vessel_type="filter"
-        stir_speed="500">
+        stir_speed="500 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="500" />
+          stir_speed="500 RPM" />
       </StartStir>
       <Add
         reagent="distilled water"
@@ -826,7 +826,7 @@
         dispense_speed="40"
         time="None"
         stir="True"
-        stir_speed="500"
+        stir_speed="500 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -839,12 +839,12 @@
         <StartStir
           vessel="filter"
           vessel_type="filter"
-          stir_speed="500">
+          stir_speed="500 RPM">
           <CStir
             vessel="filter" />
           <CSetStirRate
             vessel="filter"
-            stir_speed="500" />
+            stir_speed="500 RPM" />
         </StartStir>
         <PrimePumpForAdd
           reagent="distilled water"

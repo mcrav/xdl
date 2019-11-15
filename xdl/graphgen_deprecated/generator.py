@@ -2,7 +2,7 @@ from typing import Dict, List
 import json
 import os
 import copy
-from ..steps import FilterThrough
+from ..steps.chemputer import FilterThrough
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 

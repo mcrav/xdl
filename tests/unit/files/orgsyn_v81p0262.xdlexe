@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="574b15ffb4f2135bbca1c9f80f7dde932faef47b8230cd2804d7972dfbdaa37b"
+  graph_sha256="804c9cbd70ead251f76b60655b7800c42d0698760e6b1ac97dc4844cfec24b69"
 >
   <Hardware>
     <Component
@@ -30,11 +30,11 @@
 
   <Procedure>
     <CSetStirRate
-      vessel="filter"
-      stir_speed="250" />
-    <CSetStirRate
       vessel="reactor"
-      stir_speed="250" />
+      stir_speed="250 RPM" />
+    <CSetStirRate
+      vessel="filter"
+      stir_speed="250 RPM" />
     <CleanBackbone
       solvent="toluene"
       waste_vessels="waste_Z waste_H waste_G waste_Y waste_K waste_X"
@@ -124,7 +124,7 @@
       dispense_speed="40"
       time="None"
       stir="False"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -149,7 +149,7 @@
       dispense_speed="40"
       time="None"
       stir="False"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -174,7 +174,7 @@
       dispense_speed="40"
       time="None"
       stir="False"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -254,7 +254,7 @@
       dispense_speed="40"
       time="None"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -267,12 +267,12 @@
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <PrimePumpForAdd
         reagent="benzylamine"
@@ -401,17 +401,17 @@
       temp="140°C"
       time="16 hrs"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="reactor">
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <HeatChillToTemp
         vessel="reactor"
@@ -419,7 +419,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="250"
+        stir_speed="250 RPM"
         vessel_type="reactor"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -428,12 +428,12 @@
         <StartStir
           vessel="reactor"
           vessel_type="reactor"
-          stir_speed="250">
+          stir_speed="250 RPM">
           <CStir
             vessel="reactor" />
           <CSetStirRate
             vessel="reactor"
-            stir_speed="250" />
+            stir_speed="250 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="reactor"
@@ -480,7 +480,7 @@
       active="False"
       continue_heatchill="False"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="reactor"
       wait_recording_speed="2000"
       after_recording_speed="14"
@@ -489,12 +489,12 @@
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <HeatChillSetTemp
         vessel="reactor"
@@ -533,7 +533,7 @@
       dispense_speed="40"
       time="None"
       stir="True"
-      stir_speed="250"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -546,12 +546,12 @@
       <StartStir
         vessel="filter"
         vessel_type="filter"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <PrimePumpForAdd
         reagent="hexanes"
@@ -772,17 +772,17 @@
     <Stir
       vessel="filter"
       time="30 mins"
-      stir_speed="250"
+      stir_speed="250 RPM"
       vessel_type="filter">
       <StartStir
         vessel="filter"
         vessel_type="filter"
-        stir_speed="250">
+        stir_speed="250 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="250" />
+          stir_speed="250 RPM" />
       </StartStir>
       <Wait
         time="30 mins"
@@ -809,7 +809,7 @@
       wait_time="2 mins"
       aspiration_speed="5"
       stir="True"
-      stir_speed="500"
+      stir_speed="500 RPM"
       waste_vessel="waste_Z"
       filtrate_vessel="None"
       vacuum="vacuum_filter"
@@ -820,12 +820,12 @@
       <StartStir
         vessel="filter"
         vessel_type="None"
-        stir_speed="500">
+        stir_speed="500 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="500" />
+          stir_speed="500 RPM" />
       </StartStir>
       <CMove
         from_vessel="filter"
@@ -964,7 +964,7 @@
       vacuum_time="10 secs"
       stir="True"
       stir_time="30 secs"
-      stir_speed="500"
+      stir_speed="500 RPM"
       waste_vessel="waste_Z"
       filtrate_vessel="None"
       aspiration_speed="5"
@@ -979,12 +979,12 @@
       <StartStir
         vessel="filter"
         vessel_type="filter"
-        stir_speed="500">
+        stir_speed="500 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="500" />
+          stir_speed="500 RPM" />
       </StartStir>
       <Add
         reagent="hexanes"
@@ -998,7 +998,7 @@
         dispense_speed="40"
         time="None"
         stir="True"
-        stir_speed="500"
+        stir_speed="500 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -1011,12 +1011,12 @@
         <StartStir
           vessel="filter"
           vessel_type="filter"
-          stir_speed="500">
+          stir_speed="500 RPM">
           <CStir
             vessel="filter" />
           <CSetStirRate
             vessel="filter"
-            stir_speed="500" />
+            stir_speed="500 RPM" />
         </StartStir>
         <PrimePumpForAdd
           reagent="hexanes"
@@ -1288,7 +1288,7 @@
       vacuum_time="10 secs"
       stir="True"
       stir_time="30 secs"
-      stir_speed="500"
+      stir_speed="500 RPM"
       waste_vessel="waste_Z"
       filtrate_vessel="None"
       aspiration_speed="5"
@@ -1303,12 +1303,12 @@
       <StartStir
         vessel="filter"
         vessel_type="filter"
-        stir_speed="500">
+        stir_speed="500 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="500" />
+          stir_speed="500 RPM" />
       </StartStir>
       <Add
         reagent="distilled water"
@@ -1322,7 +1322,7 @@
         dispense_speed="40"
         time="None"
         stir="True"
-        stir_speed="500"
+        stir_speed="500 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -1335,12 +1335,12 @@
         <StartStir
           vessel="filter"
           vessel_type="filter"
-          stir_speed="500">
+          stir_speed="500 RPM">
           <CStir
             vessel="filter" />
           <CSetStirRate
             vessel="filter"
-            stir_speed="500" />
+            stir_speed="500 RPM" />
         </StartStir>
         <PrimePumpForAdd
           reagent="distilled water"
