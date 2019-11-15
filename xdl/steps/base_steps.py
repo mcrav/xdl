@@ -179,6 +179,10 @@ class AbstractBaseStep(Step, ABC):
     def final_sanity_check(self):
         pass
 
+    @property
+    def requirements(self):
+        return {}
+
     @abstractmethod
     def execute(self, chempiler: 'Chempiler'):
         return False
@@ -355,3 +359,6 @@ class UnimplementedStep(Step):
     @property
     def requirements(self):
         return {}
+
+    def on_prepare_for_execution(self, graph):
+        pass

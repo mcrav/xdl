@@ -4,7 +4,8 @@ from .utils import VesselContents
 from ..steps import Step, Filter, WashSolid, Dry, Separate, CMove,  Evaporate
 from ..hardware import Hardware
 from ..utils import raise_error
-from .constants import INERT_GAS_SYNONYMS, COMMON_SOLVENT_NAMES
+from .constants import COMMON_SOLVENT_NAMES
+from ..constants import INERT_GAS_SYNONYMS
 
 def iter_vessel_contents(
     steps: List[Step], hardware: Hardware, additions: bool = False

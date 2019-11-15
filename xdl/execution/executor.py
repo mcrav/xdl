@@ -37,11 +37,11 @@ from .cleaning import (
     get_cleaning_schedule
 )
 from .constants import (
-    INERT_GAS_SYNONYMS,
     CLEAN_VESSEL_VOLUME_FRACTION,
     SOLVENT_BOILING_POINTS,
     CLEAN_VESSEL_BOILING_POINT_FACTOR
 )
+from ..constants import INERT_GAS_SYNONYMS
 
 class XDLExecutor(object):
 

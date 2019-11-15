@@ -9,7 +9,8 @@ from math import ceil
 
 from .constants import *
 from .localisation import HUMAN_READABLE_STEPS
-from .graphgen import get_graph
+from .graphgen import graph_from_template
+from .graphgen_deprecated import get_graph
 from .steps import *
 from .steps import steps_synthesis
 from .steps import steps_utility
@@ -422,11 +423,32 @@ class XDL(object):
                 self.logger.info('')
             self.logger.info('')
 
-    def graph(self):
+    def graph(
+        self,
+        graph_template=None,
+        save=None,
+        auto_fix_issues=False,
+        ignore_errors=[]
+    ):
         """Return graph to run procedure with, built on template.
 
         Returns:
             Dict: JSON node link graph as dictionary.
+        """
+        return graph_from_template(
+            self,
+            template=graph_template,
+            save=save,
+            auto_fix_issues=auto_fix_issues,
+            ignore_errors=ignore_errors,
+        )
+
+    def graph_deprecated(
+        self,
+    ):
+        """
+        Here to maintain SynthReader compatibility. Eventually SynthReader should
+        use new graph generator.
         """
         liquid_reagents = [reagent.id for reagent in self.reagents]
         cartridge_reagents = []
@@ -437,7 +459,6 @@ class XDL(object):
 
             elif type(step) == FilterThrough and step.through:
                 cartridge_reagents.append(step.through)
-        print(cartridge_reagents)
         return get_graph(liquid_reagents, list(set(cartridge_reagents)))
 
     def prepare_for_execution(

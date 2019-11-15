@@ -9,7 +9,7 @@ class Recrystallize(AbstractStep):
         vessel: str,
         time: float = 'default',
         dissolve_temp: float = None,
-        crystallize_temp: float = None,
+        crystallize_temp: float = 'default',
         solvent: str = None,
         solvent_volume: float = None,
         **kwargs
@@ -39,3 +39,17 @@ class Recrystallize(AbstractStep):
             time=self.time,
             stir=True,
         )
+
+    @property
+    def requirements(self):
+        temps = []
+        if self.crystallize_temp:
+            temps.append(self.crystallize_temp)
+        if self.dissolve_temp:
+            temps.append(self.dissolve_temp)
+        return {
+            'vessel': {
+                'heatchill': True,
+                'temp': temps
+            }
+        }
