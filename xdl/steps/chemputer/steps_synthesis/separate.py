@@ -152,6 +152,7 @@ class Separate(AbstractStep):
                     upper_phase_vessel=self.waste_phase_to_vessel,
                     upper_phase_port=self.waste_phase_to_port,
                     dead_volume_target=self.dead_volume_target,
+                    dead_volume_through=self.through_cartridge,
                     lower_phase_through=self.through_cartridge
                 )]
             else:
@@ -213,6 +214,7 @@ class Separate(AbstractStep):
                         upper_phase_vessel=self.waste_phase_to_vessel,
                         upper_phase_port=self.waste_phase_to_port,
                         lower_phase_through=self.through_cartridge,
+                        dead_volume_through=self.through_cartridge,
                         dead_volume_target=self.to_vessel,
                     ),
                     # Move to_vessel to separation_vessel
@@ -264,6 +266,7 @@ class Separate(AbstractStep):
                         lower_phase_through=self.through_cartridge,
                         upper_phase_vessel=self.separation_vessel,
                         dead_volume_target=self.to_vessel,
+                        dead_volume_through=self.through_cartridge,
                     )
                 )
             else:
