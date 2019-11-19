@@ -189,6 +189,9 @@ DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME: float = 60
 #: Time to wait for during Evacuate after vessel is connected to vacuum.
 DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME: float = 60
 
+#: Default vacuum pressure when evacuating flask
+DEFAULT_EVACUATE_VACUUM_PRESSURE: float = 50 # mbar
+
 #########################
 ### Recrystallization ###
 #########################
@@ -337,6 +340,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'after_inert_gas_wait_time': DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME,
         'after_vacuum_wait_time': DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME,
         'evacuations': DEFAULT_EVACUATE_N_EVACUTIONS,
+        'vacuum_pressure': DEFAULT_EVACUATE_VACUUM_PRESSURE,
     },
     'Recrystallize': {
         'time': DEFAULT_RECRYSTALLIZE_WAIT_TIME,
