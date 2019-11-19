@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="24cf98ef963679d81137790ccd32c7f858e57e9cae995e050e56652ffff70bed"
+  graph_sha256="800f32fd6e15928da804083d944cf57198f55834bf7ac309203bc1902d4c7b6f"
 >
   <Hardware>
     <Component
@@ -130,43 +130,55 @@
       after_inert_gas_wait_time="60 secs"
       after_vacuum_wait_time="60 secs"
       inert_gas="flask_nitrogen"
-      vacuum="vacuum_reactor">
+      vacuum="vacuum_reactor"
+      vacuum_device="vacuum_pump"
+      vacuum_pressure="50 mbar"
+      vessel_type="reactor">
+      <StartVacuum
+        vessel="vacuum_reactor"
+        pressure="50 mbar">
+        <CSetVacuumSetPoint
+          vessel="vacuum_reactor"
+          vacuum_pressure="50 mbar" />
+        <CStartVacuum
+          vessel="vacuum_reactor" />
+      </StartVacuum>
+      <CConnect
+        from_vessel="reactor"
+        to_vessel="vacuum_reactor"
+        from_port="None"
+        to_port="None"
+        unique="True" />
+      <Wait
+        time="2 mins"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="2 mins" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <CConnect
+        from_vessel="flask_nitrogen"
+        to_vessel="reactor"
+        from_port="None"
+        to_port="None"
+        unique="True" />
+      <Wait
+        time="60 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="60 secs" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
       <Repeat
-        repeats="3">
-        <CConnect
-          from_vessel="reactor"
-          to_vessel="vacuum_reactor"
-          from_port="None"
-          to_port="None"
-          unique="True" />
-        <Wait
-          time="60 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
-          <CSetRecordingSpeed
-            recording_speed="2000" />
-          <CWait
-            time="60 secs" />
-          <CSetRecordingSpeed
-            recording_speed="14" />
-        </Wait>
-        <CConnect
-          from_vessel="flask_nitrogen"
-          to_vessel="reactor"
-          from_port="None"
-          to_port="None"
-          unique="True" />
-        <Wait
-          time="60 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
-          <CSetRecordingSpeed
-            recording_speed="2000" />
-          <CWait
-            time="60 secs" />
-          <CSetRecordingSpeed
-            recording_speed="14" />
-        </Wait>
+        repeats="2">
         <CConnect
           from_vessel="reactor"
           to_vessel="vacuum_reactor"
@@ -270,6 +282,11 @@
             recording_speed="14" />
         </Wait>
       </Repeat>
+      <StopVacuum
+        vessel="vacuum_reactor">
+        <CStopVacuum
+          vessel="vacuum_reactor" />
+      </StopVacuum>
     </Evacuate>
     <Add
       reagent="2 methylcyclohexanone"

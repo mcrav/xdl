@@ -6,7 +6,7 @@ from xdl.constants import (
     DEFAULT_EVACUATE_N_EVACUTIONS
 )
 from xdl import XDL
-from xdl.steps import Evacuate, CConnect, Wait, Repeat
+from xdl.steps import Evacuate, CConnect, Wait, Repeat, StartVacuum, StopVacuum
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')
@@ -26,8 +26,18 @@ def test_evacuate():
     x.prepare_for_execution(graph_f)
     for step in x.steps:
         if type(step) == Evacuate:
-            assert len(step.steps) == 1
-            assert type(step.steps[0]) == Repeat
-            assert step.steps[0].repeats == DEFAULT_EVACUATE_N_EVACUTIONS
-            for i, substep in enumerate(step.steps[0].children):
+            assert len(step.steps) == 7
+            assert type(step.steps[0]) == StartVacuum
+            assert step.steps[0].vessel == 'vacuum_flask'
+            assert type(step.steps[1]) == CConnect
+            assert type(step.steps[2]) == Wait
+            assert step.steps[2].time == DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME * 2
+            assert type(step.steps[3]) == CConnect
+            assert type(step.steps[4]) == Wait
+            assert type(step.steps[-2]) == Repeat
+            assert type(step.steps[-1]) == StopVacuum
+            assert step.steps[-1].vessel == 'vacuum_flask'
+            assert step.steps[-2].repeats == DEFAULT_EVACUATE_N_EVACUTIONS - 1
+
+            for i, substep in enumerate(step.steps[-2].children):
                 test_step(substep, correct_steps[i])
