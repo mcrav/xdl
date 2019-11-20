@@ -1,0 +1,9 @@
+!Precipitate
+
+# Example: Trigger precipitation in flask by chilling to -20°C for 1 hr.
+
+en
+Trigger precipitation in {vessel} by chilling to {temp} for {time}.
+
+zh
+降温至温度为{temp}， 保持时间为{time}，促使{vessel}中的沉淀析出。

@@ -1,0 +1,14 @@
+!Recrystallize (without solvent)
+
+# Example: Recrystallize contents of reactor by heating to 30 °C and waiting for 2 hrs.
+
+en
+Recrystallize contents of {vessel} by heating to {crystallize_temp} and waiting for {time}.
+
+
+!Recrystallize (with solvent)
+
+# Example: "Recrystallize contents of reactor by dissolving in ethanol (10 mL) at 50 °C then heating to 30 °C and waiting for 2 hrs.
+
+en
+Recrystallize contents of {vessel} by dissolving in {solvent} ({solvent_volume}) at {dissolve_temp} then heating to {crystallize_temp} and waiting for {time}.

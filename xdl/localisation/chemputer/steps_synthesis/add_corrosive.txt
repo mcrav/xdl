@@ -1,0 +1,9 @@
+!AddCorrosive
+
+en
+Transfer corrosive reagent {reagent} ({volume}) to {vessel}.
+
+zh
+将腐蚀性试剂{reagent} ({volume})转移至{vessel}.
+
+# Example: Transfer corrosive reagent fuming nitric acid (50 mL) to flask.

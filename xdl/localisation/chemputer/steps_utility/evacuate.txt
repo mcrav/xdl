@@ -1,0 +1,6 @@
+!Evacuate
+
+# Example: "Perform 3 evacuations of reactor with inert gas."
+
+en
+Perform {evacuations} evacuations of {vessel} with inert gas.

@@ -10,7 +10,8 @@ setup(
     packages=find_packages(),
     package_data={
         'xdl': [
-            'localisation/xdl_translations.txt',
+            'localisation/special_steps.txt',
+            'localisation/chemputer',
             'graphgen_deprecated/chemputer_std6.json',
             'graphgen/template.json'
         ]
