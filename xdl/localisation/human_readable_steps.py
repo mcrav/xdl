@@ -1,25 +1,56 @@
 import os
 
-def load_human_readable_steps():
-    here = os.path.abspath(os.path.dirname(__file__))
-    human_readable_steps = {}
+HERE = os.path.abspath(os.path.dirname(__file__))
 
-    # Need to specify encoding='utf-8' otherwise it throws an error on Windows
-    with open(os.path.join(here, 'xdl_translations.txt'),
-              encoding='utf-8') as fileobj:
-        lines = [line.strip() for line in fileobj.readlines() if line]
+def read_localisation_file(f):
+    with open(f) as fd:
+        lines = [line.strip() for line in fd.readlines() if line.strip()]
+    step_localisations = []
+    current = {}
+    language = None
+    for line in lines:
+        if line.startswith('!'):
+            if current:
+                step_localisations.append(current)
+            current = {'name': line[1:]}
 
-    current_step = None
-    for i in range(len(lines)):
+        elif line.startswith('#'):
+            continue
 
-        if lines[i].startswith('en'):
-            current_step = lines[i-1]
-            human_readable_steps[current_step] = {}
-            human_readable_steps[current_step]['en'] = lines[i+1]
+        elif len(line) == 2:
+            language = line
 
-        elif len(lines[i]) == 2:
-            human_readable_steps[current_step][lines[i]] = lines[i+1]
+        else:
+            if language:
+                current[language] = line
+            else:
+                raise ValueError(f'Language is none ({current}) {f}')
 
-    return human_readable_steps
+    if current:
+        step_localisations.append(current)
 
-HUMAN_READABLE_STEPS = load_human_readable_steps()
+    return step_localisations
+
+def load_localisations():
+    steps_utility = os.path.join(HERE, 'chemputer', 'steps_utility')
+    steps_synthesis = os.path.join(HERE, 'chemputer', 'steps_synthesis')
+
+    localisations = []
+    for folder in [steps_utility, steps_synthesis]:
+        for f in os.listdir(folder):
+            f_path = os.path.join(folder, f)
+            localisations.extend(read_localisation_file(f_path))
+
+    localisations.extend(
+        read_localisation_file(os.path.join(HERE, 'chemputer', 'unimplemented_steps.txt')))
+    localisations.extend(
+        read_localisation_file(os.path.join(HERE, 'special_steps.txt')))
+
+    localisation_dict = {}
+    for localisation in localisations:
+        name = localisation['name']
+        del localisation['name']
+        localisation_dict[name] = localisation
+    return localisation_dict
+
+HUMAN_READABLE_STEPS = load_localisations()
