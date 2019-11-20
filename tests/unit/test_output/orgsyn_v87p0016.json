@@ -461,10 +461,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "methanol",
-      "name": "flask_methanol",
-      "label": "flask_methanol",
-      "id": "flask_methanol",
+      "chemical": "2-thiophenecarboxaldehyde",
+      "name": "flask_2-thiophenecarboxaldehyde",
+      "label": "flask_2-thiophenecarboxaldehyde",
+      "id": "flask_2-thiophenecarboxaldehyde",
       "internalId": 7
     },
     {
@@ -500,10 +500,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "2-thiophenecarboxaldehyde",
-      "name": "flask_2-thiophenecarboxaldehyde",
-      "label": "flask_2-thiophenecarboxaldehyde",
-      "id": "flask_2-thiophenecarboxaldehyde",
+      "chemical": "methanol",
+      "name": "flask_methanol",
+      "label": "flask_methanol",
+      "id": "flask_methanol",
       "internalId": 21
     },
     {
@@ -1079,7 +1079,7 @@
     },
     {
       "port": "(0,4)",
-      "source": "flask_methanol",
+      "source": "flask_2-thiophenecarboxaldehyde",
       "target": "valve_Z",
       "sourceInternal": 7,
       "targetInternal": 13,
@@ -1106,7 +1106,7 @@
     },
     {
       "port": "(0,4)",
-      "source": "flask_2-thiophenecarboxaldehyde",
+      "source": "flask_methanol",
       "target": "valve_G",
       "sourceInternal": 21,
       "targetInternal": 19,
