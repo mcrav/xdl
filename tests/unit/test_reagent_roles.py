@@ -7,4 +7,5 @@ def test_reagent_roles():
         Reagent(id="irnbru", role="juice")
     Reagent(id="DCM", role="solvent")
     Reagent(id="Pd(DBA)2", role="catalyst")
-    Reagent(id="2-aminophenethyl alcohol", role="reactant")
+    Reagent(id="2-aminophenethyl alcohol", role="reagent")
+    Reagent(id="compound 2", role="substrate")
