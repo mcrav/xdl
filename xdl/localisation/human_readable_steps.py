@@ -3,7 +3,7 @@ import os
 HERE = os.path.abspath(os.path.dirname(__file__))
 
 def read_localisation_file(f):
-    with open(f) as fd:
+    with open(f, encoding='utf-8') as fd:
         lines = [line.strip() for line in fd.readlines() if line.strip()]
     step_localisations = []
     current = {}
