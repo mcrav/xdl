@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="4f2a47a1872df8aaef51e49c5a446ea1ae372a652b7e1f75b74b7d145d5e7bbe"
+  graph_sha256="38a81106623c4d112def1bed6b6634542062bcc7de997d998db6e4593e0ac813"
 >
   <Hardware>
     <Component
@@ -730,7 +730,7 @@
       from_vessel="reactor"
       to_vessel="rotavap"
       volume="all"
-      from_port="None"
+      from_port="0"
       to_port="evaporate"
       through="None"
       time="None"
@@ -744,7 +744,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
+        from_port="0"
         to_port="evaporate"
         unique="False"
         through="None" />
@@ -944,7 +944,7 @@
         to_vessel="waste_K"
         volume="all"
         from_port="collect"
-        to_port="None"
+        to_port="0"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -958,7 +958,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="collect"
-          to_port="None"
+          to_port="0"
           unique="False"
           through="None" />
       </Transfer>
@@ -986,7 +986,7 @@
         to_vessel="separator"
         volume="all"
         from_port="evaporate"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -1000,7 +1000,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="evaporate"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -2370,7 +2370,7 @@
         to_vessel="waste_K"
         volume="all"
         from_port="collect"
-        to_port="None"
+        to_port="0"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -2384,7 +2384,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="collect"
-          to_port="None"
+          to_port="0"
           unique="False"
           through="None" />
       </Transfer>

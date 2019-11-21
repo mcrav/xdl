@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="1bfdb9e699b59b8ca534dc644e65d18b52157a973914f9d499cb096f994241ef"
+  graph_sha256="7bc75bf53e87c25f8c53bb186e415e213a85e7c6184a2683c3d6a2b0c39f3291"
 >
   <Hardware>
     <Component
@@ -1027,7 +1027,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -1041,7 +1041,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -1816,7 +1816,7 @@
         to_vessel="waste_K"
         volume="all"
         from_port="collect"
-        to_port="None"
+        to_port="0"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -1830,7 +1830,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="collect"
-          to_port="None"
+          to_port="0"
           unique="False"
           through="None" />
       </Transfer>

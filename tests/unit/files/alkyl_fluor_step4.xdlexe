@@ -541,7 +541,7 @@
       to_vessel="filter2"
       volume="all"
       from_port="evaporate"
-      to_port="None"
+      to_port="top"
       through="None"
       time="None"
       aspiration_speed="10"
@@ -555,7 +555,7 @@
         aspiration_speed="10"
         dispense_speed="40"
         from_port="evaporate"
-        to_port="None"
+        to_port="top"
         unique="False"
         through="None" />
     </Transfer>
@@ -1460,7 +1460,7 @@
         to_vessel="waste_aqueous"
         volume="all"
         from_port="collect"
-        to_port="None"
+        to_port="0"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -1474,7 +1474,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="collect"
-          to_port="None"
+          to_port="0"
           unique="False"
           through="None" />
       </Transfer>
@@ -2194,8 +2194,8 @@
       from_vessel="buffer_flask"
       to_vessel="rotavap"
       volume="all"
-      from_port="None"
-      to_port="None"
+      from_port="0"
+      to_port="evaporate"
       through="None"
       time="None"
       aspiration_speed="10"
@@ -2208,8 +2208,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="evaporate"
         unique="False"
         through="None" />
     </Transfer>

@@ -422,10 +422,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "distilled water",
-      "name": "flask_distilled water",
-      "label": "flask_distilled water",
-      "id": "flask_distilled water",
+      "chemical": "toluene",
+      "name": "flask_toluene",
+      "label": "flask_toluene",
+      "id": "flask_toluene",
       "internalId": 1
     },
     {
@@ -435,10 +435,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "toluene",
-      "name": "flask_toluene",
-      "label": "flask_toluene",
-      "id": "flask_toluene",
+      "chemical": "distilled water",
+      "name": "flask_distilled water",
+      "label": "flask_distilled water",
+      "id": "flask_distilled water",
       "internalId": 2
     },
     {
@@ -975,7 +975,7 @@
     },
     {
       "port": "(0,2)",
-      "source": "flask_distilled water",
+      "source": "flask_toluene",
       "target": "valve_Z",
       "sourceInternal": 1,
       "targetInternal": 13,
@@ -984,7 +984,7 @@
     },
     {
       "port": "(0,4)",
-      "source": "flask_toluene",
+      "source": "flask_distilled water",
       "target": "valve_Z",
       "sourceInternal": 2,
       "targetInternal": 13,

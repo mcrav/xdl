@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="08f08ddc4b2cb4d5f68eeab921b1a375ef04105b56ab104de194bd8f2a6df3b7"
+  graph_sha256="a10f028a0286cfe76e10709deacd372b66c3f08ff4cc66f26fb61369607ebeb6"
 >
   <Hardware>
     <Component
@@ -679,8 +679,8 @@
       from_vessel="reactor"
       to_vessel="filter"
       volume="all"
-      from_port="None"
-      to_port="None"
+      from_port="0"
+      to_port="top"
       through="None"
       time="None"
       aspiration_speed="10"
@@ -693,8 +693,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="top"
         unique="False"
         through="None" />
     </Transfer>

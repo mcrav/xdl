@@ -55,7 +55,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -69,7 +69,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -267,7 +267,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -281,7 +281,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -479,7 +479,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -493,7 +493,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -691,7 +691,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -705,7 +705,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -903,7 +903,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -917,7 +917,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -1308,7 +1308,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -1322,7 +1322,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -1690,7 +1690,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -1704,7 +1704,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -2072,7 +2072,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -2086,7 +2086,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -2477,7 +2477,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -2491,7 +2491,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -2712,7 +2712,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -2726,7 +2726,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -2947,7 +2947,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -2961,7 +2961,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -3159,7 +3159,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -3173,7 +3173,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -3371,7 +3371,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -3385,7 +3385,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -3753,7 +3753,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -3767,7 +3767,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -4181,7 +4181,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -4195,7 +4195,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -4609,7 +4609,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -4623,7 +4623,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -5014,7 +5014,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -5028,7 +5028,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -5249,7 +5249,7 @@
         to_vessel="separator"
         volume="all"
         from_port="None"
-        to_port="top"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -5263,7 +5263,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="None"
-          to_port="top"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
