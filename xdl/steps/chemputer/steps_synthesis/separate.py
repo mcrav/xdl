@@ -189,6 +189,23 @@ class Separate(AbstractStep):
                     )
                 ]
 
+            elif self.waste_phase_to_vessel == self.separation_vessel:
+                return [
+                    CSeparatePhases(
+                        separation_vessel=self.separation_vessel,
+                        lower_phase_vessel=self.buffer_flasks[0],
+                        upper_phase_vessel=self.to_vessel,
+                        upper_phase_port=self.to_port,
+                        dead_volume_target=self.dead_volume_target,
+                        upper_phase_through=self.through_cartridge
+                    ),
+                    Transfer(
+                        from_vessel=self.buffer_flasks[0],
+                        to_vessel=self.waste_phase_to_vessel,
+                        volume='all'
+                    )
+                ]
+
             return [CSeparatePhases(
                 separation_vessel=self.separation_vessel,
                 lower_phase_vessel=self.waste_phase_to_vessel,
@@ -387,6 +404,12 @@ class Separate(AbstractStep):
     ########################################
     ###  Abstract Method implementations ###
     ########################################
+
+    def final_sanity_check(self):
+        assert self.to_vessel != self.waste_phase_to_vessel
+        assert not self.solvent_volume or self.solvent_volume > 0
+        assert self.purpose in ['extract', 'wash']
+        assert self.n_separations > 0
 
     @property
     def buffer_flasks_required(self):

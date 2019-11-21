@@ -422,10 +422,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "distilled water",
-      "name": "flask_distilled water",
-      "label": "flask_distilled water",
-      "id": "flask_distilled water",
+      "chemical": "toluene",
+      "name": "flask_toluene",
+      "label": "flask_toluene",
+      "id": "flask_toluene",
       "internalId": 1
     },
     {
@@ -435,10 +435,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "hydriodic acid",
-      "name": "flask_hydriodic acid",
-      "label": "flask_hydriodic acid",
-      "id": "flask_hydriodic acid",
+      "chemical": "distilled water",
+      "name": "flask_distilled water",
+      "label": "flask_distilled water",
+      "id": "flask_distilled water",
       "internalId": 2
     },
     {
@@ -448,11 +448,24 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "propiolic acid",
-      "name": "flask_propiolic acid",
-      "label": "flask_propiolic acid",
-      "id": "flask_propiolic acid",
+      "chemical": "hexanes",
+      "name": "flask_hexanes",
+      "label": "flask_hexanes",
+      "id": "flask_hexanes",
       "internalId": 4
+    },
+    {
+      "type": "flask",
+      "x": 160,
+      "y": 40,
+      "max_volume": 100,
+      "current_volume": 0,
+      "class": "ChemputerFlask",
+      "chemical": "benzylamine",
+      "name": "flask_benzylamine",
+      "label": "flask_benzylamine",
+      "id": "flask_benzylamine",
+      "internalId": 7
     }
   ],
   "links": [
@@ -962,7 +975,7 @@
     },
     {
       "port": "(0,2)",
-      "source": "flask_distilled water",
+      "source": "flask_toluene",
       "target": "valve_Z",
       "sourceInternal": 1,
       "targetInternal": 13,
@@ -971,7 +984,7 @@
     },
     {
       "port": "(0,4)",
-      "source": "flask_hydriodic acid",
+      "source": "flask_distilled water",
       "target": "valve_Z",
       "sourceInternal": 2,
       "targetInternal": 13,
@@ -980,11 +993,20 @@
     },
     {
       "port": "(0,5)",
-      "source": "flask_propiolic acid",
+      "source": "flask_hexanes",
       "target": "valve_Z",
       "sourceInternal": 4,
       "targetInternal": 13,
       "id": 5,
+      "key": 0
+    },
+    {
+      "port": "(0,5)",
+      "source": "flask_benzylamine",
+      "target": "valve_H",
+      "sourceInternal": 7,
+      "targetInternal": 16,
+      "id": 6,
       "key": 0
     }
   ]

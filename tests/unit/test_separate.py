@@ -318,13 +318,59 @@ correct_step_info = [
             'to_vessel': 'separator',
         }),
     ],
+
+    # Product top, 1 extraction, waste phase to separator, product phase to rotavap
+    [
+        (Transfer, {}), # Reaction mixture
+        (Add, {}), # Solvent
+        (Stir, {}),
+        (Stir, {}),
+        (Wait, {}),
+        (CSeparatePhases, {
+            'lower_phase_vessel': 'buffer_flask',
+            'upper_phase_vessel': 'rotavap',
+        }),
+        (Transfer, {
+            'from_vessel': 'buffer_flask',
+            'to_vessel': 'separator',
+        }),
+    ],
+
+    # Product top, 2 extractions, waste_phase_to_separator, product phase to rotavap
+    [
+        (Transfer, {}), # Reaction mixture
+        (Add, {}), # Solvent
+        (Stir, {}),
+        (Stir, {}),
+        (Wait, {}),
+        (CSeparatePhases, {
+            'lower_phase_vessel': 'buffer_flask',
+            'upper_phase_vessel': 'rotavap',
+        }),
+        (Transfer,  {
+            'from_vessel': 'buffer_flask',
+            'to_vessel': 'separator',
+        }),
+        (Add, {}), # Solvent
+        (Stir, {}),
+        (Stir, {}),
+        (Wait, {}),
+        (CSeparatePhases, {
+            'lower_phase_vessel': 'buffer_flask',
+            'upper_phase_vessel': 'rotavap',
+        }),
+        (Transfer, {
+            'from_vessel': 'buffer_flask',
+            'to_vessel': 'separator',
+        }),
+    ],
 ]
 
 def test_separate():
     """Test separating then moving through a cartridge to the final vessel."""
     xdl_f = os.path.join(FOLDER, 'separate.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
-    generic_chempiler_test(xdl_f, graph_f)
+    # generic_chempiler_test(xdl_f, graph_f)
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f)
     i = 0

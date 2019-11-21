@@ -43,15 +43,17 @@ from ....localisation import HUMAN_READABLE_STEPS
 
 
 def heater_chiller_sanity_check(heater, chiller, temp):
+    print('HEATER', heater, chiller, temp)
     if not heater and chiller:
-        assert temp < CHILLER_MAX_TEMP
-        assert temp > CHILLER_MIN_TEMP
+        assert temp <= CHILLER_MAX_TEMP
+        assert temp >= CHILLER_MIN_TEMP
 
     if not chiller and heater:
-        assert temp >= 25
+        assert temp >= 18
         assert temp <= HEATER_MAX_TEMP
 
     assert CHILLER_MIN_TEMP <= temp <= HEATER_MAX_TEMP
+    print('HEATER', 'PASSED')
 
 class StartHeatChill(AbstractStep):
     """Start heating/chilling vessel to given temp and leave heater/chiller on.
