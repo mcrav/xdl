@@ -109,6 +109,7 @@ class AbstractStep(Step, ABC):
             logger (logging.Logger): Logger to handle output step output.
             level (int): Level of recursion in step execution.
         """
+        self.final_sanity_check()
         level += 1
         if not logger:
             logger = logging.getLogger('xdl_logger')

@@ -1470,7 +1470,19 @@
           temp="110.6°C"
           vessel_type="filter"
           heater="None"
-          chiller="chiller_filter" />
+          chiller="chiller_filter">
+          <CChillerSetTemp
+            vessel="filter1"
+            temp="110.6°C" />
+          <CStartChiller
+            vessel="filter1" />
+        </StartHeatChill>
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CChillerWaitForTemp
+          vessel="filter1" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
       </HeatChillToTemp>
       <Wait
         time="60 mins"
