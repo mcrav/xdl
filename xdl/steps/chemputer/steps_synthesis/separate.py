@@ -107,7 +107,7 @@ class Separate(AbstractStep):
                     from_vessel=self.from_vessel,
                     from_port=self.from_port,
                     to_vessel=self.separation_vessel,
-                    to_port=TOP_PORT,
+                    to_port=BOTTOM_PORT,
                     volume='all'
                 )
             )

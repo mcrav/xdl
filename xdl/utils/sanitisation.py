@@ -228,4 +228,10 @@ def clean_properties(xdl_class, properties):
                 if re.match(r'[0-9]+', val):
                     properties[prop] = int(val)
 
+        if 'port' in prop:
+            try:
+                properties[prop] = int(properties[prop])
+            except (ValueError, TypeError):
+                pass
+
     return properties

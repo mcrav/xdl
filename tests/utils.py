@@ -1,7 +1,7 @@
 import os
 import sys
 from xdl import XDL
-from xdl.steps import Confirm, Step, AbstractBaseStep
+from xdl.steps import Confirm, Step, AbstractBaseStep, UnimplementedStep
 from chempiler import Chempiler
 import ChemputerAPI
 
@@ -24,6 +24,9 @@ def generic_chempiler_test(xdl_file: str, graph_file: str) -> None:
         graph_file (str): Path to graph file.
     """
     x = XDL(xdl_file)
+    for i in reversed(range(len(x.steps))):
+        if isinstance(x.steps[i], UnimplementedStep):
+            x.steps.pop(i)
     x.prepare_for_execution(graph_file, interactive=False)
     x.steps = [
         remove_confirm_steps(step) for step in x.steps]

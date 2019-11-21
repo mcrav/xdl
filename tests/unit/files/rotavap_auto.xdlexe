@@ -101,7 +101,7 @@
         to_vessel="waste_rotavap"
         volume="50 mL"
         from_port="collect"
-        to_port="None"
+        to_port="0"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -115,7 +115,7 @@
           aspiration_speed="10"
           dispense_speed="40"
           from_port="collect"
-          to_port="None"
+          to_port="0"
           unique="False"
           through="None" />
       </Transfer>

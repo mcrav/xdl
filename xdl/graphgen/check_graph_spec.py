@@ -198,7 +198,6 @@ def check_flasks(
     else:
         n_buffer_flasks_required = 0
     total_n_ports_required = n_reagent_flasks_required + n_buffer_flasks_required + (2*len(cartridge_spec))
-    print('PORTS REQUIRED', total_n_ports_required, n_reagent_flasks_required, n_buffer_flasks_required, len(cartridge_spec), n_available_ports)
     if total_n_ports_required > n_available_ports:
         errors.append({
             'error': NOT_ENOUGH_SPARE_PORTS_ERROR,

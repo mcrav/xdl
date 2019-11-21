@@ -4,8 +4,9 @@ from ..utils.errors import XDLError
 
 VALID_REAGENT_ROLES = [
     'catalyst',
-    'reactant',
+    'reagent',
     'solvent',
+    'substrate',
 ]
 
 class Reagent(XDLBase):

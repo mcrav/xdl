@@ -110,8 +110,8 @@
         from_vessel="reactor"
         to_vessel="rotavap"
         volume="all"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="evaporate"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -124,8 +124,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="evaporate"
           unique="False"
           through="None" />
       </Transfer>

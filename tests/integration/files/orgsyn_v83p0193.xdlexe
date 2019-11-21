@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="7bc75bf53e87c25f8c53bb186e415e213a85e7c6184a2683c3d6a2b0c39f3291"
+  graph_sha256="d1fc0d5c29debad563224a9226be302cd2019ae6823653034547058255c5b8cb"
 >
   <Hardware>
     <Component
@@ -48,11 +48,11 @@
       vessel="reactor"
       stir_speed="250 RPM" />
     <CleanBackbone
-      solvent="hexane"
+      solvent="acetonitrile"
       waste_vessels="waste_Z waste_H waste_G waste_Y waste_K waste_X"
-      solvent_vessel="flask_hexane">
+      solvent_vessel="flask_acetonitrile">
       <CMove
-        from_vessel="flask_hexane"
+        from_vessel="flask_acetonitrile"
         to_vessel="waste_Z"
         volume="3 mL"
         move_speed="40"
@@ -63,7 +63,7 @@
         unique="False"
         through="" />
       <CMove
-        from_vessel="flask_hexane"
+        from_vessel="flask_acetonitrile"
         to_vessel="waste_H"
         volume="3 mL"
         move_speed="40"
@@ -74,7 +74,7 @@
         unique="False"
         through="" />
       <CMove
-        from_vessel="flask_hexane"
+        from_vessel="flask_acetonitrile"
         to_vessel="waste_G"
         volume="3 mL"
         move_speed="40"
@@ -85,7 +85,7 @@
         unique="False"
         through="" />
       <CMove
-        from_vessel="flask_hexane"
+        from_vessel="flask_acetonitrile"
         to_vessel="waste_Y"
         volume="3 mL"
         move_speed="40"
@@ -96,7 +96,7 @@
         unique="False"
         through="" />
       <CMove
-        from_vessel="flask_hexane"
+        from_vessel="flask_acetonitrile"
         to_vessel="waste_K"
         volume="3 mL"
         move_speed="40"
@@ -107,7 +107,7 @@
         unique="False"
         through="" />
       <CMove
-        from_vessel="flask_hexane"
+        from_vessel="flask_acetonitrile"
         to_vessel="waste_X"
         volume="3 mL"
         move_speed="40"
@@ -118,34 +118,28 @@
         unique="False"
         through="" />
     </CleanBackbone>
-    <CConnect
-      from_vessel="flask_nitrogen"
-      to_vessel="filter"
-      from_port="None"
-      to_port="bottom"
-      unique="True" />
     <Evacuate
       vessel="reactor"
       evacuations="3"
       after_inert_gas_wait_time="60 secs"
       after_vacuum_wait_time="60 secs"
       inert_gas="flask_nitrogen"
-      vacuum="vacuum_reactor"
+      vacuum="vacuum"
       vacuum_device="vacuum_pump"
       vacuum_pressure="50 mbar"
       vessel_type="reactor">
       <StartVacuum
-        vessel="vacuum_reactor"
+        vessel="vacuum"
         pressure="50 mbar">
         <CSetVacuumSetPoint
-          vessel="vacuum_reactor"
+          vessel="vacuum"
           vacuum_pressure="50 mbar" />
         <CStartVacuum
-          vessel="vacuum_reactor" />
+          vessel="vacuum" />
       </StartVacuum>
       <CConnect
         from_vessel="reactor"
-        to_vessel="vacuum_reactor"
+        to_vessel="vacuum"
         from_port="None"
         to_port="None"
         unique="True" />
@@ -181,7 +175,7 @@
         repeats="2">
         <CConnect
           from_vessel="reactor"
-          to_vessel="vacuum_reactor"
+          to_vessel="vacuum"
           from_port="None"
           to_port="None"
           unique="True" />
@@ -215,7 +209,7 @@
         </Wait>
         <CConnect
           from_vessel="reactor"
-          to_vessel="vacuum_reactor"
+          to_vessel="vacuum"
           from_port="None"
           to_port="None"
           unique="True" />
@@ -249,7 +243,7 @@
         </Wait>
         <CConnect
           from_vessel="reactor"
-          to_vessel="vacuum_reactor"
+          to_vessel="vacuum"
           from_port="None"
           to_port="None"
           unique="True" />
@@ -283,9 +277,9 @@
         </Wait>
       </Repeat>
       <StopVacuum
-        vessel="vacuum_reactor">
+        vessel="vacuum">
         <CStopVacuum
-          vessel="vacuum_reactor" />
+          vessel="vacuum" />
       </StopVacuum>
     </Evacuate>
     <Add
@@ -306,7 +300,7 @@
       anticlogging_solvent_volume="2 mL"
       anticlogging_reagent_volume="10 mL"
       anticlogging_solvent_vessel="None"
-      reagent_vessel="flask_2 methylcyclohexanone"
+      reagent_vessel="flask_2-methylcyclohexanone"
       waste_vessel="waste_H"
       flush_tube_vessel="flask_nitrogen"
       vessel_type="reactor">
@@ -320,10 +314,10 @@
       <PrimePumpForAdd
         reagent="2 methylcyclohexanone"
         volume="3 mL"
-        reagent_vessel="flask_2 methylcyclohexanone"
+        reagent_vessel="flask_2-methylcyclohexanone"
         waste_vessel="waste_H">
         <CMove
-          from_vessel="flask_2 methylcyclohexanone"
+          from_vessel="flask_2-methylcyclohexanone"
           to_vessel="waste_H"
           volume="3 mL"
           move_speed="40"
@@ -335,7 +329,7 @@
           through="" />
       </PrimePumpForAdd>
       <CMove
-        from_vessel="flask_2 methylcyclohexanone"
+        from_vessel="flask_2-methylcyclohexanone"
         to_vessel="reactor"
         volume="10 mL"
         move_speed="40"
@@ -636,7 +630,7 @@
       anticlogging_solvent_volume="2 mL"
       anticlogging_reagent_volume="10 mL"
       anticlogging_solvent_vessel="None"
-      reagent_vessel="flask_sodium iodide acetonitrile solution"
+      reagent_vessel="flask_NaI_solution"
       waste_vessel="waste_H"
       flush_tube_vessel="flask_nitrogen"
       vessel_type="reactor">
@@ -653,10 +647,10 @@
       <PrimePumpForAdd
         reagent="sodium iodide acetonitrile solution"
         volume="3 mL"
-        reagent_vessel="flask_sodium iodide acetonitrile solution"
+        reagent_vessel="flask_NaI_solution"
         waste_vessel="waste_H">
         <CMove
-          from_vessel="flask_sodium iodide acetonitrile solution"
+          from_vessel="flask_NaI_solution"
           to_vessel="waste_H"
           volume="3 mL"
           move_speed="40"
@@ -668,7 +662,7 @@
           through="" />
       </PrimePumpForAdd>
       <CMove
-        from_vessel="flask_sodium iodide acetonitrile solution"
+        from_vessel="flask_NaI_solution"
         to_vessel="reactor"
         volume="100 mL"
         move_speed="40"
@@ -772,11 +766,9 @@
         unique="False"
         through="" />
     </CleanBackbone>
-    <HeatChill
+    <Stir
       vessel="reactor"
-      temp="50°C"
       time="18 hrs"
-      stir="True"
       stir_speed="250 RPM"
       vessel_type="reactor">
       <StartStir
@@ -789,47 +781,6 @@
           vessel="reactor"
           stir_speed="250 RPM" />
       </StartStir>
-      <HeatChillToTemp
-        vessel="reactor"
-        temp="50°C"
-        active="True"
-        continue_heatchill="True"
-        stir="True"
-        stir_speed="250 RPM"
-        vessel_type="reactor"
-        wait_recording_speed="2000"
-        after_recording_speed="14"
-        heater="stirrer_reactor"
-        chiller="None">
-        <StartStir
-          vessel="reactor"
-          vessel_type="reactor"
-          stir_speed="250 RPM">
-          <CStir
-            vessel="reactor" />
-          <CSetStirRate
-            vessel="reactor"
-            stir_speed="250 RPM" />
-        </StartStir>
-        <StartHeatChill
-          vessel="reactor"
-          temp="50°C"
-          vessel_type="reactor"
-          heater="stirrer_reactor"
-          chiller="None">
-          <CStirrerSetTemp
-            vessel="reactor"
-            temp="50°C" />
-          <CStirrerHeat
-            vessel="reactor" />
-        </StartHeatChill>
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CStirrerWaitForTemp
-          vessel="reactor" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </HeatChillToTemp>
       <Wait
         time="18 hrs"
         wait_recording_speed="2000"
@@ -841,15 +792,14 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <StopHeatChill
+      <StopStir
         vessel="reactor"
         vessel_type="reactor"
-        heater="stirrer_reactor"
-        chiller="None">
-        <CStopHeat
+        vessel_has_stirrer="True">
+        <CStopStir
           vessel="reactor" />
-      </StopHeatChill>
-    </HeatChill>
+      </StopStir>
+    </Stir>
     <Add
       reagent="saturated sodium bicarbonate solution"
       vessel="reactor"
@@ -868,7 +818,7 @@
       anticlogging_solvent_volume="2 mL"
       anticlogging_reagent_volume="10 mL"
       anticlogging_solvent_vessel="None"
-      reagent_vessel="flask_saturated sodium bicarbonate solution"
+      reagent_vessel="flask_Na2CO3_solution"
       waste_vessel="waste_H"
       flush_tube_vessel="flask_nitrogen"
       vessel_type="reactor">
@@ -885,10 +835,10 @@
       <PrimePumpForAdd
         reagent="saturated sodium bicarbonate solution"
         volume="3 mL"
-        reagent_vessel="flask_saturated sodium bicarbonate solution"
+        reagent_vessel="flask_Na2CO3_solution"
         waste_vessel="waste_H">
         <CMove
-          from_vessel="flask_saturated sodium bicarbonate solution"
+          from_vessel="flask_Na2CO3_solution"
           to_vessel="waste_H"
           volume="3 mL"
           move_speed="40"
@@ -900,7 +850,7 @@
           through="" />
       </PrimePumpForAdd>
       <CMove
-        from_vessel="flask_saturated sodium bicarbonate solution"
+        from_vessel="flask_Na2CO3_solution"
         to_vessel="reactor"
         volume="100 mL"
         move_speed="40"
@@ -1014,13 +964,13 @@
       through="None"
       through_cartridge="None"
       from_port="None"
-      to_port="top"
+      to_port="bottom"
       solvent_volume="200 mL"
       n_separations="2"
       waste_phase_to_vessel="waste_Y"
       waste_phase_to_port="None"
       waste_vessel="waste_Y"
-      buffer_flasks="buffer_flask1 buffer_flask2"
+      buffer_flasks="phase_A phase_B product"
       remove_dead_volume="False">
       <Transfer
         from_vessel="reactor"
@@ -1205,10 +1155,10 @@
           recording_speed="14" />
       </Wait>
       <CSeparatePhases
-        lower_phase_vessel="buffer_flask1"
-        upper_phase_vessel="buffer_flask2"
+        lower_phase_vessel="phase_A"
+        upper_phase_vessel="phase_B"
         separation_vessel="separator"
-        dead_volume_target="buffer_flask1"
+        dead_volume_target="phase_A"
         lower_phase_port="None"
         upper_phase_port="None"
         dead_volume_port="None"
@@ -1216,7 +1166,7 @@
         upper_phase_through="None"
         dead_volume_through="None" />
       <Transfer
-        from_vessel="buffer_flask1"
+        from_vessel="phase_A"
         to_vessel="separator"
         volume="all"
         from_port="None"
@@ -1227,7 +1177,7 @@
         move_speed="40"
         dispense_speed="40">
         <CMove
-          from_vessel="buffer_flask1"
+          from_vessel="phase_A"
           to_vessel="separator"
           volume="500 mL"
           move_speed="40"
@@ -1409,7 +1359,7 @@
         upper_phase_through="None"
         dead_volume_through="None" />
       <Transfer
-        from_vessel="buffer_flask2"
+        from_vessel="phase_B"
         to_vessel="separator"
         volume="all"
         from_port="None"
@@ -1420,7 +1370,7 @@
         move_speed="40"
         dispense_speed="40">
         <CMove
-          from_vessel="buffer_flask2"
+          from_vessel="phase_B"
           to_vessel="separator"
           volume="500 mL"
           move_speed="40"
@@ -1519,7 +1469,7 @@
       waste_phase_to_vessel="waste_Y"
       waste_phase_to_port="None"
       waste_vessel="waste_Y"
-      buffer_flasks="buffer_flask1 buffer_flask2"
+      buffer_flasks="phase_A phase_B product"
       remove_dead_volume="True">
       <Add
         reagent="brine"
@@ -1837,7 +1787,7 @@
     </Evaporate>
     <FilterThrough
       from_vessel="rotavap"
-      to_vessel="reactor"
+      to_vessel="product"
       through="silica-gel"
       eluting_solvent="hexane"
       eluting_volume="1000 mL"
@@ -1847,13 +1797,13 @@
       eluting_solvent_vessel="flask_hexane"
       flush_cartridge_vessel="flask_nitrogen"
       through_cartridge="cartridge_silica-gel"
-      cartridge_dead_volume="25 mL"
+      cartridge_dead_volume="150 mL"
       buffer_flask="None"
       buffer_flask_max_volume="None"
-      to_vessel_max_volume="300 mL">
+      to_vessel_max_volume="2 l">
       <Transfer
         from_vessel="rotavap"
-        to_vessel="reactor"
+        to_vessel="product"
         volume="all"
         from_port="None"
         to_port="None"
@@ -1864,7 +1814,7 @@
         dispense_speed="40">
         <CMove
           from_vessel="rotavap"
-          to_vessel="reactor"
+          to_vessel="product"
           volume="250 mL"
           move_speed="5"
           aspiration_speed="5"
@@ -1877,7 +1827,7 @@
       <Transfer
         from_vessel="flask_hexane"
         to_vessel="rotavap"
-        volume="300 mL"
+        volume="1000 mL"
         from_port="None"
         to_port="None"
         through="None"
@@ -1888,7 +1838,7 @@
         <CMove
           from_vessel="flask_hexane"
           to_vessel="rotavap"
-          volume="300 mL"
+          volume="1000 mL"
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
@@ -1899,8 +1849,8 @@
       </Transfer>
       <Transfer
         from_vessel="rotavap"
-        to_vessel="reactor"
-        volume="300 mL"
+        to_vessel="product"
+        volume="1000 mL"
         from_port="None"
         to_port="None"
         through="cartridge_silica-gel"
@@ -1910,146 +1860,8 @@
         dispense_speed="40">
         <CMove
           from_vessel="rotavap"
-          to_vessel="reactor"
-          volume="300 mL"
-          move_speed="5"
-          aspiration_speed="5"
-          dispense_speed="40"
-          from_port="None"
-          to_port="None"
-          unique="False"
-          through="cartridge_silica-gel" />
-      </Transfer>
-      <Transfer
-        from_vessel="flask_hexane"
-        to_vessel="rotavap"
-        volume="300 mL"
-        from_port="None"
-        to_port="None"
-        through="None"
-        time="None"
-        aspiration_speed="10"
-        move_speed="40"
-        dispense_speed="40">
-        <CMove
-          from_vessel="flask_hexane"
-          to_vessel="rotavap"
-          volume="300 mL"
-          move_speed="40"
-          aspiration_speed="10"
-          dispense_speed="40"
-          from_port="None"
-          to_port="None"
-          unique="False"
-          through="None" />
-      </Transfer>
-      <Transfer
-        from_vessel="rotavap"
-        to_vessel="reactor"
-        volume="300 mL"
-        from_port="None"
-        to_port="None"
-        through="cartridge_silica-gel"
-        time="None"
-        aspiration_speed="5"
-        move_speed="5"
-        dispense_speed="40">
-        <CMove
-          from_vessel="rotavap"
-          to_vessel="reactor"
-          volume="300 mL"
-          move_speed="5"
-          aspiration_speed="5"
-          dispense_speed="40"
-          from_port="None"
-          to_port="None"
-          unique="False"
-          through="cartridge_silica-gel" />
-      </Transfer>
-      <Transfer
-        from_vessel="flask_hexane"
-        to_vessel="rotavap"
-        volume="300 mL"
-        from_port="None"
-        to_port="None"
-        through="None"
-        time="None"
-        aspiration_speed="10"
-        move_speed="40"
-        dispense_speed="40">
-        <CMove
-          from_vessel="flask_hexane"
-          to_vessel="rotavap"
-          volume="300 mL"
-          move_speed="40"
-          aspiration_speed="10"
-          dispense_speed="40"
-          from_port="None"
-          to_port="None"
-          unique="False"
-          through="None" />
-      </Transfer>
-      <Transfer
-        from_vessel="rotavap"
-        to_vessel="reactor"
-        volume="300 mL"
-        from_port="None"
-        to_port="None"
-        through="cartridge_silica-gel"
-        time="None"
-        aspiration_speed="5"
-        move_speed="5"
-        dispense_speed="40">
-        <CMove
-          from_vessel="rotavap"
-          to_vessel="reactor"
-          volume="300 mL"
-          move_speed="5"
-          aspiration_speed="5"
-          dispense_speed="40"
-          from_port="None"
-          to_port="None"
-          unique="False"
-          through="cartridge_silica-gel" />
-      </Transfer>
-      <Transfer
-        from_vessel="flask_hexane"
-        to_vessel="rotavap"
-        volume="100 mL"
-        from_port="None"
-        to_port="None"
-        through="None"
-        time="None"
-        aspiration_speed="10"
-        move_speed="40"
-        dispense_speed="40">
-        <CMove
-          from_vessel="flask_hexane"
-          to_vessel="rotavap"
-          volume="100 mL"
-          move_speed="40"
-          aspiration_speed="10"
-          dispense_speed="40"
-          from_port="None"
-          to_port="None"
-          unique="False"
-          through="None" />
-      </Transfer>
-      <Transfer
-        from_vessel="rotavap"
-        to_vessel="reactor"
-        volume="100 mL"
-        from_port="None"
-        to_port="None"
-        through="cartridge_silica-gel"
-        time="None"
-        aspiration_speed="5"
-        move_speed="5"
-        dispense_speed="40">
-        <CMove
-          from_vessel="rotavap"
-          to_vessel="reactor"
-          volume="100 mL"
+          to_vessel="product"
+          volume="1000 mL"
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
@@ -2060,8 +1872,8 @@
       </Transfer>
       <Transfer
         from_vessel="flask_nitrogen"
-        to_vessel="reactor"
-        volume="25 mL"
+        to_vessel="product"
+        volume="150 mL"
         from_port="None"
         to_port="None"
         through="cartridge_silica-gel"
@@ -2071,8 +1883,8 @@
         dispense_speed="40">
         <CMove
           from_vessel="flask_nitrogen"
-          to_vessel="reactor"
-          volume="25 mL"
+          to_vessel="product"
+          volume="150 mL"
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"

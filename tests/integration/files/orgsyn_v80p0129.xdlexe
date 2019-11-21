@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="d635be960b81c1f6ddb87cb3bc79f33f2fbff51f3d33125edae491433d741540"
+  graph_sha256="271d1970a912fc42450a51a008021731cc4d5d3db007254b62aa36839d11f6e6"
 >
   <Hardware>
     <Component
@@ -26,21 +26,10 @@
       stir_speed="250 RPM" />
     <CleanBackbone
       solvent="distilled water"
-      waste_vessels="waste_Z waste_H waste_G waste_Y waste_K waste_X"
-      solvent_vessel="flask_distilled water">
+      waste_vessels="waste_H waste_G"
+      solvent_vessel="flask_H2O">
       <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_Z"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
+        from_vessel="flask_H2O"
         to_vessel="waste_H"
         volume="3 mL"
         move_speed="40"
@@ -51,41 +40,8 @@
         unique="False"
         through="" />
       <CMove
-        from_vessel="flask_distilled water"
+        from_vessel="flask_H2O"
         to_vessel="waste_G"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_Y"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_K"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_X"
         volume="3 mL"
         move_speed="40"
         aspiration_speed="10"
@@ -120,7 +76,7 @@
       anticlogging_reagent_volume="10 mL"
       anticlogging_solvent_vessel="None"
       reagent_vessel="None"
-      waste_vessel="waste_Z"
+      waste_vessel="waste_H"
       flush_tube_vessel="flask_nitrogen"
       vessel_type="filter">
       <Confirm
@@ -144,8 +100,8 @@
       anticlogging_solvent_volume="2 mL"
       anticlogging_reagent_volume="10 mL"
       anticlogging_solvent_vessel="None"
-      reagent_vessel="flask_hydriodic acid"
-      waste_vessel="waste_Z"
+      reagent_vessel="flask_HI"
+      waste_vessel="waste_H"
       flush_tube_vessel="flask_nitrogen"
       vessel_type="filter">
       <StopStir
@@ -158,11 +114,11 @@
       <PrimePumpForAdd
         reagent="hydriodic acid"
         volume="3 mL"
-        reagent_vessel="flask_hydriodic acid"
-        waste_vessel="waste_Z">
+        reagent_vessel="flask_HI"
+        waste_vessel="waste_H">
         <CMove
-          from_vessel="flask_hydriodic acid"
-          to_vessel="waste_Z"
+          from_vessel="flask_HI"
+          to_vessel="waste_H"
           volume="3 mL"
           move_speed="40"
           aspiration_speed="10"
@@ -173,7 +129,7 @@
           through="" />
       </PrimePumpForAdd>
       <CMove
-        from_vessel="flask_hydriodic acid"
+        from_vessel="flask_HI"
         to_vessel="filter"
         volume="40 mL"
         move_speed="40"
@@ -208,21 +164,10 @@
     </Add>
     <CleanBackbone
       solvent="distilled water"
-      waste_vessels="waste_Z waste_H waste_G waste_Y waste_K waste_X"
-      solvent_vessel="flask_distilled water">
+      waste_vessels="waste_H waste_G"
+      solvent_vessel="flask_H2O">
       <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_Z"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
+        from_vessel="flask_H2O"
         to_vessel="waste_H"
         volume="3 mL"
         move_speed="40"
@@ -233,41 +178,8 @@
         unique="False"
         through="" />
       <CMove
-        from_vessel="flask_distilled water"
+        from_vessel="flask_H2O"
         to_vessel="waste_G"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_Y"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_K"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_X"
         volume="3 mL"
         move_speed="40"
         aspiration_speed="10"
@@ -295,8 +207,8 @@
       anticlogging_solvent_volume="2 mL"
       anticlogging_reagent_volume="10 mL"
       anticlogging_solvent_vessel="None"
-      reagent_vessel="flask_propiolic acid"
-      waste_vessel="waste_Z"
+      reagent_vessel="flask_propiolic_acid"
+      waste_vessel="waste_H"
       flush_tube_vessel="flask_nitrogen"
       vessel_type="filter">
       <StartStir
@@ -312,11 +224,11 @@
       <PrimePumpForAdd
         reagent="propiolic acid"
         volume="3 mL"
-        reagent_vessel="flask_propiolic acid"
-        waste_vessel="waste_Z">
+        reagent_vessel="flask_propiolic_acid"
+        waste_vessel="waste_H">
         <CMove
-          from_vessel="flask_propiolic acid"
-          to_vessel="waste_Z"
+          from_vessel="flask_propiolic_acid"
+          to_vessel="waste_H"
           volume="3 mL"
           move_speed="40"
           aspiration_speed="10"
@@ -327,7 +239,7 @@
           through="" />
       </PrimePumpForAdd>
       <CMove
-        from_vessel="flask_propiolic acid"
+        from_vessel="flask_propiolic_acid"
         to_vessel="filter"
         volume="10 mL"
         move_speed="40"
@@ -362,21 +274,10 @@
     </Add>
     <CleanBackbone
       solvent="distilled water"
-      waste_vessels="waste_Z waste_H waste_G waste_Y waste_K waste_X"
-      solvent_vessel="flask_distilled water">
+      waste_vessels="waste_H waste_G"
+      solvent_vessel="flask_H2O">
       <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_Z"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
+        from_vessel="flask_H2O"
         to_vessel="waste_H"
         volume="3 mL"
         move_speed="40"
@@ -387,41 +288,8 @@
         unique="False"
         through="" />
       <CMove
-        from_vessel="flask_distilled water"
+        from_vessel="flask_H2O"
         to_vessel="waste_G"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_Y"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_K"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_X"
         volume="3 mL"
         move_speed="40"
         aspiration_speed="10"
@@ -442,7 +310,7 @@
       wait_recording_speed="2000"
       after_recording_speed="14"
       heater="None"
-      chiller="chiller_filter">
+      chiller="chiller">
       <StartStir
         vessel="filter"
         vessel_type="filter"
@@ -458,7 +326,7 @@
         temp="130°C"
         vessel_type="filter"
         heater="None"
-        chiller="chiller_filter">
+        chiller="chiller">
         <CChillerSetTemp
           vessel="filter"
           temp="130°C" />
@@ -517,7 +385,7 @@
       wait_recording_speed="2000"
       after_recording_speed="14"
       heater="None"
-      chiller="chiller_filter">
+      chiller="chiller">
       <StartStir
         vessel="filter"
         vessel_type="filter"
@@ -533,7 +401,7 @@
         temp="28°C"
         vessel_type="filter"
         heater="None"
-        chiller="chiller_filter">
+        chiller="chiller">
         <CChillerSetTemp
           vessel="filter"
           temp="28°C" />
@@ -542,7 +410,7 @@
         vessel="filter"
         vessel_type="filter"
         heater="None"
-        chiller="chiller_filter">
+        chiller="chiller">
         <CStopChiller
           vessel="filter" />
       </StopHeatChill>
@@ -557,7 +425,7 @@
         temp="28°C"
         vessel_type="filter"
         heater="None"
-        chiller="chiller_filter">
+        chiller="chiller">
         <CChillerSetTemp
           vessel="filter"
           temp="28°C" />
@@ -593,7 +461,7 @@
         wait_recording_speed="2000"
         after_recording_speed="14"
         heater="None"
-        chiller="chiller_filter">
+        chiller="chiller">
         <StartStir
           vessel="filter"
           vessel_type="filter"
@@ -609,7 +477,7 @@
           temp="25°C"
           vessel_type="filter"
           heater="None"
-          chiller="chiller_filter">
+          chiller="chiller">
           <CChillerSetTemp
             vessel="filter"
             temp="25°C" />
@@ -638,7 +506,7 @@
         vessel="filter"
         vessel_type="filter"
         heater="None"
-        chiller="chiller_filter">
+        chiller="chiller">
         <CStopChiller
           vessel="filter" />
       </StopHeatChill>
@@ -650,13 +518,13 @@
       aspiration_speed="5"
       stir="True"
       stir_speed="500 RPM"
-      waste_vessel="waste_Z"
+      waste_vessel="waste_H"
       filtrate_vessel="None"
-      vacuum="vacuum_filter"
+      vacuum="vacuum"
       vacuum_device="vacuum_pump"
       inert_gas="flask_nitrogen"
-      vacuum_valve="valve_vacuum"
-      valve_unused_port="3">
+      vacuum_valve="valve_J"
+      valve_unused_port="2">
       <StartStir
         vessel="filter"
         vessel_type="None"
@@ -669,7 +537,7 @@
       </StartStir>
       <CMove
         from_vessel="filter"
-        to_vessel="waste_Z"
+        to_vessel="waste_H"
         volume="75 mL"
         move_speed="40"
         aspiration_speed="5"
@@ -686,17 +554,17 @@
           vessel="filter" />
       </StopStir>
       <StartVacuum
-        vessel="vacuum_filter"
+        vessel="vacuum"
         pressure="400 mbar">
         <CSetVacuumSetPoint
-          vessel="vacuum_filter"
+          vessel="vacuum"
           vacuum_pressure="400 mbar" />
         <CStartVacuum
-          vessel="vacuum_filter" />
+          vessel="vacuum" />
       </StartVacuum>
       <CConnect
         from_vessel="filter"
-        to_vessel="vacuum_filter"
+        to_vessel="vacuum"
         from_port="bottom"
         to_port="None"
         unique="True" />
@@ -718,30 +586,19 @@
         to_port="None"
         unique="True" />
       <StopVacuum
-        vessel="vacuum_filter">
+        vessel="vacuum">
         <CStopVacuum
-          vessel="vacuum_filter" />
+          vessel="vacuum" />
       </StopVacuum>
       <CVentVacuum
-        vessel="vacuum_filter" />
+        vessel="vacuum" />
     </Filter>
     <CleanBackbone
       solvent="distilled water"
-      waste_vessels="waste_Z waste_H waste_G waste_Y waste_K waste_X"
-      solvent_vessel="flask_distilled water">
+      waste_vessels="waste_H waste_G"
+      solvent_vessel="flask_H2O">
       <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_Z"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
+        from_vessel="flask_H2O"
         to_vessel="waste_H"
         volume="3 mL"
         move_speed="40"
@@ -752,41 +609,8 @@
         unique="False"
         through="" />
       <CMove
-        from_vessel="flask_distilled water"
+        from_vessel="flask_H2O"
         to_vessel="waste_G"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_Y"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_K"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_X"
         volume="3 mL"
         move_speed="40"
         aspiration_speed="10"
@@ -805,16 +629,16 @@
       stir="True"
       stir_time="30 secs"
       stir_speed="500 RPM"
-      waste_vessel="waste_Z"
+      waste_vessel="waste_H"
       filtrate_vessel="None"
       aspiration_speed="5"
-      vacuum="vacuum_filter"
+      vacuum="vacuum"
       vacuum_device="vacuum_pump"
       inert_gas="flask_nitrogen"
-      vacuum_valve="valve_vacuum"
-      valve_unused_port="3"
+      vacuum_valve="valve_J"
+      valve_unused_port="2"
       vessel_type="filter"
-      filter_dead_volume="10 mL"
+      filter_dead_volume="19 mL"
       repeat="3">
       <StartStir
         vessel="filter"
@@ -844,8 +668,8 @@
         anticlogging_solvent_volume="2 mL"
         anticlogging_reagent_volume="10 mL"
         anticlogging_solvent_vessel="None"
-        reagent_vessel="flask_distilled water"
-        waste_vessel="waste_Z"
+        reagent_vessel="flask_H2O"
+        waste_vessel="waste_H"
         flush_tube_vessel="flask_nitrogen"
         vessel_type="filter">
         <StartStir
@@ -861,11 +685,11 @@
         <PrimePumpForAdd
           reagent="distilled water"
           volume="3 mL"
-          reagent_vessel="flask_distilled water"
-          waste_vessel="waste_Z">
+          reagent_vessel="flask_H2O"
+          waste_vessel="waste_H">
           <CMove
-            from_vessel="flask_distilled water"
-            to_vessel="waste_Z"
+            from_vessel="flask_H2O"
+            to_vessel="waste_H"
             volume="3 mL"
             move_speed="40"
             aspiration_speed="10"
@@ -876,7 +700,7 @@
             through="" />
         </PrimePumpForAdd>
         <CMove
-          from_vessel="flask_distilled water"
+          from_vessel="flask_H2O"
           to_vessel="filter"
           volume="70 mL"
           move_speed="40"
@@ -922,8 +746,8 @@
       </Wait>
       <CMove
         from_vessel="filter"
-        to_vessel="waste_Z"
-        volume="115 mL"
+        to_vessel="waste_H"
+        volume="124 mL"
         move_speed="40"
         aspiration_speed="5"
         dispense_speed="40"
@@ -932,13 +756,13 @@
         unique="False"
         through="" />
       <StartVacuum
-        vessel="vacuum_filter"
+        vessel="vacuum"
         pressure="400 mbar">
         <CSetVacuumSetPoint
-          vessel="vacuum_filter"
+          vessel="vacuum"
           vacuum_pressure="400 mbar" />
         <CStartVacuum
-          vessel="vacuum_filter" />
+          vessel="vacuum" />
       </StartVacuum>
       <StopStir
         vessel="filter"
@@ -949,7 +773,7 @@
       </StopStir>
       <CConnect
         from_vessel="filter"
-        to_vessel="vacuum_filter"
+        to_vessel="vacuum"
         from_port="bottom"
         to_port="None"
         unique="True" />
@@ -971,30 +795,19 @@
         to_port="None"
         unique="True" />
       <StopVacuum
-        vessel="vacuum_filter">
+        vessel="vacuum">
         <CStopVacuum
-          vessel="vacuum_filter" />
+          vessel="vacuum" />
       </StopVacuum>
       <CVentVacuum
-        vessel="vacuum_filter" />
+        vessel="vacuum" />
     </WashSolid>
     <CleanBackbone
       solvent="distilled water"
-      waste_vessels="waste_Z waste_H waste_G waste_Y waste_K waste_X"
-      solvent_vessel="flask_distilled water">
+      waste_vessels="waste_H waste_G"
+      solvent_vessel="flask_H2O">
       <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_Z"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
+        from_vessel="flask_H2O"
         to_vessel="waste_H"
         volume="3 mL"
         move_speed="40"
@@ -1005,41 +818,8 @@
         unique="False"
         through="" />
       <CMove
-        from_vessel="flask_distilled water"
+        from_vessel="flask_H2O"
         to_vessel="waste_G"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_Y"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_K"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_X"
         volume="3 mL"
         move_speed="40"
         aspiration_speed="10"
@@ -1053,14 +833,14 @@
       vessel="filter"
       time="60 mins"
       temp="None"
-      waste_vessel="waste_Z"
+      waste_vessel="waste_H"
       aspiration_speed="5"
-      vacuum="vacuum_filter"
+      vacuum="vacuum"
       vacuum_device="vacuum_pump"
       vacuum_pressure="400 mbar"
       inert_gas="flask_nitrogen"
-      vacuum_valve="valve_vacuum"
-      valve_unused_port="3"
+      vacuum_valve="valve_J"
+      valve_unused_port="2"
       vessel_type="filter"
       vessel_has_stirrer="True">
       <StopStir
@@ -1072,7 +852,7 @@
       </StopStir>
       <CMove
         from_vessel="filter"
-        to_vessel="waste_Z"
+        to_vessel="waste_H"
         volume="5 mL"
         move_speed="40"
         aspiration_speed="5"
@@ -1082,17 +862,17 @@
         unique="False"
         through="" />
       <StartVacuum
-        vessel="vacuum_filter"
+        vessel="vacuum"
         pressure="400 mbar">
         <CSetVacuumSetPoint
-          vessel="vacuum_filter"
+          vessel="vacuum"
           vacuum_pressure="400 mbar" />
         <CStartVacuum
-          vessel="vacuum_filter" />
+          vessel="vacuum" />
       </StartVacuum>
       <CConnect
         from_vessel="filter"
-        to_vessel="vacuum_filter"
+        to_vessel="vacuum"
         from_port="bottom"
         to_port="None"
         unique="True" />
@@ -1114,33 +894,22 @@
         to_port="None"
         unique="True" />
       <StopVacuum
-        vessel="vacuum_filter">
+        vessel="vacuum">
         <CStopVacuum
-          vessel="vacuum_filter" />
+          vessel="vacuum" />
       </StopVacuum>
       <CVentVacuum
-        vessel="vacuum_filter" />
+        vessel="vacuum" />
       <CSetVacuumSetPoint
-        vessel="vacuum_filter"
+        vessel="vacuum"
         vacuum_pressure="400 mbar" />
     </Dry>
     <CleanBackbone
       solvent="distilled water"
-      waste_vessels="waste_Z waste_H waste_G waste_Y waste_K waste_X"
-      solvent_vessel="flask_distilled water">
+      waste_vessels="waste_H waste_G"
+      solvent_vessel="flask_H2O">
       <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_Z"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
+        from_vessel="flask_H2O"
         to_vessel="waste_H"
         volume="3 mL"
         move_speed="40"
@@ -1151,41 +920,8 @@
         unique="False"
         through="" />
       <CMove
-        from_vessel="flask_distilled water"
+        from_vessel="flask_H2O"
         to_vessel="waste_G"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_Y"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_K"
-        volume="3 mL"
-        move_speed="40"
-        aspiration_speed="10"
-        dispense_speed="40"
-        from_port="None"
-        to_port="None"
-        unique="False"
-        through="" />
-      <CMove
-        from_vessel="flask_distilled water"
-        to_vessel="waste_X"
         volume="3 mL"
         move_speed="40"
         aspiration_speed="10"
