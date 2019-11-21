@@ -40,3 +40,38 @@ def test_orgsyn_v83p0193():
         os.path.join(FOLDER, 'orgsyn_v83p0193.xdl'),
         os.path.join(FOLDER, 'orgsyn_v83p0193_graph.json')
     )
+
+@pytest.mark.integration
+def test_orgsyn_v80p0129():
+    generic_chempiler_test(
+        os.path.join(FOLDER, 'orgsyn_v80p0129.xdl'),
+        os.path.join(FOLDER, 'orgsyn_v80p0129_graph.json')
+    )
+
+@pytest.mark.integration
+def test_orgsyn_v88p0152_a():
+    generic_chempiler_test(
+        os.path.join(FOLDER, 'orgsyn_v88p0152_a.xdl'),
+        os.path.join(FOLDER, 'orgsyn_v88p0152_a_graph.json')
+    )
+
+@pytest.mark.integration
+def test_orgsyn_v81p0262():
+    generic_chempiler_test(
+        os.path.join(FOLDER, 'orgsyn_v81p0262.xdl'),
+        os.path.join(FOLDER, 'orgsyn_v81p0262_graph.json')
+    )
+
+@pytest.mark.integration
+def test_orgsyn_v87p0016():
+    generic_chempiler_test(
+        os.path.join(FOLDER, 'orgsyn_v87p0016.xdl'),
+        os.path.join(FOLDER, 'orgsyn_v87p0016_graph.json')
+    )
+
+@pytest.mark.integration
+def test_orgsyn_v90p0251():
+    generic_chempiler_test(
+        os.path.join(FOLDER, 'orgsyn_v90p0251.xdl'),
+        os.path.join(FOLDER, 'orgsyn_v90p0251_graph.json')
+    )
