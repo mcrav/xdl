@@ -43,7 +43,6 @@ from ....localisation import HUMAN_READABLE_STEPS
 
 
 def heater_chiller_sanity_check(heater, chiller, temp):
-    print('HEATER', heater, chiller, temp)
     if not heater and chiller:
         assert temp <= CHILLER_MAX_TEMP
         assert temp >= CHILLER_MIN_TEMP
@@ -53,7 +52,6 @@ def heater_chiller_sanity_check(heater, chiller, temp):
         assert temp <= HEATER_MAX_TEMP
 
     assert CHILLER_MIN_TEMP <= temp <= HEATER_MAX_TEMP
-    print('HEATER', 'PASSED')
 
 class StartHeatChill(AbstractStep):
     """Start heating/chilling vessel to given temp and leave heater/chiller on.
@@ -115,7 +113,7 @@ class StartHeatChill(AbstractStep):
             CRotavapStartHeater(rotavap_name=self.vessel),
         ]
 
-    def final_sanity_check(self):
+    def final_sanity_check(self, graph):
         assert self.steps
         heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
 
@@ -166,7 +164,7 @@ class HeatChillSetTemp(AbstractStep):
                     )
         return steps
 
-    def final_sanity_check(self):
+    def final_sanity_check(self, graph):
         assert self.steps
         heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
 
@@ -243,7 +241,7 @@ class HeatChillToTemp(AbstractStep):
                 vessel=self.vessel, vessel_type=self.vessel_type))
         return steps
 
-    def final_sanity_check(self):
+    def final_sanity_check(self, graph):
         heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
 
     def get_chiller_steps(self):

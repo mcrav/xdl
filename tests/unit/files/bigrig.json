@@ -50,6 +50,12 @@
           "id": "collection_flask_volume",
           "units": "mL",
           "type": "number"
+        },
+        "can_filter": {
+          "name": "Can Filter",
+          "id": "can_filter",
+          "units": "",
+          "type": "bool"
         }
       },
       "class": "IKARV10",
@@ -57,7 +63,8 @@
       "port": "evaporate",
       "current_volume": 0,
       "max_volume": 100,
-      "collection_flask_volume": 50
+      "collection_flask_volume": 50,
+      "can_filter": false
     },
     {
       "id": "waste_rotavap",
@@ -139,14 +146,23 @@
       "id": "reactor",
       "type": "reactor",
       "x": -80,
-      "y": 280,
+      "y": 240,
       "internalId": 21,
       "label": "reactor",
+      "customProperties": {
+        "can_filter": {
+          "name": "Can Filter",
+          "id": "can_filter",
+          "units": "",
+          "type": "bool"
+        }
+      },
       "class": "ChemputerReactor",
       "name": "reactor",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "can_filter": true
     },
     {
       "id": "stirrer_reactor",
@@ -468,13 +484,13 @@
       "type": "flask",
       "x": -600,
       "y": 160,
+      "internalId": 92,
+      "label": "buffer_flask",
       "class": "ChemputerFlask",
       "name": "buffer_flask",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 100,
-      "internalId": 92,
-      "label": "buffer_flask"
+      "max_volume": 100
     }
   ],
   "links": [
