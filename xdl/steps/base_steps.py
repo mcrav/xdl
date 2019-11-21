@@ -89,7 +89,7 @@ class AbstractStep(Step, ABC):
         for step in self.base_steps:
             step.release_lock(chempiler, locking_pid)
 
-    def final_sanity_check(self):
+    def final_sanity_check(self, graph):
         pass
 
     def on_prepare_for_execution(self, graph):
@@ -109,7 +109,7 @@ class AbstractStep(Step, ABC):
             logger (logging.Logger): Logger to handle output step output.
             level (int): Level of recursion in step execution.
         """
-        self.final_sanity_check()
+        self.final_sanity_check(chempiler.graph.graph)
         level += 1
         if not logger:
             logger = logging.getLogger('xdl_logger')

@@ -2,11 +2,13 @@ from typing import Optional, List, Dict, Any, Union
 from ..utils import get_vacuum_valve_reconnect_steps
 from ...base_steps import Step, AbstractStep
 from ..steps_base import CMove, CConnect, CVentVacuum
-from ..steps_utility import StopStir, StartStir, Wait, StartVacuum, StopVacuum
+from ..steps_utility import (
+    StopStir, StartStir, Wait, StartVacuum, StopVacuum, Transfer)
 from ....constants import (
     BOTTOM_PORT,
     DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
     DEFAULT_FILTER_VACUUM_PRESSURE)
+from ....utils.errors import XDLError
 
 class Filter(AbstractStep):
     """Filter contents of filter vessel. Apply vacuum for given time.
@@ -113,3 +115,33 @@ class Filter(AbstractStep):
     def syntext(self) -> str:
         s = 'The reaction mixture was filtered.'
         return s
+
+
+class FilterTo(AbstractStep):
+    def __init__(
+        self,
+        from_vessel: str,
+        to_vessel: str,
+    ):
+        super().__init__(locals())
+
+    def get_steps(self):
+        return [
+            Transfer(
+                from_vessel=self.from_vessel,
+                to_vessel=self.to_vessel,
+                volume='all',
+            )
+        ]
+
+    def final_sanity_check(self, graph):
+        try:
+            full_node = graph.node[self.from_vessel]
+            assert 'can_filter' in full_node and full_node['can_filter']
+        except AssertionError:
+            raise XDLError(f"from_vessel ({self.from_vessel}) doesn't have can_filter property == True")
+
+        try:
+            assert self.from_vessel != self.to_vessel
+        except AssertionError:
+            raise XDLError(f"from_vessel and to_vessel can't be the same node ({self.from_vessel}).")

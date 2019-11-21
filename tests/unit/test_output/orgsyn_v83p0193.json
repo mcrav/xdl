@@ -448,10 +448,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "sodium iodide acetonitrile solution",
-      "name": "flask_sodium iodide acetonitrile solution",
-      "label": "flask_sodium iodide acetonitrile solution",
-      "id": "flask_sodium iodide acetonitrile solution",
+      "chemical": "triethylamine",
+      "name": "flask_triethylamine",
+      "label": "flask_triethylamine",
+      "id": "flask_triethylamine",
       "internalId": 4
     },
     {
@@ -461,10 +461,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "hexane",
-      "name": "flask_hexane",
-      "label": "flask_hexane",
-      "id": "flask_hexane",
+      "chemical": "sodium iodide acetonitrile solution",
+      "name": "flask_sodium iodide acetonitrile solution",
+      "label": "flask_sodium iodide acetonitrile solution",
+      "id": "flask_sodium iodide acetonitrile solution",
       "internalId": 7
     },
     {
@@ -474,10 +474,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "brine",
-      "name": "flask_brine",
-      "label": "flask_brine",
-      "id": "flask_brine",
+      "chemical": "2 methylcyclohexanone",
+      "name": "flask_2 methylcyclohexanone",
+      "label": "flask_2 methylcyclohexanone",
+      "id": "flask_2 methylcyclohexanone",
       "internalId": 8
     },
     {
@@ -487,10 +487,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "triethylamine",
-      "name": "flask_triethylamine",
-      "label": "flask_triethylamine",
-      "id": "flask_triethylamine",
+      "chemical": "hexane",
+      "name": "flask_hexane",
+      "label": "flask_hexane",
+      "id": "flask_hexane",
       "internalId": 9
     },
     {
@@ -500,10 +500,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "saturated sodium bicarbonate solution",
-      "name": "flask_saturated sodium bicarbonate solution",
-      "label": "flask_saturated sodium bicarbonate solution",
-      "id": "flask_saturated sodium bicarbonate solution",
+      "chemical": "brine",
+      "name": "flask_brine",
+      "label": "flask_brine",
+      "id": "flask_brine",
       "internalId": 21
     },
     {
@@ -513,10 +513,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "2 methylcyclohexanone",
-      "name": "flask_2 methylcyclohexanone",
-      "label": "flask_2 methylcyclohexanone",
-      "id": "flask_2 methylcyclohexanone",
+      "chemical": "saturated sodium bicarbonate solution",
+      "name": "flask_saturated sodium bicarbonate solution",
+      "label": "flask_saturated sodium bicarbonate solution",
+      "id": "flask_saturated sodium bicarbonate solution",
       "internalId": 31
     },
     {
@@ -1103,7 +1103,7 @@
     },
     {
       "port": "(0,2)",
-      "source": "flask_sodium iodide acetonitrile solution",
+      "source": "flask_triethylamine",
       "target": "valve_Z",
       "sourceInternal": 4,
       "targetInternal": 13,
@@ -1112,7 +1112,7 @@
     },
     {
       "port": "(0,4)",
-      "source": "flask_hexane",
+      "source": "flask_sodium iodide acetonitrile solution",
       "target": "valve_Z",
       "sourceInternal": 7,
       "targetInternal": 13,
@@ -1121,7 +1121,7 @@
     },
     {
       "port": "(0,5)",
-      "source": "flask_brine",
+      "source": "flask_2 methylcyclohexanone",
       "target": "valve_Z",
       "sourceInternal": 8,
       "targetInternal": 13,
@@ -1130,7 +1130,7 @@
     },
     {
       "port": "(0,5)",
-      "source": "flask_triethylamine",
+      "source": "flask_hexane",
       "target": "valve_H",
       "sourceInternal": 9,
       "targetInternal": 16,
@@ -1139,7 +1139,7 @@
     },
     {
       "port": "(0,4)",
-      "source": "flask_saturated sodium bicarbonate solution",
+      "source": "flask_brine",
       "target": "valve_G",
       "sourceInternal": 21,
       "targetInternal": 19,
@@ -1148,7 +1148,7 @@
     },
     {
       "port": "(0,5)",
-      "source": "flask_2 methylcyclohexanone",
+      "source": "flask_saturated sodium bicarbonate solution",
       "target": "valve_G",
       "sourceInternal": 31,
       "targetInternal": 19,

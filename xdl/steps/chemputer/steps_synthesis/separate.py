@@ -405,7 +405,7 @@ class Separate(AbstractStep):
     ###  Abstract Method implementations ###
     ########################################
 
-    def final_sanity_check(self):
+    def final_sanity_check(self, graph):
         assert self.to_vessel != self.waste_phase_to_vessel
         assert not self.solvent_volume or self.solvent_volume > 0
         assert self.purpose in ['extract', 'wash']
