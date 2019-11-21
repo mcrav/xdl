@@ -440,6 +440,16 @@ VALID_PORTS = {
     'ChemputerVacuum': ['0'],
 }
 
+DEFAULT_PORTS: Dict[str, Dict[str, str]] = {
+    'ChemputerSeparator': {'from': 'bottom', 'to': 'bottom'},
+    'ChemputerReactor': {'from': 0, 'to': 0},
+    'ChemputerFilter': {'from': 'bottom', 'to': 'top'},
+    'ChemputerPump': {'from': 0, 'to': 0},
+    'IKARV10': {'from': 'evaporate', 'to': 'evaporate'},
+    'ChemputerFlask': {'from': 0, 'to': 0},
+    'ChemputerWaste': {'from': 0, 'to': 0},
+}
+
 FILTER_DEAD_VOLUME_INERT_GAS_METHOD: str = 'inert_gas'
 FILTER_DEAD_VOLUME_LIQUID_METHOD: str = 'solvent'
 

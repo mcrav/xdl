@@ -26,3 +26,17 @@ def test_alkyl_fluor_prepare_for_execution():
     graph_f = os.path.join(FOLDER, 'AlkylFluor_graph.graphml')
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f, interactive=False)
+
+@pytest.mark.integration
+def test_orgsyn_v83p0184a_prepare_for_execution():
+    xdl_f = os.path.join(FOLDER, 'orgsyn_v83p0184a.xdl')
+    graph_f = os.path.join(FOLDER, 'orgsyn_v83p0184a_graph.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)
+
+@pytest.mark.integration
+def test_orgsyn_v83p0193_prepare_for_execution():
+    xdl_f = os.path.join(FOLDER, 'orgsyn_v83p0193.xdl')
+    graph_f = os.path.join(FOLDER, 'orgsyn_v83p0193_graph.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)

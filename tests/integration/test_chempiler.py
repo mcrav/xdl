@@ -26,3 +26,17 @@ def test_alkyl_fluor():
         os.path.join(FOLDER, 'AlkylFluor.xdl'),
         os.path.join(FOLDER, 'AlkylFluor_graph.graphml')
     )
+
+@pytest.mark.integration
+def test_orgsyn_v83p0184a():
+    generic_chempiler_test(
+        os.path.join(FOLDER, 'orgsyn_v83p0184a.xdl'),
+        os.path.join(FOLDER, 'orgsyn_v83p0184a_graph.json')
+    )
+
+@pytest.mark.integration
+def test_orgsyn_v83p0193():
+    generic_chempiler_test(
+        os.path.join(FOLDER, 'orgsyn_v83p0193.xdl'),
+        os.path.join(FOLDER, 'orgsyn_v83p0193_graph.json')
+    )

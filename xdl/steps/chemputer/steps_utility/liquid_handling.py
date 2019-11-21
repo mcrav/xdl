@@ -1,5 +1,6 @@
 from typing import Optional, List, Dict
 
+from ....constants import DEFAULT_PORTS
 from ...base_steps import AbstractStep, Step
 from ..steps_base import CMove
 from ....utils.misc import get_port_str
@@ -70,6 +71,22 @@ class Transfer(AbstractStep):
                       aspiration_speed=self.aspiration_speed,
                       move_speed=self.move_speed,
                       dispense_speed=dispense_speed)]
+
+    def on_prepare_for_execution(self, graph) -> str:
+        """If self.port is None, return default port for different vessel types.
+
+        Returns:
+            str: Vessel port to add to.
+        """
+        if self.from_port in [None, '']:
+            from_class = graph.node[self.from_vessel]['class']
+            if from_class in DEFAULT_PORTS:
+                self.from_port = DEFAULT_PORTS[from_class]['from']
+
+        if self.to_port in [None, '']:
+            to_class = graph.node[self.to_vessel]['class']
+            if to_class in DEFAULT_PORTS:
+                self.to_port = DEFAULT_PORTS[to_class]['to']
 
     def get_dispense_speed(self) -> float:
         if self.time and type(self.volume) != str:
