@@ -2276,7 +2276,6 @@
           through="None" />
       </Transfer>
     </Evaporate>
-    <Distill />
   </Procedure>
 
 </Synthesis>
