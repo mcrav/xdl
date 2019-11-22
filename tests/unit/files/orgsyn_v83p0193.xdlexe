@@ -1025,7 +1025,7 @@
       <Transfer
         from_vessel="reactor"
         to_vessel="separator"
-        volume="all"
+        volume="300 mL"
         from_port="None"
         to_port="bottom"
         through="None"
@@ -1218,7 +1218,7 @@
       <Transfer
         from_vessel="buffer_flask1"
         to_vessel="separator"
-        volume="all"
+        volume="500 mL"
         from_port="None"
         to_port="None"
         through="None"
@@ -1411,7 +1411,7 @@
       <Transfer
         from_vessel="buffer_flask2"
         to_vessel="separator"
-        volume="all"
+        volume="500 mL"
         from_port="None"
         to_port="None"
         through="None"
@@ -1814,7 +1814,7 @@
       <Transfer
         from_vessel="rotavap"
         to_vessel="waste_K"
-        volume="all"
+        volume="250 mL"
         from_port="collect"
         to_port="0"
         through="None"
@@ -1854,7 +1854,7 @@
       <Transfer
         from_vessel="rotavap"
         to_vessel="reactor"
-        volume="all"
+        volume="250 mL"
         from_port="None"
         to_port="None"
         through="cartridge_silica-gel"

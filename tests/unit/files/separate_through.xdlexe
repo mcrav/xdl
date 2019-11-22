@@ -53,7 +53,7 @@
       <Transfer
         from_vessel="filter"
         to_vessel="separator"
-        volume="all"
+        volume="100 mL"
         from_port="None"
         to_port="bottom"
         through="None"
@@ -265,7 +265,7 @@
       <Transfer
         from_vessel="filter"
         to_vessel="separator"
-        volume="all"
+        volume="100 mL"
         from_port="None"
         to_port="bottom"
         through="None"
@@ -477,7 +477,7 @@
       <Transfer
         from_vessel="filter"
         to_vessel="separator"
-        volume="all"
+        volume="100 mL"
         from_port="None"
         to_port="bottom"
         through="None"
@@ -859,7 +859,7 @@
       <Transfer
         from_vessel="filter"
         to_vessel="separator"
-        volume="all"
+        volume="100 mL"
         from_port="None"
         to_port="bottom"
         through="None"
@@ -1052,7 +1052,7 @@
       <Transfer
         from_vessel="rotavap"
         to_vessel="separator"
-        volume="all"
+        volume="100 mL"
         from_port="None"
         to_port="None"
         through="None"

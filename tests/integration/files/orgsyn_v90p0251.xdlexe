@@ -1059,7 +1059,7 @@
     <Transfer
       from_vessel="reactor"
       to_vessel="separator"
-      volume="all"
+      volume="250.2 mL"
       from_port="0"
       to_port="top"
       through="None"
@@ -1070,7 +1070,7 @@
       <CMove
         from_vessel="reactor"
         to_vessel="separator"
-        volume="300 mL"
+        volume="250.2 mL"
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
@@ -1783,7 +1783,7 @@
     <Transfer
       from_vessel="phase_B"
       to_vessel="separator"
-      volume="all"
+      volume="500 mL"
       from_port="0"
       to_port="top"
       through="None"
@@ -2279,7 +2279,7 @@
     <Transfer
       from_vessel="phase_A"
       to_vessel="separator"
-      volume="all"
+      volume="500 mL"
       from_port="0"
       to_port="top"
       through="None"
@@ -2823,7 +2823,7 @@
       <Transfer
         from_vessel="rotavap"
         to_vessel="waste_K"
-        volume="all"
+        volume="250 mL"
         from_port="collect"
         to_port="0"
         through="None"

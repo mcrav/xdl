@@ -15,7 +15,8 @@ def iter_vessel_contents(
         int,
         Step,
         Dict[str, VesselContents],
-        Optional[List[str]]],
+        Optional[List[str]],
+        bool],
     None, None]:
     """Iterator. Allows you to track vessel contents as they change
     throughout the steps.
@@ -31,6 +32,7 @@ def iter_vessel_contents(
                 contents -- Dict of contents of all vessels after step.
                 additions (optional) -- List of contents added during step.
     """
+    definite = True
     vessel_contents = {}
     for flask in hardware.flasks:
         vessel_contents[flask.id] = VesselContents(
@@ -40,6 +42,7 @@ def iter_vessel_contents(
         try:
             # Handle separate step differently.
             if type(step) == Separate:
+                definite = False
                 # Add vessels to vessel_contents if they aren't there.
                 if step.solvent:
                     additions_l.append(step.solvent)
@@ -77,6 +80,7 @@ def iter_vessel_contents(
                         vessel_contents[step.to_vessel].volume += from_volume
 
             elif type(step) == Filter:
+                definite = False
                 for vessel in [step.filter_vessel, step.waste_vessel]:
                     vessel_contents.setdefault(
                         vessel, VesselContents([], hardware[vessel].current_volume))
@@ -89,6 +93,7 @@ def iter_vessel_contents(
                 vessel_contents[step.waste_vessel].volume += filter_volume
 
             elif type(step) == WashSolid:
+                definite = False
                 for vessel in [step.vessel, step.waste_vessel]:
                     vessel_contents.setdefault(
                         vessel, VesselContents([], hardware[vessel].current_volume))
@@ -102,6 +107,7 @@ def iter_vessel_contents(
                 additions_l.append(step.solvent)
 
             elif type(step) == Dry:
+                definite = False
                 # This is necessary to stop move command putting filter into
                 # negative volume
                 vessel_contents.setdefault(
@@ -109,6 +115,7 @@ def iter_vessel_contents(
                 vessel_contents[step.vessel].volume = 0
 
             elif type(step) == Evaporate:
+                definite = False
                 if step.rotavap_name in vessel_contents:
                     for j in reversed(range(len(
                         vessel_contents[step.rotavap_name].reagents))):
@@ -165,10 +172,11 @@ def iter_vessel_contents(
                     i,
                     step,
                     copy.deepcopy(vessel_contents),
-                    copy.deepcopy(additions_l)
+                    copy.deepcopy(additions_l),
+                    definite,
                 )
             else:
-                yield (i, step, copy.deepcopy(vessel_contents))
+                yield (i, step, copy.deepcopy(vessel_contents), definite)
         except Exception as e:
             raise_error(e, f'Error tracking vessel contents.\nStep: {type(step)} {step.properties}')
 

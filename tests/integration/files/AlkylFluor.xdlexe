@@ -667,7 +667,7 @@
       <CMove
         from_vessel="flask_glyoxal_solution"
         to_vessel="jacketed_filter"
-        volume="100 mL"
+        volume="80 mL"
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
@@ -998,7 +998,7 @@
     </CleanBackbone>
     <Filter
       filter_vessel="jacketed_filter"
-      filter_top_volume="561 mL"
+      filter_top_volume="541 mL"
       wait_time="2 mins"
       aspiration_speed="5"
       stir="True"
@@ -1023,7 +1023,7 @@
       <CMove
         from_vessel="jacketed_filter"
         to_vessel="waste_organic"
-        volume="841.5 mL"
+        volume="811.5 mL"
         move_speed="40"
         aspiration_speed="5"
         dispense_speed="40"
@@ -4703,7 +4703,7 @@
       <Transfer
         from_vessel="jacketed_filter"
         to_vessel="rotavap"
-        volume="all"
+        volume="200 mL"
         from_port="None"
         to_port="None"
         through="cartridge_celite_A"
@@ -5690,7 +5690,7 @@
       <Transfer
         from_vessel="rotavap"
         to_vessel="waste_solvents"
-        volume="all"
+        volume="250 mL"
         from_port="collect"
         to_port="0"
         through="None"
@@ -6602,7 +6602,7 @@
     <Transfer
       from_vessel="rotavap"
       to_vessel="jacketed_filter"
-      volume="all"
+      volume="250 mL"
       from_port="evaporate"
       to_port="top"
       through="None"
@@ -7236,7 +7236,7 @@
       <Transfer
         from_vessel="jacketed_filter"
         to_vessel="rotavap"
-        volume="all"
+        volume="200 mL"
         from_port="None"
         to_port="None"
         through="cartridge_celite_B"
@@ -7565,7 +7565,7 @@
       <Transfer
         from_vessel="rotavap"
         to_vessel="waste_solvents"
-        volume="all"
+        volume="250 mL"
         from_port="collect"
         to_port="0"
         through="None"
@@ -7725,7 +7725,7 @@
       <Transfer
         from_vessel="rotavap"
         to_vessel="buffer_flask"
-        volume="all"
+        volume="250 mL"
         from_port="None"
         to_port="None"
         through="cartridge_celite_C"
@@ -8322,7 +8322,7 @@
     <Transfer
       from_vessel="buffer_flask"
       to_vessel="rotavap"
-      volume="all"
+      volume="500 mL"
       from_port="0"
       to_port="evaporate"
       through="None"
@@ -8645,7 +8645,7 @@
       <Transfer
         from_vessel="rotavap"
         to_vessel="waste_solvents"
-        volume="all"
+        volume="250 mL"
         from_port="None"
         to_port="None"
         through="None"
