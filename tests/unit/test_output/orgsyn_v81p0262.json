@@ -422,10 +422,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "toluene",
-      "name": "flask_toluene",
-      "label": "flask_toluene",
-      "id": "flask_toluene",
+      "chemical": "benzylamine",
+      "name": "flask_benzylamine",
+      "label": "flask_benzylamine",
+      "id": "flask_benzylamine",
       "internalId": 1
     },
     {
@@ -461,10 +461,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "benzylamine",
-      "name": "flask_benzylamine",
-      "label": "flask_benzylamine",
-      "id": "flask_benzylamine",
+      "chemical": "toluene",
+      "name": "flask_toluene",
+      "label": "flask_toluene",
+      "id": "flask_toluene",
       "internalId": 7
     }
   ],
@@ -975,7 +975,7 @@
     },
     {
       "port": "(0,2)",
-      "source": "flask_toluene",
+      "source": "flask_benzylamine",
       "target": "valve_Z",
       "sourceInternal": 1,
       "targetInternal": 13,
@@ -1002,7 +1002,7 @@
     },
     {
       "port": "(0,5)",
-      "source": "flask_benzylamine",
+      "source": "flask_toluene",
       "target": "valve_H",
       "sourceInternal": 7,
       "targetInternal": 16,
