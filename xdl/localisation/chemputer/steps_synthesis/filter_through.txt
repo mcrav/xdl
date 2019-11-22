@@ -1,0 +1,20 @@
+!FilterThrough (not eluting)
+
+# Example: Filter contents of flask through drying cartridge into rotavap.
+
+en
+Filter contents of {from_vessel} through {through_cartridge} into {to_vessel}.
+
+zh
+过滤{from_vessel}中的组分，经{through_cartridge}进入{to_vessel}.
+
+
+!FilterThrough (eluting)
+
+# Example: Filter contents of flask through drying cartridge into rotavap, eluting with 3 x 50 mL of DCM.
+
+en
+Filter contents of {from_vessel} through {through_cartridge} into {to_vessel}, eluting with {eluting_repeats} x {eluting_volume} of {eluting_solvent}.
+
+zh
+过滤{from_vessel}中的滤液经{through_cartridge}进入{to_vessel}, 用{eluting_solvent}{eluting_repeats}x{eluting_volume} 进行洗脱.

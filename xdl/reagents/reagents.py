@@ -1,5 +1,13 @@
 from ..constants import *
 from ..utils.xdl_base import XDLBase
+from ..utils.errors import XDLError
+
+VALID_REAGENT_ROLES = [
+    'catalyst',
+    'reagent',
+    'solvent',
+    'substrate',
+]
 
 class Reagent(XDLBase):
     """Base reagent class.
@@ -18,7 +26,15 @@ class Reagent(XDLBase):
         stir: bool = False,
         cas: int = None,
         temp: float = None,
+        role: str = None,
         last_minute_addition: str = None,
         last_minute_addition_volume: float = None,
     ) -> None:
         super().__init__(locals())
+        self.validate_role()
+
+    def validate_role(self):
+        try:
+            assert not self.role or self.role in VALID_REAGENT_ROLES
+        except AssertionError:
+            raise XDLError(f'Invalid role "{self.role}" given for reagent "{self.id}". Valid roles: {", ".join(VALID_REAGENT_ROLES)}')

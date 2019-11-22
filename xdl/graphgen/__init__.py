@@ -1,1 +1,1 @@
-from .generator import get_graph, save_graph
+from .generator import graph_from_template

@@ -2,7 +2,7 @@ from typing import Dict, List, Any
 
 #: XDL version number. Remember to increment after merging into master. Used
 # in header at top of outputted XDL files.
-XDL_VERSION: str = '0.1.13'
+XDL_VERSION: str = '0.2.0'
 
 ##########################
 ### DEFAULT PARAMETERS ###
@@ -189,6 +189,17 @@ DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME: float = 60
 #: Time to wait for during Evacuate after vessel is connected to vacuum.
 DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME: float = 60
 
+#: Default vacuum pressure when evacuating flask
+DEFAULT_EVACUATE_VACUUM_PRESSURE: float = 50 # mbar
+
+#########################
+### Recrystallization ###
+#########################
+
+DEFAULT_RECRYSTALLIZE_WAIT_TIME = 60 * 120
+
+DEFAULT_RECRYSTALLIZE_TEMP = 25
+
 ###########
 ## Video ##
 ###########
@@ -329,9 +340,11 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'after_inert_gas_wait_time': DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME,
         'after_vacuum_wait_time': DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME,
         'evacuations': DEFAULT_EVACUATE_N_EVACUTIONS,
+        'vacuum_pressure': DEFAULT_EVACUATE_VACUUM_PRESSURE,
     },
     'Recrystallize': {
-        'time': DEFAULT_RECRYSTALLIZATION_WAIT_TIME,
+        'time': DEFAULT_RECRYSTALLIZE_WAIT_TIME,
+        'crystallize_temp': DEFAULT_RECRYSTALLIZE_TEMP,
     }
 }
 
@@ -404,7 +417,7 @@ HEATER_CLASSES: List[str] = [IKA_RCT_DIGITAL_CLASS_NAME, IKA_RET_CONTROL_VISC]
 CHILLER_CLASSES: List[str] = [JULABO_CF41_CLASS_NAME, HUBER_PETITE_FLEUR_CLASS_NAME]
 
 CHILLER_MIN_TEMP: int = -40
-CHILLER_MAX_TEMP: int = 110
+CHILLER_MAX_TEMP: int = 140
 HEATER_MAX_TEMP: int = 360
 
 # Filter, separator ports
@@ -414,16 +427,27 @@ TOP_PORT: str = 'top'
 EVAPORATE_PORT: str = 'evaporate'
 COLLECT_PORT: str = 'collect'
 
-VALID_PORTS: Dict[str, List[str]] = {
-    'ChemputerSeparator': ['top', 'bottom'],
+VALID_PORTS = {
     'ChemputerReactor': ['0'],
+    'ChemputerSeparator': ['top', 'bottom'],
     'ChemputerFilter': ['top', 'bottom'],
-    'ChemputerPump': ['0'],
     'IKARV10': ['evaporate', 'collect'],
     'ChemputerValve': ['-1', '0', '1', '2', '3', '4', '5'],
+    'ChemputerPump': ['0'],
     'ChemputerWaste': ['0'],
     'ChemputerFlask': ['0'],
     'ChemputerCartridge': ['in', 'out'],
+    'ChemputerVacuum': ['0'],
+}
+
+DEFAULT_PORTS: Dict[str, Dict[str, str]] = {
+    'ChemputerSeparator': {'from': 'bottom', 'to': 'bottom'},
+    'ChemputerReactor': {'from': 0, 'to': 0},
+    'ChemputerFilter': {'from': 'bottom', 'to': 'top'},
+    'ChemputerPump': {'from': 0, 'to': 0},
+    'IKARV10': {'from': 'evaporate', 'to': 'evaporate'},
+    'ChemputerFlask': {'from': 0, 'to': 0},
+    'ChemputerWaste': {'from': 0, 'to': 0},
 }
 
 FILTER_DEAD_VOLUME_INERT_GAS_METHOD: str = 'inert_gas'
@@ -433,6 +457,12 @@ FILTER_DEAD_VOLUME_LIQUID_METHOD: str = 'solvent'
 ############
 ### MISC ###
 ############
+
+#: Valid platforms for XDL
+VALID_PLATFORMS: List[str] = ['chemputer', 'chemobot']
+
+#: Chemicals that will be recognised as inert gas.
+INERT_GAS_SYNONYMS: List[str] = ['nitrogen', 'n2', 'ar', 'argon']
 
 #: Default duration for base steps when the command is basically instantaneous
 DEFAULT_INSTANT_DURATION = 1 # s
@@ -475,6 +505,11 @@ SYNTHESIS_ATTRS = [
         'type': str,
         'default': None,
     },
+    {
+        'name': 'graph_sha256',
+        'type': str,
+        'default': '',
+    }
 ]
 
 #: Steps for which the volume shouldn't be scaled if XDL.scale_procedure is

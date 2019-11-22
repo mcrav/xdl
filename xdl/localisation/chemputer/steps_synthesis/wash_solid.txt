@@ -1,0 +1,9 @@
+!WashSolid
+
+# Example: Wash solid in filter flask with DCM (50 mL).
+
+en
+Wash solid in {vessel} with {solvent} ({volume}).
+
+zh
+用{solvent} ({volume})洗涤{vessel}中的固体

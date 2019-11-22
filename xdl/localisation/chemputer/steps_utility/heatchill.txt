@@ -1,0 +1,58 @@
+!HeatChillToTemp (stirring)
+
+# Example: Heat/Chill flask to 80°C with stirring.
+
+en
+Heat/Chill {vessel} to {temp} with stirring.
+
+zh
+搅拌下，加热/冷却{vessel}至温度为{temp}。
+
+
+!HeatChillToTemp (not stirring)
+
+# Example: Heat/Chill flask to 80°C without stirring.
+
+en
+Heat/Chill {vessel} to {temp} without stirring.
+
+zh
+不搅拌下，加热/冷却{vessel}至温度为{temp}。
+
+
+!StopHeatChill
+
+# Example: Stop heating/chilling flask.
+
+en
+Stop heating/chilling {vessel}.
+
+zh
+停止加热/冷却{vessel}
+
+
+!StartHeatChill
+
+# Example: Start heating/chilling flask.
+
+en
+Start heating/chilling {vessel}.
+
+
+!HeatChillSetTemp
+
+# Example: Set reactor heater/chiller temperature to 30 °C.
+
+en
+Set {vessel} heater/chiller temperature to {temp}.
+
+
+!HeatChillReturnToRT
+
+# Example: Stop heating flask and wait for it to return to room temperature.
+
+en
+Stop heating/chilling {vessel} and wait for it to return to room temperature.
+
+zh
+停止加热/冷却{vessel}，然后等待回至室温。

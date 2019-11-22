@@ -1,0 +1,53 @@
+!PrimePumpForAdd
+
+# Example: Move reagent (5 mL) to waste in order to prime pump.
+
+en
+Move reagent ({volume}) to waste in order to prime pump.
+
+zh
+移动试剂({volume})至废液以便润洗泵。
+
+
+!Transfer
+
+# Example: Transfer 50 mL from rotavap to filter flask.
+
+en
+Transfer {volume} mL from {from_vessel} to {to_vessel}.
+
+zh
+转移{volume} mL从{from_vessel} 到{to_vessel}.
+
+
+!Transfer (all)
+
+# Example: Transfer contents of rotavap to filter.
+
+en
+Transfer contents of {from_vessel} to {to_vessel}.
+
+zh
+转移{from_vessel}中的组分至{to_vessel}
+
+
+!Transfer (all through)
+
+# Example: Transfer contents of {from_vessel} to {to_vessel} through {through}.
+
+en
+Transfer contents of {from_vessel} to {to_vessel} through {through}.
+
+zh
+转移{from_vessel}中的组分，经{through}，至{to_vessel}。
+
+
+!Transfer (through)
+
+# Example: Transfer 50 mL from rotavap to filter flask, through celite cartridge.
+
+en
+Transfer {volume} mL from {from_vessel} to {to_vessel} through {through}.
+
+zh
+转移{volume} mL从{from_vessel} 到{to_vessel} 经由{through}.

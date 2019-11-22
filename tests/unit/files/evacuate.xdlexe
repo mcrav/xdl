@@ -1,0 +1,190 @@
+<?xdl version="0.2.0" ?>
+
+<Synthesis
+  graph_sha256="b7d05d8b742a8f91f975ae32088e302f82dff2f1760e47abace0d42de78df469"
+>
+  <Hardware>
+    <Component
+      id="filter"
+      type="filter" />
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="water" />
+  </Reagents>
+
+  <Procedure>
+    <CConnect
+      from_vessel="flask_nitrogen"
+      to_vessel="filter"
+      from_port="None"
+      to_port="bottom"
+      unique="True" />
+    <Evacuate
+      vessel="filter"
+      evacuations="3"
+      after_inert_gas_wait_time="60 secs"
+      after_vacuum_wait_time="60 secs"
+      inert_gas="flask_nitrogen"
+      vacuum="vacuum_flask"
+      vacuum_device="vacuum_device"
+      vacuum_pressure="50 mbar"
+      vessel_type="filter">
+      <StartVacuum
+        vessel="vacuum_flask"
+        pressure="50 mbar">
+        <CSetVacuumSetPoint
+          vessel="vacuum_flask"
+          vacuum_pressure="50 mbar" />
+        <CStartVacuum
+          vessel="vacuum_flask" />
+      </StartVacuum>
+      <CConnect
+        from_vessel="filter"
+        to_vessel="vacuum_flask"
+        from_port="None"
+        to_port="None"
+        unique="True" />
+      <Wait
+        time="2 mins"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="2 mins" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <CConnect
+        from_vessel="flask_nitrogen"
+        to_vessel="filter"
+        from_port="None"
+        to_port="None"
+        unique="True" />
+      <Wait
+        time="60 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="60 secs" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <Repeat
+        repeats="2">
+        <CConnect
+          from_vessel="filter"
+          to_vessel="vacuum_flask"
+          from_port="None"
+          to_port="None"
+          unique="True" />
+        <Wait
+          time="60 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="60 secs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <CConnect
+          from_vessel="flask_nitrogen"
+          to_vessel="filter"
+          from_port="None"
+          to_port="None"
+          unique="True" />
+        <Wait
+          time="60 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="60 secs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <CConnect
+          from_vessel="filter"
+          to_vessel="vacuum_flask"
+          from_port="None"
+          to_port="None"
+          unique="True" />
+        <Wait
+          time="60 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="60 secs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <CConnect
+          from_vessel="flask_nitrogen"
+          to_vessel="filter"
+          from_port="None"
+          to_port="None"
+          unique="True" />
+        <Wait
+          time="60 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="60 secs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <CConnect
+          from_vessel="filter"
+          to_vessel="vacuum_flask"
+          from_port="None"
+          to_port="None"
+          unique="True" />
+        <Wait
+          time="60 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="60 secs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <CConnect
+          from_vessel="flask_nitrogen"
+          to_vessel="filter"
+          from_port="None"
+          to_port="None"
+          unique="True" />
+        <Wait
+          time="60 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="60 secs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+      </Repeat>
+      <StopVacuum
+        vessel="vacuum_flask">
+        <CStopVacuum
+          vessel="vacuum_flask" />
+      </StopVacuum>
+    </Evacuate>
+  </Procedure>
+
+</Synthesis>

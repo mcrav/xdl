@@ -2,7 +2,8 @@ from typing import List, Any
 from lxml import etree
 from ..reagents import Reagent
 from ..hardware import Hardware
-from ..steps import Add, Step
+from ..steps.chemputer import Add
+from ..steps import Step, AbstractBaseStep
 from ..constants import DEFAULT_VALS, INTERNAL_PROPERTIES, XDL_VERSION
 from ..utils.misc import format_property
 
@@ -17,6 +18,8 @@ class XDLGenerator(object):
         hardware: Hardware,
         reagents: List[Reagent],
         full_properties: bool = False,
+        full_tree: bool = False,
+        graph_hash: int = None,
     ) -> None:
         """
         Generate XDL from steps, hardware and reagents.
@@ -33,12 +36,15 @@ class XDLGenerator(object):
                 versions of XDL.
         """
         self.hardware, self.reagents, self.steps = hardware, reagents, steps
-        self.full_properties = full_properties
+        self.full_properties, self.full_tree = full_properties, full_tree
+        self.graph_hash = graph_hash
         self._generate_xdl()
 
     def _generate_xdl(self) -> None:
         """Generate XDL tree."""
         self.xdltree = etree.Element('Synthesis')
+        if self.graph_hash:
+            self.xdltree.attrib['graph_sha256'] = self.graph_hash
         self._append_hardware_tree()
         self._append_reagents_tree()
         self._append_procedure_tree()
@@ -83,7 +89,7 @@ class XDLGenerator(object):
                     child_tree = self.get_step_tree(child)
                     step_tree.append(child_tree)
             else:
-                if val != None:
+                if val != None or self.full_properties:
                     # if self.full_properties is False ignore some properties.
                     if not self.full_properties:
                         # Don't write properties that are the same as the default.
@@ -97,8 +103,16 @@ class XDLGenerator(object):
                             and prop in INTERNAL_PROPERTIES[step.name]):
                             continue
                     # Convert value to nice units and add to element attrib.
-                    step_tree.attrib[prop] = format_property(
+                    formatted_property = format_property(
                         prop, val, human_readable=False)
+
+                    if formatted_property == None:
+                        formatted_property = str(formatted_property)
+
+                    step_tree.attrib[prop] = formatted_property
+        if self.full_tree:
+            for substep in step.steps:
+                step_tree.append(self.get_step_tree(substep))
         return step_tree
 
     def save(self, save_file: str) -> None:
@@ -114,7 +128,7 @@ def get_element_xdl_string(
     element: etree._ElementTree, indent_level=0, indent='  ') -> str:
     s = ''
     s += f'{indent * indent_level}<{element.tag}\n'
-    has_children = list(element)
+    has_children = list(element.findall('*'))
     indent_level += 1
     # Element Properties
     for attr, val in element.attrib.items():
@@ -124,13 +138,12 @@ def get_element_xdl_string(
         s = s[:-1] + '>\n'
     else:
         s = s[:-1] + ' />\n'
-    for subelement in element:
+    for subelement in element.findall('*'):
         s += get_element_xdl_string(subelement, indent_level=indent_level, indent=indent)
     indent_level -= 1
     if has_children:
         s += f'{indent * indent_level}</{element.tag}>\n'
     return s
-
 
 def get_xdl_string(xdltree: etree._ElementTree) -> str:
     """Convert XDL etree to pretty XML string.
@@ -144,7 +157,12 @@ def get_xdl_string(xdltree: etree._ElementTree) -> str:
     indent = '  '
     # Synthesis tag
     s = f'<?xdl version="{XDL_VERSION}" ?>\n\n'
-    s += '<Synthesis>\n'
+    s += '<Synthesis'
+    if xdltree.attrib:
+        s += '\n'
+        for prop in xdltree.attrib:
+            s += f'{indent}{prop}="{xdltree.attrib[prop]}"\n'
+    s += '>\n'
     indent_level = 1
     # Hardware, Reagents and Procedure tags
     for element in xdltree.findall('*'):
@@ -152,7 +170,8 @@ def get_xdl_string(xdltree: etree._ElementTree) -> str:
         indent_level += 1
         # Component, Reagent and Step tags
         for element2 in element.findall('*'):
-            s += get_element_xdl_string(element2, indent_level, indent)
+            s += get_element_xdl_string(
+                element2, indent=indent, indent_level=indent_level)
         indent_level -= 1
         s += f'{indent * indent_level}</{element.tag}>\n\n'
     s += '</Synthesis>\n'

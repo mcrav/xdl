@@ -1,0 +1,9 @@
+!Dry
+
+# Example: Dry contents of flask for 60 seconds.
+
+en
+Dry contents of {vessel} for {time}.
+
+zh
+干燥{vessel}中的组分，时间为{time}

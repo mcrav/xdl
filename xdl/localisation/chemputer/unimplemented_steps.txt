@@ -1,0 +1,28 @@
+!Sonicate
+
+en
+The reaction mixture is sonicated.
+
+
+!Distill
+
+en
+The reaction mixture is distilled.
+
+
+!Sublimate
+
+en
+The reaction mixture is sublimed.
+
+
+!Hydrogenate
+
+en
+The reaction mixture is hydrogenated.
+
+
+!Irradiate
+
+en
+The reaction mixture is irradiated.

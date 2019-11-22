@@ -11,6 +11,7 @@ from .test_scale_procedure  import *
 from .test_wash_solid import *
 from .test_separate_through import *
 from .test_filter_dead_volume import *
+from .test_filter_to import test_filter_to
 from .test_buffer_flask import *
 from .test_async import test_async_step, test_async_wrapper
 from .test_abstract_dynamic_step import test_abstract_dynamic_step
@@ -21,4 +22,9 @@ from .test_heatchill import *
 from .test_separate import test_separate
 from .test_evacuate import test_evacuate
 from .test_recrystallize import test_recrystallization
+from .test_xdlexe import test_xdlexe, test_xdlexe_execute_wrong_graph
 from .test_port_validation import test_port_validation
+from .test_get_graph_spec import test_get_graph_spec
+from .test_check_graph_spec import test_check_template, test_check_graph_spec
+from .test_graphgen import test_graphgen
+from .test_reagent_roles import test_reagent_roles

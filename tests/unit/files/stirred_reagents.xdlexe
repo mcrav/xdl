@@ -1,0 +1,41 @@
+<?xdl version="0.2.0" ?>
+
+<Synthesis
+  graph_sha256="b7d05d8b742a8f91f975ae32088e302f82dff2f1760e47abace0d42de78df469"
+>
+  <Hardware>
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="water"
+      stir="True" />
+  </Reagents>
+
+  <Procedure>
+    <CSetStirRate
+      vessel="flask_water"
+      stir_speed="250 RPM" />
+    <StartStir
+      vessel="flask_water"
+      vessel_type="flask"
+      stir_speed="200 RPM">
+      <CStir
+        vessel="flask_water" />
+      <CSetStirRate
+        vessel="flask_water"
+        stir_speed="200 RPM" />
+    </StartStir>
+    <CConnect
+      from_vessel="flask_nitrogen"
+      to_vessel="filter"
+      from_port="None"
+      to_port="bottom"
+      unique="True" />
+    <StopStir
+      vessel="flask_water"
+      vessel_type="flask"
+      vessel_has_stirrer="False" />
+  </Procedure>
+
+</Synthesis>

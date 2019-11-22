@@ -1,0 +1,193 @@
+<?xdl version="0.2.0" ?>
+
+<Synthesis
+  graph_sha256="b7d05d8b742a8f91f975ae32088e302f82dff2f1760e47abace0d42de78df469"
+>
+  <Hardware>
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="water"
+      last_minute_addition="ether"
+      last_minute_addition_volume="50.0" />
+  </Reagents>
+
+  <Procedure>
+    <CConnect
+      from_vessel="flask_nitrogen"
+      to_vessel="filter"
+      from_port="None"
+      to_port="bottom"
+      unique="True" />
+    <Wait
+      time="60 secs"
+      wait_recording_speed="2000"
+      after_recording_speed="14">
+      <CSetRecordingSpeed
+        recording_speed="2000" />
+      <CWait
+        time="60 secs" />
+      <CSetRecordingSpeed
+        recording_speed="14" />
+    </Wait>
+    <Add
+      reagent="ether"
+      vessel="flask_water"
+      volume="50 mL"
+      mass="None"
+      port="None"
+      through="None"
+      move_speed="40"
+      aspiration_speed="10"
+      dispense_speed="40"
+      time="None"
+      stir="False"
+      stir_speed="250 RPM"
+      anticlogging="False"
+      anticlogging_solvent="None"
+      anticlogging_solvent_volume="2 mL"
+      anticlogging_reagent_volume="10 mL"
+      anticlogging_solvent_vessel="None"
+      reagent_vessel="flask_ether"
+      waste_vessel="waste_rotavap"
+      flush_tube_vessel="flask_nitrogen"
+      vessel_type="flask">
+      <StopStir
+        vessel="flask_water"
+        vessel_type="flask"
+        vessel_has_stirrer="False" />
+      <PrimePumpForAdd
+        reagent="ether"
+        volume="3 mL"
+        reagent_vessel="flask_ether"
+        waste_vessel="waste_rotavap">
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="waste_rotavap"
+          volume="3 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="" />
+      </PrimePumpForAdd>
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="flask_water"
+        volume="50 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="None" />
+      <Wait
+        time="10 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="10 secs" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <CMove
+        from_vessel="flask_nitrogen"
+        to_vessel="flask_water"
+        volume="5 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="None"
+        unique="False"
+        through="" />
+    </Add>
+    <Add
+      reagent="water"
+      vessel="filter"
+      volume="10 mL"
+      mass="None"
+      port="None"
+      through="None"
+      move_speed="40"
+      aspiration_speed="10"
+      dispense_speed="40"
+      time="None"
+      stir="False"
+      stir_speed="250 RPM"
+      anticlogging="False"
+      anticlogging_solvent="None"
+      anticlogging_solvent_volume="2 mL"
+      anticlogging_reagent_volume="10 mL"
+      anticlogging_solvent_vessel="None"
+      reagent_vessel="flask_water"
+      waste_vessel="waste_filter"
+      flush_tube_vessel="flask_nitrogen"
+      vessel_type="filter">
+      <StopStir
+        vessel="filter"
+        vessel_type="filter"
+        vessel_has_stirrer="True">
+        <CStopStir
+          vessel="filter" />
+      </StopStir>
+      <PrimePumpForAdd
+        reagent="water"
+        volume="3 mL"
+        reagent_vessel="flask_water"
+        waste_vessel="waste_filter">
+        <CMove
+          from_vessel="flask_water"
+          to_vessel="waste_filter"
+          volume="3 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="None"
+          to_port="None"
+          unique="False"
+          through="" />
+      </PrimePumpForAdd>
+      <CMove
+        from_vessel="flask_water"
+        to_vessel="filter"
+        volume="10 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="top"
+        unique="False"
+        through="None" />
+      <Wait
+        time="10 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14">
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CWait
+          time="10 secs" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+      </Wait>
+      <CMove
+        from_vessel="flask_nitrogen"
+        to_vessel="filter"
+        volume="5 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="None"
+        to_port="top"
+        unique="False"
+        through="" />
+    </Add>
+  </Procedure>
+
+</Synthesis>

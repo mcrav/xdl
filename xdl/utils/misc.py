@@ -37,7 +37,11 @@ def format_property(
     if 'time' in prop:
         return format_time(val)
 
-    elif 'volume' in prop:
+    elif prop == 'remove_dead_volume':
+        return str(val)
+
+    # endswith must be used as 'dead_volume_target' isn't a volume.
+    elif prop.endswith('volume'):
         return format_volume(val)
 
     elif 'mass' in prop:
@@ -52,7 +56,7 @@ def format_property(
     elif 'port' in prop and human_readable:
         return get_port_str(val)
 
-    elif 'stir_rpm' in prop:
+    elif 'stir_speed' in prop:
         return format_stir_rpm(val)
 
     elif prop in ['n_separations', 'repeat', 'cleans', 'eluting_repeats']:
@@ -87,7 +91,11 @@ def format_pressure(val_mbar: float)  -> str:
     Returns:
         str: Formatted pressure in sensible units.
     """
-    return f'{format_val(val_mbar)} mbar'
+    if type(val_mbar) in [float, int]:
+        return f'{format_val(val_mbar)} mbar'
+    # 'low' or 'high' in pneumatic controller step.
+    else:
+        return val_mbar
 
 def format_volume(val_ml: float) -> str:
     """Return formatted volume in sensible units.
@@ -187,5 +195,5 @@ def format_val(val: float) -> str:
         str: Number rounded to two decimal places with trailing '0' and '.'
             removed.
     """
-    hours_str = f'{val:.2f}'
+    hours_str = f'{val:.4f}'
     return hours_str.rstrip('0').rstrip('0').rstrip('.')

@@ -1,0 +1,264 @@
+<?xdl version="0.2.0" ?>
+
+<Synthesis
+  graph_sha256="b7d05d8b742a8f91f975ae32088e302f82dff2f1760e47abace0d42de78df469"
+>
+  <Hardware>
+    <Component
+      id="filter"
+      type="filter" />
+  </Hardware>
+
+  <Reagents>
+  </Reagents>
+
+  <Procedure>
+    <CSetStirRate
+      vessel="filter"
+      stir_speed="250 RPM" />
+    <CConnect
+      from_vessel="flask_nitrogen"
+      to_vessel="filter"
+      from_port="None"
+      to_port="bottom"
+      unique="True" />
+    <Recrystallize
+      vessel="filter"
+      time="18 hrs"
+      dissolve_temp="80°C"
+      crystallize_temp="10°C"
+      solvent="ether"
+      solvent_volume="50 mL">
+      <Dissolve
+        vessel="filter"
+        solvent="ether"
+        volume="50 mL"
+        port="None"
+        temp="80°C"
+        time="20 mins"
+        stir_speed="400 RPM"
+        solvent_vessel="flask_ether"
+        vessel_type="filter">
+        <Add
+          reagent="ether"
+          vessel="filter"
+          volume="50 mL"
+          mass="None"
+          port="None"
+          through="None"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          time="None"
+          stir="False"
+          stir_speed="250 RPM"
+          anticlogging="False"
+          anticlogging_solvent="None"
+          anticlogging_solvent_volume="2 mL"
+          anticlogging_reagent_volume="10 mL"
+          anticlogging_solvent_vessel="None"
+          reagent_vessel="flask_ether"
+          waste_vessel="waste_filter"
+          flush_tube_vessel="flask_nitrogen"
+          vessel_type="filter">
+          <StopStir
+            vessel="filter"
+            vessel_type="filter"
+            vessel_has_stirrer="True">
+            <CStopStir
+              vessel="filter" />
+          </StopStir>
+          <PrimePumpForAdd
+            reagent="ether"
+            volume="3 mL"
+            reagent_vessel="flask_ether"
+            waste_vessel="waste_filter">
+            <CMove
+              from_vessel="flask_ether"
+              to_vessel="waste_filter"
+              volume="3 mL"
+              move_speed="40"
+              aspiration_speed="10"
+              dispense_speed="40"
+              from_port="None"
+              to_port="None"
+              unique="False"
+              through="" />
+          </PrimePumpForAdd>
+          <CMove
+            from_vessel="flask_ether"
+            to_vessel="filter"
+            volume="50 mL"
+            move_speed="40"
+            aspiration_speed="10"
+            dispense_speed="40"
+            from_port="None"
+            to_port="top"
+            unique="False"
+            through="None" />
+          <Wait
+            time="10 secs"
+            wait_recording_speed="2000"
+            after_recording_speed="14">
+            <CSetRecordingSpeed
+              recording_speed="2000" />
+            <CWait
+              time="10 secs" />
+            <CSetRecordingSpeed
+              recording_speed="14" />
+          </Wait>
+          <CMove
+            from_vessel="flask_nitrogen"
+            to_vessel="filter"
+            volume="5 mL"
+            move_speed="40"
+            aspiration_speed="10"
+            dispense_speed="40"
+            from_port="None"
+            to_port="top"
+            unique="False"
+            through="" />
+        </Add>
+        <HeatChillToTemp
+          vessel="filter"
+          temp="80°C"
+          active="True"
+          continue_heatchill="True"
+          stir="True"
+          stir_speed="400 RPM"
+          vessel_type="filter"
+          wait_recording_speed="2000"
+          after_recording_speed="14"
+          heater="None"
+          chiller="filter_chiller">
+          <StartStir
+            vessel="filter"
+            vessel_type="filter"
+            stir_speed="400 RPM">
+            <CStir
+              vessel="filter" />
+            <CSetStirRate
+              vessel="filter"
+              stir_speed="400 RPM" />
+          </StartStir>
+          <StartHeatChill
+            vessel="filter"
+            temp="80°C"
+            vessel_type="filter"
+            heater="None"
+            chiller="filter_chiller">
+            <CChillerSetTemp
+              vessel="filter"
+              temp="80°C" />
+            <CStartChiller
+              vessel="filter" />
+          </StartHeatChill>
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CChillerWaitForTemp
+            vessel="filter" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </HeatChillToTemp>
+        <Wait
+          time="20 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="20 mins" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <StopHeatChill
+          vessel="filter"
+          vessel_type="filter"
+          heater="None"
+          chiller="filter_chiller">
+          <CStopChiller
+            vessel="filter" />
+        </StopHeatChill>
+      </Dissolve>
+      <HeatChill
+        vessel="filter"
+        temp="10°C"
+        time="18 hrs"
+        stir="True"
+        stir_speed="250 RPM"
+        vessel_type="filter">
+        <StartStir
+          vessel="filter"
+          vessel_type="filter"
+          stir_speed="250 RPM">
+          <CStir
+            vessel="filter" />
+          <CSetStirRate
+            vessel="filter"
+            stir_speed="250 RPM" />
+        </StartStir>
+        <HeatChillToTemp
+          vessel="filter"
+          temp="10°C"
+          active="True"
+          continue_heatchill="True"
+          stir="True"
+          stir_speed="250 RPM"
+          vessel_type="filter"
+          wait_recording_speed="2000"
+          after_recording_speed="14"
+          heater="None"
+          chiller="filter_chiller">
+          <StartStir
+            vessel="filter"
+            vessel_type="filter"
+            stir_speed="250 RPM">
+            <CStir
+              vessel="filter" />
+            <CSetStirRate
+              vessel="filter"
+              stir_speed="250 RPM" />
+          </StartStir>
+          <StartHeatChill
+            vessel="filter"
+            temp="10°C"
+            vessel_type="filter"
+            heater="None"
+            chiller="filter_chiller">
+            <CChillerSetTemp
+              vessel="filter"
+              temp="10°C" />
+            <CStartChiller
+              vessel="filter" />
+          </StartHeatChill>
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CChillerWaitForTemp
+            vessel="filter" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </HeatChillToTemp>
+        <Wait
+          time="18 hrs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="18 hrs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <StopHeatChill
+          vessel="filter"
+          vessel_type="filter"
+          heater="None"
+          chiller="filter_chiller">
+          <CStopChiller
+            vessel="filter" />
+        </StopHeatChill>
+      </HeatChill>
+    </Recrystallize>
+  </Procedure>
+
+</Synthesis>

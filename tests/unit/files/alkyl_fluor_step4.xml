@@ -1,0 +1,2756 @@
+<?xdl version="0.1.10" ?>
+
+<Synthesis>
+  <Hardware>
+    <Component
+      id="filter2"
+      type="filter"
+    />
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="acetonitrile"
+    />
+    <Reagent
+      id="substrateS3"
+    />
+    <Reagent
+      id="KF"
+    />
+    <Reagent
+      id="KBF4"
+    />
+    <Reagent
+      id="ether"
+    />
+    <Reagent
+      id="DCM"
+    />
+  </Reagents>
+
+  <Procedure>
+    <CSetStirRate
+      vessel="filter2"
+      stir_speed="250"
+    />
+    <CleanBackbone
+      solvent="acetonitrile"
+      waste_vessels="waste_reagents waste_aqueous waste_workup waste_organic waste_solvents waste_solvents_2"
+      solvent_vessel="flask_acetonitrile"
+    >
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_reagents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_aqueous"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_workup"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_organic"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_solvents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_solvents_2"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+    <CleanBackbone />
+    <Add
+      reagent="KF"
+      vessel="filter2"
+      mass="5 g"
+      move_speed="40"
+      aspiration_speed="10"
+      dispense_speed="40"
+      stir="False"
+      stir_speed="250"
+      anticlogging="False"
+      anticlogging_solvent_volume="2 mL"
+      anticlogging_reagent_volume="10 mL"
+      waste_vessel="waste_organic"
+      flush_tube_vessel="flask_nitrogen"
+      vessel_type="filter"
+      children=""
+    >
+      <Confirm
+        msg="Is KF (5.0 g) in filter2?"
+      />
+    <Add />
+    <Dry
+      vessel="filter2"
+      time="2 hrs"
+      temp="40°C"
+      waste_vessel="waste_organic"
+      aspiration_speed="5"
+      vacuum="flask_vacuum"
+      vacuum_device="filter_vacuum"
+      vacuum_pressure="400 mbar"
+      inert_gas="flask_nitrogen"
+      vacuum_valve="valve_vacuum2"
+      valve_unused_port="0"
+      vessel_type="filter"
+      vessel_has_stirrer="True"
+      children=""
+    >
+      <HeatChillToTemp
+        vessel="filter2"
+        temp="40°C"
+        stir="False"
+        stir_speed="250"
+        vessel_type="filter"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <StopStir
+          vessel="filter2"
+          vessel_type="filter"
+          vessel_has_stirrer="True"
+        >
+          <CStopStir
+            vessel="filter2"
+          />
+        <StopStir />
+        <StartHeatChill
+          vessel="filter2"
+          temp="40°C"
+          vessel_type="filter"
+        >
+          <CChillerSetTemp
+            vessel="filter2"
+            temp="40°C"
+          />
+          <CStartChiller
+            vessel="filter2"
+          />
+        <StartHeatChill />
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CChillerWaitForTemp
+          vessel="filter2"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <HeatChillToTemp />
+      <StopStir
+        vessel="filter2"
+        vessel_type="filter"
+        vessel_has_stirrer="True"
+      >
+        <CStopStir
+          vessel="filter2"
+        />
+      <StopStir />
+      <CMove
+        from_vessel="filter2"
+        to_vessel="waste_organic"
+        volume="5 mL"
+        move_speed="40"
+        aspiration_speed="5"
+        dispense_speed="40"
+        from_port="bottom"
+        unique="False"
+        through=""
+      />
+      <StartVacuum
+        vessel="flask_vacuum"
+        pressure="400 mbar"
+      >
+        <CSetVacuumSetPoint
+          vessel="flask_vacuum"
+          vacuum_pressure="400 mbar"
+        />
+        <CStartVacuum
+          vessel="flask_vacuum"
+        />
+      <StartVacuum />
+      <CConnect
+        from_vessel="filter2"
+        to_vessel="flask_vacuum"
+        from_port="bottom"
+        unique="True"
+      />
+      <Wait
+        time="2 hrs"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CWait
+          time="2 hrs"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <Wait />
+      <CConnect
+        from_vessel="flask_nitrogen"
+        to_vessel="filter2"
+        unique="True"
+      />
+      <StopVacuum
+        vessel="flask_vacuum"
+      >
+        <CStopVacuum
+          vessel="flask_vacuum"
+        />
+      <StopVacuum />
+      <CVentVacuum
+        vessel="flask_vacuum"
+      />
+      <CSetVacuumSetPoint
+        vessel="flask_vacuum"
+        vacuum_pressure="400 mbar"
+      />
+    <Dry />
+    <CleanBackbone
+      solvent="acetonitrile"
+      waste_vessels="waste_reagents waste_aqueous waste_workup waste_organic waste_solvents waste_solvents_2"
+      solvent_vessel="flask_acetonitrile"
+    >
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_reagents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_aqueous"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_workup"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_organic"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_solvents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_solvents_2"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+    <CleanBackbone />
+    <AddFilterDeadVolume
+      filter_vessel="filter2"
+      solvent="acetonitrile"
+      volume="30 mL"
+      waste_vessel="waste_organic"
+      solvent_vessel="flask_acetonitrile"
+      vacuum="flask_vacuum"
+      inert_gas="flask_nitrogen"
+      vacuum_valve="valve_vacuum2"
+      valve_unused_port="0"
+    >
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="filter2"
+        volume="30 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        to_port="bottom"
+        unique="False"
+        through=""
+      />
+      <CValveMoveToPosition
+        valve_name="valve_vacuum2"
+        position="0"
+      />
+    <AddFilterDeadVolume />
+    <Add
+      reagent="acetonitrile"
+      vessel="filter2"
+      volume="100 mL"
+      port="top"
+      move_speed="40"
+      aspiration_speed="10"
+      dispense_speed="40"
+      stir="True"
+      stir_speed="250.0"
+      anticlogging="False"
+      anticlogging_solvent_volume="2 mL"
+      anticlogging_reagent_volume="10 mL"
+      reagent_vessel="flask_acetonitrile"
+      waste_vessel="waste_organic"
+      flush_tube_vessel="flask_nitrogen"
+      vessel_type="filter"
+      children=""
+    >
+      <PrimePumpForAdd
+        reagent="acetonitrile"
+        volume="3 mL"
+        reagent_vessel="flask_acetonitrile"
+        waste_vessel="waste_organic"
+      >
+        <CMove
+          from_vessel="flask_acetonitrile"
+          to_vessel="waste_organic"
+          volume="3 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          unique="False"
+          through=""
+        />
+      <PrimePumpForAdd />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="filter2"
+        volume="100 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        to_port="top"
+        unique="False"
+        through=""
+      />
+      <Wait
+        time="10 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CWait
+          time="10 secs"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <Wait />
+    <Add />
+    <Dissolve
+      vessel="rotavap"
+      solvent="acetonitrile"
+      volume="200 mL"
+      temp="25°C"
+      time="10 mins"
+      stir_speed="250.0"
+      solvent_vessel="flask_acetonitrile"
+      vessel_type="rotavap"
+      children=""
+    >
+      <Add
+        reagent="acetonitrile"
+        vessel="rotavap"
+        volume="200 mL"
+        port="evaporate"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        stir="False"
+        stir_speed="250"
+        anticlogging="False"
+        anticlogging_solvent_volume="2 mL"
+        anticlogging_reagent_volume="10 mL"
+        reagent_vessel="flask_acetonitrile"
+        waste_vessel="waste_aqueous"
+        flush_tube_vessel="flask_nitrogen"
+        vessel_type="rotavap"
+      >
+        <PrimePumpForAdd
+          reagent="acetonitrile"
+          volume="3 mL"
+          reagent_vessel="flask_acetonitrile"
+          waste_vessel="waste_aqueous"
+        >
+          <CMove
+            from_vessel="flask_acetonitrile"
+            to_vessel="waste_aqueous"
+            volume="3 mL"
+            move_speed="40"
+            aspiration_speed="10"
+            dispense_speed="40"
+            unique="False"
+            through=""
+          />
+        <PrimePumpForAdd />
+        <CMove
+          from_vessel="flask_acetonitrile"
+          to_vessel="rotavap"
+          volume="200 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          to_port="evaporate"
+          unique="False"
+          through=""
+        />
+        <Wait
+          time="10 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14"
+        >
+          <CSetRecordingSpeed
+            recording_speed="2000"
+          />
+          <CWait
+            time="10 secs"
+          />
+          <CSetRecordingSpeed
+            recording_speed="14"
+          />
+        <Wait />
+      <Add />
+      <CRotavapSetTemp
+        rotavap_name="rotavap"
+        temp="25°C"
+      />
+      <CRotavapStartHeater
+        rotavap_name="rotavap"
+      />
+      <CRotavapSetRotationSpeed
+        rotavap_name="rotavap"
+        rotation_speed="250"
+      />
+      <CRotavapStartRotation
+        rotavap_name="rotavap"
+      />
+      <CRotavapLiftDown
+        rotavap_name="rotavap"
+      />
+      <Wait
+        time="10 mins"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CWait
+          time="10 mins"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <Wait />
+      <CRotavapStopRotation
+        rotavap_name="rotavap"
+      />
+      <CRotavapStopHeater
+        rotavap_name="rotavap"
+      />
+      <CRotavapLiftUp
+        rotavap_name="rotavap"
+      />
+    <Dissolve />
+    <Transfer
+      from_vessel="rotavap"
+      to_vessel="filter2"
+      volume="all"
+      from_port="evaporate"
+      aspiration_speed="10"
+      move_speed="40"
+      dispense_speed="40"
+      children=""
+    >
+      <CMove
+        from_vessel="rotavap"
+        to_vessel="filter2"
+        volume="250 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        from_port="evaporate"
+        unique="False"
+      />
+    <Transfer />
+    <CleanBackbone
+      solvent="acetonitrile"
+      waste_vessels="waste_reagents waste_aqueous waste_workup waste_organic waste_solvents waste_solvents_2"
+      solvent_vessel="flask_acetonitrile"
+    >
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_reagents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_aqueous"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_workup"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_organic"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_solvents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_solvents_2"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+    <CleanBackbone />
+    <CleanVessel
+      vessel="rotavap"
+      solvent="acetonitrile"
+      stir_time="60 secs"
+      stir_speed="500"
+      temp="65.32°C"
+      volume="125 mL"
+      cleans="2"
+      solvent_vessel="flask_acetonitrile"
+      waste_vessel="waste_aqueous"
+    >
+      <StartStir
+        vessel="rotavap"
+        vessel_type="rotavap"
+        stir_speed="250"
+      >
+        <CRotavapSetRotationSpeed
+          rotavap_name="rotavap"
+          rotation_speed="250"
+        />
+        <CRotavapStartRotation
+          rotavap_name="rotavap"
+        />
+      <StartStir />
+      <HeatChillToTemp
+        vessel="rotavap"
+        temp="65.32°C"
+        stir="True"
+        stir_speed="250"
+        vessel_type="rotavap"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <StartStir
+          vessel="rotavap"
+          vessel_type="rotavap"
+          stir_speed="250"
+        >
+          <CRotavapSetRotationSpeed
+            rotavap_name="rotavap"
+            rotation_speed="250"
+          />
+          <CRotavapStartRotation
+            rotavap_name="rotavap"
+          />
+        <StartStir />
+        <StartHeatChill
+          vessel="rotavap"
+          temp="65.32°C"
+          vessel_type="rotavap"
+        >
+          <CRotavapSetTemp
+            rotavap_name="rotavap"
+            temp="65.32°C"
+          />
+          <CRotavapStartHeater
+            rotavap_name="rotavap"
+          />
+        <StartHeatChill />
+        <Wait
+          time="5 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14"
+        >
+          <CSetRecordingSpeed
+            recording_speed="2000"
+          />
+          <CWait
+            time="5 mins"
+          />
+          <CSetRecordingSpeed
+            recording_speed="14"
+          />
+        <Wait />
+      <HeatChillToTemp />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="rotavap"
+        volume="125 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <Wait
+        time="60 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CWait
+          time="60 secs"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <Wait />
+      <CMove
+        from_vessel="rotavap"
+        to_vessel="waste_aqueous"
+        volume="125 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <StopStir
+        vessel="rotavap"
+        vessel_type="rotavap"
+        vessel_has_stirrer="False"
+      >
+        <CRotavapStopRotation
+          rotavap_name="rotavap"
+        />
+      <StopStir />
+      <StartStir
+        vessel="rotavap"
+        vessel_type="rotavap"
+        stir_speed="250"
+      >
+        <CRotavapSetRotationSpeed
+          rotavap_name="rotavap"
+          rotation_speed="250"
+        />
+        <CRotavapStartRotation
+          rotavap_name="rotavap"
+        />
+      <StartStir />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="rotavap"
+        volume="125 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <Wait
+        time="60 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CWait
+          time="60 secs"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <Wait />
+      <CMove
+        from_vessel="rotavap"
+        to_vessel="waste_aqueous"
+        volume="125 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <StopStir
+        vessel="rotavap"
+        vessel_type="rotavap"
+        vessel_has_stirrer="False"
+      >
+        <CRotavapStopRotation
+          rotavap_name="rotavap"
+        />
+      <StopStir />
+      <Dry
+        vessel="rotavap"
+        time="60 mins"
+        waste_vessel="waste_aqueous"
+        aspiration_speed="5"
+        vacuum="flask_vacuum"
+        vacuum_device="filter_vacuum"
+        vacuum_pressure="400 mbar"
+        inert_gas="flask_nitrogen"
+        vacuum_valve="valve_vacuum2"
+        valve_unused_port="0"
+        vessel_type="rotavap"
+        vessel_has_stirrer="False"
+      >
+        <StopStir
+          vessel="rotavap"
+          vessel_type="rotavap"
+          vessel_has_stirrer="False"
+        >
+          <CRotavapStopRotation
+            rotavap_name="rotavap"
+          />
+        <StopStir />
+        <CMove
+          from_vessel="rotavap"
+          to_vessel="waste_aqueous"
+          volume="5 mL"
+          move_speed="40"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="evaporate"
+          unique="False"
+          through=""
+        />
+        <StartVacuum
+          vessel="rotavap"
+          pressure="400 mbar"
+        >
+          <CSetVacuumSetPoint
+            vessel="rotavap"
+            vacuum_pressure="400 mbar"
+          />
+          <CStartVacuum
+            vessel="rotavap"
+          />
+        <StartVacuum />
+        <Wait
+          time="60 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14"
+        >
+          <CSetRecordingSpeed
+            recording_speed="2000"
+          />
+          <CWait
+            time="60 mins"
+          />
+          <CSetRecordingSpeed
+            recording_speed="14"
+          />
+        <Wait />
+        <StopVacuum
+          vessel="rotavap"
+        >
+          <CStopVacuum
+            vessel="rotavap"
+          />
+        <StopVacuum />
+        <CVentVacuum
+          vessel="rotavap"
+        />
+        <CSetVacuumSetPoint
+          vessel="rotavap"
+          vacuum_pressure="400 mbar"
+        />
+      <Dry />
+      <HeatChillReturnToRT
+        vessel="rotavap"
+        stir="False"
+        stir_speed="250"
+        vessel_type="rotavap"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <StopStir
+          vessel="rotavap"
+          vessel_type="rotavap"
+          vessel_has_stirrer="False"
+        >
+          <CRotavapStopRotation
+            rotavap_name="rotavap"
+          />
+        <StopStir />
+        <CRotavapStopHeater
+          rotavap_name="rotavap"
+        />
+        <Wait
+          time="5 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14"
+        >
+          <CSetRecordingSpeed
+            recording_speed="2000"
+          />
+          <CWait
+            time="5 mins"
+          />
+          <CSetRecordingSpeed
+            recording_speed="14"
+          />
+        <Wait />
+      <HeatChillReturnToRT />
+    <CleanVessel />
+    <CleanBackbone
+      solvent="acetonitrile"
+      waste_vessels="waste_reagents waste_aqueous waste_workup waste_organic waste_solvents waste_solvents_2"
+      solvent_vessel="flask_acetonitrile"
+    >
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_reagents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_aqueous"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_workup"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_organic"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_solvents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_acetonitrile"
+        to_vessel="waste_solvents_2"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+    <CleanBackbone />
+    <CleanBackbone
+      solvent="DCM"
+      waste_vessels="waste_reagents waste_aqueous waste_workup waste_organic waste_solvents waste_solvents_2"
+      solvent_vessel="flask_DCM"
+    >
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_reagents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_aqueous"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_workup"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_organic"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_solvents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_solvents_2"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+    <CleanBackbone />
+    <HeatChill
+      vessel="filter2"
+      temp="80°C"
+      time="16 hrs"
+      stir="True"
+      stir_speed="500.0"
+      vessel_type="filter"
+      children=""
+    >
+      <StartStir
+        vessel="filter2"
+        vessel_type="filter"
+        stir_speed="500.0"
+      >
+        <CStir
+          vessel="filter2"
+        />
+        <CSetStirRate
+          vessel="filter2"
+          stir_speed="500.0"
+        />
+      <StartStir />
+      <HeatChillToTemp
+        vessel="filter2"
+        temp="80°C"
+        stir="True"
+        stir_speed="500.0"
+        vessel_type="filter"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <StartStir
+          vessel="filter2"
+          vessel_type="filter"
+          stir_speed="500.0"
+        >
+          <CStir
+            vessel="filter2"
+          />
+          <CSetStirRate
+            vessel="filter2"
+            stir_speed="500.0"
+          />
+        <StartStir />
+        <StartHeatChill
+          vessel="filter2"
+          temp="80°C"
+          vessel_type="filter"
+        >
+          <CChillerSetTemp
+            vessel="filter2"
+            temp="80°C"
+          />
+          <CStartChiller
+            vessel="filter2"
+          />
+        <StartHeatChill />
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CChillerWaitForTemp
+          vessel="filter2"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <HeatChillToTemp />
+      <Wait
+        time="16 hrs"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CWait
+          time="16 hrs"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <Wait />
+      <StopHeatChill
+        vessel="filter2"
+        vessel_type="filter"
+      >
+        <CStopChiller
+          vessel="filter2"
+        />
+      <StopHeatChill />
+    <HeatChill />
+    <HeatChillReturnToRT
+      vessel="filter2"
+      stir="True"
+      stir_speed="250"
+      vessel_type="filter"
+      wait_recording_speed="2000"
+      after_recording_speed="14"
+      children=""
+    >
+      <StartStir
+        vessel="filter2"
+        vessel_type="filter"
+        stir_speed="250"
+      >
+        <CStir
+          vessel="filter2"
+        />
+        <CSetStirRate
+          vessel="filter2"
+          stir_speed="250"
+        />
+      <StartStir />
+      <CChillerSetTemp
+        vessel="filter2"
+        temp="25°C"
+      />
+      <CStartChiller
+        vessel="filter2"
+      />
+      <CSetRecordingSpeed
+        recording_speed="2000"
+      />
+      <CChillerWaitForTemp
+        vessel="filter2"
+      />
+      <CSetRecordingSpeed
+        recording_speed="14"
+      />
+      <CStopChiller
+        vessel="filter2"
+      />
+    <HeatChillReturnToRT />
+    <FilterThrough
+      from_vessel="filter2"
+      to_vessel="rotavap"
+      eluting_solvent="DCM"
+      eluting_volume="25 mL"
+      eluting_repeats="3"
+      move_speed="5"
+      aspiration_speed="5"
+      eluting_solvent_vessel="flask_DCM"
+      flush_cartridge_vessel="flask_nitrogen"
+      through_cartridge="cartridge_celite"
+      cartridge_dead_volume="25 mL"
+      children=""
+    >
+      <Transfer
+        from_vessel="filter2"
+        to_vessel="rotavap"
+        volume="all"
+        through="cartridge_celite"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="filter2"
+          to_vessel="rotavap"
+          volume="200 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          unique="False"
+          through="cartridge_celite"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="flask_DCM"
+        to_vessel="filter2"
+        volume="25 mL"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="flask_DCM"
+          to_vessel="filter2"
+          volume="25 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          unique="False"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="filter2"
+        to_vessel="rotavap"
+        volume="25 mL"
+        through="cartridge_celite"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="filter2"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          unique="False"
+          through="cartridge_celite"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="flask_DCM"
+        to_vessel="filter2"
+        volume="25 mL"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="flask_DCM"
+          to_vessel="filter2"
+          volume="25 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          unique="False"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="filter2"
+        to_vessel="rotavap"
+        volume="25 mL"
+        through="cartridge_celite"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="filter2"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          unique="False"
+          through="cartridge_celite"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="flask_DCM"
+        to_vessel="filter2"
+        volume="25 mL"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="flask_DCM"
+          to_vessel="filter2"
+          volume="25 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          unique="False"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="filter2"
+        to_vessel="rotavap"
+        volume="25 mL"
+        through="cartridge_celite"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="filter2"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          unique="False"
+          through="cartridge_celite"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="flask_nitrogen"
+        to_vessel="rotavap"
+        volume="25 mL"
+        through="cartridge_celite"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="flask_nitrogen"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          unique="False"
+          through="cartridge_celite"
+        />
+      <Transfer />
+    <FilterThrough />
+    <CleanBackbone
+      solvent="DCM"
+      waste_vessels="waste_reagents waste_aqueous waste_workup waste_organic waste_solvents waste_solvents_2"
+      solvent_vessel="flask_DCM"
+    >
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_reagents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_aqueous"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_workup"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_organic"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_solvents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_solvents_2"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+    <CleanBackbone />
+    <Evaporate
+      rotavap_name="rotavap"
+      temp="40°C"
+      pressure="750.0 mbar"
+      time="60 mins"
+      rotation_speed="150"
+      mode="manual"
+      waste_vessel="waste_aqueous"
+      children=""
+    >
+      <RotavapStartRotation
+        rotavap_name="rotavap"
+        rotation_speed="150"
+      >
+        <CRotavapSetRotationSpeed
+          rotavap_name="rotavap"
+          rotation_speed="150"
+        />
+        <CRotavapStartRotation
+          rotavap_name="rotavap"
+        />
+      <RotavapStartRotation />
+      <CRotavapLiftDown
+        rotavap_name="rotavap"
+      />
+      <RotavapHeatToTemp
+        rotavap_name="rotavap"
+        temp="40°C"
+      >
+        <CRotavapSetTemp
+          rotavap_name="rotavap"
+          temp="40°C"
+        />
+        <CRotavapStartHeater
+          rotavap_name="rotavap"
+        />
+      <RotavapHeatToTemp />
+      <RotavapStartVacuum
+        rotavap_name="rotavap"
+        pressure="750.0 mbar"
+      >
+        <CSetVacuumSetPoint
+          vessel="rotavap"
+          vacuum_pressure="750.0 mbar"
+        />
+        <CStartVacuum
+          vessel="rotavap"
+        />
+      <RotavapStartVacuum />
+      <Wait
+        time="60 mins"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CWait
+          time="60 mins"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <Wait />
+      <RotavapStopEverything
+        rotavap_name="rotavap"
+      >
+        <CStopVacuum
+          vessel="rotavap"
+        />
+        <CRotavapLiftUp
+          rotavap_name="rotavap"
+        />
+        <CVentVacuum
+          vessel="rotavap"
+        />
+        <CRotavapStopHeater
+          rotavap_name="rotavap"
+        />
+        <CRotavapStopRotation
+          rotavap_name="rotavap"
+        />
+      <RotavapStopEverything />
+      <Transfer
+        from_vessel="rotavap"
+        to_vessel="waste_aqueous"
+        volume="all"
+        from_port="collect"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="rotavap"
+          to_vessel="waste_aqueous"
+          volume="250 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          from_port="collect"
+          unique="False"
+        />
+      <Transfer />
+    <Evaporate />
+    <Dissolve
+      vessel="rotavap"
+      solvent="DCM"
+      volume="200 mL"
+      temp="25°C"
+      time="10 mins"
+      stir_speed="250.0"
+      solvent_vessel="flask_DCM"
+      vessel_type="rotavap"
+      children=""
+    >
+      <Add
+        reagent="DCM"
+        vessel="rotavap"
+        volume="200 mL"
+        port="evaporate"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        stir="False"
+        stir_speed="250"
+        anticlogging="False"
+        anticlogging_solvent_volume="2 mL"
+        anticlogging_reagent_volume="10 mL"
+        reagent_vessel="flask_DCM"
+        waste_vessel="waste_aqueous"
+        flush_tube_vessel="flask_nitrogen"
+        vessel_type="rotavap"
+      >
+        <PrimePumpForAdd
+          reagent="DCM"
+          volume="3 mL"
+          reagent_vessel="flask_DCM"
+          waste_vessel="waste_aqueous"
+        >
+          <CMove
+            from_vessel="flask_DCM"
+            to_vessel="waste_aqueous"
+            volume="3 mL"
+            move_speed="40"
+            aspiration_speed="10"
+            dispense_speed="40"
+            unique="False"
+            through=""
+          />
+        <PrimePumpForAdd />
+        <CMove
+          from_vessel="flask_DCM"
+          to_vessel="rotavap"
+          volume="200 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          to_port="evaporate"
+          unique="False"
+          through=""
+        />
+        <Wait
+          time="10 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14"
+        >
+          <CSetRecordingSpeed
+            recording_speed="2000"
+          />
+          <CWait
+            time="10 secs"
+          />
+          <CSetRecordingSpeed
+            recording_speed="14"
+          />
+        <Wait />
+      <Add />
+      <CRotavapSetTemp
+        rotavap_name="rotavap"
+        temp="25°C"
+      />
+      <CRotavapStartHeater
+        rotavap_name="rotavap"
+      />
+      <CRotavapSetRotationSpeed
+        rotavap_name="rotavap"
+        rotation_speed="250"
+      />
+      <CRotavapStartRotation
+        rotavap_name="rotavap"
+      />
+      <CRotavapLiftDown
+        rotavap_name="rotavap"
+      />
+      <Wait
+        time="10 mins"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CWait
+          time="10 mins"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <Wait />
+      <CRotavapStopRotation
+        rotavap_name="rotavap"
+      />
+      <CRotavapStopHeater
+        rotavap_name="rotavap"
+      />
+      <CRotavapLiftUp
+        rotavap_name="rotavap"
+      />
+    <Dissolve />
+    <FilterThrough
+      from_vessel="rotavap"
+      to_vessel="buffer_flask"
+      eluting_solvent="DCM"
+      eluting_volume="25 mL"
+      eluting_repeats="3"
+      move_speed="5"
+      aspiration_speed="5"
+      eluting_solvent_vessel="flask_DCM"
+      flush_cartridge_vessel="flask_nitrogen"
+      through_cartridge="cartridge_celite"
+      cartridge_dead_volume="25 mL"
+      children=""
+    >
+      <Transfer
+        from_vessel="rotavap"
+        to_vessel="buffer_flask"
+        volume="all"
+        through="cartridge_celite"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="rotavap"
+          to_vessel="buffer_flask"
+          volume="250 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          unique="False"
+          through="cartridge_celite"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="flask_DCM"
+        to_vessel="rotavap"
+        volume="25 mL"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="flask_DCM"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          unique="False"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="rotavap"
+        to_vessel="buffer_flask"
+        volume="25 mL"
+        through="cartridge_celite"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="rotavap"
+          to_vessel="buffer_flask"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          unique="False"
+          through="cartridge_celite"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="flask_DCM"
+        to_vessel="rotavap"
+        volume="25 mL"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="flask_DCM"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          unique="False"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="rotavap"
+        to_vessel="buffer_flask"
+        volume="25 mL"
+        through="cartridge_celite"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="rotavap"
+          to_vessel="buffer_flask"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          unique="False"
+          through="cartridge_celite"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="flask_DCM"
+        to_vessel="rotavap"
+        volume="25 mL"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="flask_DCM"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          unique="False"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="rotavap"
+        to_vessel="buffer_flask"
+        volume="25 mL"
+        through="cartridge_celite"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="rotavap"
+          to_vessel="buffer_flask"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          unique="False"
+          through="cartridge_celite"
+        />
+      <Transfer />
+      <Transfer
+        from_vessel="flask_nitrogen"
+        to_vessel="buffer_flask"
+        volume="25 mL"
+        through="cartridge_celite"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="flask_nitrogen"
+          to_vessel="buffer_flask"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          unique="False"
+          through="cartridge_celite"
+        />
+      <Transfer />
+    <FilterThrough />
+    <CleanBackbone
+      solvent="DCM"
+      waste_vessels="waste_reagents waste_aqueous waste_workup waste_organic waste_solvents waste_solvents_2"
+      solvent_vessel="flask_DCM"
+    >
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_reagents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_aqueous"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_workup"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_organic"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_solvents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_solvents_2"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+    <CleanBackbone />
+    <CleanVessel
+      vessel="rotavap"
+      solvent="DCM"
+      stir_time="60 secs"
+      stir_speed="500"
+      temp="31.84°C"
+      volume="125 mL"
+      cleans="2"
+      solvent_vessel="flask_DCM"
+      waste_vessel="waste_aqueous"
+    >
+      <StartStir
+        vessel="rotavap"
+        vessel_type="rotavap"
+        stir_speed="250"
+      >
+        <CRotavapSetRotationSpeed
+          rotavap_name="rotavap"
+          rotation_speed="250"
+        />
+        <CRotavapStartRotation
+          rotavap_name="rotavap"
+        />
+      <StartStir />
+      <HeatChillToTemp
+        vessel="rotavap"
+        temp="31.84°C"
+        stir="True"
+        stir_speed="250"
+        vessel_type="rotavap"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <StartStir
+          vessel="rotavap"
+          vessel_type="rotavap"
+          stir_speed="250"
+        >
+          <CRotavapSetRotationSpeed
+            rotavap_name="rotavap"
+            rotation_speed="250"
+          />
+          <CRotavapStartRotation
+            rotavap_name="rotavap"
+          />
+        <StartStir />
+        <StartHeatChill
+          vessel="rotavap"
+          temp="31.84°C"
+          vessel_type="rotavap"
+        >
+          <CRotavapSetTemp
+            rotavap_name="rotavap"
+            temp="31.84°C"
+          />
+          <CRotavapStartHeater
+            rotavap_name="rotavap"
+          />
+        <StartHeatChill />
+        <Wait
+          time="5 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14"
+        >
+          <CSetRecordingSpeed
+            recording_speed="2000"
+          />
+          <CWait
+            time="5 mins"
+          />
+          <CSetRecordingSpeed
+            recording_speed="14"
+          />
+        <Wait />
+      <HeatChillToTemp />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="rotavap"
+        volume="125 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <Wait
+        time="60 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CWait
+          time="60 secs"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <Wait />
+      <CMove
+        from_vessel="rotavap"
+        to_vessel="waste_aqueous"
+        volume="125 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <StopStir
+        vessel="rotavap"
+        vessel_type="rotavap"
+        vessel_has_stirrer="False"
+      >
+        <CRotavapStopRotation
+          rotavap_name="rotavap"
+        />
+      <StopStir />
+      <StartStir
+        vessel="rotavap"
+        vessel_type="rotavap"
+        stir_speed="250"
+      >
+        <CRotavapSetRotationSpeed
+          rotavap_name="rotavap"
+          rotation_speed="250"
+        />
+        <CRotavapStartRotation
+          rotavap_name="rotavap"
+        />
+      <StartStir />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="rotavap"
+        volume="125 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <Wait
+        time="60 secs"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CWait
+          time="60 secs"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <Wait />
+      <CMove
+        from_vessel="rotavap"
+        to_vessel="waste_aqueous"
+        volume="125 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <StopStir
+        vessel="rotavap"
+        vessel_type="rotavap"
+        vessel_has_stirrer="False"
+      >
+        <CRotavapStopRotation
+          rotavap_name="rotavap"
+        />
+      <StopStir />
+      <Dry
+        vessel="rotavap"
+        time="60 mins"
+        waste_vessel="waste_aqueous"
+        aspiration_speed="5"
+        vacuum="flask_vacuum"
+        vacuum_device="filter_vacuum"
+        vacuum_pressure="400 mbar"
+        inert_gas="flask_nitrogen"
+        vacuum_valve="valve_vacuum2"
+        valve_unused_port="0"
+        vessel_type="rotavap"
+        vessel_has_stirrer="False"
+      >
+        <StopStir
+          vessel="rotavap"
+          vessel_type="rotavap"
+          vessel_has_stirrer="False"
+        >
+          <CRotavapStopRotation
+            rotavap_name="rotavap"
+          />
+        <StopStir />
+        <CMove
+          from_vessel="rotavap"
+          to_vessel="waste_aqueous"
+          volume="5 mL"
+          move_speed="40"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="evaporate"
+          unique="False"
+          through=""
+        />
+        <StartVacuum
+          vessel="rotavap"
+          pressure="400 mbar"
+        >
+          <CSetVacuumSetPoint
+            vessel="rotavap"
+            vacuum_pressure="400 mbar"
+          />
+          <CStartVacuum
+            vessel="rotavap"
+          />
+        <StartVacuum />
+        <Wait
+          time="60 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14"
+        >
+          <CSetRecordingSpeed
+            recording_speed="2000"
+          />
+          <CWait
+            time="60 mins"
+          />
+          <CSetRecordingSpeed
+            recording_speed="14"
+          />
+        <Wait />
+        <StopVacuum
+          vessel="rotavap"
+        >
+          <CStopVacuum
+            vessel="rotavap"
+          />
+        <StopVacuum />
+        <CVentVacuum
+          vessel="rotavap"
+        />
+        <CSetVacuumSetPoint
+          vessel="rotavap"
+          vacuum_pressure="400 mbar"
+        />
+      <Dry />
+      <HeatChillReturnToRT
+        vessel="rotavap"
+        stir="False"
+        stir_speed="250"
+        vessel_type="rotavap"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <StopStir
+          vessel="rotavap"
+          vessel_type="rotavap"
+          vessel_has_stirrer="False"
+        >
+          <CRotavapStopRotation
+            rotavap_name="rotavap"
+          />
+        <StopStir />
+        <CRotavapStopHeater
+          rotavap_name="rotavap"
+        />
+        <Wait
+          time="5 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14"
+        >
+          <CSetRecordingSpeed
+            recording_speed="2000"
+          />
+          <CWait
+            time="5 mins"
+          />
+          <CSetRecordingSpeed
+            recording_speed="14"
+          />
+        <Wait />
+      <HeatChillReturnToRT />
+    <CleanVessel />
+    <CleanBackbone
+      solvent="DCM"
+      waste_vessels="waste_reagents waste_aqueous waste_workup waste_organic waste_solvents waste_solvents_2"
+      solvent_vessel="flask_DCM"
+    >
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_reagents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_aqueous"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_workup"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_organic"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_solvents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_solvents_2"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+    <CleanBackbone />
+    <Transfer
+      from_vessel="buffer_flask"
+      to_vessel="rotavap"
+      volume="all"
+      aspiration_speed="10"
+      move_speed="40"
+      dispense_speed="40"
+      children=""
+    >
+      <CMove
+        from_vessel="buffer_flask"
+        to_vessel="rotavap"
+        volume="500 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+      />
+    <Transfer />
+    <CleanBackbone
+      solvent="DCM"
+      waste_vessels="waste_reagents waste_aqueous waste_workup waste_organic waste_solvents waste_solvents_2"
+      solvent_vessel="flask_DCM"
+    >
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_reagents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_aqueous"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_workup"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_organic"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_solvents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_DCM"
+        to_vessel="waste_solvents_2"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+    <CleanBackbone />
+    <CleanBackbone
+      solvent="ether"
+      waste_vessels="waste_reagents waste_aqueous waste_workup waste_organic waste_solvents waste_solvents_2"
+      solvent_vessel="flask_ether"
+    >
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_reagents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_aqueous"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_workup"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_organic"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_solvents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_solvents_2"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+    <CleanBackbone />
+    <WashSolid
+      vessel="rotavap"
+      solvent="ether"
+      volume="15 mL"
+      vacuum_time="10 secs"
+      stir="True"
+      stir_time="10 mins"
+      stir_speed="250.0"
+      waste_vessel="waste_aqueous"
+      aspiration_speed="5"
+      vacuum="flask_vacuum"
+      vacuum_device="filter_vacuum"
+      inert_gas="flask_nitrogen"
+      vacuum_valve="valve_vacuum2"
+      valve_unused_port="0"
+      vessel_type="rotavap"
+      repeat="3"
+      children=""
+    >
+      <Add
+        reagent="ether"
+        vessel="rotavap"
+        volume="15 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        stir="False"
+        stir_speed="250"
+        anticlogging="False"
+        anticlogging_solvent_volume="2 mL"
+        anticlogging_reagent_volume="10 mL"
+        reagent_vessel="flask_ether"
+        waste_vessel="waste_aqueous"
+        flush_tube_vessel="flask_nitrogen"
+        vessel_type="rotavap"
+      >
+        <PrimePumpForAdd
+          reagent="ether"
+          volume="3 mL"
+          reagent_vessel="flask_ether"
+          waste_vessel="waste_aqueous"
+        >
+          <CMove
+            from_vessel="flask_ether"
+            to_vessel="waste_aqueous"
+            volume="3 mL"
+            move_speed="40"
+            aspiration_speed="10"
+            dispense_speed="40"
+            unique="False"
+            through=""
+          />
+        <PrimePumpForAdd />
+        <CMove
+          from_vessel="flask_ether"
+          to_vessel="rotavap"
+          volume="15 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          to_port="evaporate"
+          unique="False"
+          through=""
+        />
+        <Wait
+          time="10 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14"
+        >
+          <CSetRecordingSpeed
+            recording_speed="2000"
+          />
+          <CWait
+            time="10 secs"
+          />
+          <CSetRecordingSpeed
+            recording_speed="14"
+          />
+        <Wait />
+      <Add />
+      <Stir
+        vessel="rotavap"
+        time="10 mins"
+        stir_speed="250.0"
+        vessel_type="rotavap"
+      >
+        <RotavapStir
+          rotavap_name="rotavap"
+          time="10 mins"
+          stir_speed="250.0"
+        >
+          <RotavapStartRotation
+            rotavap_name="rotavap"
+            rotation_speed="250.0"
+          >
+            <CRotavapSetRotationSpeed
+              rotavap_name="rotavap"
+              rotation_speed="250.0"
+            />
+            <CRotavapStartRotation
+              rotavap_name="rotavap"
+            />
+          <RotavapStartRotation />
+          <Wait
+            time="10 mins"
+            wait_recording_speed="2000"
+            after_recording_speed="14"
+          >
+            <CSetRecordingSpeed
+              recording_speed="2000"
+            />
+            <CWait
+              time="10 mins"
+            />
+            <CSetRecordingSpeed
+              recording_speed="14"
+            />
+          <Wait />
+          <RotavapStopRotation
+            rotavap_name="rotavap"
+          >
+            <CRotavapStopRotation
+              rotavap_name="rotavap"
+            />
+          <RotavapStopRotation />
+        <RotavapStir />
+      <Stir />
+      <Transfer
+        from_vessel="rotavap"
+        to_vessel="waste_aqueous"
+        volume="all"
+        aspiration_speed="10"
+        move_speed="40"
+        dispense_speed="40"
+      >
+        <CMove
+          from_vessel="rotavap"
+          to_vessel="waste_aqueous"
+          volume="250 mL"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
+          unique="False"
+        />
+      <Transfer />
+    <WashSolid />
+    <CleanBackbone
+      solvent="ether"
+      waste_vessels="waste_reagents waste_aqueous waste_workup waste_organic waste_solvents waste_solvents_2"
+      solvent_vessel="flask_ether"
+    >
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_reagents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_aqueous"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_workup"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_organic"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_solvents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_solvents_2"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+    <CleanBackbone />
+    <Dry
+      vessel="rotavap"
+      time="60 mins"
+      temp="23°C"
+      waste_vessel="waste_aqueous"
+      aspiration_speed="5"
+      vacuum="flask_vacuum"
+      vacuum_device="filter_vacuum"
+      vacuum_pressure="400 mbar"
+      inert_gas="flask_nitrogen"
+      vacuum_valve="valve_vacuum2"
+      valve_unused_port="0"
+      vessel_type="rotavap"
+      vessel_has_stirrer="False"
+      children=""
+    >
+      <HeatChillToTemp
+        vessel="rotavap"
+        temp="23°C"
+        stir="False"
+        stir_speed="250"
+        vessel_type="filter"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <StopStir
+          vessel="rotavap"
+          vessel_type="filter"
+          vessel_has_stirrer="False"
+        />
+        <StartHeatChill
+          vessel="rotavap"
+          temp="23°C"
+          vessel_type="rotavap"
+        >
+          <CRotavapSetTemp
+            rotavap_name="rotavap"
+            temp="23°C"
+          />
+          <CRotavapStartHeater
+            rotavap_name="rotavap"
+          />
+        <StartHeatChill />
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CChillerWaitForTemp
+          vessel="rotavap"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <HeatChillToTemp />
+      <StopStir
+        vessel="rotavap"
+        vessel_type="rotavap"
+        vessel_has_stirrer="False"
+      >
+        <CRotavapStopRotation
+          rotavap_name="rotavap"
+        />
+      <StopStir />
+      <CMove
+        from_vessel="rotavap"
+        to_vessel="waste_aqueous"
+        volume="5 mL"
+        move_speed="40"
+        aspiration_speed="5"
+        dispense_speed="40"
+        from_port="evaporate"
+        unique="False"
+        through=""
+      />
+      <StartVacuum
+        vessel="rotavap"
+        pressure="400 mbar"
+      >
+        <CSetVacuumSetPoint
+          vessel="rotavap"
+          vacuum_pressure="400 mbar"
+        />
+        <CStartVacuum
+          vessel="rotavap"
+        />
+      <StartVacuum />
+      <Wait
+        time="60 mins"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+      >
+        <CSetRecordingSpeed
+          recording_speed="2000"
+        />
+        <CWait
+          time="60 mins"
+        />
+        <CSetRecordingSpeed
+          recording_speed="14"
+        />
+      <Wait />
+      <StopVacuum
+        vessel="rotavap"
+      >
+        <CStopVacuum
+          vessel="rotavap"
+        />
+      <StopVacuum />
+      <CVentVacuum
+        vessel="rotavap"
+      />
+      <CSetVacuumSetPoint
+        vessel="rotavap"
+        vacuum_pressure="400 mbar"
+      />
+    <Dry />
+    <CleanBackbone
+      solvent="ether"
+      waste_vessels="waste_reagents waste_aqueous waste_workup waste_organic waste_solvents waste_solvents_2"
+      solvent_vessel="flask_ether"
+    >
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_reagents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_aqueous"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_workup"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_organic"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_solvents"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+      <CMove
+        from_vessel="flask_ether"
+        to_vessel="waste_solvents_2"
+        volume="3 mL"
+        move_speed="40"
+        aspiration_speed="10"
+        dispense_speed="40"
+        unique="False"
+        through=""
+      />
+    <CleanBackbone />
+  </Procedure>
+
+</Synthesis>

@@ -1,0 +1,20 @@
+!StartVacuum
+
+# Example: Start vacuum for filter flask at 100 mbar.
+
+en
+Start vacuum for {vessel} at {pressure}.
+
+zh
+开启{vessel}的真空，压力为{pressure}。
+
+
+!StopVacuum
+
+# Example: Stop vacuum for filter flask.
+
+en
+Stop Vacuum for {vessel}.
+
+zh
+关闭{vessel}的真空。

@@ -1,0 +1,9 @@
+!CleanBackbone
+
+# Example: Clean backbone with ether.
+
+en
+Clean backbone with {solvent}.
+
+zh
+用{solvent}清洗主干道。

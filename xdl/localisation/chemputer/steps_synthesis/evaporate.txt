@@ -1,0 +1,9 @@
+!Evaporate
+
+# Example: Evaporate contents of rotavap at 50°C and 70 mbar for 10 minutes.
+
+en
+Evaporate contents of {rotavap_name} at {temp} and {pressure} for {time}.
+
+zh
+在温度为{temp} 压力为{pressure}条件，下保持时间为{time}，蒸发除掉{rotavap_name} 中的成分。
