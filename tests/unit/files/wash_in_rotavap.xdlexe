@@ -186,7 +186,7 @@
       <Transfer
         from_vessel="rotavap"
         to_vessel="waste_rotavap"
-        volume="all"
+        volume="100 mL"
         from_port="None"
         to_port="None"
         through="None"

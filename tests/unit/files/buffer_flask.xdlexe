@@ -170,7 +170,7 @@
       <Transfer
         from_vessel="rotavap"
         to_vessel="buffer_flask"
-        volume="all"
+        volume="30 mL"
         from_port="None"
         to_port="None"
         through="cartridge_celite"
@@ -181,7 +181,7 @@
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
-          volume="250 mL"
+          volume="30 mL"
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
@@ -528,7 +528,7 @@
       <Transfer
         from_vessel="buffer_flask"
         to_vessel="rotavap"
-        volume="all"
+        volume="0"
         from_port="None"
         to_port="None"
         through="None"
@@ -539,7 +539,7 @@
         <CMove
           from_vessel="buffer_flask"
           to_vessel="rotavap"
-          volume="250 mL"
+          volume="0"
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"

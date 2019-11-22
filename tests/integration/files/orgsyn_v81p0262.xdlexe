@@ -579,7 +579,7 @@
     <Transfer
       from_vessel="reactor"
       to_vessel="filter"
-      volume="all"
+      volume="73.4 mL"
       from_port="0"
       to_port="top"
       through="None"
@@ -590,7 +590,7 @@
       <CMove
         from_vessel="reactor"
         to_vessel="filter"
-        volume="250 mL"
+        volume="73.4 mL"
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
@@ -673,7 +673,7 @@
     </Stir>
     <Filter
       filter_vessel="filter"
-      filter_top_volume="750 mL"
+      filter_top_volume="573.4 mL"
       wait_time="2 mins"
       aspiration_speed="5"
       stir="True"
@@ -698,7 +698,7 @@
       <CMove
         from_vessel="filter"
         to_vessel="waste_Z"
-        volume="1.125 l"
+        volume="860.1 mL"
         move_speed="40"
         aspiration_speed="5"
         dispense_speed="40"

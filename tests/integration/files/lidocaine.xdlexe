@@ -1566,7 +1566,7 @@
       <Transfer
         from_vessel="filter1"
         to_vessel="flask_separator"
-        volume="all"
+        volume="160 mL"
         from_port="None"
         to_port="bottom"
         through="None"

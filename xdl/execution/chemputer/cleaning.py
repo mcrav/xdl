@@ -89,7 +89,7 @@ def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:
         return None
     schedule = [None for step in xdl_obj.steps]
     # Add solvents to schedule at solvent addition steps.
-    for i, _, _, additions in iter_vessel_contents(
+    for i, _, _, additions, _ in iter_vessel_contents(
         xdl_obj.steps, graph_hardware, additions=True):
         for reagent in additions:
             cleaning_solvent = get_reagent_cleaning_solvent(
@@ -324,7 +324,7 @@ def get_vessel_emptying_steps(
     vessel_emptying_steps = []
     full_vessel_contents = []
     prev_vessel_contents = {}
-    for i, _, vessel_contents in iter_vessel_contents(steps, hardware):
+    for i, _, vessel_contents, _ in iter_vessel_contents(steps, hardware):
         full_vessel_contents.append(vessel_contents)
         for vessel, contents in vessel_contents.items():
             # If target vessel has just been emptied, append to vessel
@@ -357,7 +357,7 @@ def get_clean_vessel_sequence(
     prev_vessel_contents = {}
     # Go through and find conditions where CleanVessel steps should be added.
     # Find solvents to clean with as well.
-    for i, step, vessel_contents in iter_vessel_contents(steps, hardware):
+    for i, step, vessel_contents, _ in iter_vessel_contents(steps, hardware):
         cleaning_solvents = []
         # Clean separation from_vessel
         if (type(step) == Separate

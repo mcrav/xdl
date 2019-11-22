@@ -667,7 +667,7 @@ class XDLExecutor(AbstractXDLExecutor):
         filter_emptying_steps = []
         full_vessel_contents = []
         prev_vessel_contents = {}
-        for i, _, vessel_contents in iter_vessel_contents(
+        for i, _, vessel_contents, _ in iter_vessel_contents(
             self._xdl.steps, self._graph_hardware):
             full_vessel_contents.append(vessel_contents)
             for vessel, contents in vessel_contents.items():
@@ -763,18 +763,32 @@ class XDLExecutor(AbstractXDLExecutor):
     ### SOLIDIFY IMPLIED PROPERTIES ###
     ###################################
 
+    def _add_all_volumes_to_step(self, step, vessel_contents, definite):
+        if type(step) in [Transfer, CMove]:
+            if step.volume == 'all':
+                if definite and step.from_vessel in vessel_contents:
+                    step.volume = vessel_contents[step.from_vessel].volume
+                else:
+                    try:
+                        step.volume = self._graph_hardware[
+                            step.from_vessel].max_volume
+                    except AttributeError:
+                        raise XDLError(f'Missing flask ("from_vessel": "{step.from_vessel}") in {step.name} step.\n{step.properties}\n')
+
+        if not isinstance(step, AbstractBaseStep):
+            for substep in step.steps:
+                self._add_all_volumes_to_step(substep, vessel_contents, definite)
+
     def _add_all_volumes(self) -> None:
         """When volumes in CMove commands are specified by 'all', change
         these to max_volume of vessel.
         """
-        for step in self._xdl.steps:
-            for base_step in self._xdl.climb_down_tree(step):
-                if type(base_step) == CMove and base_step.volume == 'all':
-                    try:
-                        base_step.volume = self._graph_hardware[
-                            base_step.from_vessel].max_volume
-                    except AttributeError:
-                        raise XDLError(f'Missing flask ("from_vessel": "{base_step.from_vessel}") in {step.name} step.\n{step.properties}\nBase step: {base_step.name}\n{base_step.properties}')
+        prev_vessel_contents = None
+        for _, step, vessel_contents, definite  in iter_vessel_contents(
+            self._xdl.steps, self._graph_hardware
+        ):
+            self._add_all_volumes_to_step(step, prev_vessel_contents, definite)
+            prev_vessel_contents = vessel_contents
 
     def _add_filter_volumes(self) -> None:
         """
@@ -782,7 +796,7 @@ class XDLExecutor(AbstractXDLExecutor):
         added to filter top to Filter steps.
         """
         prev_vessel_contents = {}
-        for _, step, vessel_contents in iter_vessel_contents(
+        for _, step, vessel_contents, _ in iter_vessel_contents(
             self._xdl.steps, self._graph_hardware):
             if type(step) == Filter:
                 if step.filter_vessel in prev_vessel_contents:
@@ -915,7 +929,7 @@ class XDLExecutor(AbstractXDLExecutor):
             stirring_schedule.append(stirred_vessels)
 
         # Look for vessels out of scope that need stirring stopped
-        for i, step, vessel_contents in iter_vessel_contents(
+        for i, step, vessel_contents, _ in iter_vessel_contents(
             self._xdl.steps, self._graph_hardware):
             for prop, val in step.properties.items():
                 if 'vessel' in prop and val in stirring_schedule[i]:

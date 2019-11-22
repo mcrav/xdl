@@ -448,10 +448,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "hexanes",
-      "name": "flask_hexanes",
-      "label": "flask_hexanes",
-      "id": "flask_hexanes",
+      "chemical": "toluene",
+      "name": "flask_toluene",
+      "label": "flask_toluene",
+      "id": "flask_toluene",
       "internalId": 4
     },
     {
@@ -993,7 +993,7 @@
     },
     {
       "port": "(0,5)",
-      "source": "flask_hexanes",
+      "source": "flask_toluene",
       "target": "valve_Z",
       "sourceInternal": 4,
       "targetInternal": 13,

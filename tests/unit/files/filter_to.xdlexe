@@ -109,7 +109,7 @@
       <Transfer
         from_vessel="reactor"
         to_vessel="rotavap"
-        volume="all"
+        volume="300 mL"
         from_port="0"
         to_port="evaporate"
         through="None"
@@ -120,7 +120,7 @@
         <CMove
           from_vessel="reactor"
           to_vessel="rotavap"
-          volume="100 mL"
+          volume="300 mL"
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
