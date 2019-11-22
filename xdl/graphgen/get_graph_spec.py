@@ -21,7 +21,7 @@ def get_flask_reagents(xdl_obj):
         elif 'eluting_solvent' in step.properties and step.eluting_solvent:
             reagents.append(step.eluting_solvent)
 
-    return set(reagents)
+    return sorted(list(set(reagents)))
 
 def get_buffer_flasks(xdl_obj):
     buffer_flasks = []
