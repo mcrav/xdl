@@ -1567,7 +1567,7 @@
         from_vessel="filter1"
         to_vessel="flask_separator"
         volume="160 mL"
-        from_port="None"
+        from_port="bottom"
         to_port="bottom"
         through="None"
         time="None"
@@ -1581,7 +1581,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="bottom"
           to_port="bottom"
           unique="False"
           through="None" />
@@ -2610,7 +2610,7 @@
         </StopStir>
         <ChillerReturnToRT
           vessel="filter1"
-          vessel_class="None"
+          vessel_class="ChemputerFilter"
           wait_recording_speed="2000"
           after_recording_speed="14" />
       </HeatChillReturnToRT>

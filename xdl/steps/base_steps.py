@@ -177,7 +177,7 @@ class AbstractBaseStep(Step, ABC):
     def on_prepare_for_execution(self, graph):
         pass
 
-    def final_sanity_check(self):
+    def final_sanity_check(self, graph):
         pass
 
     @property
@@ -360,6 +360,9 @@ class UnimplementedStep(Step):
     @property
     def requirements(self):
         return {}
+
+    def final_sanity_check(self, graph):
+        pass
 
     def on_prepare_for_execution(self, graph):
         pass

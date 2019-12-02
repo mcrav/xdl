@@ -72,18 +72,22 @@ class Transfer(AbstractStep):
                       move_speed=self.move_speed,
                       dispense_speed=dispense_speed)]
 
+    def final_sanity_check(self, graph):
+        assert self.from_vessel
+        assert self.to_vessel
+
     def on_prepare_for_execution(self, graph) -> str:
         """If self.port is None, return default port for different vessel types.
 
         Returns:
             str: Vessel port to add to.
         """
-        if self.from_port in [None, '']:
+        if self.from_port in [None, ''] and self.from_vessel:
             from_class = graph.node[self.from_vessel]['class']
             if from_class in DEFAULT_PORTS:
                 self.from_port = DEFAULT_PORTS[from_class]['from']
 
-        if self.to_port in [None, '']:
+        if self.to_port in [None, ''] and self.to_vessel:
             to_class = graph.node[self.to_vessel]['class']
             if to_class in DEFAULT_PORTS:
                 self.to_port = DEFAULT_PORTS[to_class]['to']
