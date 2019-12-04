@@ -4,6 +4,7 @@ from ..steps_utility import (
     StartStir, StopStir, Wait, HeatChillToTemp, HeatChillReturnToRT)
 from ..steps_base import CMove
 from .dry import Dry
+from ....utils.errors import XDLError
 
 class CleanVessel(AbstractStep):
 
@@ -35,6 +36,22 @@ class CleanVessel(AbstractStep):
                 to.
         """
         super().__init__(locals())
+
+    def final_sanity_check(self, graph):
+        try:
+            assert self.solvent_vessel
+        except AssertionError as e:
+            raise XDLError(f'No solvent vessel found in graph for {self.solvent}')
+        assert self.waste_vessel
+        assert self.cleans > 0
+        assert self.volume and self.volume > 0
+
+    def on_prepare_for_execution(self, graph):
+        for node in graph.nodes():
+            if graph.node[node]['class'] == 'ChemputerFlask':
+                if graph.node[node]['chemical'] == self.solvent:
+                    self.solvent_vessel = node
+                    break
 
     def get_steps(self):
         steps = []

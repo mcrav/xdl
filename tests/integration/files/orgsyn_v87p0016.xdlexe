@@ -1120,8 +1120,8 @@
         from_vessel="phase_A"
         to_vessel="separator"
         volume="200 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -1134,8 +1134,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -1313,8 +1313,8 @@
         from_vessel="phase_A"
         to_vessel="separator"
         volume="200 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -1327,8 +1327,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -1506,8 +1506,8 @@
         from_vessel="phase_B"
         to_vessel="separator"
         volume="200 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
@@ -1520,8 +1520,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -2276,6 +2276,7 @@
           through="None" />
       </Transfer>
     </Evaporate>
+    <Distill />
   </Procedure>
 
 </Synthesis>

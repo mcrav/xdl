@@ -487,10 +487,10 @@
       "max_volume": 100,
       "current_volume": 0,
       "class": "ChemputerFlask",
-      "chemical": "2 methylcyclohexanone",
-      "name": "flask_2 methylcyclohexanone",
-      "label": "flask_2 methylcyclohexanone",
-      "id": "flask_2 methylcyclohexanone",
+      "chemical": "saturated sodium bicarbonate solution",
+      "name": "flask_saturated sodium bicarbonate solution",
+      "label": "flask_saturated sodium bicarbonate solution",
+      "id": "flask_saturated sodium bicarbonate solution",
       "internalId": 9
     },
     {
@@ -1130,7 +1130,7 @@
     },
     {
       "port": "(0,5)",
-      "source": "flask_2 methylcyclohexanone",
+      "source": "flask_saturated sodium bicarbonate solution",
       "target": "valve_H",
       "sourceInternal": 9,
       "targetInternal": 16,
