@@ -8,6 +8,9 @@ Wash contents of {from_vessel} with {solvent} ({n_separations} x {solvent_volume
 zh
 用{solvent} ({n_separations} x {solvent_volume})洗涤{from_vessel}中组分. 转移废液相 ({waste_phase}) 至{waste_phase_to_vessel} ， 转移产品相({product_phase}) 至{to_vessel}.
 
+ru
+Промыть содержимое {from_vessel} с помощью {solvent} ({n_separations} раз(а) по {solvent_volume}). Отработанную фазу ({waste_phase}) слить в {waste_phase_to_vessel}, фазу с продуктом ({product_phase}) - в {to_vessel}.
+
 
 !Separate (extract)
 
@@ -18,3 +21,6 @@ Extract contents of {from_vessel} with {solvent} ({n_separations} x {solvent_vol
 
 zh
 用{solvent} ({n_separations} x {solvent_volume})萃取 {from_vessel}中的组分. 转移废液相 ({waste_phase}) 至废液瓶{waste_phase_to_vessel} ， 转移产品相({product_phase}) 至容器{to_vessel}.
+
+ru
+Экстрагировать содержимое {from_vessel} с помощью {solvent} ({n_separations} раз(а) по {solvent_volume}). Отработанную фазу ({waste_phase}) слить в {waste_phase_to_vessel}, фазу с продуктом ({product_phase}) - в {to_vessel}.

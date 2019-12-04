@@ -8,6 +8,9 @@ Set stir rate of {vessel} to {stir_speed}.
 zh
 设置{vessel}的搅拌速率为{stir_speed}.
 
+ru
+Установить скорость перемешивания {vessel} на {stir_speed}.
+
 
 !StartStir
 
@@ -18,6 +21,9 @@ Set stir rate to {stir_speed} and start stirring {vessel}.
 
 zh
 设置搅拌速率为{stir_speed}并开始搅拌{vessel}.
+
+ru
+Установить скорость перемешивания {vessel} на {stir_speed} и начать перемешивание.
 
 
 !StopStir
@@ -30,6 +36,9 @@ Stop stirring {vessel}.
 zh
 停止搅拌{vessel}.
 
+ru
+Остановить перемешивание {vessel}.
+
 
 !Stir
 
@@ -40,3 +49,6 @@ Stir {vessel} for {time} at {stir_speed}.
 
 zh
 搅拌{vessel}，搅拌时间为 {time}，搅拌速度为{stir_speed}。
+
+ru
+Мешать {vessel} в течение {time} со скорость {stir_speed}.

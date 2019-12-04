@@ -7,3 +7,6 @@ Wash solid in {vessel} with {solvent} ({volume}).
 
 zh
 用{solvent} ({volume})洗涤{vessel}中的固体
+
+ru
+Промыть осадок в {vessel} с помощью {solvent} ({volume}).

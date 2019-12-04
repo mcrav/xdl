@@ -8,6 +8,9 @@ Filter contents of {from_vessel} through {through_cartridge} into {to_vessel}.
 zh
 过滤{from_vessel}中的组分，经{through_cartridge}进入{to_vessel}.
 
+ru
+Отфильтровать содержимое {from_vessel} в {to_vessel} через {through_cartridge}.
+
 
 !FilterThrough (eluting)
 
@@ -18,3 +21,6 @@ Filter contents of {from_vessel} through {through_cartridge} into {to_vessel}, e
 
 zh
 过滤{from_vessel}中的滤液经{through_cartridge}进入{to_vessel}, 用{eluting_solvent}{eluting_repeats}x{eluting_volume} 进行洗脱.
+
+ru
+Отфильтровать содержимое {from_vessel} в {to_vessel} через {through_cartridge}, промыв {eluting_solvent} ({eluting_repeats} раза по {eluting_volume}).
