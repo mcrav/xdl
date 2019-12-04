@@ -8,6 +8,9 @@ Start vacuum for {vessel} at {pressure}.
 zh
 开启{vessel}的真空，压力为{pressure}。
 
+ru
+Включить вакуум у {vessel} на {pressure}.
+
 
 !StopVacuum
 
@@ -18,3 +21,6 @@ Stop Vacuum for {vessel}.
 
 zh
 关闭{vessel}的真空。
+
+ru
+Остановить вакуум у {vessel}.

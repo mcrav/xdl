@@ -4,3 +4,6 @@
 
 en
 Repeat {repeats} times:
+
+ru
+Повторять {repeats} раз(а):

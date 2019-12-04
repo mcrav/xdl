@@ -7,3 +7,6 @@ Heat/Chill {vessel} to {temp} for {time}.
 
 zh
 加热/冷却{vessel}至温度为{temp} 保持时间{time}.
+
+ru
+Нагревать/Охлаждать {vessel} до температуры {temp} в течение {time}.

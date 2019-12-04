@@ -8,6 +8,9 @@ Fill bottom of {filter_vessel} with {solvent} ({volume}).
 zh
 用{solvent} ({volume})填满过滤器{filter_vessel}的底部。
 
+ru
+Заполнить нижний объём {filter_vessel} с помощью {solvent} ({volume}).
+
 
 !RemoveFilterDeadVolume
 
@@ -18,3 +21,6 @@ Remove dead volume ({dead_volume}) from bottom of {filter_vessel}.
 
 zh
 从{filter_vessel}底部排除死体积({dead_volume}).
+
+ru
+Убрать растворитель из нижнего объёма ({dead_volume}) {filter_vessel}.

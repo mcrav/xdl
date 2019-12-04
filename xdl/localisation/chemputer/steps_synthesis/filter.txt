@@ -7,3 +7,6 @@ Filter contents of {filter_vessel}.
 
 zh
 过滤{filter_vessel}中的组分。
+
+ru
+Отфильтровать содержимое {filter_vessel}.

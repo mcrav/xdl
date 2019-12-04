@@ -5,6 +5,9 @@
 en
 Recrystallize contents of {vessel} by heating to {crystallize_temp} and waiting for {time}.
 
+ru
+Перекристаллизовать содержимое {vessel} нагревая/охлаждая до температуры {crystallize_temp} в течение {time}.
+
 
 !Recrystallize (with solvent)
 
@@ -12,3 +15,6 @@ Recrystallize contents of {vessel} by heating to {crystallize_temp} and waiting 
 
 en
 Recrystallize contents of {vessel} by dissolving in {solvent} ({solvent_volume}) at {dissolve_temp} then heating to {crystallize_temp} and waiting for {time}.
+
+ru
+Перекристаллизовать содержимое {vessel} растворив осадок в {solvent} ({solvent_volume}) при температурe {dissolve_temp} и охлаждая до температуры {crystallize_temp} в течение {time}.

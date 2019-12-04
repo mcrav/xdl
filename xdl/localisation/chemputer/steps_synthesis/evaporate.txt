@@ -7,3 +7,6 @@ Evaporate contents of {rotavap_name} at {temp} and {pressure} for {time}.
 
 zh
 在温度为{temp} 压力为{pressure}条件，下保持时间为{time}，蒸发除掉{rotavap_name} 中的成分。
+
+ru
+Упарить содержимое {rotavap_name} под вакуумом {pressure} при температуре {temp} в течение {time}.
