@@ -493,7 +493,8 @@ class XDL(object):
     def prepare_for_execution(
         self, graph_file: str = None,
         interactive: bool = True,
-        save_path: str = ''
+        save_path: str = '',
+        sanity_check: bool = True,
     ) -> None:
         """Check hardware compatibility and prepare XDL for execution on given
         setup.
@@ -510,7 +511,11 @@ class XDL(object):
                 save_path = self._xdl_file.replace('.xdl', '.xdlexe')
             if self.platform == 'chemputer':
                 self.executor.prepare_for_execution(
-                    graph_file, interactive=interactive, save_path=save_path)
+                    graph_file,
+                    interactive=interactive,
+                    save_path=save_path,
+                    sanity_check=sanity_check,
+                )
             elif self.platform == 'chemobot':
                 self.executor.prepare_for_execution()
 

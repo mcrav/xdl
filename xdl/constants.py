@@ -137,6 +137,8 @@ DEFAULT_WASH_SOLID_STIR_SPEED: int = 400
 
 DEFAULT_WASH_SOLID_STIR_TIME: int = 60 * 5
 
+DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED: int = 2
+
 #########
 ## Add ##
 #########
@@ -226,6 +228,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
         'stir': True,
         'stir_speed': DEFAULT_WASHFILTERCAKE_STIR_SPEED,
+        'anticlogging': False,
     },
     'Dry': {
         'time': DEFAULT_DRY_TIME,
@@ -240,6 +243,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'stir_time': DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME,
         'stir_speed': DEFAULT_WASHFILTERCAKE_STIR_SPEED,
         'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
+        'anticlogging': False,
     },
     'Transfer': {
         'stir_speed': DEFAULT_STIR_SPEED,
