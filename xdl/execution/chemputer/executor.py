@@ -1069,7 +1069,8 @@ class XDLExecutor(AbstractXDLExecutor):
         self,
         graph_file: Union[str, Dict],
         interactive: bool = True,
-        save_path: str = ''
+        save_path: str = '',
+        sanity_check: bool = True,
     ) -> None:
         """
         Prepare the XDL for execution on a Chemputer corresponding to the given
@@ -1117,9 +1118,9 @@ class XDLExecutor(AbstractXDLExecutor):
 
                 self._add_internal_properties()
 
-                for step in self._xdl.steps:
-                    self._do_sanity_check(step)
-
+                if sanity_check:
+                    for step in self._xdl.steps:
+                        self._do_sanity_check(step)
 
                 # Add in steps implied by explicit steps.
                 self._add_implied_steps(interactive=interactive)
