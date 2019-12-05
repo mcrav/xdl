@@ -51,6 +51,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -171,13 +172,14 @@
         from_vessel="rotavap"
         to_vessel="buffer_flask"
         volume="30 mL"
-        from_port="None"
-        to_port="None"
+        from_port="evaporate"
+        to_port="0"
         through="cartridge_celite"
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -185,8 +187,8 @@
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="evaporate"
+          to_port="0"
           unique="False"
           through="cartridge_celite" />
       </Transfer>
@@ -194,13 +196,14 @@
         from_vessel="flask_dichloromethane"
         to_vessel="rotavap"
         volume="15 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="evaporate"
         through="None"
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_dichloromethane"
           to_vessel="rotavap"
@@ -208,8 +211,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="evaporate"
           unique="False"
           through="None" />
       </Transfer>
@@ -217,13 +220,14 @@
         from_vessel="rotavap"
         to_vessel="buffer_flask"
         volume="15 mL"
-        from_port="None"
-        to_port="None"
+        from_port="evaporate"
+        to_port="0"
         through="cartridge_celite"
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -231,8 +235,8 @@
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="evaporate"
+          to_port="0"
           unique="False"
           through="cartridge_celite" />
       </Transfer>
@@ -240,13 +244,14 @@
         from_vessel="flask_dichloromethane"
         to_vessel="rotavap"
         volume="15 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="evaporate"
         through="None"
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_dichloromethane"
           to_vessel="rotavap"
@@ -254,8 +259,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="evaporate"
           unique="False"
           through="None" />
       </Transfer>
@@ -263,13 +268,14 @@
         from_vessel="rotavap"
         to_vessel="buffer_flask"
         volume="15 mL"
-        from_port="None"
-        to_port="None"
+        from_port="evaporate"
+        to_port="0"
         through="cartridge_celite"
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -277,8 +283,8 @@
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="evaporate"
+          to_port="0"
           unique="False"
           through="cartridge_celite" />
       </Transfer>
@@ -286,13 +292,14 @@
         from_vessel="flask_dichloromethane"
         to_vessel="rotavap"
         volume="15 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="evaporate"
         through="None"
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_dichloromethane"
           to_vessel="rotavap"
@@ -300,8 +307,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="evaporate"
           unique="False"
           through="None" />
       </Transfer>
@@ -309,13 +316,14 @@
         from_vessel="rotavap"
         to_vessel="buffer_flask"
         volume="15 mL"
-        from_port="None"
-        to_port="None"
+        from_port="evaporate"
+        to_port="0"
         through="cartridge_celite"
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -323,8 +331,8 @@
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="evaporate"
+          to_port="0"
           unique="False"
           through="cartridge_celite" />
       </Transfer>
@@ -332,13 +340,14 @@
         from_vessel="flask_nitrogen"
         to_vessel="buffer_flask"
         volume="25 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         through="cartridge_celite"
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_nitrogen"
           to_vessel="buffer_flask"
@@ -346,8 +355,8 @@
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="0"
           unique="False"
           through="cartridge_celite" />
       </Transfer>
@@ -529,13 +538,14 @@
         from_vessel="buffer_flask"
         to_vessel="rotavap"
         volume="0"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="evaporate"
         through="None"
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="buffer_flask"
           to_vessel="rotavap"
@@ -543,8 +553,8 @@
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="evaporate"
           unique="False"
           through="None" />
       </Transfer>

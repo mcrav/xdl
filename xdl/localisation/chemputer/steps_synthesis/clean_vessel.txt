@@ -7,3 +7,6 @@ Clean {vessel} with {solvent} ({cleans} × {volume}).
 
 zh
 用 {solvent} ({cleans} × {volume})洗涤 {vessel}.
+
+ru
+Помыть {vessel} с помощью {solvent} ({cleans} раз по {volume}).

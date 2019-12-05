@@ -7,3 +7,6 @@ Dissolve contents of {vessel} in {solvent} ({volume}) at {temp} over {time}.
 
 zh
 用{solvent}({volume}溶解{vessel} 中的组分，温度为{temp}时间为{time}。
+
+ru
+Растворить содержимое {vessel} в {solvent} ({volume}) при температуре {temp} в течение {time}.

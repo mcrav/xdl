@@ -7,7 +7,9 @@ from ..steps_utility import (
 from ....constants import (
     BOTTOM_PORT,
     DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
-    DEFAULT_FILTER_VACUUM_PRESSURE)
+    DEFAULT_FILTER_VACUUM_PRESSURE,
+    DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED,
+)
 from ....utils.errors import XDLError
 
 class Filter(AbstractStep):
@@ -52,6 +54,7 @@ class Filter(AbstractStep):
         inert_gas: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
         valve_unused_port: Optional[Union[str, int]] = None,
+        anticlogging: Optional[bool] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -61,6 +64,10 @@ class Filter(AbstractStep):
         if not filtrate_vessel:
             filtrate_vessel = self.waste_vessel
 
+        aspiration_speed = self.aspiration_speed
+        if self.anticlogging:
+            aspiration_speed = DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED
+
         steps = [
             # Move the filter top volume from the bottom to the waste.
             CMove(
@@ -69,7 +76,7 @@ class Filter(AbstractStep):
                 from_port=BOTTOM_PORT,
                 volume=(self.filter_top_volume
                         * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR),
-                aspiration_speed=self.aspiration_speed),
+                aspiration_speed=aspiration_speed),
             StartVacuum(
                 vessel=self.vacuum, pressure=DEFAULT_FILTER_VACUUM_PRESSURE),
             # Connect the vacuum.

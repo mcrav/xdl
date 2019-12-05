@@ -208,7 +208,6 @@ class XDLExecutor(AbstractXDLExecutor):
             step_list (List[Step]): List of steps to add internal properties to.
         """
         for step in step_list:
-
             # Set step.waste_vessel to nearest waste_vessel to vessel involved
             # in step.
             if 'waste_vessel' in step.properties and not step.waste_vessel:
@@ -329,6 +328,7 @@ class XDLExecutor(AbstractXDLExecutor):
                 step.heater, step.chiller = self._find_heater_chiller(
                     self._graph, step.vessel)
 
+            step.on_prepare_for_execution(self._graph)
             if not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
                 self._add_internal_properties_to_steps(step.steps)
 
@@ -1022,6 +1022,12 @@ class XDLExecutor(AbstractXDLExecutor):
         for warning in self._warnings:
             self.logger.info(warning)
 
+    def _do_sanity_check(self, step):
+        step.final_sanity_check(self._graph)
+        if type(step) != AbstractBaseStep:
+            for substep in step.steps:
+                self._do_sanity_check(substep)
+
     ######################
     ### PUBLIC METHODS ###
     ######################
@@ -1063,7 +1069,8 @@ class XDLExecutor(AbstractXDLExecutor):
         self,
         graph_file: Union[str, Dict],
         interactive: bool = True,
-        save_path: str = ''
+        save_path: str = '',
+        sanity_check: bool = True,
     ) -> None:
         """
         Prepare the XDL for execution on a Chemputer corresponding to the given
@@ -1111,8 +1118,9 @@ class XDLExecutor(AbstractXDLExecutor):
 
                 self._add_internal_properties()
 
-                for step in self._xdl.steps:
-                    self.call_on_prepare_for_execution(step)
+                if sanity_check:
+                    for step in self._xdl.steps:
+                        self._do_sanity_check(step)
 
                 # Add in steps implied by explicit steps.
                 self._add_implied_steps(interactive=interactive)

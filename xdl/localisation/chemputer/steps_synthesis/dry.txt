@@ -7,3 +7,6 @@ Dry contents of {vessel} for {time}.
 
 zh
 干燥{vessel}中的组分，时间为{time}
+
+ru
+Высушить содержимое {vessel} в течение {time}.

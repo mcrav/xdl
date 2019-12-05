@@ -19,7 +19,9 @@ from ....constants import (
     BOTTOM_PORT,
     TOP_PORT,
     DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
-    DEFAULT_FILTER_VACUUM_PRESSURE)
+    DEFAULT_FILTER_VACUUM_PRESSURE,
+    DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED,
+)
 
 class WashSolid(AbstractStep):
     """Wash filter cake with given volume of given solvent.
@@ -77,6 +79,7 @@ class WashSolid(AbstractStep):
         valve_unused_port: Optional[Union[str, int]] = None,
         vessel_type: Optional[str] = None,
         filter_dead_volume: Optional[float] = None,
+        anticlogging: Optional[bool] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -90,6 +93,10 @@ class WashSolid(AbstractStep):
         if self.filter_dead_volume:
             withdraw_volume += self.filter_dead_volume
 
+        aspiration_speed = self.aspiration_speed
+        if self.anticlogging:
+            aspiration_speed = DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED
+
         # Rotavap/reactor WashSolid steps
         if not self.vessel_type == 'filter':
             steps.extend([
@@ -101,7 +108,8 @@ class WashSolid(AbstractStep):
                      stir_speed=self.stir_speed),
                 Transfer(from_vessel=self.vessel,
                          to_vessel=self.waste_vessel,
-                         volume='all'),
+                         volume='all',
+                         aspiration_speed=aspiration_speed),
             ])
         # Filter WashSolid steps
         else:
@@ -124,7 +132,7 @@ class WashSolid(AbstractStep):
                     from_port=BOTTOM_PORT,
                     to_vessel=filtrate_vessel,
                     volume=withdraw_volume,
-                    aspiration_speed=self.aspiration_speed),
+                    aspiration_speed=aspiration_speed),
                 # Briefly dry under vacuum.
                 StartVacuum(
                     vessel=self.vacuum, pressure=DEFAULT_FILTER_VACUUM_PRESSURE),

@@ -7,3 +7,6 @@ Wait for {time}.
 
 zh
 等待时间{time}.
+
+ru
+Подождать {time}.

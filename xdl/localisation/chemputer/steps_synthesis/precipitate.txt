@@ -7,3 +7,6 @@ Trigger precipitation in {vessel} by chilling to {temp} for {time}.
 
 zh
 降温至温度为{temp}， 保持时间为{time}，促使{vessel}中的沉淀析出。
+
+ru
+Охладить {vessel} до температуры {temp} в течение {time} для образования осадка.

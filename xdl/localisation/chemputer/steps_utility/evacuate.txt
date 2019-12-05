@@ -4,3 +4,6 @@
 
 en
 Perform {evacuations} evacuations of {vessel} with inert gas.
+
+ru
+Вакуумировать и заполнить инертным газом {vessel} {evacuations} раз.

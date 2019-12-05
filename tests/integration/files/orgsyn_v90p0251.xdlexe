@@ -179,6 +179,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="False"
       stir_speed="250 RPM"
@@ -259,6 +260,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -413,6 +415,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="1.25 hrs"
       stir="True"
       stir_speed="250 RPM"
@@ -713,6 +716,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="30 mins"
       stir="True"
       stir_speed="250 RPM"
@@ -867,6 +871,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="30 mins"
       stir="True"
       stir_speed="250 RPM"
@@ -1066,7 +1071,8 @@
       time="None"
       aspiration_speed="10"
       move_speed="40"
-      dispense_speed="40">
+      dispense_speed="40"
+      viscous="False">
       <CMove
         from_vessel="reactor"
         to_vessel="separator"
@@ -1231,6 +1237,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -1385,6 +1392,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -1790,7 +1798,8 @@
       time="None"
       aspiration_speed="10"
       move_speed="40"
-      dispense_speed="40">
+      dispense_speed="40"
+      viscous="False">
       <CMove
         from_vessel="phase_B"
         to_vessel="separator"
@@ -1973,6 +1982,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -2286,7 +2296,8 @@
       time="None"
       aspiration_speed="10"
       move_speed="40"
-      dispense_speed="40">
+      dispense_speed="40"
+      viscous="False">
       <CMove
         from_vessel="phase_A"
         to_vessel="separator"
@@ -2469,6 +2480,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -2830,7 +2842,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="waste_K"
@@ -2864,6 +2877,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -3045,6 +3059,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -3095,6 +3110,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -3290,7 +3306,8 @@
       time="None"
       aspiration_speed="10"
       move_speed="40"
-      dispense_speed="3.0">
+      dispense_speed="3.0"
+      viscous="False">
       <CMove
         from_vessel="rotavap"
         to_vessel="filter"
@@ -3418,7 +3435,8 @@
       time="None"
       aspiration_speed="10"
       move_speed="40"
-      dispense_speed="0.83">
+      dispense_speed="0.83"
+      viscous="False">
       <CMove
         from_vessel="rotavap"
         to_vessel="filter"
@@ -3686,7 +3704,8 @@
       vacuum_device="vacuum_pump"
       inert_gas="flask_nitrogen"
       vacuum_valve="valve_J"
-      valve_unused_port="2">
+      valve_unused_port="2"
+      anticlogging="False">
       <StartStir
         vessel="filter"
         vessel_type="None"
@@ -3845,6 +3864,7 @@
       valve_unused_port="2"
       vessel_type="filter"
       filter_dead_volume="20 mL"
+      anticlogging="False"
       repeat="2">
       <StartStir
         vessel="filter"
@@ -3866,6 +3886,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="True"
         stir_speed="500 RPM"

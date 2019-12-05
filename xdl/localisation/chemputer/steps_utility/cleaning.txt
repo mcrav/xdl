@@ -7,3 +7,6 @@ Clean backbone with {solvent}.
 
 zh
 用{solvent}清洗主干道。
+
+ru
+Промыть клапаны с помощью {solvent}.

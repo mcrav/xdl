@@ -42,7 +42,8 @@
       vacuum_valve="valve_vacuum"
       valve_unused_port="2"
       vessel_type="filter"
-      filter_dead_volume="10 mL">
+      filter_dead_volume="10 mL"
+      anticlogging="False">
       <HeatChillToTemp
         vessel="filter"
         temp="10°C"
@@ -104,6 +105,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="True"
         stir_speed="500 RPM"

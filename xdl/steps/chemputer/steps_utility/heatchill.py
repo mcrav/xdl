@@ -291,12 +291,6 @@ class HeatChillToTemp(AbstractStep):
         except KeyError:
             return self.name
 
-    def syntext(self) -> str:
-        verb = 'heated'
-        if self.temp < 25:
-            verb = 'chilled'
-        return f'{self.vessel} was {verb} to {self.temp} °C.'
-
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {

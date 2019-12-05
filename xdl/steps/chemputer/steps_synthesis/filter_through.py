@@ -53,6 +53,14 @@ class FilterThrough(AbstractStep):
     ):
         super().__init__(locals())
 
+    def final_sanity_check(self, graph):
+        if self.eluting_solvent:
+            assert self.eluting_solvent_vessel
+            # assert self.to_vessel_max_volume > self.eluting_volume
+        if self.from_vessel == self.to_vessel:
+            assert self.buffer_flask
+        assert self.through_cartridge
+
     def on_prepare_for_execution(self, graph):
         if self.buffer_flask:
             self.buffer_flask_max_volume = graph.node[self.buffer_flask]['max_volume']
@@ -160,11 +168,3 @@ class FilterThrough(AbstractStep):
                     **self.formatted_properties())
         except KeyError:
             return self.name
-
-    def syntext(self) -> str:
-        formatted_properties = self.formatted_properties()
-        s = f'The contents of {self.from_vessel} were filtered through {self.through} to {self.to_vessel}'
-        if self.eluting_solvent:
-            s += f', eluting with {self.eluting_solvent} ({self.eluting_repeats} × {formatted_properties["eluting_volume"]})'
-        if s: s += '.'
-        return s

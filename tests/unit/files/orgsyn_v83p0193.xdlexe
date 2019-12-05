@@ -298,6 +298,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="False"
       stir_speed="250 RPM"
@@ -449,6 +450,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -603,6 +605,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -628,6 +631,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="30 mins"
       stir="True"
       stir_speed="250 RPM"
@@ -860,6 +864,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -1026,13 +1031,14 @@
         from_vessel="reactor"
         to_vessel="separator"
         volume="300 mL"
-        from_port="None"
+        from_port="0"
         to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="reactor"
           to_vessel="separator"
@@ -1040,7 +1046,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="0"
           to_port="bottom"
           unique="False"
           through="None" />
@@ -1055,6 +1061,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -1219,13 +1226,14 @@
         from_vessel="buffer_flask1"
         to_vessel="separator"
         volume="500 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="buffer_flask1"
           to_vessel="separator"
@@ -1233,8 +1241,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -1248,6 +1256,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -1412,13 +1421,14 @@
         from_vessel="buffer_flask2"
         to_vessel="separator"
         volume="500 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="bottom"
         through="None"
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="buffer_flask2"
           to_vessel="separator"
@@ -1426,8 +1436,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="bottom"
           unique="False"
           through="None" />
       </Transfer>
@@ -1531,6 +1541,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -1821,7 +1832,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="waste_K"
@@ -1855,13 +1867,14 @@
         from_vessel="rotavap"
         to_vessel="reactor"
         volume="250 mL"
-        from_port="None"
-        to_port="None"
+        from_port="evaporate"
+        to_port="0"
         through="cartridge_silica-gel"
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="reactor"
@@ -1869,8 +1882,8 @@
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="evaporate"
+          to_port="0"
           unique="False"
           through="cartridge_silica-gel" />
       </Transfer>
@@ -1878,13 +1891,14 @@
         from_vessel="flask_hexane"
         to_vessel="rotavap"
         volume="300 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="evaporate"
         through="None"
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_hexane"
           to_vessel="rotavap"
@@ -1892,8 +1906,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="evaporate"
           unique="False"
           through="None" />
       </Transfer>
@@ -1901,13 +1915,14 @@
         from_vessel="rotavap"
         to_vessel="reactor"
         volume="300 mL"
-        from_port="None"
-        to_port="None"
+        from_port="evaporate"
+        to_port="0"
         through="cartridge_silica-gel"
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="reactor"
@@ -1915,8 +1930,8 @@
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="evaporate"
+          to_port="0"
           unique="False"
           through="cartridge_silica-gel" />
       </Transfer>
@@ -1924,13 +1939,14 @@
         from_vessel="flask_hexane"
         to_vessel="rotavap"
         volume="300 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="evaporate"
         through="None"
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_hexane"
           to_vessel="rotavap"
@@ -1938,8 +1954,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="evaporate"
           unique="False"
           through="None" />
       </Transfer>
@@ -1947,13 +1963,14 @@
         from_vessel="rotavap"
         to_vessel="reactor"
         volume="300 mL"
-        from_port="None"
-        to_port="None"
+        from_port="evaporate"
+        to_port="0"
         through="cartridge_silica-gel"
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="reactor"
@@ -1961,8 +1978,8 @@
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="evaporate"
+          to_port="0"
           unique="False"
           through="cartridge_silica-gel" />
       </Transfer>
@@ -1970,13 +1987,14 @@
         from_vessel="flask_hexane"
         to_vessel="rotavap"
         volume="300 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="evaporate"
         through="None"
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_hexane"
           to_vessel="rotavap"
@@ -1984,8 +2002,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="evaporate"
           unique="False"
           through="None" />
       </Transfer>
@@ -1993,13 +2011,14 @@
         from_vessel="rotavap"
         to_vessel="reactor"
         volume="300 mL"
-        from_port="None"
-        to_port="None"
+        from_port="evaporate"
+        to_port="0"
         through="cartridge_silica-gel"
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="reactor"
@@ -2007,8 +2026,8 @@
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="evaporate"
+          to_port="0"
           unique="False"
           through="cartridge_silica-gel" />
       </Transfer>
@@ -2016,13 +2035,14 @@
         from_vessel="flask_hexane"
         to_vessel="rotavap"
         volume="100 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="evaporate"
         through="None"
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_hexane"
           to_vessel="rotavap"
@@ -2030,8 +2050,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="evaporate"
           unique="False"
           through="None" />
       </Transfer>
@@ -2039,13 +2059,14 @@
         from_vessel="rotavap"
         to_vessel="reactor"
         volume="100 mL"
-        from_port="None"
-        to_port="None"
+        from_port="evaporate"
+        to_port="0"
         through="cartridge_silica-gel"
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="reactor"
@@ -2053,8 +2074,8 @@
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="evaporate"
+          to_port="0"
           unique="False"
           through="cartridge_silica-gel" />
       </Transfer>
@@ -2062,13 +2083,14 @@
         from_vessel="flask_nitrogen"
         to_vessel="reactor"
         volume="25 mL"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         through="cartridge_silica-gel"
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_nitrogen"
           to_vessel="reactor"
@@ -2076,8 +2098,8 @@
           move_speed="5"
           aspiration_speed="5"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="0"
           unique="False"
           through="cartridge_silica-gel" />
       </Transfer>
