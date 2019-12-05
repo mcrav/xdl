@@ -51,6 +51,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -177,7 +178,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -200,7 +202,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_dichloromethane"
           to_vessel="rotavap"
@@ -223,7 +226,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -246,7 +250,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_dichloromethane"
           to_vessel="rotavap"
@@ -269,7 +274,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -292,7 +298,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_dichloromethane"
           to_vessel="rotavap"
@@ -315,7 +322,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -338,7 +346,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_nitrogen"
           to_vessel="buffer_flask"
@@ -535,7 +544,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="buffer_flask"
           to_vessel="rotavap"

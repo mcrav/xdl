@@ -113,6 +113,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="False"
       stir_speed="250 RPM"
@@ -253,6 +254,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="False"
       stir_speed="250 RPM"
@@ -278,6 +280,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="False"
       stir_speed="250 RPM"
@@ -303,6 +306,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -583,6 +587,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -700,7 +705,8 @@
       time="None"
       aspiration_speed="10"
       move_speed="40"
-      dispense_speed="40">
+      dispense_speed="40"
+      viscous="False">
       <CMove
         from_vessel="reactor"
         to_vessel="rotavap"
@@ -891,7 +897,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="waste_K"
@@ -933,7 +940,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="separator"
@@ -956,6 +964,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -1126,7 +1135,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="phase_A"
           to_vessel="separator"
@@ -1149,6 +1159,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -1319,7 +1330,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="phase_A"
           to_vessel="separator"
@@ -1342,6 +1354,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -1512,7 +1525,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="phase_B"
           to_vessel="separator"
@@ -1674,6 +1688,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -1983,6 +1998,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -2262,7 +2278,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="waste_K"
