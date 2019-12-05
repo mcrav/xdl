@@ -8,10 +8,11 @@ from ....utils.misc import get_port_str, format_property
 from ....constants import (
     DEFAULT_AFTER_ADD_WAIT_TIME,
     DEFAULT_AIR_FLUSH_TUBE_VOLUME,
+    DEFAULT_VISCOUS_ASPIRATION_SPEED,
     BOTTOM_PORT,
     TOP_PORT,
     BOTTOM_PORT,
-    EVAPORATE_PORT
+    EVAPORATE_PORT,
 )
 from ....localisation import HUMAN_READABLE_STEPS
 
@@ -63,6 +64,7 @@ class Add(AbstractStep):
         move_speed: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
         dispense_speed: Optional[float] = 'default',
+        viscous: Optional[bool] = 'default',
         time: Optional[float] = None,
         stir: Optional[bool] = False,
         stir_speed: Optional[float] = 'default',
@@ -112,6 +114,9 @@ class Add(AbstractStep):
         return steps
 
     def get_add_steps(self):
+        aspiration_speed = self.aspiration_speed
+        if self.viscous:
+            aspiration_speed = DEFAULT_VISCOUS_ASPIRATION_SPEED
         return [
             PrimePumpForAdd(
                 reagent=self.reagent,
@@ -124,7 +129,7 @@ class Add(AbstractStep):
                 volume=self.volume,
                 through=self.through,
                 move_speed=self.move_speed,
-                aspiration_speed=self.aspiration_speed,
+                aspiration_speed=aspiration_speed,
                 dispense_speed=self.get_dispense_speed()),
             Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME)
         ]
@@ -162,7 +167,6 @@ class Add(AbstractStep):
         steps.append(Wait(time=DEFAULT_AFTER_ADD_WAIT_TIME))
         return steps
 
-
     def human_readable(self, language: str = 'en') -> str:
         try:
             if self.mass != None:
@@ -175,20 +179,6 @@ class Add(AbstractStep):
                 return self.name
         except KeyError:
             return self.name
-
-    def syntext(self) -> str:
-        formatted_properties = self.formatted_properties()
-        s = ''
-        if self.volume:
-            s += f'{self.reagent} ({formatted_properties["volume"]}) was added'
-        elif self.mass:
-            s += f'{self.reagent} ({formatted_properties["mass"]}) was added'
-        if self.time != None:
-            s += f' over {formatted_properties["time"]}'
-        if self.stir:
-            s += f' with stirring ({self.stir_speed} RPM)'
-        if s: s += '.'
-        return s
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

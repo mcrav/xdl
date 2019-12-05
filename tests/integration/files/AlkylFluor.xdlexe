@@ -171,6 +171,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -254,6 +255,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -419,6 +421,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -625,6 +628,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="500.0 RPM"
@@ -1009,7 +1013,8 @@
       vacuum_device="filter_vacuum"
       inert_gas="flask_nitrogen"
       vacuum_valve="valve_vacuum"
-      valve_unused_port="0">
+      valve_unused_port="0"
+      anticlogging="False">
       <StartStir
         vessel="jacketed_filter"
         vessel_type="None"
@@ -1179,6 +1184,7 @@
       valve_unused_port="0"
       vessel_type="filter"
       filter_dead_volume="25 mL"
+      anticlogging="False"
       repeat="3">
       <Add
         reagent="MeOH"
@@ -1190,6 +1196,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="800.0 RPM"
@@ -1538,6 +1545,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -1621,6 +1629,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="45 mins"
       stir="True"
       stir_speed="500.0 RPM"
@@ -2046,7 +2055,8 @@
       vacuum_device="filter_vacuum"
       inert_gas="flask_nitrogen"
       vacuum_valve="valve_vacuum"
-      valve_unused_port="0">
+      valve_unused_port="0"
+      anticlogging="False">
       <StartStir
         vessel="jacketed_filter"
         vessel_type="None"
@@ -2216,6 +2226,7 @@
       valve_unused_port="0"
       vessel_type="filter"
       filter_dead_volume="25 mL"
+      anticlogging="False"
       repeat="3">
       <StartStir
         vessel="jacketed_filter"
@@ -2237,6 +2248,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="True"
         stir_speed="500.0 RPM"
@@ -2743,6 +2755,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250 RPM"
@@ -2867,6 +2880,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="5.0"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250.0 RPM"
@@ -3151,6 +3165,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="1.0"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="500.0 RPM"
@@ -3576,7 +3591,8 @@
       vacuum_device="filter_vacuum"
       inert_gas="flask_nitrogen"
       vacuum_valve="valve_vacuum"
-      valve_unused_port="0">
+      valve_unused_port="0"
+      anticlogging="False">
       <StartStir
         vessel="jacketed_filter"
         vessel_type="None"
@@ -3746,6 +3762,7 @@
       valve_unused_port="0"
       vessel_type="filter"
       filter_dead_volume="25 mL"
+      anticlogging="False"
       repeat="3">
       <Add
         reagent="THF"
@@ -3757,6 +3774,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="700.0 RPM"
@@ -4007,6 +4025,7 @@
       valve_unused_port="0"
       vessel_type="filter"
       filter_dead_volume="25 mL"
+      anticlogging="False"
       repeat="6">
       <Add
         reagent="toluene"
@@ -4018,6 +4037,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="500.0 RPM"
@@ -4553,6 +4573,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -4710,7 +4731,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="jacketed_filter"
           to_vessel="rotavap"
@@ -4733,7 +4755,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="jacketed_filter"
@@ -4756,7 +4779,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="jacketed_filter"
           to_vessel="rotavap"
@@ -4779,7 +4803,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="jacketed_filter"
@@ -4802,7 +4827,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="jacketed_filter"
           to_vessel="rotavap"
@@ -4825,7 +4851,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="jacketed_filter"
@@ -4848,7 +4875,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="jacketed_filter"
           to_vessel="rotavap"
@@ -4871,7 +4899,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_nitrogen"
           to_vessel="rotavap"
@@ -5697,7 +5726,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="waste_solvents"
@@ -6406,6 +6436,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="True"
       stir_speed="250.0 RPM"
@@ -6499,6 +6530,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -6609,7 +6641,8 @@
       time="None"
       aspiration_speed="10"
       move_speed="40"
-      dispense_speed="40">
+      dispense_speed="40"
+      viscous="False">
       <CMove
         from_vessel="rotavap"
         to_vessel="jacketed_filter"
@@ -7243,7 +7276,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="jacketed_filter"
           to_vessel="rotavap"
@@ -7266,7 +7300,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="jacketed_filter"
@@ -7289,7 +7324,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="jacketed_filter"
           to_vessel="rotavap"
@@ -7312,7 +7348,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="jacketed_filter"
@@ -7335,7 +7372,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="jacketed_filter"
           to_vessel="rotavap"
@@ -7358,7 +7396,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="jacketed_filter"
@@ -7381,7 +7420,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="jacketed_filter"
           to_vessel="rotavap"
@@ -7404,7 +7444,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_nitrogen"
           to_vessel="rotavap"
@@ -7572,7 +7613,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="waste_solvents"
@@ -7606,6 +7648,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -7732,7 +7775,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -7755,7 +7799,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="rotavap"
@@ -7778,7 +7823,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -7801,7 +7847,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="rotavap"
@@ -7824,7 +7871,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -7847,7 +7895,8 @@
         time="None"
         aspiration_speed="10"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="rotavap"
@@ -7870,7 +7919,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -7893,7 +7943,8 @@
         time="None"
         aspiration_speed="5"
         move_speed="5"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="flask_nitrogen"
           to_vessel="buffer_flask"
@@ -8329,7 +8380,8 @@
       time="None"
       aspiration_speed="10"
       move_speed="40"
-      dispense_speed="40">
+      dispense_speed="40"
+      viscous="False">
       <CMove
         from_vessel="buffer_flask"
         to_vessel="rotavap"
@@ -8525,6 +8577,7 @@
       valve_unused_port="0"
       vessel_type="rotavap"
       filter_dead_volume="None"
+      anticlogging="False"
       repeat="3">
       <Add
         reagent="ether"
@@ -8536,6 +8589,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -8650,15 +8704,16 @@
         to_port="0"
         through="None"
         time="None"
-        aspiration_speed="10"
+        aspiration_speed="5"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="waste_solvents"
           volume="250 mL"
           move_speed="40"
-          aspiration_speed="10"
+          aspiration_speed="5"
           dispense_speed="40"
           from_port="evaporate"
           to_port="0"

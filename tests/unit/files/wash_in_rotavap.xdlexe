@@ -33,6 +33,7 @@
       move_speed="40"
       aspiration_speed="10"
       dispense_speed="40"
+      viscous="False"
       time="None"
       stir="False"
       stir_speed="250 RPM"
@@ -66,7 +67,8 @@
       vacuum_valve="valve_reactor_vacuum"
       valve_unused_port="1"
       vessel_type="rotavap"
-      filter_dead_volume="None">
+      filter_dead_volume="None"
+      anticlogging="False">
       <Add
         reagent="water"
         vessel="rotavap"
@@ -77,6 +79,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
+        viscous="False"
         time="None"
         stir="False"
         stir_speed="250 RPM"
@@ -191,15 +194,16 @@
         to_port="0"
         through="None"
         time="None"
-        aspiration_speed="10"
+        aspiration_speed="5"
         move_speed="40"
-        dispense_speed="40">
+        dispense_speed="40"
+        viscous="False">
         <CMove
           from_vessel="rotavap"
           to_vessel="waste_rotavap"
           volume="100 mL"
           move_speed="40"
-          aspiration_speed="10"
+          aspiration_speed="5"
           dispense_speed="40"
           from_port="evaporate"
           to_port="0"

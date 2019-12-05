@@ -26,6 +26,9 @@ DEFAULT_PUMP_PRIME_VOLUME: int = 3 # mL
 
 DEFAULT_AIR_FLUSH_TUBE_VOLUME = 5 # mL
 
+#: Default aspiration speed for viscous liquids.
+DEFAULT_VISCOUS_ASPIRATION_SPEED = 2 # mL / min
+
 ################
 ## Separation ##
 ################
@@ -250,6 +253,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
         'dispense_speed': DEFAULT_DISPENSE_SPEED,
         'move_speed': DEFAULT_MOVE_SPEED,
+        'viscous': False,
     },
     'Add': {
         'move_speed': DEFAULT_MOVE_SPEED,
@@ -259,6 +263,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'anticlogging': False,
         'anticlogging_solvent_volume': DEFAULT_ANTICLOGGING_SOLVENT_VOLUME,
         'anticlogging_reagent_volume': DEFAULT_ANTICLOGGING_REAGENT_VOLUME,
+        'viscous': False,
     },
     'PrimePumpForAdd': {
         'volume': DEFAULT_PUMP_PRIME_VOLUME,

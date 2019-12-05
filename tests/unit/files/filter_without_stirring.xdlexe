@@ -34,7 +34,8 @@
       vacuum_device="vacuum_device"
       inert_gas="flask_nitrogen"
       vacuum_valve="valve_vacuum"
-      valve_unused_port="2">
+      valve_unused_port="2"
+      anticlogging="False">
       <StopStir
         vessel="filter"
         vessel_type="None"

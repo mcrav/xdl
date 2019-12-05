@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict
 
-from ....constants import DEFAULT_PORTS
+from ....constants import DEFAULT_PORTS, DEFAULT_VISCOUS_ASPIRATION_SPEED
 from ...base_steps import AbstractStep, Step
 from ..steps_base import CMove
 from ....utils.misc import get_port_str
@@ -56,19 +56,21 @@ class Transfer(AbstractStep):
         aspiration_speed: Optional[float] = 'default',
         move_speed: Optional[float] = 'default',
         dispense_speed: Optional[float] = 'default',
+        viscous: Optional[bool] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
         dispense_speed = self.get_dispense_speed()
+        aspiration_speed = self.get_aspiration_speed()
         return [CMove(from_vessel=self.from_vessel,
                       from_port=self.from_port,
                       to_vessel=self.to_vessel,
                       to_port=self.to_port,
                       volume=self.volume,
                       through=self.through,
-                      aspiration_speed=self.aspiration_speed,
+                      aspiration_speed=aspiration_speed,
                       move_speed=self.move_speed,
                       dispense_speed=dispense_speed)]
 
@@ -97,6 +99,11 @@ class Transfer(AbstractStep):
             # dispense_speed (mL / min) = volume (mL) / time (min)
             return self.volume / (self.time / 60)
         return self.dispense_speed
+
+    def get_aspiration_speed(self)  -> float:
+        if self.viscous:
+            return DEFAULT_VISCOUS_ASPIRATION_SPEED
+        return self.aspiration_speed
 
     def human_readable(self, language='en'):
         try:
