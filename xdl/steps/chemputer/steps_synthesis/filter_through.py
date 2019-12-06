@@ -63,10 +63,10 @@ class FilterThrough(AbstractStep):
 
     def on_prepare_for_execution(self, graph):
         if self.buffer_flask:
-            self.buffer_flask_max_volume = graph.node[self.buffer_flask]['max_volume']
+            self.buffer_flask_max_volume = graph.nodes[self.buffer_flask]['max_volume']
 
         if self.to_vessel:
-            self.to_vessel_max_volume = graph.node[self.to_vessel]['max_volume']
+            self.to_vessel_max_volume = graph.nodes[self.to_vessel]['max_volume']
 
     def get_steps(self) -> List[Step]:
         filter_through_to_vessel = self.to_vessel

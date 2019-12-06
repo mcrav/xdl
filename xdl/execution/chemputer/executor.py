@@ -161,7 +161,7 @@ class XDLExecutor(AbstractXDLExecutor):
                     if step.properties[port_keyword] != None:
                         validate_port(
                             step.properties[vessel_keyword],
-                            self._graph.node[step.properties[vessel_keyword]]['class'],
+                            self._graph.nodes[step.properties[vessel_keyword]]['class'],
                             step.properties[port_keyword]
                         )
         if not isinstance(step, AbstractBaseStep):
@@ -336,10 +336,10 @@ class XDLExecutor(AbstractXDLExecutor):
         heater, chiller = None, None
         neighbors = undirected_neighbors(graph, node)
         for neighbor in neighbors:
-            print(graph.node[neighbor])
-            if graph.node[neighbor]['class'] in HEATER_CLASSES:
+            print(graph.nodes[neighbor])
+            if graph.nodes[neighbor]['class'] in HEATER_CLASSES:
                 heater = neighbor
-            elif graph.node[neighbor]['class'] in CHILLER_CLASSES:
+            elif graph.nodes[neighbor]['class'] in CHILLER_CLASSES:
                 chiller = neighbor
         return heater, chiller
 

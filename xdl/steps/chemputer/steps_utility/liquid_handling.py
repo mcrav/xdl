@@ -85,12 +85,12 @@ class Transfer(AbstractStep):
             str: Vessel port to add to.
         """
         if self.from_port in [None, ''] and self.from_vessel:
-            from_class = graph.node[self.from_vessel]['class']
+            from_class = graph.nodes[self.from_vessel]['class']
             if from_class in DEFAULT_PORTS:
                 self.from_port = DEFAULT_PORTS[from_class]['from']
 
         if self.to_port in [None, ''] and self.to_vessel:
-            to_class = graph.node[self.to_vessel]['class']
+            to_class = graph.nodes[self.to_vessel]['class']
             if to_class in DEFAULT_PORTS:
                 self.to_port = DEFAULT_PORTS[to_class]['to']
 

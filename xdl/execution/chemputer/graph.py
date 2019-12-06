@@ -27,7 +27,7 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
             raw_graph = copy.deepcopy(graph)
             name_mapping = {}
             for node in graph.nodes():
-                name_mapping[node] = graph.node[node]['label']
+                name_mapping[node] = graph.nodes[node]['label']
             graph = relabel_nodes(graph, name_mapping)
 
         elif graph_file.lower().endswith('.json'):
@@ -64,7 +64,7 @@ def hardware_from_graph(graph: MultiDiGraph) -> Hardware:
     """
     components = []
     for node in graph.nodes():
-        props = graph.node[node]
+        props = graph.nodes[node]
         props['type'] = props['class']
         component = Component(node, props['type'])
         if props['type'] == 'ChemputerFlask' and not 'chemical' in props:
@@ -92,11 +92,11 @@ def make_vessel_map(
     vessel_map = {}
     target_vessels = [
         node for node in undirected_graph.nodes()
-        if (undirected_graph.node[node]['type']
+        if (undirected_graph.nodes[node]['type']
             == target_vessel_class)
     ]
     for node in undirected_graph.nodes():
-        node_info = undirected_graph.node[node]
+        node_info = undirected_graph.nodes[node]
         if node_info['type'] != target_vessel_class:
 
             shortest_path_found = 100000
@@ -129,9 +129,9 @@ def make_inert_gas_map(graph: MultiDiGraph):
     nitrogen_flasks = [
         node
         for node in graph.nodes()
-        if (graph.node[node]['type'] == 'ChemputerFlask'
-            and 'chemical' in graph.node[node]
-            and graph.node[node]['chemical'].lower() in ['nitrogen', 'argon',
+        if (graph.nodes[node]['type'] == 'ChemputerFlask'
+            and 'chemical' in graph.nodes[node]
+            and graph.nodes[node]['chemical'].lower() in ['nitrogen', 'argon',
                                                          'n2', 'ar'])
     ]
     inert_gas_map = {}
