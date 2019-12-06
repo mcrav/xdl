@@ -48,8 +48,8 @@ class CleanVessel(AbstractStep):
 
     def on_prepare_for_execution(self, graph):
         for node in graph.nodes():
-            if graph.node[node]['class'] == 'ChemputerFlask':
-                if graph.node[node]['chemical'] == self.solvent:
+            if graph.nodes[node]['class'] == 'ChemputerFlask':
+                if graph.nodes[node]['chemical'] == self.solvent:
                     self.solvent_vessel = node
                     break
 

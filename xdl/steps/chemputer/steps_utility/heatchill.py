@@ -429,7 +429,7 @@ class ChillerReturnToRT(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
-        self.properties['vessel_class'] = graph.node[self.vessel]['class']
+        self.properties['vessel_class'] = graph.nodes[self.vessel]['class']
         self.update()
 
     def get_steps(self):

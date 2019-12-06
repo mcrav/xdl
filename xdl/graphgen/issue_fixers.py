@@ -6,7 +6,7 @@ def fix_issue_src_port_invalid(graph, issue):
     for src, _, data in graph.edges(data=True):
         src_port, dest_port = parse_port(data['port'])
         if issue['src_port'] == src_port and issue['dest_port'] == dest_port:
-            src_class = graph.node[src]['class']
+            src_class = graph.nodes[src]['class']
             assert src_class in VALID_PORTS
             assert len(VALID_PORTS[src_class]) == 1
             data['port'] = f'({VALID_PORTS[src_class][0]},{dest_port})'
@@ -16,7 +16,7 @@ def fix_issue_dest_port_invalid(graph, issue):
     for _, dest, data in graph.edges(data=True):
         src_port, dest_port = parse_port(data['port'])
         if issue['src_port'] == src_port and issue['dest_port'] == dest_port:
-            dest_class = graph.node[dest]['class']
+            dest_class = graph.nodes[dest]['class']
             assert dest_class in VALID_PORTS
             assert len(VALID_PORTS[dest_class]) == 1
             data['port'] = f'({src_port},{VALID_PORTS[dest_class][0]})'
@@ -25,7 +25,7 @@ def fix_issue_dest_port_invalid(graph, issue):
 def fix_issue_replace_flask_with_cartridge(graph, issue):
     for neighbor in undirected_neighbors(graph, issue['valve']):
         print(neighbor, issue)
-        if graph.node[neighbor]['class'] == 'ChemputerFlask':
+        if graph.nodes[neighbor]['class'] == 'ChemputerFlask':
             graph.remove_node(neighbor)
             return
     raise XDLError(f'No flask found connected to {issue["valve"]} for removal to make way for cartridge.')

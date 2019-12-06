@@ -143,7 +143,7 @@ class FilterTo(AbstractStep):
 
     def final_sanity_check(self, graph):
         try:
-            full_node = graph.node[self.from_vessel]
+            full_node = graph.nodes[self.from_vessel]
             assert 'can_filter' in full_node and full_node['can_filter']
         except AssertionError:
             raise XDLError(f"from_vessel ({self.from_vessel}) doesn't have can_filter property == True")

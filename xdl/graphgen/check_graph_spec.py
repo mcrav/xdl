@@ -72,8 +72,8 @@ def check_template_ports(graph):
 
         # Unpack edge
         src_port, dest_port = parse_port(data['port'])
-        src_node = graph.node[src]
-        dest_node = graph.node[dest]
+        src_node = graph.nodes[src]
+        dest_node = graph.nodes[dest]
         src_class = src_node['class']
         dest_class = dest_node['class']
 
@@ -154,8 +154,8 @@ def check_template_edges(graph):
 
     for src, dest in graph.edges():
         # Unpack edge
-        src_node = graph.node[src]
-        dest_node = graph.node[dest]
+        src_node = graph.nodes[src]
+        dest_node = graph.nodes[dest]
 
         # No edges leading out of vacuum
         if src_node['class'] == 'ChemputerVacuum':
@@ -214,7 +214,7 @@ def check_vessel_spec(vessel_spec, graph):
     fixable_issues, errors = [], []
     available_vessels = [
         node for node in graph
-        if graph.node[node]['class'] in [
+        if graph.nodes[node]['class'] in [
             'ChemputerSeparator',
             'ChemputerReactor',
             'ChemputerFilter',
@@ -235,7 +235,7 @@ def check_vessel_spec(vessel_spec, graph):
         if component_type in type_mapping:
             found_type = False
             for i in range(len(available_vessels)):
-                if graph.node[available_vessels[i]]['class'] == type_mapping[component_type]:
+                if graph.nodes[available_vessels[i]]['class'] == type_mapping[component_type]:
                     found_type = True
                     vessel_map[component_id] = available_vessels[i]
                     available_vessels.pop(i)
@@ -278,10 +278,10 @@ def check_vessel_spec(vessel_spec, graph):
     return fixable_issues, errors
 
 def get_vessel_temp_range(node, graph):
-    if graph.node[node]['class'] == 'IKARV10':
+    if graph.nodes[node]['class'] == 'IKARV10':
         return HEATER_CHILLER_TEMP_RANGES['IKARV10']
     for neighbor in undirected_neighbors(graph, node):
-        neighbor_class = graph.node[neighbor]['class']
+        neighbor_class = graph.nodes[neighbor]['class']
         if neighbor_class in HEATER_CHILLER_TEMP_RANGES:
             return HEATER_CHILLER_TEMP_RANGES[neighbor_class]
     return None
