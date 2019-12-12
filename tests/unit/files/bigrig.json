@@ -374,14 +374,14 @@
       "necks": 1
     },
     {
-      "id": 73,
+      "id": "stirrer_separator",
       "type": "stirrer",
       "x": -480,
       "y": 360,
       "internalId": 73,
-      "label": 73,
+      "label": "stirrer_separator",
       "class": "IKAmicrostar75",
-      "name": "",
+      "name": "stirrer_separator",
       "port": ""
     },
     {
@@ -409,14 +409,14 @@
       "port": ""
     },
     {
-      "id": 79,
+      "id": "conductivity_sensor",
       "type": "conductivity_sensor",
       "x": -560,
       "y": 280,
       "internalId": 79,
-      "label": 79,
+      "label": "conductivity_sensor",
       "class": "ConductivitySensor",
-      "name": "",
+      "name": "conductivity_sensor",
       "port": ""
     },
     {
@@ -834,7 +834,7 @@
       "id": 74,
       "sourceInternal": 73,
       "targetInternal": 69,
-      "source": 73,
+      "source": "stirrer_separator",
       "target": "separator",
       "port": "(,)"
     },
@@ -858,7 +858,7 @@
       "id": 80,
       "sourceInternal": 79,
       "targetInternal": 69,
-      "source": 79,
+      "source": "conductivity_sensor",
       "target": "separator",
       "port": "(,)"
     },

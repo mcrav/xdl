@@ -451,19 +451,6 @@
       "max_volume": 100
     },
     {
-      "id": "flask_0b",
-      "type": "flask",
-      "x": -320,
-      "y": 160,
-      "internalId": 51,
-      "label": "flask_0b",
-      "class": "ChemputerFlask",
-      "name": "flask_0b",
-      "chemical": "",
-      "current_volume": 100,
-      "max_volume": 100
-    },
-    {
       "id": "flask_0a",
       "type": "flask",
       "x": -320,
@@ -542,11 +529,92 @@
       "type": "cartridge",
       "x": 1120,
       "y": 560,
+      "internalId": 116,
+      "label": "cartridge3",
       "class": "ChemputerCartridge",
       "name": "cartridge3",
+      "chemical": ""
+    },
+    {
+      "id": "pump_reagents00",
+      "type": "pump",
+      "x": -400,
+      "y": 40,
+      "class": "ChemputerPump",
+      "name": "pump_reagents00",
+      "address": "",
+      "max_volume": 100,
+      "current_volume": 0,
+      "internalId": 119,
+      "label": "pump_reagents00"
+    },
+    {
+      "id": "valve_reagents00",
+      "type": "valve",
+      "x": -400,
+      "y": 160,
+      "class": "ChemputerValve",
+      "name": "valve_reagents00",
+      "address": "",
+      "current_volume": 0,
+      "internalId": 51,
+      "label": "valve_reagents00"
+    },
+    {
+      "id": "flask_00a",
+      "type": "flask",
+      "x": -520,
+      "y": 40,
+      "class": "ChemputerFlask",
+      "name": "flask_00a",
       "chemical": "",
-      "internalId": 116,
-      "label": "cartridge3"
+      "current_volume": 100,
+      "max_volume": 100,
+      "can_filter": false,
+      "internalId": 124,
+      "label": "flask_00a"
+    },
+    {
+      "id": "flask_00b",
+      "type": "flask",
+      "x": -560,
+      "y": 160,
+      "class": "ChemputerFlask",
+      "name": "flask_00b",
+      "chemical": "",
+      "current_volume": 100,
+      "max_volume": 100,
+      "can_filter": false,
+      "internalId": 126,
+      "label": "flask_00b"
+    },
+    {
+      "id": "flask_00c",
+      "type": "flask",
+      "x": -520,
+      "y": 280,
+      "class": "ChemputerFlask",
+      "name": "flask_00c",
+      "chemical": "",
+      "current_volume": 100,
+      "max_volume": 100,
+      "can_filter": false,
+      "internalId": 128,
+      "label": "flask_00c"
+    },
+    {
+      "id": "flask_00d",
+      "type": "flask",
+      "x": -400,
+      "y": 280,
+      "class": "ChemputerFlask",
+      "name": "flask_00d",
+      "chemical": "",
+      "current_volume": 100,
+      "max_volume": 100,
+      "can_filter": false,
+      "internalId": 130,
+      "label": "flask_00d"
     }
   ],
   "links": [
@@ -1031,14 +1099,6 @@
       "port": "(0,3)"
     },
     {
-      "id": 52,
-      "sourceInternal": 51,
-      "targetInternal": 44,
-      "source": "flask_0b",
-      "target": "valve_reagents0",
-      "port": "(0,2)"
-    },
-    {
       "id": 76,
       "sourceInternal": 53,
       "targetInternal": 44,
@@ -1149,6 +1209,78 @@
       "source": "cartridge3",
       "target": "valve_rotavap",
       "port": "(out,)"
+    },
+    {
+      "id": 52,
+      "sourceInternal": 44,
+      "targetInternal": 51,
+      "source": "valve_reagents0",
+      "target": "valve_reagents00",
+      "port": "(2,3)"
+    },
+    {
+      "id": 120,
+      "sourceInternal": 51,
+      "targetInternal": 44,
+      "source": "valve_reagents00",
+      "target": "valve_reagents0",
+      "port": "(3,2)"
+    },
+    {
+      "id": 121,
+      "sourceInternal": 119,
+      "targetInternal": 51,
+      "source": "pump_reagents00",
+      "target": "valve_reagents00",
+      "port": "(0,-1)"
+    },
+    {
+      "id": 122,
+      "sourceInternal": 51,
+      "targetInternal": 119,
+      "source": "valve_reagents00",
+      "target": "pump_reagents00",
+      "port": "(-1,0)"
+    },
+    {
+      "id": 123,
+      "sourceInternal": 51,
+      "targetInternal": 99,
+      "source": "valve_reagents00",
+      "target": "waste",
+      "port": "(0,0)"
+    },
+    {
+      "id": 125,
+      "sourceInternal": 124,
+      "targetInternal": 51,
+      "source": "flask_00a",
+      "target": "valve_reagents00",
+      "port": "(0,1)"
+    },
+    {
+      "id": 127,
+      "sourceInternal": 126,
+      "targetInternal": 51,
+      "source": "flask_00b",
+      "target": "valve_reagents00",
+      "port": "(0,2)"
+    },
+    {
+      "id": 129,
+      "sourceInternal": 128,
+      "targetInternal": 51,
+      "source": "flask_00c",
+      "target": "valve_reagents00",
+      "port": "(0,4)"
+    },
+    {
+      "id": 131,
+      "sourceInternal": 130,
+      "targetInternal": 51,
+      "source": "flask_00d",
+      "target": "valve_reagents00",
+      "port": "(0,5)"
     }
   ]
 }
