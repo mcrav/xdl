@@ -92,7 +92,3 @@ class Dissolve(AbstractStep):
                 'stir': True,
             }
         }
-
-    def syntext(self) -> str:
-        formatted_properties = self.formatted_properties()
-        return f'The solid was dissolved in {self.solvent} ({formatted_properties["volume"]}).'

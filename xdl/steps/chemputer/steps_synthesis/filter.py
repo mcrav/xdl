@@ -119,10 +119,6 @@ class Filter(AbstractStep):
             }
         }
 
-    def syntext(self) -> str:
-        s = 'The reaction mixture was filtered.'
-        return s
-
 
 class FilterTo(AbstractStep):
     def __init__(

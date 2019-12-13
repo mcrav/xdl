@@ -179,16 +179,6 @@ class XDL(object):
             self.climb_down_tree(step, print_tree=True)
         self.logger.info('\n')
 
-    def as_syntext(self):
-        joined_reagents = '\n'.join([reagent.id for reagent in self.reagents])
-        s = f'Reagents:\n{joined_reagents}\n\n'
-        for step in self.steps:
-            step_syntext = step.syntext()
-            if step_syntext:
-                step_syntext = step_syntext[0].upper() + step_syntext[1:]
-            s += step_syntext + '\n'
-        return s
-
     def human_readable(self, language='en') -> str:
         """Return human-readable English description of XDL procedure.
 

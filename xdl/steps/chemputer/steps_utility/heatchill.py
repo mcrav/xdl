@@ -341,9 +341,6 @@ class StopHeatChill(AbstractStep):
             }
         }
 
-    def syntext(self) -> str:
-        return f'Heating was discontinued for {self.vessel}.'
-
 class HeatChillReturnToRT(AbstractStep):
     """Let heater/chiller return to room temperatre and then stop
     heating/chilling.
