@@ -28,7 +28,7 @@
       vessel="rotavap"
       volume="None"
       mass="500 g"
-      port="None"
+      port="evaporate"
       through="None"
       move_speed="40"
       aspiration_speed="10"

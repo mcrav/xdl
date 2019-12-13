@@ -114,6 +114,10 @@ class StartHeatChill(AbstractStep):
         ]
 
     def final_sanity_check(self, graph):
+        try:
+            assert self.heater or self.chiller or self.vessel_type == 'rotavap'
+        except AssertionError:
+            raise XDLError(f'Trying to heat/chill vessel "{self.vessel}" with no heater or chiller attached.')
         assert self.steps
         heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
 

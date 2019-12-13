@@ -35,7 +35,7 @@
       vessel="rotavap"
       solvent="dichloromethane"
       volume="30 mL"
-      port="None"
+      port="evaporate"
       temp="25°C"
       time="20 mins"
       stir_speed="400 RPM"
@@ -83,8 +83,8 @@
             move_speed="40"
             aspiration_speed="10"
             dispense_speed="40"
-            from_port="None"
-            to_port="None"
+            from_port="0"
+            to_port="0"
             unique="False"
             through="" />
         </PrimePumpForAdd>
@@ -95,7 +95,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="0"
           to_port="evaporate"
           unique="False"
           through="None" />
@@ -117,7 +117,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="0"
           to_port="evaporate"
           unique="False"
           through="" />
@@ -387,8 +387,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="evaporate"
           unique="False"
           through="" />
         <Wait
@@ -409,8 +409,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="evaporate"
+          to_port="0"
           unique="False"
           through="" />
         <StopStir
@@ -437,8 +437,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="evaporate"
           unique="False"
           through="" />
         <Wait
@@ -459,8 +459,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="evaporate"
+          to_port="0"
           unique="False"
           through="" />
         <StopStir
@@ -499,7 +499,7 @@
             aspiration_speed="5"
             dispense_speed="40"
             from_port="evaporate"
-            to_port="None"
+            to_port="0"
             unique="False"
             through="" />
           <StartVacuum

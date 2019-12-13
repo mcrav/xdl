@@ -36,8 +36,8 @@ CHECK_TEMPLATE_TESTS = [
         'errors': [INVALID_PORT_ERROR]
     }),
     ('check_graph_spec_bad_reactor_port.json', {
-        'fixable_issues': [SRC_PORT_INVALID, DEST_PORT_INVALID],
-        'errors': []
+        'fixable_issues': [],
+        'errors': [INVALID_PORT_ERROR, INVALID_PORT_ERROR]
     }),
     ('check_graph_spec_unnecessary_ports.json', {
         'fixable_issues': [REMOVE_SRC_PORT, REMOVE_DEST_PORT],

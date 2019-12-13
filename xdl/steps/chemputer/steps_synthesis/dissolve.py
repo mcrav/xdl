@@ -52,7 +52,7 @@ class Dissolve(AbstractStep):
                 Add(reagent=self.solvent,
                     volume=self.volume,
                     vessel=self.vessel,
-                    port=EVAPORATE_PORT,
+                    port=self.port,
                     stir=False),
                 CRotavapSetTemp(self.vessel, self.temp),
                 CRotavapStartHeater(self.vessel),

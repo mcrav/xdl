@@ -328,9 +328,31 @@ class XDLExecutor(AbstractXDLExecutor):
                 step.heater, step.chiller = self._find_heater_chiller(
                     self._graph, step.vessel)
 
+            self._add_default_ports(step)
+
             step.on_prepare_for_execution(self._graph)
             if not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
                 self._add_internal_properties_to_steps(step.steps)
+
+    def _add_default_ports(self, step):
+        changed = False
+        if type(step) != CConnect:
+            for k in step.properties:
+                if 'port' in k and step.properties[k] == None:
+                    vessel_prop = k.replace('port', 'vessel')
+                    if vessel_prop in step.properties:
+                        vessel = step.properties[vessel_prop]
+                        if vessel:
+                            vessel_class = self._graph.nodes[vessel]['class']
+                            if vessel_class in DEFAULT_PORTS:
+                                changed = True
+                                if 'from' in k:
+                                    step.properties[k] = DEFAULT_PORTS[vessel_class]['from']
+                                else:
+                                    step.properties[k] = DEFAULT_PORTS[vessel_class]['to']
+        if changed:
+            step.update()
+        return step
 
     def _find_heater_chiller(self, graph, node):
         heater, chiller = None, None
