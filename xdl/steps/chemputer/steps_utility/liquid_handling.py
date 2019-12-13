@@ -122,16 +122,3 @@ class Transfer(AbstractStep):
                     **self.formatted_properties())
         except KeyError:
             return self.name
-
-    def syntext(self) -> str:
-        volume = ''
-        formatted_properties = self.formatted_properties()
-        if self.volume != 'all':
-            volume = f'({formatted_properties["volume"]}) '
-        s = f'The contents of {self.from_vessel} were transferred to {self.to_vessel}'
-        if self.time:
-            s += f' over {formatted_properties["time"]}'
-        if self.through:
-            s += f' through {self.through}'
-        if s: s += '.'
-        return s

@@ -84,7 +84,6 @@ class Add(AbstractStep):
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
-        port = self.get_port()
         steps = []
         # Solid addition
         if self.volume == None and self.mass != None:
@@ -102,7 +101,7 @@ class Add(AbstractStep):
                 steps.append(CMove(
                     from_vessel=self.flush_tube_vessel,
                     to_vessel=self.vessel,
-                    to_port=port,
+                    to_port=self.port,
                     volume=DEFAULT_AIR_FLUSH_TUBE_VOLUME))
 
             if self.stir:
@@ -125,7 +124,7 @@ class Add(AbstractStep):
             CMove(
                 from_vessel=self.reagent_vessel,
                 to_vessel=self.vessel,
-                to_port=self.get_port(),
+                to_port=self.port,
                 volume=self.volume,
                 through=self.through,
                 move_speed=self.move_speed,
@@ -136,7 +135,6 @@ class Add(AbstractStep):
 
     def get_anticlogging_add_steps(self):
         dispense_speed = self.get_dispense_speed()
-        port = self.get_port()
         steps = [
             PrimePumpForAdd(
                 reagent=self.reagent,
@@ -150,7 +148,7 @@ class Add(AbstractStep):
                 CMove(
                     from_vessel=self.reagent_vessel,
                     to_vessel=self.vessel,
-                    to_port=port,
+                    to_port=self.port,
                     volume=self.anticlogging_reagent_volume,
                     move_speed=self.move_speed,
                     aspiration_speed=self.aspiration_speed,
@@ -158,7 +156,7 @@ class Add(AbstractStep):
                 CMove(
                     from_vessel=self.anticlogging_solvent_vessel,
                     to_vessel=self.vessel,
-                    to_port=port,
+                    to_port=self.port,
                     volume=self.anticlogging_solvent_volume,
                     move_speed=self.move_speed,
                     aspiration_speed=self.aspiration_speed,
@@ -187,22 +185,6 @@ class Add(AbstractStep):
                 'stir': self.stir,
             }
         }
-
-    def get_port(self) -> str:
-        """If self.port is None, return default port for different vessel types.
-
-        Returns:
-            str: Vessel port to add to.
-        """
-        if self.port:
-            return self.port
-        elif self.vessel_type == 'filter':
-            return TOP_PORT
-        elif self.vessel_type == 'separator':
-            return BOTTOM_PORT
-        elif self.vessel_type == 'rotavap':
-            return EVAPORATE_PORT
-        return None
 
     def get_dispense_speed(self) -> float:
         if self.time:

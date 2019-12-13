@@ -22,7 +22,7 @@
       vessel="rotavap"
       volume="None"
       mass="5 g"
-      port="None"
+      port="evaporate"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -115,7 +115,7 @@
         aspiration_speed="5"
         dispense_speed="40"
         from_port="evaporate"
-        to_port="None"
+        to_port="0"
         unique="False"
         through="" />
       <StartVacuum

@@ -79,7 +79,7 @@
     </SwitchArgon>
     <SwitchVacuum
       vessel="flask"
-      port="None"
+      port="0"
       pneumatic_controller="pneumatic_controller"
       pneumatic_controller_port="1">
       <CSwitchVacuum
@@ -99,7 +99,7 @@
     </SwitchVacuum>
     <SwitchArgon
       vessel="flask"
-      port="None"
+      port="0"
       pressure="high"
       pneumatic_controller="pneumatic_controller"
       pneumatic_controller_port="1">
@@ -121,7 +121,7 @@
     </SwitchArgon>
     <SwitchArgon
       vessel="flask"
-      port="None"
+      port="0"
       pressure="low"
       pneumatic_controller="pneumatic_controller"
       pneumatic_controller_port="1">
