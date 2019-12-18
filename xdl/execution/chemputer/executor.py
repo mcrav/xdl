@@ -793,7 +793,6 @@ class XDLExecutor(AbstractXDLExecutor):
 
     def _add_all_volumes_to_step(self, step, vessel_contents, definite):
         if type(step) in [Transfer, CMove]:
-            print('ALL', step.name,  step.properties, '\n')
             if step.volume == 'all':
                 if definite and step.from_vessel in vessel_contents:
                     step.volume = vessel_contents[step.from_vessel].volume
@@ -812,12 +811,10 @@ class XDLExecutor(AbstractXDLExecutor):
         """When volumes in CMove commands are specified by 'all', change
         these to max_volume of vessel.
         """
-        print('ADDING ALL VOLUMES')
         prev_vessel_contents = None
         for _, step, vessel_contents, definite  in iter_vessel_contents(
             self._xdl.steps, self._graph_hardware
         ):
-            print('ALL', step.name, step.properties, '\n')
             self._add_all_volumes_to_step(step, prev_vessel_contents, definite)
             prev_vessel_contents = vessel_contents
 
@@ -877,6 +874,19 @@ class XDLExecutor(AbstractXDLExecutor):
         self._stop_stirring_when_vessels_lose_scope()
         self._remove_pointless_backbone_cleaning()
         self._no_waiting_if_dry_run()
+
+    def _remove_pointless_dry_return_to_rt(self, steps=None) -> None:
+        """If next step is heating to same temp as dry step, dry step shouldn't
+        return to RT at end of stpe.
+        """
+        if steps == None:
+            steps = self._xdl.steps
+        for i, step in enumerate(steps):
+            if type(step) == Dry and step.temp and not step.continue_heatchill:
+                if (i+1 < len(steps)
+                    and 'temp' in steps[i+1].properties
+                    and step.temp == steps[i+1].temp):
+                    step.continue_heatchill = True
 
     def _optimise_separation_steps(self, steps=None) -> None:
         """Optimise separation steps to reduce risk of backbone contamination.
@@ -1089,6 +1099,7 @@ class XDLExecutor(AbstractXDLExecutor):
         self._add_internal_properties(steps=block)
         self._validate_ports(steps=block)
         # Convert implied properties to concrete values.
+        self._remove_pointless_dry_return_to_rt(steps=block)
         self._optimise_separation_steps(steps=block)
 
         # Optimise procedure.
@@ -1158,6 +1169,7 @@ class XDLExecutor(AbstractXDLExecutor):
                 # Convert implied properties to concrete values.
                 self._add_clean_vessel_temps()
                 self._optimise_separation_steps()
+                self._remove_pointless_dry_return_to_rt()
                 self._add_internal_properties()
                 self._add_all_volumes()
                 self._add_filter_volumes()
