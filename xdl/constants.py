@@ -237,6 +237,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'time': DEFAULT_DRY_TIME,
         'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
         'vacuum_pressure': DEFAULT_FILTER_VACUUM_PRESSURE,
+        'continue_heatchill': False,
     },
     'WashSolid': {
         'volume': DEFAULT_WASHFILTERCAKE_VOLUME,

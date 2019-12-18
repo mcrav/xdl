@@ -2486,7 +2486,8 @@
       vacuum_valve="valve_vacuum"
       valve_unused_port="0"
       vessel_type="filter"
-      vessel_has_stirrer="True">
+      vessel_has_stirrer="True"
+      continue_heatchill="False">
       <StopStir
         vessel="jacketed_filter"
         vessel_type="filter"
@@ -4302,7 +4303,8 @@
       vacuum_valve="valve_vacuum"
       valve_unused_port="0"
       vessel_type="filter"
-      vessel_has_stirrer="True">
+      vessel_has_stirrer="True"
+      continue_heatchill="False">
       <StopStir
         vessel="jacketed_filter"
         vessel_type="filter"
@@ -5160,7 +5162,8 @@
         vacuum_valve="valve_vacuum"
         valve_unused_port="0"
         vessel_type="filter"
-        vessel_has_stirrer="True">
+        vessel_has_stirrer="True"
+        continue_heatchill="False">
         <StopStir
           vessel="jacketed_filter"
           vessel_type="filter"
@@ -5489,7 +5492,8 @@
         vacuum_valve="valve_vacuum"
         valve_unused_port="0"
         vessel_type="filter"
-        vessel_has_stirrer="True">
+        vessel_has_stirrer="True"
+        continue_heatchill="False">
         <StopStir
           vessel="jacketed_filter"
           vessel_type="filter"
@@ -5754,7 +5758,8 @@
       vacuum_valve="valve_vacuum"
       valve_unused_port="0"
       vessel_type="rotavap"
-      vessel_has_stirrer="False">
+      vessel_has_stirrer="False"
+      continue_heatchill="False">
       <HeatChillToTemp
         vessel="rotavap"
         temp="23°C"
@@ -5846,6 +5851,57 @@
       <CSetVacuumSetPoint
         vessel="rotavap"
         vacuum_pressure="400 mbar" />
+      <HeatChillToTemp
+        vessel="rotavap"
+        temp="25°C"
+        active="True"
+        continue_heatchill="False"
+        stir="False"
+        stir_speed="250 RPM"
+        vessel_type="rotavap"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+        heater="None"
+        chiller="None">
+        <StopStir
+          vessel="rotavap"
+          vessel_type="rotavap"
+          vessel_has_stirrer="False">
+          <CRotavapStopRotation
+            rotavap_name="rotavap" />
+        </StopStir>
+        <StartHeatChill
+          vessel="rotavap"
+          temp="25°C"
+          vessel_type="rotavap"
+          heater="None"
+          chiller="None">
+          <CRotavapSetTemp
+            rotavap_name="rotavap"
+            temp="25°C" />
+          <CRotavapStartHeater
+            rotavap_name="rotavap" />
+        </StartHeatChill>
+        <Wait
+          time="5 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="5 mins" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <StopHeatChill
+          vessel="rotavap"
+          vessel_type="rotavap"
+          heater="None"
+          chiller="None">
+          <CRotavapStopHeater
+            rotavap_name="rotavap" />
+        </StopHeatChill>
+      </HeatChillToTemp>
     </Dry>
     <CleanBackbone
       solvent="DCM"
@@ -5942,7 +5998,8 @@
       vacuum_valve="valve_vacuum"
       valve_unused_port="0"
       vessel_type="filter"
-      vessel_has_stirrer="True">
+      vessel_has_stirrer="True"
+      continue_heatchill="False">
       <HeatChillToTemp
         vessel="jacketed_filter"
         temp="50°C"
@@ -6041,6 +6098,52 @@
       <CSetVacuumSetPoint
         vessel="flask_vacuum"
         vacuum_pressure="400 mbar" />
+      <HeatChillToTemp
+        vessel="jacketed_filter"
+        temp="25°C"
+        active="True"
+        continue_heatchill="False"
+        stir="False"
+        stir_speed="250 RPM"
+        vessel_type="filter"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+        heater="None"
+        chiller="chiller_filter">
+        <StopStir
+          vessel="jacketed_filter"
+          vessel_type="filter"
+          vessel_has_stirrer="True">
+          <CStopStir
+            vessel="jacketed_filter" />
+        </StopStir>
+        <StartHeatChill
+          vessel="jacketed_filter"
+          temp="25°C"
+          vessel_type="filter"
+          heater="None"
+          chiller="chiller_filter">
+          <CChillerSetTemp
+            vessel="jacketed_filter"
+            temp="25°C" />
+          <CStartChiller
+            vessel="jacketed_filter" />
+        </StartHeatChill>
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CChillerWaitForTemp
+          vessel="jacketed_filter" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+        <StopHeatChill
+          vessel="jacketed_filter"
+          vessel_type="filter"
+          heater="None"
+          chiller="chiller_filter">
+          <CStopChiller
+            vessel="jacketed_filter" />
+        </StopHeatChill>
+      </HeatChillToTemp>
     </Dry>
     <CleanBackbone
       solvent="DCM"
@@ -6137,7 +6240,8 @@
       vacuum_valve="valve_vacuum"
       valve_unused_port="0"
       vessel_type="filter"
-      vessel_has_stirrer="True">
+      vessel_has_stirrer="True"
+      continue_heatchill="False">
       <HeatChillToTemp
         vessel="jacketed_filter"
         temp="40°C"
@@ -6236,6 +6340,52 @@
       <CSetVacuumSetPoint
         vessel="flask_vacuum"
         vacuum_pressure="400 mbar" />
+      <HeatChillToTemp
+        vessel="jacketed_filter"
+        temp="25°C"
+        active="True"
+        continue_heatchill="False"
+        stir="False"
+        stir_speed="250 RPM"
+        vessel_type="filter"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+        heater="None"
+        chiller="chiller_filter">
+        <StopStir
+          vessel="jacketed_filter"
+          vessel_type="filter"
+          vessel_has_stirrer="True">
+          <CStopStir
+            vessel="jacketed_filter" />
+        </StopStir>
+        <StartHeatChill
+          vessel="jacketed_filter"
+          temp="25°C"
+          vessel_type="filter"
+          heater="None"
+          chiller="chiller_filter">
+          <CChillerSetTemp
+            vessel="jacketed_filter"
+            temp="25°C" />
+          <CStartChiller
+            vessel="jacketed_filter" />
+        </StartHeatChill>
+        <CSetRecordingSpeed
+          recording_speed="2000" />
+        <CChillerWaitForTemp
+          vessel="jacketed_filter" />
+        <CSetRecordingSpeed
+          recording_speed="14" />
+        <StopHeatChill
+          vessel="jacketed_filter"
+          vessel_type="filter"
+          heater="None"
+          chiller="chiller_filter">
+          <CStopChiller
+            vessel="jacketed_filter" />
+        </StopHeatChill>
+      </HeatChillToTemp>
     </Dry>
     <CleanBackbone
       solvent="DCM"
@@ -6906,7 +7056,8 @@
         vacuum_valve="valve_vacuum"
         valve_unused_port="0"
         vessel_type="rotavap"
-        vessel_has_stirrer="False">
+        vessel_has_stirrer="False"
+        continue_heatchill="False">
         <StopStir
           vessel="rotavap"
           vessel_type="rotavap"
@@ -8209,7 +8360,8 @@
         vacuum_valve="valve_vacuum"
         valve_unused_port="0"
         vessel_type="rotavap"
-        vessel_has_stirrer="False">
+        vessel_has_stirrer="False"
+        continue_heatchill="False">
         <StopStir
           vessel="rotavap"
           vessel_type="rotavap"
@@ -8816,7 +8968,8 @@
       vacuum_valve="valve_vacuum"
       valve_unused_port="0"
       vessel_type="rotavap"
-      vessel_has_stirrer="False">
+      vessel_has_stirrer="False"
+      continue_heatchill="False">
       <HeatChillToTemp
         vessel="rotavap"
         temp="23°C"
@@ -8908,6 +9061,57 @@
       <CSetVacuumSetPoint
         vessel="rotavap"
         vacuum_pressure="400 mbar" />
+      <HeatChillToTemp
+        vessel="rotavap"
+        temp="25°C"
+        active="True"
+        continue_heatchill="False"
+        stir="False"
+        stir_speed="250 RPM"
+        vessel_type="rotavap"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+        heater="None"
+        chiller="None">
+        <StopStir
+          vessel="rotavap"
+          vessel_type="rotavap"
+          vessel_has_stirrer="False">
+          <CRotavapStopRotation
+            rotavap_name="rotavap" />
+        </StopStir>
+        <StartHeatChill
+          vessel="rotavap"
+          temp="25°C"
+          vessel_type="rotavap"
+          heater="None"
+          chiller="None">
+          <CRotavapSetTemp
+            rotavap_name="rotavap"
+            temp="25°C" />
+          <CRotavapStartHeater
+            rotavap_name="rotavap" />
+        </StartHeatChill>
+        <Wait
+          time="5 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="5 mins" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <StopHeatChill
+          vessel="rotavap"
+          vessel_type="rotavap"
+          heater="None"
+          chiller="None">
+          <CRotavapStopHeater
+            rotavap_name="rotavap" />
+        </StopHeatChill>
+      </HeatChillToTemp>
     </Dry>
     <CleanBackbone
       solvent="ether"

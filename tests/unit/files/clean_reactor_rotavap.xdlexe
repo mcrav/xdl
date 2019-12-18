@@ -198,7 +198,8 @@
         vacuum_valve="valve_reactor_vacuum"
         valve_unused_port="2"
         vessel_type="rotavap"
-        vessel_has_stirrer="False">
+        vessel_has_stirrer="False"
+        continue_heatchill="False">
         <StopStir
           vessel="rotavap"
           vessel_type="rotavap"
@@ -441,7 +442,8 @@
         vacuum_valve="valve_reactor_vacuum"
         valve_unused_port="2"
         vessel_type="reactor"
-        vessel_has_stirrer="True">
+        vessel_has_stirrer="True"
+        continue_heatchill="False">
         <StopStir
           vessel="reactor"
           vessel_type="reactor"

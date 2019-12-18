@@ -56,7 +56,8 @@
       vacuum_valve="valve_reactor_vacuum"
       valve_unused_port="2"
       vessel_type="rotavap"
-      vessel_has_stirrer="False">
+      vessel_has_stirrer="False"
+      continue_heatchill="False">
       <HeatChillToTemp
         vessel="rotavap"
         temp="50°C"
@@ -148,6 +149,57 @@
       <CSetVacuumSetPoint
         vessel="rotavap"
         vacuum_pressure="400 mbar" />
+      <HeatChillToTemp
+        vessel="rotavap"
+        temp="25°C"
+        active="True"
+        continue_heatchill="False"
+        stir="False"
+        stir_speed="250 RPM"
+        vessel_type="rotavap"
+        wait_recording_speed="2000"
+        after_recording_speed="14"
+        heater="None"
+        chiller="None">
+        <StopStir
+          vessel="rotavap"
+          vessel_type="rotavap"
+          vessel_has_stirrer="False">
+          <CRotavapStopRotation
+            rotavap_name="rotavap" />
+        </StopStir>
+        <StartHeatChill
+          vessel="rotavap"
+          temp="25°C"
+          vessel_type="rotavap"
+          heater="None"
+          chiller="None">
+          <CRotavapSetTemp
+            rotavap_name="rotavap"
+            temp="25°C" />
+          <CRotavapStartHeater
+            rotavap_name="rotavap" />
+        </StartHeatChill>
+        <Wait
+          time="5 mins"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="5 mins" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <StopHeatChill
+          vessel="rotavap"
+          vessel_type="rotavap"
+          heater="None"
+          chiller="None">
+          <CRotavapStopHeater
+            rotavap_name="rotavap" />
+        </StopHeatChill>
+      </HeatChillToTemp>
     </Dry>
   </Procedure>
 

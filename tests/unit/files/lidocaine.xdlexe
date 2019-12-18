@@ -986,7 +986,8 @@
       vacuum_valve="valve_vacuum"
       valve_unused_port="2"
       vessel_type="filter"
-      vessel_has_stirrer="True">
+      vessel_has_stirrer="True"
+      continue_heatchill="False">
       <StopStir
         vessel="filter1"
         vessel_type="filter"
@@ -2624,7 +2625,8 @@
         vacuum_valve="valve_vacuum"
         valve_unused_port="2"
         vessel_type="filter"
-        vessel_has_stirrer="True">
+        vessel_has_stirrer="True"
+        continue_heatchill="False">
         <StopStir
           vessel="filter1"
           vessel_type="filter"
@@ -4087,7 +4089,8 @@
       vacuum_valve="valve_vacuum"
       valve_unused_port="2"
       vessel_type="filter"
-      vessel_has_stirrer="True">
+      vessel_has_stirrer="True"
+      continue_heatchill="False">
       <StopStir
         vessel="filter1"
         vessel_type="filter"
@@ -4203,7 +4206,8 @@
       vacuum_valve="valve_vacuum"
       valve_unused_port="2"
       vessel_type="filter"
-      vessel_has_stirrer="True">
+      vessel_has_stirrer="True"
+      continue_heatchill="False">
       <StopStir
         vessel="filter1"
         vessel_type="filter"
