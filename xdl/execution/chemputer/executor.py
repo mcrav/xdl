@@ -66,6 +66,12 @@ class XDLExecutor(AbstractXDLExecutor):
                           len(self._graph_hardware.filters))
         enough_separators = (len(self._xdl.hardware.separators) <=
                              len(self._graph_hardware.separators))
+        if not enough_reactors:
+            print(f'{len(self._xdl.hardware.reactors)} reactor required, {len(self._graph_hardware.reactors)} present.')
+        if not enough_filters:
+            print(f'{len(self._xdl.hardware.filters)} filter required, {len(self._graph_hardware.filters)} present.')
+        if not enough_separators:
+            print(f'{len(self._xdl.hardware.separators)} separator required, {len(self._graph_hardware.separators)} present.')
         return enough_reactors and enough_filters and enough_separators
 
     def _check_enough_buffer_flasks(self) -> bool:
@@ -869,6 +875,19 @@ class XDLExecutor(AbstractXDLExecutor):
         self._remove_pointless_backbone_cleaning()
         self._no_waiting_if_dry_run()
 
+    def _remove_pointless_dry_return_to_rt(self, steps=None) -> None:
+        """If next step is heating to same temp as dry step, dry step shouldn't
+        return to RT at end of stpe.
+        """
+        if steps == None:
+            steps = self._xdl.steps
+        for i, step in enumerate(steps):
+            if type(step) == Dry and step.temp and not step.continue_heatchill:
+                if (i+1 < len(steps)
+                    and 'temp' in steps[i+1].properties
+                    and step.temp == steps[i+1].temp):
+                    step.continue_heatchill = True
+
     def _optimise_separation_steps(self, steps=None) -> None:
         """Optimise separation steps to reduce risk of backbone contamination.
         The issue this addresses is that if a product is extracted into the
@@ -1080,6 +1099,7 @@ class XDLExecutor(AbstractXDLExecutor):
         self._add_internal_properties(steps=block)
         self._validate_ports(steps=block)
         # Convert implied properties to concrete values.
+        self._remove_pointless_dry_return_to_rt(steps=block)
         self._optimise_separation_steps(steps=block)
 
         # Optimise procedure.
@@ -1149,6 +1169,7 @@ class XDLExecutor(AbstractXDLExecutor):
                 # Convert implied properties to concrete values.
                 self._add_clean_vessel_temps()
                 self._optimise_separation_steps()
+                self._remove_pointless_dry_return_to_rt()
                 self._add_internal_properties()
                 self._add_all_volumes()
                 self._add_filter_volumes()
