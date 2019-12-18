@@ -583,13 +583,16 @@ def xdl_copy(xdl_obj: XDL) -> XDL:
     copy_hardware = []
 
     for step in xdl_obj.steps:
-        copy_steps.append(type(step)(**step.properties))
+        copy_props = copy.deepcopy(step.properties)
+        copy_steps.append(type(step)(**copy_props))
 
     for reagent in xdl_obj.reagents:
-        copy_reagents.append(type(reagent)(**reagent.properties))
+        copy_props = copy.deepcopy(reagent.properties)
+        copy_reagents.append(type(reagent)(**copy_props))
 
     for component in xdl_obj.hardware:
-        copy_hardware.append(type(component)(**component.properties))
+        copy_props = copy.deepcopy(component.properties)
+        copy_hardware.append(type(component)(**copy_props))
 
     return XDL(steps=copy_steps,
                reagents=copy_reagents,
