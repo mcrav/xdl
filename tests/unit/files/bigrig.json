@@ -949,6 +949,22 @@
       "source": "buffer_flask",
       "target": "valve_separator",
       "port": "(0,3)"
+    },
+    {
+      "id": 95,
+      "sourceInternal": 31,
+      "targetInternal": 56,
+      "source": "flask_nitrogen",
+      "target": "valve_reactor_vacuum",
+      "port": "(0,1)"
+    },
+    {
+      "id": 96,
+      "sourceInternal": 56,
+      "targetInternal": 21,
+      "source": "valve_reactor_vacuum",
+      "target": "reactor",
+      "port": "(-1,0)"
     }
   ]
 }

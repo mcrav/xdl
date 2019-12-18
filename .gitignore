@@ -17,7 +17,7 @@ lidocaine
 tests/chempiler_output/
 tests/unit/chempiler_output
 
-# other shite
+# other
 .vscode
 test.py
 chempiler_output/

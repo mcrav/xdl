@@ -66,6 +66,12 @@ class XDLExecutor(AbstractXDLExecutor):
                           len(self._graph_hardware.filters))
         enough_separators = (len(self._xdl.hardware.separators) <=
                              len(self._graph_hardware.separators))
+        if not enough_reactors:
+            print(f'{len(self._xdl.hardware.reactors)} reactor required, {len(self._graph_hardware.reactors)} present.')
+        if not enough_filters:
+            print(f'{len(self._xdl.hardware.filters)} filter required, {len(self._graph_hardware.filters)} present.')
+        if not enough_separators:
+            print(f'{len(self._xdl.hardware.separators)} separator required, {len(self._graph_hardware.separators)} present.')
         return enough_reactors and enough_filters and enough_separators
 
     def _check_enough_buffer_flasks(self) -> bool:
@@ -787,6 +793,7 @@ class XDLExecutor(AbstractXDLExecutor):
 
     def _add_all_volumes_to_step(self, step, vessel_contents, definite):
         if type(step) in [Transfer, CMove]:
+            print('ALL', step.name,  step.properties, '\n')
             if step.volume == 'all':
                 if definite and step.from_vessel in vessel_contents:
                     step.volume = vessel_contents[step.from_vessel].volume
@@ -805,10 +812,12 @@ class XDLExecutor(AbstractXDLExecutor):
         """When volumes in CMove commands are specified by 'all', change
         these to max_volume of vessel.
         """
+        print('ADDING ALL VOLUMES')
         prev_vessel_contents = None
         for _, step, vessel_contents, definite  in iter_vessel_contents(
             self._xdl.steps, self._graph_hardware
         ):
+            print('ALL', step.name, step.properties, '\n')
             self._add_all_volumes_to_step(step, prev_vessel_contents, definite)
             prev_vessel_contents = vessel_contents
 

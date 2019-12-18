@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="d9b4b49b9c0ffaf38bd4bddaaa2bba8bcb97149f7d1a265371ff8f45db54ef54"
+  graph_sha256="2e45816aeee0bf89118def1a001dc80476b97634be96ca7d2841df171022e79d"
 >
   <Hardware>
     <Component
@@ -65,7 +65,7 @@
       vacuum_device="vacuum_reactor_device"
       inert_gas="flask_nitrogen"
       vacuum_valve="valve_reactor_vacuum"
-      valve_unused_port="1"
+      valve_unused_port="2"
       vessel_type="rotavap"
       filter_dead_volume="None"
       anticlogging="False">

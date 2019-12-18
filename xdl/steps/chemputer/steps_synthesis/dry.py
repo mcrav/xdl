@@ -108,7 +108,9 @@ class Dry(AbstractStep):
                 vessel_type=self.vessel_type,
                 stir=False))
 
-        if self.vessel_type not in ['rotavap', 'reactor']:
+        print('DRY', self.properties)
+
+        if self.vessel_type not in ['rotavap'] and self.vacuum:
             steps.extend(get_vacuum_valve_reconnect_steps(
                 inert_gas=self.inert_gas,
                 vacuum_valve=self.vacuum_valve,
