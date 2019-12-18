@@ -42,4 +42,10 @@ setup(
         ]
     },
     include_package_data=True,
+    install_requires=[
+        'lxml>=4',
+        'networkx>=2',
+        'appdirs>=1',
+        'termcolor>=1',
+    ]
 )

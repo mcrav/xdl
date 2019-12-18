@@ -11,7 +11,11 @@ from ..steps_utility import (
 )
 from ..steps_base import CMove, CConnect, CVentVacuum
 from ....constants import (
-    BOTTOM_PORT, DEFAULT_DRY_WASTE_VOLUME, DEFAULT_FILTER_VACUUM_PRESSURE)
+    BOTTOM_PORT,
+    DEFAULT_DRY_WASTE_VOLUME,
+    DEFAULT_FILTER_VACUUM_PRESSURE,
+    ROOM_TEMPERATURE
+)
 
 class Dry(AbstractStep):
     """Dry given vessel by applying vacuum for given time.
@@ -53,6 +57,7 @@ class Dry(AbstractStep):
         valve_unused_port: Optional[Union[str, int]] = None,
         vessel_type: Optional[str] = None,
         vessel_has_stirrer: Optional[bool] = True,
+        continue_heatchill: Optional[bool] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -108,7 +113,7 @@ class Dry(AbstractStep):
                 vessel_type=self.vessel_type,
                 stir=False))
 
-        if self.vessel_type not in ['rotavap', 'reactor']:
+        if self.vessel_type not in ['rotavap'] and self.vacuum:
             steps.extend(get_vacuum_valve_reconnect_steps(
                 inert_gas=self.inert_gas,
                 vacuum_valve=self.vacuum_valve,
@@ -124,6 +129,16 @@ class Dry(AbstractStep):
                     vacuum_pressure=DEFAULT_FILTER_VACUUM_PRESSURE)
             ])
 
+        if not self.continue_heatchill and self.temp:
+            steps.append(
+                HeatChillToTemp(
+                    vessel=self.vessel,
+                    temp=ROOM_TEMPERATURE,
+                    continue_heatchill=False,
+                    stir=False
+                )
+            )
+
         return steps
 
     @property
@@ -133,17 +148,3 @@ class Dry(AbstractStep):
                 'temp': [item for item in [self.temp] if item != None],
             }
         }
-
-    def syntext(self) -> str:
-        formatted_properties = self.formatted_properties()
-        s = 'The solid was dried'
-
-        #  Add temp modifier
-        if self.temp != None:
-            s += f" at {formatted_properties['temp']}"
-
-        # Add time modifier
-        if self.time != None:
-            s += f" for {formatted_properties['time']}"
-
-        return f'{s}.'

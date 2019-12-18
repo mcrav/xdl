@@ -52,7 +52,7 @@ class Dissolve(AbstractStep):
                 Add(reagent=self.solvent,
                     volume=self.volume,
                     vessel=self.vessel,
-                    port=EVAPORATE_PORT,
+                    port=self.port,
                     stir=False),
                 CRotavapSetTemp(self.vessel, self.temp),
                 CRotavapStartHeater(self.vessel),
@@ -92,7 +92,3 @@ class Dissolve(AbstractStep):
                 'stir': True,
             }
         }
-
-    def syntext(self) -> str:
-        formatted_properties = self.formatted_properties()
-        return f'The solid was dissolved in {self.solvent} ({formatted_properties["volume"]}).'

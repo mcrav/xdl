@@ -66,6 +66,12 @@ class XDLExecutor(AbstractXDLExecutor):
                           len(self._graph_hardware.filters))
         enough_separators = (len(self._xdl.hardware.separators) <=
                              len(self._graph_hardware.separators))
+        if not enough_reactors:
+            print(f'{len(self._xdl.hardware.reactors)} reactor required, {len(self._graph_hardware.reactors)} present.')
+        if not enough_filters:
+            print(f'{len(self._xdl.hardware.filters)} filter required, {len(self._graph_hardware.filters)} present.')
+        if not enough_separators:
+            print(f'{len(self._xdl.hardware.separators)} separator required, {len(self._graph_hardware.separators)} present.')
         return enough_reactors and enough_filters and enough_separators
 
     def _check_enough_buffer_flasks(self) -> bool:
@@ -161,7 +167,7 @@ class XDLExecutor(AbstractXDLExecutor):
                     if step.properties[port_keyword] != None:
                         validate_port(
                             step.properties[vessel_keyword],
-                            self._graph.node[step.properties[vessel_keyword]]['class'],
+                            self._graph.nodes[step.properties[vessel_keyword]]['class'],
                             step.properties[port_keyword]
                         )
         if not isinstance(step, AbstractBaseStep):
@@ -328,18 +334,40 @@ class XDLExecutor(AbstractXDLExecutor):
                 step.heater, step.chiller = self._find_heater_chiller(
                     self._graph, step.vessel)
 
+            self._add_default_ports(step)
+
             step.on_prepare_for_execution(self._graph)
             if not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
                 self._add_internal_properties_to_steps(step.steps)
+
+    def _add_default_ports(self, step):
+        changed = False
+        if type(step) != CConnect:
+            for k in step.properties:
+                if 'port' in k and step.properties[k] == None:
+                    vessel_prop = k.replace('port', 'vessel')
+                    if vessel_prop in step.properties:
+                        vessel = step.properties[vessel_prop]
+                        if vessel:
+                            vessel_class = self._graph.nodes[vessel]['class']
+                            if vessel_class in DEFAULT_PORTS:
+                                changed = True
+                                if 'from' in k:
+                                    step.properties[k] = DEFAULT_PORTS[vessel_class]['from']
+                                else:
+                                    step.properties[k] = DEFAULT_PORTS[vessel_class]['to']
+        if changed:
+            step.update()
+        return step
 
     def _find_heater_chiller(self, graph, node):
         heater, chiller = None, None
         neighbors = undirected_neighbors(graph, node)
         for neighbor in neighbors:
-            print(graph.node[neighbor])
-            if graph.node[neighbor]['class'] in HEATER_CLASSES:
+            print(graph.nodes[neighbor])
+            if graph.nodes[neighbor]['class'] in HEATER_CLASSES:
                 heater = neighbor
-            elif graph.node[neighbor]['class'] in CHILLER_CLASSES:
+            elif graph.nodes[neighbor]['class'] in CHILLER_CLASSES:
                 chiller = neighbor
         return heater, chiller
 
@@ -847,6 +875,19 @@ class XDLExecutor(AbstractXDLExecutor):
         self._remove_pointless_backbone_cleaning()
         self._no_waiting_if_dry_run()
 
+    def _remove_pointless_dry_return_to_rt(self, steps=None) -> None:
+        """If next step is heating to same temp as dry step, dry step shouldn't
+        return to RT at end of stpe.
+        """
+        if steps == None:
+            steps = self._xdl.steps
+        for i, step in enumerate(steps):
+            if type(step) == Dry and step.temp and not step.continue_heatchill:
+                if (i+1 < len(steps)
+                    and 'temp' in steps[i+1].properties
+                    and step.temp == steps[i+1].temp):
+                    step.continue_heatchill = True
+
     def _optimise_separation_steps(self, steps=None) -> None:
         """Optimise separation steps to reduce risk of backbone contamination.
         The issue this addresses is that if a product is extracted into the
@@ -1058,6 +1099,7 @@ class XDLExecutor(AbstractXDLExecutor):
         self._add_internal_properties(steps=block)
         self._validate_ports(steps=block)
         # Convert implied properties to concrete values.
+        self._remove_pointless_dry_return_to_rt(steps=block)
         self._optimise_separation_steps(steps=block)
 
         # Optimise procedure.
@@ -1127,6 +1169,7 @@ class XDLExecutor(AbstractXDLExecutor):
                 # Convert implied properties to concrete values.
                 self._add_clean_vessel_temps()
                 self._optimise_separation_steps()
+                self._remove_pointless_dry_return_to_rt()
                 self._add_internal_properties()
                 self._add_all_volumes()
                 self._add_filter_volumes()

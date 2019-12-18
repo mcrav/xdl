@@ -85,12 +85,12 @@ class Transfer(AbstractStep):
             str: Vessel port to add to.
         """
         if self.from_port in [None, ''] and self.from_vessel:
-            from_class = graph.node[self.from_vessel]['class']
+            from_class = graph.nodes[self.from_vessel]['class']
             if from_class in DEFAULT_PORTS:
                 self.from_port = DEFAULT_PORTS[from_class]['from']
 
         if self.to_port in [None, ''] and self.to_vessel:
-            to_class = graph.node[self.to_vessel]['class']
+            to_class = graph.nodes[self.to_vessel]['class']
             if to_class in DEFAULT_PORTS:
                 self.to_port = DEFAULT_PORTS[to_class]['to']
 
@@ -122,16 +122,3 @@ class Transfer(AbstractStep):
                     **self.formatted_properties())
         except KeyError:
             return self.name
-
-    def syntext(self) -> str:
-        volume = ''
-        formatted_properties = self.formatted_properties()
-        if self.volume != 'all':
-            volume = f'({formatted_properties["volume"]}) '
-        s = f'The contents of {self.from_vessel} were transferred to {self.to_vessel}'
-        if self.time:
-            s += f' over {formatted_properties["time"]}'
-        if self.through:
-            s += f' through {self.through}'
-        if s: s += '.'
-        return s

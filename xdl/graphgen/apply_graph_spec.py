@@ -23,7 +23,7 @@ def apply_spec_to_template(graph_spec, graph, fixable_issues):
 
 def reset_flasks(graph):
     for node in graph.nodes():
-        full_node = graph.node[node]
+        full_node = graph.nodes[node]
         if (full_node['class'] == 'ChemputerFlask'
             and full_node['chemical'].lower() not in INERT_GAS_SYNONYMS):
             full_node['chemical'] = 'none'
@@ -55,8 +55,8 @@ def get_used_node_positions(graph):
 
 def get_flask_position(graph, valve):
     used_pos = get_used_node_positions(graph)
-    valve_x = graph.node[valve]['x']
-    valve_y = graph.node[valve]['y']
+    valve_x = graph.nodes[valve]['x']
+    valve_y = graph.nodes[valve]['y']
     gridsize = 40
     offset = gridsize * 2
     possible_pos = [
@@ -92,8 +92,8 @@ def add_buffer_flask(graph, node_name, valve, port):
     )
 
 def add_buffer_flask_edges(graph, valve, flask, valve_port):
-    flask_id = graph.node[flask]['internalId']
-    valve_id = graph.node[valve]['internalId']
+    flask_id = graph.nodes[flask]['internalId']
+    valve_id = graph.nodes[valve]['internalId']
     in_data = {
         'id': get_new_edge_id(graph),
         'source': valve,
@@ -141,8 +141,8 @@ def add_reagent_flask(graph, valve, node_name, reagent):
     })
 
 def add_reagent_flask_edge(graph, valve, flask, valve_port):
-    valve_id = graph.node[valve]['internalId']
-    flask_id = graph.node[flask]['internalId']
+    valve_id = graph.nodes[valve]['internalId']
+    flask_id = graph.nodes[flask]['internalId']
     graph.add_edge(flask, valve, **{
         'port': f'(0,{valve_port})',
         'source': flask,
@@ -156,10 +156,10 @@ def get_cartridge_node_position(graph, from_valve, to_valve):
     used_positions = []
     for node, data in graph.nodes(data=True):
         used_positions.append((data['x'], data['y']))
-    from_x = graph.node[from_valve]['x']
-    from_y = graph.node[from_valve]['y']
-    to_x = graph.node[to_valve]['x']
-    to_y = graph.node[to_valve]['y']
+    from_x = graph.nodes[from_valve]['x']
+    from_y = graph.nodes[from_valve]['y']
+    to_x = graph.nodes[to_valve]['x']
+    to_y = graph.nodes[to_valve]['y']
     min_x = min(from_x, to_x)
     min_y = min(from_y, to_y)
     max_x = max(from_x, to_x)
@@ -192,7 +192,7 @@ def get_nearest_buffer_flask_valve(graph, backbone_valve):
 def get_buffer_flasks_from_neighbors(graph, valve, avoid=[]):
     buffer_flasks, tried = [], []
     for neighbor in undirected_neighbors(graph, valve):
-        if graph.node[neighbor]['class'] == 'ChemputerValve':
+        if graph.nodes[neighbor]['class'] == 'ChemputerValve':
             buffer_flasks.extend(get_buffer_flasks_on_valve(graph, neighbor))
             tried.append(neighbor)
     return buffer_flasks, tried
@@ -200,7 +200,7 @@ def get_buffer_flasks_from_neighbors(graph, valve, avoid=[]):
 def get_buffer_flasks_on_valve(graph, valve):
     buffer_flasks = []
     for node in undirected_neighbors(graph, valve):
-        if graph.node[node]['class'] == 'ChemputerFlask' and not graph.node[node]['chemical']:
+        if graph.nodes[node]['class'] == 'ChemputerFlask' and not graph.nodes[node]['chemical']:
             buffer_flasks.append(node)
     return buffer_flasks
 
@@ -221,7 +221,7 @@ def apply_cartridge(graph, cartridge_spec):
             'port': f"({unused_ports[0]},in)",
             'source': from_valve,
             'target': cartridge_node_name,
-            'sourceInternal': graph.node[from_valve]['internalId'],
+            'sourceInternal': graph.nodes[from_valve]['internalId'],
             'targetInternal': cartridge_internal_id,
         }
 
@@ -233,7 +233,7 @@ def apply_cartridge(graph, cartridge_spec):
             'source': cartridge_node_name,
             'target': to_valve,
             'sourceInternal': cartridge_internal_id,
-            'targetInternal': graph.node[to_valve]['internalId'],
+            'targetInternal': graph.nodes[to_valve]['internalId'],
         }
 
         x, y = get_cartridge_node_position(graph, from_valve, to_valve)

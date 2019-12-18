@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="b7d05d8b742a8f91f975ae32088e302f82dff2f1760e47abace0d42de78df469"
+  graph_sha256="2e45816aeee0bf89118def1a001dc80476b97634be96ca7d2841df171022e79d"
 >
   <Hardware>
     <Component
@@ -28,7 +28,7 @@
       vessel="rotavap"
       volume="None"
       mass="1 g"
-      port="None"
+      port="evaporate"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -53,7 +53,7 @@
       vessel="rotavap"
       solvent="water"
       volume="100 mL"
-      port="None"
+      port="evaporate"
       temp="25°C"
       time="20 mins"
       stir_speed="400 RPM"
@@ -101,8 +101,8 @@
             move_speed="40"
             aspiration_speed="10"
             dispense_speed="40"
-            from_port="None"
-            to_port="None"
+            from_port="0"
+            to_port="0"
             unique="False"
             through="" />
         </PrimePumpForAdd>
@@ -113,7 +113,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="0"
           to_port="evaporate"
           unique="False"
           through="None" />
@@ -135,7 +135,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="0"
           to_port="evaporate"
           unique="False"
           through="" />

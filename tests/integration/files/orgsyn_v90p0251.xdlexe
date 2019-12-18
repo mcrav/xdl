@@ -68,8 +68,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -79,8 +79,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -90,8 +90,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -101,8 +101,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -112,8 +112,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -123,8 +123,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -174,7 +174,7 @@
       vessel="reactor"
       volume="80 mL"
       mass="None"
-      port="None"
+      port="0"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -211,8 +211,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="0"
           unique="False"
           through="" />
       </PrimePumpForAdd>
@@ -223,8 +223,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="None" />
       <Wait
@@ -245,8 +245,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </Add>
@@ -255,7 +255,7 @@
       vessel="reactor"
       volume="6.2 mL"
       mass="None"
-      port="None"
+      port="0"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -295,8 +295,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="0"
           unique="False"
           through="" />
       </PrimePumpForAdd>
@@ -307,8 +307,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="None" />
       <Wait
@@ -329,8 +329,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </Add>
@@ -345,8 +345,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -356,8 +356,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -367,8 +367,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -378,8 +378,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -389,8 +389,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -400,8 +400,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -410,7 +410,7 @@
       vessel="reactor"
       volume="20 mL"
       mass="None"
-      port="None"
+      port="0"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -450,8 +450,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="0"
           unique="False"
           through="" />
       </PrimePumpForAdd>
@@ -462,8 +462,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="0.26666666666666666"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="None" />
       <Wait
@@ -484,8 +484,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </Add>
@@ -500,8 +500,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -511,8 +511,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -522,8 +522,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -533,8 +533,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -544,8 +544,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -555,8 +555,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -571,8 +571,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -582,8 +582,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -593,8 +593,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -604,8 +604,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -615,8 +615,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -626,8 +626,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -711,7 +711,7 @@
       vessel="reactor"
       volume="128 mL"
       mass="None"
-      port="None"
+      port="0"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -751,8 +751,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="0"
           unique="False"
           through="" />
       </PrimePumpForAdd>
@@ -763,8 +763,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="4.266666666666667"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="None" />
       <Wait
@@ -785,8 +785,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </Add>
@@ -801,8 +801,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -812,8 +812,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -823,8 +823,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -834,8 +834,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -845,8 +845,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -856,8 +856,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -866,7 +866,7 @@
       vessel="reactor"
       volume="16 mL"
       mass="None"
-      port="None"
+      port="0"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -906,8 +906,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="0"
           unique="False"
           through="" />
       </PrimePumpForAdd>
@@ -918,8 +918,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="0.5333333333333333"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="None" />
       <Wait
@@ -940,8 +940,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </Add>
@@ -1096,8 +1096,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1107,8 +1107,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1118,8 +1118,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1129,8 +1129,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1140,8 +1140,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1151,8 +1151,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -1167,8 +1167,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1178,8 +1178,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1189,8 +1189,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1200,8 +1200,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1211,8 +1211,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1222,8 +1222,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -1232,7 +1232,7 @@
       vessel="separator"
       volume="100 mL"
       mass="None"
-      port="None"
+      port="bottom"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -1272,8 +1272,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="0"
           unique="False"
           through="" />
       </PrimePumpForAdd>
@@ -1284,7 +1284,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
+        from_port="0"
         to_port="bottom"
         unique="False"
         through="None" />
@@ -1306,7 +1306,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
+        from_port="0"
         to_port="bottom"
         unique="False"
         through="" />
@@ -1322,8 +1322,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1333,8 +1333,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1344,8 +1344,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1355,8 +1355,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1366,8 +1366,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1377,8 +1377,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -1387,7 +1387,7 @@
       vessel="separator"
       volume="56 mL"
       mass="None"
-      port="None"
+      port="bottom"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -1427,8 +1427,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="0"
           unique="False"
           through="" />
       </PrimePumpForAdd>
@@ -1439,7 +1439,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
+        from_port="0"
         to_port="bottom"
         unique="False"
         through="None" />
@@ -1461,7 +1461,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
+        from_port="0"
         to_port="bottom"
         unique="False"
         through="" />
@@ -1477,8 +1477,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1488,8 +1488,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1499,8 +1499,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1510,8 +1510,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1521,8 +1521,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1532,8 +1532,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -1546,12 +1546,12 @@
       solvent=""
       through="None"
       through_cartridge="None"
-      from_port="None"
-      to_port="None"
+      from_port="bottom"
+      to_port="0"
       solvent_volume="30 mL"
       n_separations="1"
       waste_phase_to_vessel="phase_B"
-      waste_phase_to_port="None"
+      waste_phase_to_port="0"
       waste_vessel="waste_Y"
       buffer_flasks="phase_A phase_B"
       remove_dead_volume="True">
@@ -1639,8 +1639,8 @@
         upper_phase_vessel="phase_A"
         separation_vessel="separator"
         dead_volume_target="waste_Y"
-        lower_phase_port="None"
-        upper_phase_port="None"
+        lower_phase_port="0"
+        upper_phase_port="0"
         dead_volume_port="None"
         lower_phase_through="None"
         upper_phase_through="None"
@@ -1657,8 +1657,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1668,8 +1668,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1679,8 +1679,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1690,8 +1690,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1701,8 +1701,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1712,8 +1712,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -1728,8 +1728,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1739,8 +1739,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1750,8 +1750,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1761,8 +1761,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1772,8 +1772,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1783,8 +1783,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -1823,8 +1823,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1834,8 +1834,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1845,8 +1845,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1856,8 +1856,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1867,8 +1867,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1878,8 +1878,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -1894,8 +1894,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1905,8 +1905,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1916,8 +1916,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1927,8 +1927,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1938,8 +1938,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -1949,8 +1949,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -1963,12 +1963,12 @@
       solvent="MTBE"
       through="None"
       through_cartridge="None"
-      from_port="None"
+      from_port="bottom"
       to_port="top"
       solvent_volume="56 mL"
       n_separations="1"
       waste_phase_to_vessel="waste_Y"
-      waste_phase_to_port="None"
+      waste_phase_to_port="0"
       waste_vessel="waste_Y"
       buffer_flasks="phase_A phase_B"
       remove_dead_volume="False">
@@ -2014,8 +2014,8 @@
             move_speed="40"
             aspiration_speed="10"
             dispense_speed="40"
-            from_port="None"
-            to_port="None"
+            from_port="0"
+            to_port="0"
             unique="False"
             through="" />
         </PrimePumpForAdd>
@@ -2026,7 +2026,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="0"
           to_port="bottom"
           unique="False"
           through="None" />
@@ -2048,7 +2048,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="0"
           to_port="bottom"
           unique="False"
           through="" />
@@ -2137,7 +2137,7 @@
         upper_phase_vessel="separator"
         separation_vessel="separator"
         dead_volume_target="None"
-        lower_phase_port="None"
+        lower_phase_port="0"
         upper_phase_port="top"
         dead_volume_port="None"
         lower_phase_through="None"
@@ -2155,8 +2155,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2166,8 +2166,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2177,8 +2177,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2188,8 +2188,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2199,8 +2199,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2210,8 +2210,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -2226,8 +2226,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2237,8 +2237,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2248,8 +2248,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2259,8 +2259,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2270,8 +2270,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2281,8 +2281,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -2321,8 +2321,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2332,8 +2332,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2343,8 +2343,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2354,8 +2354,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2365,8 +2365,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2376,8 +2376,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -2392,8 +2392,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2403,8 +2403,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2414,8 +2414,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2425,8 +2425,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2436,8 +2436,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2447,8 +2447,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -2461,12 +2461,12 @@
       solvent="brine"
       through="sodium sulfate"
       through_cartridge="cartridge_Na2SO4"
-      from_port="None"
+      from_port="bottom"
       to_port="evaporate"
       solvent_volume="43 mL"
       n_separations="1"
       waste_phase_to_vessel="waste_Y"
-      waste_phase_to_port="None"
+      waste_phase_to_port="0"
       waste_vessel="waste_Y"
       buffer_flasks="phase_A phase_B"
       remove_dead_volume="True">
@@ -2512,8 +2512,8 @@
             move_speed="40"
             aspiration_speed="10"
             dispense_speed="40"
-            from_port="None"
-            to_port="None"
+            from_port="0"
+            to_port="0"
             unique="False"
             through="" />
         </PrimePumpForAdd>
@@ -2524,7 +2524,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="0"
           to_port="bottom"
           unique="False"
           through="None" />
@@ -2546,7 +2546,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="0"
           to_port="bottom"
           unique="False"
           through="" />
@@ -2635,7 +2635,7 @@
         upper_phase_vessel="rotavap"
         separation_vessel="separator"
         dead_volume_target="waste_Y"
-        lower_phase_port="None"
+        lower_phase_port="0"
         upper_phase_port="evaporate"
         dead_volume_port="None"
         lower_phase_through="None"
@@ -2653,8 +2653,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2664,8 +2664,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2675,8 +2675,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2686,8 +2686,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2697,8 +2697,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2708,8 +2708,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -2724,8 +2724,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2735,8 +2735,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2746,8 +2746,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2757,8 +2757,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2768,8 +2768,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -2779,8 +2779,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -2861,7 +2861,7 @@
       vessel="rotavap"
       solvent="ethyl acetate"
       volume="90 mL"
-      port="None"
+      port="evaporate"
       temp="25°C"
       time="20 mins"
       stir_speed="400 RPM"
@@ -2909,8 +2909,8 @@
             move_speed="40"
             aspiration_speed="10"
             dispense_speed="40"
-            from_port="None"
-            to_port="None"
+            from_port="0"
+            to_port="0"
             unique="False"
             through="" />
         </PrimePumpForAdd>
@@ -2921,7 +2921,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="0"
           to_port="evaporate"
           unique="False"
           through="None" />
@@ -2943,7 +2943,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="0"
           to_port="evaporate"
           unique="False"
           through="" />
@@ -2989,8 +2989,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3000,8 +3000,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3011,8 +3011,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3022,8 +3022,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3033,8 +3033,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3044,8 +3044,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -3054,7 +3054,7 @@
       vessel="filter"
       volume="None"
       mass="9.3 g"
-      port="None"
+      port="top"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -3092,7 +3092,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
+        from_port="0"
         to_port="bottom"
         unique="False"
         through="" />
@@ -3105,7 +3105,7 @@
       vessel="filter"
       volume="14 mL"
       mass="None"
-      port="None"
+      port="top"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -3145,8 +3145,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="0"
           unique="False"
           through="" />
       </PrimePumpForAdd>
@@ -3157,7 +3157,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
+        from_port="0"
         to_port="top"
         unique="False"
         through="None" />
@@ -3179,7 +3179,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
+        from_port="0"
         to_port="top"
         unique="False"
         through="" />
@@ -3195,8 +3195,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3206,8 +3206,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3217,8 +3217,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3228,8 +3228,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3239,8 +3239,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3250,8 +3250,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -3331,8 +3331,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3342,8 +3342,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3353,8 +3353,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3364,8 +3364,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3375,8 +3375,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3386,8 +3386,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -3460,8 +3460,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3471,8 +3471,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3482,8 +3482,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3493,8 +3493,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3504,8 +3504,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3515,8 +3515,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -3613,7 +3613,7 @@
         aspiration_speed="10"
         dispense_speed="40"
         from_port="bottom"
-        to_port="None"
+        to_port="0"
         unique="False"
         through="" />
       <CValveMoveToPosition
@@ -3631,8 +3631,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3642,8 +3642,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3653,8 +3653,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3664,8 +3664,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3675,8 +3675,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3686,8 +3686,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -3785,8 +3785,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3796,8 +3796,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3807,8 +3807,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3818,8 +3818,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3829,8 +3829,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -3840,8 +3840,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -3921,8 +3921,8 @@
             move_speed="40"
             aspiration_speed="10"
             dispense_speed="40"
-            from_port="None"
-            to_port="None"
+            from_port="0"
+            to_port="0"
             unique="False"
             through="" />
         </PrimePumpForAdd>
@@ -3933,7 +3933,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="0"
           to_port="top"
           unique="False"
           through="None" />
@@ -3955,7 +3955,7 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
+          from_port="0"
           to_port="top"
           unique="False"
           through="" />
@@ -3979,7 +3979,7 @@
         aspiration_speed="5"
         dispense_speed="40"
         from_port="bottom"
-        to_port="None"
+        to_port="0"
         unique="False"
         through="" />
       <StartVacuum
@@ -4040,8 +4040,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -4051,8 +4051,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -4062,8 +4062,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -4073,8 +4073,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -4084,8 +4084,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -4095,8 +4095,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>
@@ -4113,7 +4113,8 @@
       vacuum_valve="valve_J"
       valve_unused_port="2"
       vessel_type="filter"
-      vessel_has_stirrer="True">
+      vessel_has_stirrer="True"
+      continue_heatchill="False">
       <StopStir
         vessel="filter"
         vessel_type="filter"
@@ -4129,7 +4130,7 @@
         aspiration_speed="5"
         dispense_speed="40"
         from_port="bottom"
-        to_port="None"
+        to_port="0"
         unique="False"
         through="" />
       <StartVacuum
@@ -4186,8 +4187,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -4197,8 +4198,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -4208,8 +4209,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -4219,8 +4220,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -4230,8 +4231,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <CMove
@@ -4241,8 +4242,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </CleanBackbone>

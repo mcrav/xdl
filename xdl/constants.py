@@ -237,6 +237,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'time': DEFAULT_DRY_TIME,
         'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
         'vacuum_pressure': DEFAULT_FILTER_VACUUM_PRESSURE,
+        'continue_heatchill': False,
     },
     'WashSolid': {
         'volume': DEFAULT_WASHFILTERCAKE_VOLUME,
@@ -437,7 +438,7 @@ EVAPORATE_PORT: str = 'evaporate'
 COLLECT_PORT: str = 'collect'
 
 VALID_PORTS = {
-    'ChemputerReactor': ['0'],
+    'ChemputerReactor': ['0', '1', '2'],
     'ChemputerSeparator': ['top', 'bottom'],
     'ChemputerFilter': ['top', 'bottom'],
     'IKARV10': ['evaporate', 'collect'],

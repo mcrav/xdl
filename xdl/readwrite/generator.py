@@ -5,6 +5,7 @@ from ..hardware import Hardware
 from ..steps.chemputer import Add
 from ..steps import Step, AbstractBaseStep
 from ..constants import DEFAULT_VALS, INTERNAL_PROPERTIES, XDL_VERSION
+from .constants import ALWAYS_WRITE
 from ..utils.misc import format_property
 
 class XDLGenerator(object):
@@ -96,7 +97,10 @@ class XDLGenerator(object):
                         if (step.name in DEFAULT_VALS
                             and prop in DEFAULT_VALS[step.name]
                             and DEFAULT_VALS[step.name][prop] == val):
-                            continue
+                            # Some things should always be written even if they
+                            # are default.
+                            if not (step.name in ALWAYS_WRITE and prop in ALWAYS_WRITE[step.name]):
+                                continue
 
                         # Don't write internal properties.
                         if (step.name in INTERNAL_PROPERTIES

@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="b7d05d8b742a8f91f975ae32088e302f82dff2f1760e47abace0d42de78df469"
+  graph_sha256="2e45816aeee0bf89118def1a001dc80476b97634be96ca7d2841df171022e79d"
 >
   <Hardware>
   </Hardware>
@@ -36,7 +36,7 @@
       vessel="flask_water"
       volume="50 mL"
       mass="None"
-      port="None"
+      port="0"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -70,8 +70,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="0"
           unique="False"
           through="" />
       </PrimePumpForAdd>
@@ -82,8 +82,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="None" />
       <Wait
@@ -104,8 +104,8 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
     </Add>
@@ -114,7 +114,7 @@
       vessel="filter"
       volume="10 mL"
       mass="None"
-      port="None"
+      port="top"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -151,8 +151,8 @@
           move_speed="40"
           aspiration_speed="10"
           dispense_speed="40"
-          from_port="None"
-          to_port="None"
+          from_port="0"
+          to_port="0"
           unique="False"
           through="" />
       </PrimePumpForAdd>
@@ -163,7 +163,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
+        from_port="0"
         to_port="top"
         unique="False"
         through="None" />
@@ -185,7 +185,7 @@
         move_speed="40"
         aspiration_speed="10"
         dispense_speed="40"
-        from_port="None"
+        from_port="0"
         to_port="top"
         unique="False"
         through="" />

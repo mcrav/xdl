@@ -4,18 +4,18 @@ def parse_port(port_str):
 
 def get_backbone_valve(graph, node):
     for neighbor in undirected_neighbors(graph, node):
-        if graph.node[neighbor]['class'] == 'ChemputerValve':
+        if graph.nodes[neighbor]['class'] == 'ChemputerValve':
             # Only look for valve with pump attached
             for valve_neighbor in graph.neighbors(neighbor):
-                if graph.node[valve_neighbor]['class'] == 'ChemputerPump':
+                if graph.nodes[valve_neighbor]['class'] == 'ChemputerPump':
                     return neighbor
     return None
 
 def get_all_backbone_valves(graph):
     backbone_valves = []
     for src, dest in graph.edges():
-        if (graph.node[src]['class'] == 'ChemputerValve'
-            and graph.node[dest]['class'] == 'ChemputerPump'):
+        if (graph.nodes[src]['class'] == 'ChemputerValve'
+            and graph.nodes[dest]['class'] == 'ChemputerPump'):
             backbone_valves.append(src)
     return backbone_valves
 

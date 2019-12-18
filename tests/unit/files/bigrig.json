@@ -374,14 +374,14 @@
       "necks": 1
     },
     {
-      "id": 73,
+      "id": "stirrer_separator",
       "type": "stirrer",
       "x": -480,
       "y": 360,
       "internalId": 73,
-      "label": 73,
+      "label": "stirrer_separator",
       "class": "IKAmicrostar75",
-      "name": "",
+      "name": "stirrer_separator",
       "port": ""
     },
     {
@@ -409,14 +409,14 @@
       "port": ""
     },
     {
-      "id": 79,
+      "id": "conductivity_sensor",
       "type": "conductivity_sensor",
       "x": -560,
       "y": 280,
       "internalId": 79,
-      "label": 79,
+      "label": "conductivity_sensor",
       "class": "ConductivitySensor",
-      "name": "",
+      "name": "conductivity_sensor",
       "port": ""
     },
     {
@@ -834,7 +834,7 @@
       "id": 74,
       "sourceInternal": 73,
       "targetInternal": 69,
-      "source": 73,
+      "source": "stirrer_separator",
       "target": "separator",
       "port": "(,)"
     },
@@ -858,7 +858,7 @@
       "id": 80,
       "sourceInternal": 79,
       "targetInternal": 69,
-      "source": 79,
+      "source": "conductivity_sensor",
       "target": "separator",
       "port": "(,)"
     },
@@ -949,6 +949,22 @@
       "source": "buffer_flask",
       "target": "valve_separator",
       "port": "(0,3)"
+    },
+    {
+      "id": 95,
+      "sourceInternal": 31,
+      "targetInternal": 56,
+      "source": "flask_nitrogen",
+      "target": "valve_reactor_vacuum",
+      "port": "(0,1)"
+    },
+    {
+      "id": 96,
+      "sourceInternal": 56,
+      "targetInternal": 21,
+      "source": "valve_reactor_vacuum",
+      "target": "reactor",
+      "port": "(-1,0)"
     }
   ]
 }

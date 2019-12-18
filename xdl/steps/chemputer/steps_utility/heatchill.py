@@ -114,6 +114,10 @@ class StartHeatChill(AbstractStep):
         ]
 
     def final_sanity_check(self, graph):
+        try:
+            assert self.heater or self.chiller or self.vessel_type == 'rotavap'
+        except AssertionError:
+            raise XDLError(f'Trying to heat/chill vessel "{self.vessel}" with no heater or chiller attached.')
         assert self.steps
         heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
 
@@ -341,9 +345,6 @@ class StopHeatChill(AbstractStep):
             }
         }
 
-    def syntext(self) -> str:
-        return f'Heating was discontinued for {self.vessel}.'
-
 class HeatChillReturnToRT(AbstractStep):
     """Let heater/chiller return to room temperatre and then stop
     heating/chilling.
@@ -429,7 +430,7 @@ class ChillerReturnToRT(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
-        self.properties['vessel_class'] = graph.node[self.vessel]['class']
+        self.properties['vessel_class'] = graph.nodes[self.vessel]['class']
         self.update()
 
     def get_steps(self):

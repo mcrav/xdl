@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="b7d05d8b742a8f91f975ae32088e302f82dff2f1760e47abace0d42de78df469"
+  graph_sha256="2e45816aeee0bf89118def1a001dc80476b97634be96ca7d2841df171022e79d"
 >
   <Hardware>
     <Component
@@ -22,7 +22,7 @@
       vessel="reactor"
       volume="None"
       mass="5 g"
-      port="None"
+      port="0"
       through="None"
       move_speed="40"
       aspiration_speed="10"
@@ -54,9 +54,10 @@
       vacuum_pressure="600 mbar"
       inert_gas="flask_nitrogen"
       vacuum_valve="valve_reactor_vacuum"
-      valve_unused_port="1"
+      valve_unused_port="2"
       vessel_type="reactor"
-      vessel_has_stirrer="True">
+      vessel_has_stirrer="True"
+      continue_heatchill="False">
       <StopStir
         vessel="reactor"
         vessel_type="reactor"
@@ -71,8 +72,8 @@
         move_speed="40"
         aspiration_speed="5"
         dispense_speed="40"
-        from_port="None"
-        to_port="None"
+        from_port="0"
+        to_port="0"
         unique="False"
         through="" />
       <StartVacuum
@@ -101,6 +102,12 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
+      <CConnect
+        from_vessel="flask_nitrogen"
+        to_vessel="reactor"
+        from_port="None"
+        to_port="None"
+        unique="True" />
       <StopVacuum
         vessel="vacuum_reactor_flask">
         <CStopVacuum

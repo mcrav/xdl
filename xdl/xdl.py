@@ -179,16 +179,6 @@ class XDL(object):
             self.climb_down_tree(step, print_tree=True)
         self.logger.info('\n')
 
-    def as_syntext(self):
-        joined_reagents = '\n'.join([reagent.id for reagent in self.reagents])
-        s = f'Reagents:\n{joined_reagents}\n\n'
-        for step in self.steps:
-            step_syntext = step.syntext()
-            if step_syntext:
-                step_syntext = step_syntext[0].upper() + step_syntext[1:]
-            s += step_syntext + '\n'
-        return s
-
     def human_readable(self, language='en') -> str:
         """Return human-readable English description of XDL procedure.
 
@@ -294,6 +284,7 @@ class XDL(object):
         heatchill_time_per_degree = 60 # seconds. Pretty random guess.
         fallback_wait_for_temp_time = 60 * 30 # seconds. Again random guess.
         for step in self.base_steps:
+            print(step.name,  step.properties, '\n')
             time = 0
             if type(step) == CMove:
                 rate_seconds = (step.move_speed * 60
@@ -356,7 +347,7 @@ class XDL(object):
         self.logger.info(f'    Estimated duration: {s}')
 
     @property
-    def reagent_volumes(self) -> None:
+    def reagent_volumes(self) -> Dict:
         """Compute volumes used of all liquid reagents in procedure and return
         as dict.
 
@@ -370,7 +361,7 @@ class XDL(object):
         if not self.prepared:
             self.logger.warning(
                 'prepare_for_execution must be called before reagent volumes can be calculated.')
-            return
+            return {}
         reagent_volumes = {}
         flasks = self.executor._graph_hardware.flasks
         flask_ids = [item.id for item in flasks]
@@ -491,7 +482,8 @@ class XDL(object):
             return None
 
     def prepare_for_execution(
-        self, graph_file: str = None,
+        self,
+        graph_file: str = None,
         interactive: bool = True,
         save_path: str = '',
         sanity_check: bool = True,
@@ -516,13 +508,18 @@ class XDL(object):
                     save_path=save_path,
                     sanity_check=sanity_check,
                 )
+
             elif self.platform == 'chemobot':
                 self.executor.prepare_for_execution()
 
-            self.prepared = True
-            self.logger.info('    Experiment Details\n')
-            self.print_reagent_volumes()
-            self.print_estimated_duration()
+            else:
+                raise XDLError('Invalid platform given. Valid platforms: chemputer, chemobot.')
+
+            if self.executor._prepared_for_execution:
+                self.prepared = True
+                self.logger.info('    Experiment Details\n')
+                self.print_reagent_volumes()
+                self.print_estimated_duration()
 
         else:
             self.logger.warning('Cannot call prepare for execution twice on same XDL object.')

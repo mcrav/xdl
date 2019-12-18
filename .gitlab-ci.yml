@@ -27,7 +27,6 @@ before_script:
   - pip install wheel
   # Install xdl requirements
   - pip install pytest
-  - pip install -r requirements.txt
 
   # Install Chempiler, SerialLabware and ChemputerAPI for simulations
   - pip install git+http://gitlab+deploy-token-2:u5KWxsk2hAU75o31rZUe@datalore.chem.gla.ac.uk/Chemputer/Chempiler.git@develop
