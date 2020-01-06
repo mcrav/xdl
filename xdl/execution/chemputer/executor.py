@@ -67,11 +67,11 @@ class XDLExecutor(AbstractXDLExecutor):
         enough_separators = (len(self._xdl.hardware.separators) <=
                              len(self._graph_hardware.separators))
         if not enough_reactors:
-            print(f'{len(self._xdl.hardware.reactors)} reactor required, {len(self._graph_hardware.reactors)} present.')
+            self.logger.warning(f'{len(self._xdl.hardware.reactors)} reactor required, {len(self._graph_hardware.reactors)} present.')
         if not enough_filters:
-            print(f'{len(self._xdl.hardware.filters)} filter required, {len(self._graph_hardware.filters)} present.')
+            self.logger.warning(f'{len(self._xdl.hardware.filters)} filter required, {len(self._graph_hardware.filters)} present.')
         if not enough_separators:
-            print(f'{len(self._xdl.hardware.separators)} separator required, {len(self._graph_hardware.separators)} present.')
+            self.logger.warning(f'{len(self._xdl.hardware.separators)} separator required, {len(self._graph_hardware.separators)} present.')
         return enough_reactors and enough_filters and enough_separators
 
     def _check_enough_buffer_flasks(self) -> bool:
@@ -364,7 +364,6 @@ class XDLExecutor(AbstractXDLExecutor):
         heater, chiller = None, None
         neighbors = undirected_neighbors(graph, node)
         for neighbor in neighbors:
-            print(graph.nodes[neighbor])
             if graph.nodes[neighbor]['class'] in HEATER_CLASSES:
                 heater = neighbor
             elif graph.nodes[neighbor]['class'] in CHILLER_CLASSES:

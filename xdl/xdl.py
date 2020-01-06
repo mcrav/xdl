@@ -12,7 +12,7 @@ from .localisation import HUMAN_READABLE_STEPS
 from .graphgen import graph_from_template
 from .graphgen_deprecated import get_graph
 
-from .utils import parse_bool, initialise_logger
+from .utils import parse_bool, get_logger
 from .steps import Step, AbstractBaseStep
 from .steps.chemputer import *
 from .utils.errors import XDLError
@@ -35,7 +35,7 @@ class XDL(object):
         steps: List[Step] = None,
         hardware: Hardware = None,
         reagents: List[Reagent] = None,
-        logger: logging.Logger = None,
+        logging_level: int = logging.INFO,
         platform: str = 'chemputer',
     ) -> None:
         """Init method for XDL object.
@@ -54,11 +54,8 @@ class XDL(object):
         Raises:
             ValueError: If insufficient args provided to instantiate object.
         """
-        self.logger = logger
-        if not logger:
-            self.logger = logging.getLogger('xdl_logger')
-            if not self.logger.hasHandlers():
-                self.logger = initialise_logger(self.logger)
+        self.logger = get_logger()
+        self.logger.setLevel(logging_level)
 
         self._xdl_file = None
         self.auto_clean = DEFAULT_AUTO_CLEAN
@@ -284,7 +281,7 @@ class XDL(object):
         heatchill_time_per_degree = 60 # seconds. Pretty random guess.
         fallback_wait_for_temp_time = 60 * 30 # seconds. Again random guess.
         for step in self.base_steps:
-            print(step.name,  step.properties, '\n')
+            (step.name,  step.properties, '\n')
             time = 0
             if type(step) == CMove:
                 rate_seconds = (step.move_speed * 60

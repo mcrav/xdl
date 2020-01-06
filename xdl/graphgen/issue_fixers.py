@@ -24,7 +24,6 @@ def fix_issue_dest_port_invalid(graph, issue):
 
 def fix_issue_replace_flask_with_cartridge(graph, issue):
     for neighbor in undirected_neighbors(graph, issue['valve']):
-        print(neighbor, issue)
         if graph.nodes[neighbor]['class'] == 'ChemputerFlask':
             graph.remove_node(neighbor)
             return

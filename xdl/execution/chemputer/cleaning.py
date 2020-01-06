@@ -10,6 +10,7 @@ from ...steps.chemputer import *
 from ...hardware import Hardware
 from ...reagents import Reagent
 from ...constants import AQUEOUS_KEYWORDS
+from ...utils import get_logger
 
 """
 Backbone Cleaning Rules
@@ -499,22 +500,23 @@ def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
         xdl_obj (XDL): XDL object with cleaning steps amended according to user
             input.
     """
-    print('\nVerifying Cleaning Steps\n------------------------\n')
-    print('* CleanBackbone solvent indicates the step which is being verified. Other steps are shown for context.\n\n')
+    logger = get_logger()
+    logger.info('\nVerifying Cleaning Steps\n------------------------\n')
+    logger.info('* CleanBackbone solvent indicates the step which is being verified. Other steps are shown for context.\n\n')
     available_solvents = get_available_solvents(xdl_obj)
     chunks = get_cleaning_chunks(xdl_obj)
-    print('Procedure Start')
+    logger.info('Procedure Start')
     for chunk in chunks:
         for i in range(len(chunk)):
             if type(chunk[i]) == CleanBackbone:
-                print('---------------\n')
+                logger.info('---------------\n')
                 for j, step in enumerate(chunk):
                     if j == i:
-                        print(f'* CleanBackbone {step.solvent}')
+                        logger.info(f'* CleanBackbone {step.solvent}')
                     elif type(step) == CleanBackbone:
-                        print(f'CleanBackbone {step.solvent}')
+                        logger.info(f'CleanBackbone {step.solvent}')
                     else:
-                        print(step.human_readable())
+                        logger.info(step.human_readable())
                 answer = None
                 # Get appropriate answer.
                 while answer not in ['', 'y', 'n']:
@@ -538,10 +540,10 @@ def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
                         try:
                             new_solvent_index = int(new_solvent_index)
                         except ValueError:
-                            print('Input must be number corresponding to solvent.')
+                            logger.info('Input must be number corresponding to solvent.')
                     # Change CleanBackbone step solvent.
                     chunk[i].solvent = available_solvents[new_solvent_index]
-                    print(f'Solvent changed to {chunk[i].solvent}\n')
+                    logger.info(f'Solvent changed to {chunk[i].solvent}\n')
                     time.sleep(1)
 
 def get_cleaning_chunks(xdl_obj: 'XDL') -> List[List[Step]]:
