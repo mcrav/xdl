@@ -59,6 +59,7 @@ class XDL(object):
         """
         self.logger = get_logger()
         self.logger.setLevel(logging_level)
+        self.logging_level = logging_level
 
         self._xdl_file = None
         self.auto_clean = DEFAULT_AUTO_CLEAN
@@ -593,4 +594,5 @@ def xdl_copy(xdl_obj: XDL) -> XDL:
 
     return XDL(steps=copy_steps,
                reagents=copy_reagents,
-               hardware=Hardware(copy_hardware))
+               hardware=Hardware(copy_hardware),
+               logging_level=xdl_obj.logging_level)
