@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Union, Dict
 import hashlib
 import appdirs
 import os
@@ -26,7 +26,13 @@ class AbstractXDLExecutor(ABC):
         self._prepared_for_execution = False
 
     @abstractmethod
-    def prepare_for_execution(self, graph):
+    def prepare_for_execution(
+        self,
+        graph_file: Union[str, Dict],
+        interactive: bool = True,
+        save_path: str = '',
+        sanity_check: bool = True,
+    ) -> None:
         return
 
     def _graph_hash(self, graph=None):

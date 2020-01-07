@@ -1,9 +1,9 @@
-from .execution.chemputer import XDLExecutor
+from .platforms.chemputer.executor import ChemputerExecutor
 import inspect
 import re
-from .steps.chemputer import steps_synthesis
-from .steps.chemputer import steps_utility
-from .steps.chemputer import steps_base
+from .platforms.chemputer.steps import steps_synthesis
+from .platforms.chemputer.steps import steps_utility
+from .platforms.chemputer.steps import steps_base
 from .steps import Step, AbstractStep, AbstractBaseStep, AbstractAsyncStep, AbstractDynamicStep
 from .utils.errors import XDLError
 
@@ -51,7 +51,7 @@ def get_method_name(class_name):
 def xdl_controller_init(self, chempiler):
     """Initialise XDL controller."""
     self.graph = chempiler.graph.graph
-    self.executor = XDLExecutor()
+    self.executor = ChemputerExecutor()
     self.chempiler = chempiler
 
 XDLController = make_xdl_controller()
