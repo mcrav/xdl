@@ -10,10 +10,14 @@ from ..steps import Step, AbstractBaseStep
 from ..reagents import Reagent
 from ..hardware import Hardware, Component
 
+# For type annotations
+if False:
+    from ..execution.abstract_platform import AbstractPlatform
+
 def xdl_file_to_objs(
     xdl_file: str,
+    platform: 'AbstractPlatform',
     logger: logging.Logger,
-    platform: str = 'chemputer'
 ) -> Dict[str, Any]:
     """Given XDL file return steps, hardware and reagents.
 
@@ -27,12 +31,13 @@ def xdl_file_to_objs(
                   reagents: List of Reagent objects.
     """
     with open(xdl_file) as fileobj:
-        return xdl_str_to_objs(fileobj.read(), logger, platform=platform)
+        return xdl_str_to_objs(
+            xdl_str=fileobj.read(), logger=logger, platform=platform)
 
 def xdl_str_to_objs(
     xdl_str: str,
+    platform: 'AbstractPlatform',
     logger: logging.Logger,
-    platform: str = 'chemputer'
 ) -> Dict[str, Any]:
     """Given XDL str return steps, hardware and reagents.
 
@@ -47,7 +52,7 @@ def xdl_str_to_objs(
     """
     if xdl_str:
         try:
-            steps, step_record = steps_from_xdl(xdl_str)
+            steps, step_record = steps_from_xdl(xdl_str, platform)
             hardware = hardware_from_xdl(xdl_str)
             reagents = reagents_from_xdl(xdl_str)
             synthesis_attrs = synthesis_attrs_from_xdl(xdl_str)
@@ -97,7 +102,7 @@ def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
                processed_attr[attr['name']] = parse_bool(raw_attr[attr['name']])
     return processed_attr
 
-def steps_from_xdl(xdl_str: str, platform: str = 'chemputer') -> List[Step]:
+def steps_from_xdl(xdl_str: str, platform: 'AbstractPlatform') -> List[Step]:
     """Given XDL str return list of Step objects.
 
     Arguments:
@@ -107,14 +112,13 @@ def steps_from_xdl(xdl_str: str, platform: str = 'chemputer') -> List[Step]:
         List[Step]: List of Step objects corresponding to procedure described
                       in xdl_str.
     """
-    step_type_dict = get_step_type_dict(platform)
     steps = []
     xdl_tree = etree.fromstring(xdl_str)
     for element in xdl_tree.findall('*'):
         if element.tag == 'Procedure':
             step_record = get_full_step_record(element)
             for step_xdl in element.findall('*'):
-                steps.append(xdl_to_step(step_xdl, step_type_dict))
+                steps.append(xdl_to_step(step_xdl, platform.step_library))
     return steps, step_record
 
 def get_base_steps(step):
@@ -126,15 +130,6 @@ def get_base_steps(step):
     else:
         return [step]
     return base_steps
-
-def get_step_type_dict(platform: str = 'chemputer'):
-    if platform == 'chemputer':
-        from ..steps.chemputer import STEP_OBJ_DICT
-    elif platform == 'chemobot':
-        from ..steps.chemobot import STEP_OBJ_DICT
-    else:
-        raise XDLError(f"{platform} is an invalid platform. Must be 'chemputer' or 'chemobot'")
-    return STEP_OBJ_DICT
 
 def hardware_from_xdl(xdl_str: str) -> Hardware:
     """Given XDL str return Hardware object.

@@ -1,3 +1,4 @@
+from typing import Union, Dict
 if False:
     from ...xdl import XDL
 
@@ -48,7 +49,13 @@ class XDLExecutor(AbstractXDLExecutor):
                 if wheel_position > N_WHEEL_POSITIONS:
                     wheel_position -= N_WHEEL_POSITIONS
 
-    def prepare_for_execution(self):
+    def prepare_for_execution(
+        self,
+        graph_file: Union[str, Dict],
+        interactive: bool = True,
+        save_path: str = '',
+        sanity_check: bool = True,
+    ) -> None:
         """At the moment just figures out how many turns of the wheel are
         required.
         """
