@@ -2,7 +2,7 @@ from typing import List, Any
 from lxml import etree
 from ..reagents import Reagent
 from ..hardware import Hardware
-from ..steps.chemputer import Add
+from ..platforms.chemputer.steps import Add
 from ..steps import Step, AbstractBaseStep
 from ..constants import DEFAULT_VALS, INTERNAL_PROPERTIES, XDL_VERSION
 from .constants import ALWAYS_WRITE

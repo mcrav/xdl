@@ -2,7 +2,7 @@ import os
 import time
 
 from xdl.steps import Wait, AbstractDynamicStep, Add
-from xdl.execution import XDLExecutor
+from xdl.platforms.chemputer.executor import ChemputerExecutor
 
 import ChemputerAPI
 from chempiler import Chempiler
@@ -37,7 +37,7 @@ chempiler = Chempiler(
 
 def test_abstract_dynamic_step():
     step = TestDynamicStep()
-    executor = XDLExecutor(None)
+    executor = ChemputerExecutor(None)
     step.prepare_for_execution(os.path.join(HERE, 'files', 'bigrig.json'), executor)
     assert step.start_block[-2].reagent_vessel == 'flask_ether'
     step.execute(chempiler)

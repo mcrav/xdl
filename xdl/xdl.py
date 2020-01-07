@@ -14,15 +14,15 @@ from .graphgen_deprecated import get_graph
 
 from .utils import parse_bool, initialise_logger
 from .steps import Step, AbstractBaseStep
-from .steps.chemputer import *
+from .platforms.chemputer.steps import *
 from .utils.errors import XDLError
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 from .readwrite import XDLGenerator
 from .hardware import Hardware
 from .reagents import Reagent
 from .execution.abstract_platform import AbstractPlatform
-from .execution.chemputer.platform import ChemputerPlatform
-from .execution.chemobot.platform import ModularWheelPlatform
+from .platforms.chemputer import ChemputerPlatform
+from .platforms.modular_wheel import ModularWheelPlatform
 
 # For type annotations
 if False:
@@ -113,7 +113,7 @@ class XDL(object):
     def _validate_platform(self, platform):
         if platform == 'chemputer':
             self.platform = ChemputerPlatform()
-        elif platform == 'chemobot':
+        elif platform == 'modular_wheel':
             self.platform = ModularWheelPlatform()
         elif issubclass(platform, AbstractPlatform):
             self.platform = platform()
