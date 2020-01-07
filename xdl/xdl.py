@@ -70,7 +70,6 @@ class XDL(object):
         self.filter_dead_volume_solvent = None
         self.prepared = False
         self._validate_platform(platform)
-        print('PLATFORM', self.platform)
         if xdl:
             parsed_xdl = {}
             if os.path.exists(xdl):
@@ -468,7 +467,7 @@ class XDL(object):
         Here to maintain SynthReader compatibility. Eventually SynthReader should
         use new graph generator.
         """
-        if self.platform == 'chemputer':
+        if type(self.platform) == ChemputerPlatform:
             liquid_reagents = [reagent.id for reagent in self.reagents]
             cartridge_reagents = []
             for step in self.steps:
@@ -505,15 +504,13 @@ class XDL(object):
             save_path = None
             if self._xdl_file:
                 save_path = self._xdl_file.replace('.xdl', '.xdlexe')
-                self.executor.prepare_for_execution(
-                    graph_file,
-                    interactive=interactive,
-                    save_path=save_path,
-                    sanity_check=sanity_check,
-                )
 
-            else:
-                raise XDLError('Invalid platform given. Valid platforms: chemputer, chemobot.')
+            self.executor.prepare_for_execution(
+                graph_file,
+                interactive=interactive,
+                save_path=save_path,
+                sanity_check=sanity_check,
+            )
 
             if self.executor._prepared_for_execution:
                 self.prepared = True

@@ -5,7 +5,6 @@ import copy
 import sys
 import time
 from abc import ABC, abstractmethod
-from ..utils import initialise_logger
 from ..utils.misc import format_property
 from ..localisation import HUMAN_READABLE_STEPS
 
@@ -109,9 +108,8 @@ class AbstractStep(Step, ABC):
         self.final_sanity_check(chempiler.graph.graph)
         level += 1
         if not logger:
-            logger = logging.getLogger('xdl_logger')
-            if not logger.hasHandlers():
-                logger = initialise_logger(logger)
+            logger = logging.getLogger('xdl')
+
         try:
             repeats = 1
             if 'repeat' in self.properties: repeats = int(self.repeat)
