@@ -276,7 +276,7 @@ class XDL(object):
         Returns:
             float: Estimated runtime of procedure in seconds.
         """
-        if self.platform != 'chemputer':
+        if type(self.platform) != ChemputerPlatform:
             self.logger.info('Estimated duration only supported for Chemputer.')
             return -1
         if not self.prepared:

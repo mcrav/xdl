@@ -115,7 +115,10 @@ class AbstractStep(Step, ABC):
             if 'repeat' in self.properties: repeats = int(self.repeat)
             for _ in range(repeats):
                 for step in self.steps:
-                    logger.info('{0}{1}'.format('  ' * level, step.name))
+                    prop_str = ''
+                    for k, v in step.properties.items():
+                        prop_str += f'{"  " * level}  {k}: {v}\n'
+                    logger.info('Executing:\n{0}{1}\n{2}'.format('  ' * level, step.name, prop_str))
                     try:
                         keep_going = step.execute(chempiler, logger, level=level)
                     except Exception as e:
