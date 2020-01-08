@@ -221,6 +221,7 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
         'move_speed': DEFAULT_MOVE_SPEED,
         'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
         'dispense_speed': DEFAULT_DISPENSE_SPEED,
+        'use_backbone': True,
     },
     'Separate': {
         'solvent_volume': DEFAULT_SEPARATION_SOLVENT_VOLUME,
