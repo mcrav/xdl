@@ -2374,7 +2374,6 @@
           use_backbone="True" />
       </Transfer>
     </Evaporate>
-    <Distill />
   </Procedure>
 
 </Synthesis>
