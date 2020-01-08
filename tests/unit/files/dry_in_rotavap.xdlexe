@@ -118,7 +118,8 @@
         from_port="evaporate"
         to_port="0"
         unique="False"
-        through="" />
+        through=""
+        use_backbone="True" />
       <StartVacuum
         vessel="rotavap"
         pressure="600 mbar">

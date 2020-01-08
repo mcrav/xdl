@@ -133,7 +133,8 @@
           from_port="collect"
           to_port="0"
           unique="False"
-          through="None" />
+          through="None"
+          use_backbone="True" />
       </Transfer>
     </Evaporate>
   </Procedure>

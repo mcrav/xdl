@@ -104,7 +104,8 @@
             from_port="0"
             to_port="0"
             unique="False"
-            through="" />
+            through=""
+            use_backbone="True" />
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_water"
@@ -116,7 +117,8 @@
           from_port="0"
           to_port="evaporate"
           unique="False"
-          through="None" />
+          through="None"
+          use_backbone="True" />
         <Wait
           time="10 secs"
           wait_recording_speed="2000"
@@ -138,7 +140,8 @@
           from_port="0"
           to_port="evaporate"
           unique="False"
-          through="" />
+          through=""
+          use_backbone="True" />
       </Add>
       <CRotavapSetTemp
         rotavap_name="rotavap"

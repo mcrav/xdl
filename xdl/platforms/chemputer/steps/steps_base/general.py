@@ -101,7 +101,8 @@ class CMove(AbstractBaseStep):
         from_port: Optional[str] = None,
         to_port: Optional[str] = None,
         unique: Optional[bool] = False,
-        through: Optional[List[str]] = []
+        through: Optional[List[str]] = [],
+        use_backbone: Optional[bool] = 'default',
     ) -> None:
         super().__init__(locals())
 
@@ -117,6 +118,7 @@ class CMove(AbstractBaseStep):
             src_port=self.from_port,
             dest_port=self.to_port,
             through_nodes=self.through,
+            use_backbone=self.use_backbone,
         )
         return True
 
@@ -131,6 +133,7 @@ class CMove(AbstractBaseStep):
             src_port=self.from_port,
             dest_port=self.to_port,
             through_nodes=self.through,
+            use_backbone=self.use_backbone,
         )
 
     def locks(self, chempiler):
@@ -141,6 +144,7 @@ class CMove(AbstractBaseStep):
             src_port=self.from_port,
             dest_port=self.to_port,
             through_nodes=self.through,
+            use_backbone=self.use_backbone,
         )
 
 class CConnect(AbstractBaseStep):

@@ -29,7 +29,8 @@
         from_port="0"
         to_port="0"
         unique="False"
-        through="" />
+        through=""
+        use_backbone="True" />
       <CMove
         from_vessel="flask_ether"
         to_vessel="waste_reactor"
@@ -40,7 +41,8 @@
         from_port="0"
         to_port="0"
         unique="False"
-        through="" />
+        through=""
+        use_backbone="True" />
       <CMove
         from_vessel="flask_ether"
         to_vessel="waste_filter"
@@ -51,7 +53,8 @@
         from_port="0"
         to_port="0"
         unique="False"
-        through="" />
+        through=""
+        use_backbone="True" />
       <CMove
         from_vessel="flask_ether"
         to_vessel="waste_separator"
@@ -62,7 +65,8 @@
         from_port="0"
         to_port="0"
         unique="False"
-        through="" />
+        through=""
+        use_backbone="True" />
     </CleanBackbone>
     <CConnect
       from_vessel="flask_nitrogen"
@@ -128,7 +132,8 @@
         from_port="bottom"
         to_port="0"
         unique="False"
-        through="" />
+        through=""
+        use_backbone="True" />
       <StartVacuum
         vessel="vacuum_flask"
         pressure="600 mbar">
@@ -186,7 +191,8 @@
         from_port="0"
         to_port="0"
         unique="False"
-        through="" />
+        through=""
+        use_backbone="True" />
       <CMove
         from_vessel="flask_ether"
         to_vessel="waste_reactor"
@@ -197,7 +203,8 @@
         from_port="0"
         to_port="0"
         unique="False"
-        through="" />
+        through=""
+        use_backbone="True" />
       <CMove
         from_vessel="flask_ether"
         to_vessel="waste_filter"
@@ -208,7 +215,8 @@
         from_port="0"
         to_port="0"
         unique="False"
-        through="" />
+        through=""
+        use_backbone="True" />
       <CMove
         from_vessel="flask_ether"
         to_vessel="waste_separator"
@@ -219,7 +227,8 @@
         from_port="0"
         to_port="0"
         unique="False"
-        through="" />
+        through=""
+        use_backbone="True" />
     </CleanBackbone>
   </Procedure>
 
