@@ -1,5 +1,6 @@
 from ..constants import DEFAULT_VALS
 from .sanitisation import clean_properties
+from .logging import get_logger
 from typing import Dict, Any
 
 class XDLBase(object):
@@ -17,6 +18,7 @@ class XDLBase(object):
             if param != 'self':
                 self.properties[param] = params[param]
         self.get_defaults()
+        self.logger = get_logger()
 
     def load_properties(self, properties: Dict[str, Any]) -> None:
         """Load dict of properties.

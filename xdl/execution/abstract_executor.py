@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Union, Dict
 import hashlib
 import appdirs
 import os
@@ -7,6 +7,7 @@ from networkx.readwrite import node_link_data
 from ..steps.special_steps import Async, Await
 from ..readwrite.generator import XDLGenerator
 from ..utils.errors import XDLError
+from ..utils import get_logger
 
 class AbstractXDLExecutor(ABC):
     _prepared_for_execution = False
@@ -17,13 +18,21 @@ class AbstractXDLExecutor(ABC):
         if xdl:
             self.logger = xdl.logger
             self._xdl = xdl
+        else:
+            self.logger = get_logger()
         self._warnings = []
         self._raw_graph = None
         self._graph = None
         self._prepared_for_execution = False
 
     @abstractmethod
-    def prepare_for_execution(self, graph):
+    def prepare_for_execution(
+        self,
+        graph_file: Union[str, Dict],
+        interactive: bool = True,
+        save_path: str = '',
+        sanity_check: bool = True,
+    ) -> None:
         return
 
     def _graph_hash(self, graph=None):

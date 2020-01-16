@@ -12,14 +12,17 @@ from .localisation import HUMAN_READABLE_STEPS
 from .graphgen import graph_from_template
 from .graphgen_deprecated import get_graph
 
-from .utils import parse_bool, initialise_logger
+from .utils import parse_bool, get_logger
 from .steps import Step, AbstractBaseStep
-from .steps.chemputer import *
+from .platforms.chemputer.steps import *
 from .utils.errors import XDLError
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 from .readwrite import XDLGenerator
 from .hardware import Hardware
 from .reagents import Reagent
+from .platforms.abstract_platform import AbstractPlatform
+from .platforms.chemputer import ChemputerPlatform
+from .platforms.modular_wheel import ModularWheelPlatform
 
 # For type annotations
 if False:
@@ -35,7 +38,7 @@ class XDL(object):
         steps: List[Step] = None,
         hardware: Hardware = None,
         reagents: List[Reagent] = None,
-        logger: logging.Logger = None,
+        logging_level: int = logging.INFO,
         platform: str = 'chemputer',
     ) -> None:
         """Init method for XDL object.
@@ -54,11 +57,9 @@ class XDL(object):
         Raises:
             ValueError: If insufficient args provided to instantiate object.
         """
-        self.logger = logger
-        if not logger:
-            self.logger = logging.getLogger('xdl_logger')
-            if not self.logger.hasHandlers():
-                self.logger = initialise_logger(self.logger)
+        self.logger = get_logger()
+        self.logger.setLevel(logging_level)
+        self.logging_level = logging_level
 
         self._xdl_file = None
         self.auto_clean = DEFAULT_AUTO_CLEAN
@@ -69,16 +70,18 @@ class XDL(object):
         self.filter_dead_volume_method = 'inert_gas'
         self.filter_dead_volume_solvent = None
         self.prepared = False
-        self.platform = platform
-        executor_class = self._get_executor_class() # Also validates platform
+        self._validate_platform(platform)
         if xdl:
             parsed_xdl = {}
             if os.path.exists(xdl):
                 self._xdl_file = xdl
-                parsed_xdl = xdl_file_to_objs(xdl, self.logger, platform=platform)
+                parsed_xdl = xdl_file_to_objs(
+                    xdl_file=xdl, logger=self.logger, platform=self.platform)
+
             # Check XDL is XDL str and not just mistyped XDL file path.
             elif '<Synthesis' in xdl and '<Procedure>' in xdl:
-                parsed_xdl = xdl_str_to_objs(xdl, self.logger, platform=platform)
+                parsed_xdl = xdl_str_to_objs(
+                    xdl_str=xdl, logger=self.logger, platform=self.platform)
             else:
                 raise ValueError(
                     f"Can't instantiate XDL from this: \n{xdl}"
@@ -90,7 +93,7 @@ class XDL(object):
                 # Get attrs from <Synthesis> tag.
                 for k, v in parsed_xdl['procedure_attrs'].items():
                     setattr(self, k, v)
-                self.executor = executor_class(self)
+                self.executor = self.platform.executor(self)
 
             else:
                 self.logger.info('Invalid XDL given.')
@@ -99,19 +102,20 @@ class XDL(object):
               and reagents is not None
               and hardware is not None):
             self.steps, self.hardware, self.reagents = steps, hardware, reagents
-            self.executor = executor_class(self)
+            self.executor = self.platform.executor(self)
         else:
             raise ValueError(
                 "Can't create XDL object. Insufficient args given to __init__ method.")
 
-    def _get_executor_class(self):
-        if self.platform == 'chemputer':
-            from .execution.chemputer import XDLExecutor
-        elif self.platform == 'chemobot':
-            from .execution.chemobot import XDLExecutor
+    def _validate_platform(self, platform):
+        if platform == 'chemputer':
+            self.platform = ChemputerPlatform()
+        elif platform == 'modular_wheel':
+            self.platform = ModularWheelPlatform()
+        elif issubclass(platform, AbstractPlatform):
+            self.platform = platform()
         else:
-            raise XDLError(f'Platform given: {self.platform}. Valid platforms: {", ".join(VALID_PLATFORMS)}')
-        return XDLExecutor
+            raise XDLError(f'{platform} is an invalid platform. Platform must be "chemputer", "chemobot" or a subclass of AbstractPlatform.')
 
     def _get_exp_id(self, default: str = 'xdl_exp') -> str:
         """Get experiment ID name to give to the Chempiler."""
@@ -272,7 +276,7 @@ class XDL(object):
         Returns:
             float: Estimated runtime of procedure in seconds.
         """
-        if self.platform != 'chemputer':
+        if type(self.platform) != ChemputerPlatform:
             self.logger.info('Estimated duration only supported for Chemputer.')
             return -1
         if not self.prepared:
@@ -284,7 +288,7 @@ class XDL(object):
         heatchill_time_per_degree = 60 # seconds. Pretty random guess.
         fallback_wait_for_temp_time = 60 * 30 # seconds. Again random guess.
         for step in self.base_steps:
-            print(step.name,  step.properties, '\n')
+            (step.name,  step.properties, '\n')
             time = 0
             if type(step) == CMove:
                 rate_seconds = (step.move_speed * 60
@@ -464,7 +468,7 @@ class XDL(object):
         Here to maintain SynthReader compatibility. Eventually SynthReader should
         use new graph generator.
         """
-        if self.platform == 'chemputer':
+        if type(self.platform) == ChemputerPlatform:
             liquid_reagents = [reagent.id for reagent in self.reagents]
             cartridge_reagents = []
             for step in self.steps:
@@ -501,19 +505,13 @@ class XDL(object):
             save_path = None
             if self._xdl_file:
                 save_path = self._xdl_file.replace('.xdl', '.xdlexe')
-            if self.platform == 'chemputer':
-                self.executor.prepare_for_execution(
-                    graph_file,
-                    interactive=interactive,
-                    save_path=save_path,
-                    sanity_check=sanity_check,
-                )
 
-            elif self.platform == 'chemobot':
-                self.executor.prepare_for_execution()
-
-            else:
-                raise XDLError('Invalid platform given. Valid platforms: chemputer, chemobot.')
+            self.executor.prepare_for_execution(
+                graph_file,
+                interactive=interactive,
+                save_path=save_path,
+                sanity_check=sanity_check,
+            )
 
             if self.executor._prepared_for_execution:
                 self.prepared = True
@@ -583,14 +581,18 @@ def xdl_copy(xdl_obj: XDL) -> XDL:
     copy_hardware = []
 
     for step in xdl_obj.steps:
-        copy_steps.append(type(step)(**step.properties))
+        copy_props = copy.deepcopy(step.properties)
+        copy_steps.append(type(step)(**copy_props))
 
     for reagent in xdl_obj.reagents:
-        copy_reagents.append(type(reagent)(**reagent.properties))
+        copy_props = copy.deepcopy(reagent.properties)
+        copy_reagents.append(type(reagent)(**copy_props))
 
     for component in xdl_obj.hardware:
-        copy_hardware.append(type(component)(**component.properties))
+        copy_props = copy.deepcopy(component.properties)
+        copy_hardware.append(type(component)(**copy_props))
 
     return XDL(steps=copy_steps,
                reagents=copy_reagents,
-               hardware=Hardware(copy_hardware))
+               hardware=Hardware(copy_hardware),
+               logging_level=xdl_obj.logging_level)

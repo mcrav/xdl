@@ -1,4 +1,4 @@
-from xdl.execution import XDLExecutor
+from xdl.platforms.chemputer.executor import ChemputerExecutor
 from xdl.steps import Add, Transfer
 from xdl.utils.errors import IllegalPortError
 import pytest
@@ -8,7 +8,7 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')
 
 def test_port_validation():
-    executor = XDLExecutor()
+    executor = ChemputerExecutor()
     bigrig = os.path.join(FOLDER, 'bigrig.json')
     with pytest.raises(IllegalPortError):
         block = [Add(reagent="water", vessel="reactor", volume=5, port="top")]

@@ -14,7 +14,8 @@ Usage
    :caption: Contents:
 
    install
-   tutorial
+   usage_tutorial
+   platforms
    custom_steps
    reference/index
 

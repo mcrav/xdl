@@ -53,7 +53,8 @@
         from_port="bottom"
         to_port="None"
         unique="False"
-        through="" />
+        through=""
+        use_backbone="True" />
       <StartVacuum
         vessel="vacuum_flask"
         pressure="400 mbar">
