@@ -1,6 +1,6 @@
 from typing import Dict
 import abc
-from .abstract_executor import AbstractXDLExecutor
+from ..execution.abstract_executor import AbstractXDLExecutor
 from ..steps import Step
 
 class AbstractPlatform(object):

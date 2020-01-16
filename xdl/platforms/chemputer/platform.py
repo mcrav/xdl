@@ -1,6 +1,6 @@
 from .steps.collection import STEP_OBJ_DICT
 from .executor import ChemputerExecutor 
-from ...execution.abstract_platform import AbstractPlatform
+from ..abstract_platform import AbstractPlatform
 
 class ChemputerPlatform(AbstractPlatform):
 

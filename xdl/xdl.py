@@ -20,7 +20,7 @@ from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 from .readwrite import XDLGenerator
 from .hardware import Hardware
 from .reagents import Reagent
-from .execution.abstract_platform import AbstractPlatform
+from .platforms.abstract_platform import AbstractPlatform
 from .platforms.chemputer import ChemputerPlatform
 from .platforms.modular_wheel import ModularWheelPlatform
 
