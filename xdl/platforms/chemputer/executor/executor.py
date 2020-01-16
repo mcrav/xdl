@@ -16,6 +16,7 @@ if False:
 from ....execution.abstract_executor import AbstractXDLExecutor
 from ....constants import *
 from ....utils.errors import raise_error
+from ....utils.graph import get_graph
 from ....step_utils import *
 from ..steps import *
 from ....reagents import Reagent
@@ -23,7 +24,6 @@ from ....readwrite import XDLGenerator
 from .tracking import iter_vessel_contents
 from .graph import (
     hardware_from_graph,
-    get_graph,
     make_vessel_map,
     make_inert_gas_map,
     get_unused_valve_port,

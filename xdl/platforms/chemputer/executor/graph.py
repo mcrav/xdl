@@ -9,48 +9,6 @@ from networkx.algorithms.shortest_paths.generic import shortest_path_length
 from ....hardware.components import Component, Hardware
 from ....constants import CHEMPUTER_WASTE_CLASS_NAME
 
-def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
-    """Given one of the args available, return a networkx Graph object.
-
-    Args:
-        graph_file (str, optional): Path to graph file. May be GraphML file,
-            JSON file with graph in node link format, or dict containing graph
-            in same format as JSON file.
-
-    Returns:
-        networkx.classes.multidigraph: MultiDiGraph object.
-    """
-    graph = None
-    if type(graph_file) == str:
-        if graph_file.lower().endswith('.graphml'):
-            graph = MultiDiGraph(read_graphml(graph_file))
-            raw_graph = copy.deepcopy(graph)
-            name_mapping = {}
-            for node in graph.nodes():
-                name_mapping[node] = graph.nodes[node]['label']
-            graph = relabel_nodes(graph, name_mapping)
-
-        elif graph_file.lower().endswith('.json'):
-            with open(graph_file) as fileobj:
-                json_data = json.load(fileobj)
-                graph = json_graph.node_link_graph(
-                    json_data, directed=True, multigraph=True)
-            raw_graph = copy.deepcopy(graph)
-
-    elif type(graph_file) == dict:
-        graph = json_graph.node_link_graph(
-            graph_file, directed=True, multigraph=True)
-        raw_graph = copy.deepcopy(graph)
-
-    elif type(graph_file) == MultiDiGraph:
-        graph = graph_file
-        raw_graph = copy.deepcopy(graph)
-
-    for edge in graph.edges:
-        if 'port' in graph.edges[edge]:
-            port_str = graph.edges[edge]['port']
-            graph.edges[edge]['port'] = port_str[1:-1].split(',')
-    return graph, raw_graph
 
 def hardware_from_graph(graph: MultiDiGraph) -> Hardware:
     """Given networkx graph return a Hardware object corresponding to
