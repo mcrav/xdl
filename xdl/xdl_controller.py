@@ -6,6 +6,7 @@ from .platforms.chemputer.steps import steps_utility
 from .platforms.chemputer.steps import steps_base
 from .steps import Step, AbstractStep, AbstractBaseStep, AbstractAsyncStep, AbstractDynamicStep
 from .utils.errors import XDLError
+from .utils.graph import  get_graph
 
 def make_xdl_controller(platform='chemputer'):
     """Generates XDLController class. This is a class that has methods corresponding
@@ -48,9 +49,9 @@ def get_method_name(class_name):
     """Pascal case -> snake case"""
     return re.sub(r'(?<!^)([A-Z])', r'_\1', class_name).lower()
 
-def xdl_controller_init(self, chempiler):
+def xdl_controller_init(self, chempiler, graph_file):
     """Initialise XDL controller."""
-    self.graph = chempiler.graph.graph
+    self.graph, _ = get_graph(graph_file)
     self.executor = ChemputerExecutor()
     self.chempiler = chempiler
 
