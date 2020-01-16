@@ -3,6 +3,8 @@ data/
 stuff/
 build/
 documentation/_build
+documentation/public
+public/
 
 # Python
 .ipynb_checkpoints

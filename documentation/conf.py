@@ -20,8 +20,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'xdl'
-copyright = '2019, Matthew Craven'
-author = 'Matthew Craven'
+copyright = '2019, Cronin Group, University of Glasgow'
+author = 'Cronin Group'
 
 # The short X.Y version
 version = ''

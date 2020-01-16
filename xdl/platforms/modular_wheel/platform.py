@@ -1,6 +1,6 @@
 from .steps.collection import STEP_OBJ_DICT
 from .executor import ModularWheelExecutor
-from ...execution.abstract_platform import AbstractPlatform
+from ..abstract_platform import AbstractPlatform
 
 class ModularWheelPlatform(AbstractPlatform):
 
