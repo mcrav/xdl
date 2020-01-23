@@ -15,7 +15,7 @@ def get_all_backbone_valves(graph):
     backbone_valves = []
     for src, dest in graph.edges():
         if (graph.nodes[src]['class'] == 'ChemputerValve'
-            and graph.nodes[dest]['class'] == 'ChemputerPump'):
+                and graph.nodes[dest]['class'] == 'ChemputerPump'):
             backbone_valves.append(src)
     return backbone_valves
 
@@ -23,11 +23,11 @@ def undirected_neighbors(graph, node):
     already_yielded = []
     for src, dest in graph.edges():
         if src == node:
-            if not dest in already_yielded:
+            if dest not in already_yielded:
                 already_yielded.append(dest)
                 yield dest
         elif dest == node:
-            if not src in already_yielded:
+            if src not in already_yielded:
                 already_yielded.append(src)
                 yield src
 
@@ -65,14 +65,14 @@ def get_nearest_unused_ports(graph, valve, avoid=[]):
     backbone_valves = get_all_backbone_valves(graph)
     if not unused_ports:
         for neighbor in undirected_neighbors(graph, valve):
-            if neighbor in backbone_valves and not neighbor in avoid:
+            if neighbor in backbone_valves and neighbor not in avoid:
                 unused_ports = get_valve_unused_ports(graph, neighbor)
                 if unused_ports:
                     valve = neighbor
                     break
     if not unused_ports:
         for backbone_valve in backbone_valves:
-            if not backbone_valve in avoid:
+            if backbone_valve not in avoid:
                 unused_ports = get_valve_unused_ports(graph, backbone_valve)
                 if unused_ports:
                     valve = backbone_valve

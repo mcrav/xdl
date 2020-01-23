@@ -1,9 +1,3 @@
-from typing import Optional
-# For type annotations
-if False:
-    from chempiler import Chempiler
-from logging import Logger
-
 from .....step_utils.base_steps import AbstractBaseStep
 
 class CStir(AbstractBaseStep):
@@ -71,8 +65,8 @@ class CStopHeat(AbstractBaseStep):
         return True
 
 class CStirrerSetTemp(AbstractBaseStep):
-    """Sets the temperature setpoint of a hotplate stirrer. This command is NOT available
-    for overhead stirrers!
+    """Sets the temperature setpoint of a hotplate stirrer. This command is NOT
+    available for overhead stirrers!
 
     Args:
         vessel (str): Vessel name to set temperature of hotplate stirrer.
@@ -106,8 +100,9 @@ class CSetStirRate(AbstractBaseStep):
         return True
 
 class CStirrerWaitForTemp(AbstractBaseStep):
-    """Delays the script execution until the current temperature of the hotplate is within
-    0.5 °C of the setpoint. This command is NOT available for overhead stirrers!
+    """Delays the script execution until the current temperature of the
+    hotplate is within 0.5 °C of the setpoint. This command is NOT available
+    for overhead stirrers!
 
     Args:
         vessel (str): Vessel name to wait for temperature.
@@ -119,7 +114,7 @@ class CStirrerWaitForTemp(AbstractBaseStep):
         return [], [self.vessel], []
 
     def duration(self, chempiler):
-        return 2 # arbitrary value for the moment
+        return 2  # arbitrary value for the moment
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.wait_for_temp(self.vessel)

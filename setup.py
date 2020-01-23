@@ -1,9 +1,10 @@
 from distutils.core import setup
 from setuptools import find_packages
+from xdl.constants import XDL_VERSION
 
 setup(
     name='xdl',
-    version='0.1.0',
+    version=XDL_VERSION,
     description='Package for working with XDL (chemical descriptive language).',
     author='Matthew Craven',
     author_email='matthew.craven@glasgow.ac.uk',

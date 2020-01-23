@@ -1,4 +1,3 @@
-from ..constants import *
 from ..utils.xdl_base import XDLBase
 from ..utils.errors import XDLError
 
@@ -37,4 +36,5 @@ class Reagent(XDLBase):
         try:
             assert not self.role or self.role in VALID_REAGENT_ROLES
         except AssertionError:
-            raise XDLError(f'Invalid role "{self.role}" given for reagent "{self.id}". Valid roles: {", ".join(VALID_REAGENT_ROLES)}')
+            raise XDLError(f'Invalid role "{self.role}" given for reagent\
+ "{self.id}". Valid roles: {", ".join(VALID_REAGENT_ROLES)}')

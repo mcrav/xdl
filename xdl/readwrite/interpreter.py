@@ -1,7 +1,5 @@
 import logging
-import re
-import copy
-from typing import Dict, List, Any, Optional, Union
+from typing import Dict, List, Any
 from lxml import etree
 from .validation import check_attrs_are_valid
 from ..constants import SYNTHESIS_ATTRS
@@ -26,9 +24,9 @@ def xdl_file_to_objs(
 
     Returns:
         Dict: (steps, hardware, reagents)
-                  steps: List of Step objects.
-                  hardware: Hardware object.
-                  reagents: List of Reagent objects.
+                steps: List of Step objects.
+                hardware: Hardware object.
+                reagents: List of Reagent objects.
     """
     with open(xdl_file) as fileobj:
         return xdl_str_to_objs(
@@ -76,7 +74,7 @@ def xdl_str_to_objs(
 
 def apply_step_record(step, step_record_step):
     assert step.name == step_record_step[0]
-    for prop, val in step.properties.items():
+    for prop in step.properties:
         step.properties[prop] = step_record_step[1][prop]
     step.update()
     if not isinstance(step, AbstractBaseStep):
@@ -97,9 +95,10 @@ def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
     processed_attr = {}
     for attr in SYNTHESIS_ATTRS:
         if attr['name'] in raw_attr:
-           processed_attr[attr['name']] = raw_attr[attr['name']]
-           if attr['type'] == bool:
-               processed_attr[attr['name']] = parse_bool(raw_attr[attr['name']])
+            processed_attr[attr['name']] = raw_attr[attr['name']]
+            if attr['type'] == bool:
+                processed_attr[attr['name']] = parse_bool(
+                    raw_attr[attr['name']])
     return processed_attr
 
 def steps_from_xdl(xdl_str: str, platform: 'AbstractPlatform') -> List[Step]:
@@ -192,7 +191,7 @@ def xdl_to_step(
         Step: Step object corresponding to step in xdl_step_element.
     """
     # Check if step name is valid and get step class.
-    if not xdl_step_element.tag in step_type_dict:
+    if xdl_step_element.tag not in step_type_dict:
         raise XDLError(f'{xdl_step_element.tag} is not a valid step type.')
 
     children = xdl_step_element.findall('*')
@@ -208,7 +207,8 @@ def xdl_to_step(
         if attrs[attr].lower() == 'none':
             attrs[attr] = None
 
-    if not issubclass(step_type, AbstractBaseStep) and 'children' in step_type.__init__.__annotations__:
+    if (not issubclass(step_type, AbstractBaseStep)
+            and 'children' in step_type.__init__.__annotations__):
         attrs['children'] = children_steps
 
     # Try to instantiate step, any invalid values given will throw an error
@@ -218,7 +218,8 @@ def xdl_to_step(
     except Exception as e:
         raise_error(
             e,
-            f'Error instantiating {step_type.__name__} step with following properties: \n{attrs}')
+            f'Error instantiating {step_type.__name__} step with following\
+ properties: \n{attrs}')
     return step
 
 def xdl_to_component(xdl_component_element: etree._Element) -> Component:
@@ -234,11 +235,11 @@ def xdl_to_component(xdl_component_element: etree._Element) -> Component:
     """
     attrs = dict(xdl_component_element.attrib)
     # Check 'id' is in attrs..
-    if not 'id' in attrs:
+    if 'id' not in attrs:
         raise XDLError(
             "'id' attribute not specified for component.")
     #  Check 'type' is in attrs.
-    if not 'type' in attrs:
+    if 'type' not in attrs:
         raise XDLError(
             f"'type' attribute not specified for {attrs['id']} component.")
     check_attrs_are_valid(attrs, Component)
@@ -253,7 +254,8 @@ def xdl_to_component(xdl_component_element: etree._Element) -> Component:
     except Exception as e:
         raise_error(
             e,
-            f'Error instantiating Component with following attributes: \n{attrs}'
+            f'Error instantiating Component with following attributes:\n\
+{attrs}'
         )
     return component
 
@@ -269,7 +271,7 @@ def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
     """
     # Check attrs are valid for Reagent
     attrs = dict(xdl_reagent_element.attrib)
-    if not 'id' in attrs:
+    if 'id' not in attrs:
         raise XDLError(
             "'id' attribute not specified for reagent.")
     check_attrs_are_valid(attrs, Reagent)
@@ -284,9 +286,9 @@ def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
     return reagent
 
 
-##############################
-### ChemEXE interpretation ###
-##############################
+##########################
+# .xdlexe interpretation #
+##########################
 
 def get_full_step_record(procedure_tree):
     step_record = []

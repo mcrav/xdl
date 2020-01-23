@@ -1,10 +1,7 @@
-from typing import Dict, List
+from typing import Dict
 import json
 import os
-import copy
-import re
 from .constants import (
-    HEATER_CHILLER_TEMP_RANGES,
     REMOVE_SRC_PORT,
     REMOVE_DEST_PORT,
     SRC_PORT_INVALID,
@@ -12,13 +9,11 @@ from .constants import (
     SWITCH_TO_IN_EDGE,
     SWITCH_TO_OUT_EDGE
 )
-from .utils import parse_port, get_backbone_valve, undirected_neighbors
 from .issue_fixers import (
     fix_issue_remove_src_port,
     fix_issue_remove_dest_port,
     fix_issue_src_port_invalid,
     fix_issue_dest_port_invalid,
-    fix_issue_replace_flask_with_cartridge,
     fix_issue_switch_to_in_edge,
     fix_issue_switch_to_out_edge
 )
@@ -27,7 +22,6 @@ from .get_graph_spec import get_graph_spec
 from .apply_graph_spec import apply_spec_to_template
 
 from ..utils.errors import XDLError
-from ..constants import INERT_GAS_SYNONYMS, VALID_PORTS
 from networkx.readwrite import node_link_data, node_link_graph
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -53,7 +47,13 @@ def load_template(template=DEFAULT_TEMPLATE) -> Dict:
     with open(template) as fd:
         return json.load(fd)
 
-def graph_from_template(xdl_obj, template=None, save=None, auto_fix_issues=False, ignore_errors=[]):
+def graph_from_template(
+    xdl_obj,
+    template=None,
+    save=None,
+    auto_fix_issues=False,
+    ignore_errors=[]
+):
     graph = node_link_graph(load_template(template), directed=True)
     graph_spec = get_graph_spec(xdl_obj)
     fixable_issues, errors = check_graph_spec(graph_spec, graph)
@@ -62,7 +62,8 @@ def graph_from_template(xdl_obj, template=None, save=None, auto_fix_issues=False
     if errors:
         error_str = '\n  -- '.join([error['msg'] for error in errors])
         error_str = '  -- ' + error_str
-        raise XDLError(f'Graph template supplied cannot be used for this procedure. Errors:\n{error_str}')
+        raise XDLError(f'Graph template supplied cannot be used for this\
+ procedure. Errors:\n{error_str}')
 
     if fixable_issues:
         if not auto_fix_issues:
@@ -75,7 +76,8 @@ def graph_from_template(xdl_obj, template=None, save=None, auto_fix_issues=False
                 if not answer or answer in ['y', 'Y']:
                     continue
                 elif answer in ['n', 'N']:
-                    raise XDLError(f'Graph template supplied cannot be used for this procedure. Issue: {issue["msg"]}')
+                    raise XDLError(f'Graph template supplied cannot be used for\
+ this procedure. Issue: {issue["msg"]}')
 
         for issue in fixable_issues:
             FIXABLE_ISSUES[issue['issue']](graph, issue)

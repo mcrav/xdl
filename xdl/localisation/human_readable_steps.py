@@ -42,7 +42,8 @@ def load_localisations():
             localisations.extend(read_localisation_file(f_path))
 
     localisations.extend(
-        read_localisation_file(os.path.join(HERE, 'chemputer', 'unimplemented_steps.txt')))
+        read_localisation_file(
+            os.path.join(HERE, 'chemputer', 'unimplemented_steps.txt')))
     localisations.extend(
         read_localisation_file(os.path.join(HERE, 'special_steps.txt')))
 
@@ -52,5 +53,6 @@ def load_localisations():
         del localisation['name']
         localisation_dict[name] = localisation
     return localisation_dict
+
 
 HUMAN_READABLE_STEPS = load_localisations()

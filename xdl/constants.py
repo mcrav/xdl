@@ -4,13 +4,13 @@ from typing import Dict, List, Any
 # in header at top of outputted XDL files.
 XDL_VERSION: str = '0.2.0'
 
-##########################
-### DEFAULT PARAMETERS ###
-##########################
+######################
+# DEFAULT PARAMETERS #
+######################
 
-##########
-## Move ##
-##########
+########
+# Move #
+########
 #: Default speed to move liquid in mL / min.
 DEFAULT_MOVE_SPEED: int = 40
 
@@ -21,17 +21,18 @@ DEFAULT_ASPIRATION_SPEED: int = 10
 #: Default dispence speed (speed pushing liquid out of pump) in mL / min.
 DEFAULT_DISPENSE_SPEED: int = DEFAULT_MOVE_SPEED
 
-#: Default volume of reagent to move to waste to prime the tubes before Add step.
-DEFAULT_PUMP_PRIME_VOLUME: int = 3 # mL
+#: Default volume of reagent to move to waste to prime the tubes before Add
+#: step.
+DEFAULT_PUMP_PRIME_VOLUME: int = 3  # mL
 
-DEFAULT_AIR_FLUSH_TUBE_VOLUME = 5 # mL
+DEFAULT_AIR_FLUSH_TUBE_VOLUME = 5  # mL
 
 #: Default aspiration speed for viscous liquids.
-DEFAULT_VISCOUS_ASPIRATION_SPEED = 2 # mL / min
+DEFAULT_VISCOUS_ASPIRATION_SPEED = 2  # mL / min
 
-################
-## Separation ##
-################
+##############
+# Separation #
+##############
 #: Default solvent volume to use in separation in mL.
 DEFAULT_SEPARATION_SOLVENT_VOLUME: int = 30
 
@@ -50,9 +51,9 @@ DEFAULT_SEPARATION_SLOW_STIR_SPEED: int = 30
 #: Default time to allow separation mixture to settle after stirring.
 DEFAULT_SEPARATION_SETTLE_TIME: int = 60 * 5
 
-##############
-## Cleaning ##
-##############
+############
+# Cleaning #
+############
 #: Default value for auto_clean, determines whether clean backbone steps are
 #: inserted between appropriate steps.
 DEFAULT_AUTO_CLEAN: bool = True
@@ -68,7 +69,7 @@ DEFAULT_AQUEOUS_CLEANING_SOLVENT: str = 'water'
 DEFAULT_CLEAN_BACKBONE_VOLUME: int = 3
 
 #: Default volume in mL of solvent to clean vessel with.
-DEFAULT_CLEAN_VESSEL_VOLUME: int = 10 # mL
+DEFAULT_CLEAN_VESSEL_VOLUME: int = 10  # mL
 
 #: Default time in seconds to stir vessel during CleanVessel step.
 DEFAULT_CLEAN_VESSEL_STIR_TIME: int = 60
@@ -76,11 +77,11 @@ DEFAULT_CLEAN_VESSEL_STIR_TIME: int = 60
 #: Default stir rate in RPM for CleanVessel step.
 DEFAULT_CLEAN_VESSEL_STIR_SPEED: int = 500
 
-#############
-## Rotavap ##
-#############
+###########
+# Rotavap #
+###########
 #: Default time in seconds for evaporating mixture to dryness.
-DEFAULT_ROTAVAP_DRYING_TIME: int = 2* 60 * 60
+DEFAULT_ROTAVAP_DRYING_TIME: int = 2 * 60 * 60
 
 #: Default rotation speed in RPM for rotavap.
 DEFAULT_ROTAVAP_ROTATION_SPEED: int = 150
@@ -91,17 +92,17 @@ DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED: int = 250
 #: Default time to wait for bath to heat up with rotavap.
 DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME: int = 60 * 5
 
-###############
-## Filtering ##
-###############
+#############
+# Filtering #
+#############
 #: Default aspiration speed for removing solvent from filter vessel.
 DEFAULT_FILTER_ASPIRATION_SPEED: int = 5
 
 #: Default time in seconds to wait with vacuum on while filtering.
-DEFAULT_FILTER_WAIT_TIME: int = 60*2
+DEFAULT_FILTER_WAIT_TIME: int = 60 * 2
 
 #: Default pressure to set vacuum to while filtering.
-DEFAULT_FILTER_VACUUM_PRESSURE: int = 400 # mbar
+DEFAULT_FILTER_VACUUM_PRESSURE: int = 400  # mbar
 
 #: Default volume of solvent to use when washing a filter cake.
 DEFAULT_WASHFILTERCAKE_VOLUME: int = 20
@@ -109,10 +110,12 @@ DEFAULT_WASHFILTERCAKE_VOLUME: int = 20
 #: Default time to stir mixture for after adding solvent but before filtering.
 DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME: int = 30
 
-#: Default speed in RPM to stir mixture after adding solvent but before filtering.
+#: Default speed in RPM to stir mixture after adding solvent but before
+#: filtering.
 DEFAULT_WASHFILTERCAKE_STIR_SPEED: int = 500
 
-#: Default time in seconds to wait for with vacuum on when washing a filter cake.
+#: Default time in seconds to wait for with vacuum on when washing a filter
+#: cake.
 DEFAULT_WASHFILTERCAKE_VACUUM_TIME: int = 10
 
 #: Default volume factor to remove solvent after washing filter cake,
@@ -120,7 +123,7 @@ DEFAULT_WASHFILTERCAKE_VACUUM_TIME: int = 10
 DEFAULT_FILTER_EXCESS_REMOVE_FACTOR: float = 1.5
 
 #: Default time in seconds to wait for with vacuum on when drying a filter cake.
-DEFAULT_DRY_TIME: int = 60*60
+DEFAULT_DRY_TIME: int = 60 * 60
 
 #: Default volume in mL to transfer from bottom of filter flask to waste after
 #: drying filter cake.
@@ -133,18 +136,18 @@ DEFAULT_FILTER_THROUGH_MOVE_SPEED: int = 5
 #: FilterThrough step to push out any remaining liquid.
 DEFAULT_CARTRIDGE_DEAD_VOLUME: int = 25
 
-#################
-### WashSolid ###
-#################
+#############
+# WashSolid #
+#############
 DEFAULT_WASH_SOLID_STIR_SPEED: int = 400
 
 DEFAULT_WASH_SOLID_STIR_TIME: int = 60 * 5
 
 DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED: int = 2
 
-#########
-## Add ##
-#########
+#######
+# Add #
+#######
 #: Default time in seconds to wait with stirring after addition of a reagent.
 DEFAULT_AFTER_ADD_WAIT_TIME: int = 10
 
@@ -154,9 +157,9 @@ DEFAULT_ANTICLOGGING_REAGENT_VOLUME: int = 10
 #: Default portion of solvent to transfer in each loop cycle of anticlogging add
 DEFAULT_ANTICLOGGING_SOLVENT_VOLUME: int = 2
 
-##############
-## Stirring ##
-##############
+############
+# Stirring #
+############
 #: Default speed in RPM to stir at.
 DEFAULT_STIR_SPEED: int = 250
 
@@ -166,24 +169,24 @@ DEFAULT_DISSOLVE_STIR_SPEED: int = 400
 #: Default speed to stir reagents that specify stirring in reagent flask.
 DEFAULT_STIR_REAGENT_FLASK_SPEED: int = 200
 
-#####################
-### Precipitation ###
-#####################
+#################
+# Precipitation #
+#################
 #: Default time to stir for after precipitation temperature is reached.
 DEFAULT_PRECIPITATION_TIME = 60 * 60
 
 #: Default temp in celsius to chill to for precipitation.
 DEFAULT_PRECIPITATION_TEMP = 25
 
-#########################
-### Recrystallization ###
-#########################
+#####################
+# Recrystallization #
+#####################
 
 DEFAULT_RECRYSTALLIZATION_WAIT_TIME: int = 60 * 60 * 2
 
-##################
-### Evacuation ###
-##################
+##############
+# Evacuation #
+##############
 
 #: Number of vacuum/inert gas cycles to do during Evacuate.
 DEFAULT_EVACUATE_N_EVACUTIONS: int = 3
@@ -195,19 +198,19 @@ DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME: float = 60
 DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME: float = 60
 
 #: Default vacuum pressure when evacuating flask
-DEFAULT_EVACUATE_VACUUM_PRESSURE: float = 50 # mbar
+DEFAULT_EVACUATE_VACUUM_PRESSURE: float = 50  # mbar
 
-#########################
-### Recrystallization ###
-#########################
+#####################
+# Recrystallization #
+#####################
 
 DEFAULT_RECRYSTALLIZE_WAIT_TIME = 60 * 120
 
 DEFAULT_RECRYSTALLIZE_TEMP = 25
 
-###########
-## Video ##
-###########
+#########
+# Video #
+#########
 #: Default recording speed in multiples of real time speed.
 DEFAULT_RECORDING_SPEED: int = 14
 
@@ -407,9 +410,9 @@ INTERNAL_PROPERTIES = {
 }
 
 
-####################################
-### CHEMPUTER DEVICE CLASS NAMES ###
-####################################
+################################
+# CHEMPUTER DEVICE CLASS NAMES #
+################################
 
 CHEMPUTER_REACTOR_CLASS_NAME: str = 'ChemputerReactor'
 CHEMPUTER_SEPARATOR_CLASS_NAME: str = 'ChemputerSeparator'
@@ -425,7 +428,8 @@ IKA_RCT_DIGITAL_CLASS_NAME: str = 'IKARCTDigital'
 IKA_RET_CONTROL_VISC: str = 'IKARETControlVisc'
 
 HEATER_CLASSES: List[str] = [IKA_RCT_DIGITAL_CLASS_NAME, IKA_RET_CONTROL_VISC]
-CHILLER_CLASSES: List[str] = [JULABO_CF41_CLASS_NAME, HUBER_PETITE_FLEUR_CLASS_NAME]
+CHILLER_CLASSES: List[str] = [
+    JULABO_CF41_CLASS_NAME, HUBER_PETITE_FLEUR_CLASS_NAME]
 
 CHILLER_MIN_TEMP: int = -40
 CHILLER_MAX_TEMP: int = 140
@@ -465,9 +469,9 @@ FILTER_DEAD_VOLUME_INERT_GAS_METHOD: str = 'inert_gas'
 FILTER_DEAD_VOLUME_LIQUID_METHOD: str = 'solvent'
 
 
-############
-### MISC ###
-############
+########
+# MISC #
+########
 
 #: Valid platforms for XDL
 VALID_PLATFORMS: List[str] = ['chemputer', 'chemobot']
@@ -476,7 +480,7 @@ VALID_PLATFORMS: List[str] = ['chemputer', 'chemobot']
 INERT_GAS_SYNONYMS: List[str] = ['nitrogen', 'n2', 'ar', 'argon']
 
 #: Default duration for base steps when the command is basically instantaneous
-DEFAULT_INSTANT_DURATION = 1 # s
+DEFAULT_INSTANT_DURATION = 1  # s
 
 #: Room temperature in °C
 ROOM_TEMPERATURE: int = 25
@@ -529,9 +533,9 @@ UNSCALED_STEPS = [
     'CleanVessel', 'AddFilterDeadVolume', 'RemoveFilterDeadVolume']
 
 
-#######################
-### Parallelisation ###
-#######################
+###################
+# Parallelisation #
+###################
 
 #: Time to wait during venting of vacuum to ambient pressure.
 DEFAULT_VACUUM_VENT_WAIT_TIME: float = 60

@@ -1,56 +1,9 @@
-from typing import Union, Dict, Tuple
-import json
-import copy
+from typing import Dict, Tuple
 
-from networkx.readwrite import json_graph
-from networkx import MultiDiGraph, read_graphml, NetworkXNoPath, relabel_nodes
+from networkx import MultiDiGraph, NetworkXNoPath
 from networkx.algorithms.shortest_paths.generic import shortest_path_length
 
 from ....hardware.components import Component, Hardware
-from ....constants import CHEMPUTER_WASTE_CLASS_NAME
-
-def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
-    """Given one of the args available, return a networkx Graph object.
-
-    Args:
-        graph_file (str, optional): Path to graph file. May be GraphML file,
-            JSON file with graph in node link format, or dict containing graph
-            in same format as JSON file.
-
-    Returns:
-        networkx.classes.multidigraph: MultiDiGraph object.
-    """
-    graph = None
-    if type(graph_file) == str:
-        if graph_file.lower().endswith('.graphml'):
-            graph = MultiDiGraph(read_graphml(graph_file))
-            raw_graph = copy.deepcopy(graph)
-            name_mapping = {}
-            for node in graph.nodes():
-                name_mapping[node] = graph.nodes[node]['label']
-            graph = relabel_nodes(graph, name_mapping)
-
-        elif graph_file.lower().endswith('.json'):
-            with open(graph_file) as fileobj:
-                json_data = json.load(fileobj)
-                graph = json_graph.node_link_graph(
-                    json_data, directed=True, multigraph=True)
-            raw_graph = copy.deepcopy(graph)
-
-    elif type(graph_file) == dict:
-        graph = json_graph.node_link_graph(
-            graph_file, directed=True, multigraph=True)
-        raw_graph = copy.deepcopy(graph)
-
-    elif type(graph_file) == MultiDiGraph:
-        graph = graph_file
-        raw_graph = copy.deepcopy(graph)
-
-    for edge in graph.edges:
-        if 'port' in graph.edges[edge]:
-            port_str = graph.edges[edge]['port']
-            graph.edges[edge]['port'] = port_str[1:-1].split(',')
-    return graph, raw_graph
 
 def hardware_from_graph(graph: MultiDiGraph) -> Hardware:
     """Given networkx graph return a Hardware object corresponding to
@@ -67,14 +20,15 @@ def hardware_from_graph(graph: MultiDiGraph) -> Hardware:
         props = graph.nodes[node]
         props['type'] = props['class']
         component = Component(node, props['type'])
-        if props['type'] == 'ChemputerFlask' and not 'chemical' in props:
+        if props['type'] == 'ChemputerFlask' and 'chemical' not in props:
             props['chemical'] = ''
         component.properties.update(props)
         components.append(component)
     return Hardware(components)
 
 def make_vessel_map(
-    graph: MultiDiGraph, target_vessel_class: str) -> Dict[str, str]:
+    graph: MultiDiGraph, target_vessel_class: str
+) -> Dict[str, str]:
     """Given graph, make dict with nodes as keys and nearest waste vessels to
     each node as values, i.e. {node: nearest_waste_vessel}.
 
@@ -131,8 +85,8 @@ def make_inert_gas_map(graph: MultiDiGraph):
         for node in graph.nodes()
         if (graph.nodes[node]['type'] == 'ChemputerFlask'
             and 'chemical' in graph.nodes[node]
-            and graph.nodes[node]['chemical'].lower() in ['nitrogen', 'argon',
-                                                         'n2', 'ar'])
+            and graph.nodes[node]['chemical'].lower() in [
+                'nitrogen', 'argon', 'n2', 'ar'])
     ]
     inert_gas_map = {}
     for vessel in vessels:
@@ -174,13 +128,14 @@ def get_unused_valve_port(valve_node: str, graph: MultiDiGraph) -> int:
             used_ports.append(int(edge_data['port'][0]))
 
     # Return first found unconnected valve positions.
-    for i in range(-1, 6): # Possible valve ports are -1, 0, 1, 2, 3, 4, 5.
+    for i in range(-1, 6):  # Possible valve ports are -1, 0, 1, 2, 3, 4, 5.
         if i not in used_ports:
             return i
     return None
 
 def vacuum_device_attached_to_flask(
-    flask_node: str, graph: MultiDiGraph) -> bool:
+    flask_node: str, graph: MultiDiGraph
+) -> bool:
     """Return True if given vacuum flask is attached to a vacuum device. If it
     is attached to nothing (i.e. vacuum line in fumehood) return False.
 
@@ -198,7 +153,8 @@ def vacuum_device_attached_to_flask(
     return None
 
 def get_pneumatic_controller(
-    vessel: str, port: str, graph: MultiDiGraph) -> Tuple[str, int]:
+    vessel: str, port: str, graph: MultiDiGraph
+) -> Tuple[str, int]:
     """Given vessel, return pneumatic controller node that is a direct neighbour
     of the vessel in the graph, with the pneumatic controller port number.
 

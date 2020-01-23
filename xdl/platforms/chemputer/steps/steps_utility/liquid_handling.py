@@ -1,9 +1,8 @@
-from typing import Optional, List, Dict
+from typing import Optional, List
 
 from .....constants import DEFAULT_PORTS, DEFAULT_VISCOUS_ASPIRATION_SPEED
 from .....step_utils.base_steps import AbstractStep, Step
 from ..steps_base import CMove
-from .....utils.misc import get_port_str
 from .....localisation import HUMAN_READABLE_STEPS
 
 class PrimePumpForAdd(AbstractStep):
@@ -100,7 +99,7 @@ class Transfer(AbstractStep):
             return self.volume / (self.time / 60)
         return self.dispense_speed
 
-    def get_aspiration_speed(self)  -> float:
+    def get_aspiration_speed(self) -> float:
         if self.viscous:
             return DEFAULT_VISCOUS_ASPIRATION_SPEED
         return self.aspiration_speed
@@ -109,11 +108,13 @@ class Transfer(AbstractStep):
         try:
             if self.through:
                 if self.volume == 'all':
-                    return HUMAN_READABLE_STEPS['Transfer (all through)'][language].format(
-                        **self.formatted_properties())
+                    return HUMAN_READABLE_STEPS[
+                        'Transfer (all through)'][language].format(
+                            **self.formatted_properties())
                 else:
-                    return HUMAN_READABLE_STEPS['Transfer (through)'][language].format(
-                        **self.formatted_properties())
+                    return HUMAN_READABLE_STEPS[
+                        'Transfer (through)'][language].format(
+                            **self.formatted_properties())
             elif self.volume == 'all':
                 return HUMAN_READABLE_STEPS['Transfer (all)'][language].format(
                     **self.formatted_properties())

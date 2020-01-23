@@ -73,6 +73,6 @@ class Evacuate(AbstractStep):
 
         return steps
 
-
     def human_readable(self, language='en'):
-        return f'Perform {self.evacuations} evacuations of {self.vessel} with inert gas.'
+        return f'Perform {self.evacuations} evacuations of {self.vessel} with\
+ inert gas.'

@@ -1,8 +1,4 @@
 from typing import Optional
-# For type annotations
-if False:
-    from chempiler import Chempiler
-from logging import Logger
 
 from .....step_utils.base_steps import AbstractBaseStep
 from .....constants import DEFAULT_ROTAVAP_WAIT_FOR_ARM_TIME
@@ -170,8 +166,9 @@ class CRotavapSetRotationSpeed(AbstractBaseStep):
         return True
 
 class CRotavapSetInterval(AbstractBaseStep):
-    """Sets the interval time for the rotary evaporator, causing it to periodically switch
-    direction. Setting this to 0 deactivates interval operation.
+    """Sets the interval time for the rotary evaporator, causing it to
+    periodically switch direction. Setting this to 0 deactivates interval
+    operation.
 
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.

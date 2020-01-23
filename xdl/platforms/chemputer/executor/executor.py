@@ -1,29 +1,61 @@
-import statistics
 import copy
-import logging
-import hashlib
-import os
-import appdirs
-from typing import List, Union, Tuple
+from typing import List, Union, Tuple, Dict, Optional
 
 from networkx import MultiDiGraph
 from networkx.algorithms.shortest_paths.generic import shortest_path_length
-from networkx.readwrite import node_link_data
-if False:
-    from ....xdl import XDL
-    from chempiler import Chempiler
 
 from ....execution.abstract_executor import AbstractXDLExecutor
-from ....constants import *
-from ....utils.errors import raise_error
-from ....step_utils import *
-from ..steps import *
-from ....reagents import Reagent
-from ....readwrite import XDLGenerator
+from ....constants import (
+    DEFAULT_PORTS,
+    BOTTOM_PORT,
+    DEFAULT_STIR_SPEED,
+    DEFAULT_STIR_REAGENT_FLASK_SPEED,
+    CHEMPUTER_FILTER_CLASS_NAME,
+    CHEMPUTER_WASTE_CLASS_NAME,
+    CHEMPUTER_VACUUM_CLASS_NAME,
+    CHEMPUTER_VALVE_CLASS_NAME,
+    HEATER_CLASSES,
+    CHILLER_CLASSES,
+    FILTER_DEAD_VOLUME_INERT_GAS_METHOD,
+    FILTER_DEAD_VOLUME_LIQUID_METHOD,
+    INERT_GAS_SYNONYMS,
+)
+from ....utils.graph import get_graph, undirected_neighbors
+from ....utils.errors import XDLError
+from ....step_utils import (
+    AbstractBaseStep,
+    AbstractAsyncStep,
+    AbstractStep,
+    Step,
+)
+from ..steps import (
+    RunColumn,
+    FilterThrough,
+    Separate,
+    CleanVessel,
+    CleanBackbone,
+    Add,
+    Transfer,
+    Dry,
+    Filter,
+    Wait,
+    Evaporate,
+    WashSolid,
+    AddFilterDeadVolume,
+    RemoveFilterDeadVolume,
+    StartHeatChill,
+    StopHeatChill,
+    StartStir,
+    StopStir,
+    CSetStirRate,
+    CStir,
+    CStopStir,
+    CMove,
+    CConnect,
+)
 from .tracking import iter_vessel_contents
 from .graph import (
     hardware_from_graph,
-    get_graph,
     make_vessel_map,
     make_inert_gas_map,
     get_unused_valve_port,
@@ -52,26 +84,29 @@ class ChemputerExecutor(AbstractXDLExecutor):
         xdl (XDL): XDL object to execute.
     """
 
-    ####################################
-    ### CHECK HARDWARE COMPATIBILITY ###
-    ####################################
+    ################################
+    # CHECK HARDWARE COMPATIBILITY #
+    ################################
 
     def _hardware_is_compatible(self) -> bool:
         """Determine if XDL hardware object can be mapped to hardware available
         in graph.
         """
-        enough_reactors = (len(self._xdl.hardware.reactors) <=
-                           len(self._graph_hardware.reactors))
-        enough_filters = (len(self._xdl.hardware.filters) <=
-                          len(self._graph_hardware.filters))
-        enough_separators = (len(self._xdl.hardware.separators) <=
-                             len(self._graph_hardware.separators))
+        enough_reactors = (len(self._xdl.hardware.reactors)
+                           <= len(self._graph_hardware.reactors))
+        enough_filters = (len(self._xdl.hardware.filters)
+                          <= len(self._graph_hardware.filters))
+        enough_separators = (len(self._xdl.hardware.separators)
+                             <= len(self._graph_hardware.separators))
         if not enough_reactors:
-            self.logger.warning(f'{len(self._xdl.hardware.reactors)} reactor required, {len(self._graph_hardware.reactors)} present.')
+            self.logger.warning(f'{len(self._xdl.hardware.reactors)} reactor\
+ required, {len(self._graph_hardware.reactors)} present.')
         if not enough_filters:
-            self.logger.warning(f'{len(self._xdl.hardware.filters)} filter required, {len(self._graph_hardware.filters)} present.')
+            self.logger.warning(f'{len(self._xdl.hardware.filters)} filter\
+ required, {len(self._graph_hardware.filters)} present.')
         if not enough_separators:
-            self.logger.warning(f'{len(self._xdl.hardware.separators)} separator required, {len(self._graph_hardware.separators)} present.')
+            self.logger.warning(f'{len(self._xdl.hardware.separators)}\
+ separator required, {len(self._graph_hardware.separators)} present.')
         return enough_reactors and enough_filters and enough_separators
 
     def _check_enough_buffer_flasks(self) -> bool:
@@ -92,7 +127,8 @@ class ChemputerExecutor(AbstractXDLExecutor):
         if buffer_flasks_required:
             buffer_flasks_required = max(buffer_flasks_required)
             for vessel in list(set(vessels_for_search)):
-                vessel_buffer_flasks = self._get_buffer_flask(vessel, return_single=False)
+                vessel_buffer_flasks = self._get_buffer_flask(
+                    vessel, return_single=False)
                 if vessel_buffer_flasks:
                     buffer_flasks_present.extend(vessel_buffer_flasks)
             buffer_flasks_present = len(buffer_flasks_present)
@@ -127,7 +163,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
                     if flask.chemical == reagent.id:
                         reagent_flask_present = True
                         break
-            if reagent_flask_present == False:
+            if reagent_flask_present is False:
                 self.logger.warning(
                     'WARNING: No flask present for {0}'.format(reagent.id))
                 flasks_ok = False
@@ -145,7 +181,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
             cartridge.chemical for cartridge in self._graph_hardware.cartridges]
         for step in self._xdl.steps:
             if type(step) == FilterThrough:
-                if not step.through in cartridge_chemicals_in_graph:
+                if step.through not in cartridge_chemicals_in_graph:
                     raise XDLError(
                         f'No cartridge present containing {step.through}')
         return True
@@ -164,19 +200,20 @@ class ChemputerExecutor(AbstractXDLExecutor):
         ]:
             if vessel_keyword in step.properties:
                 if port_keyword in step.properties:
-                    if step.properties[port_keyword] != None:
+                    if step.properties[port_keyword] is not None:
                         validate_port(
                             step.properties[vessel_keyword],
-                            self._graph.nodes[step.properties[vessel_keyword]]['class'],
+                            self._graph.nodes[
+                                step.properties[vessel_keyword]]['class'],
                             step.properties[port_keyword]
                         )
         if not isinstance(step, AbstractBaseStep):
             for substep in step.steps:
                 self._validate_ports_step(substep)
 
-    ###################################
-    ### MAP GRAPH HARDWARE TO STEPS ###
-    ###################################
+    ###############################
+    # MAP GRAPH HARDWARE TO STEPS #
+    ###############################
 
     def _get_hardware_map(self) -> None:
         """
@@ -205,7 +242,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
             if not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
                 self._add_internal_properties_to_steps(step.steps)
 
-
     def _add_internal_properties_to_steps(self, step_list: List[Step]) -> None:
         """Recursively add internal properties to all steps and substeps in
         given list of steps.
@@ -223,13 +259,12 @@ class ChemputerExecutor(AbstractXDLExecutor):
                 step.solvent_vessel = self._get_reagent_vessel(step.solvent)
 
             if ('anticlogging_solvent_vessel' in step.properties
-                and step.anticlogging_solvent):
-
+                    and step.anticlogging_solvent):
                 step.anticlogging_solvent_vessel = self._get_reagent_vessel(
                     step.anticlogging_solvent)
 
             if ('eluting_solvent_vessel' in step.properties
-                and step.eluting_solvent):
+                    and step.eluting_solvent):
                 step.eluting_solvent_vessel = self._get_reagent_vessel(
                     step.eluting_solvent)
 
@@ -237,12 +272,12 @@ class ChemputerExecutor(AbstractXDLExecutor):
                 step.reagent_vessel = self._get_reagent_vessel(step.reagent)
 
             if ('flush_tube_vessel' in step.properties
-                and not step.flush_tube_vessel):
+                    and not step.flush_tube_vessel):
                 step.flush_tube_vessel = self._get_flush_tube_vessel()
 
             # FilterThrough step flushes cartridge with inert gas/air
             if ('flush_cartridge_vessel' in step.properties
-                and not step.flush_cartridge_vessel):
+                    and not step.flush_cartridge_vessel):
                 step.flush_cartridge_vessel = self._get_flush_tube_vessel()
 
             # FilterThrough needs to know what dead volume of cartridge is. If
@@ -277,34 +312,38 @@ class ChemputerExecutor(AbstractXDLExecutor):
                         graph=self._graph, flask_node=step.vessel)
 
             if 'vessel_has_stirrer' in step.properties:
-                step.vessel_has_stirrer = not step.vessel in [
+                step.vessel_has_stirrer = step.vessel not in [
                     item.id
                     for item in self._graph_hardware.rotavaps
-                                + self._graph_hardware.flasks]
+                    + self._graph_hardware.flasks]
 
             if 'vessel_type' in step.properties and not step.vessel_type:
                 step.vessel_type = self._get_vessel_type(step.vessel)
 
             if 'volume' in step.properties and type(step) == CleanVessel:
-                if step.volume == None:
+                if step.volume is None:
                     step.volume = self._graph_hardware[
                         step.vessel].max_volume * CLEAN_VESSEL_VOLUME_FRACTION
 
             if ('collection_flask_volume' in step.properties
-                 and not step.collection_flask_volume):
+                    and not step.collection_flask_volume):
                 rotavap = self._graph_hardware[step.rotavap_name]
                 if 'collection_flask_volume' in rotavap.properties:
-                    step.collection_flask_volume = rotavap.collection_flask_volume
+                    step.collection_flask_volume =\
+                        rotavap.collection_flask_volume
 
-            # When doing FilterThrough or RunColumn and from_vessel and to_vessel
-            # are the same, find an unused reactor to use as a buffer flask.
+            # When doing FilterThrough or RunColumn and from_vessel and to
+            # vessel are the same, find an unused reactor to use as a buffer
+            # flask.
             if 'buffer_flask' in step.properties:
                 if type(step) in [FilterThrough, RunColumn]:
                     if (step.from_vessel == step.to_vessel
-                        and not step.buffer_flask):
-                        step.buffer_flask = self._get_buffer_flask(step.from_vessel)
+                            and not step.buffer_flask):
+                        step.buffer_flask = self._get_buffer_flask(
+                            step.from_vessel)
                 elif type(step) == Separate:
-                    step.buffer_flask = self._get_buffer_flask(step.separation_vessel)
+                    step.buffer_flask = self._get_buffer_flask(
+                        step.separation_vessel)
 
             if 'buffer_flasks' in step.properties:
                 step.buffer_flasks = self._get_buffer_flask(
@@ -312,7 +351,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
 
             # Add filter dead volume to WashSolid steps
             if ('filter_dead_volume' in step.properties
-                and not step.filter_dead_volume):
+                    and not step.filter_dead_volume):
                 vessel = self._graph_hardware[step.vessel]
                 if 'dead_volume' in vessel.properties:
                     step.filter_dead_volume = vessel.dead_volume
@@ -320,12 +359,13 @@ class ChemputerExecutor(AbstractXDLExecutor):
             # Add pneumatic_controller to SwitchVacuum but not to CSwitchVacuum
             # as it is not an internal property in CSwitchVacuum
             if ('pneumatic_controller' in step.properties
-                and 'vessel' in step.properties):
+                    and 'vessel' in step.properties):
                 step.pneumatic_controller, step.pneumatic_controller_port = (
-                    get_pneumatic_controller(step.vessel, step.port, self._graph))
+                    get_pneumatic_controller(
+                        step.vessel, step.port, self._graph))
 
             if ('through_cartridge' in step.properties
-                and not step.through_cartridge):
+                    and not step.through_cartridge):
                 for cartridge in self._graph_hardware.cartridges:
                     if cartridge.chemical == step.through:
                         step.through_cartridge = cartridge.id
@@ -344,7 +384,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
         changed = False
         if type(step) != CConnect:
             for k in step.properties:
-                if 'port' in k and step.properties[k] == None:
+                if 'port' in k and step.properties[k] is None:
                     vessel_prop = k.replace('port', 'vessel')
                     if vessel_prop in step.properties:
                         vessel = step.properties[vessel_prop]
@@ -353,9 +393,11 @@ class ChemputerExecutor(AbstractXDLExecutor):
                             if vessel_class in DEFAULT_PORTS:
                                 changed = True
                                 if 'from' in k:
-                                    step.properties[k] = DEFAULT_PORTS[vessel_class]['from']
+                                    step.properties[k] = DEFAULT_PORTS[
+                                        vessel_class]['from']
                                 else:
-                                    step.properties[k] = DEFAULT_PORTS[vessel_class]['to']
+                                    step.properties[k] = DEFAULT_PORTS[
+                                        vessel_class]['to']
         if changed:
             step.update()
         return step
@@ -454,7 +496,10 @@ class ChemputerExecutor(AbstractXDLExecutor):
                 if return_single:
                     return sorted(shortest_paths, key=lambda x: x[1])[0][0]
                 else:
-                    return [item[0] for item in sorted(shortest_paths, key=lambda x: x[1])]
+                    return [
+                        item[0]
+                        for item in sorted(shortest_paths, key=lambda x: x[1])
+                    ]
         if return_single:
             return None
         else:
@@ -538,10 +583,9 @@ class ChemputerExecutor(AbstractXDLExecutor):
         else:
             return self._waste_map[nearest_node]
 
-
-    #########################
-    ### ADD IMPLIED STEPS ###
-    #########################
+    #####################
+    # ADD IMPLIED STEPS #
+    #####################
 
     def _add_implied_steps(self, interactive: bool = True) -> None:
         """Add extra steps implied by explicit XDL steps."""
@@ -553,7 +597,8 @@ class ChemputerExecutor(AbstractXDLExecutor):
         self._add_reagent_last_minute_addition_steps()
 
     def _add_implied_clean_backbone_steps(
-        self, interactive: bool = True) -> None:
+        self, interactive: bool = True
+    ) -> None:
         """Add CleanBackbone steps after certain steps which will contaminate
         the backbone.
         Takes into account when organic and aqueous reagents have been used to
@@ -591,12 +636,13 @@ class ChemputerExecutor(AbstractXDLExecutor):
                             0,
                             StartStir(
                                 vessel=reagent_flask,
-                                stir_speed=DEFAULT_STIR_REAGENT_FLASK_SPEED)
+                                stir_speed=DEFAULT_STIR_REAGENT_FLASK_SPEED
                             )
+                        )
 
                         self._xdl.steps.append(StopStir(vessel=reagent_flask))
 
-                    if reagent.temp != None:
+                    if reagent.temp is not None:
                         self._xdl.steps.insert(
                             0,
                             StartHeatChill(vessel=reagent_flask,
@@ -631,7 +677,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
 
                         for base_step in base_steps:
                             if (type(base_step) == CMove
-                                and base_step.from_vessel == reagent_flask):
+                                    and base_step.from_vessel == reagent_flask):
                                 first_use = i
                                 break
 
@@ -645,10 +691,9 @@ class ChemputerExecutor(AbstractXDLExecutor):
                                 reagent=addition,
                                 volume=volume))
 
-
-###################################
-### FILTER DEAD VOLUME HANDLING ###
-###################################
+    ###############################
+    # FILTER DEAD VOLUME HANDLING #
+    ###############################
 
     def _add_filter_dead_volume_handling_steps(self) -> None:
         """Add steps to handle the filter dead volume. This can be handled in
@@ -665,7 +710,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
         the top part of the filter where it is.
         """
         if (self._xdl.filter_dead_volume_method
-            == FILTER_DEAD_VOLUME_INERT_GAS_METHOD):
+                == FILTER_DEAD_VOLUME_INERT_GAS_METHOD):
             self._add_filter_inert_gas_connect_steps()
 
         elif (self._xdl.filter_dead_volume_method
@@ -683,27 +728,30 @@ class ChemputerExecutor(AbstractXDLExecutor):
         self._add_internal_properties()
 
     def _get_filter_emptying_steps(
-        self) -> List[Tuple[int, str, Dict[str, VesselContents]]]:
+            self) -> List[Tuple[int, str, Dict[str, VesselContents]]]:
+
         """Get steps at which a filter vessel is emptied. Also return full
         list of vessel contents dict at every step.
 
         Returns:
             List[Tuple[int, str, Dict[str, VesselContents]]]: List of tuples,
-                format: [(step_index, filter_vessel_name, {vessel: VesselContents, ...},...]
+                format: [(step_index,
+                          filter_vessel_name,
+                          {vessel: VesselContents, ...})...]
         """
         filter_emptying_steps = []
         full_vessel_contents = []
         prev_vessel_contents = {}
         for i, _, vessel_contents, _ in iter_vessel_contents(
-            self._xdl.steps, self._graph_hardware):
+                self._xdl.steps, self._graph_hardware):
             full_vessel_contents.append(vessel_contents)
             for vessel, contents in vessel_contents.items():
                 if (self._graph_hardware[vessel].type
-                    == CHEMPUTER_FILTER_CLASS_NAME
-                    and vessel in prev_vessel_contents):
+                        == CHEMPUTER_FILTER_CLASS_NAME
+                        and vessel in prev_vessel_contents):
                     # If filter vessel has just been emptied, append to filters.
                     if (not contents.reagents
-                        and prev_vessel_contents[vessel].reagents):
+                            and prev_vessel_contents[vessel].reagents):
                         filter_emptying_steps.append(
                             (i, vessel, full_vessel_contents))
 
@@ -739,14 +787,14 @@ class ChemputerExecutor(AbstractXDLExecutor):
         # Filter steps as liquid may be transferred to filter flask for other
         # reasons i.e. using the chiller.
         for filter_i, filter_vessel, full_vessel_contents in reversed(
-            self._get_filter_emptying_steps()):
+                self._get_filter_emptying_steps()):
             j = filter_i - 1
 
             # Find point at which first reagent is added to filter vessel.
             # This is the point at which to insert the PrepareFilter step.
             while (j > 0
-                   and filter_vessel in full_vessel_contents[j-1]
-                   and full_vessel_contents[j-1][filter_vessel].reagents):
+                   and filter_vessel in full_vessel_contents[j - 1]
+                   and full_vessel_contents[j - 1][filter_vessel].reagents):
                 j -= 1
 
             solvent = cleaning_solvents[j]
@@ -766,10 +814,12 @@ class ChemputerExecutor(AbstractXDLExecutor):
             # Only move to waste after Filter step. For any other step should
             # become part of the reaction mixture.
             if self._xdl.steps[i].name == 'Filter':
-                self._xdl.steps.insert(i,
+                self._xdl.steps.insert(
+                    i,
                     RemoveFilterDeadVolume(
                         filter_vessel=vessel,
-                        dead_volume=self._get_filter_dead_volume(vessel)))
+                        dead_volume=self._get_filter_dead_volume(vessel))
+                )
 
     def _add_filter_inert_gas_connect_steps(self) -> None:
         """Add steps to self._xdl.steps to implement the following:
@@ -783,12 +833,12 @@ class ChemputerExecutor(AbstractXDLExecutor):
                     0, CConnect(
                         from_vessel=self._inert_gas_map[filter_vessel.id],
                         to_vessel=filter_vessel.id,
-                        to_port=BOTTOM_PORT))
+                        to_port=BOTTOM_PORT)
+                )
 
-
-    ###################################
-    ### SOLIDIFY IMPLIED PROPERTIES ###
-    ###################################
+    ###############################
+    # SOLIDIFY IMPLIED PROPERTIES #
+    ###############################
 
     def _add_all_volumes_to_step(self, step, vessel_contents, definite):
         if type(step) in [Transfer, CMove]:
@@ -800,18 +850,20 @@ class ChemputerExecutor(AbstractXDLExecutor):
                         step.volume = self._graph_hardware[
                             step.from_vessel].max_volume
                     except AttributeError:
-                        raise XDLError(f'Missing flask ("from_vessel": "{step.from_vessel}") in {step.name} step.\n{step.properties}\n')
+                        raise XDLError(f'Missing flask ("from_vessel": \
+"{step.from_vessel}") in {step.name} step.\n{step.properties}\n')
 
         if not isinstance(step, AbstractBaseStep):
             for substep in step.steps:
-                self._add_all_volumes_to_step(substep, vessel_contents, definite)
+                self._add_all_volumes_to_step(
+                    substep, vessel_contents, definite)
 
     def _add_all_volumes(self) -> None:
         """When volumes in CMove commands are specified by 'all', change
         these to max_volume of vessel.
         """
         prev_vessel_contents = None
-        for _, step, vessel_contents, definite  in iter_vessel_contents(
+        for _, step, vessel_contents, definite in iter_vessel_contents(
             self._xdl.steps, self._graph_hardware
         ):
             self._add_all_volumes_to_step(step, prev_vessel_contents, definite)
@@ -824,7 +876,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
         """
         prev_vessel_contents = {}
         for _, step, vessel_contents, _ in iter_vessel_contents(
-            self._xdl.steps, self._graph_hardware):
+                self._xdl.steps, self._graph_hardware):
             if type(step) == Filter:
                 if step.filter_vessel in prev_vessel_contents:
                     step.filter_top_volume = max(prev_vessel_contents[
@@ -849,22 +901,22 @@ class ChemputerExecutor(AbstractXDLExecutor):
                 CleanVessel steps
 
         Returns:
-            List[List[Step]]: List of steps with temperatures added to CleanVessel
-                steps.
+            List[List[Step]]: List of steps with temperatures added to
+                CleanVessel steps.
         """
         for step in self._xdl.steps:
             if type(step) == CleanVessel:
-                if step.temp == None:
+                if step.temp is None:
                     solvent = step.solvent.lower()
                     if solvent in SOLVENT_BOILING_POINTS:
                         step.temp = (SOLVENT_BOILING_POINTS[solvent]
-                                    * CLEAN_VESSEL_BOILING_POINT_FACTOR)
+                                     * CLEAN_VESSEL_BOILING_POINT_FACTOR)
                     else:
                         step.temp = 30
 
-    ##########################
-    ### OPTIMISE PROCEDURE ###
-    ##########################
+    ######################
+    # OPTIMISE PROCEDURE #
+    ######################
 
     def _tidy_up_procedure(self, steps=None) -> None:
         """Remove steps that are pointless and optimise procedure.
@@ -878,20 +930,21 @@ class ChemputerExecutor(AbstractXDLExecutor):
         """If next step is heating to same temp as dry step, dry step shouldn't
         return to RT at end of stpe.
         """
-        if steps == None:
+        if steps is None:
             steps = self._xdl.steps
         for i, step in enumerate(steps):
             if type(step) == Dry and step.temp and not step.continue_heatchill:
-                if (i+1 < len(steps)
-                    and 'temp' in steps[i+1].properties
-                    and step.temp == steps[i+1].temp):
+                if (i + 1 < len(steps)
+                        and 'temp' in steps[i + 1].properties
+                        and step.temp == steps[i + 1].temp):
                     step.continue_heatchill = True
 
     def _optimise_separation_steps(self, steps=None) -> None:
         """Optimise separation steps to reduce risk of backbone contamination.
         The issue this addresses is that if a product is extracted into the
-        aqueous phase, but the organic phase ends up in the backbone, the product
-        can redissolve in the organic phase when transferred out of the separator.
+        aqueous phase, but the organic phase ends up in the backbone, the
+        product can redissolve in the organic phase when transferred out of the
+        separator.
 
         Rules implemented here:
 
@@ -914,8 +967,8 @@ class ChemputerExecutor(AbstractXDLExecutor):
         for i in range(len(steps)):
             step = steps[i]
             if type(step) == Separate:
-                if (step.to_vessel == step.separation_vessel
-                    or step.waste_phase_to_vessel == step.separation_vessel):
+                if (step.waste_phase_to_vessel == step.separation_vessel
+                        or step.to_vessel == step.separation_vessel):
                     j = i + 1
                     next_solvent = None
                     while j < len(steps):
@@ -924,11 +977,13 @@ class ChemputerExecutor(AbstractXDLExecutor):
                             break
                         j += 1
                     if (next_solvent
-                        and is_aqueous(next_solvent) == is_aqueous(step.solvent)):
+                        and is_aqueous(next_solvent)
+                            == is_aqueous(step.solvent)):
                         step.remove_dead_volume = False
 
     def find_stirring_schedule(
-        self, step: Step, stirring: List[str]) -> List[str]:
+        self, step: Step, stirring: List[str]
+    ) -> List[str]:
         """Find vessels being stirred after given step.
 
         Args:
@@ -970,12 +1025,11 @@ class ChemputerExecutor(AbstractXDLExecutor):
 
         # Look for vessels out of scope that need stirring stopped
         for i, step, vessel_contents, _ in iter_vessel_contents(
-            self._xdl.steps, self._graph_hardware):
+                self._xdl.steps, self._graph_hardware):
             for prop, val in step.properties.items():
                 if 'vessel' in prop and val in stirring_schedule[i]:
                     if (val in vessel_contents
-                        and not vessel_contents[val].reagents):
-
+                            and not vessel_contents[val].reagents):
                         insertions.append((i + 1, StopStir(vessel=val)))
 
     def _get_stir_vessels(self, step: Step):
@@ -996,7 +1050,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
                 if type(substep) == CStir:
                     stir_vessels.append(substep.vessel)
                 elif not isinstance(
-                    substep, (AbstractBaseStep, AbstractAsyncStep)):
+                        substep, (AbstractBaseStep, AbstractAsyncStep)):
                     stir_vessels.extend(self._get_stir_vessels(substep))
         return stir_vessels
 
@@ -1049,14 +1103,13 @@ class ChemputerExecutor(AbstractXDLExecutor):
                     after_step = self._xdl.steps[i + 1]
 
                     if should_remove_clean_backbone_step(
-                        before_step, after_step):
+                            before_step, after_step):
                         self._xdl.steps.pop(i)
             i -= 1
 
-
-    ############
-    ### MISC ###
-    ############
+    ########
+    # MISC #
+    ########
 
     def _print_warnings(self) -> None:
         for warning in self._warnings:
@@ -1068,19 +1121,19 @@ class ChemputerExecutor(AbstractXDLExecutor):
             for substep in step.steps:
                 self._do_sanity_check(substep)
 
-    ######################
-    ### PUBLIC METHODS ###
-    ######################
+    ##################
+    # PUBLIC METHODS #
+    ##################
 
     def prepare_block_for_execution(
-        self, graph_file: Union[str, Dict], block: List[Step]) -> None:
+        self, graph_file: Union[str, Dict], block: List[Step]
+    ) -> None:
         """Prepare block of AbstractDynamicStep for execution
 
         Args:
-            graph_file (Union[str, Dict]): Path to graph file. May be GraphML file,
-                                           JSON file with graph in node link format,
-                                           or dict containing graph in same format
-                                           as JSON file.
+            graph_file (Union[str, Dict]): Path to graph file. May be GraphML
+                file, JSON file with graph in node link format, or dict
+                containing graph in same format as JSON file.
         """
         if not type(graph_file) == MultiDiGraph:
             self._graph, self._raw_graph = get_graph(graph_file)
@@ -1119,9 +1172,8 @@ class ChemputerExecutor(AbstractXDLExecutor):
 
         Args:
             graph_file (str, optional): Path to graph file. May be GraphML file,
-                                        JSON file with graph in node link format,
-                                        or dict containing graph in same format
-                                        as JSON file.
+                JSON file with graph in node link format, or dict containing
+                graph in same format as JSON file.
         """
         if not self._prepared_for_execution:
             self._xdl.original_steps = copy.deepcopy(self._xdl.steps)
@@ -1153,9 +1205,11 @@ class ChemputerExecutor(AbstractXDLExecutor):
 
                 self._validate_ports()
 
-                enough_buffer_flasks, n_buffer_required, n_buffer_present = self._check_enough_buffer_flasks()
+                enough_buffer_flasks, n_buffer_required, n_buffer_present =\
+                    self._check_enough_buffer_flasks()
                 if not enough_buffer_flasks:
-                    raise XDLError(f'The procedure requires {n_buffer_required} empty buffer flasks but only {n_buffer_present} are present in the graph.')
+                    raise XDLError(f'The procedure requires {n_buffer_required}\
+ empty buffer flasks but only {n_buffer_present} are present in the graph.')
 
                 self._add_internal_properties()
 
@@ -1185,7 +1239,8 @@ class ChemputerExecutor(AbstractXDLExecutor):
                     "Hardware is not compatible. Can't execute.")
 
 def should_remove_clean_backbone_step(
-    before_step: Step, after_step: Step) -> bool:
+    before_step: Step, after_step: Step
+) -> bool:
     """Return True if backbone cleaning is pointless between given two steps.
 
     Args:

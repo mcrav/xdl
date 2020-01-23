@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional
 from .....step_utils.base_steps import AbstractStep
 from ..steps_utility import (
     StartStir, StopStir, Wait, HeatChillToTemp, HeatChillReturnToRT)
@@ -40,8 +40,9 @@ class CleanVessel(AbstractStep):
     def final_sanity_check(self, graph):
         try:
             assert self.solvent_vessel
-        except AssertionError as e:
-            raise XDLError(f'No solvent vessel found in graph for {self.solvent}')
+        except AssertionError:
+            raise XDLError(
+                f'No solvent vessel found in graph for {self.solvent}')
         assert self.waste_vessel
         assert self.cleans > 0
         assert self.volume and self.volume > 0
@@ -68,7 +69,7 @@ class CleanVessel(AbstractStep):
                 StopStir(vessel=self.vessel),
             ])
         steps.append(Dry(vessel=self.vessel))
-        if self.temp != None and (self.temp < 20 or self.temp > 25):
+        if self.temp is not None and (self.temp < 20 or self.temp > 25):
             steps.insert(
                 1, HeatChillToTemp(vessel=self.vessel, temp=self.temp))
             steps.append(HeatChillReturnToRT(vessel=self.vessel, stir=False))

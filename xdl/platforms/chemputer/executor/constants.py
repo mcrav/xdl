@@ -1,9 +1,21 @@
 from typing import List
-from ..steps import *
+from ..steps import (
+    Add,
+    Separate,
+    WashSolid,
+    Filter,
+    Dry,
+    AddFilterDeadVolume,
+    RemoveFilterDeadVolume,
+    Dissolve,
+    CleanVessel,
+    Transfer,
+    FilterThrough,
+)
 
-################
-### CLEANING ###
-################
+############
+# CLEANING #
+############
 
 #: Code for generic organic reagent when determining cleaning schedules
 GENERIC_ORGANIC: int = 0
@@ -165,6 +177,7 @@ COMMON_SOLVENT_NAMES = [
     'm-xylene',
     'p-xylene',
 ]
+
 COMMON_SOLVENT_NAMES.extend(
     [f'anhydrous {name}' for name in COMMON_SOLVENT_NAMES])
 
@@ -249,6 +262,7 @@ SOLVENT_BOILING_POINTS = {
     'm-xylene': 139.1,
     'p-xylene': 138.4,
 }
+
 for solvent, bp in list(SOLVENT_BOILING_POINTS.items()):
     SOLVENT_BOILING_POINTS[f'anhydrous {solvent}'] = bp
 

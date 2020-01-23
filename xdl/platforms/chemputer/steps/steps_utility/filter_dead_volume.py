@@ -2,7 +2,7 @@ from typing import Optional, List, Dict, Any, Union
 
 from ..utils import get_vacuum_valve_reconnect_steps
 from .....step_utils.base_steps import AbstractStep, Step
-from ..steps_base import CMove, CValveMoveToPosition
+from ..steps_base import CMove
 from .....constants import BOTTOM_PORT
 
 class AddFilterDeadVolume(AbstractStep):
@@ -64,7 +64,8 @@ class RemoveFilterDeadVolume(AbstractStep):
 
     Args:
         filter_vessel (str): Filter vessel to remove dead volume from.
-        dead_volume (float): Volume in mL to remove from bottom of filter vessel.
+        dead_volume (float): Volume in mL to remove from bottom of filter
+            vessel.
         waste_vessel (str): Given internally. Waste vessel to send solvent to.
         vacuum (str): Given internally. Name of vacuum flask.
         inert_gas (str): Given internally. Name of node supplying inert gas.
