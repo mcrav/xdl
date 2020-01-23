@@ -1,4 +1,4 @@
-from typing import Union, Generator
+from typing import Union, Generator, List
 from .constants import (
     FILTER_TYPES,
     REACTOR_TYPES,
@@ -9,7 +9,6 @@ from .constants import (
     CARTRIDGE_TYPES,
 )
 from ..utils.xdl_base import XDLBase
-from ..constants import *
 
 class Component(XDLBase):
     """Base component class. At moment does nothing more than XDLBase.
@@ -20,7 +19,7 @@ class Component(XDLBase):
         chemical (str): Optional. Chemical component contains.
     """
     def __init__(
-        self, id: str, component_type: str, chemical: str = None) -> None:
+            self, id: str, component_type: str, chemical: str = None) -> None:
         super().__init__(locals())
 
 class Hardware(object):
