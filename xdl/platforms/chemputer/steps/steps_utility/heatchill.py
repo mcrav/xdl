@@ -1,10 +1,7 @@
 from typing import Optional, List, Dict, Any
 
 from .....step_utils.base_steps import AbstractStep, Step
-from .....utils.graph import undirected_neighbors
 from .....constants import (
-    HEATER_CLASSES,
-    CHILLER_CLASSES,
     CHILLER_MIN_TEMP,
     CHILLER_MAX_TEMP,
     HEATER_MAX_TEMP,
@@ -21,15 +18,11 @@ from ..steps_base import (
     CStirrerSetTemp,
     CStirrerHeat,
     CStirrerWaitForTemp,
-    CStir,
-    CSetStirRate,
-    CStopStir,
     CStopHeat,
 
     CRotavapStartHeater,
     CRotavapStopHeater,
     CRotavapSetTemp,
-    CRotavapStopRotation,
 )
 from .general import Wait
 from .stirring import StopStir, StartStir
@@ -39,8 +32,6 @@ from .....constants import (
 )
 from .....utils.errors import XDLError
 from .....localisation import HUMAN_READABLE_STEPS
-
-
 
 def heater_chiller_sanity_check(heater, chiller, temp):
     if not heater and chiller:
@@ -89,7 +80,8 @@ class StartHeatChill(AbstractStep):
                     elif self.heater and 18 <= self.temp <= HEATER_MAX_TEMP:
                         steps = self.get_heater_steps()
 
-                # Temp greater than 25, try use heater, if not available try use chiller.
+                # Temp greater than 25, try use heater, if not available try
+                # use chiller.
                 elif self.heater and 18 <= self.temp <= HEATER_MAX_TEMP:
                     steps = self.get_heater_steps()
 
@@ -117,7 +109,8 @@ class StartHeatChill(AbstractStep):
         try:
             assert self.heater or self.chiller or self.vessel_type == 'rotavap'
         except AssertionError:
-            raise XDLError(f'Trying to heat/chill vessel "{self.vessel}" with no heater or chiller attached.')
+            raise XDLError(f'Trying to heat/chill vessel "{self.vessel}" with\
+ no heater or chiller attached.')
         assert self.steps
         heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
 
@@ -213,7 +206,7 @@ class HeatChillToTemp(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
-        assert temp != None
+        assert temp is not None
 
     def get_steps(self) -> List[Step]:
         steps = []
@@ -286,8 +279,9 @@ class HeatChillToTemp(AbstractStep):
     def human_readable(self, language='en') -> str:
         try:
             if self.stir:
-                return HUMAN_READABLE_STEPS['HeatChillToTemp (stirring)'][language].format(
-                    **self.formatted_properties())
+                return HUMAN_READABLE_STEPS[
+                    'HeatChillToTemp (stirring)'][language].format(
+                        **self.formatted_properties())
             else:
                 return HUMAN_READABLE_STEPS[
                     'HeatChillToTemp (not stirring)'][language].format(

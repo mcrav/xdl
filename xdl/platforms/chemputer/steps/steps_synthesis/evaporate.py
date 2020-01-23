@@ -1,18 +1,7 @@
 from typing import Optional, List, Dict, Any
 from .....step_utils.base_steps import Step, AbstractStep
 from ..steps_base import (
-    CRotavapSetRotationSpeed,
-    CRotavapStartRotation,
     CRotavapLiftDown,
-    CRotavapSetTemp,
-    CRotavapStartHeater,
-    CSetVacuumSetPoint,
-    CStartVacuum,
-    CStopVacuum,
-    CVentVacuum,
-    CRotavapStopRotation,
-    CRotavapStopHeater,
-    CRotavapLiftUp,
     CRotavapAutoEvaporation,
 )
 from ..steps_utility import (
@@ -76,22 +65,23 @@ class Evaporate(AbstractStep):
             RotavapStopEverything(self.rotavap_name),
             # Empty collect flask
             Transfer(from_vessel=self.rotavap_name,
-                        to_vessel=self.waste_vessel,
-                        from_port=COLLECT_PORT,
-                        volume=collection_flask_volume)
+                     to_vessel=self.waste_vessel,
+                     from_port=COLLECT_PORT,
+                     volume=collection_flask_volume)
         ]
 
         if self.mode == 'auto':
             del steps[-4:-2]
-            pressure = 1 # 1 == auto pressure
+            pressure = 1  # 1 == auto pressure
             if self.pressure:
                 # Approximation. Pressure given should be pressure solvent
                 # evaporates at, but in auto evaporation, pressure is the limit
-                # of the pressure ramp, so actual pressure given needs to be lower.
+                # of the pressure ramp, so actual pressure given needs to be
+                # lower.
                 pressure = self.pressure / 2
             steps.insert(-2, CRotavapAutoEvaporation(
                 rotavap_name=self.rotavap_name,
-                sensitivity=2, # High sensitivity
+                sensitivity=2,  # High sensitivity
                 vacuum_limit=pressure,
                 time_limit=self.time,
                 vent_after=True
@@ -100,10 +90,13 @@ class Evaporate(AbstractStep):
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
-        if self.temp and self.temp > 25: heatchill = True
-        else: heatchill = False
+        if self.temp and self.temp > 25:
+            heatchill = True
+        else:
+            heatchill = False
         temps = []
-        if self.temp: temps = [self.temp]
+        if self.temp:
+            temps = [self.temp]
         return {
             'rotavap_name': {
                 'rotavap': True,
@@ -114,4 +107,6 @@ class Evaporate(AbstractStep):
 
     def syntext(self) -> str:
         formatted_properties = self.formatted_properties()
-        return f'Excess solvent was removed by rotary evaporation ({formatted_properties["pressure"]}, {formatted_properties["temp"]}, {formatted_properties["time"]}).'
+        return f'Excess solvent was removed by rotary evaporation\
+ ({formatted_properties["pressure"]}, {formatted_properties["temp"]},\
+ {formatted_properties["time"]}).'

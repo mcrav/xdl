@@ -1,7 +1,4 @@
-from typing import Dict
 import abc
-from ..execution.abstract_executor import AbstractXDLExecutor
-from ..steps import Step
 
 class AbstractPlatform(object):
     """Container class to hold everything necessary for a platform to be used
@@ -10,8 +7,8 @@ class AbstractPlatform(object):
     Args:
         executor (AbstractXDLExecutor): Implementation of
             abstract class AbstractXDLExecutor.
-        step_library (Dict[str, Step]): Dictionary of step names and corresponding
-            step classes.
+        step_library (Dict[str, Step]): Dictionary of step names and
+            corresponding step classes.
     """
     def __init__(self):
         pass

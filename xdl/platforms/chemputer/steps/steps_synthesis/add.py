@@ -1,18 +1,12 @@
 from typing import Optional, List, Dict, Any
-import copy
 
 from ..steps_utility import PrimePumpForAdd, Wait, StopStir, StartStir
 from ..steps_base import CMove, Confirm
 from .....step_utils.base_steps import Step, AbstractStep
-from .....utils.misc import get_port_str, format_property
 from .....constants import (
     DEFAULT_AFTER_ADD_WAIT_TIME,
     DEFAULT_AIR_FLUSH_TUBE_VOLUME,
     DEFAULT_VISCOUS_ASPIRATION_SPEED,
-    BOTTOM_PORT,
-    TOP_PORT,
-    BOTTOM_PORT,
-    EVAPORATE_PORT,
 )
 from .....localisation import HUMAN_READABLE_STEPS
 
@@ -86,7 +80,7 @@ class Add(AbstractStep):
     def get_steps(self) -> List[Step]:
         steps = []
         # Solid addition
-        if self.volume == None and self.mass != None:
+        if self.volume is None and self.mass is not None:
             steps = [Confirm('Is {reagent} ({mass} g) in {vessel}?'.format(
                 **self.properties))]
         # Liquid addition
@@ -167,10 +161,10 @@ class Add(AbstractStep):
 
     def human_readable(self, language: str = 'en') -> str:
         try:
-            if self.mass != None:
+            if self.mass is not None:
                 return HUMAN_READABLE_STEPS['Add (mass)'][language].format(
                     **self.formatted_properties())
-            elif self.volume != None:
+            elif self.volume is not None:
                 return HUMAN_READABLE_STEPS['Add (volume)'][language].format(
                     **self.formatted_properties())
             else:

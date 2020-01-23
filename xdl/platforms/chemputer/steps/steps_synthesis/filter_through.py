@@ -1,4 +1,4 @@
-from typing import Optional, List, Dict
+from typing import Optional, List
 from .clean_vessel import CleanVessel
 from .....step_utils.base_steps import Step, AbstractStep
 from ..steps_utility import Transfer
@@ -63,10 +63,12 @@ class FilterThrough(AbstractStep):
 
     def on_prepare_for_execution(self, graph):
         if self.buffer_flask:
-            self.buffer_flask_max_volume = graph.nodes[self.buffer_flask]['max_volume']
+            self.buffer_flask_max_volume = graph.nodes[
+                self.buffer_flask]['max_volume']
 
         if self.to_vessel:
-            self.to_vessel_max_volume = graph.nodes[self.to_vessel]['max_volume']
+            self.to_vessel_max_volume = graph.nodes[
+                self.to_vessel]['max_volume']
 
     def get_steps(self) -> List[Step]:
         filter_through_to_vessel = self.to_vessel
@@ -76,7 +78,7 @@ class FilterThrough(AbstractStep):
             filter_through_to_vessel = self.buffer_flask
             filter_through_to_vessel_max_volume = self.buffer_flask_max_volume
 
-        if filter_through_to_vessel_max_volume == None:
+        if filter_through_to_vessel_max_volume is None:
             filter_through_to_vessel_max_volume = 100
 
         steps = [self.get_initial_filter_through_step(filter_through_to_vessel)]
@@ -91,8 +93,8 @@ class FilterThrough(AbstractStep):
                         self.eluting_volume - volume_added,
                         filter_through_to_vessel_max_volume
                     )
-                    # Transfer to from_vessel to rinse any residual product, then
-                    # transfer through cartridge to target vess
+                    # Transfer to from_vessel to rinse any residual product,
+                    # then transfer through cartridge to target vess
                     steps.extend(self.get_eluting_steps(
                         filter_through_to_vessel, volume_to_add))
                     volume_added += volume_to_add
@@ -126,7 +128,7 @@ class FilterThrough(AbstractStep):
             move_speed=self.move_speed,
             aspiration_speed=self.aspiration_speed)
 
-    def get_eluting_steps(self, filter_through_to_vessel,  volume):
+    def get_eluting_steps(self, filter_through_to_vessel, volume):
         return [
             Transfer(
                 from_vessel=self.eluting_solvent_vessel,
@@ -161,10 +163,12 @@ class FilterThrough(AbstractStep):
     def human_readable(self, language='en'):
         try:
             if self.eluting_solvent:
-                return HUMAN_READABLE_STEPS['FilterThrough (eluting)'][language].format(
-                    **self.formatted_properties())
+                return HUMAN_READABLE_STEPS[
+                    'FilterThrough (eluting)'][language].format(
+                        **self.formatted_properties())
             else:
-                return HUMAN_READABLE_STEPS['FilterThrough (not eluting)'][language].format(
-                    **self.formatted_properties())
+                return HUMAN_READABLE_STEPS[
+                    'FilterThrough (not eluting)'][language].format(
+                        **self.formatted_properties())
         except KeyError:
             return self.name

@@ -1,4 +1,4 @@
-from typing import List, Dict, Any
+from typing import List
 from .....step_utils.base_steps import Step, AbstractStep
 from ..steps_base import CStartVacuum, CStopVacuum, CSetVacuumSetPoint
 
@@ -9,7 +9,8 @@ class StartVacuum(AbstractStep):
         vessel (str): Vessel name to start vacuum on.
     """
     def __init__(
-        self, vessel: str, pressure: float = 'default', **kwargs) -> None:
+        self, vessel: str, pressure: float = 'default', **kwargs
+    ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:

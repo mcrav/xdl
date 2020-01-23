@@ -34,5 +34,6 @@ def is_aqueous(reagent_name):
 def validate_port(vessel, vessel_class, port):
     try:
         assert str(port) in VALID_PORTS[vessel_class]
-    except AssertionError as e:
-        raise IllegalPortError(f'{port} is an illegal port for {vessel}. Valid ports: {", ".join(VALID_PORTS[vessel_class])}')
+    except AssertionError:
+        raise IllegalPortError(f'{port} is an illegal port for {vessel}. Valid\
+ ports: {", ".join(VALID_PORTS[vessel_class])}')

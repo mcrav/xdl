@@ -31,7 +31,8 @@ class SetStirRate(AbstractStep):
             return [CRotavapSetRotationSpeed(rotavap_name=self.vessel,
                                              rotation_speed=self.stir_speed)]
         else:
-            return [CSetStirRate(vessel=self.vessel, stir_speed=self.stir_speed)]
+            return [
+                CSetStirRate(vessel=self.vessel, stir_speed=self.stir_speed)]
 
 class StartStir(AbstractStep):
     """Start stirring given vessel.
@@ -83,7 +84,7 @@ class StopStir(AbstractStep):
     """
     def __init__(
         self,
-        vessel:str,
+        vessel: str,
         vessel_type: str = None,
         vessel_has_stirrer: bool = True,
         **kwargs

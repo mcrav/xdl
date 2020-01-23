@@ -1,6 +1,5 @@
 from typing import Optional
 from .....step_utils.base_steps import AbstractStep
-from ..steps_utility import Transfer
 from .filter_through import FilterThrough
 
 class RunColumn(AbstractStep):

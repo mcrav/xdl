@@ -1,4 +1,4 @@
-from typing import List, Dict, Generator, Optional, Union, Tuple
+from typing import List, Dict, Generator, Optional, Tuple
 import copy
 from .utils import VesselContents
 from ....step_utils import Step
@@ -11,13 +11,13 @@ from ....constants import INERT_GAS_SYNONYMS
 def iter_vessel_contents(
     steps: List[Step], hardware: Hardware, additions: bool = False
 ) -> Generator[
-    Tuple[
+        Tuple[
         int,
         Step,
         Dict[str, VesselContents],
         Optional[List[str]],
         bool],
-    None, None]:
+        None, None]:
     """Iterator. Allows you to track vessel contents as they change
     throughout the steps.
 
@@ -46,16 +46,22 @@ def iter_vessel_contents(
                 # Add vessels to vessel_contents if they aren't there.
                 if step.solvent:
                     additions_l.append(step.solvent)
-                for vessel in [step.from_vessel, step.to_vessel,
-                                step.waste_phase_to_vessel]:
+                for vessel in [
+                    step.from_vessel,
+                    step.to_vessel,
+                    step.waste_phase_to_vessel
+                ]:
                     vessel_contents.setdefault(
-                        vessel, VesselContents([], hardware[vessel].current_volume))
+                        vessel,
+                        VesselContents([], hardware[vessel].current_volume)
+                    )
                 # Empty from_vessel
                 from_reagents = vessel_contents[step.from_vessel].reagents
                 from_volume = vessel_contents[step.from_vessel].volume
                 vessel_contents[step.from_vessel].reagents = []
                 vessel_contents[step.from_vessel].volume = 0
-                # Add from_vessel contents to to_vessel and waste_phase_to_vessel
+                # Add from_vessel contents to to_vessel and
+                # waste_phase_to_vessel
                 vessel_contents[step.to_vessel].reagents.extend(
                     from_reagents)
                 vessel_contents[step.waste_phase_to_vessel].reagents.extend(
@@ -65,8 +71,10 @@ def iter_vessel_contents(
                     # If extraction add solvent to to_vessel
                     # and from_vessel volume to waste_phase_to_vessel.
                     if step.purpose == 'extract':
-                        vessel_contents[step.to_vessel].reagents.append(step.solvent)
-                        vessel_contents[step.to_vessel].volume += step.solvent_volume * step.n_separations
+                        vessel_contents[step.to_vessel].reagents.append(
+                            step.solvent)
+                        vessel_contents[step.to_vessel].volume +=\
+                            step.solvent_volume * step.n_separations
                         vessel_contents[
                             step.waste_phase_to_vessel].volume += from_volume
 
@@ -74,29 +82,36 @@ def iter_vessel_contents(
                     # and from_vessel volume to to_vessel.
                     elif step.purpose == 'wash':
                         vessel_contents[
-                            step.waste_phase_to_vessel].reagents.append(step.solvent)
+                            step.waste_phase_to_vessel].reagents.append(
+                                step.solvent)
                         vessel_contents[
-                            step.waste_phase_to_vessel].volume += step.solvent_volume * step.n_separations
+                            step.waste_phase_to_vessel].volume +=\
+                            step.solvent_volume * step.n_separations
                         vessel_contents[step.to_vessel].volume += from_volume
 
             elif type(step) == Filter:
                 definite = False
                 for vessel in [step.filter_vessel, step.waste_vessel]:
                     vessel_contents.setdefault(
-                        vessel, VesselContents([], hardware[vessel].current_volume))
+                        vessel,
+                        VesselContents([], hardware[vessel].current_volume)
+                    )
 
                 filter_reagents = vessel_contents[step.filter_vessel].reagents
                 filter_volume = vessel_contents[step.filter_vessel].volume
                 vessel_contents[step.filter_vessel].reagents = []
                 vessel_contents[step.filter_vessel].volume = 0
-                vessel_contents[step.waste_vessel].reagents.extend(filter_reagents)
+                vessel_contents[step.waste_vessel].reagents.extend(
+                    filter_reagents)
                 vessel_contents[step.waste_vessel].volume += filter_volume
 
             elif type(step) == WashSolid:
                 definite = False
                 for vessel in [step.vessel, step.waste_vessel]:
                     vessel_contents.setdefault(
-                        vessel, VesselContents([], hardware[vessel].current_volume))
+                        vessel,
+                        VesselContents([], hardware[vessel].current_volume)
+                    )
 
                 reagents = vessel_contents[step.vessel].reagents
                 volume = vessel_contents[step.vessel].volume
@@ -111,15 +126,16 @@ def iter_vessel_contents(
                 # This is necessary to stop move command putting filter into
                 # negative volume
                 vessel_contents.setdefault(
-                    step.vessel, VesselContents([], hardware[step.vessel].current_volume))
+                    step.vessel,
+                    VesselContents([], hardware[step.vessel].current_volume)
+                )
                 vessel_contents[step.vessel].volume = 0
 
             elif type(step) == Evaporate:
                 definite = False
                 if step.rotavap_name in vessel_contents:
                     for j in reversed(range(len(
-                        vessel_contents[step.rotavap_name].reagents))):
-
+                            vessel_contents[step.rotavap_name].reagents))):
                         # Remove all common solvents during evaporation
                         reagent = vessel_contents[step.rotavap_name].reagents[j]
                         if reagent.lower() in COMMON_SOLVENT_NAMES:
@@ -135,7 +151,8 @@ def iter_vessel_contents(
                     empty_from_vessel = False
                     # Add vessels to vessel_contents if they aren't there.
                     if ('chemical' in hardware[from_vessel].properties
-                        and hardware[from_vessel].chemical in INERT_GAS_SYNONYMS):
+                        and hardware[
+                            from_vessel].chemical in INERT_GAS_SYNONYMS):
                         continue
                     for vessel in [from_vessel, to_vessel]:
                         vessel_contents.setdefault(
@@ -157,7 +174,7 @@ def iter_vessel_contents(
                     # hit negative volume they should still contain their
                     # reagent.
                     if (vessel_contents[from_vessel].volume <= 0
-                        and not from_vessel in [
+                        and from_vessel not in [
                             item.id for item in hardware.flasks]):
                         vessel_contents[from_vessel].reagents = []
                         vessel_contents[from_vessel].volume = 0
@@ -178,7 +195,8 @@ def iter_vessel_contents(
             else:
                 yield (i, step, copy.deepcopy(vessel_contents), definite)
         except Exception as e:
-            raise_error(e, f'Error tracking vessel contents.\nStep: {type(step)} {step.properties}')
+            raise_error(e, f'Error tracking vessel contents.\nStep:\
+ {type(step)} {step.properties}')
 
 def get_movements(step: Step) -> List[Tuple[str, str, float]]:
     """Get all liquid movements associated with given step. Works recursively

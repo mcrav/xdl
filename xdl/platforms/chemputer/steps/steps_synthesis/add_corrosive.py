@@ -1,4 +1,4 @@
-from typing import Optional, List, Dict
+from typing import Optional, List
 from .....step_utils.base_steps import Step, AbstractStep
 from ..steps_utility import Transfer
 from ..steps_base import CStir, CStopStir
