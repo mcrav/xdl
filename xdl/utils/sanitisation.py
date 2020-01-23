@@ -1,8 +1,5 @@
 from typing import Optional, Union, List
-import logging
-import copy
 import re
-import sys
 
 def parse_bool(s: str) -> bool:
     """Parse bool from string.
@@ -22,19 +19,39 @@ def parse_bool(s: str) -> bool:
         return False
     raise ValueError(f'{s} cannot be parsed as a bool.')
 
-days_to_seconds = lambda x: x * 60 * 60 * 24
-minutes_to_seconds = lambda x: x * 60
-hours_to_seconds = lambda x: x * 60 * 60
-no_conversion = lambda x: x
+def days_to_seconds(x):
+    return x * 60 * 60 * 24
 
-cl_to_ml = lambda x: x * 10
-dl_to_ml = lambda x: x * 10**2
-l_to_ml = lambda x: x * 10**3
-ul_to_ml = lambda x: x * 10**-3
+def minutes_to_seconds(x):
+    return x * 60
 
-kilogram_to_grams = lambda x: x * 10**3
-milligram_to_grams = lambda x: x * 10**-3
-microgram_to_grams = lambda x: x * 10**-6
+def hours_to_seconds(x):
+    return x * 60 * 60
+
+def no_conversion(x):
+    return x
+
+def cl_to_ml(x):
+    return x * 10
+
+def dl_to_ml(x):
+    return x * 10**2
+
+def l_to_ml(x):
+    return x * 10**3
+
+def ul_to_ml(x):
+    return x * 10**-3
+
+def kilogram_to_grams(x):
+    return x * 10**3
+
+def milligram_to_grams(x):
+    return x * 10**-3
+
+def microgram_to_grams(x):
+    return x * 10**-6
+
 
 UNIT_CONVERTERS = {
     'ml': no_conversion,
@@ -203,7 +220,7 @@ def clean_properties(xdl_class, properties):
 
         elif prop_type == Union[bool, str]:
             bool_val = parse_bool(val)
-            if bool_val != None:
+            if bool_val is not None:
                 properties[prop] = bool_val
 
         elif prop_type in [int, Optional[int]]:
@@ -217,7 +234,7 @@ def clean_properties(xdl_class, properties):
                 split_list = val.split()
                 for i in range(len(split_list)):
                     if (type(split_list[i]) == str
-                        and split_list[i].lower() == 'none'):
+                            and split_list[i].lower() == 'none'):
                         split_list[i] = None
                 properties[prop] = split_list
             elif type(val) == list:
