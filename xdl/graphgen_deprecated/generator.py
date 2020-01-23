@@ -2,7 +2,6 @@ from typing import Dict, List
 import json
 import os
 import copy
-from ..platforms.chemputer.steps import FilterThrough
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
@@ -26,13 +25,14 @@ def get_n_reagent_flasks(template: Dict) -> int:
     i = 0
     for node in template['nodes']:
         if (node['type'] == 'flask'
-            and not node['name'].startswith('buffer_flask')
-            and not node['chemical']):
+                and not node['name'].startswith('buffer_flask')
+                and not node['chemical']):
             i += 1
     return i
 
 def add_reagents(
-    template: Dict, reagents: List[str], cartridge_reagents: [List[str]]) -> Dict:
+    template: Dict, reagents: List[str], cartridge_reagents: [List[str]]
+) -> Dict:
     """Add reagents to reagent flasks in template.
 
     Args:
@@ -47,12 +47,13 @@ def add_reagents(
     max_n_reagents = get_n_reagent_flasks(template)
     if len(reagents) > max_n_reagents:
         raise(
-            ValueError(f'{len(reagents)} in procedure. Not enough space in template for more than {max_n_reagents} reagents'))
+            ValueError(f'{len(reagents)} in procedure. Not enough space in\
+ template for more than {max_n_reagents} reagents'))
 
     reagents = copy.deepcopy(list(set(reagents)))
     for node in template['nodes']:
         if (node['type'] == 'flask'
-            and not node['name'].startswith('buffer_flask')):
+                and not node['name'].startswith('buffer_flask')):
             if reagents:
                 node['chemical'] = reagents.pop()
             elif not node['chemical']:
