@@ -25,6 +25,7 @@ from ....utils.errors import XDLError
 from ....step_utils import (
     AbstractBaseStep,
     AbstractAsyncStep,
+    AbstractDynamicStep,
     AbstractStep,
     Step,
 )
@@ -72,7 +73,8 @@ from .cleaning import (
 from .constants import (
     CLEAN_VESSEL_VOLUME_FRACTION,
     SOLVENT_BOILING_POINTS,
-    CLEAN_VESSEL_BOILING_POINT_FACTOR
+    CLEAN_VESSEL_BOILING_POINT_FACTOR,
+    NON_RECURSIVE_ABSTRACT_STEPS
 )
 
 class ChemputerExecutor(AbstractXDLExecutor):
@@ -207,7 +209,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
                                 step.properties[vessel_keyword]]['class'],
                             step.properties[port_keyword]
                         )
-        if not isinstance(step, AbstractBaseStep):
+        if not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
             for substep in step.steps:
                 self._validate_ports_step(substep)
 
@@ -239,7 +241,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
                     step.properties[prop] = self._xdl.hardware_map[val]
             step.update()
 
-            if not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
+            if not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
                 self._add_internal_properties_to_steps(step.steps)
 
     def _add_internal_properties_to_steps(self, step_list: List[Step]) -> None:
@@ -377,7 +379,11 @@ class ChemputerExecutor(AbstractXDLExecutor):
             self._add_default_ports(step)
 
             step.on_prepare_for_execution(self._graph)
-            if not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
+
+            if isinstance(step, AbstractDynamicStep):
+                step.prepare_for_execution(self._graph, self)
+
+            if not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
                 self._add_internal_properties_to_steps(step.steps)
 
     def _add_default_ports(self, step):
@@ -853,7 +859,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
                         raise XDLError(f'Missing flask ("from_vessel": \
 "{step.from_vessel}") in {step.name} step.\n{step.properties}\n')
 
-        if not isinstance(step, AbstractBaseStep):
+        if not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
             for substep in step.steps:
                 self._add_all_volumes_to_step(
                     substep, vessel_contents, definite)
@@ -998,7 +1004,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
         elif type(step) == CStopStir:
             if step.vessel in stirring:
                 stirring.remove(step.vessel)
-        elif not isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
+        elif not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
             for sub_step in step.steps:
                 if isinstance(sub_step, AbstractStep):
                     self.find_stirring_schedule(sub_step, stirring)
@@ -1042,7 +1048,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
             List[str]: List of vessels being stirred in given step.
         """
         stir_vessels = []
-        if isinstance(step, (AbstractBaseStep, AbstractAsyncStep)):
+        if isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
             if type(step) == CStir:
                 stir_vessels.append(step.vessel)
         else:
@@ -1117,7 +1123,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
 
     def _do_sanity_check(self, step):
         step.final_sanity_check(self._graph)
-        if type(step) != AbstractBaseStep:
+        if not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
             for substep in step.steps:
                 self._do_sanity_check(substep)
 
@@ -1157,7 +1163,13 @@ class ChemputerExecutor(AbstractXDLExecutor):
         # Optimise procedure.
         self._set_all_stir_speeds(steps=block)
 
+        for step in block:
+            step.on_prepare_for_execution(self._graph)
+
         self._print_warnings()
+
+    def initialise_graph(self, graph_file):
+        self._graph = get_graph(graph_file)
 
     def prepare_for_execution(
         self,

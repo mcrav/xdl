@@ -5,6 +5,7 @@ import threading
 import copy
 from abc import ABC, abstractmethod
 from ..utils.misc import format_property
+from ..utils.graph import get_graph
 from ..localisation import HUMAN_READABLE_STEPS
 
 if False:
@@ -254,6 +255,7 @@ class AbstractDynamicStep(XDLBase):
         super().__init__(param_dict)
         self.state = {}
         self.async_steps = []
+        self.steps = []
 
     @abstractmethod
     def on_start(self):
@@ -286,6 +288,9 @@ class AbstractDynamicStep(XDLBase):
         """
         return []
 
+    def final_sanity_check(self, graph):
+        pass
+
     def _post_finish(self):
         """Called after steps returned by on_finish have finished executing to
         try to join all threads.
@@ -293,9 +298,13 @@ class AbstractDynamicStep(XDLBase):
         for async_step in self.async_steps:
             async_step.kill()
 
+    def on_prepare_for_execution(self, graph):
+        pass
+
     def prepare_for_execution(self, graph, executor):
         self.executor = executor
         self.graph = graph
+        self.on_prepare_for_execution(get_graph(graph)[0])
         self.start_block = self.on_start()
         self.executor.prepare_block_for_execution(self.graph, self.start_block)
 
@@ -345,6 +354,9 @@ class AbstractDynamicStep(XDLBase):
         self._post_finish()
 
         return True
+
+    def human_readable(self, language='en'):
+        return
 
 class UnimplementedStep(Step):
     """Abstract base class for steps that have no implementation but are

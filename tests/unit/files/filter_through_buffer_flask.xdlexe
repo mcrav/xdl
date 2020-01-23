@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="2e45816aeee0bf89118def1a001dc80476b97634be96ca7d2841df171022e79d"
+  graph_sha256="cef344b332797f0750a0a606242e459edb495c450f4fb762c6a38616b8f688a9"
 >
   <Hardware>
     <Component
@@ -443,11 +443,11 @@
           temp="None"
           waste_vessel="waste_rotavap"
           aspiration_speed="5"
-          vacuum="vacuum_reactor_flask"
-          vacuum_device="vacuum_reactor_device"
+          vacuum="vacuum_flask"
+          vacuum_device="vacuum_device"
           vacuum_pressure="400 mbar"
           inert_gas="flask_nitrogen"
-          vacuum_valve="valve_reactor_vacuum"
+          vacuum_valve="valve_vacuum"
           valve_unused_port="2"
           vessel_type="rotavap"
           vessel_has_stirrer="False"

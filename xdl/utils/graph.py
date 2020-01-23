@@ -59,5 +59,6 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
     for edge in graph.edges:
         if 'port' in graph.edges[edge]:
             port_str = graph.edges[edge]['port']
-            graph.edges[edge]['port'] = port_str[1:-1].split(',')
+            if type(port_str) == str:
+                graph.edges[edge]['port'] = port_str[1:-1].split(',')
     return graph, raw_graph

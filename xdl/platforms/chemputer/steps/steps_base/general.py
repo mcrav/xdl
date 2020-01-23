@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 from logging import Logger
 from .....step_utils.base_steps import AbstractBaseStep
 
@@ -101,7 +101,7 @@ class CMove(AbstractBaseStep):
         from_port: Optional[str] = None,
         to_port: Optional[str] = None,
         unique: Optional[bool] = False,
-        through: Optional[List[str]] = [],
+        through: Optional[str] = [],
         use_backbone: Optional[bool] = 'default',
     ) -> None:
         super().__init__(locals())

@@ -8,3 +8,4 @@ from .vacuum import *
 from .rotavap import *
 from .pneumatic_controller import *
 from .evacuate import Evacuate
+from .separate_phases import SeparatePhases

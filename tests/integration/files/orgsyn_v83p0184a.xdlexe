@@ -1954,11 +1954,12 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="rotavap"
         upper_phase_vessel="separator"
-        separation_vessel="separator"
-        dead_volume_target="None"
+        dead_volume_vessel="None"
+        step_volume="1 mL"
         lower_phase_port="evaporate"
         upper_phase_port="bottom"
         dead_volume_port="None"
@@ -2212,14 +2213,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="rotavap"
         upper_phase_vessel="separator"
-        separation_vessel="separator"
-        dead_volume_target="rotavap"
+        dead_volume_vessel="rotavap"
+        step_volume="1 mL"
         lower_phase_port="evaporate"
         upper_phase_port="bottom"
-        dead_volume_port="None"
+        dead_volume_port="evaporate"
         lower_phase_through="cartridge_MgSO4"
         upper_phase_through="None"
         dead_volume_through="cartridge_MgSO4" />
@@ -2386,14 +2388,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="rotavap"
         upper_phase_vessel="separator"
-        separation_vessel="separator"
-        dead_volume_target="rotavap"
+        dead_volume_vessel="rotavap"
+        step_volume="1 mL"
         lower_phase_port="evaporate"
         upper_phase_port="bottom"
-        dead_volume_port="None"
+        dead_volume_port="evaporate"
         lower_phase_through="cartridge_MgSO4"
         upper_phase_through="None"
         dead_volume_through="cartridge_MgSO4" />
@@ -2560,14 +2563,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="rotavap"
         upper_phase_vessel="waste_Y"
-        separation_vessel="separator"
-        dead_volume_target="waste_Y"
+        dead_volume_vessel="waste_Y"
+        step_volume="1 mL"
         lower_phase_port="evaporate"
         upper_phase_port="0"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="cartridge_MgSO4"
         upper_phase_through="None"
         dead_volume_through="cartridge_MgSO4" />
