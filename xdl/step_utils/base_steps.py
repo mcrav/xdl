@@ -1,18 +1,14 @@
-from typing import List, Callable, Union
+from ..utils import XDLBase
+from ..constants import DEFAULT_INSTANT_DURATION
 import logging
 import threading
 import copy
-import sys
-import time
 from abc import ABC, abstractmethod
 from ..utils.misc import format_property
 from ..localisation import HUMAN_READABLE_STEPS
 
 if False:
     from chempiler import Chempiler
-
-from ..utils import XDLBase
-from ..constants import DEFAULT_INSTANT_DURATION
 
 class Step(XDLBase):
     """Base class for all step objects.
@@ -39,8 +35,8 @@ class Step(XDLBase):
         if self.name in HUMAN_READABLE_STEPS:
             step_human_readables = HUMAN_READABLE_STEPS[self.name]
             if language in step_human_readables:
-                human_readable = HUMAN_READABLE_STEPS[self.name][language].format(
-                    **self.formatted_properties())
+                human_readable = HUMAN_READABLE_STEPS[
+                    self.name][language].format(**self.formatted_properties())
             else:
                 human_readable = self.name
         else:
@@ -112,18 +108,23 @@ class AbstractStep(Step, ABC):
 
         try:
             repeats = 1
-            if 'repeat' in self.properties: repeats = int(self.repeat)
+            if 'repeat' in self.properties:
+                repeats = int(self.repeat)
             for _ in range(repeats):
                 for step in self.steps:
                     prop_str = ''
                     for k, v in step.properties.items():
                         prop_str += f'{"  " * level}  {k}: {v}\n'
-                    logger.info('Executing:\n{0}{1}\n{2}'.format('  ' * level, step.name, prop_str))
+                    logger.info(
+                        'Executing:\n{0}{1}\n{2}'.format(
+                            '  ' * level, step.name, prop_str))
                     try:
-                        keep_going = step.execute(chempiler, logger, level=level)
+                        keep_going = step.execute(
+                            chempiler, logger, level=level)
                     except Exception as e:
                         logger.info(
-                            'Step failed {0} {1}'.format(type(step), step.properties))
+                            'Step failed {0} {1}'.format(
+                                type(step), step.properties))
                         raise e
                     if not keep_going:
                         return False
@@ -229,7 +230,8 @@ class AbstractAsyncStep(XDLBase):
 
     @abstractmethod
     def async_execute(
-        self, chempiler: 'Chempiler', logger: logging.Logger = None) -> bool:
+        self, chempiler: 'Chempiler', logger: logging.Logger = None
+    ) -> bool:
         return True
 
     def kill(self):
@@ -294,7 +296,7 @@ class AbstractDynamicStep(XDLBase):
     def prepare_for_execution(self, graph, executor):
         self.executor = executor
         self.graph = graph
-        self.start_block  = self.on_start()
+        self.start_block = self.on_start()
         self.executor.prepare_block_for_execution(self.graph, self.start_block)
 
     def execute(self, chempiler, logger=None, level=0):
@@ -327,7 +329,8 @@ class AbstractDynamicStep(XDLBase):
                 step.execute(chempiler, logger=logger, level=level)
 
             continue_block = self.on_continue()
-            self.executor.prepare_block_for_execution(self.graph, continue_block)
+            self.executor.prepare_block_for_execution(
+                self.graph, continue_block)
 
         # Execute steps from on_finish
         finish_block = self.on_finish()
@@ -344,8 +347,9 @@ class AbstractDynamicStep(XDLBase):
         return True
 
 class UnimplementedStep(Step):
-    """Abstract base class for steps that have no implementation but are included
-    either as stubs or for the purpose of showing requirements / human_readable.
+    """Abstract base class for steps that have no implementation but are
+    included either as stubs or for the purpose of showing requirements or
+    human_readable.
     """
     def __init__(self, param_dict):
         super().__init__(param_dict)
