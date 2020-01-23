@@ -39,13 +39,12 @@ before_script:
 
 lint:
   variables:
-    FLAKE8_OUTER_FILES: setup.py, xdl/xdl.py xdl/xdl_controller.py xdl/constants.py xdl/execution/abstract_executor.py
-    FLAKE8_EXECUTION_FILES: xdl/execution/abstract_executor.py
+    FLAKE8_EXCLUDE: xdl/graphgen_deprecated,xdl/hardware,xdl/localisation,xdl/platforms,xdl/readwrite,xdl/reagents,xdl/steps,xd/step_utils,xdl/utils,tests,documentation,*__init__.py
     FLAKE8_MAX_LINE_LENGTH: 80
     FLAKE8_IGNORE: E302,W503
+
   script:
-    - flake8 $FLAKE8_OUTER_FILES --max-line-length=$FLAKE8_MAX_LINE_LENGTH --ignore=$FLAKE8_IGNORE
-    - flake8 $FLAKE8_EXECUTION_FILES --max-line-length=$FLAKE8_MAX_LINE_LENGTH --ignore=$FLAKE8_IGNORE
+    - flake8 . --max-line-length=$FLAKE8_MAX_LINE_LENGTH --ignore=$FLAKE8_IGNORE --exclude=$FLAKE8_EXCLUDE
 
 test:
   script:
