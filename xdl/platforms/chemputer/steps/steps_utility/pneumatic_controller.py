@@ -1,9 +1,9 @@
 from .....step_utils.base_steps import AbstractStep
 from ..steps_base import CSwitchVacuum, CSwitchArgon
-from  .general import Wait
+from .general import Wait
 
 #: Time to wait after switching between argon/vacuum for pressure to change.
-WAIT_AFTER_SWITCH_TIME = 30 # s
+WAIT_AFTER_SWITCH_TIME = 30  # s
 
 class SwitchVacuum(AbstractStep):
     """Supply given vessel with vacuum using PneumaticController.

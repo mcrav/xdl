@@ -1,9 +1,8 @@
-from typing import List, Any
+from typing import List
 from lxml import etree
 from ..reagents import Reagent
 from ..hardware import Hardware
-from ..platforms.chemputer.steps import Add
-from ..steps import Step, AbstractBaseStep
+from ..steps import Step
 from ..constants import DEFAULT_VALS, INTERNAL_PROPERTIES, XDL_VERSION
 from .constants import ALWAYS_WRITE
 from ..utils.misc import format_property
@@ -56,7 +55,7 @@ class XDLGenerator(object):
         for component in self.hardware:
             component_tree = etree.Element('Component')
             for prop, val in component.properties.items():
-                if val != None:
+                if val is not None:
                     if prop == 'component_type':
                         component_tree.attrib['type'] = str(val)
                     else:
@@ -90,27 +89,29 @@ class XDLGenerator(object):
                     child_tree = self.get_step_tree(child)
                     step_tree.append(child_tree)
             else:
-                if val != None or self.full_properties:
+                if val is not None or self.full_properties:
                     # if self.full_properties is False ignore some properties.
                     if not self.full_properties:
-                        # Don't write properties that are the same as the default.
+                        # Don't write properties that are the same as the
+                        # default.
                         if (step.name in DEFAULT_VALS
-                            and prop in DEFAULT_VALS[step.name]
-                            and DEFAULT_VALS[step.name][prop] == val):
+                                and prop in DEFAULT_VALS[step.name]
+                                and DEFAULT_VALS[step.name][prop] == val):
                             # Some things should always be written even if they
                             # are default.
-                            if not (step.name in ALWAYS_WRITE and prop in ALWAYS_WRITE[step.name]):
+                            if (not (step.name in ALWAYS_WRITE
+                                     and prop in ALWAYS_WRITE[step.name])):
                                 continue
 
                         # Don't write internal properties.
                         if (step.name in INTERNAL_PROPERTIES
-                            and prop in INTERNAL_PROPERTIES[step.name]):
+                                and prop in INTERNAL_PROPERTIES[step.name]):
                             continue
                     # Convert value to nice units and add to element attrib.
                     formatted_property = format_property(
                         prop, val, human_readable=False)
 
-                    if formatted_property == None:
+                    if formatted_property is None:
                         formatted_property = str(formatted_property)
 
                     step_tree.attrib[prop] = formatted_property
@@ -129,21 +130,22 @@ class XDLGenerator(object):
         return get_xdl_string(self.xdltree)
 
 def get_element_xdl_string(
-    element: etree._ElementTree, indent_level=0, indent='  ') -> str:
+        element: etree._ElementTree, indent_level=0, indent='  ') -> str:
     s = ''
     s += f'{indent * indent_level}<{element.tag}\n'
     has_children = list(element.findall('*'))
     indent_level += 1
     # Element Properties
     for attr, val in element.attrib.items():
-        if val != None:
+        if val is not None:
             s += f'{indent * indent_level}{attr}="{val}"\n'
     if has_children:
         s = s[:-1] + '>\n'
     else:
         s = s[:-1] + ' />\n'
     for subelement in element.findall('*'):
-        s += get_element_xdl_string(subelement, indent_level=indent_level, indent=indent)
+        s += get_element_xdl_string(
+            subelement, indent_level=indent_level, indent=indent)
     indent_level -= 1
     if has_children:
         s += f'{indent * indent_level}</{element.tag}>\n'

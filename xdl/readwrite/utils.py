@@ -1,10 +1,3 @@
-import re
-from typing import Tuple
-
-############
-### MISC ###
-############
-
 # Should match, '1', '11', '1.1', '1.01', '13.12' etc.
 float_regex: str = r'([0-9]+([.][0-9]+)?)'
 

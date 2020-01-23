@@ -14,7 +14,7 @@ def get_port_str(port: str) -> str:
     return ''
 
 def format_property(
-    prop: str, val: Any, human_readable: Optional[bool] = True) -> str:
+        prop: str, val: Any, human_readable: Optional[bool] = True) -> str:
     """Given property key and value in standard units, convert value
     to sensitive units and return str ready for putting in XDL.
     E.g. time: 3600 -> '1 hr', volume 2000 -> '2 l'.
@@ -31,7 +31,7 @@ def format_property(
         str: Value converted to nice units if necessary and returned
             as neat str ready for outputting.
     """
-    if val == None:
+    if val is None:
         return None
 
     if 'time' in prop:
@@ -68,7 +68,7 @@ def format_property(
     return str(val)
 
 def format_int(val) -> str:
-    if val != None:
+    if val is not None:
         return str(int(val))
 
 def format_stir_rpm(val: float) -> str:
@@ -82,7 +82,7 @@ def format_stir_rpm(val: float) -> str:
     """
     return f'{val} RPM'
 
-def format_pressure(val_mbar: float)  -> str:
+def format_pressure(val_mbar: float) -> str:
     """Return formatted pressure in sensible units.
 
     Args:
@@ -112,8 +112,8 @@ def format_volume(val_ml: float) -> str:
         return '0'
     # litres
     if val_ml > 1000:
-        l = val_ml / 1000
-        return f'{format_val(l)} l'
+        litres = val_ml / 1000
+        return f'{format_val(litres)} l'
     # microlitres
     elif val_ml < 0.1:
         ul = val_ml * 1000
@@ -179,7 +179,7 @@ def format_temp(val_celsius: float) -> str:
     Returns:
         str: Formatted temperature.
     """
-    if type(val_celsius) == str: # 'reflux' or 'None'
+    if type(val_celsius) == str:  # 'reflux' or 'None'
         return val_celsius
     else:
         return f'{format_val(val_celsius)}°C'

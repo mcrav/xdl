@@ -1,13 +1,10 @@
 from typing import Optional, Dict, Any, List
-import copy
 from .....step_utils.base_steps import Step, AbstractStep
 from .add import Add
 from ..steps_utility import Transfer, Wait, Stir
-from ..steps_base import CSeparatePhases, CMove
-from .....utils.misc import get_port_str, format_property
+from ..steps_base import CSeparatePhases
 from .....constants import (
     BOTTOM_PORT,
-    TOP_PORT,
     DEFAULT_SEPARATION_FAST_STIR_TIME,
     DEFAULT_SEPARATION_FAST_STIR_SPEED,
     DEFAULT_SEPARATION_SLOW_STIR_TIME,
@@ -72,8 +69,8 @@ class Separate(AbstractStep):
     def get_steps(self) -> List[Step]:
         """It may seem mental having this many methods with lots of duplicate
         code but the condensed version with lots of if statements for different
-        scenarios was took too long to see what was going on. Better just to have
-        clear routines for every scenario.
+        scenarios was took too long to see what was going on. Better just to
+        have clear routines for every scenario.
         """
         if not self.waste_phase_to_vessel and self.waste_vessel:
             self.waste_phase_to_vessel = self.waste_vessel
@@ -87,15 +84,15 @@ class Separate(AbstractStep):
             elif self.purpose == 'extract':
                 return self._get_multi_extract_steps()
 
-            raise XDLError('Invalid purpose given to Separate step.\nValid purposes: "wash" or "extract"')
+            raise XDLError('Invalid purpose given to Separate step.\nValid\
+ purposes: "wash" or "extract"')
 
         else:
             return self._get_single_separation_steps()
 
-
-    #####################################
-    ### Separation Routine Components ###
-    #####################################
+    #################################
+    # Separation Routine Components #
+    #################################
 
     def _get_initial_reaction_mixture_transfer_step(self):
         """Transfer reaction mixture to separator."""
@@ -172,8 +169,8 @@ class Separate(AbstractStep):
                 ]
         else:
             if (self.n_separations > 1
-                and self.to_vessel == self.separation_vessel
-                and self.purpose == 'extract'):
+                    and self.to_vessel == self.separation_vessel
+                    and self.purpose == 'extract'):
                 return [
                     CSeparatePhases(
                         separation_vessel=self.separation_vessel,
@@ -218,7 +215,8 @@ class Separate(AbstractStep):
 
     def _get_multi_wash_loop_separate_phases(self):
         """Get CSeparatePhases in wash routine, if there is another separation
-        to be performed after. Ensure product phase ends up in back in separator.
+        to be performed after. Ensure product phase ends up in back in
+        separator.
         """
         steps = []
         if self.product_bottom:
@@ -329,14 +327,12 @@ class Separate(AbstractStep):
                 ])
         return steps
 
-
-    ####################################
-    ### Complete Separation Routines ###
-    ####################################
+    ################################
+    # Complete Separation Routines #
+    ################################
 
     def _get_single_separation_steps(self):
-        """Get full separation routine for 1 wash/extraction.
-        """
+        """Get full separation routine for 1 wash/extraction."""
         # If necessary, Transfer from_vessel to separation_vessel
         steps = self._get_initial_reaction_mixture_transfer_step()
 
@@ -400,10 +396,9 @@ class Separate(AbstractStep):
         steps.extend(self._get_final_separate_phases_step())
         return steps
 
-
-    ########################################
-    ###  Abstract Method implementations ###
-    ########################################
+    ####################################
+    #  Abstract Method implementations #
+    ####################################
 
     def final_sanity_check(self, graph):
         assert self.to_vessel != self.waste_phase_to_vessel
@@ -413,18 +408,31 @@ class Separate(AbstractStep):
 
     @property
     def buffer_flasks_required(self):
-        if self.purpose == 'extract' and self.n_separations > 1 and not self.product_bottom and self.to_vessel == self.separation_vessel:
+        if (self.purpose == 'extract'
+                and self.n_separations > 1
+                and not self.product_bottom
+                and self.to_vessel == self.separation_vessel):
             return 2
         elif (
-            (self.product_bottom and self.n_separations == 1 and self.to_vessel == self.separation_vessel)
-            or (self.n_separations > 1 and self.product_bottom and self.to_vessel == self.separation_vessel and self.purpose == 'wash')
-            or (self.purpose == 'extract' and self.product_bottom and self.to_vessel == self.separation_vessel and self.n_separations > 1)
-            or (self.purpose == 'extract' and not self.product_bottom and self.n_separations > 1)
+            (self.product_bottom
+             and self.n_separations == 1
+             and self.to_vessel == self.separation_vessel)
+            or (self.n_separations > 1
+                and self.product_bottom
+                and self.to_vessel == self.separation_vessel
+                and self.purpose == 'wash')
+            or (self.purpose == 'extract'
+                and self.product_bottom
+                and self.to_vessel == self.separation_vessel
+                and self.n_separations > 1)
+            or (self.purpose == 'extract'
+                and not self.product_bottom
+                and self.n_separations > 1)
         ):
             return 1
         return 0
 
-    def human_readable(self,  language='en') -> str:
+    def human_readable(self, language='en') -> str:
         props = self.formatted_properties()
 
         phases = ['bottom', 'top']
@@ -434,9 +442,11 @@ class Separate(AbstractStep):
 
         try:
             if self.purpose == 'wash':
-                s = HUMAN_READABLE_STEPS['Separate (wash)'][language].format(**props)
+                s = HUMAN_READABLE_STEPS['Separate (wash)'][language].format(
+                    **props)
             elif self.purpose == 'extract':
-                s = HUMAN_READABLE_STEPS['Separate (extract)'][language].format(**props)
+                s = HUMAN_READABLE_STEPS['Separate (extract)'][language].format(
+                    **props)
             return s[0].upper() + s[1:]
         except KeyError:
             return self.name

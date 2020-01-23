@@ -12,7 +12,7 @@ def get_graph_spec(xdl_obj):
 def get_flask_reagents(xdl_obj):
     reagents = []
     for step in xdl_obj.steps:
-        if type(step) == Add and step.volume != None:
+        if type(step) == Add and step.volume is not None:
             reagents.append(step.reagent)
 
         elif 'solvent' in step.properties and step.solvent:
@@ -27,7 +27,8 @@ def get_buffer_flasks(xdl_obj):
     buffer_flasks = []
     for step in xdl_obj.steps:
         if type(step) == FilterThrough and step.from_vessel == step.to_vessel:
-            buffer_flasks.append({'n_required': 1, 'connected_node': step.from_vessel})
+            buffer_flasks.append(
+                {'n_required': 1, 'connected_node': step.from_vessel})
 
         elif type(step) == Separate:
             n_required = step.buffer_flasks_required
@@ -74,9 +75,9 @@ def get_vessel_spec(xdl_obj):
             actual_vessel = step.properties[vessel]
             for prop, val in reqs.items():
                 if prop == 'temp':
-                    if not actual_vessel in vessel_spec['temps']:
+                    if actual_vessel not in vessel_spec['temps']:
                         vessel_spec['temps'][actual_vessel] = {}
-                    if not prop in vessel_spec['temps'][actual_vessel]:
+                    if prop not in vessel_spec['temps'][actual_vessel]:
                         vessel_spec['temps'][actual_vessel] = []
                     vessel_spec['temps'][actual_vessel].extend(val)
     return vessel_spec

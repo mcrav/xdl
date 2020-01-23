@@ -1,10 +1,9 @@
-from typing import Dict, List
+from typing import Dict
 from . import steps_synthesis
 from . import steps_utility
 from . import steps_base
 from . import unimplemented_steps
 from ....step_utils import special_steps
-from ....step_utils import Step
 import copy
 import inspect
 
@@ -26,7 +25,9 @@ SPECIAL_STEP_OBJ_DICT: Dict[str, type] = {
 
 #: Dictionary of unimplemented step name keys and step class values.
 UNIMPLEMENTED_STEP_OBJ_DICT: Dict[str, type] = {
-    m[0]: m[1] for m in inspect.getmembers(unimplemented_steps, inspect.isclass)}
+    m[0]: m[1]
+    for m in inspect.getmembers(unimplemented_steps, inspect.isclass)
+}
 
 #: Dictionary of all step name keys and step class values.
 STEP_OBJ_DICT: Dict[str, type] = copy.copy(BASE_STEP_OBJ_DICT)

@@ -1,10 +1,6 @@
 from typing import Optional, List
-# For type annotations
-if False:
-    from chempiler import Chempiler
 from logging import Logger
-
-from .....step_utils.base_steps import Step, AbstractBaseStep
+from .....step_utils.base_steps import AbstractBaseStep
 
 class Confirm(AbstractBaseStep):
     """Get the user to confirm something before execution continues.
@@ -20,7 +16,7 @@ class Confirm(AbstractBaseStep):
         return [], [], []
 
     def execute(
-        self, chempiler: 'Chempiler', logger: Logger = None, level: int = 0
+        self, chempiler, logger: Logger = None, level: int = 0
     ) -> bool:
         keep_going = input(self.msg)
         if not keep_going or keep_going.lower() in ['y', 'yes']:
@@ -31,7 +27,8 @@ class CSetRecordingSpeed(AbstractBaseStep):
     """Sets the timelapse speed of the camera module.
 
     Args:
-        recording_speed (float): Factor by which the recording should be sped up, i.e. 2 would mean twice the normal speed. 1 means normal speed.
+        recording_speed (float): Factor by which the recording should be sped
+            up, i.e. 2 would mean twice the normal speed. 1 means normal speed.
     """
     def __init__(self, recording_speed: float) -> None:
         super().__init__(locals())
@@ -44,9 +41,9 @@ class CSetRecordingSpeed(AbstractBaseStep):
         return True
 
 class CWait(AbstractBaseStep):
-    """Delays execution of the script for a set amount of time. This command will
-    immediately reply with an estimate of when the waiting will be finished, and also
-    give regular updates indicating that it is still alive.
+    """Delays execution of the script for a set amount of time. This command
+    will immediately reply with an estimate of when the waiting will be
+    finished, and also give regular updates indicating that it is still alive.
 
     Args:
         time (int): Time to wait in seconds.
@@ -65,8 +62,8 @@ class CWait(AbstractBaseStep):
         return self.time
 
 class CBreakpoint(AbstractBaseStep):
-    """Introduces a breakpoint in the script. The execution is halted until the operator
-    resumes it.
+    """Introduces a breakpoint in the script. The execution is halted until the
+    operator resumes it.
     """
     def __init__(self) -> None:
         super().__init__(locals())
@@ -79,16 +76,19 @@ class CBreakpoint(AbstractBaseStep):
         return True
 
 class CMove(AbstractBaseStep):
-    """Moves a specified volume from one node in the graph to another. Moving from and to
-    the same node is supported.
+    """Moves a specified volume from one node in the graph to another. Moving
+    from and to the same node is supported.
 
     Args:
         from_vessel (str): Vessel name to move from.
         to_vessel (str): Vessel name to move to.
         volume (float): Volume to move in mL. 'all' moves everything.
-        move_speed (float): Speed at which liquid is moved in mL / min. (optional)
-        aspiration_speed (float): Speed at which liquid aspirates from from_vessel. (optional)
-        dispense_speed (float): Speed at which liquid dispenses from from_vessel. (optional)
+        move_speed (float): Speed at which liquid is moved in mL / min.
+            (optional)
+        aspiration_speed (float): Speed at which liquid aspirates from
+            from_vessel. (optional)
+        dispense_speed (float): Speed at which liquid dispenses from
+            from_vessel. (optional)
     """
     def __init__(
         self,
@@ -105,7 +105,6 @@ class CMove(AbstractBaseStep):
         use_backbone: Optional[bool] = 'default',
     ) -> None:
         super().__init__(locals())
-
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.move(

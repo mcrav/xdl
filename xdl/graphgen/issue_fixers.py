@@ -27,7 +27,8 @@ def fix_issue_replace_flask_with_cartridge(graph, issue):
         if graph.nodes[neighbor]['class'] == 'ChemputerFlask':
             graph.remove_node(neighbor)
             return
-    raise XDLError(f'No flask found connected to {issue["valve"]} for removal to make way for cartridge.')
+    raise XDLError(f'No flask found connected to {issue["valve"]} for removal\
+ to make way for cartridge.')
 
 def reverse_edge(graph, issue):
     edge_to_reverse = None

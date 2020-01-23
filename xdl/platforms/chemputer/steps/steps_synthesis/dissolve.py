@@ -10,11 +10,9 @@ from ..steps_base import (
     CRotavapStopHeater,
     CRotavapLiftDown,
     CRotavapLiftUp,
-    CStopVacuum,
-    CVentVacuum
 )
 from .add import Add
-from .....constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED, EVAPORATE_PORT
+from .....constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
 
 class Dissolve(AbstractStep):
     """Dissolve contents of vessel in given solvent.

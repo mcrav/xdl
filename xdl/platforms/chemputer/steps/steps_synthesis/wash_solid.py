@@ -38,8 +38,8 @@ class WashSolid(AbstractStep):
             False means don't stir.
         stir_time (float): Time to stir for after solvent has been added. Only
             relevant if stir is True or 'solvent'.
-        stir_speed (float): Speed to stir at in RPM. Only relevant if stir is True
-            or 'solvent'.
+        stir_speed (float): Speed to stir at in RPM. Only relevant if stir is
+            True or 'solvent'.
         waste_vessel (str): Given internally. Vessel to send waste to.
         filtrate_vessel (str): Optional. Vessel to send filtrate to. Defaults to
             waste_vessel.
@@ -68,7 +68,7 @@ class WashSolid(AbstractStep):
         vacuum_time: Optional[float] = 'default',
         stir: Optional[Union[bool, str]] = 'default',
         stir_time: Optional[float] = 'default',
-        stir_speed: Optional[float] =  'default',
+        stir_speed: Optional[float] = 'default',
         waste_vessel: Optional[str] = None,
         filtrate_vessel: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
@@ -122,7 +122,7 @@ class WashSolid(AbstractStep):
                 Add(reagent=self.solvent, volume=self.volume,
                     vessel=self.vessel, port=TOP_PORT,
                     waste_vessel=self.waste_vessel,
-                    stir=self.stir == True,
+                    stir=self.stir is True,
                     stir_speed=self.stir_speed),
                 # Stir (or not if stir=False) filter cake and solvent briefly.
                 Wait(self.stir_time),
@@ -135,20 +135,22 @@ class WashSolid(AbstractStep):
                     aspiration_speed=aspiration_speed),
                 # Briefly dry under vacuum.
                 StartVacuum(
-                    vessel=self.vacuum, pressure=DEFAULT_FILTER_VACUUM_PRESSURE),
+                    vessel=self.vacuum,
+                    pressure=DEFAULT_FILTER_VACUUM_PRESSURE
+                ),
                 CConnect(from_vessel=self.vessel, to_vessel=self.vacuum,
                          from_port=BOTTOM_PORT),
                 Wait(self.vacuum_time),
             ])
 
-            # If vacuum is just from vacuum line not device remove Start/Stop vacuum
-            # steps.
+            # If vacuum is just from vacuum line not device remove Start/Stop
+            # vacuum steps.
             if not self.vacuum_device:
                 steps.pop(-3)
 
-            # Start stirring before the solvent is added and stop stirring after the
-            # solvent has been removed but before the vacuum is connected.
-            if self.stir == True:
+            # Start stirring before the solvent is added and stop stirring after
+            # the solvent has been removed but before the vacuum is connected.
+            if self.stir is True:
                 steps.insert(
                     0, StartStir(vessel=self.vessel,
                                  vessel_type=self.vessel_type,
@@ -176,7 +178,7 @@ class WashSolid(AbstractStep):
                 ])
 
             # If self.temp isn't None add HeatChill steps at beginning and end.
-            if self.temp != None:
+            if self.temp is not None:
                 steps.insert(
                     0, HeatChillToTemp(vessel=self.vessel, temp=self.temp))
                 steps.append(StopHeatChill(vessel=self.vessel))
@@ -197,6 +199,6 @@ class WashSolid(AbstractStep):
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {
             'vessel': {
-                'stir': self.stir != False,
+                'stir': self.stir is False,
             }
         }

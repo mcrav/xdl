@@ -2,12 +2,12 @@ from typing import Union, List, Callable, Dict, Any
 import logging
 import time
 import math
-import os
 from functools import partial
 
 from .base_steps import Step, AbstractAsyncStep, AbstractStep, AbstractBaseStep
 
-os.system('color')
+if False:
+    from chempiler import Chempiler
 
 class Async(AbstractAsyncStep):
     """Wrapper to execute a step or sequence of steps asynchronously.
@@ -43,7 +43,8 @@ class Async(AbstractAsyncStep):
         self.finished = False
 
     def async_execute(
-        self, chempiler: 'Chempiler', logger: logging.Logger = None) -> None:
+        self, chempiler: 'Chempiler', logger: logging.Logger = None
+    ) -> None:
         for step in self.children:
             keep_going = step.execute(chempiler, logger)
             if not keep_going or self._should_end:
@@ -90,7 +91,8 @@ class Repeat(AbstractStep):
         children (List[Step]): Child steps to repeat.
     """
     def __init__(
-        self, repeats: int, children: Union[Step, List[Step]])  -> None:
+        self, repeats: int, children: Union[Step, List[Step]]
+    ) -> None:
         super().__init__(locals())
 
         if type(children) != list:
@@ -130,8 +132,8 @@ class Parallelizer(object):
         self.block_id = 0
         self.chempiler = chempiler
         self.block_queue = blocks
-        self.exstream = [] # Execution stream
-        self.lockmatrix = [] # Matrix showing vessel locking over time
+        self.exstream = []  # Execution stream
+        self.lockmatrix = []  # Matrix showing vessel locking over time
         self.nodes = [node for node in self.chempiler.graph.nodes()]
         self.time_step = time_step
 
@@ -142,7 +144,6 @@ class Parallelizer(object):
 
         # Add all remaining blocks to lockmatrix and exstream
         self.process_blocks()
-
 
     def get_step_end(self, step: Step, start_t: int) -> int:
         """Get the time step in the lockmatrix at which the given step ends
@@ -191,7 +192,8 @@ class Parallelizer(object):
         return self.apply_ongoing_locks(lockmatrix)
 
     def apply_ongoing_locks(
-        self, lockmatrix: List[List[int]]) -> List[List[int]]:
+        self, lockmatrix: List[List[int]]
+    ) -> List[List[int]]:
         """Fill in ongoing_locks in lockmatrix. Should be called whenever lock
         matrix is extended.
 
@@ -214,7 +216,7 @@ class Parallelizer(object):
                     lockmatrix[j][i] = 2
         return lockmatrix
 
-    def get_exstream(self, block: List[List[Step]]) ->  List[List[Step]]:
+    def get_exstream(self, block: List[List[Step]]) -> List[List[Step]]:
         """Get execution stream for given block.
 
         Args:
@@ -266,17 +268,20 @@ class Parallelizer(object):
             block_exstream = self.get_exstream(block)
             for block_start_t in range(len(self.lockmatrix)):
                 if self.check_block_compat(block_lockmatrix, block_start_t):
-                    self.add_block_to_lockmatrix(block_lockmatrix, block_start_t)
+                    self.add_block_to_lockmatrix(
+                        block_lockmatrix, block_start_t)
                     self.add_block_to_exstream(block_exstream, block_start_t)
                     break
 
     def check_block_compat(
-        self, block_lockmatrix: List[List[int]], block_start_t: int) -> bool:
+        self, block_lockmatrix: List[List[int]], block_start_t: int
+    ) -> bool:
         """Check if given block lockmatrix is compatible with the global
         lockmatrix at the given block start time step.
 
         Args:
-            block_lockmatrix (List[List[int]]): Lock matrix for block being added.
+            block_lockmatrix (List[List[int]]): Lock matrix for block being
+                added.
             block_start_t (int): Time step to check block compatibility with
                 global lock matrix, if the block starts at this time step.
 
@@ -290,14 +295,16 @@ class Parallelizer(object):
 
             # Check for lock conflicts
             for j in range(len(block_lockmatrix[i])):
-                if block_lockmatrix[i][j] > 0 and self.lockmatrix[i+block_start_t][j] > 0:
+                if (block_lockmatrix[i][j] > 0
+                        and self.lockmatrix[i + block_start_t][j] > 0):
                     return False
 
         # Gone through entire block and found no lock conflicts
         return True
 
     def add_block_to_exstream(
-        self, block_exstream: List[List[Step]],  block_start_t: int) -> None:
+        self, block_exstream: List[List[Step]], block_start_t: int
+    ) -> None:
         """Add block execution stream to the global execution stream starting
         at the given time step.
 
@@ -310,15 +317,17 @@ class Parallelizer(object):
         for i in range(len(block_exstream)):
             if block_start_t + i >= len(self.exstream):
                 self.exstream.append([])
-            self.exstream[block_start_t+i].extend(block_exstream[i])
+            self.exstream[block_start_t + i].extend(block_exstream[i])
 
     def add_block_to_lockmatrix(
-        self, block_lockmatrix: List[List[int]], block_start_t: int) -> None:
+        self, block_lockmatrix: List[List[int]], block_start_t: int
+    ) -> None:
         """Add block lockmatrix to the global lockmatrix starting at the given
         time step.
 
         Args:
-            block_lockmatrix (List[List[int]]): Lock matrix of block being added.
+            block_lockmatrix (List[List[int]]): Lock matrix of block being
+                added.
             block_start_t (int): Time step of global lock matrix to add block
                 lock matrix to.
         """
@@ -329,7 +338,7 @@ class Parallelizer(object):
 
             # Add block locks to lockmatrix
             for j in range(len(block_lockmatrix[i])):
-                self.lockmatrix[i+block_start_t][j] += block_lockmatrix[i][j]
+                self.lockmatrix[i + block_start_t][j] += block_lockmatrix[i][j]
 
         self.apply_ongoing_locks(self.lockmatrix)
 
@@ -352,7 +361,8 @@ class Parallelizer(object):
             self.execute_time_step()
             time_elapsed = time.time() - start_t
 
-            # Wait until time step duration has passed to execute next time step.
+            # Wait until time step duration has passed to execute next time
+            # step.
             while time_elapsed < self.time_step:
                 time.sleep(1)
                 time_elapsed = time.time() - start_t
@@ -382,8 +392,13 @@ class Parallelizer(object):
             # If some steps could not be executed due to unreleased lock, wait
             # then try again.
             if time_step:
-                print(f'Waiting to execute {len(time_step)} more steps in current time step...')
-                print([node for node in self.chempiler.graph.nodes() if self.chempiler.graph[node]['lock'] != None])
+                print(f'Waiting to execute {len(time_step)} more steps in\
+ current time step...')
+                print([
+                    node
+                    for node in self.chempiler.graph.nodes()
+                    if self.chempiler.graph[node]['lock'] is not None
+                ])
                 time.sleep(1)
 
     def execute_step(self, step) -> None:
@@ -391,7 +406,11 @@ class Parallelizer(object):
         after execution.
         """
         step.acquire_lock(self.chempiler, step.locking_pid)
-        async_step = Async(step, on_finish=partial(step.release_lock, self.chempiler, step.locking_pid))
+        async_step = Async(
+            step,
+            on_finish=partial(
+                step.release_lock, self.chempiler, step.locking_pid)
+        )
         async_step.execute(self.chempiler)
 
     def print_lockmatrix(self):

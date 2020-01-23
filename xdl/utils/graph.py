@@ -1,10 +1,8 @@
-from typing import Union,  Dict
+from typing import Union, Dict
 import copy
 import json
 from networkx.readwrite import json_graph
-from networkx import MultiDiGraph, read_graphml, NetworkXNoPath, relabel_nodes
-from networkx.algorithms.shortest_paths.generic import shortest_path_length
-
+from networkx import MultiDiGraph, read_graphml, relabel_nodes
 
 def undirected_neighbors(graph, node, data=False):
     yielded_neighbors = []

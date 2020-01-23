@@ -9,7 +9,7 @@
 
 from logging import Logger
 from typing import Optional
-from ....step_utils.base_steps import Step, AbstractBaseStep
+from ....step_utils.base_steps import AbstractBaseStep
 
 class CBTurnWheel(AbstractBaseStep):
     """Turns the wheel on the Chemobot Modular Wheel system
@@ -19,12 +19,10 @@ class CBTurnWheel(AbstractBaseStep):
 
     Args:
         n_turns (int): Number of turns to move
-
     """
 
-    def __init__(self, n_turns: int, children = []) -> None:
+    def __init__(self, n_turns: int, **kwargs) -> None:
         super().__init__(locals())
-
 
     def execute(
         self, chemobot_mgr, logger: Optional[Logger] = None, level: int = 0
@@ -35,7 +33,6 @@ class CBTurnWheel(AbstractBaseStep):
         chemobot_mgr.wheel.turn_wheel(self.n_turns)
         return True
 
-
 class CBDispense(AbstractBaseStep):
     """Dispenses a volume from a given pump
 
@@ -45,9 +42,10 @@ class CBDispense(AbstractBaseStep):
     Args:
         pump (str): Name of the pump
         volume (float): Volume to dispense
-        in_valve (str): Tricont valve to pull in from (Triconts only -- Defaults to 'I')
-        out_valve (str): Tricont valve to dispense from (Triconts only -- Defaults to 'O')
-
+        in_valve (str): Tricont valve to pull in from (Triconts only -- \
+Defaults to 'I')
+        out_valve (str): Tricont valve to dispense from (Triconts only -- \
+Defaults to 'O')
     """
 
     def __init__(
@@ -56,10 +54,9 @@ class CBDispense(AbstractBaseStep):
         volume: float,
         in_valve: str = "I",
         out_valve: str = "O",
-        children = [],
+        **kwargs
     ) -> None:
         super().__init__(locals())
-
 
     def execute(
         self, chemobot_mgr, logger: Optional[Logger] = None, level: int = 0
@@ -67,7 +64,6 @@ class CBDispense(AbstractBaseStep):
         chemobot_mgr.dispense(
             self.pump, self.volume, self.in_valve, self.out_valve)
         return True
-
 
 class CBSetStirRate(AbstractBaseStep):
     """Sets the stir rate of the wheel's stirring mechanism
@@ -79,16 +75,14 @@ class CBSetStirRate(AbstractBaseStep):
         stir_rate (int): PWM value
 
     """
-    def __init__(self, stir_rate: int, children = []) -> None:
+    def __init__(self, stir_rate: int, **kwargs) -> None:
         super().__init__(locals())
-
 
     def execute(
         self, chemobot_mgr, logger: Optional[Logger] = None, level: int = 0
     ) -> None:
         chemobot_mgr.set_stir_rate(self.stir_rate)
         return True
-
 
 class CBWait(AbstractBaseStep):
     """Pause execution until time has elapsed
@@ -100,10 +94,11 @@ class CBWait(AbstractBaseStep):
         wait_time (float): Wait time in seconds
 
     """
-    def __init__(self, wait_time: float, children = []) -> None:
+    def __init__(self, wait_time: float, **kwargs) -> None:
         super().__init__(locals())
 
-
-    def execute(self, chemobot_mgr, logger = None, level = 0) -> None:
+    def execute(
+        self, chemobot_mgr, logger: Logger = None, level: int = 0
+    ) -> None:
         chemobot_mgr.wait(self.wait_time)
         return True

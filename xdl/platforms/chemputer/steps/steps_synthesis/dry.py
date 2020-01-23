@@ -72,7 +72,7 @@ class Dry(AbstractStep):
         from_port = None
         if self.vessel_type == 'rotavap':
             vacuum_vessel = self.vessel
-            from_port='evaporate'
+            from_port = 'evaporate'
         # from_port should be None unless drying is in a filter in which case
         # use bottom port, or for a rotavap port 'evaporate' is used.
         if self.vessel_type == 'filter':
@@ -96,8 +96,8 @@ class Dry(AbstractStep):
             no_vacuum_device_remove_i = -3
             steps.append(
                 CConnect(from_vessel=self.vessel,
-                        to_vessel=vacuum_vessel,
-                        from_port=from_port))
+                         to_vessel=vacuum_vessel,
+                         from_port=from_port))
 
         steps.append(Wait(self.time))
 
@@ -106,7 +106,7 @@ class Dry(AbstractStep):
         if not self.vacuum_device:
             steps.pop(no_vacuum_device_remove_i)
 
-        if self.temp != None:
+        if self.temp is not None:
             steps.insert(0, HeatChillToTemp(
                 vessel=self.vessel,
                 temp=self.temp,
@@ -145,6 +145,6 @@ class Dry(AbstractStep):
     def requirements(self) -> Dict[str, Dict[str, Any]]:
         return {
             'vessel': {
-                'temp': [item for item in [self.temp] if item != None],
+                'temp': [item for item in [self.temp] if item is not None],
             }
         }

@@ -15,9 +15,13 @@ def get_valid_attrs(target_class: type) -> List[str]:
     Returns:
         List[str]: List of arg names for target_class __init__ method.
     """
-    valid_attrs = [k for k in target_class.__init__.__annotations__ if k != 'return']
+    valid_attrs = [
+        k
+        for k in target_class.__init__.__annotations__
+        if k != 'return'
+    ]
     if (AbstractStep in target_class.__bases__
-        or AbstractBaseStep in target_class.__bases__):
+            or AbstractBaseStep in target_class.__bases__):
         valid_attrs.append('repeat')
     elif target_class == Component:
         valid_attrs.remove('component_type')
@@ -35,17 +39,18 @@ def check_attrs_are_valid(attrs: Dict[str, str], target_class: type) -> None:
             __init__ method.
 
     Raises:
-        XDLError: Error raised if any of attrs aren't args of target_class __init__
+        XDLError: Error raised if any of attrs aren't args of target_class\
+ __init__
             method.
     """
     valid_attrs = get_valid_attrs(target_class) + ['children', 'repeat']
     for attr, _ in attrs.items():
-        if not attr in valid_attrs:
+        if attr not in valid_attrs:
             raise XDLError(
                 f'{attr} is not a valid attribute for {target_class.__name__}.')
 
 def check_reagents_are_all_declared(
-    steps: List[Step], reagents: List[Reagent]) -> None:
+        steps: List[Step], reagents: List[Reagent]) -> None:
     """Check all reagents used in steps are declared in Reagents section.
 
     Args:
@@ -61,13 +66,14 @@ def check_reagents_are_all_declared(
         for prop in step.properties:
             if prop in REAGENT_PROPS:
                 step_reagent = step.properties[prop]
-                if not step_reagent in reagent_ids:
+                if step_reagent not in reagent_ids:
                     raise XDLError(
-                        f'{step_reagent} for {step.name} step not declared in Reagents section.')
+                        f'{step_reagent} for {step.name} step not declared in\
+ Reagents section.')
 
 
 def check_vessels_are_all_declared(
-    steps: List[Step], components: List[Component]) -> None:
+        steps: List[Step], components: List[Component]) -> None:
     """Check all components used in steps are declared in Hardware section.
 
     Args:
@@ -83,6 +89,7 @@ def check_vessels_are_all_declared(
         for prop in step.properties:
             if 'vessel' in prop or prop == 'rotavap_name':
                 step_vessel = step.properties[prop]
-                if step_vessel and not step_vessel in component_ids:
+                if step_vessel and step_vessel not in component_ids:
                     raise XDLError(
-                        f'{step_vessel} for {step.name} step not declared in Hardware section.')
+                        f'{step_vessel} for {step.name} step not declared in\
+ Hardware section.')

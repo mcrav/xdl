@@ -1,16 +1,11 @@
-from typing import Optional
-# For type annotations
-if False:
-    from chempiler import Chempiler
-from logging import Logger
-
 from .....step_utils.base_steps import AbstractBaseStep
 
 class CStartChiller(AbstractBaseStep):
     """Starts the recirculation chiller.
 
     Args:
-        vessel (str): Vessel to chill. Name of the node the chiller is attached to.
+        vessel (str): Vessel to chill. Name of the node the chiller is attached
+        to.
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
@@ -26,7 +21,8 @@ class CStopChiller(AbstractBaseStep):
     """Stops the recirculation chiller.
 
     Args:
-        vessel (str): Vessel to stop chilling. Name of the node the chiller is attached to.
+        vessel (str): Vessel to stop chilling. Name of the node the chiller is
+            attached to.
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
@@ -42,7 +38,8 @@ class CChillerSetTemp(AbstractBaseStep):
     """Sets the temperature setpoint.
 
     Args:
-        vessel (str): Vessel to set chiller temperature. Name of the node the chiller is attached to.
+        vessel (str): Vessel to set chiller temperature. Name of the node the
+            chiller is attached to.
         temp (float): Temperature in °C.
     """
     def __init__(self, vessel: str, temp: float) -> None:
@@ -56,11 +53,12 @@ class CChillerSetTemp(AbstractBaseStep):
         return True
 
 class CChillerWaitForTemp(AbstractBaseStep):
-    """Delays the script execution until the current temperature of the chiller is within
-    0.5°C of the setpoint.
+    """Delays the script execution until the current temperature of the chiller
+    is within 0.5°C of the setpoint.
 
     Args:
-        vessel (str): Vessel to wait for temperature. Name of the node the chiller is attached to.
+        vessel (str): Vessel to wait for temperature. Name of the node the
+            chiller is attached to.
     """
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
@@ -69,18 +67,19 @@ class CChillerWaitForTemp(AbstractBaseStep):
         return [self.vessel], [], []
 
     def duration(self, chempiler):
-        return 2 * 60 # arbitrary value given for the moment
+        return 2 * 60  # arbitrary value given for the moment
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.wait_for_temp(self.vessel)
         return True
 
 class CRampChiller(AbstractBaseStep):
-    """Causes the chiller to ramp the temperature up or down. Only available for Petite
-    Fleur.
+    """Causes the chiller to ramp the temperature up or down. Only available for
+    Petite Fleur.
 
     Args:
-        vessel (str): Vessel to ramp chiller on. Name of the node the chiller is attached to.
+        vessel (str): Vessel to ramp chiller on. Name of the node the chiller
+            is attached to.
         ramp_duration (int): Desired duration of the ramp in seconds.
         end_temperature (float): Final temperature of the ramp in °C.
     """
@@ -96,7 +95,8 @@ class CRampChiller(AbstractBaseStep):
         return [self.vessel], [], []
 
     def execute(self, chempiler, logger=None, level=0):
-        chempiler.chiller.ramp_chiller(self.vessel, self.ramp_duration, self.end_temperature)
+        chempiler.chiller.ramp_chiller(
+            self.vessel, self.ramp_duration, self.end_temperature)
         return True
 
     def duration(self, chempiler):
@@ -106,7 +106,8 @@ class CSetCoolingPower(AbstractBaseStep):
     """Sets the cooling power (0-100%). Only available for CF41.
 
     Args:
-        vessel (str): Vessel to set cooling power of chiller. Name of the node the chiller is attached to.
+        vessel (str): Vessel to set cooling power of chiller. Name of the node
+            the chiller is attached to.
         cooling_power (float): Desired cooling power in percent.
     """
     def __init__(self, vessel: str, cooling_power: float) -> None:

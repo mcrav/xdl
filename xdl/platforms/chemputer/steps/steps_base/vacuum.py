@@ -1,9 +1,3 @@
-from typing import Optional
-# For type annotations
-if False:
-    from chempiler import Chempiler
-from logging import Logger
-
 from .....step_utils.base_steps import AbstractBaseStep
 from .....constants import DEFAULT_VACUUM_VENT_WAIT_TIME
 

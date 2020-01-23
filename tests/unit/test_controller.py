@@ -12,4 +12,3 @@ def test_controller():
     c = get_chempiler(graph_f)
     controller = XDLController(c, graph_f)
     controller.add(reagent='water', vessel='reactor', volume=10)
-    

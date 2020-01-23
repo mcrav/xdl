@@ -1,8 +1,4 @@
 # For type annotations
-if False:
-    from chempiler import Chempiler
-from logging import Logger
-
 from .....step_utils.base_steps import AbstractBaseStep
 
 class CValveMoveToPosition(AbstractBaseStep):
@@ -18,12 +14,7 @@ class CValveMoveToPosition(AbstractBaseStep):
     def locks(self, chempiler):
         return [self.valve_name], [], []
 
-    def execute(
-        self,
-        chempiler: 'Chempiler',
-        logger: Logger = None,
-        level: int = 0
-    ) -> None:
+    def execute(self, chempiler, logger=None, level=0) -> None:
         valve = chempiler[self.valve_name]
         valve.move_to_position(self.position)
         return True

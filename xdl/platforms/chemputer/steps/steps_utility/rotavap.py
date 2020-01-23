@@ -54,7 +54,8 @@ class RotavapStopRotation(AbstractStep):
         rotavap_name (str): Rotavap name to start rotation for.
     """
     def __init__(
-        self, rotavap_name: str, **kwargs) -> None:
+        self, rotavap_name: str, **kwargs
+    ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
