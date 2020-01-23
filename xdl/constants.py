@@ -99,7 +99,7 @@ DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME: int = 60 * 5
 DEFAULT_FILTER_ASPIRATION_SPEED: int = 5
 
 #: Default time in seconds to wait with vacuum on while filtering.
-DEFAULT_FILTER_WAIT_TIME: int = 60*2
+DEFAULT_FILTER_WAIT_TIME: int = 60 * 2
 
 #: Default pressure to set vacuum to while filtering.
 DEFAULT_FILTER_VACUUM_PRESSURE: int = 400  # mbar
@@ -123,7 +123,7 @@ DEFAULT_WASHFILTERCAKE_VACUUM_TIME: int = 10
 DEFAULT_FILTER_EXCESS_REMOVE_FACTOR: float = 1.5
 
 #: Default time in seconds to wait for with vacuum on when drying a filter cake.
-DEFAULT_DRY_TIME: int = 60*60
+DEFAULT_DRY_TIME: int = 60 * 60
 
 #: Default volume in mL to transfer from bottom of filter flask to waste after
 #: drying filter cake.

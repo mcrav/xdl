@@ -8,6 +8,8 @@ from ..steps.special_steps import Async, Await
 from ..readwrite.generator import XDLGenerator
 from ..utils.errors import XDLError
 from ..utils import get_logger
+if False:
+    from ..xdl import XDL
 
 class AbstractXDLExecutor(ABC):
     _prepared_for_execution = False
@@ -37,7 +39,8 @@ class AbstractXDLExecutor(ABC):
 
     def _graph_hash(self, graph=None):
         """Get SHA 256 hash of graph."""
-        if not graph: graph = self._raw_graph
+        if not graph:
+            graph = self._raw_graph
         return hashlib.sha256(
             str(node_link_data(graph)).encode('utf-8')
         ).hexdigest()
@@ -69,14 +72,16 @@ class AbstractXDLExecutor(ABC):
             )
 
         # Save execution script file path for later
-        else: self.exe_save_path = save_path
+        else:
+            self.exe_save_path = save_path
 
         try:
             # Save execution script
-            with open(self.exe_save_path, 'w')  as fd:
+            with open(self.exe_save_path, 'w') as fd:
                 fd.write(exescript)
         except FileNotFoundError:
-            self.logger.warning(f'Unable to save execution script in {save_folder}.')
+            self.logger.warning(
+                f'Unable to save execution script in {save_folder}.')
 
     def call_on_prepare_for_execution(self, step):
         step.on_prepare_for_execution(self._graph)
@@ -91,16 +96,18 @@ class AbstractXDLExecutor(ABC):
             chempiler (chempiler.Chempiler): Chempiler object to execute XDL
                                              with.
         """
-        if not self._prepared_for_execution and hasattr(self._xdl, 'graph_sha256'):
+        if (not self._prepared_for_execution
+                and hasattr(self._xdl, 'graph_sha256')):
             # Currently, this check only performed for Chemputer
             if hasattr(platform_controller, 'graph'):
                 if self._xdl.graph_sha256 == self._graph_hash(
-                    platform_controller.graph.raw_graph):
+                        platform_controller.graph.raw_graph):
                     self.logger.info('Executing xdlexe, graph hashes match.')
                     self._prepared_for_execution = True
                 else:
                     raise XDLError(
-                'Trying to execute xdlexe on different graph than it was made with.')
+                        'Trying to execute xdlexe on different graph than it\
+ was made with.')
 
         if self._prepared_for_execution:
             self._xdl.print_full_xdl_tree()
@@ -122,7 +129,8 @@ class AbstractXDLExecutor(ABC):
 
                     # Normal step execution
                     else:
-                        keep_going = step.execute(platform_controller, self.logger)
+                        keep_going = step.execute(
+                            platform_controller, self.logger)
 
                 # Raise any errors during step execution.
                 except Exception as e:
@@ -134,4 +142,5 @@ class AbstractXDLExecutor(ABC):
                     return
         else:
             self.logger.error(
-                'Not prepared for execution. Prepare by calling xdlexecutor.prepare_for_execution with your graph.')
+                'Not prepared for execution. Prepare by calling\
+ xdlexecutor.prepare_for_execution with your graph.')

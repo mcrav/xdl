@@ -18,17 +18,15 @@ cache:
     - venv/
 
 before_script:
-  # Initialise virtualenv
-  # - conda -V
-
   - python -V
   - pip -V
   - python -m venv venv 
   - . venv/bin/activate
   - pip install wheel
-  # Install xdl requirements
+  - pip install flake8
   - pip install pytest
 
+  # Install xdl requirements
   # Install Chempiler, SerialLabware and ChemputerAPI for simulations
   - pip install git+https://$CHEMPILER_USER:$CHEMPILER_PW@gitlab.com/croningroup/chemputer/chempiler.git@develop
 
@@ -38,7 +36,17 @@ before_script:
   # Install xdl
   - pip install .
   - pip freeze
-  
+
+lint:
+  variables:
+    FLAKE8_OUTER_FILES: setup.py, xdl/xdl.py xdl/xdl_controller.py xdl/constants.py xdl/execution/abstract_executor.py
+    FLAKE8_EXECUTION_FILES: xdl/execution/abstract_executor.py
+    FLAKE8_MAX_LINE_LENGTH: 80
+    FLAKE8_IGNORE: E302,W503
+  script:
+    - flake8 $FLAKE8_OUTER_FILES --max-line-length=$FLAKE8_MAX_LINE_LENGTH --ignore=$FLAKE8_IGNORE
+    - flake8 $FLAKE8_EXECUTION_FILES --max-line-length=$FLAKE8_MAX_LINE_LENGTH --ignore=$FLAKE8_IGNORE
+
 test:
   script:
   - pytest tests/integration/test_prepare_for_execution.py -x

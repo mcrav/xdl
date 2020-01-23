@@ -158,7 +158,7 @@ class XDL(object):
         indent = '  '
         tree = [step]
         if print_tree:
-            self.logger.info('{0}{1}'.format(indent*lvl, step.name))
+            self.logger.info('{0}{1}'.format(indent * lvl, step.name))
         if isinstance(step, AbstractBaseStep):
             return tree
         else:
@@ -166,7 +166,8 @@ class XDL(object):
             for step in step.steps:
                 if isinstance(step, AbstractBaseStep):
                     if print_tree:
-                        self.logger.info('{0}{1}'.format(indent*lvl, step.name))
+                        self.logger.info(
+                            '{0}{1}'.format(indent * lvl, step.name))
                     tree.append(step)
                     continue
                 else:
