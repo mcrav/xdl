@@ -1,7 +1,4 @@
 from typing import Union, Dict
-if False:
-    from ....xdl import XDL
-
 from ....execution.abstract_executor import AbstractXDLExecutor
 from ..steps import Add, CBTurnWheel
 from ....utils.errors import XDLError
@@ -15,11 +12,12 @@ class ModularWheelExecutor(AbstractXDLExecutor):
         i = 0
         for step in self._xdl.steps:
             if type(step) == Add:
-                if not step.vessel in vessel_map:
+                if step.vessel not in vessel_map:
                     vessel_map[step.vessel] = i
                     i += 1
                     if i > N_WHEEL_POSITIONS:
-                        raise XDLError(f'Too many vessels for number of wheel positions {i} - {N_WHEEL_POSITIONS}')
+                        raise XDLError(f'Too many vessels for number of wheel\
+ positions {i} - {N_WHEEL_POSITIONS}')
         for step in self._xdl.steps:
             if type(step) == Add:
                 step.vessel = vessel_map[step.vessel]

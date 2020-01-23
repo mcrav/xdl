@@ -11,10 +11,9 @@ class Add(AbstractStep):
         in_valve: str = "I",
         out_valve: str = "O",
         n_turns: int = 0,
-        children = [],
+        children: List = [],
     ) -> None:
         super().__init__(locals())
-
 
     def get_steps(self) -> List[Step]:
         steps = []
