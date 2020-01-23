@@ -6,7 +6,7 @@ from ..steps import Step
 class AbstractPlatform(object):
     """Container class to hold everything necessary for a platform to be used
     with the XDL framework.
-    
+
     Args:
         executor (AbstractXDLExecutor): Implementation of
             abstract class AbstractXDLExecutor.
@@ -19,10 +19,9 @@ class AbstractPlatform(object):
     @property
     @abc.abstractmethod
     def executor(self):
-        return None 
+        return None
 
     @property
     @abc.abstractmethod
     def step_library(self):
         return None
-        
