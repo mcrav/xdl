@@ -1,4 +1,6 @@
 from typing import List
+from ....step_utils import (
+    AbstractBaseStep, AbstractDynamicStep, AbstractAsyncStep)
 from ..steps import (
     Add,
     Separate,
@@ -272,3 +274,7 @@ CLEAN_VESSEL_BOILING_POINT_FACTOR: float = 0.8
 
 #: Keywords that if found in a reagent name indicate that it is aqueous
 AQUEOUS_KEYWORDS: List[str] = ['aqueous', ' m ', 'acid', 'hydroxide', 'water']
+
+NON_RECURSIVE_ABSTRACT_STEPS: List[type] = (
+    AbstractBaseStep, AbstractDynamicStep, AbstractAsyncStep
+)

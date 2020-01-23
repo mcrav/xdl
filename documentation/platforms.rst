@@ -5,13 +5,13 @@ Integrating New Platforms
 XDL is designed to be platform-independent, so that XDL files can be written once,
 and the same file executed on two completely different platforms, that both support
 the same synthetic operations. The two platforms currently implemented for XDL
-are the Cronin group's Chemputer and Modular Wheel systems. This aims to be a 
+are the Cronin group's Chemputer and Modular Wheel systems. This aims to be a
 complete guide to integrating any other platform into the system.
 
 Creating a custom platform
 *****************************
 
-To add support for another platform, you must make a subclass of `xdl.platforms.AbstractPlatform`. This class 
+To add support for another platform, you must make a subclass of `xdl.platforms.AbstractPlatform`. This class
 has two abstract methods, `step_library` and `executor`, that must be implemented.
 
 ::
@@ -54,4 +54,3 @@ of the graph and adding in cleaning routines.
 
 Creating a custom step library
 ******************************
-

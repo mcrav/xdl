@@ -5,7 +5,7 @@ from ....step_utils import Step
 from ..steps import Filter, WashSolid, Dry, Separate, CMove, Evaporate
 from ....hardware import Hardware
 from ....utils import raise_error
-from .constants import COMMON_SOLVENT_NAMES
+from .constants import COMMON_SOLVENT_NAMES, NON_RECURSIVE_ABSTRACT_STEPS
 from ....constants import INERT_GAS_SYNONYMS
 
 def iter_vessel_contents(
@@ -214,7 +214,7 @@ def get_movements(step: Step) -> List[Tuple[str, str, float]]:
     if type(step) == CMove:
         movements.append((step.from_vessel, step.to_vessel, step.volume))
     # Recursive calls until CMove steps encountered.
-    elif step.steps:
+    elif not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS) and step.steps:
         for sub_step in step.steps:
             movements.extend(get_movements(sub_step))
     return movements

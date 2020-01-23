@@ -5,8 +5,8 @@
 >
   <Hardware>
     <Component
-      id="reactor"
-      type="reactor" />
+      id="rotavap"
+      type="rotavap" />
   </Hardware>
 
   <Reagents>
@@ -107,35 +107,73 @@
         through=""
         use_backbone="True" />
     </Add>
-    <FilterTo
+    <FilterThrough
       from_vessel="reactor"
-      to_vessel="rotavap">
+      to_vessel="rotavap"
+      through="celite"
+      eluting_solvent="None"
+      eluting_volume="None"
+      eluting_repeats="1"
+      move_speed="5"
+      aspiration_speed="5"
+      eluting_solvent_vessel="None"
+      flush_cartridge_vessel="flask_nitrogen"
+      through_cartridge="cartridge_celite"
+      cartridge_dead_volume="25 mL"
+      buffer_flask="None"
+      buffer_flask_max_volume="None"
+      to_vessel_max_volume="100 mL">
       <Transfer
         from_vessel="reactor"
         to_vessel="rotavap"
         volume="300 mL"
         from_port="0"
         to_port="evaporate"
-        through="None"
+        through="cartridge_celite"
         time="None"
-        aspiration_speed="10"
-        move_speed="40"
+        aspiration_speed="5"
+        move_speed="5"
         dispense_speed="40"
         viscous="False">
         <CMove
           from_vessel="reactor"
           to_vessel="rotavap"
           volume="300 mL"
-          move_speed="40"
-          aspiration_speed="10"
+          move_speed="5"
+          aspiration_speed="5"
           dispense_speed="40"
           from_port="0"
           to_port="evaporate"
           unique="False"
-          through="None"
+          through="cartridge_celite"
           use_backbone="True" />
       </Transfer>
-    </FilterTo>
+      <Transfer
+        from_vessel="flask_nitrogen"
+        to_vessel="rotavap"
+        volume="25 mL"
+        from_port="0"
+        to_port="evaporate"
+        through="cartridge_celite"
+        time="None"
+        aspiration_speed="5"
+        move_speed="5"
+        dispense_speed="40"
+        viscous="False">
+        <CMove
+          from_vessel="flask_nitrogen"
+          to_vessel="rotavap"
+          volume="25 mL"
+          move_speed="5"
+          aspiration_speed="5"
+          dispense_speed="40"
+          from_port="0"
+          to_port="evaporate"
+          unique="False"
+          through="cartridge_celite"
+          use_backbone="True" />
+      </Transfer>
+    </FilterThrough>
   </Procedure>
 
 </Synthesis>

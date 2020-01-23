@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="2e45816aeee0bf89118def1a001dc80476b97634be96ca7d2841df171022e79d"
+  graph_sha256="cef344b332797f0750a0a606242e459edb495c450f4fb762c6a38616b8f688a9"
 >
   <Hardware>
     <Component
@@ -238,14 +238,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="rotavap"
         upper_phase_vessel="waste_separator"
-        separation_vessel="separator"
-        dead_volume_target="waste_separator"
+        dead_volume_vessel="waste_separator"
+        step_volume="1 mL"
         lower_phase_port="evaporate"
         upper_phase_port="0"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -456,14 +457,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="waste_separator"
         upper_phase_vessel="rotavap"
-        separation_vessel="separator"
-        dead_volume_target="waste_separator"
+        dead_volume_vessel="waste_separator"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="evaporate"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -674,14 +676,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="rotavap"
         upper_phase_vessel="waste_separator"
-        separation_vessel="separator"
-        dead_volume_target="waste_separator"
+        dead_volume_vessel="waste_separator"
+        step_volume="1 mL"
         lower_phase_port="evaporate"
         upper_phase_port="0"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -892,14 +895,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="waste_separator"
         upper_phase_vessel="rotavap"
-        separation_vessel="separator"
-        dead_volume_target="waste_separator"
+        dead_volume_vessel="waste_separator"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="evaporate"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -1110,14 +1114,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="rotavap"
         upper_phase_vessel="waste_separator"
-        separation_vessel="separator"
-        dead_volume_target="rotavap"
+        dead_volume_vessel="rotavap"
+        step_volume="1 mL"
         lower_phase_port="evaporate"
         upper_phase_port="0"
-        dead_volume_port="None"
+        dead_volume_port="evaporate"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -1309,14 +1314,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="rotavap"
         upper_phase_vessel="waste_separator"
-        separation_vessel="separator"
-        dead_volume_target="waste_separator"
+        dead_volume_vessel="waste_separator"
+        step_volume="1 mL"
         lower_phase_port="evaporate"
         upper_phase_port="0"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -1527,14 +1533,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="waste_separator"
         upper_phase_vessel="separator"
-        separation_vessel="separator"
-        dead_volume_target="waste_separator"
+        dead_volume_vessel="waste_separator"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="bottom"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -1701,14 +1708,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="waste_separator"
         upper_phase_vessel="rotavap"
-        separation_vessel="separator"
-        dead_volume_target="waste_separator"
+        dead_volume_vessel="waste_separator"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="evaporate"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -1919,14 +1927,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="rotavap"
         upper_phase_vessel="separator"
-        separation_vessel="separator"
-        dead_volume_target="rotavap"
+        dead_volume_vessel="rotavap"
+        step_volume="1 mL"
         lower_phase_port="evaporate"
         upper_phase_port="bottom"
-        dead_volume_port="None"
+        dead_volume_port="evaporate"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -2093,14 +2102,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="rotavap"
         upper_phase_vessel="waste_separator"
-        separation_vessel="separator"
-        dead_volume_target="waste_separator"
+        dead_volume_vessel="waste_separator"
+        step_volume="1 mL"
         lower_phase_port="evaporate"
         upper_phase_port="0"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -2311,14 +2321,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="buffer_flask"
         upper_phase_vessel="rotavap"
-        separation_vessel="separator"
-        dead_volume_target="buffer_flask"
+        dead_volume_vessel="buffer_flask"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="evaporate"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -2510,14 +2521,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="waste_separator"
         upper_phase_vessel="rotavap"
-        separation_vessel="separator"
-        dead_volume_target="waste_separator"
+        dead_volume_vessel="waste_separator"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="evaporate"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -2728,11 +2740,12 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="buffer_flask"
         upper_phase_vessel="waste_separator"
-        separation_vessel="separator"
-        dead_volume_target="None"
+        dead_volume_vessel="None"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="0"
         dead_volume_port="None"
@@ -2971,11 +2984,12 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="buffer_flask"
         upper_phase_vessel="waste_separator"
-        separation_vessel="separator"
-        dead_volume_target="None"
+        dead_volume_vessel="None"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="0"
         dead_volume_port="None"
@@ -3214,11 +3228,12 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="waste_separator"
         upper_phase_vessel="separator"
-        separation_vessel="separator"
-        dead_volume_target="None"
+        dead_volume_vessel="None"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="bottom"
         dead_volume_port="None"
@@ -3432,11 +3447,12 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="waste_separator"
         upper_phase_vessel="separator"
-        separation_vessel="separator"
-        dead_volume_target="None"
+        dead_volume_vessel="None"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="bottom"
         dead_volume_port="None"
@@ -3650,14 +3666,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="waste_separator"
         upper_phase_vessel="separator"
-        separation_vessel="separator"
-        dead_volume_target="waste_separator"
+        dead_volume_vessel="waste_separator"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="bottom"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -3824,11 +3841,12 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="waste_separator"
         upper_phase_vessel="separator"
-        separation_vessel="separator"
-        dead_volume_target="None"
+        dead_volume_vessel="None"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="bottom"
         dead_volume_port="None"
@@ -4042,14 +4060,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="buffer_flask"
         upper_phase_vessel="waste_separator"
-        separation_vessel="separator"
-        dead_volume_target="buffer_flask"
+        dead_volume_vessel="buffer_flask"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="0"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -4241,11 +4260,12 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="buffer_flask"
         upper_phase_vessel="waste_separator"
-        separation_vessel="separator"
-        dead_volume_target="None"
+        dead_volume_vessel="None"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="0"
         dead_volume_port="None"
@@ -4484,14 +4504,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="buffer_flask"
         upper_phase_vessel="buffer_flask2"
-        separation_vessel="separator"
-        dead_volume_target="buffer_flask"
+        dead_volume_vessel="buffer_flask"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="0"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -4683,11 +4704,12 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="waste_separator"
         upper_phase_vessel="separator"
-        separation_vessel="separator"
-        dead_volume_target="None"
+        dead_volume_vessel="None"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="bottom"
         dead_volume_port="None"
@@ -4926,14 +4948,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="buffer_flask"
         upper_phase_vessel="separator"
-        separation_vessel="separator"
-        dead_volume_target="buffer_flask"
+        dead_volume_vessel="buffer_flask"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="bottom"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -5100,11 +5123,12 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="buffer_flask"
         upper_phase_vessel="waste_separator"
-        separation_vessel="separator"
-        dead_volume_target="None"
+        dead_volume_vessel="None"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="0"
         dead_volume_port="None"
@@ -5343,11 +5367,12 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="buffer_flask"
         upper_phase_vessel="rotavap"
-        separation_vessel="separator"
-        dead_volume_target="None"
+        dead_volume_vessel="None"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="evaporate"
         dead_volume_port="None"
@@ -5586,14 +5611,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="buffer_flask"
         upper_phase_vessel="rotavap"
-        separation_vessel="separator"
-        dead_volume_target="buffer_flask"
+        dead_volume_vessel="buffer_flask"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="evaporate"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />
@@ -5785,14 +5811,15 @@
         <CSetRecordingSpeed
           recording_speed="14" />
       </Wait>
-      <CSeparatePhases
+      <SeparatePhases
+        separation_vessel="separator"
         lower_phase_vessel="buffer_flask"
         upper_phase_vessel="rotavap"
-        separation_vessel="separator"
-        dead_volume_target="waste_separator"
+        dead_volume_vessel="waste_separator"
+        step_volume="1 mL"
         lower_phase_port="0"
         upper_phase_port="evaporate"
-        dead_volume_port="None"
+        dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
         dead_volume_through="None" />

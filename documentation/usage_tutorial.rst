@@ -46,7 +46,7 @@ a .xdlexe file.
 Load and Run XDL Executable
 ***************************
 
-The executable can be inspected to see a full breakdown of what actions will be 
+The executable can be inspected to see a full breakdown of what actions will be
 taken upon execution. Once you are ready to run the xdlexe, it is just a matter of
 instantiating the platform controller, and passing it to the xdlexe execute method.
 It is advisable to first execute in simulation mode, before running on a physical

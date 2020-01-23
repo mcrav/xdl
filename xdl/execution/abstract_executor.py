@@ -4,7 +4,9 @@ import appdirs
 import os
 from abc import ABC, abstractmethod
 from networkx.readwrite import node_link_data
-from ..steps.special_steps import Async, Await
+from ..step_utils.special_steps import Async, Await
+from ..step_utils.base_steps import (
+    AbstractDynamicStep, AbstractAsyncStep, AbstractBaseStep)
 from ..readwrite.generator import XDLGenerator
 from ..utils.errors import XDLError
 from ..utils import get_logger
@@ -88,6 +90,16 @@ class AbstractXDLExecutor(ABC):
         for substep in step.steps:
             self.call_on_prepare_for_execution(substep)
 
+    def prepare_dynamic_steps_for_execution(self, step, graph):
+        if isinstance(step, AbstractDynamicStep):
+            if not hasattr(step, 'start_block'):
+                step.prepare_for_execution(graph, self)
+            for substep in step.start_block:
+                self.prepare_dynamic_steps_for_execution(substep, graph)
+        elif not isinstance(step, (AbstractAsyncStep, AbstractBaseStep)):
+            for substep in step.steps:
+                self.prepare_dynamic_steps_for_execution(substep, graph)
+
     def execute(self, platform_controller: Any) -> None:
         """Execute XDL procedure with given chempiler. The same graph must be
         passed to the chempiler and to prepare_for_execution.
@@ -120,6 +132,9 @@ class AbstractXDLExecutor(ABC):
                 # Store all Async steps so that they can be awaited.
                 if type(step) == Async:
                     async_steps.append(step)
+
+                self.prepare_dynamic_steps_for_execution(
+                    step, platform_controller.graph.graph)
 
                 self.logger.info(step.name)
                 try:

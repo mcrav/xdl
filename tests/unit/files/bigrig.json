@@ -411,7 +411,7 @@
     {
       "id": "conductivity_sensor",
       "type": "conductivity_sensor",
-      "x": -560,
+      "x": -600,
       "y": 280,
       "internalId": 79,
       "label": "conductivity_sensor",
@@ -448,8 +448,8 @@
     {
       "id": "cartridge_celite",
       "type": "cartridge",
-      "x": 80,
-      "y": 320,
+      "x": 120,
+      "y": 280,
       "internalId": 28,
       "label": "cartridge_celite",
       "class": "ChemputerCartridge",
@@ -855,14 +855,6 @@
       "port": "(,)"
     },
     {
-      "id": 80,
-      "sourceInternal": 79,
-      "targetInternal": 69,
-      "source": "conductivity_sensor",
-      "target": "separator",
-      "port": "(,)"
-    },
-    {
       "id": 88,
       "sourceInternal": 87,
       "targetInternal": 33,
@@ -893,14 +885,6 @@
       "source": "buffer_flask2",
       "target": "valve_rotavap",
       "port": "(0,4)"
-    },
-    {
-      "id": 29,
-      "sourceInternal": 21,
-      "targetInternal": 28,
-      "source": "reactor",
-      "target": "cartridge_celite",
-      "port": "(0,in)"
     },
     {
       "id": 30,
@@ -965,6 +949,22 @@
       "source": "valve_reactor_vacuum",
       "target": "reactor",
       "port": "(-1,0)"
+    },
+    {
+      "id": 29,
+      "sourceInternal": 79,
+      "targetInternal": 69,
+      "source": "conductivity_sensor",
+      "target": "separator",
+      "port": "(,)"
+    },
+    {
+      "id": 80,
+      "sourceInternal": 1,
+      "targetInternal": 28,
+      "source": "valve_rotavap",
+      "target": "cartridge_celite",
+      "port": "(0,in)"
     }
   ]
 }

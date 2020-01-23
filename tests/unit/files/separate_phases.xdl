@@ -1,0 +1,24 @@
+<Synthesis auto_clean="false">
+  <Hardware>
+    <Component
+      id="separator"
+      type="separator"
+    />
+    <Component
+      id="reactor"
+      type="reactor"
+    />
+  </Hardware>
+
+  <Reagents>
+  </Reagents>
+
+  <Procedure>
+    <SeparatePhases
+      separation_vessel="separator"
+      lower_phase_vessel="waste_separator"
+      upper_phase_vessel="reactor"
+    />
+  </Procedure>
+
+</Synthesis>

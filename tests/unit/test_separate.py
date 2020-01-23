@@ -1,6 +1,6 @@
 import os
 from xdl import XDL
-from xdl.steps import Transfer, Add, Stir, Wait, CSeparatePhases, Separate
+from xdl.steps import Transfer, Add, Stir, Wait, Separate, SeparatePhases
 from ..utils import generic_chempiler_test, test_step
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -14,7 +14,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'rotavap',
             'lower_phase_port': 'evaporate',
             'upper_phase_vessel': 'waste_separator'
@@ -27,7 +27,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'waste_separator',
             'upper_phase_vessel': 'rotavap',
             'upper_phase_port': 'evaporate',
@@ -40,7 +40,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'rotavap',
             'lower_phase_port': 'evaporate',
             'upper_phase_vessel': 'waste_separator'
@@ -53,7 +53,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'waste_separator',
             'upper_phase_vessel': 'rotavap',
             'upper_phase_port': 'evaporate',
@@ -66,7 +66,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'rotavap',
             'lower_phase_port': 'evaporate',
             'upper_phase_vessel': 'waste_separator',
@@ -79,7 +79,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'rotavap',
             'lower_phase_port': 'evaporate',
             'upper_phase_vessel': 'waste_separator'
@@ -92,7 +92,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'waste_separator',
             'upper_phase_vessel': 'separator',
         }),
@@ -100,7 +100,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'upper_phase_vessel': 'rotavap',
             'upper_phase_port': 'evaporate',
             'lower_phase_vessel': 'waste_separator'
@@ -113,7 +113,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'rotavap',
             'lower_phase_port': 'evaporate',
             'upper_phase_vessel': 'separator',
@@ -122,7 +122,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'upper_phase_vessel': 'waste_separator',
             'lower_phase_port': 'evaporate',
             'lower_phase_vessel': 'rotavap'
@@ -135,7 +135,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'rotavap',
             'upper_phase_port': 'evaporate',
@@ -148,7 +148,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'upper_phase_vessel': 'rotavap',
             'upper_phase_port': 'evaporate',
             'lower_phase_vessel': 'waste_separator'
@@ -162,7 +162,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'waste_separator',
         }),
@@ -179,7 +179,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'waste_separator',
         }),
@@ -196,7 +196,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'waste_separator',
             'upper_phase_vessel': 'separator',
         }),
@@ -209,7 +209,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'waste_separator',
             'upper_phase_vessel': 'separator',
         }),
@@ -222,7 +222,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'waste_separator',
             'upper_phase_vessel': 'separator',
         }),
@@ -230,7 +230,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'upper_phase_vessel': 'separator',
             'lower_phase_vessel': 'waste_separator'
         }),
@@ -243,7 +243,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'waste_separator',
         }),
@@ -255,7 +255,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'waste_separator',
         }),
@@ -272,7 +272,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'buffer_flask2',
         }),
@@ -284,7 +284,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'waste_separator',
             'upper_phase_vessel': 'separator',
         }),
@@ -301,7 +301,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'separator',
         }),
@@ -309,7 +309,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'waste_separator',
         }),
@@ -326,7 +326,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'rotavap',
         }),
@@ -343,7 +343,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'rotavap',
         }),
@@ -355,7 +355,7 @@ correct_step_info = [
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
-        (CSeparatePhases, {
+        (SeparatePhases, {
             'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'rotavap',
         }),

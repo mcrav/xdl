@@ -20,7 +20,7 @@ cache:
 before_script:
   - python -V
   - pip -V
-  - python -m venv venv 
+  - python -m venv venv
   - . venv/bin/activate
   - pip install wheel
   - pip install flake8
@@ -63,4 +63,4 @@ pages:
     paths:
     - public
   only:
-  - master 
+  - master
