@@ -362,9 +362,12 @@ class ChemputerExecutor(AbstractXDLExecutor):
             # as it is not an internal property in CSwitchVacuum
             if ('pneumatic_controller' in step.properties
                     and 'vessel' in step.properties):
+                port = None
+                if hasattr(step, 'port'):
+                    port = step.port
                 step.pneumatic_controller, step.pneumatic_controller_port = (
                     get_pneumatic_controller(
-                        step.vessel, step.port, self._graph))
+                        step.vessel, port, self._graph))
 
             if ('through_cartridge' in step.properties
                     and not step.through_cartridge):
