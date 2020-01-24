@@ -27,14 +27,15 @@ def test_filter_through_buffer_flask():
     generic_chempiler_test(xdl_f, graph_f)
 
 def test_filter_eluting_with_more_than_max_volume():
-    xdl_f = os.path.join(FOLDER, 'filter_through_elute_more_than_max_volume.xdl')
+    xdl_f = os.path.join(
+        FOLDER, 'filter_through_elute_more_than_max_volume.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f)
     total_vol_added = 0
     total_elutes = 0
     tests = [
-        (10,  1000),
+        (10, 1000),
         (20, 2000),
         (3, 75),
         (3, 150)
@@ -44,7 +45,8 @@ def test_filter_eluting_with_more_than_max_volume():
         if type(step) == FilterThrough:
             for substep in step.base_steps:
                 if type(substep) == CMove:
-                    if substep.from_vessel == 'flask_ether' and substep.to_vessel == 'reactor':
+                    if (substep.from_vessel == 'flask_ether'
+                            and substep.to_vessel == 'reactor'):
                         total_vol_added += substep.volume
                         total_elutes += 1
             assert total_elutes == tests[i][0]

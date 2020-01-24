@@ -3,6 +3,7 @@ from typing import Optional, List
 from .....step_utils.base_steps import AbstractStep, Step
 from ..steps_base import CSetRecordingSpeed, CWait
 
+
 class Wait(AbstractStep):
     """Wait for given time.
 
@@ -11,6 +12,7 @@ class Wait(AbstractStep):
         wait_recording_speed (int): Recording speed during wait (faster) ~2000
         after_recording_speed (int): Recording speed after wait (slower) ~14
     """
+
     def __init__(
         self,
         time: float,

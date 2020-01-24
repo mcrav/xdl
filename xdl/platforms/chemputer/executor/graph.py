@@ -167,7 +167,10 @@ def get_pneumatic_controller(
     """
     for src_node, _, info in graph.in_edges(vessel, data=True):
         if graph.nodes[src_node]['class'] == 'PneumaticController':
-            ports = info['port']
-            if not port or ports[1] == port:
+            if port is not None:
+                ports = info['port']
+                if not port or ports[1] == port:
+                    return src_node, info['port'][0]
+            else:
                 return src_node, info['port'][0]
     return None, None

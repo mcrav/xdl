@@ -22,18 +22,23 @@ class SwitchVacuum(AbstractStep):
         port: str = None,
         pneumatic_controller: str = None,
         pneumatic_controller_port: str = None,
+        after_switch_wait: float = 'default',
         **kwargs,
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self):
-        return [
+        steps = [
             CSwitchVacuum(
                 pneumatic_controller=self.pneumatic_controller,
                 port=self.pneumatic_controller_port
             ),
-            Wait(time=WAIT_AFTER_SWITCH_TIME)
         ]
+        if self.after_switch_wait:
+            steps.append(
+                Wait(time=self.after_switch_wait)
+            )
+        return steps
 
 class SwitchArgon(AbstractStep):
     """Supply given vessel with argon using PneumaticController.
@@ -54,16 +59,21 @@ class SwitchArgon(AbstractStep):
         pressure: str = 'low',
         pneumatic_controller: str = None,
         pneumatic_controller_port: str = None,
+        after_switch_wait: float = None,
         **kwargs,
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self):
-        return [
+        steps = [
             CSwitchArgon(
                 pneumatic_controller=self.pneumatic_controller,
                 port=self.pneumatic_controller_port,
                 pressure=self.pressure
-            ),
-            Wait(time=WAIT_AFTER_SWITCH_TIME)
+            )
         ]
+        if self.after_switch_wait:
+            steps.append(
+                Wait(time=self.after_switch_wait)
+            )
+        return steps

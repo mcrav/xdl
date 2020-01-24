@@ -9,13 +9,13 @@ def undirected_neighbors(graph, node, data=False):
     for src, dest in graph.edges():
         if src == node and dest not in yielded_neighbors:
             if data:
-                yield graph.nodes[dest]
+                yield dest, graph.nodes[dest]
             else:
                 yield dest
 
         elif dest == node and src not in yielded_neighbors:
             if data:
-                yield graph.nodes[src]
+                yield src, graph.nodes[src]
             else:
                 yield src
 
