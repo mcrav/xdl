@@ -390,7 +390,9 @@ def get_clean_vessel_sequence(
         # Clean separation from_vessel
         if (type(step) == Separate
             and step.from_vessel not in [
-                step.separation_vessel, step.to_vessel]):
+                step.separation_vessel,
+                step.to_vessel,
+                step.waste_phase_to_vessel]):
             cleaning_solvents = get_clean_vessel_solvents(xdl_obj,
                                                           step.from_vessel,
                                                           prev_vessel_contents,
@@ -405,7 +407,7 @@ def get_clean_vessel_sequence(
                                                           available_solvents)
         # For all cleaning solvents found add them to the sequence along with
         # the vessel and position in procedure.
-        for cleaning_solvent in cleaning_solvents:
+        for cleaning_solvent in list(set(cleaning_solvents)):
             cleaning_sequence.append((
                 i + 1, step.from_vessel, cleaning_solvent))
         prev_vessel_contents = vessel_contents
