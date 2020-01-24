@@ -2,7 +2,7 @@ import os
 import pytest
 from xdl import XDL
 from xdl.steps.base_steps import AbstractBaseStep, AbstractDynamicStep
-from  xdl.utils.errors import XDLError
+from xdl.utils.errors import XDLError
 from ..utils import get_chempiler, generic_chempiler_test
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -10,9 +10,14 @@ FOLDER = os.path.join(HERE, 'files')
 INTEGRATION_FOLDER = os.path.join(os.path.dirname(HERE), 'integration', 'files')
 
 TESTS = [
-    (os.path.join(INTEGRATION_FOLDER, 'lidocaine.xdl'), os.path.join(INTEGRATION_FOLDER, 'lidocaine_graph.json')),
-    (os.path.join(INTEGRATION_FOLDER, 'DMP.xdl'), os.path.join(INTEGRATION_FOLDER, 'DMP_graph.json')),
-    (os.path.join(INTEGRATION_FOLDER, 'AlkylFluor.xdl'), os.path.join(INTEGRATION_FOLDER, 'AlkylFluor_graph.graphml')),
+    (os.path.join(INTEGRATION_FOLDER, 'lidocaine.xdl'),
+     os.path.join(INTEGRATION_FOLDER, 'lidocaine_graph.json')),
+
+    (os.path.join(INTEGRATION_FOLDER, 'DMP.xdl'),
+     os.path.join(INTEGRATION_FOLDER, 'DMP_graph.json')),
+
+    (os.path.join(INTEGRATION_FOLDER, 'AlkylFluor.xdl'),
+     os.path.join(INTEGRATION_FOLDER, 'AlkylFluor_graph.graphml')),
 ]
 
 @pytest.mark.unit
@@ -37,7 +42,8 @@ def test_steps_identical(step1, step2):
                 else:
                     assert step2.properties[prop] == val
             except AssertionError:
-                raise AssertionError(f'Property "{prop}": {val} != {step2.properties[prop]}')
+                raise AssertionError(
+                    f'Property "{prop}": {val} != {step2.properties[prop]}')
     if not isinstance(step1, (AbstractBaseStep, AbstractDynamicStep)):
         assert len(step1.steps) == len(step2.steps)
         for j, step in enumerate(step1.steps):

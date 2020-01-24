@@ -21,6 +21,7 @@ def test_clean_vessel():
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     generic_chempiler_test(xdl_f, graph_f)
 
+
 CLEAN_VESSEL_TESTS = [
     (os.path.join(FOLDER, 'alkyl_fluor_step4.xdl'),
      os.path.join(FOLDER, 'alkyl_fluor_step4.graphml'),
@@ -84,8 +85,9 @@ def test_clean_vessel_scheduling():
                     # Found emptying step.
                     elif not emptying_step_passed:
                         emptying_step_passed = True
-                    # Emptying step already found but next step backwards is not a
-                    # Dissolve step. Therefore CleanVessel is incorrectly placed.
+                    # Emptying step already found but next step backwards is
+                    # not a Dissolve step. Therefore CleanVessel is incorrectly
+                    # placed.
                     else:
                         legit = False
                         break

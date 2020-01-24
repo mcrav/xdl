@@ -12,11 +12,11 @@ def test_default_ports():
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f, interactive=False)
     correct_ports = [
-        'top', # filter default
-        '0', # reactor default
-        'evaporate', # rotavap default
-        'bottom', # separator default
-        'top', # separator explicit
+        'top',  # filter default
+        '0',  # reactor default
+        'evaporate',  # rotavap default
+        'bottom',  # separator default
+        'top',  # separator explicit
 
         'top',
         '0',
@@ -44,7 +44,8 @@ def test_default_ports():
                     assert str(substep.to_port) == correct_to_port
 
         elif type(step) == Separate:
-            correct_from_port, correct_to_port, correct_waste_phase_to_port = correct_ports.pop(0)
+            correct_from_port, correct_to_port, correct_waste_phase_to_port =\
+                correct_ports.pop(0)
             assert str(step.from_port) == correct_from_port
             assert str(step.to_port) == correct_to_port
             assert str(step.waste_phase_to_port) == correct_waste_phase_to_port

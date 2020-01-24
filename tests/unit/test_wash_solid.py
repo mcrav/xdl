@@ -1,7 +1,7 @@
 import os
 from ..utils import generic_chempiler_test
 from xdl import XDL
-from xdl.steps import WashSolid,  CMove
+from xdl.steps import WashSolid, CMove
 from xdl.constants import DEFAULT_FILTER_EXCESS_REMOVE_FACTOR
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -40,6 +40,8 @@ def test_wash_solid_dead_volume():
                         if type(step) == CMove:
                             assert step.filter_dead_volume == 10
                             assert (step.steps[-4].volume
-                                    == 10 + (DEFAULT_FILTER_EXCESS_REMOVE_FACTOR * step.volume))
+                                    == 10 + (
+                                        DEFAULT_FILTER_EXCESS_REMOVE_FACTOR
+                                        * step.volume))
                 else:
                     assert step.filter_dead_volume is None

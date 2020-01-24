@@ -1,7 +1,11 @@
 import os
 from xdl import XDL
 from xdl.steps import (
-    Evaporate, CRotavapAutoEvaporation, RotavapHeatToTemp, RotavapStopEverything)
+    Evaporate,
+    CRotavapAutoEvaporation,
+    RotavapHeatToTemp,
+    RotavapStopEverything
+)
 from ..utils import generic_chempiler_test
 
 HERE = os.path.abspath(os.path.dirname(__file__))

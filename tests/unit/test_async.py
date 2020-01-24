@@ -73,12 +73,12 @@ def test_async_wrapper():
     mgr = TestAsyncWrapperManager(Wait(5))
     mgr.execute(chempiler)
     time.sleep(2)
-    assert mgr.done == True
+    assert mgr.done is True
 
     mgr = TestAsyncWrapperManager([Wait(5)])
     mgr.execute(chempiler)
     time.sleep(2)
-    assert mgr.done == True
+    assert mgr.done is True
 
 def test_async_wrapper_in_file():
     xdl_f = os.path.join(FOLDER, 'async.xdl')

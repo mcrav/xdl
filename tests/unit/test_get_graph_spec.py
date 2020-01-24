@@ -42,8 +42,10 @@ def test_get_graph_spec():
         x = XDL(os.path.join(FOLDER, test_xdl_f))
         graph_spec = get_graph_spec(x)
         test_graph_spec_reagents(test_info['reagents'], graph_spec['reagents'])
-        test_graph_spec_buffer_flasks(test_info['buffer_flasks'], graph_spec['buffer_flasks'])
-        test_graph_spec_cartridges(test_info['cartridges'], graph_spec['cartridges'])
+        test_graph_spec_buffer_flasks(
+            test_info['buffer_flasks'], graph_spec['buffer_flasks'])
+        test_graph_spec_cartridges(
+            test_info['cartridges'], graph_spec['cartridges'])
         test_graph_spec_vessels(test_info['vessels'], graph_spec['vessels'])
 
 def test_graph_spec_reagents(correct_reagent, graph_spec_reagents):
@@ -52,14 +54,17 @@ def test_graph_spec_reagents(correct_reagent, graph_spec_reagents):
     for reagent in correct_reagent:
         assert reagent in graph_spec_reagents
 
-def test_graph_spec_buffer_flasks(correct_buffer_flasks, graph_spec_buffer_flasks):
+def test_graph_spec_buffer_flasks(
+        correct_buffer_flasks, graph_spec_buffer_flasks):
     assert len(correct_buffer_flasks) == len(graph_spec_buffer_flasks)
     for buffer_flask in correct_buffer_flasks:
         found = False
         for graph_spec_buffer_flask in graph_spec_buffer_flasks:
             print(graph_spec_buffer_flask)
-            if (buffer_flask['n_required'] == graph_spec_buffer_flask['n_required']
-                and buffer_flask['connected_node'] == graph_spec_buffer_flask['connected_node']):
+            if (buffer_flask['n_required']
+                == graph_spec_buffer_flask['n_required']
+                and buffer_flask['connected_node']
+                    == graph_spec_buffer_flask['connected_node']):
                 found = True
         assert found
 
@@ -70,8 +75,9 @@ def test_graph_spec_cartridges(correct_cartridges, graph_spec_cartridges):
         for graph_spec_cartridge in graph_spec_cartridges:
             if (cartridge['from'] == graph_spec_cartridge['from']
                 and cartridge['to'] == graph_spec_cartridge['to']
-                and cartridge['chemical'] == graph_spec_cartridge['chemical']):
-               found = True
+                and cartridge['chemical']
+                    == graph_spec_cartridge['chemical']):
+                found = True
         assert found
 
 def test_graph_spec_vessels(correct_vessels, graph_spec_vessels):

@@ -1,7 +1,6 @@
 import os
 from ..utils import generic_chempiler_test, test_step
 from xdl.constants import (
-    DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME,
     DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME,
     DEFAULT_EVACUATE_N_EVACUTIONS
 )
@@ -31,7 +30,8 @@ def test_evacuate():
             assert step.steps[0].vessel == 'vacuum_flask'
             assert type(step.steps[1]) == CConnect
             assert type(step.steps[2]) == Wait
-            assert step.steps[2].time == DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME * 2
+            assert (step.steps[2].time
+                    == DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME * 2)
             assert type(step.steps[3]) == CConnect
             assert type(step.steps[4]) == Wait
             assert type(step.steps[-2]) == Repeat

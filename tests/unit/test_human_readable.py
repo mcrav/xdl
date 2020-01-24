@@ -20,10 +20,20 @@ def test_human_readable():
         x.prepare_for_execution(graph_f, interactive=False)
         for step in x.steps:
             if not isinstance(step, AbstractBaseStep):
-                assert step.human_readable() not in  [step.name, None] # No language given
-                assert step.human_readable(language='en') not in [step.name, None] # Default language
-                assert step.human_readable(language='cz') == step.__class__.__name__ # Unsupported language
-                assert step.human_readable(language='zh') not in  [step.name, None] # Non default language
+                # No language given
+                assert step.human_readable() not in [step.name, None]
+
+                # Default language
+                assert (step.human_readable(language='en')
+                        not in [step.name, None])
+
+                # Unsupported language
+                assert (step.human_readable(language='cz')
+                        == step.__class__.__name__)
+
+                # Non default language
+                assert step.human_readable(language='zh') not in [
+                    step.name, None]
                 for prop in step.properties:
                     assert not '{' + prop + '}' in step.human_readable('en')
                     assert not '{' + prop + '}' in step.human_readable('zh')
