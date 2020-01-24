@@ -17,7 +17,8 @@
       vessel="filter"
       port="bottom"
       pneumatic_controller="pneumatic_controller"
-      pneumatic_controller_port="0">
+      pneumatic_controller_port="0"
+      after_switch_wait="30">
       <CSwitchVacuum
         pneumatic_controller="pneumatic_controller"
         port="0" />
@@ -38,50 +39,31 @@
       port="bottom"
       pressure="high"
       pneumatic_controller="pneumatic_controller"
-      pneumatic_controller_port="0">
+      pneumatic_controller_port="0"
+      after_switch_wait="None">
       <CSwitchArgon
         pneumatic_controller="pneumatic_controller"
         port="0"
         pressure="high" />
-      <Wait
-        time="30 secs"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="30 secs" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
     </SwitchArgon>
     <SwitchArgon
       vessel="filter"
       port="bottom"
       pressure="low"
       pneumatic_controller="pneumatic_controller"
-      pneumatic_controller_port="0">
+      pneumatic_controller_port="0"
+      after_switch_wait="None">
       <CSwitchArgon
         pneumatic_controller="pneumatic_controller"
         port="0"
         pressure="low" />
-      <Wait
-        time="30 secs"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="30 secs" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
     </SwitchArgon>
     <SwitchVacuum
       vessel="flask"
       port="0"
       pneumatic_controller="pneumatic_controller"
-      pneumatic_controller_port="1">
+      pneumatic_controller_port="1"
+      after_switch_wait="30">
       <CSwitchVacuum
         pneumatic_controller="pneumatic_controller"
         port="1" />
@@ -102,50 +84,31 @@
       port="0"
       pressure="high"
       pneumatic_controller="pneumatic_controller"
-      pneumatic_controller_port="1">
+      pneumatic_controller_port="1"
+      after_switch_wait="None">
       <CSwitchArgon
         pneumatic_controller="pneumatic_controller"
         port="1"
         pressure="high" />
-      <Wait
-        time="30 secs"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="30 secs" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
     </SwitchArgon>
     <SwitchArgon
       vessel="flask"
       port="0"
       pressure="low"
       pneumatic_controller="pneumatic_controller"
-      pneumatic_controller_port="1">
+      pneumatic_controller_port="1"
+      after_switch_wait="None">
       <CSwitchArgon
         pneumatic_controller="pneumatic_controller"
         port="1"
         pressure="low" />
-      <Wait
-        time="30 secs"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="30 secs" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
     </SwitchArgon>
     <SwitchVacuum
       vessel="filter"
       port="top"
       pneumatic_controller="pneumatic_controller"
-      pneumatic_controller_port="2">
+      pneumatic_controller_port="2"
+      after_switch_wait="30">
       <CSwitchVacuum
         pneumatic_controller="pneumatic_controller"
         port="2" />
@@ -166,44 +129,24 @@
       port="top"
       pressure="high"
       pneumatic_controller="pneumatic_controller"
-      pneumatic_controller_port="2">
+      pneumatic_controller_port="2"
+      after_switch_wait="None">
       <CSwitchArgon
         pneumatic_controller="pneumatic_controller"
         port="2"
         pressure="high" />
-      <Wait
-        time="30 secs"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="30 secs" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
     </SwitchArgon>
     <SwitchArgon
       vessel="filter"
       port="top"
       pressure="low"
       pneumatic_controller="pneumatic_controller"
-      pneumatic_controller_port="2">
+      pneumatic_controller_port="2"
+      after_switch_wait="None">
       <CSwitchArgon
         pneumatic_controller="pneumatic_controller"
         port="2"
         pressure="low" />
-      <Wait
-        time="30 secs"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="30 secs" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
     </SwitchArgon>
   </Procedure>
 
