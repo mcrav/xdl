@@ -19,6 +19,7 @@ class CleanVessel(AbstractStep):
         cleans: Optional[int] = 2,
         solvent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
+        dry: Optional[bool] = True,
         **kwargs
     ) -> None:
         """Clean given vessel with given solvent.
@@ -68,7 +69,8 @@ class CleanVessel(AbstractStep):
                       volume=self.volume),
                 StopStir(vessel=self.vessel),
             ])
-        steps.append(Dry(vessel=self.vessel))
+        if self.dry:
+            steps.append(Dry(vessel=self.vessel))
         if self.temp is not None and (self.temp < 20 or self.temp > 25):
             steps.insert(
                 1, HeatChillToTemp(vessel=self.vessel, temp=self.temp))
