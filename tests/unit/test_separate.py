@@ -1,7 +1,7 @@
 import os
 from xdl import XDL
 from xdl.steps import Transfer, Add, Stir, Wait, Separate, SeparatePhases
-from ..utils import generic_chempiler_test, test_step
+from ..utils import test_step
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')
@@ -9,8 +9,8 @@ FOLDER = os.path.join(HERE, 'files')
 correct_step_info = [
     # Product bottom, single wash
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -22,8 +22,8 @@ correct_step_info = [
     ],
     # Product top, single wash
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -35,8 +35,8 @@ correct_step_info = [
     ],
     # Product bottom, single extraction
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -48,8 +48,8 @@ correct_step_info = [
     ],
     # Product top, single extraction
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -61,8 +61,8 @@ correct_step_info = [
     ],
     # Product bottom, 2 washes
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -87,8 +87,8 @@ correct_step_info = [
     ],
     # Product top, 2 washes
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -108,8 +108,8 @@ correct_step_info = [
     ],
     # Product bottom, 2 extractions
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -130,8 +130,8 @@ correct_step_info = [
     ],
     # Product top 2, extractions
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -157,8 +157,8 @@ correct_step_info = [
 
     # Product bottom 1 wash, to_vessel == separation_vessel
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -174,8 +174,8 @@ correct_step_info = [
 
     # Product bottom 1 extraction, to_vessel == separation_vessel
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -191,8 +191,8 @@ correct_step_info = [
 
     # Product top 1 wash, to_vessel == separation_vessel
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -204,8 +204,8 @@ correct_step_info = [
 
     # Product top 1 extraction, to_vessel == separation_vessel
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -217,8 +217,8 @@ correct_step_info = [
 
     # Product top 2 wash, to_vessel == separation_vessel
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -238,8 +238,8 @@ correct_step_info = [
 
     # Product bottom 2 wash, to_vessel == separation_vessel
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -267,8 +267,8 @@ correct_step_info = [
 
     # Product top 2 extractions, to_vessel == separation_vessel
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -296,8 +296,8 @@ correct_step_info = [
 
     # Product bottom 2 extractions, to_vessel == separation_vessel
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -319,10 +319,11 @@ correct_step_info = [
         }),
     ],
 
-    # Product top, 1 extraction, waste phase to separator, product phase to rotavap
+    # Product top, 1 extraction, waste phase to separator, product phase to
+    # rotavap
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -336,10 +337,11 @@ correct_step_info = [
         }),
     ],
 
-    # Product top, 2 extractions, waste_phase_to_separator, product phase to rotavap
+    # Product top, 2 extractions, waste_phase_to_separator, product phase to
+    # rotavap
     [
-        (Transfer, {}), # Reaction mixture
-        (Add, {}), # Solvent
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),
@@ -347,11 +349,11 @@ correct_step_info = [
             'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'rotavap',
         }),
-        (Transfer,  {
+        (Transfer, {
             'from_vessel': 'buffer_flask',
             'to_vessel': 'separator',
         }),
-        (Add, {}), # Solvent
+        (Add, {}),  # Solvent
         (Stir, {}),
         (Stir, {}),
         (Wait, {}),

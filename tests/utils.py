@@ -45,7 +45,8 @@ def remove_confirm_steps(step: Step) -> None:
     Args:
         step (Step): Step to remove Confirm steps from.
     """
-    if isinstance(step, AbstractBaseStep):  # If step is base step just return step.
+    # If step is base step just return step.
+    if isinstance(step, AbstractBaseStep):
         return step
     else:
         for i in reversed(range(len(step.steps))):

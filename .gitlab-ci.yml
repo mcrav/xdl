@@ -39,7 +39,7 @@ before_script:
 
 lint:
   variables:
-    FLAKE8_EXCLUDE: xdl/steps,xdl/execution/constants.py,xdl/execution/tracking.py,xdl/execution/utils.py,tests,*__init__.py,venv
+    FLAKE8_EXCLUDE: xdl/steps,xdl/execution/constants.py,xdl/execution/tracking.py,xdl/execution/utils.py,tests/all_tests.py,tests/integration/all_integration_tests.py,tests/unit/all_unit_tests.py,*__init__.py,venv
     FLAKE8_MAX_LINE_LENGTH: 80
     FLAKE8_IGNORE: E302,W503
 

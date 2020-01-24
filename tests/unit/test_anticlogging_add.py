@@ -19,7 +19,7 @@ test_info = [
     {
         'solvent_volume': 3,
         'reagent_volume': 20,
-        'n_adds':  4,
+        'n_adds': 4,
     }
 ]
 

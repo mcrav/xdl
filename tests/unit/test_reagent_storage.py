@@ -3,7 +3,6 @@ from xdl import XDL
 from xdl.steps import (
     StartStir, StopStir, StartHeatChill, StopHeatChill, Wait, Add)
 from xdl.constants import DEFAULT_STIR_REAGENT_FLASK_SPEED
-from ..utils import generic_chempiler_test
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')
@@ -38,8 +37,8 @@ def test_last_minute_addition():
     x.prepare_for_execution(graph_f)
     for i, step in enumerate(x.steps):
         if type(step) == Wait:
-            last_minute_step = x.steps[i+1]
-            add_step = x.steps[i+2]
+            last_minute_step = x.steps[i + 1]
+            add_step = x.steps[i + 2]
             assert type(last_minute_step) == Add
             assert type(add_step) == Add
             assert last_minute_step.volume == 50

@@ -18,19 +18,43 @@ def test_port_validation():
     executor.prepare_block_for_execution(bigrig, block)
 
     with pytest.raises(IllegalPortError):
-        block = [Transfer(from_vessel="rotavap", to_vessel="reactor", volume=5, from_port="top")]
+        block = [Transfer(
+            from_vessel="rotavap",
+            to_vessel="reactor",
+            volume=5,
+            from_port="top")]
         executor.prepare_block_for_execution(bigrig, block)
 
-    block = [Transfer(from_vessel="rotavap", to_vessel="reactor", volume=5, from_port="evaporate")]
+    block = [Transfer(
+        from_vessel="rotavap",
+        to_vessel="reactor",
+        volume=5,
+        from_port="evaporate")]
     executor.prepare_block_for_execution(bigrig, block)
-    block = [Transfer(from_vessel="rotavap", to_vessel="reactor", volume=5, from_port="collect")]
+    block = [Transfer(
+        from_vessel="rotavap",
+        to_vessel="reactor",
+        volume=5,
+        from_port="collect")]
     executor.prepare_block_for_execution(bigrig, block)
 
     with pytest.raises(IllegalPortError):
-        block = [Transfer(from_vessel="rotavap", to_vessel="filter", volume=5, to_port="0")]
+        block = [Transfer(
+            from_vessel="rotavap",
+            to_vessel="filter",
+            volume=5,
+            to_port="0")]
         executor.prepare_block_for_execution(bigrig, block)
 
-    block = [Transfer(from_vessel="rotavap", to_vessel="filter", volume=5, to_port="top")]
+    block = [Transfer(
+        from_vessel="rotavap",
+        to_vessel="filter",
+        volume=5,
+        to_port="top")]
     executor.prepare_block_for_execution(bigrig, block)
-    block = [Transfer(from_vessel="rotavap", to_vessel="filter", volume=5, to_port="bottom")]
+    block = [Transfer(
+        from_vessel="rotavap",
+        to_vessel="filter",
+        volume=5,
+        to_port="bottom")]
     executor.prepare_block_for_execution(bigrig, block)

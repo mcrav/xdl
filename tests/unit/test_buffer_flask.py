@@ -1,6 +1,5 @@
 import os
 from ..utils import generic_chempiler_test
-from xdl import XDL
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')

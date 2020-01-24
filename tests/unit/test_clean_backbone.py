@@ -2,14 +2,14 @@ import os
 from ..utils import generic_chempiler_test
 
 from xdl import XDL
-from xdl.steps import CleanBackbone, Dissolve, CleanVessel
+from xdl.steps import CleanBackbone
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')
 
-#########################
-### Cleaning Schedule ###
-#########################
+#####################
+# Cleaning Schedule #
+#####################
 
 ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE = [
     'acetonitrile',

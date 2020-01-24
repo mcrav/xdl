@@ -1,6 +1,5 @@
 import os
 from xdl import XDL
-from xdl.steps import Add, CMove
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(os.path.dirname(HERE), 'integration', 'files')
@@ -15,7 +14,7 @@ def test_remove_filter_dead_volume():
     for i, step in enumerate(x.steps):
         if step.name == 'RemoveFilterDeadVolume':
             if i + 2 < len(x.steps):
-                assert x.steps[i+2].name == 'Filter'
+                assert x.steps[i + 2].name == 'Filter'
         elif step.name == 'Filter':
             if i - 2 >= 0:
-                assert x.steps[i-2].name == 'RemoveFilterDeadVolume'
+                assert x.steps[i - 2].name == 'RemoveFilterDeadVolume'

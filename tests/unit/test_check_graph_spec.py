@@ -9,8 +9,6 @@ from xdl.graphgen.constants import (
     SWITCH_TO_IN_EDGE,
     REMOVE_DEST_PORT,
     REMOVE_SRC_PORT,
-    SRC_PORT_INVALID,
-    DEST_PORT_INVALID,
 
     CANNOT_REACH_TARGET_TEMP_ERROR,
     INVALID_PORT_ERROR,
@@ -58,17 +56,21 @@ CHECK_GRAPH_SPEC_TESTS = [
         'fixable_issues': [],
         'errors': [MISSING_HEATER_OR_CHILLER_ERROR]
     }),
-    ('check_graph_spec_cannot_reach_temp.json', 'orgsyn_v83p0193_high_temp.xdl', {
-        'fixable_issues': [],
-        'errors': [CANNOT_REACH_TARGET_TEMP_ERROR]
-    }),
+    (
+        'check_graph_spec_cannot_reach_temp.json',
+        'orgsyn_v83p0193_high_temp.xdl',
+        {
+            'fixable_issues': [],
+            'errors': [CANNOT_REACH_TARGET_TEMP_ERROR]
+        }
+    ),
 ]
 
 def test_check_template():
     for test_graph_f, test_info in CHECK_TEMPLATE_TESTS:
         print(test_graph_f)
         with open(os.path.join(FOLDER, test_graph_f)) as fd:
-            graph = node_link_graph(json.load(fd),  directed=True)
+            graph = node_link_graph(json.load(fd), directed=True)
         fixable_issues, errors = check_template(graph)
         assert len(errors) == len(test_info['errors'])
         assert len(fixable_issues) == len(test_info['fixable_issues'])
@@ -83,7 +85,7 @@ def test_check_graph_spec():
     for test_graph_f, test_xdl_f, test_info in CHECK_GRAPH_SPEC_TESTS:
         print(test_graph_f)
         with open(os.path.join(FOLDER, test_graph_f)) as fd:
-            graph = node_link_graph(json.load(fd),  directed=True)
+            graph = node_link_graph(json.load(fd), directed=True)
         x = XDL(os.path.join(FOLDER, test_xdl_f))
         graph_spec = get_graph_spec(x)
         fixable_issues, errors = check_graph_spec(graph_spec, graph)
