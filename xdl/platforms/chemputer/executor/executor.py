@@ -1191,7 +1191,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
                 graph in same format as JSON file.
         """
         if not self._prepared_for_execution:
-            self._xdl.original_steps = copy.deepcopy(self._xdl.steps)
 
             self._graph, self._raw_graph = get_graph(graph_file)
             # Load graph, make Hardware object from graph, and map nearest
