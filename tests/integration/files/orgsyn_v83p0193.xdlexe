@@ -133,7 +133,8 @@
       vacuum="vacuum"
       vacuum_device="vacuum_pump"
       vacuum_pressure="50 mbar"
-      vessel_type="reactor">
+      vessel_type="reactor"
+      pneumatic_controller="None">
       <StartVacuum
         vessel="vacuum"
         pressure="50 mbar">

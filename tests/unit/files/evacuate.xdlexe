@@ -1,7 +1,7 @@
 <?xdl version="0.2.0" ?>
 
 <Synthesis
-  graph_sha256="cef344b332797f0750a0a606242e459edb495c450f4fb762c6a38616b8f688a9"
+  graph_sha256="8918a3f8f1b2859a56a2b0193b355339f222cc60b66b8259e3bb0a72044e4ee7"
 >
   <Hardware>
     <Component
@@ -16,7 +16,7 @@
 
   <Procedure>
     <CConnect
-      from_vessel="flask_nitrogen"
+      from_vessel="None"
       to_vessel="filter"
       from_port="None"
       to_port="bottom"
@@ -26,164 +26,203 @@
       evacuations="3"
       after_inert_gas_wait_time="60 secs"
       after_vacuum_wait_time="60 secs"
-      inert_gas="flask_nitrogen"
-      vacuum="vacuum_flask"
-      vacuum_device="vacuum_device"
+      inert_gas="None"
+      vacuum="None"
+      vacuum_device="None"
       vacuum_pressure="50 mbar"
-      vessel_type="filter">
-      <StartVacuum
-        vessel="vacuum_flask"
-        pressure="50 mbar">
-        <CSetVacuumSetPoint
-          vessel="vacuum_flask"
-          vacuum_pressure="50 mbar" />
-        <CStartVacuum
-          vessel="vacuum_flask" />
-      </StartVacuum>
-      <CConnect
-        from_vessel="filter"
-        to_vessel="vacuum_flask"
-        from_port="None"
-        to_port="None"
-        unique="True" />
-      <Wait
-        time="2 mins"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="2 mins" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
-      <CConnect
-        from_vessel="flask_nitrogen"
-        to_vessel="filter"
-        from_port="None"
-        to_port="None"
-        unique="True" />
-      <Wait
-        time="60 secs"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="60 secs" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
+      vessel_type="filter"
+      pneumatic_controller="pneumatic_controller">
       <Repeat
-        repeats="2">
-        <CConnect
-          from_vessel="filter"
-          to_vessel="vacuum_flask"
-          from_port="None"
-          to_port="None"
-          unique="True" />
-        <Wait
-          time="60 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
-          <CSetRecordingSpeed
-            recording_speed="2000" />
-          <CWait
-            time="60 secs" />
-          <CSetRecordingSpeed
-            recording_speed="14" />
-        </Wait>
-        <CConnect
-          from_vessel="flask_nitrogen"
-          to_vessel="filter"
-          from_port="None"
-          to_port="None"
-          unique="True" />
-        <Wait
-          time="60 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
-          <CSetRecordingSpeed
-            recording_speed="2000" />
-          <CWait
-            time="60 secs" />
-          <CSetRecordingSpeed
-            recording_speed="14" />
-        </Wait>
-        <CConnect
-          from_vessel="filter"
-          to_vessel="vacuum_flask"
-          from_port="None"
-          to_port="None"
-          unique="True" />
-        <Wait
-          time="60 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
-          <CSetRecordingSpeed
-            recording_speed="2000" />
-          <CWait
-            time="60 secs" />
-          <CSetRecordingSpeed
-            recording_speed="14" />
-        </Wait>
-        <CConnect
-          from_vessel="flask_nitrogen"
-          to_vessel="filter"
-          from_port="None"
-          to_port="None"
-          unique="True" />
-        <Wait
-          time="60 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
-          <CSetRecordingSpeed
-            recording_speed="2000" />
-          <CWait
-            time="60 secs" />
-          <CSetRecordingSpeed
-            recording_speed="14" />
-        </Wait>
-        <CConnect
-          from_vessel="filter"
-          to_vessel="vacuum_flask"
-          from_port="None"
-          to_port="None"
-          unique="True" />
-        <Wait
-          time="60 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
-          <CSetRecordingSpeed
-            recording_speed="2000" />
-          <CWait
-            time="60 secs" />
-          <CSetRecordingSpeed
-            recording_speed="14" />
-        </Wait>
-        <CConnect
-          from_vessel="flask_nitrogen"
-          to_vessel="filter"
-          from_port="None"
-          to_port="None"
-          unique="True" />
-        <Wait
-          time="60 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
-          <CSetRecordingSpeed
-            recording_speed="2000" />
-          <CWait
-            time="60 secs" />
-          <CSetRecordingSpeed
-            recording_speed="14" />
-        </Wait>
+        repeats="3">
+        <SwitchVacuum
+          vessel="filter"
+          port="top"
+          pneumatic_controller="pneumatic_controller"
+          pneumatic_controller_port="2"
+          after_switch_wait="60">
+          <CSwitchVacuum
+            pneumatic_controller="pneumatic_controller"
+            port="2" />
+          <Wait
+            time="60 secs"
+            wait_recording_speed="2000"
+            after_recording_speed="14">
+            <CSetRecordingSpeed
+              recording_speed="2000" />
+            <CWait
+              time="60 secs" />
+            <CSetRecordingSpeed
+              recording_speed="14" />
+          </Wait>
+        </SwitchVacuum>
+        <SwitchArgon
+          vessel="filter"
+          port="top"
+          pressure="high"
+          pneumatic_controller="pneumatic_controller"
+          pneumatic_controller_port="2"
+          after_switch_wait="60">
+          <CSwitchArgon
+            pneumatic_controller="pneumatic_controller"
+            port="2"
+            pressure="high" />
+          <Wait
+            time="60 secs"
+            wait_recording_speed="2000"
+            after_recording_speed="14">
+            <CSetRecordingSpeed
+              recording_speed="2000" />
+            <CWait
+              time="60 secs" />
+            <CSetRecordingSpeed
+              recording_speed="14" />
+          </Wait>
+        </SwitchArgon>
+        <SwitchVacuum
+          vessel="filter"
+          port="top"
+          pneumatic_controller="pneumatic_controller"
+          pneumatic_controller_port="2"
+          after_switch_wait="60">
+          <CSwitchVacuum
+            pneumatic_controller="pneumatic_controller"
+            port="2" />
+          <Wait
+            time="60 secs"
+            wait_recording_speed="2000"
+            after_recording_speed="14">
+            <CSetRecordingSpeed
+              recording_speed="2000" />
+            <CWait
+              time="60 secs" />
+            <CSetRecordingSpeed
+              recording_speed="14" />
+          </Wait>
+        </SwitchVacuum>
+        <SwitchArgon
+          vessel="filter"
+          port="top"
+          pressure="high"
+          pneumatic_controller="pneumatic_controller"
+          pneumatic_controller_port="2"
+          after_switch_wait="60">
+          <CSwitchArgon
+            pneumatic_controller="pneumatic_controller"
+            port="2"
+            pressure="high" />
+          <Wait
+            time="60 secs"
+            wait_recording_speed="2000"
+            after_recording_speed="14">
+            <CSetRecordingSpeed
+              recording_speed="2000" />
+            <CWait
+              time="60 secs" />
+            <CSetRecordingSpeed
+              recording_speed="14" />
+          </Wait>
+        </SwitchArgon>
+        <SwitchVacuum
+          vessel="filter"
+          port="top"
+          pneumatic_controller="pneumatic_controller"
+          pneumatic_controller_port="2"
+          after_switch_wait="60">
+          <CSwitchVacuum
+            pneumatic_controller="pneumatic_controller"
+            port="2" />
+          <Wait
+            time="60 secs"
+            wait_recording_speed="2000"
+            after_recording_speed="14">
+            <CSetRecordingSpeed
+              recording_speed="2000" />
+            <CWait
+              time="60 secs" />
+            <CSetRecordingSpeed
+              recording_speed="14" />
+          </Wait>
+        </SwitchVacuum>
+        <SwitchArgon
+          vessel="filter"
+          port="top"
+          pressure="high"
+          pneumatic_controller="pneumatic_controller"
+          pneumatic_controller_port="2"
+          after_switch_wait="60">
+          <CSwitchArgon
+            pneumatic_controller="pneumatic_controller"
+            port="2"
+            pressure="high" />
+          <Wait
+            time="60 secs"
+            wait_recording_speed="2000"
+            after_recording_speed="14">
+            <CSetRecordingSpeed
+              recording_speed="2000" />
+            <CWait
+              time="60 secs" />
+            <CSetRecordingSpeed
+              recording_speed="14" />
+          </Wait>
+        </SwitchArgon>
+        <SwitchVacuum
+          vessel="filter"
+          port="top"
+          pneumatic_controller="pneumatic_controller"
+          pneumatic_controller_port="2"
+          after_switch_wait="60">
+          <CSwitchVacuum
+            pneumatic_controller="pneumatic_controller"
+            port="2" />
+          <Wait
+            time="60 secs"
+            wait_recording_speed="2000"
+            after_recording_speed="14">
+            <CSetRecordingSpeed
+              recording_speed="2000" />
+            <CWait
+              time="60 secs" />
+            <CSetRecordingSpeed
+              recording_speed="14" />
+          </Wait>
+        </SwitchVacuum>
+        <SwitchArgon
+          vessel="filter"
+          port="top"
+          pressure="high"
+          pneumatic_controller="pneumatic_controller"
+          pneumatic_controller_port="2"
+          after_switch_wait="60">
+          <CSwitchArgon
+            pneumatic_controller="pneumatic_controller"
+            port="2"
+            pressure="high" />
+          <Wait
+            time="60 secs"
+            wait_recording_speed="2000"
+            after_recording_speed="14">
+            <CSetRecordingSpeed
+              recording_speed="2000" />
+            <CWait
+              time="60 secs" />
+            <CSetRecordingSpeed
+              recording_speed="14" />
+          </Wait>
+        </SwitchArgon>
       </Repeat>
-      <StopVacuum
-        vessel="vacuum_flask">
-        <CStopVacuum
-          vessel="vacuum_flask" />
-      </StopVacuum>
+      <SwitchArgon
+        vessel="filter"
+        port="top"
+        pressure="low"
+        pneumatic_controller="pneumatic_controller"
+        pneumatic_controller_port="0"
+        after_switch_wait="None">
+        <CSwitchArgon
+          pneumatic_controller="pneumatic_controller"
+          port="0"
+          pressure="low" />
+      </SwitchArgon>
     </Evacuate>
   </Procedure>
 

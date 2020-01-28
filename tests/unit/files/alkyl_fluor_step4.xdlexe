@@ -717,7 +717,8 @@
       volume="125 mL"
       cleans="2"
       solvent_vessel="flask_acetonitrile"
-      waste_vessel="waste_aqueous">
+      waste_vessel="waste_aqueous"
+      dry="True">
       <StartStir
         vessel="rotavap"
         vessel_type="rotavap"
@@ -2026,7 +2027,8 @@
       volume="125 mL"
       cleans="2"
       solvent_vessel="flask_DCM"
-      waste_vessel="waste_aqueous">
+      waste_vessel="waste_aqueous"
+      dry="True">
       <StartStir
         vessel="rotavap"
         vessel_type="rotavap"

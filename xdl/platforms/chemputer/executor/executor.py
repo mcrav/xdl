@@ -60,7 +60,6 @@ from .graph import (
     make_inert_gas_map,
     get_unused_valve_port,
     vacuum_device_attached_to_flask,
-    get_pneumatic_controller,
 )
 from .utils import VesselContents, is_aqueous, validate_port
 from .cleaning import (
@@ -75,6 +74,7 @@ from .constants import (
     CLEAN_VESSEL_BOILING_POINT_FACTOR,
     NON_RECURSIVE_ABSTRACT_STEPS
 )
+from ..utils.execution import get_pneumatic_controller
 
 class ChemputerExecutor(AbstractXDLExecutor):
 
@@ -366,7 +366,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
                     port = step.port
                 step.pneumatic_controller, step.pneumatic_controller_port = (
                     get_pneumatic_controller(
-                        step.vessel, port, self._graph))
+                        self._graph, step.vessel, port))
 
             if ('through_cartridge' in step.properties
                     and not step.through_cartridge):

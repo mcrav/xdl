@@ -5234,7 +5234,8 @@
       volume="100 mL"
       cleans="2"
       solvent_vessel="flask_DCM"
-      waste_vessel="waste_organic">
+      waste_vessel="waste_organic"
+      dry="True">
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
@@ -6852,7 +6853,8 @@
       volume="125 mL"
       cleans="2"
       solvent_vessel="flask_acetonitrile"
-      waste_vessel="waste_solvents">
+      waste_vessel="waste_solvents"
+      dry="True">
       <StartStir
         vessel="rotavap"
         vessel_type="rotavap"
@@ -8209,7 +8211,8 @@
       volume="125 mL"
       cleans="2"
       solvent_vessel="flask_DCM"
-      waste_vessel="waste_solvents">
+      waste_vessel="waste_solvents"
+      dry="True">
       <StartStir
         vessel="rotavap"
         vessel_type="rotavap"

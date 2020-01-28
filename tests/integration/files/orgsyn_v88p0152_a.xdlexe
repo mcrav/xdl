@@ -120,7 +120,8 @@
       vacuum="vacuum"
       vacuum_device="vacuum_pump"
       vacuum_pressure="50 mbar"
-      vessel_type="filter">
+      vessel_type="filter"
+      pneumatic_controller="None">
       <StartVacuum
         vessel="vacuum"
         pressure="50 mbar">

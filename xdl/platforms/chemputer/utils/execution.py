@@ -1,3 +1,6 @@
+from typing import Tuple
+from networkx import MultiDiGraph
+
 def get_unused_valve_port(graph, valve_node):
     used_ports = []
     # Get connected valve positions.
@@ -14,3 +17,26 @@ def get_unused_valve_port(graph, valve_node):
         if i not in used_ports:
             return i
     return None
+
+def get_pneumatic_controller(
+    graph: MultiDiGraph, vessel: str, port: str = None
+) -> Tuple[str, int]:
+    """Given vessel, return pneumatic controller node that is a direct neighbour
+    of the vessel in the graph, with the pneumatic controller port number.
+
+    Args:
+        vessel (str): Vessel to find attached pneumatic controller
+        graph (MultiDiGraph): Graph containing vessel
+
+    Returns:
+        Tuple[str, int]: (pneumatic_controller_node, pneumatic_controller_port)
+    """
+    for src_node, _, info in graph.in_edges(vessel, data=True):
+        if graph.nodes[src_node]['class'] == 'PneumaticController':
+            if port is not None:
+                ports = info['port']
+                if not port or ports[1] == port:
+                    return src_node, info['port'][0]
+            else:
+                return src_node, info['port'][0]
+    return None, None

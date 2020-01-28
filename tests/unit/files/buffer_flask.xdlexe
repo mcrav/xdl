@@ -380,7 +380,8 @@
         volume="125 mL"
         cleans="2"
         solvent_vessel="flask_dichloromethane"
-        waste_vessel="waste_E">
+        waste_vessel="waste_E"
+        dry="True">
         <StartStir
           vessel="rotavap"
           vessel_type="rotavap"

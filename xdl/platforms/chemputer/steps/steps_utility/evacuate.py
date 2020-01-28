@@ -1,8 +1,10 @@
 from typing import Optional
 from .....step_utils.base_steps import AbstractStep
-from ..steps_utility import Wait, StartVacuum, StopVacuum
+from ..steps_utility import (
+    Wait, StartVacuum, StopVacuum, SwitchArgon, SwitchVacuum)
 from ..steps_base import CConnect
 from .....step_utils.special_steps import Repeat
+from ...utils.execution import get_pneumatic_controller
 
 class Evacuate(AbstractStep):
     """Evacuate given vessel with inert gas.
@@ -28,11 +30,27 @@ class Evacuate(AbstractStep):
         vacuum_device: Optional[str] = None,
         vacuum_pressure: Optional[float] = 'default',
         vessel_type: Optional[str] = None,
+        pneumatic_controller: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
+    def on_prepare_for_execution(self, graph):
+        self.pneumatic_controller, _ = get_pneumatic_controller(
+            graph, self.vessel)
+
+    def final_sanity_check(self, graph):
+        assert self.pneumatic_controller or (self.vacuum and self.inert_gas)
+
     def get_steps(self):
+        if self.pneumatic_controller:
+            return self.get_pneumatic_controller_steps()
+        elif self.vacuum and self.inert_gas:
+            return self.get_vacuum_inert_gas_valve_steps()
+        else:
+            return []
+
+    def get_vacuum_inert_gas_valve_steps(self):
         vacuum_vessel = self.vacuum
         if self.vessel_type == 'rotavap':
             vacuum_vessel = self.vessel
@@ -71,6 +89,29 @@ class Evacuate(AbstractStep):
                 )
             ]
 
+        return steps
+
+    def get_pneumatic_controller_steps(self):
+        steps = [
+            Repeat(
+                repeats=self.evacuations,
+                children=[
+                    SwitchVacuum(
+                        vessel=self.vessel,
+                        after_switch_wait=self.after_vacuum_wait_time
+                    ),
+                    SwitchArgon(
+                        vessel=self.vessel,
+                        pressure='high',
+                        after_switch_wait=self.after_inert_gas_wait_time
+                    )
+                ]
+            ),
+            SwitchArgon(
+                vessel=self.vessel,
+                pressure='low',
+            ),
+        ]
         return steps
 
     def human_readable(self, language='en'):
