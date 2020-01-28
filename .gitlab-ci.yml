@@ -58,6 +58,7 @@ pages:
   - pip install -U sphinx
   - pip install sphinx_rtd_theme
   - cd documentation
+  - ./makedocs.sh
   - sphinx-build -b html -c ./ . ../public
   artifacts:
     paths:
