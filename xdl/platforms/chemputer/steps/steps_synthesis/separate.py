@@ -12,6 +12,7 @@ from .....constants import (
 )
 from .....utils.errors import XDLError
 from .....localisation import HUMAN_READABLE_STEPS
+from ...utils.execution import get_buffer_flasks
 
 class Separate(AbstractStep):
     """Extract contents of from_vessel using given amount of given solvent.
@@ -400,6 +401,12 @@ class Separate(AbstractStep):
     ####################################
 
     def final_sanity_check(self, graph):
+        buffer_flasks = get_buffer_flasks(graph)
+        try:
+            assert len(buffer_flasks) >= self.buffer_flasks_required
+        except AssertionError:
+            raise XDLError('Not enough buffer flasks in graph. Create buffer\
+ flasks as ChemputerFlask nodes with an empty chemical property.')
         assert self.to_vessel != self.waste_phase_to_vessel
         assert not self.solvent_volume or self.solvent_volume > 0
         assert self.purpose in ['extract', 'wash']

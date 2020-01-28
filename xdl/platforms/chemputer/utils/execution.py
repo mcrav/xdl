@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, List
 from networkx import MultiDiGraph
 
 def get_unused_valve_port(graph, valve_node):
@@ -40,3 +40,10 @@ def get_pneumatic_controller(
             else:
                 return src_node, info['port'][0]
     return None, None
+
+def get_buffer_flasks(graph: MultiDiGraph) -> List[str]:
+    buffer_flasks = []
+    for node, data in graph.nodes(data=True):
+        if data['class'] == 'ChemputerFlask' and not data['chemical']:
+            buffer_flasks.append(node)
+    return buffer_flasks
