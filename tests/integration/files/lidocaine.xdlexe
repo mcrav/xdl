@@ -2510,7 +2510,8 @@
       volume="80 mL"
       cleans="2"
       solvent_vessel="flask_acetic_acid"
-      waste_vessel="waste_filter">
+      waste_vessel="waste_filter"
+      dry="True">
       <StartStir
         vessel="filter1"
         vessel_type="filter"

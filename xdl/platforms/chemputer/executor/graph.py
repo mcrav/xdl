@@ -1,4 +1,4 @@
-from typing import Dict, Tuple
+from typing import Dict
 
 from networkx import MultiDiGraph, NetworkXNoPath
 from networkx.algorithms.shortest_paths.generic import shortest_path_length
@@ -151,26 +151,3 @@ def vacuum_device_attached_to_flask(
         if graph.nodes[src_node]['class'] == 'CVC3000':
             return src_node
     return None
-
-def get_pneumatic_controller(
-    vessel: str, port: str, graph: MultiDiGraph
-) -> Tuple[str, int]:
-    """Given vessel, return pneumatic controller node that is a direct neighbour
-    of the vessel in the graph, with the pneumatic controller port number.
-
-    Args:
-        vessel (str): Vessel to find attached pneumatic controller
-        graph (MultiDiGraph): Graph containing vessel
-
-    Returns:
-        Tuple[str, int]: (pneumatic_controller_node, pneumatic_controller_port)
-    """
-    for src_node, _, info in graph.in_edges(vessel, data=True):
-        if graph.nodes[src_node]['class'] == 'PneumaticController':
-            if port is not None:
-                ports = info['port']
-                if not port or ports[1] == port:
-                    return src_node, info['port'][0]
-            else:
-                return src_node, info['port'][0]
-    return None, None

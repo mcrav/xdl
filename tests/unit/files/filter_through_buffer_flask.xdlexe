@@ -332,7 +332,8 @@
         volume="50 mL"
         cleans="2"
         solvent_vessel="flask_ether"
-        waste_vessel="waste_rotavap">
+        waste_vessel="waste_rotavap"
+        dry="True">
         <StartStir
           vessel="rotavap"
           vessel_type="rotavap"
