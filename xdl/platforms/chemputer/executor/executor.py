@@ -1,4 +1,3 @@
-import copy
 from typing import List, Union, Tuple, Dict, Optional
 
 from networkx import MultiDiGraph
