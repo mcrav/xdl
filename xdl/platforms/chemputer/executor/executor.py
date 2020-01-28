@@ -1123,11 +1123,12 @@ class ChemputerExecutor(AbstractXDLExecutor):
         for warning in self._warnings:
             self.logger.info(warning)
 
-    def _do_sanity_check(self, step):
+    def _do_sanity_check(self, step, level=0):
+        self.logger.debug(f'{"    "*level}{step.name}')
         step.final_sanity_check(self._graph)
         if not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
             for substep in step.steps:
-                self._do_sanity_check(substep)
+                self._do_sanity_check(substep, level + 1)
 
     ##################
     # PUBLIC METHODS #
