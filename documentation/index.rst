@@ -14,10 +14,10 @@ Usage
    :caption: Contents:
 
    install
-   usage_tutorial
+   usage/index
    platforms
    custom_steps
-   reference/index
+   xdl_autodoc/modules
 
 
 

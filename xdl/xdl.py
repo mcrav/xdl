@@ -527,7 +527,8 @@ class XDL(object):
                 graph in same format as JSON file.
         """
         if not self.prepared:
-            save_path = None
+            if not save_path:
+                save_path = None
             if self._xdl_file:
                 save_path = self._xdl_file.replace('.xdl', '.xdlexe')
 
