@@ -255,15 +255,25 @@ class Separate(AbstractStep):
                     ),
                 ])
         else:
-            steps.append(
-                SeparatePhases(
-                    separation_vessel=self.separation_vessel,
-                    lower_phase_vessel=self.waste_phase_to_vessel,
-                    lower_phase_port=self.waste_phase_to_port,
-                    upper_phase_vessel=self.separation_vessel,
-                    dead_volume_vessel=self.waste_phase_to_vessel,
+            if self.waste_phase_to_vessel != self.separation_vessel:
+                steps.append(
+                    SeparatePhases(
+                        separation_vessel=self.separation_vessel,
+                        lower_phase_vessel=self.waste_phase_to_vessel,
+                        lower_phase_port=self.waste_phase_to_port,
+                        upper_phase_vessel=self.separation_vessel,
+                        dead_volume_vessel=self.waste_phase_to_vessel,
+                    )
                 )
-            )
+            else:
+                steps.append(
+                    SeparatePhases(
+                        separation_vessel=self.separation_vessel,
+                        lower_phase_vessel=self.buffer_flasks[0],
+                        upper_phase_vessel=self.separation_vessel,
+                        dead_volume_vessel=self.buffer_flasks[0],
+                    )
+                )
         return steps
 
     def _get_multi_extract_loop_separate_phases(self):
