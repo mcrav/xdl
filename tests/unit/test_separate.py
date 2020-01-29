@@ -366,6 +366,32 @@ correct_step_info = [
             'to_vessel': 'separator',
         }),
     ],
+
+    # Product top, 2 washes, waste_phase_to_separator, product phase to
+    # rotavap
+    [
+        (Transfer, {}),  # Reaction mixture
+        (Add, {}),  # Solvent
+        (Stir, {}),
+        (Stir, {}),
+        (Wait, {}),
+        (SeparatePhases, {
+            'lower_phase_vessel': 'buffer_flask',
+            'upper_phase_vessel': 'separator',
+        }),
+        (Add, {}),  # Solvent
+        (Stir, {}),
+        (Stir, {}),
+        (Wait, {}),
+        (SeparatePhases, {
+            'lower_phase_vessel': 'buffer_flask',
+            'upper_phase_vessel': 'rotavap',
+        }),
+        (Transfer, {
+            'from_vessel': 'buffer_flask',
+            'to_vessel': 'separator',
+        }),
+    ],
 ]
 
 def test_separate():
