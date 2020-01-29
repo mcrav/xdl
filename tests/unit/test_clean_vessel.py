@@ -21,6 +21,11 @@ def test_clean_vessel():
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     generic_chempiler_test(xdl_f, graph_f)
 
+def test_clean_vessel_no_vacuum():
+    xdl_f = os.path.join(FOLDER, 'clean_vessel_no_vacuum.xdl')
+    graph_f = os.path.join(FOLDER, 'orgsyn_v81p0262.json')
+    generic_chempiler_test(xdl_f, graph_f)
+
 
 CLEAN_VESSEL_TESTS = [
     (os.path.join(FOLDER, 'alkyl_fluor_step4.xdl'),
@@ -50,6 +55,7 @@ def test_clean_vessel_scheduling():
             step for step in x.steps if type(step) == CleanVessel]
         assert len(clean_vessel_steps) == n_clean_vessels
         for i in reversed(range(len(clean_vessel_steps))):
+            print(clean_vessel_steps[i].temp)
             assert(clean_vessel_steps[i].solvent.lower()
                    == clean_vessel_solvents.pop().lower())
             correct_temp = clean_vessel_temps.pop()

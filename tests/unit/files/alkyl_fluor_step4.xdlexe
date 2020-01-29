@@ -714,11 +714,15 @@
       stir_time="60 secs"
       stir_speed="500 RPM"
       temp="65.32°C"
+      dry="True"
       volume="125 mL"
       cleans="2"
       solvent_vessel="flask_acetonitrile"
       waste_vessel="waste_aqueous"
-      dry="True">
+      vacuum="flask_vacuum"
+      vessel_type="rotavap"
+      heater="None"
+      chiller="None">
       <StartStir
         vessel="rotavap"
         vessel_type="rotavap"
@@ -2024,11 +2028,15 @@
       stir_time="60 secs"
       stir_speed="500 RPM"
       temp="31.84°C"
+      dry="True"
       volume="125 mL"
       cleans="2"
       solvent_vessel="flask_DCM"
       waste_vessel="waste_aqueous"
-      dry="True">
+      vacuum="flask_vacuum"
+      vessel_type="rotavap"
+      heater="None"
+      chiller="None">
       <StartStir
         vessel="rotavap"
         vessel_type="rotavap"

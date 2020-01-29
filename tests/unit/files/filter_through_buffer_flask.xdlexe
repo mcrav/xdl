@@ -329,11 +329,15 @@
         stir_time="60 secs"
         stir_speed="500 RPM"
         temp="None"
+        dry="True"
         volume="50 mL"
         cleans="2"
         solvent_vessel="flask_ether"
         waste_vessel="waste_rotavap"
-        dry="True">
+        vacuum="vacuum_flask"
+        vessel_type="rotavap"
+        heater="None"
+        chiller="None">
         <StartStir
           vessel="rotavap"
           vessel_type="rotavap"

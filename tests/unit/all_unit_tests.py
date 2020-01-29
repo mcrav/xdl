@@ -1,6 +1,10 @@
 from .test_rotavap import *
 from .test_clean_backbone import *
-from .test_clean_vessel import *
+from .test_clean_vessel import (
+    test_clean_vessel,
+    test_clean_vessel_no_vacuum,
+    test_clean_vessel_scheduling
+)
 from .test_filter_through import *
 from .test_filter import *
 from .test_dry import *

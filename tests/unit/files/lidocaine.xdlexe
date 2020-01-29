@@ -2572,11 +2572,15 @@
       stir_time="60 secs"
       stir_speed="500 RPM"
       temp="27.6°C"
+      dry="True"
       volume="80 mL"
       cleans="2"
       solvent_vessel="flask_ether"
       waste_vessel="waste_filter"
-      dry="True">
+      vacuum="vacuum_filter"
+      vessel_type="filter"
+      heater="None"
+      chiller="chiller_filter">
       <StartStir
         vessel="filter1"
         vessel_type="filter"
