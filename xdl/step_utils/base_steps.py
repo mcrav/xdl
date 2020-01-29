@@ -256,6 +256,7 @@ class AbstractDynamicStep(XDLBase):
         self.state = {}
         self.async_steps = []
         self.steps = []
+        self.started = False
 
     @abstractmethod
     def on_start(self):
@@ -287,6 +288,14 @@ class AbstractDynamicStep(XDLBase):
             List[Step]: List of steps to be executed once at end of step.
         """
         return []
+
+    def reset(self):
+        self.state = []
+
+    def resume(self, chempiler, logger=None, level=0):
+        self.started = False  # Hack to avoid reset.
+        self.start_block = []  # Go straight to on_continue
+        self.execute(chempiler, logger=logger, level=level)
 
     def final_sanity_check(self, graph):
         pass
@@ -321,6 +330,11 @@ class AbstractDynamicStep(XDLBase):
         Returns:
             True: bool to indicate execution should continue after this step.
         """
+        if self.started:
+            self.reset()
+
+        self.started = True
+
         # Execute steps from on_start
         for step in self.start_block:
             step.execute(chempiler, logger=logger, level=level)
