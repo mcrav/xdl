@@ -61,19 +61,7 @@ class SeparatePhases(AbstractDynamicStep):
                 dead_volume_target.
         """
         super().__init__(locals())
-        self.pump_current_volume = 0  # Current volume in separation vessel pump
-        self.pump_max_volume = None  # Max volume of separation vessel pump
-
-        # Node name of separation vessel pump
-        self.separation_vessel_pump = None
-        self.conductivity_sensor = None  # Node name of conductivity sensor
-
-        # Flag to switch between reading conductivity and withdrawing more
-        # liquid
-        self.read_conductivity = True
-        self.readings = []
-        self.done = False
-        self.discriminant = self.default_discriminant(True, True)
+        self.reset()
 
     def default_discriminant(
         self,
@@ -200,6 +188,21 @@ class SeparatePhases(AbstractDynamicStep):
         # Send upper phase to upper_phase_vessel.
         steps.extend(self.upper_phase_withdraw_step())
         return steps
+
+    def reset(self):
+        self.pump_current_volume = 0  # Current volume in separation vessel pump
+        self.pump_max_volume = None  # Max volume of separation vessel pump
+
+        # Node name of separation vessel pump
+        self.separation_vessel_pump = None
+        self.conductivity_sensor = None  # Node name of conductivity sensor
+
+        # Flag to switch between reading conductivity and withdrawing more
+        # liquid
+        self.read_conductivity = True
+        self.readings = []
+        self.done = False
+        self.discriminant = self.default_discriminant(True, True)
 
     def prime_sensor_step(self):
         return Transfer(
