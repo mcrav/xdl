@@ -1,5 +1,6 @@
 from typing import Tuple, List
 from networkx import MultiDiGraph
+from ....utils.graph import undirected_neighbors
 
 def get_unused_valve_port(graph, valve_node):
     used_ports = []
@@ -47,3 +48,15 @@ def get_buffer_flasks(graph: MultiDiGraph) -> List[str]:
         if data['class'] == 'ChemputerFlask' and not data['chemical']:
             buffer_flasks.append(node)
     return buffer_flasks
+
+def get_neighboring_vacuum(graph: MultiDiGraph, vessel: str) -> str:
+    for neighbor, data in undirected_neighbors(graph, vessel, data=True):
+        neighbor_class = data['class']
+        if neighbor_class == 'ChemputerVacuum':
+            return neighbor
+        elif neighbor_class == 'ChemputerValve':
+            for valve_neighbor, valve_neighbor_data in undirected_neighbors(
+                    graph, neighbor, data=True):
+                if valve_neighbor_data['class'] == 'ChemputerVacuum':
+                    return neighbor
+    return None
