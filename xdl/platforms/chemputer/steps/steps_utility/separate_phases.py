@@ -178,12 +178,14 @@ class SeparatePhases(AbstractDynamicStep):
 
     def on_finish(self):
         """Phase change detected. Send phases where they are supposed to go."""
-        # Withdraw dead volume if dead_volume_target given.
-        steps = self.dead_volume_withdraw_step()
+        steps = []
 
         # Send remaining lower phase in pump to lower_phase_vessel.
         if self.pump_current_volume:
             steps.append(self.lower_phase_separation_pump_dispense_step())
+
+        # Withdraw dead volume if dead_volume_target given.
+        steps.extend(self.dead_volume_withdraw_step())
 
         # Send upper phase to upper_phase_vessel.
         steps.extend(self.upper_phase_withdraw_step())
