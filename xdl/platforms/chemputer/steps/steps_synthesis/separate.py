@@ -417,10 +417,32 @@ class Separate(AbstractStep):
         except AssertionError:
             raise XDLError('Not enough buffer flasks in graph. Create buffer\
  flasks as ChemputerFlask nodes with an empty chemical property.')
-        assert self.to_vessel != self.waste_phase_to_vessel
-        assert not self.solvent_volume or self.solvent_volume > 0
-        assert self.purpose in ['extract', 'wash']
-        assert self.n_separations > 0
+
+        try:
+            assert self.to_vessel != self.waste_phase_to_vessel
+        except AssertionError:
+            raise XDLError('Separate step `to_vessel` must be different to\
+ `waste_phase_to_vessel` otherwise both phases end up in the same vessel.')
+
+        try:
+            assert not self.solvent or self.solvent_volume > 0
+        except AssertionError:
+            raise XDLError(
+                'Solvent volume must be greater than 0 mL if solvent\
+ specified.')
+
+        try:
+            assert self.purpose in ['extract', 'wash']
+        except AssertionError:
+            raise XDLError(f'"{self.purpose}" is invalid for Separate `purpose`\
+ property. Valid values: "extract" or "wash".')
+
+        try:
+            assert self.n_separations > 0
+        except AssertionError:
+            raise XDLError(
+                f'Separate `n_separations` property must be > 1.\
+ {self.n_separations} is an invalid value.')
 
     @property
     def buffer_flasks_required(self):

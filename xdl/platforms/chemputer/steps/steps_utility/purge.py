@@ -5,6 +5,7 @@ from ...utils.execution import get_unused_valve_port
 from .....step_utils.base_steps import AbstractStep
 from .....utils.graph import undirected_neighbors
 from .....constants import INERT_GAS_SYNONYMS
+from .....utils.errors import XDLError
 
 def get_pneumatic_controller(graph, vessel):
     for node, data in undirected_neighbors(graph, vessel, data=True):
@@ -36,7 +37,12 @@ class StartPurge(AbstractStep):
         super().__init__(locals())
 
     def final_sanity_check(self, graph):
-        assert self.pneumatic_controller or self.inert_gas
+        try:
+            assert self.pneumatic_controller or self.inert_gas
+        except AssertionError:
+            raise XDLError(
+                f'Cannot find pneumatic controller or inert gas connected to\
+ {self.vessel} so cannot purge.')
 
     def on_prepare_for_execution(self, graph):
         self.pneumatic_controller = self.inert_gas = None
@@ -76,8 +82,18 @@ class StopPurge(AbstractStep):
         super().__init__(locals())
 
     def final_sanity_check(self, graph):
-        assert self.pneumatic_controller or self.inert_gas
-        assert_node_in_graph(graph, self.vessel)
+        try:
+            assert self.pneumatic_controller or self.inert_gas
+        except AssertionError:
+            raise XDLError(
+                f'Cannot find pneumatic controller or inert gas connected to\
+ {self.vessel} so cannot purge.')
+
+        try:
+            assert_node_in_graph(graph, self.vessel)
+        except AssertionError:
+            raise XDLError(
+                f'Unable to find {self.vessel} in graph.')
 
     def on_prepare_for_execution(self, graph):
         self.pneumatic_controller = self.inert_gas = None
@@ -119,8 +135,16 @@ class Purge(AbstractStep):
         super().__init__(locals())
 
     def final_sanity_check(self, graph):
-        assert_node_in_graph(graph, self.vessel)
-        assert self.time >= 0
+        try:
+            assert_node_in_graph(graph, self.vessel)
+        except AssertionError:
+            raise XDLError(
+                f'Unable to find {self.vessel} in graph.')
+
+        try:
+            assert self.time > 0
+        except AssertionError:
+            raise XDLError('Purge time must be > 0.')
 
     def on_prepare_for_execution(self, graph):
         return
