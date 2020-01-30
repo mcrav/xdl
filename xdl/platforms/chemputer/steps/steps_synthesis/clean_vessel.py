@@ -50,9 +50,25 @@ class CleanVessel(AbstractStep):
         except AssertionError:
             raise XDLError(
                 f'No solvent vessel found in graph for {self.solvent}')
-        assert self.waste_vessel
-        assert self.cleans > 0
-        assert self.volume and self.volume > 0
+
+        try:
+            assert self.waste_vessel
+        except AssertionError:
+            raise XDLError(
+                f'No waste vessel found for "{self.vessel}".')
+
+        try:
+            assert self.cleans > 0
+        except AssertionError:
+            raise XDLError(
+                f'`cleans` property must be > 0. {self.cleans} is an invalid\
+ value.')
+
+        try:
+            assert self.volume and self.volume > 0
+        except AssertionError:
+            raise XDLError(
+                f'`volume` must be > 0. {self.volume} is an invalid value.')
 
     def on_prepare_for_execution(self, graph):
         for node in graph.nodes():
