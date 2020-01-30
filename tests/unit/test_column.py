@@ -1,7 +1,5 @@
 import os
 from ..utils import generic_chempiler_test
-from xdl import XDL
-from xdl.steps import FilterThrough
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')

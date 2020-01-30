@@ -4,6 +4,7 @@ from .....constants import DEFAULT_PORTS, DEFAULT_VISCOUS_ASPIRATION_SPEED
 from .....step_utils.base_steps import AbstractStep, Step
 from ..steps_base import CMove
 from .....localisation import HUMAN_READABLE_STEPS
+from .....utils.errors import XDLError
 
 class PrimePumpForAdd(AbstractStep):
     """Prime pump attached to given reagent flask in anticipation of Add step.
@@ -74,8 +75,15 @@ class Transfer(AbstractStep):
                       dispense_speed=dispense_speed)]
 
     def final_sanity_check(self, graph):
-        assert self.from_vessel
-        assert self.to_vessel
+        try:
+            assert self.from_vessel
+        except AssertionError:
+            raise XDLError('from_vessel must be node in graph.')
+
+        try:
+            assert self.to_vessel
+        except AssertionError:
+            raise XDLError('to_vessel must be node in graph.')
 
     def on_prepare_for_execution(self, graph) -> str:
         """If self.port is None, return default port for different vessel types.

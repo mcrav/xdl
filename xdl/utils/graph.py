@@ -9,13 +9,13 @@ def undirected_neighbors(graph, node, data=False):
     for src, dest in graph.edges():
         if src == node and dest not in yielded_neighbors:
             if data:
-                yield graph.nodes[dest]
+                yield dest, graph.nodes[dest]
             else:
                 yield dest
 
         elif dest == node and src not in yielded_neighbors:
             if data:
-                yield graph.nodes[src]
+                yield src, graph.nodes[src]
             else:
                 yield src
 
@@ -59,5 +59,6 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
     for edge in graph.edges:
         if 'port' in graph.edges[edge]:
             port_str = graph.edges[edge]['port']
-            graph.edges[edge]['port'] = port_str[1:-1].split(',')
+            if type(port_str) == str:
+                graph.edges[edge]['port'] = port_str[1:-1].split(',')
     return graph, raw_graph

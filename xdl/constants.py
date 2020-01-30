@@ -200,6 +200,8 @@ DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME: float = 60
 #: Default vacuum pressure when evacuating flask
 DEFAULT_EVACUATE_VACUUM_PRESSURE: float = 50  # mbar
 
+DEFAULT_PURGE_WAIT_TIME: int = 300  # seconds
+
 #####################
 # Recrystallization #
 #####################
@@ -207,6 +209,12 @@ DEFAULT_EVACUATE_VACUUM_PRESSURE: float = 50  # mbar
 DEFAULT_RECRYSTALLIZE_WAIT_TIME = 60 * 120
 
 DEFAULT_RECRYSTALLIZE_TEMP = 25
+
+########################
+# Pneumatic Controller #
+########################
+
+DEFAULT_WAIT_AFTER_SWITCH_VACUUM_TIME: float = 30
 
 #########
 # Video #
@@ -359,6 +367,15 @@ DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
     'Recrystallize': {
         'time': DEFAULT_RECRYSTALLIZE_WAIT_TIME,
         'crystallize_temp': DEFAULT_RECRYSTALLIZE_TEMP,
+    },
+    'Purge': {
+        'time': DEFAULT_PURGE_WAIT_TIME,
+    },
+    'SwitchVacuum': {
+        'after_switch_wait': DEFAULT_WAIT_AFTER_SWITCH_VACUUM_TIME,
+    },
+    'SwitchArgon': {
+        'after_switch_wait': DEFAULT_WAIT_AFTER_SWITCH_VACUUM_TIME,
     }
 }
 

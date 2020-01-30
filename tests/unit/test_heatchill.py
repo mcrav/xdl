@@ -38,7 +38,11 @@ def test_heatchill_reactor_with_heater_and_chiller():
     graph_f = os.path.join(FOLDER, 'heater_chiller_reactor.json')
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f, interactive=False)
-    assert len([step for step in x.base_steps if type(step) in [CChillerSetTemp, CStirrerSetTemp]]) == 9
+    assert len([
+        step
+        for step in x.base_steps
+        if type(step) in [CChillerSetTemp, CStirrerSetTemp]
+    ]) == 9
     for step in x.base_steps:
         if type(step) == CChillerSetTemp:
             assert CHILLER_MIN_TEMP < step.temp < CHILLER_MAX_TEMP

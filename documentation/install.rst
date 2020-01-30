@@ -7,5 +7,5 @@ and Windows 10.
 
 Install from source::
 
-   git clone https://gitlab.com/croningp/xdl.git
-   pip install -e XDL
+   git clone https://gitlab.com/croningp/chemputer/xdl.git
+   cd xdl; pip install -e .

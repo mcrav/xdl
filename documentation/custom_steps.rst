@@ -69,6 +69,3 @@ Examples
 
         def human_readable(self, language: str = 'en'):
             return f'Add {self.reagent} ({self.volume} mL) to {self.vessel} and heat {self.vessel} at {self.temp} °C for {self.time / 60} mins.'
-
-
-

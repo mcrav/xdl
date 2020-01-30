@@ -290,7 +290,7 @@ class XDL(object):
         Returns:
             float: Estimated runtime of procedure in seconds.
         """
-        if type(self.platform) != ChemputerPlatform:
+        if not isinstance(self.platform, ChemputerPlatform):
             self.logger.info('Estimated duration only supported for Chemputer.')
             return -1
         if not self.prepared:
@@ -374,7 +374,7 @@ class XDL(object):
         Returns:
             Dict[str, float]: Dict of { reagent_name: volume_used... }
         """
-        if self.platform != 'chemputer':
+        if not isinstance(self.platform, ChemputerPlatform):
             self.logger.info('Reagent volume prediction only supported for\
  chemputer.')
             return {}
@@ -527,7 +527,8 @@ class XDL(object):
                 graph in same format as JSON file.
         """
         if not self.prepared:
-            save_path = None
+            if not save_path:
+                save_path = None
             if self._xdl_file:
                 save_path = self._xdl_file.replace('.xdl', '.xdlexe')
 

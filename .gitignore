@@ -4,6 +4,7 @@ stuff/
 build/
 documentation/_build
 documentation/public
+documentation/xdl_autodoc
 public/
 
 # Python

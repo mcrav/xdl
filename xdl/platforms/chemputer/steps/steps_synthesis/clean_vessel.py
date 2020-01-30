@@ -5,6 +5,7 @@ from ..steps_utility import (
 from ..steps_base import CMove
 from .dry import Dry
 from .....utils.errors import XDLError
+from ...utils.execution import get_neighboring_vacuum
 
 class CleanVessel(AbstractStep):
 
@@ -15,10 +16,15 @@ class CleanVessel(AbstractStep):
         stir_time: Optional[float] = 'default',
         stir_speed: Optional[float] = 'default',
         temp: Optional[float] = None,
+        dry: Optional[bool] = True,
         volume: Optional[float] = None,
         cleans: Optional[int] = 2,
         solvent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
+        vacuum: Optional[str] = None,
+        vessel_type: Optional[str] = None,
+        heater: Optional[str] = None,
+        chiller: Optional[str] = None,
         **kwargs
     ) -> None:
         """Clean given vessel with given solvent.
@@ -34,6 +40,7 @@ class CleanVessel(AbstractStep):
             solvent_vessel (str): Given internally. Flask containing solvent.
             waste_vessel (str): Given internally. Vessel to send waste solvent
                 to.
+            vacuum (str): Internal property. Used to tell if drying is possible.
         """
         super().__init__(locals())
 
@@ -43,9 +50,25 @@ class CleanVessel(AbstractStep):
         except AssertionError:
             raise XDLError(
                 f'No solvent vessel found in graph for {self.solvent}')
-        assert self.waste_vessel
-        assert self.cleans > 0
-        assert self.volume and self.volume > 0
+
+        try:
+            assert self.waste_vessel
+        except AssertionError:
+            raise XDLError(
+                f'No waste vessel found for "{self.vessel}".')
+
+        try:
+            assert self.cleans > 0
+        except AssertionError:
+            raise XDLError(
+                f'`cleans` property must be > 0. {self.cleans} is an invalid\
+ value.')
+
+        try:
+            assert self.volume and self.volume > 0
+        except AssertionError:
+            raise XDLError(
+                f'`volume` must be > 0. {self.volume} is an invalid value.')
 
     def on_prepare_for_execution(self, graph):
         for node in graph.nodes():
@@ -53,6 +76,19 @@ class CleanVessel(AbstractStep):
                 if graph.nodes[node]['chemical'] == self.solvent:
                     self.solvent_vessel = node
                     break
+        self.check_for_vacuum_pump(graph)
+        self.check_for_heater()
+
+    def check_for_vacuum_pump(self, graph):
+        if self.dry and not self.vessel_type == 'rotavap':
+            if not get_neighboring_vacuum(graph, self.vessel):
+                self.dry = False
+
+    def check_for_heater(self):
+        if (self.temp is not None
+            and not (self.heater or self.chiller
+                     or self.vessel_type == 'rotavap')):
+            self.temp = None
 
     def get_steps(self):
         steps = []
@@ -68,7 +104,8 @@ class CleanVessel(AbstractStep):
                       volume=self.volume),
                 StopStir(vessel=self.vessel),
             ])
-        steps.append(Dry(vessel=self.vessel))
+        if self.dry:
+            steps.append(Dry(vessel=self.vessel))
         if self.temp is not None and (self.temp < 20 or self.temp > 25):
             steps.insert(
                 1, HeatChillToTemp(vessel=self.vessel, temp=self.temp))

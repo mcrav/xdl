@@ -1,6 +1,10 @@
 from .test_rotavap import *
 from .test_clean_backbone import *
-from .test_clean_vessel import *
+from .test_clean_vessel import (
+    test_clean_vessel,
+    test_clean_vessel_no_vacuum,
+    test_clean_vessel_scheduling
+)
 from .test_filter_through import *
 from .test_filter import *
 from .test_dry import *
@@ -19,7 +23,7 @@ from .test_reagent_storage import *
 from .test_anticlogging_add import *
 from .test_heatchill import *
 from .test_separate import test_separate
-from .test_evacuate import test_evacuate
+from .test_evacuate import test_evacuate, test_evacuate_pneumatic_controller
 from .test_recrystallize import test_recrystallization
 from .test_xdlexe import test_xdlexe, test_xdlexe_execute_wrong_graph
 from .test_port_validation import test_port_validation
@@ -29,3 +33,4 @@ from .test_graphgen import test_graphgen
 from .test_reagent_roles import test_reagent_roles
 from .test_default_ports import test_default_ports
 from .test_controller import test_controller
+from .test_purge import test_purge

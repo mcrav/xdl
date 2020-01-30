@@ -28,6 +28,7 @@ class TestDynamicStep(AbstractDynamicStep):
         self.done = True
         return [Wait(3)]
 
+
 chempiler = Chempiler(
     experiment_code='test',
     output_dir=os.path.join(HERE, 'chempiler_output'),
@@ -38,11 +39,12 @@ chempiler = Chempiler(
 def test_abstract_dynamic_step():
     step = TestDynamicStep()
     executor = ChemputerExecutor(None)
-    step.prepare_for_execution(os.path.join(HERE, 'files', 'bigrig.json'), executor)
+    step.prepare_for_execution(
+        os.path.join(HERE, 'files', 'bigrig.json'), executor)
     assert step.start_block[-2].reagent_vessel == 'flask_ether'
     step.execute(chempiler)
 
     time.sleep(2)
 
     assert step.state['i'] == 4
-    assert step.done == True
+    assert step.done is True

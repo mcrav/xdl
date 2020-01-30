@@ -35,14 +35,26 @@ from .....localisation import HUMAN_READABLE_STEPS
 
 def heater_chiller_sanity_check(heater, chiller, temp):
     if not heater and chiller:
-        assert temp <= CHILLER_MAX_TEMP
-        assert temp >= CHILLER_MIN_TEMP
+        try:
+            assert temp <= CHILLER_MAX_TEMP
+            assert temp >= CHILLER_MIN_TEMP
+        except AssertionError:
+            raise XDLError(
+                f'{temp} is an invalid temperature for a chiller.')
 
     if not chiller and heater:
-        assert temp >= 18
-        assert temp <= HEATER_MAX_TEMP
+        try:
+            assert temp >= 18
+            assert temp <= HEATER_MAX_TEMP
+        except AssertionError:
+            raise XDLError(
+                f'{temp} is an invalid temperature for a heater.')
 
-    assert CHILLER_MIN_TEMP <= temp <= HEATER_MAX_TEMP
+    try:
+        assert CHILLER_MIN_TEMP <= temp <= HEATER_MAX_TEMP
+    except AssertionError:
+        raise XDLError(
+            f'{temp} is an invalid temperature for a heater or a chiller.')
 
 class StartHeatChill(AbstractStep):
     """Start heating/chilling vessel to given temp and leave heater/chiller on.
@@ -111,8 +123,14 @@ class StartHeatChill(AbstractStep):
         except AssertionError:
             raise XDLError(f'Trying to heat/chill vessel "{self.vessel}" with\
  no heater or chiller attached.')
-        assert self.steps
+
         heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
+
+        try:
+            assert self.steps
+        except AssertionError:
+            raise XDLError(f'Unable to heat/chill vessel "{self.vessel}".\
+ {self.properties}')
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

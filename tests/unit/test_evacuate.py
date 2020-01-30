@@ -1,12 +1,20 @@
 import os
 from ..utils import generic_chempiler_test, test_step
 from xdl.constants import (
-    DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME,
     DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME,
     DEFAULT_EVACUATE_N_EVACUTIONS
 )
 from xdl import XDL
-from xdl.steps import Evacuate, CConnect, Wait, Repeat, StartVacuum, StopVacuum
+from xdl.steps import (
+    Evacuate,
+    CConnect,
+    Wait,
+    Repeat,
+    StartVacuum,
+    StopVacuum,
+    SwitchArgon,
+    SwitchVacuum
+)
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')
@@ -31,7 +39,8 @@ def test_evacuate():
             assert step.steps[0].vessel == 'vacuum_flask'
             assert type(step.steps[1]) == CConnect
             assert type(step.steps[2]) == Wait
-            assert step.steps[2].time == DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME * 2
+            assert (step.steps[2].time
+                    == DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME * 2)
             assert type(step.steps[3]) == CConnect
             assert type(step.steps[4]) == Wait
             assert type(step.steps[-2]) == Repeat
@@ -41,3 +50,24 @@ def test_evacuate():
 
             for i, substep in enumerate(step.steps[-2].children):
                 test_step(substep, correct_steps[i])
+
+def test_evacuate_pneumatic_controller():
+    xdl_f = os.path.join(FOLDER, 'evacuate.xdl')
+    graph_f = os.path.join(FOLDER, 'pneumatic_controller.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f)
+    for step in x.steps:
+        if type(step) == Evacuate:
+            assert len(step.steps) == 2
+            assert type(step.steps[0]) == Repeat
+            assert len(step.steps[0].children) == 2
+            vacuum = step.steps[0].children[0]
+            argon = step.steps[0].children[1]
+            assert type(vacuum) == SwitchVacuum
+            assert vacuum.vessel == step.vessel
+            assert type(argon) == SwitchArgon
+            assert argon.vessel == step.vessel
+            assert argon.pressure == 'high'
+            assert type(step.steps[1]) == SwitchArgon
+            assert step.steps[1].vessel == step.vessel
+            assert step.steps[1].pressure == 'low'

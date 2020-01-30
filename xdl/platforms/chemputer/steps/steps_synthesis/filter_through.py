@@ -3,6 +3,7 @@ from .clean_vessel import CleanVessel
 from .....step_utils.base_steps import Step, AbstractStep
 from ..steps_utility import Transfer
 from .....localisation import HUMAN_READABLE_STEPS
+from .....utils.errors import XDLError
 
 class FilterThrough(AbstractStep):
     """Filter contents of from_vessel through a cartridge,
@@ -55,11 +56,28 @@ class FilterThrough(AbstractStep):
 
     def final_sanity_check(self, graph):
         if self.eluting_solvent:
-            assert self.eluting_solvent_vessel
+            try:
+                assert self.eluting_solvent_vessel
+            except AssertionError:
+                raise XDLError(
+                    f'"{self.eluting_solvent}" specified as eluting solvent but\
+ no vessel found containing {self.eluting_solvent}.')
             # assert self.to_vessel_max_volume > self.eluting_volume
-        if self.from_vessel == self.to_vessel:
-            assert self.buffer_flask
-        assert self.through_cartridge
+
+        try:
+            if self.from_vessel == self.to_vessel:
+                assert self.buffer_flask
+        except AssertionError:
+            raise XDLError(
+                f'Trying to filter through cartridge to and from the same\
+ vessel, but cannot find buffer flask to use.')
+
+        try:
+            assert self.through_cartridge
+        except AssertionError:
+            raise XDLError(
+                f'Trying to filter through "{self.through}" but cannot find\
+ cartridge containing {self.through}.')
 
     def on_prepare_for_execution(self, graph):
         if self.buffer_flask:
