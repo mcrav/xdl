@@ -15,8 +15,7 @@ Usage
 
    install
    usage/index
-   platforms
-   custom_steps
+   development/index
    xdl_autodoc/modules
 
 
