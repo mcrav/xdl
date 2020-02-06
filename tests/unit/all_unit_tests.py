@@ -34,3 +34,4 @@ from .test_reagent_roles import test_reagent_roles
 from .test_default_ports import test_default_ports
 from .test_controller import test_controller
 from .test_purge import test_purge
+from .test_separate_phases import test_separate_phases

@@ -249,7 +249,8 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None" />
+        dead_volume_through="None"
+        max_retries="2" />
     </Separate>
     <Separate
       purpose="wash"
@@ -468,7 +469,8 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None" />
+        dead_volume_through="None"
+        max_retries="2" />
     </Separate>
     <Separate
       purpose="wash"
@@ -687,7 +689,8 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None" />
+        dead_volume_through="None"
+        max_retries="2" />
       <Add
         reagent="ether"
         vessel="separator"
@@ -862,7 +865,8 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None" />
+        dead_volume_through="None"
+        max_retries="2" />
     </Separate>
     <Separate
       purpose="wash"
@@ -1081,7 +1085,8 @@
         dead_volume_port="evaporate"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None" />
+        dead_volume_through="None"
+        max_retries="2" />
       <Transfer
         from_vessel="rotavap"
         to_vessel="separator"
@@ -1281,7 +1286,8 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None" />
+        dead_volume_through="None"
+        max_retries="2" />
     </Separate>
   </Procedure>
 
