@@ -1,3 +1,4 @@
+from .....constants import BOTTOM_PORT
 from .....utils.errors import XDLError
 from .....utils.graph import undirected_neighbors
 from .....step_utils.base_steps import AbstractDynamicStep
@@ -13,6 +14,18 @@ SEPARATION_DEFAULT_MID_PUMP_SPEED = 40
 SEPARATION_DEFAULT_END_PUMP_SPEED = 40
 
 class SeparatePhases(AbstractDynamicStep):
+
+    FINISH = 0  # Finish successfully
+    READ_CONDUCTIVITY = 1  # Take conductivity measurement
+    WITHDRAW = 2  # Withdraw more liquid
+    RETRY = 3  # Try separation again if phase change undetected
+    TERMINATE = 4  # If phase change undetected 3 times raise XDLError.
+
+    pump_max_volume = None
+    conductivity_sensor = None
+    separation_vessel_pump = None
+    can_retry = True
+
     def __init__(
         self,
         separation_vessel: str,
@@ -26,6 +39,7 @@ class SeparatePhases(AbstractDynamicStep):
         lower_phase_through: str = None,
         upper_phase_through: str = None,
         dead_volume_through: str = None,
+        max_retries: int = 2,
         **kwargs,
     ) -> None:
         """
@@ -61,7 +75,24 @@ class SeparatePhases(AbstractDynamicStep):
                 dead_volume_target.
         """
         super().__init__(locals())
+        self.continue_options = {
+            self.FINISH: lambda: [],
+            self.READ_CONDUCTIVITY: self.continue_read_conductivity,
+            self.WITHDRAW: self.continue_withdraw,
+            self.RETRY: self.continue_retry,
+            self.TERMINATE: self.continue_terminate,
+        }
+        self.discriminant = self.default_discriminant(True, True)
         self.reset()
+
+    def reset(self, retries=True):
+        self.pump_current_volume = 0  # Current volume in separation vessel pump
+        self.readings = []
+        if retries:
+            self.retries = 0
+        self.total_withdrawn = 0
+        self.continue_option = self.READ_CONDUCTIVITY
+        self.done = False
 
     def default_discriminant(
         self,
@@ -119,6 +150,8 @@ class SeparatePhases(AbstractDynamicStep):
 
     def on_prepare_for_execution(self, graph):
         """Get max volume of separation vessel and separation vessel pump."""
+        self.graph = graph
+        self.check_if_can_retry(graph)
         self.separation_vessel_pump = None
         self.separation_vessel_max_volume = None
         self.pump_max_volume = None
@@ -144,9 +177,21 @@ class SeparatePhases(AbstractDynamicStep):
             raise XDLError(f"Can't find conductivity sensor attached to\
  {self.separation_vessel}")
 
+    def check_if_can_retry(self, graph):
+        if self.lower_phase_vessel:
+            if graph.nodes[
+                    self.lower_phase_vessel]['class'] == 'ChemputerWaste':
+                self.can_retry = False
+
+    def final_sanity_check(self, graph):
+        assert self.lower_phase_vessel
+        assert self.upper_phase_vessel
+        assert self.separation_vessel
+        assert self.separation_vessel_pump
+
     def on_start(self):
         """Initial conductivity sensor reading."""
-        self.read_conductivity = False
+        self.continue_option = self.WITHDRAW
         return [
             self.prime_sensor_step(),
             ReadConductivitySensor(
@@ -157,24 +202,58 @@ class SeparatePhases(AbstractDynamicStep):
 
     def on_continue(self):
         """Either finish, take conductivity reading, or withdraw more liquid."""
-        # Finish
         if self.done:
             return []
-
         else:
-            # Read conductivity and switch read_conductivity flag.
-            if self.read_conductivity:
-                self.read_conductivity = False
-                return [
-                    ReadConductivitySensor(
-                        sensor=self.conductivity_sensor,
-                        on_reading=self.on_conductivity_sensor_reading
-                    )
-                ]
-            # Withdraw and switch read_conductivity flag.
+            return self.continue_options[self.continue_option]()
+
+    def continue_read_conductivity(self):
+        """Read conductivity."""
+        self.continue_option = self.WITHDRAW
+        return [
+            ReadConductivitySensor(
+                sensor=self.conductivity_sensor,
+                on_reading=self.on_conductivity_sensor_reading
+            )
+        ]
+
+    def continue_withdraw(self):
+        """Withdraw."""
+        self.continue_option = self.READ_CONDUCTIVITY
+        steps = self.lower_phase_stepwise_withdraw_step()
+
+        # If phase separation unsuccessful
+        if self.total_withdrawn >= self.separation_vessel_max_volume:
+            # Either retry or raise XDLError.
+            if self.retries < self.max_retries and self.can_retry:
+                self.logger.info('Separation failed. Retrying...')
+                self.continue_option = self.RETRY
             else:
-                self.read_conductivity = True
-                return self.lower_phase_stepwise_withdraw_step()
+                self.continue_option = self.TERMINATE
+        return steps
+
+    def continue_retry(self):
+        self.retries += 1
+        steps = []
+        if self.pump_max_volume:
+            steps.append(self.lower_phase_separation_pump_dispense_step())
+        steps.append(
+            Transfer(
+                from_vessel=self.lower_phase_vessel,
+                from_port=self.lower_phase_port,
+                to_vessel=self.separation_vessel,
+                to_port=BOTTOM_PORT,
+                volume=self.total_withdrawn,
+            )
+        )
+        self.reset(retries=False)
+        steps.extend(self.on_start())
+        return steps
+
+    def continue_terminate(self):
+        raise XDLError(
+            f'Attempted and failed separation {self.retries + 1} times.\
+\n{self.properties}')
 
     def on_finish(self):
         """Phase change detected. Send phases where they are supposed to go."""
@@ -190,21 +269,6 @@ class SeparatePhases(AbstractDynamicStep):
         # Send upper phase to upper_phase_vessel.
         steps.extend(self.upper_phase_withdraw_step())
         return steps
-
-    def reset(self):
-        self.pump_current_volume = 0  # Current volume in separation vessel pump
-        self.pump_max_volume = None  # Max volume of separation vessel pump
-
-        # Node name of separation vessel pump
-        self.separation_vessel_pump = None
-        self.conductivity_sensor = None  # Node name of conductivity sensor
-
-        # Flag to switch between reading conductivity and withdrawing more
-        # liquid
-        self.read_conductivity = True
-        self.readings = []
-        self.done = False
-        self.discriminant = self.default_discriminant(True, True)
 
     def prime_sensor_step(self):
         return Transfer(
@@ -236,6 +300,7 @@ class SeparatePhases(AbstractDynamicStep):
             steps.insert(0, self.lower_phase_separation_pump_dispense_step())
             self.pump_current_volume = 0
         self.pump_current_volume += self.step_volume
+        self.total_withdrawn += self.step_volume
         return steps
 
     def lower_phase_separation_pump_dispense_step(self):

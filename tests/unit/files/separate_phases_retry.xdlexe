@@ -24,12 +24,12 @@
       unique="True" />
     <SeparatePhases
       separation_vessel="separator"
-      lower_phase_vessel="waste_separator"
-      upper_phase_vessel="reactor"
+      lower_phase_vessel="reactor"
+      upper_phase_vessel="rotavap"
       dead_volume_vessel="None"
       step_volume="1 mL"
       lower_phase_port="0"
-      upper_phase_port="0"
+      upper_phase_port="evaporate"
       dead_volume_port="None"
       lower_phase_through="None"
       upper_phase_through="None"

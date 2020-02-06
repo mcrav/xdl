@@ -1165,7 +1165,8 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None" />
+        dead_volume_through="None"
+        max_retries="2" />
       <Transfer
         from_vessel="phase_A"
         to_vessel="separator"
@@ -1365,7 +1366,8 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None" />
+        dead_volume_through="None"
+        max_retries="2" />
       <Transfer
         from_vessel="phase_A"
         to_vessel="separator"
@@ -1565,7 +1567,8 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None" />
+        dead_volume_through="None"
+        max_retries="2" />
       <Transfer
         from_vessel="phase_B"
         to_vessel="separator"
@@ -1914,7 +1917,8 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None" />
+        dead_volume_through="None"
+        max_retries="2" />
     </Separate>
     <CleanBackbone
       solvent="water"
@@ -2238,7 +2242,8 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="cartridge_anhydrous MgSO4"
-        dead_volume_through="None" />
+        dead_volume_through="None"
+        max_retries="2" />
     </Separate>
     <CleanBackbone
       solvent="MTBE"
