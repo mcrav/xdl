@@ -8,6 +8,26 @@ from .....utils.errors import XDLError
 from ...utils.execution import get_neighboring_vacuum
 
 class CleanVessel(AbstractStep):
+    """Clean given vessel with given solvent.
+
+    Args:
+        vessel (str): Vessel to clean.
+        solvent (str): Solvent to clean vessel with.
+        stir_time (float): Time to stir for after solvent is added.
+        stir_speed (float): Speed to stir at in RPM.
+        volume (float): Volume of solvent to use. If not supplied will be
+            given internally according to vessel max volume.
+        cleans (int): Number of cleans to do.
+        solvent_vessel (str): Given internally. Flask containing solvent.
+        waste_vessel (str): Given internally. Vessel to send waste solvent
+            to.
+        vacuum (str): Internal property. Used to tell if drying is possible.
+    """
+
+    DEFAULT_PROPS = {
+        'stir_time': '1 minute',
+        'stir_speed': '500 RPM',
+    }
 
     def __init__(
         self,
@@ -27,21 +47,6 @@ class CleanVessel(AbstractStep):
         chiller: Optional[str] = None,
         **kwargs
     ) -> None:
-        """Clean given vessel with given solvent.
-
-        Args:
-            vessel (str): Vessel to clean.
-            solvent (str): Solvent to clean vessel with.
-            stir_time (float): Time to stir for after solvent is added.
-            stir_speed (float): Speed to stir at in RPM.
-            volume (float): Volume of solvent to use. If not supplied will be
-                given internally according to vessel max volume.
-            cleans (int): Number of cleans to do.
-            solvent_vessel (str): Given internally. Flask containing solvent.
-            waste_vessel (str): Given internally. Vessel to send waste solvent
-                to.
-            vacuum (str): Internal property. Used to tell if drying is possible.
-        """
         super().__init__(locals())
 
     def final_sanity_check(self, graph):

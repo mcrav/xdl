@@ -16,6 +16,11 @@ class RunColumn(AbstractStep):
             transfer reaction mixture to if from_vessel and to_vessel are the
             same.
     """
+
+    DEFAULT_PROPS = {
+        'move_speed': 5  # mL / min
+    }
+
     def __init__(
         self,
         from_vessel: str,

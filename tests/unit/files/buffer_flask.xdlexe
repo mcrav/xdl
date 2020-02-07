@@ -1,4 +1,4 @@
-<?xdl version="0.2.0" ?>
+<?xdl version="0.2.1" ?>
 
 <Synthesis
   graph_sha256="b20c26d0e8d246a4299594392330ecba3dc2a9887fa7c94806f28f960af5820e"
@@ -392,7 +392,7 @@
           stir_speed="250 RPM">
           <CRotavapSetRotationSpeed
             rotavap_name="rotavap"
-            rotation_speed="250" />
+            rotation_speed="250.0" />
           <CRotavapStartRotation
             rotavap_name="rotavap" />
         </StartStir>
@@ -444,7 +444,7 @@
           stir_speed="250 RPM">
           <CRotavapSetRotationSpeed
             rotavap_name="rotavap"
-            rotation_speed="250" />
+            rotation_speed="250.0" />
           <CRotavapStartRotation
             rotavap_name="rotavap" />
         </StartStir>

@@ -13,6 +13,11 @@ class PrimePumpForAdd(AbstractStep):
         reagent (str): Reagent to prime pump for addition.
         move_speed (str): Speed to move reagent at. (optional)
     """
+
+    DEFAULT_PROPS = {
+        'volume': '3 mL',
+    }
+
     def __init__(
         self,
         reagent: str,
@@ -44,6 +49,15 @@ class Transfer(AbstractStep):
         dispense_speed (float): Speed in mL / min to push liquid out of pump
             into to_vessel.
     """
+
+    DEFAULT_PROPS = {
+        'stir_speed': '250 RPM',
+        'aspiration_speed': 10,  # mL / min
+        'dispense_speed': 40,  # mL / min
+        'move_speed': 40,  # mL / min
+        'viscous': False,
+    }
+
     def __init__(
         self,
         from_vessel: str,

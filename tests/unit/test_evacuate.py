@@ -1,9 +1,5 @@
 import os
 from ..utils import generic_chempiler_test, test_step
-from xdl.constants import (
-    DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME,
-    DEFAULT_EVACUATE_N_EVACUTIONS
-)
 from xdl import XDL
 from xdl.steps import (
     Evacuate,
@@ -39,14 +35,16 @@ def test_evacuate():
             assert step.steps[0].vessel == 'vacuum_flask'
             assert type(step.steps[1]) == CConnect
             assert type(step.steps[2]) == Wait
-            assert (step.steps[2].time
-                    == DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME * 2)
+            assert step.steps[2].time == 120
             assert type(step.steps[3]) == CConnect
             assert type(step.steps[4]) == Wait
             assert type(step.steps[-2]) == Repeat
             assert type(step.steps[-1]) == StopVacuum
             assert step.steps[-1].vessel == 'vacuum_flask'
-            assert step.steps[-2].repeats == DEFAULT_EVACUATE_N_EVACUTIONS - 1
+            assert (
+                step.steps[-2].repeats
+                == Evacuate.DEFAULT_PROPS['evacuations'] - 1
+            )
 
             for i, substep in enumerate(step.steps[-2].children):
                 test_step(substep, correct_steps[i])

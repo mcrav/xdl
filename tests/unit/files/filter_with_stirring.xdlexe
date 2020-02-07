@@ -1,4 +1,4 @@
-<?xdl version="0.2.0" ?>
+<?xdl version="0.2.1" ?>
 
 <Synthesis
   graph_sha256="cef344b332797f0750a0a606242e459edb495c450f4fb762c6a38616b8f688a9"
@@ -30,7 +30,7 @@
       wait_time="2 mins"
       aspiration_speed="5"
       stir="True"
-      stir_speed="565.0 RPM"
+      stir_speed="565 RPM"
       waste_vessel="waste_filter"
       filtrate_vessel="None"
       vacuum="vacuum_flask"
@@ -42,12 +42,12 @@
       <StartStir
         vessel="filter"
         vessel_type="None"
-        stir_speed="565.0 RPM">
+        stir_speed="565 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="565.0 RPM" />
+          stir_speed="565 RPM" />
       </StartStir>
       <CMove
         from_vessel="filter"
@@ -114,7 +114,7 @@
       wait_time="2 mins"
       aspiration_speed="5"
       stir="True"
-      stir_speed="565.0 RPM"
+      stir_speed="565 RPM"
       waste_vessel="waste_filter"
       filtrate_vessel="None"
       vacuum="vacuum_flask"
@@ -126,12 +126,12 @@
       <StartStir
         vessel="filter"
         vessel_type="None"
-        stir_speed="565.0 RPM">
+        stir_speed="565 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="565.0 RPM" />
+          stir_speed="565 RPM" />
       </StartStir>
       <CMove
         from_vessel="filter"

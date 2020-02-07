@@ -1,4 +1,4 @@
-<?xdl version="0.2.0" ?>
+<?xdl version="0.2.1" ?>
 
 <Synthesis
   graph_sha256="6d1d80b4d9feeb7ef5c3ffa3a4c3eecca6c6df6ff97a764899b76787c52cd731"
@@ -662,7 +662,7 @@
       viscous="False"
       time="None"
       stir="True"
-      stir_speed="500.0 RPM"
+      stir_speed="500 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -675,12 +675,12 @@
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="500.0 RPM">
+        stir_speed="500 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="500.0 RPM" />
+          stir_speed="500 RPM" />
       </StartStir>
       <PrimePumpForAdd
         reagent="glyoxal_solution"
@@ -828,17 +828,17 @@
     <Stir
       vessel="jacketed_filter"
       time="15 mins"
-      stir_speed="500.0 RPM"
+      stir_speed="500 RPM"
       vessel_type="filter">
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="500.0 RPM">
+        stir_speed="500 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="500.0 RPM" />
+          stir_speed="500 RPM" />
       </StartStir>
       <Wait
         time="15 mins"
@@ -1230,7 +1230,7 @@
       vacuum_time="60 secs"
       stir="solvent"
       stir_time="5 mins"
-      stir_speed="800.0 RPM"
+      stir_speed="800 RPM"
       waste_vessel="waste_organic"
       filtrate_vessel="None"
       aspiration_speed="5"
@@ -1256,7 +1256,7 @@
         viscous="False"
         time="None"
         stir="False"
-        stir_speed="800.0 RPM"
+        stir_speed="800 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -1330,12 +1330,12 @@
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="800.0 RPM">
+        stir_speed="800 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="800.0 RPM" />
+          stir_speed="800 RPM" />
       </StartStir>
       <Wait
         time="5 mins"
@@ -1711,7 +1711,7 @@
       viscous="False"
       time="45 mins"
       stir="True"
-      stir_speed="500.0 RPM"
+      stir_speed="500 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -1724,12 +1724,12 @@
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="500.0 RPM">
+        stir_speed="500 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="500.0 RPM" />
+          stir_speed="500 RPM" />
       </StartStir>
       <PrimePumpForAdd
         reagent="TMSCl_solution"
@@ -1879,17 +1879,17 @@
       temp="70°C"
       time="2 hrs"
       stir="True"
-      stir_speed="400.0 RPM"
+      stir_speed="400 RPM"
       vessel_type="filter">
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="400.0 RPM">
+        stir_speed="400 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="400.0 RPM" />
+          stir_speed="400 RPM" />
       </StartStir>
       <HeatChillToTemp
         vessel="jacketed_filter"
@@ -1897,7 +1897,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="400.0 RPM"
+        stir_speed="400 RPM"
         vessel_type="filter"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -1906,12 +1906,12 @@
         <StartStir
           vessel="jacketed_filter"
           vessel_type="filter"
-          stir_speed="400.0 RPM">
+          stir_speed="400 RPM">
           <CStir
             vessel="jacketed_filter" />
           <CSetStirRate
             vessel="jacketed_filter"
-            stir_speed="400.0 RPM" />
+            stir_speed="400 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="jacketed_filter"
@@ -1958,7 +1958,7 @@
       active="True"
       continue_heatchill="True"
       stir="True"
-      stir_speed="400.0 RPM"
+      stir_speed="400 RPM"
       vessel_type="filter"
       wait_recording_speed="2000"
       after_recording_speed="14"
@@ -1967,12 +1967,12 @@
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="400.0 RPM">
+        stir_speed="400 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="400.0 RPM" />
+          stir_speed="400 RPM" />
       </StartStir>
       <StartHeatChill
         vessel="jacketed_filter"
@@ -1996,17 +1996,17 @@
     <Stir
       vessel="jacketed_filter"
       time="60 mins"
-      stir_speed="250.0 RPM"
+      stir_speed="250 RPM"
       vessel_type="filter">
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="250.0 RPM">
+        stir_speed="250 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="250.0 RPM" />
+          stir_speed="250 RPM" />
       </StartStir>
       <Wait
         time="60 mins"
@@ -2320,7 +2320,7 @@
       vacuum_time="10 secs"
       stir="True"
       stir_time="15 mins"
-      stir_speed="500.0 RPM"
+      stir_speed="500 RPM"
       waste_vessel="waste_organic"
       filtrate_vessel="None"
       aspiration_speed="5"
@@ -2336,12 +2336,12 @@
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="500.0 RPM">
+        stir_speed="500 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="500.0 RPM" />
+          stir_speed="500 RPM" />
       </StartStir>
       <Add
         reagent="EtOAc"
@@ -2356,7 +2356,7 @@
         viscous="False"
         time="None"
         stir="True"
-        stir_speed="500.0 RPM"
+        stir_speed="500 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -2369,12 +2369,12 @@
         <StartStir
           vessel="jacketed_filter"
           vessel_type="filter"
-          stir_speed="500.0 RPM">
+          stir_speed="500 RPM">
           <CStir
             vessel="jacketed_filter" />
           <CSetStirRate
             vessel="jacketed_filter"
-            stir_speed="500.0 RPM" />
+            stir_speed="500 RPM" />
         </StartStir>
         <PrimePumpForAdd
           reagent="EtOAc"
@@ -2971,7 +2971,7 @@
       active="True"
       continue_heatchill="True"
       stir="True"
-      stir_speed="400.0 RPM"
+      stir_speed="400 RPM"
       vessel_type="filter"
       wait_recording_speed="2000"
       after_recording_speed="14"
@@ -2980,12 +2980,12 @@
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="400.0 RPM">
+        stir_speed="400 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="400.0 RPM" />
+          stir_speed="400 RPM" />
       </StartStir>
       <StartHeatChill
         vessel="jacketed_filter"
@@ -3019,7 +3019,7 @@
       viscous="False"
       time="None"
       stir="True"
-      stir_speed="250.0 RPM"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -3032,12 +3032,12 @@
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="250.0 RPM">
+        stir_speed="250 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="250.0 RPM" />
+          stir_speed="250 RPM" />
       </StartStir>
       <PrimePumpForAdd
         reagent="KOtBu_solution"
@@ -3187,17 +3187,17 @@
       temp="23°C"
       time="4 hrs"
       stir="True"
-      stir_speed="400.0 RPM"
+      stir_speed="400 RPM"
       vessel_type="filter">
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="400.0 RPM">
+        stir_speed="400 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="400.0 RPM" />
+          stir_speed="400 RPM" />
       </StartStir>
       <HeatChillToTemp
         vessel="jacketed_filter"
@@ -3205,7 +3205,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="400.0 RPM"
+        stir_speed="400 RPM"
         vessel_type="filter"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -3214,12 +3214,12 @@
         <StartStir
           vessel="jacketed_filter"
           vessel_type="filter"
-          stir_speed="400.0 RPM">
+          stir_speed="400 RPM">
           <CStir
             vessel="jacketed_filter" />
           <CSetStirRate
             vessel="jacketed_filter"
-            stir_speed="400.0 RPM" />
+            stir_speed="400 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="jacketed_filter"
@@ -3266,7 +3266,7 @@
       active="True"
       continue_heatchill="True"
       stir="True"
-      stir_speed="400.0 RPM"
+      stir_speed="400 RPM"
       vessel_type="filter"
       wait_recording_speed="2000"
       after_recording_speed="14"
@@ -3275,12 +3275,12 @@
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="400.0 RPM">
+        stir_speed="400 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="400.0 RPM" />
+          stir_speed="400 RPM" />
       </StartStir>
       <StartHeatChill
         vessel="jacketed_filter"
@@ -3314,7 +3314,7 @@
       viscous="False"
       time="None"
       stir="True"
-      stir_speed="500.0 RPM"
+      stir_speed="500 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -3327,12 +3327,12 @@
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="500.0 RPM">
+        stir_speed="500 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="500.0 RPM" />
+          stir_speed="500 RPM" />
       </StartStir>
       <PrimePumpForAdd
         reagent="HCE_solution"
@@ -3482,17 +3482,17 @@
       temp="23°C"
       time="24 hrs"
       stir="True"
-      stir_speed="300.0 RPM"
+      stir_speed="300 RPM"
       vessel_type="filter">
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="300.0 RPM">
+        stir_speed="300 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="300.0 RPM" />
+          stir_speed="300 RPM" />
       </StartStir>
       <HeatChillToTemp
         vessel="jacketed_filter"
@@ -3500,7 +3500,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="300.0 RPM"
+        stir_speed="300 RPM"
         vessel_type="filter"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -3509,12 +3509,12 @@
         <StartStir
           vessel="jacketed_filter"
           vessel_type="filter"
-          stir_speed="300.0 RPM">
+          stir_speed="300 RPM">
           <CStir
             vessel="jacketed_filter" />
           <CSetStirRate
             vessel="jacketed_filter"
-            stir_speed="300.0 RPM" />
+            stir_speed="300 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="jacketed_filter"
@@ -3561,7 +3561,7 @@
       active="True"
       continue_heatchill="True"
       stir="True"
-      stir_speed="400.0 RPM"
+      stir_speed="400 RPM"
       vessel_type="filter"
       wait_recording_speed="2000"
       after_recording_speed="14"
@@ -3570,12 +3570,12 @@
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="400.0 RPM">
+        stir_speed="400 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="400.0 RPM" />
+          stir_speed="400 RPM" />
       </StartStir>
       <StartHeatChill
         vessel="jacketed_filter"
@@ -3923,7 +3923,7 @@
       vacuum_time="5 mins"
       stir="solvent"
       stir_time="5 mins"
-      stir_speed="700.0 RPM"
+      stir_speed="700 RPM"
       waste_vessel="waste_organic"
       filtrate_vessel="None"
       aspiration_speed="5"
@@ -3949,7 +3949,7 @@
         viscous="False"
         time="None"
         stir="False"
-        stir_speed="700.0 RPM"
+        stir_speed="700 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -4023,12 +4023,12 @@
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="700.0 RPM">
+        stir_speed="700 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="700.0 RPM" />
+          stir_speed="700 RPM" />
       </StartStir>
       <Wait
         time="5 mins"
@@ -4197,7 +4197,7 @@
       vacuum_time="10 secs"
       stir="solvent"
       stir_time="5 mins"
-      stir_speed="500.0 RPM"
+      stir_speed="500 RPM"
       waste_vessel="waste_organic"
       filtrate_vessel="None"
       aspiration_speed="5"
@@ -4223,7 +4223,7 @@
         viscous="False"
         time="None"
         stir="False"
-        stir_speed="500.0 RPM"
+        stir_speed="500 RPM"
         anticlogging="False"
         anticlogging_solvent="None"
         anticlogging_solvent_volume="2 mL"
@@ -4297,12 +4297,12 @@
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="500.0 RPM">
+        stir_speed="500 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="500.0 RPM" />
+          stir_speed="500 RPM" />
       </StartStir>
       <Wait
         time="5 mins"
@@ -5577,16 +5577,16 @@
       temp="40°C"
       pressure="750 mbar"
       time="60 mins"
-      rotation_speed="150"
+      rotation_speed="150.0"
       mode="manual"
       waste_vessel="waste_solvents"
       collection_flask_volume="None">
       <RotavapStartRotation
         rotavap_name="rotavap"
-        rotation_speed="150">
+        rotation_speed="150.0">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="150" />
+          rotation_speed="150.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </RotavapStartRotation>
@@ -6536,7 +6536,7 @@
       viscous="False"
       time="None"
       stir="True"
-      stir_speed="250.0 RPM"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -6549,12 +6549,12 @@
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="250.0 RPM">
+        stir_speed="250 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="250.0 RPM" />
+          stir_speed="250 RPM" />
       </StartStir>
       <PrimePumpForAdd
         reagent="acetonitrile"
@@ -6617,7 +6617,7 @@
       port="evaporate"
       temp="25°C"
       time="10 mins"
-      stir_speed="250.0 RPM"
+      stir_speed="250 RPM"
       solvent_vessel="flask_acetonitrile"
       vessel_type="rotavap">
       <Add
@@ -6869,7 +6869,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250" />
+          rotation_speed="250.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -6891,7 +6891,7 @@
           stir_speed="250 RPM">
           <CRotavapSetRotationSpeed
             rotavap_name="rotavap"
-            rotation_speed="250" />
+            rotation_speed="250.0" />
           <CRotavapStartRotation
             rotavap_name="rotavap" />
         </StartStir>
@@ -6967,7 +6967,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250" />
+          rotation_speed="250.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -7290,17 +7290,17 @@
       temp="80°C"
       time="16 hrs"
       stir="True"
-      stir_speed="500.0 RPM"
+      stir_speed="500 RPM"
       vessel_type="filter">
       <StartStir
         vessel="jacketed_filter"
         vessel_type="filter"
-        stir_speed="500.0 RPM">
+        stir_speed="500 RPM">
         <CStir
           vessel="jacketed_filter" />
         <CSetStirRate
           vessel="jacketed_filter"
-          stir_speed="500.0 RPM" />
+          stir_speed="500 RPM" />
       </StartStir>
       <HeatChillToTemp
         vessel="jacketed_filter"
@@ -7308,7 +7308,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="500.0 RPM"
+        stir_speed="500 RPM"
         vessel_type="filter"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -7317,12 +7317,12 @@
         <StartStir
           vessel="jacketed_filter"
           vessel_type="filter"
-          stir_speed="500.0 RPM">
+          stir_speed="500 RPM">
           <CStir
             vessel="jacketed_filter" />
           <CSetStirRate
             vessel="jacketed_filter"
-            stir_speed="500.0 RPM" />
+            stir_speed="500 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="jacketed_filter"
@@ -7697,16 +7697,16 @@
       temp="40°C"
       pressure="200 mbar"
       time="60 mins"
-      rotation_speed="150"
+      rotation_speed="150.0"
       mode="manual"
       waste_vessel="waste_solvents"
       collection_flask_volume="None">
       <RotavapStartRotation
         rotavap_name="rotavap"
-        rotation_speed="150">
+        rotation_speed="150.0">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="150" />
+          rotation_speed="150.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </RotavapStartRotation>
@@ -7787,7 +7787,7 @@
       port="evaporate"
       temp="25°C"
       time="10 mins"
-      stir_speed="250.0 RPM"
+      stir_speed="250 RPM"
       solvent_vessel="flask_DCM"
       vessel_type="rotavap">
       <Add
@@ -8231,7 +8231,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250" />
+          rotation_speed="250.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -8253,7 +8253,7 @@
           stir_speed="250 RPM">
           <CRotavapSetRotationSpeed
             rotavap_name="rotavap"
-            rotation_speed="250" />
+            rotation_speed="250.0" />
           <CRotavapStartRotation
             rotavap_name="rotavap" />
         </StartStir>
@@ -8329,7 +8329,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250" />
+          rotation_speed="250.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -8769,7 +8769,7 @@
       vacuum_time="10 secs"
       stir="True"
       stir_time="10 mins"
-      stir_speed="250.0 RPM"
+      stir_speed="250 RPM"
       waste_vessel="waste_solvents"
       filtrate_vessel="None"
       aspiration_speed="5"
@@ -8869,12 +8869,12 @@
       <Stir
         vessel="rotavap"
         time="10 mins"
-        stir_speed="250.0 RPM"
+        stir_speed="250 RPM"
         vessel_type="rotavap">
         <RotavapStir
           rotavap_name="rotavap"
           time="10 mins"
-          stir_speed="250.0 RPM">
+          stir_speed="250 RPM">
           <RotavapStartRotation
             rotavap_name="rotavap"
             rotation_speed="250.0">

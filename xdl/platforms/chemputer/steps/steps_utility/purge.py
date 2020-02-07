@@ -126,6 +126,11 @@ class StopPurge(AbstractStep):
             return []
 
 class Purge(AbstractStep):
+
+    DEFAULT_PROPS = {
+        'time': '5 minutes',
+    }
+
     def __init__(
         self,
         vessel: str,

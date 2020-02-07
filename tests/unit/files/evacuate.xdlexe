@@ -1,4 +1,4 @@
-<?xdl version="0.2.0" ?>
+<?xdl version="0.2.1" ?>
 
 <Synthesis
   graph_sha256="8918a3f8f1b2859a56a2b0193b355339f222cc60b66b8259e3bb0a72044e4ee7"
@@ -39,7 +39,7 @@
           port="top"
           pneumatic_controller="pneumatic_controller"
           pneumatic_controller_port="2"
-          after_switch_wait="60">
+          after_switch_wait="60.0">
           <CSwitchVacuum
             pneumatic_controller="pneumatic_controller"
             port="2" />
@@ -61,7 +61,7 @@
           pressure="high"
           pneumatic_controller="pneumatic_controller"
           pneumatic_controller_port="2"
-          after_switch_wait="60">
+          after_switch_wait="60.0">
           <CSwitchArgon
             pneumatic_controller="pneumatic_controller"
             port="2"
@@ -83,7 +83,7 @@
           port="top"
           pneumatic_controller="pneumatic_controller"
           pneumatic_controller_port="2"
-          after_switch_wait="60">
+          after_switch_wait="60.0">
           <CSwitchVacuum
             pneumatic_controller="pneumatic_controller"
             port="2" />
@@ -105,7 +105,7 @@
           pressure="high"
           pneumatic_controller="pneumatic_controller"
           pneumatic_controller_port="2"
-          after_switch_wait="60">
+          after_switch_wait="60.0">
           <CSwitchArgon
             pneumatic_controller="pneumatic_controller"
             port="2"
@@ -127,7 +127,7 @@
           port="top"
           pneumatic_controller="pneumatic_controller"
           pneumatic_controller_port="2"
-          after_switch_wait="60">
+          after_switch_wait="60.0">
           <CSwitchVacuum
             pneumatic_controller="pneumatic_controller"
             port="2" />
@@ -149,7 +149,7 @@
           pressure="high"
           pneumatic_controller="pneumatic_controller"
           pneumatic_controller_port="2"
-          after_switch_wait="60">
+          after_switch_wait="60.0">
           <CSwitchArgon
             pneumatic_controller="pneumatic_controller"
             port="2"
@@ -171,7 +171,7 @@
           port="top"
           pneumatic_controller="pneumatic_controller"
           pneumatic_controller_port="2"
-          after_switch_wait="60">
+          after_switch_wait="60.0">
           <CSwitchVacuum
             pneumatic_controller="pneumatic_controller"
             port="2" />
@@ -193,7 +193,7 @@
           pressure="high"
           pneumatic_controller="pneumatic_controller"
           pneumatic_controller_port="2"
-          after_switch_wait="60">
+          after_switch_wait="60.0">
           <CSwitchArgon
             pneumatic_controller="pneumatic_controller"
             port="2"

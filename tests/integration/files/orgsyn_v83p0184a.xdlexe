@@ -1,4 +1,4 @@
-<?xdl version="0.2.0" ?>
+<?xdl version="0.2.1" ?>
 
 <Synthesis
   graph_sha256="ddcdb907d397774f955d903ae35630b4cd51f637c4079c204074b3bbf2c4a329"
@@ -523,7 +523,7 @@
       viscous="False"
       time="10 mins"
       stir="True"
-      stir_speed="600.0 RPM"
+      stir_speed="600 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -536,12 +536,12 @@
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="600.0 RPM">
+        stir_speed="600 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="600.0 RPM" />
+          stir_speed="600 RPM" />
       </StartStir>
       <PrimePumpForAdd
         reagent="sodium hydroxide(NaOH) (12.0 g , 0.30 mol in 12 mL of H2O) water solution"
@@ -665,17 +665,17 @@
     <Stir
       vessel="reactor"
       time="2 hrs"
-      stir_speed="600.0 RPM"
+      stir_speed="600 RPM"
       vessel_type="reactor">
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="600.0 RPM">
+        stir_speed="600 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="600.0 RPM" />
+          stir_speed="600 RPM" />
       </StartStir>
       <Wait
         time="2 hrs"
@@ -701,17 +701,17 @@
       temp="25°C"
       time="22 hrs"
       stir="True"
-      stir_speed="600.0 RPM"
+      stir_speed="600 RPM"
       vessel_type="reactor">
       <StartStir
         vessel="reactor"
         vessel_type="reactor"
-        stir_speed="600.0 RPM">
+        stir_speed="600 RPM">
         <CStir
           vessel="reactor" />
         <CSetStirRate
           vessel="reactor"
-          stir_speed="600.0 RPM" />
+          stir_speed="600 RPM" />
       </StartStir>
       <HeatChillToTemp
         vessel="reactor"
@@ -719,7 +719,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="600.0 RPM"
+        stir_speed="600 RPM"
         vessel_type="reactor"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -728,12 +728,12 @@
         <StartStir
           vessel="reactor"
           vessel_type="reactor"
-          stir_speed="600.0 RPM">
+          stir_speed="600 RPM">
           <CStir
             vessel="reactor" />
           <CSetStirRate
             vessel="reactor"
-            stir_speed="600.0 RPM" />
+            stir_speed="600 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="reactor"
@@ -2650,16 +2650,16 @@
       temp="25°C"
       pressure="93.33 mbar"
       time="30 mins"
-      rotation_speed="150"
+      rotation_speed="150.0"
       mode="auto"
       waste_vessel="waste_K"
       collection_flask_volume="None">
       <RotavapStartRotation
         rotavap_name="rotavap"
-        rotation_speed="150">
+        rotation_speed="150.0">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="150" />
+          rotation_speed="150.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </RotavapStartRotation>

@@ -1,4 +1,4 @@
-<?xdl version="0.2.0" ?>
+<?xdl version="0.2.1" ?>
 
 <Synthesis
   graph_sha256="39182124a16a59a45f1ea3432cf38e5c7bafacee74ef9c9c8c2f613ecf86dfb2"
@@ -365,17 +365,17 @@
       temp="34.5°C"
       time="12 hrs"
       stir="True"
-      stir_speed="200.0 RPM"
+      stir_speed="200 RPM"
       vessel_type="filter">
       <StartStir
         vessel="filter"
         vessel_type="filter"
-        stir_speed="200.0 RPM">
+        stir_speed="200 RPM">
         <CStir
           vessel="filter" />
         <CSetStirRate
           vessel="filter"
-          stir_speed="200.0 RPM" />
+          stir_speed="200 RPM" />
       </StartStir>
       <HeatChillToTemp
         vessel="filter"
@@ -383,7 +383,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="200.0 RPM"
+        stir_speed="200 RPM"
         vessel_type="filter"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -392,12 +392,12 @@
         <StartStir
           vessel="filter"
           vessel_type="filter"
-          stir_speed="200.0 RPM">
+          stir_speed="200 RPM">
           <CStir
             vessel="filter" />
           <CSetStirRate
             vessel="filter"
-            stir_speed="200.0 RPM" />
+            stir_speed="200 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="filter"
