@@ -15,12 +15,18 @@ class HeatChill(AbstractStep):
         vessel_type (str): Given internally. Vessel type so the step knows what
             base steps to use. 'ChemputerFilter' or 'ChemputerReactor'.
     """
+
+    DEFAULT_PROPS = {
+        'stir': True,
+        'stir_speed': '250 RPM',
+    }
+
     def __init__(
         self,
         vessel: str,
         temp: float,
         time: float,
-        stir: bool = True,
+        stir: bool = 'default',
         stir_speed: float = 'default',
         vessel_type: Optional[str] = None,
         **kwargs

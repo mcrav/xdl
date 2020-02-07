@@ -59,6 +59,17 @@ class WashSolid(AbstractStep):
         filter_dead_volume (float): Given internally. Dead volume of filter if
             vessel_type == 'filter' otherwise None.
     """
+
+    DEFAULT_PROPS = {
+        'volume': '20 mL',
+        'vacuum_time': '10 seconds',
+        'stir': True,
+        'stir_time': '30 seconds',
+        'stir_speed': '500 RPM',
+        'aspiration_speed': 5,  # mL / min
+        'anticlogging': False,
+    }
+
     def __init__(
         self,
         vessel: str,

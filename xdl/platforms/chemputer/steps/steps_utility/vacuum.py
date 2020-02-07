@@ -8,6 +8,11 @@ class StartVacuum(AbstractStep):
     Args:
         vessel (str): Vessel name to start vacuum on.
     """
+
+    DEFAULT_PROPS = {
+        'pressure': '400 mbar',
+    }
+
     def __init__(
         self, vessel: str, pressure: float = 'default', **kwargs
     ) -> None:

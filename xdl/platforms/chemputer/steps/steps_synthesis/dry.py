@@ -42,6 +42,14 @@ class Dry(AbstractStep):
         vessel_has_stirrer (bool): Given internally. True if vessel is connected
             to a stirrer.
     """
+
+    DEFAULT_PROPS = {
+        'time': '1 hr',
+        'aspiration_speed': 5,  # mL / min
+        'vacuum_pressure': '400 mbar',
+        'continue_heatchill': False,
+    }
+
     def __init__(
         self,
         vessel: str,

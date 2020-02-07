@@ -41,6 +41,11 @@ class StartStir(AbstractStep):
         vessel (str): Vessel name to stir.
         stir_speed (int, optional): Speed in RPM to stir at.
     """
+
+    DEFAULT_PROPS = {
+        'stir_speed': '250 RPM',
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -108,6 +113,11 @@ class Stir(AbstractStep):
         vessel_type (str): Given internally. 'reactor', 'filter', 'rotavap',
             'flask' or 'separator'.
     """
+
+    DEFAULT_PROPS = {
+        'stir_speed': '250 RPM',
+    }
+
     def __init__(
         self,
         vessel: str,

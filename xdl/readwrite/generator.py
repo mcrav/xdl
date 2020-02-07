@@ -3,7 +3,7 @@ from lxml import etree
 from ..reagents import Reagent
 from ..hardware import Hardware
 from ..steps import Step
-from ..constants import DEFAULT_VALS, INTERNAL_PROPERTIES, XDL_VERSION
+from ..constants import INTERNAL_PROPERTIES, XDL_VERSION
 from .constants import ALWAYS_WRITE
 from ..utils.misc import format_property
 
@@ -94,9 +94,8 @@ class XDLGenerator(object):
                     if not self.full_properties:
                         # Don't write properties that are the same as the
                         # default.
-                        if (step.name in DEFAULT_VALS
-                                and prop in DEFAULT_VALS[step.name]
-                                and DEFAULT_VALS[step.name][prop] == val):
+                        if (prop in step.DEFAULT_PROPS
+                                and step.DEFAULT_PROPS[prop] == val):
                             # Some things should always be written even if they
                             # are default.
                             if (not (step.name in ALWAYS_WRITE

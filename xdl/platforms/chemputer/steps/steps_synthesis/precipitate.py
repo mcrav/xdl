@@ -13,6 +13,12 @@ class Precipitate(AbstractStep):
             If not given room temperature is used.
         time (float): Optional.  Time to stir vessel for after temp is reached.
     """
+
+    DEFAULT_PROPS = {
+        'temp': '25°C',
+        'time': '60 mins',
+    }
+
     def __init__(
         self,
         vessel: str,

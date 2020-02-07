@@ -31,6 +31,12 @@ class Evaporate(AbstractStep):
             given, but correspond to maximum time and minimum pressure that if
             either is reached, the evaporation will stop.
     """
+
+    DEFAULT_PROPS = {
+        'time': '2 hrs',
+        'rotation_speed': '150 RPM'
+    }
+
     def __init__(
         self,
         rotavap_name: str,

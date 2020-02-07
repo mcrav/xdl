@@ -15,6 +15,13 @@ from .add import Add
 from .....constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
 
 class Dissolve(AbstractStep):
+
+    DEFAULT_PROPS = {
+        'time': '20 minutes',
+        'temp': '25°C',
+        'stir_speed': '400 RPM',
+    }
+
     """Dissolve contents of vessel in given solvent.
 
     Args:

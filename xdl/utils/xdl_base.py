@@ -1,23 +1,27 @@
-from ..constants import DEFAULT_VALS
 from .sanitisation import clean_properties
 from .logging import get_logger
+from .errors import XDLError
 from typing import Dict, Any
 
 class XDLBase(object):
     """Base object for Step, Component and Reagent objects."""
 
+    DEFAULT_PROPS = {}
+
     def __init__(self, param_dict):
-        params = {k: v
-                  for k, v in param_dict.items()
-                  if k != 'self' and not k.startswith('_')}
+        params = {
+            k: v
+            for k, v in param_dict.items()
+            if k != 'self' and not k.startswith('_')
+        }
         if 'kwargs' in params:
             params.update(params['kwargs'])
             del params['kwargs']
-        self.properties = {}
+        self.properties = params
+        self.get_defaults()
         for param in clean_properties(type(self), params):
             if param != 'self':
                 self.properties[param] = params[param]
-        self.get_defaults()
         self.logger = get_logger()
 
     def load_properties(self, properties: Dict[str, Any]) -> None:
@@ -38,9 +42,17 @@ class XDLBase(object):
 
     def get_defaults(self) -> None:
         """Replace 'default' strings with default values from constants.py."""
+        # Use DEFAULT_PROPS dict in step class if it exists.
+        def get_error_msg(prop):
+            return f'"default" given as value for "{prop}" property, but\
+ no default value given in DEFAULT_PROPS.'
+
         for k in self.properties:
             if self.properties[k] == 'default':
-                self.properties[k] = DEFAULT_VALS[self.name][k]
+                if k in self.DEFAULT_PROPS:
+                    self.properties[k] = self.DEFAULT_PROPS[k]
+                else:
+                    raise XDLError(get_error_msg(k))
 
     def set_property(self, property: str, value: Any) -> None:
         self.__setattr__(property, value)

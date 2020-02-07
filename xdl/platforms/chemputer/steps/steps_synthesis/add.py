@@ -47,6 +47,18 @@ class Add(AbstractStep):
         flush_tube_vessel (str): Given internally. Air/nitrogen vessel to use to
             flush liquid out of the valve -> vessel tube.
     """
+
+    DEFAULT_PROPS = {
+        'move_speed': 40,  # mL / min
+        'aspiration_speed': 10,  # mL / min
+        'dispense_speed': 40,  # mL / min
+        'viscous': False,
+        'stir_speed': '250 RPM',
+        'anticlogging': False,
+        'anticlogging_solvent_volume': '2 mL',
+        'anticlogging_reagent_volume': '10 mL',
+    }
+
     def __init__(
         self,
         reagent: str,

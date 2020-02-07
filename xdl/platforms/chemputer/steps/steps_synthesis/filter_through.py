@@ -33,6 +33,14 @@ class FilterThrough(AbstractStep):
             the same buffer_flask will be used to push contents of from_vessel
             to temporarily, before moving to to_vessel.
     """
+
+    DEFAULT_PROPS = {
+        'move_speed': 5,  # mL / min
+        'aspiration_speed': 5,  # mL / min
+        'eluting_repeats': 1,
+        'cartridge_dead_volume': '25 mL',
+    }
+
     def __init__(
         self,
         from_vessel: str,

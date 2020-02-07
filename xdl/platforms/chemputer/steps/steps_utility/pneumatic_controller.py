@@ -16,6 +16,11 @@ class SwitchVacuum(AbstractStep):
         pneumatic_controller_port (str): Internal property. Port of pneumatic
             controller attached to correct port of vessel.
     """
+
+    DEFAULT_PROPS = {
+        'after_switch_wait': '30 seconds',
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -52,6 +57,11 @@ class SwitchArgon(AbstractStep):
         pneumatic_controller_port (str): Internal property. Port of pneumatic
             controller attached to correct port of vessel.
     """
+
+    DEFAULT_PROPS = {
+        'after_switch_wait': '30 seconds',
+    }
+
     def __init__(
         self,
         vessel: str,

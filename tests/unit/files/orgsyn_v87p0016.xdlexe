@@ -1,4 +1,4 @@
-<?xdl version="0.2.0" ?>
+<?xdl version="0.2.1" ?>
 
 <Synthesis
   graph_sha256="d199ffc455a5c3d2d1157bc2a63a9a4fb7d75b9efd2e1ca013c222d76f0d7768"
@@ -942,16 +942,16 @@
       temp="45°C"
       pressure="84 mbar"
       time="30 mins"
-      rotation_speed="150"
+      rotation_speed="150.0"
       mode="auto"
       waste_vessel="waste_K"
       collection_flask_volume="None">
       <RotavapStartRotation
         rotavap_name="rotavap"
-        rotation_speed="150">
+        rotation_speed="150.0">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="150" />
+          rotation_speed="150.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </RotavapStartRotation>
@@ -2438,16 +2438,16 @@
       temp="35°C"
       pressure="66.66 mbar"
       time="30 mins"
-      rotation_speed="150"
+      rotation_speed="150.0"
       mode="auto"
       waste_vessel="waste_K"
       collection_flask_volume="None">
       <RotavapStartRotation
         rotavap_name="rotavap"
-        rotation_speed="150">
+        rotation_speed="150.0">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="150" />
+          rotation_speed="150.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </RotavapStartRotation>

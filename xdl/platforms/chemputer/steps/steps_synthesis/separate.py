@@ -39,6 +39,12 @@ class Separate(AbstractStep):
         waste_phase_to_port (str): waste_phase_to_vessel port to use.
         waste_vessel (str): Given internally. Vessel to send waste to.
     """
+
+    DEFAULT_PROPS = {
+        'solvent_volume': '30 mL',
+        'remove_dead_volume': True,
+    }
+
     def __init__(
         self,
         purpose: str,

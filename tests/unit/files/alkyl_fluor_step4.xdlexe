@@ -1,4 +1,4 @@
-<?xdl version="0.2.0" ?>
+<?xdl version="0.2.1" ?>
 
 <Synthesis
   graph_sha256="f42b64d88c3286024f5617e823d3765f977cf6d36a16ab25d226fd4fbb893f4b"
@@ -408,7 +408,7 @@
       viscous="False"
       time="None"
       stir="True"
-      stir_speed="250.0 RPM"
+      stir_speed="250 RPM"
       anticlogging="False"
       anticlogging_solvent="None"
       anticlogging_solvent_volume="2 mL"
@@ -421,12 +421,12 @@
       <StartStir
         vessel="filter2"
         vessel_type="filter"
-        stir_speed="250.0 RPM">
+        stir_speed="250 RPM">
         <CStir
           vessel="filter2" />
         <CSetStirRate
           vessel="filter2"
-          stir_speed="250.0 RPM" />
+          stir_speed="250 RPM" />
       </StartStir>
       <PrimePumpForAdd
         reagent="acetonitrile"
@@ -489,7 +489,7 @@
       port="evaporate"
       temp="25°C"
       time="10 mins"
-      stir_speed="250.0 RPM"
+      stir_speed="250 RPM"
       solvent_vessel="flask_acetonitrile"
       vessel_type="rotavap">
       <Add
@@ -729,7 +729,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250" />
+          rotation_speed="250.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -751,7 +751,7 @@
           stir_speed="250 RPM">
           <CRotavapSetRotationSpeed
             rotavap_name="rotavap"
-            rotation_speed="250" />
+            rotation_speed="250.0" />
           <CRotavapStartRotation
             rotavap_name="rotavap" />
         </StartStir>
@@ -827,7 +827,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250" />
+          rotation_speed="250.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -1126,17 +1126,17 @@
       temp="80°C"
       time="16 hrs"
       stir="True"
-      stir_speed="500.0 RPM"
+      stir_speed="500 RPM"
       vessel_type="filter">
       <StartStir
         vessel="filter2"
         vessel_type="filter"
-        stir_speed="500.0 RPM">
+        stir_speed="500 RPM">
         <CStir
           vessel="filter2" />
         <CSetStirRate
           vessel="filter2"
-          stir_speed="500.0 RPM" />
+          stir_speed="500 RPM" />
       </StartStir>
       <HeatChillToTemp
         vessel="filter2"
@@ -1144,7 +1144,7 @@
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="500.0 RPM"
+        stir_speed="500 RPM"
         vessel_type="filter"
         wait_recording_speed="2000"
         after_recording_speed="14"
@@ -1153,12 +1153,12 @@
         <StartStir
           vessel="filter2"
           vessel_type="filter"
-          stir_speed="500.0 RPM">
+          stir_speed="500 RPM">
           <CStir
             vessel="filter2" />
           <CSetStirRate
             vessel="filter2"
-            stir_speed="500.0 RPM" />
+            stir_speed="500 RPM" />
         </StartStir>
         <StartHeatChill
           vessel="filter2"
@@ -1521,16 +1521,16 @@
       temp="40°C"
       pressure="750 mbar"
       time="60 mins"
-      rotation_speed="150"
+      rotation_speed="150.0"
       mode="manual"
       waste_vessel="waste_aqueous"
       collection_flask_volume="None">
       <RotavapStartRotation
         rotavap_name="rotavap"
-        rotation_speed="150">
+        rotation_speed="150.0">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="150" />
+          rotation_speed="150.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </RotavapStartRotation>
@@ -1611,7 +1611,7 @@
       port="evaporate"
       temp="25°C"
       time="10 mins"
-      stir_speed="250.0 RPM"
+      stir_speed="250 RPM"
       solvent_vessel="flask_DCM"
       vessel_type="rotavap">
       <Add
@@ -2043,7 +2043,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250" />
+          rotation_speed="250.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -2065,7 +2065,7 @@
           stir_speed="250 RPM">
           <CRotavapSetRotationSpeed
             rotavap_name="rotavap"
-            rotation_speed="250" />
+            rotation_speed="250.0" />
           <CRotavapStartRotation
             rotavap_name="rotavap" />
         </StartStir>
@@ -2141,7 +2141,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250" />
+          rotation_speed="250.0" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -2545,7 +2545,7 @@
       vacuum_time="10 secs"
       stir="True"
       stir_time="10 mins"
-      stir_speed="250.0 RPM"
+      stir_speed="250 RPM"
       waste_vessel="waste_aqueous"
       filtrate_vessel="None"
       aspiration_speed="5"
@@ -2645,12 +2645,12 @@
       <Stir
         vessel="rotavap"
         time="10 mins"
-        stir_speed="250.0 RPM"
+        stir_speed="250 RPM"
         vessel_type="rotavap">
         <RotavapStir
           rotavap_name="rotavap"
           time="10 mins"
-          stir_speed="250.0 RPM">
+          stir_speed="250 RPM">
           <RotavapStartRotation
             rotavap_name="rotavap"
             rotation_speed="250.0">
