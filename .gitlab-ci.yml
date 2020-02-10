@@ -59,6 +59,7 @@ lint:
 
 pages:
   stage: "deploy"
+  image: "python:3.8"
   script:
   - pip install -U sphinx
   - pip install sphinx_rtd_theme
