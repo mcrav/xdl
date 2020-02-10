@@ -1,16 +1,15 @@
-from typing import Optional, List, Dict, Any, Union
-from ..utils import get_vacuum_valve_reconnect_steps
+from typing import Optional, List, Dict, Any
 from .....step_utils.base_steps import Step, AbstractStep
-from ..steps_base import CMove, CConnect, CVentVacuum
+from ..steps_base import CMove
 from ..steps_utility import (
-    StopStir, StartStir, Wait, StartVacuum, StopVacuum, Transfer)
+    StopStir, StartStir, Transfer, ApplyVacuum)
 from .....constants import (
     BOTTOM_PORT,
     DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
-    DEFAULT_FILTER_VACUUM_PRESSURE,
     DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED,
 )
 from .....utils.errors import XDLError
+from ...utils.execution import get_vacuum_configuration
 
 class Filter(AbstractStep):
     """Filter contents of filter vessel. Apply vacuum for given time.
@@ -59,67 +58,119 @@ class Filter(AbstractStep):
         stir_speed: Optional[float] = 'default',
         waste_vessel: Optional[str] = None,
         filtrate_vessel: Optional[str] = None,
-        vacuum: Optional[str] = None,
-        vacuum_device: Optional[str] = None,
-        inert_gas: Optional[str] = None,
-        vacuum_valve: Optional[str] = None,
-        valve_unused_port: Optional[Union[str, int]] = None,
         anticlogging: Optional[bool] = 'default',
+        inline_filter: Optional[bool] = False,
+        vacuum_attached: Optional[bool] = False,
         **kwargs
     ) -> None:
         super().__init__(locals())
 
+    def on_prepare_for_execution(self, graph):
+        filter_vessel = graph.nodes[self.filter_vessel]
+        if (filter_vessel['class'] != 'ChemputerFilter'
+                and ('can_filter' in filter_vessel
+                     and filter_vessel['can_filter'] is True)):
+            self.inline_filter = True
+
+        if get_vacuum_configuration(graph, self.filter_vessel)['source']:
+            self.vacuum_attached = True
+
     def get_steps(self) -> List[Step]:
-        filtrate_vessel = self.filtrate_vessel
-        if not filtrate_vessel:
-            filtrate_vessel = self.waste_vessel
+        # Normal filtering in ChemputerFilter
+        if not self.inline_filter:
+            return self.get_normal_filtering_steps()
 
-        aspiration_speed = self.aspiration_speed
-        if self.anticlogging:
-            aspiration_speed = DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED
+        else:
+            # Inline filtering in reactor or rotavap with vacuum
+            if self.vacuum_attached:
+                return self.get_inline_filtering_with_vacuum_steps()
 
-        steps = [
-            # Move the filter top volume from the bottom to the waste.
+            else:
+                # Inline filtering in reactor or rotavap without vacuum
+                return self.get_inline_filtering_without_vacuum_steps()
+
+    def get_normal_filtering_steps(self):
+        """ChemputerFilter attached to vacuum."""
+        return (
+            self.get_initial_stir()
+            + self.get_normal_filter_liquid_transfer()
+            + self.get_vacuum_stop_stir()
+            + self.apply_vacuum(port=BOTTOM_PORT)
+        )
+
+    def get_inline_filtering_with_vacuum_steps(self):
+        """Reactor or rotavap attached to vacuum."""
+        return (
+            self.get_initial_stir()
+            + self.get_inline_filter_to()
+            + self.get_vacuum_stop_stir()
+            + self.apply_vacuum()
+        )
+
+    def get_inline_filtering_without_vacuum_steps(self):
+        """Reactor or rotavap with no vacuum."""
+        return (
+            self.get_initial_stir()
+            + self.get_inline_filter_to()
+        )
+
+    def get_normal_filter_liquid_transfer(self):
+        return [
             CMove(
                 from_vessel=self.filter_vessel,
-                to_vessel=filtrate_vessel,
+                to_vessel=self.get_filtrate_vessel(),
                 from_port=BOTTOM_PORT,
                 volume=(self.filter_top_volume
                         * DEFAULT_FILTER_EXCESS_REMOVE_FACTOR),
-                aspiration_speed=aspiration_speed),
-            StartVacuum(
-                vessel=self.vacuum, pressure=DEFAULT_FILTER_VACUUM_PRESSURE),
-            # Connect the vacuum.
-            CConnect(from_vessel=self.filter_vessel, to_vessel=self.vacuum,
-                     from_port=BOTTOM_PORT),
-            Wait(time=self.wait_time),
+                aspiration_speed=self.get_aspiration_speed()
+            )
         ]
 
-        if not self.stir:
-            steps.insert(0, StopStir(vessel=self.filter_vessel))
+    def get_inline_filter_to(self):
+        return [FilterTo(
+            from_vessel=self.filter_vessel,
+            to_vessel=self.filtrate_vessel
+        )]
+
+    def get_start_stir(self):
+        return StartStir(vessel=self.filter_vessel, stir_speed=self.stir_speed)
+
+    def get_stop_stir(self):
+        return StopStir(vessel=self.filter_vessel)
+
+    def get_initial_stir(self):
+        if self.stir is True:
+            return [self.get_start_stir()]
         else:
-            steps.insert(1, StopStir(vessel=self.filter_vessel))
-            steps.insert(0, StartStir(
-                vessel=self.filter_vessel, stir_speed=self.stir_speed))
+            return [self.get_stop_stir()]
 
-        # If vacuum is just from vacuum line not device remove Start/Stop vacuum
-        # steps.
-        if not self.vacuum_device:
-            steps.pop(-3)
+    def get_vacuum_stop_stir(self):
+        # Stirring already stopped at start of step
+        if self.stir is False:
+            return []
+        else:
+            return [self.get_stop_stir()]
 
-        # Reconnect vacuum valve to inert gas or unconnected port after done
-        # with vacuum.
-        steps.extend(get_vacuum_valve_reconnect_steps(
-            inert_gas=self.inert_gas,
-            vacuum_valve=self.vacuum_valve,
-            valve_unused_port=self.valve_unused_port,
-            vessel=self.filter_vessel))
+    def apply_vacuum(self, port=None):
+        return [
+            ApplyVacuum(
+                vessel=self.filter_vessel,
+                time=self.wait_time,
+                port=port
+            )
+        ]
 
-        if self.vacuum_device:
-            steps.extend([
-                StopVacuum(vessel=self.vacuum),
-                CVentVacuum(vessel=self.vacuum)])
-        return steps
+    def get_aspiration_speed(self):
+        aspiration_speed = self.aspiration_speed
+        if self.anticlogging:
+            aspiration_speed = DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED
+        return aspiration_speed
+
+    def get_filtrate_vessel(self):
+        filtrate_vessel = self.filtrate_vessel
+        if not filtrate_vessel:
+            filtrate_vessel = self.waste_vessel
+        return filtrate_vessel
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

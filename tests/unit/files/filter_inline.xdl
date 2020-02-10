@@ -1,0 +1,28 @@
+<Synthesis auto_clean="false">
+  <Hardware>
+    <Component
+      id="reactor"
+      type="reactor"
+     />
+  </Hardware>
+
+  <Reagents>
+    <Reagent
+      id="NaCl" />
+    <Reagent
+      id="water" />
+  </Reagents>
+
+  <Procedure>
+    <Add
+      reagent="water"
+      vessel="reactor"
+      volume="300 mL" />
+    <Filter
+      filter_vessel="reactor"
+      filtrate_vessel="rotavap"
+    />
+
+  </Procedure>
+
+</Synthesis>

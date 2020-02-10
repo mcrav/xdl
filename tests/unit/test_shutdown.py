@@ -15,9 +15,10 @@ def test_xdl_ends_with_shutdown():
     assert type(x.steps[-1]) == Shutdown
     shutdown = x.steps[-1]
 
-    assert len(shutdown.steps) == 16
+    assert len(shutdown.steps) == 17
 
     chiller_shutdown = False
+    flask_chiller_shutdown = False
 
     stirrer_separator_shutdown = False
     stirrer_filter_shutdown = False
@@ -41,6 +42,9 @@ def test_xdl_ends_with_shutdown():
         if step.name == 'CStopChiller':
             if step.vessel == 'filter':
                 chiller_shutdown = True
+
+            elif step.vessel == 'flask_water':
+                flask_chiller_shutdown = True
 
         elif step.name == 'CStopVacuum':
             if step.vessel == 'vacuum_flask':
@@ -92,6 +96,7 @@ def test_xdl_ends_with_shutdown():
                 heater_reactor_shutdown = True
 
     assert chiller_shutdown
+    assert flask_chiller_shutdown
 
     assert stirrer_separator_shutdown
     assert stirrer_filter_shutdown

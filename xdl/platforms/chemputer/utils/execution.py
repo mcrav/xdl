@@ -1,6 +1,7 @@
-from typing import Tuple, List
+from typing import Tuple, List, Dict
 from networkx import MultiDiGraph
 from ....utils.graph import undirected_neighbors
+from ....constants import VACUUM_CLASSES, INERT_GAS_SYNONYMS
 
 def get_unused_valve_port(graph, valve_node):
     used_ports = []
@@ -41,6 +42,65 @@ def get_pneumatic_controller(
             else:
                 return src_node, info['port'][0]
     return None, None
+
+def get_vacuum_configuration(
+        graph: MultiDiGraph, vessel: str) -> Dict[str, str]:
+    """Get node names and ports to fully describe vacuum setup as follows:
+    vessel <-> ChemputerValve -> ChemputerVacuum <-(Optional vacuum device)
+
+    Args:
+        graph (MultiDiGraph): Graph
+        vessel (str): Vessel to get vacuum configuration.
+
+    Returns:
+        Dict[str, str]: Dictionary containing node names and ports:
+            {
+                valve: ,  # Valve connecting vessel and vacuum
+                source: ,  # ChemputerVacuum attached to valve
+                device: ,  # Optional CVC3000 vacuum device attached to source.
+                valve_unused_port: ,  # Unused port on valve.
+                valve_inert_gas_port: ,  # Port on valve connected to inert gas.
+            }
+    """
+    valve = source = device = valve_unused_port = valve_inert_gas = None
+    for neighbor, neighbor_data in undirected_neighbors(
+            graph, vessel, data=True):
+
+        # Find valve
+        if not valve and neighbor_data['class'] == 'ChemputerValve':
+
+            for valve_neighbor, valve_neighbor_data in undirected_neighbors(
+                    graph, neighbor, data=True):
+
+                # Find vacuum
+                if valve_neighbor_data['class'] == 'ChemputerVacuum':
+
+                    # Only assign valve as attached valve connected to vacuum
+                    valve = neighbor
+                    source = valve_neighbor
+
+                    # Find vacuum device if there.
+                    for source_neighbor, source_neighbor_data in\
+                            undirected_neighbors(
+                                graph, source, data=True):
+                        if source_neighbor_data['class'] in VACUUM_CLASSES:
+                            device = source_neighbor
+
+                # Find inert gas
+                elif valve_neighbor_data['class'] == 'ChemputerFlask':
+                    if valve_neighbor_data['chemical'] in INERT_GAS_SYNONYMS:
+                        valve_inert_gas = valve_neighbor
+
+    if valve:
+        valve_unused_port = get_unused_valve_port(graph, valve)
+
+    return {
+        'valve': valve,
+        'source': source,
+        'device': device,
+        'valve_unused_port': valve_unused_port,
+        'valve_inert_gas': valve_inert_gas,
+    }
 
 def get_buffer_flasks(graph: MultiDiGraph) -> List[str]:
     buffer_flasks = []

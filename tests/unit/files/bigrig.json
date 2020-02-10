@@ -497,15 +497,30 @@
       "type": "chiller",
       "x": 360,
       "y": 280,
+      "internalId": 97,
+      "label": "rotavap_chiller",
       "class": "JULABOCF41",
       "name": "rotavap_chiller",
       "min_temp": -40,
       "max_temp": 20,
       "port": null,
       "address": "",
+      "mode": "ethernet"
+    },
+    {
+      "id": "flask_chiller",
+      "type": "chiller",
+      "x": 40,
+      "y": 320,
+      "class": "JULABOCF41",
+      "name": "flask_chiller",
+      "min_temp": null,
+      "max_temp": null,
+      "port": null,
+      "address": "",
       "mode": "ethernet",
-      "internalId": 97,
-      "label": "rotavap_chiller"
+      "internalId": 99,
+      "label": "flask_chiller"
     }
   ],
   "links": [
@@ -987,6 +1002,14 @@
       "targetInternal": 3,
       "source": "rotavap_chiller",
       "target": "rotavap",
+      "port": "(,)"
+    },
+    {
+      "id": 100,
+      "sourceInternal": 99,
+      "targetInternal": 2,
+      "source": "flask_chiller",
+      "target": "flask_water",
       "port": "(,)"
     }
   ]
