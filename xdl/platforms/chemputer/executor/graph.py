@@ -1,6 +1,6 @@
 from typing import Dict
 
-from networkx import MultiDiGraph, NetworkXNoPath
+from networkx import MultiDiGraph, NetworkXNoPath, MultiGraph
 from networkx.algorithms.shortest_paths.generic import shortest_path_length
 
 from ....hardware.components import Component, Hardware
@@ -42,7 +42,7 @@ def make_vessel_map(
     # Make graph undirected so actual closest waste vessels are found, not
     # closest in liquid flow path. As long as vessels are all attached to a
     # valve which is attached to a waste vessel this should be fine.
-    undirected_graph = graph.to_undirected()
+    undirected_graph = MultiGraph(graph)
     vessel_map = {}
     target_vessels = [
         node for node in undirected_graph.nodes()
