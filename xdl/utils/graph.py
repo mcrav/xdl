@@ -54,7 +54,7 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
 
     elif type(graph_file) == MultiDiGraph:
         graph = graph_file
-        raw_graph = copy.deepcopy(graph)
+        raw_graph = None
 
     for edge in graph.edges:
         if 'port' in graph.edges[edge]:
