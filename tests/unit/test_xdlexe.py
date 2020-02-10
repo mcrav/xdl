@@ -64,3 +64,8 @@ def test_xdlexe_execute_wrong_graph():
         x = XDL(test_xdl_f + 'exe')
         c = get_chempiler(test_graph_f)
         x.execute(c)
+
+@pytest.mark.unit
+def test_xdlexe_decodes_symbols():
+    test_path = os.path.join(FOLDER, "V60P0014_A.xdlexe")
+    XDL(test_path)

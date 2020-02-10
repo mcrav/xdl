@@ -28,9 +28,15 @@ def xdl_file_to_objs(
                 hardware: Hardware object.
                 reagents: List of Reagent objects.
     """
-    with open(xdl_file) as fileobj:
-        return xdl_str_to_objs(
-            xdl_str=fileobj.read(), logger=logger, platform=platform)
+    try:
+        with open(xdl_file) as fileobj:
+            return xdl_str_to_objs(
+                xdl_str=fileobj.read(), logger=logger, platform=platform)
+    except UnicodeDecodeError:
+        # Try different encoding to UTF-8
+        with open(xdl_file, encoding="iso-8859-1") as fileobj:
+            return xdl_str_to_objs(
+                xdl_str=fileobj.read(), logger=logger, platform=platform)
 
 def xdl_str_to_objs(
     xdl_str: str,
