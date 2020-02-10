@@ -223,9 +223,9 @@ class ChemputerExecutor(AbstractXDLExecutor):
         self._xdl.hardware_map = {}
         for xdl_hardware_list, graphml_hardware_list in zip(
             [self._xdl.hardware.reactors, self._xdl.hardware.filters,
-             self._xdl.hardware.separators],
+             self._xdl.hardware.separators, self._xdl.hardware.rotavaps],
             [self._graph_hardware.reactors, self._graph_hardware.filters,
-             self._graph_hardware.separators]
+             self._graph_hardware.separators, self._graph_hardware.rotavaps]
         ):
             for i in range(len(xdl_hardware_list)):
                 self._xdl.hardware_map[
