@@ -48,6 +48,7 @@ class Transfer(AbstractStep):
         move_speed (float): Speed in mL / min to move liquid at.
         dispense_speed (float): Speed in mL / min to push liquid out of pump
             into to_vessel.
+        through_cartridge (str): Internal property. Cartridge to pass through.
     """
 
     DEFAULT_PROPS = {
@@ -71,6 +72,7 @@ class Transfer(AbstractStep):
         move_speed: Optional[float] = 'default',
         dispense_speed: Optional[float] = 'default',
         viscous: Optional[bool] = 'default',
+        through_cartridge: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -83,7 +85,7 @@ class Transfer(AbstractStep):
                       to_vessel=self.to_vessel,
                       to_port=self.to_port,
                       volume=self.volume,
-                      through=self.through,
+                      through=self.through_cartridge,
                       aspiration_speed=aspiration_speed,
                       move_speed=self.move_speed,
                       dispense_speed=dispense_speed)]
@@ -98,6 +100,13 @@ class Transfer(AbstractStep):
             assert self.to_vessel
         except AssertionError:
             raise XDLError('to_vessel must be node in graph.')
+
+        try:
+            assert not self.through or self.through_cartridge
+        except AssertionError:
+            raise XDLError(
+                f'Trying to transfer through "{self.through}" but cannot find\
+ cartridge containing {self.through}. {self.through_cartridge}')
 
     def on_prepare_for_execution(self, graph) -> str:
         """If self.port is None, return default port for different vessel types.

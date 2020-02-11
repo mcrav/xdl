@@ -149,7 +149,7 @@ class FilterThrough(AbstractStep):
         return Transfer(
             from_vessel=self.from_vessel,
             to_vessel=filter_through_to_vessel,
-            through=self.through_cartridge,
+            through=self.through,
             volume='all',
             move_speed=self.move_speed,
             aspiration_speed=self.aspiration_speed)
@@ -164,7 +164,7 @@ class FilterThrough(AbstractStep):
             Transfer(
                 from_vessel=self.from_vessel,
                 to_vessel=filter_through_to_vessel,
-                through=self.through_cartridge,
+                through=self.through,
                 volume=volume,
                 move_speed=self.move_speed,
                 aspiration_speed=self.aspiration_speed)
@@ -174,7 +174,7 @@ class FilterThrough(AbstractStep):
         return Transfer(
             from_vessel=self.flush_cartridge_vessel,
             to_vessel=filter_through_to_vessel,
-            through=self.through_cartridge,
+            through=self.through,
             volume=self.cartridge_dead_volume,
             move_speed=self.move_speed,
             aspiration_speed=self.aspiration_speed
