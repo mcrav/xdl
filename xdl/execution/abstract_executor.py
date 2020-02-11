@@ -100,6 +100,31 @@ class AbstractXDLExecutor(ABC):
             for substep in step.steps:
                 self.prepare_dynamic_steps_for_execution(substep, graph)
 
+    def execute_step(self, platform_controller, step, async_steps=None):
+        self.prepare_dynamic_steps_for_execution(
+            step, platform_controller.graph.graph)
+
+        self.logger.info(step.name)
+
+        try:
+            # Wait for async step to finish executing
+            if type(step) == Await:
+                keep_going = step.execute(async_steps, self.logger)
+
+            # Normal step execution
+            else:
+                keep_going = step.execute(
+                    platform_controller, self.logger)
+
+        # Raise any errors during step execution.
+        except Exception as e:
+            self.logger.info(
+                'Step failed {0} {1}'.format(
+                    type(step), step.properties))
+            raise e
+
+        return keep_going
+
     def execute(self, platform_controller: Any) -> None:
         """Execute XDL procedure with given chempiler. The same graph must be
         passed to the chempiler and to prepare_for_execution.
@@ -133,26 +158,9 @@ class AbstractXDLExecutor(ABC):
                 if type(step) == Async:
                     async_steps.append(step)
 
-                self.prepare_dynamic_steps_for_execution(
-                    step, platform_controller.graph.graph)
+                keep_going = self.execute_step(
+                    platform_controller, step, async_steps=async_steps)
 
-                self.logger.info(step.name)
-                try:
-                    # Wait for async step to finish executing
-                    if type(step) == Await:
-                        keep_going = step.execute(async_steps, self.logger)
-
-                    # Normal step execution
-                    else:
-                        keep_going = step.execute(
-                            platform_controller, self.logger)
-
-                # Raise any errors during step execution.
-                except Exception as e:
-                    self.logger.info(
-                        'Step failed {0} {1}'.format(
-                            type(step), step.properties))
-                    raise e
                 if not keep_going:
                     return
         else:
