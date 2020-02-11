@@ -278,8 +278,8 @@ class XDL(object):
         for step in self.steps:
             if step.name not in UNSCALED_STEPS:
                 for prop, val in step.properties.items():
-                    if 'volume' in prop and type(val) == float:
-                        if val:
+                    if 'volume' in prop or 'mass' in prop:
+                        if val and type(val) == float:
                             step.properties[prop] = float(val) * scale
 
     @property
