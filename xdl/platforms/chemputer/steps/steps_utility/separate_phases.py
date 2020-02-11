@@ -13,6 +13,10 @@ SEPARATION_DEFAULT_INITIAL_PUMP_SPEED = 10
 SEPARATION_DEFAULT_MID_PUMP_SPEED = 40
 SEPARATION_DEFAULT_END_PUMP_SPEED = 40
 
+SEPARATION_DEFAULT_INITIAL_PUMP_SPEED_CART = 10
+SEPARATION_DEFAULT_MID_PUMP_SPEED_CART = 5
+SEPARATION_DEFAULT_END_PUMP_SPEED_CART = 5
+
 class SeparatePhases(AbstractDynamicStep):
 
     FINISH = 0  # Finish successfully
@@ -177,6 +181,16 @@ class SeparatePhases(AbstractDynamicStep):
             raise XDLError(f"Can't find conductivity sensor attached to\
  {self.separation_vessel}")
 
+    def get_pump_speeds(self, through):
+        if through:
+            self.init_pump_speed = SEPARATION_DEFAULT_INITIAL_PUMP_SPEED_CART
+            self.mid_pump_speed = SEPARATION_DEFAULT_MID_PUMP_SPEED_CART
+            self.end_pump_speed = SEPARATION_DEFAULT_END_PUMP_SPEED_CART
+        else:
+            self.init_pump_speed = SEPARATION_DEFAULT_INITIAL_PUMP_SPEED
+            self.mid_pump_speed = SEPARATION_DEFAULT_MID_PUMP_SPEED
+            self.end_pump_speed = SEPARATION_DEFAULT_END_PUMP_SPEED
+
     def check_if_can_retry(self, graph):
         if self.lower_phase_vessel:
             if graph.nodes[
@@ -271,26 +285,28 @@ class SeparatePhases(AbstractDynamicStep):
         return steps
 
     def prime_sensor_step(self):
+        self.get_pump_speeds(self.lower_phase_through)
         return Transfer(
             from_vessel=self.separation_vessel,
             to_vessel=self.lower_phase_vessel,
             volume=SEPARATION_DEFAULT_PRIMING_VOLUME,
-            aspiration_speed=SEPARATION_DEFAULT_INITIAL_PUMP_SPEED,
-            move_speed=SEPARATION_DEFAULT_MID_PUMP_SPEED,
-            dispense_speed=SEPARATION_DEFAULT_END_PUMP_SPEED,
+            aspiration_speed=self.init_pump_speed,
+            move_speed=self.mid_pump_speed,
+            dispense_speed=self.end_pump_speed,
             to_port=self.lower_phase_port,
             through=self.lower_phase_through
         )
 
     def lower_phase_stepwise_withdraw_step(self):
+        self.get_pump_speeds(self.lower_phase_through)
         steps = [
             Transfer(
                 from_vessel=self.separation_vessel,
                 to_vessel=self.separation_vessel_pump,
                 volume=self.step_volume,
-                aspiration_speed=SEPARATION_DEFAULT_INITIAL_PUMP_SPEED,
-                move_speed=SEPARATION_DEFAULT_MID_PUMP_SPEED,
-                dispense_speed=SEPARATION_DEFAULT_END_PUMP_SPEED,
+                aspiration_speed=self.init_pump_speed,
+                move_speed=self.mid_pump_speed,
+                dispense_speed=self.end_pump_speed,
                 to_port=self.lower_phase_port,
                 through=self.lower_phase_through
             )
@@ -304,18 +320,20 @@ class SeparatePhases(AbstractDynamicStep):
         return steps
 
     def lower_phase_separation_pump_dispense_step(self):
+        self.get_pump_speeds(self.lower_phase_through)
         return Transfer(
             from_vessel=self.separation_vessel_pump,
             to_vessel=self.lower_phase_vessel,
             to_port=self.lower_phase_port,
             volume=self.pump_current_volume,
-            aspiration_speed=SEPARATION_DEFAULT_INITIAL_PUMP_SPEED,
-            move_speed=SEPARATION_DEFAULT_MID_PUMP_SPEED,
-            dispense_speed=SEPARATION_DEFAULT_END_PUMP_SPEED,
+            aspiration_speed=self.init_pump_speed,
+            move_speed=self.mid_pump_speed,
+            dispense_speed=self.end_pump_speed,
             through=self.lower_phase_through
         )
 
     def upper_phase_withdraw_step(self):
+        self.get_pump_speeds(self.upper_phase_through)
         if self.separation_vessel == self.upper_phase_vessel:
             return []
         else:
@@ -323,22 +341,23 @@ class SeparatePhases(AbstractDynamicStep):
                 from_vessel=self.separation_vessel,
                 to_vessel=self.upper_phase_vessel,
                 volume=self.separation_vessel_max_volume,
-                aspiration_speed=SEPARATION_DEFAULT_INITIAL_PUMP_SPEED,
-                move_speed=SEPARATION_DEFAULT_MID_PUMP_SPEED,
-                dispense_speed=SEPARATION_DEFAULT_END_PUMP_SPEED,
+                aspiration_speed=self.init_pump_speed,
+                move_speed=self.mid_pump_speed,
+                dispense_speed=self.end_pump_speed,
                 to_port=self.upper_phase_port,
                 through=self.upper_phase_through
             )]
 
     def dead_volume_withdraw_step(self):
         if self.dead_volume_vessel:
+            self.get_pump_speeds(self.dead_volume_through)
             return [Transfer(
                 from_vessel=self.separation_vessel,
                 to_vessel=self.dead_volume_vessel,
                 volume=SEPARATION_DEAD_VOLUME,
-                aspiration_speed=SEPARATION_DEFAULT_INITIAL_PUMP_SPEED,
-                move_speed=SEPARATION_DEFAULT_MID_PUMP_SPEED,
-                dispense_speed=SEPARATION_DEFAULT_END_PUMP_SPEED,
+                aspiration_speed=self.init_pump_speed,
+                move_speed=self.mid_pump_speed,
+                dispense_speed=self.end_pump_speed,
                 to_port=self.dead_volume_port,
                 through=self.dead_volume_through
             )]

@@ -17,8 +17,12 @@
     <SeparatePhases
       separation_vessel="separator"
       lower_phase_vessel="waste_separator"
+      upper_phase_vessel="reactor" />
+    <SeparatePhases
+      separation_vessel="separator"
+      lower_phase_vessel="waste_separator"
       upper_phase_vessel="reactor"
-    />
+      lower_phase_through='mgso4' />
   </Procedure>
 
 </Synthesis>
