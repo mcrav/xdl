@@ -28,6 +28,7 @@ from .test_recrystallize import test_recrystallization
 from .test_xdlexe import (
     test_xdlexe,
     test_xdlexe_execute_wrong_graph,
+    test_xdlexe_missing_properties,
     test_execute_dynamic_steps_inidividually,
     test_xdlexe_decodes_symbols,
 )
