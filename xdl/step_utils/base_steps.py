@@ -6,6 +6,7 @@ import copy
 from abc import ABC, abstractmethod
 from ..utils.misc import format_property
 from ..utils.graph import get_graph
+from ..utils.errors import XDLError
 from ..localisation import HUMAN_READABLE_STEPS
 
 if False:
@@ -334,6 +335,12 @@ class AbstractDynamicStep(XDLBase):
             self.reset()
 
         self.started = True
+
+        if not hasattr(self, 'start_block'):
+            raise XDLError('Dynamic step has not been prepared for execution.\
+ if executing steps individually, please use\
+ `xdl_obj.execute(platform_controller, step_index)` rather than\
+ `xdl_obj.steps[step_index].execute(platform_controller)`.')
 
         # Execute steps from on_start
         for step in self.start_block:

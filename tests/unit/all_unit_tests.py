@@ -25,7 +25,12 @@ from .test_heatchill import *
 from .test_separate import test_separate
 from .test_evacuate import test_evacuate, test_evacuate_pneumatic_controller
 from .test_recrystallize import test_recrystallization
-from .test_xdlexe import test_xdlexe, test_xdlexe_execute_wrong_graph
+from .test_xdlexe import (
+    test_xdlexe,
+    test_xdlexe_execute_wrong_graph,
+    test_execute_dynamic_steps_inidividually,
+    test_xdlexe_decodes_symbols,
+)
 from .test_port_validation import test_port_validation
 from .test_get_graph_spec import test_get_graph_spec
 from .test_check_graph_spec import test_check_template, test_check_graph_spec

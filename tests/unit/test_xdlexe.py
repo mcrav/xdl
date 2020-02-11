@@ -69,3 +69,21 @@ def test_xdlexe_execute_wrong_graph():
 def test_xdlexe_decodes_symbols():
     test_path = os.path.join(FOLDER, "V60P0014_A.xdlexe")
     XDL(test_path)
+
+@pytest.mark.unit
+def test_execute_dynamic_steps_inidividually():
+    x = XDL(os.path.join(FOLDER, 'separate.xdlexe'))
+    graph = os.path.join(FOLDER, 'bigrig.json')
+    c = get_chempiler(graph)
+    steps = [
+        (i, step)
+        for i, step in enumerate(x.steps)
+        if step.name == 'Separate'
+    ]
+    assert len(steps) > 0
+    for i, step in steps[:1]:
+        with pytest.raises(XDLError):
+            step.execute(c)
+
+    for i, step in steps[:1]:
+        x.execute(c, i)
