@@ -488,6 +488,7 @@ def add_vessel_cleaning_steps(xdl_obj: 'XDL', hardware: Hardware) -> 'XDL':
                 solvent = xdl_obj.organic_cleaning_solvent
             xdl_obj.steps.insert(i, CleanVessel(vessel=vessel, solvent=solvent))
     xdl_obj.steps = add_clean_vessel_temps(xdl_obj.steps)
+    xdl_obj.steps = move_non_essential_clean_vessel_steps_to_end(xdl_obj.steps)
     return xdl_obj
 
 def add_clean_vessel_temps(steps: List[List[Step]]) -> List[List[Step]]:
@@ -513,6 +514,36 @@ def add_clean_vessel_temps(steps: List[List[Step]]) -> List[List[Step]]:
                                  * CLEAN_VESSEL_BOILING_POINT_FACTOR)
                 else:
                     step.temp = 30
+    return steps
+
+def move_non_essential_clean_vessel_steps_to_end(
+        steps: List[List[Step]]) -> List[List[Step]]:
+    """If vessel is being cleaned but not needed later on in the procedure do
+    the cleaning at the end so the synthesis is not interrupted.
+    """
+    steps_to_move = []
+    for i, step in enumerate(steps):
+        if type(step) == CleanVessel:
+            vessel = step.vessel
+            j = i + 1
+            move_to_end = True
+            if j >= len(steps):
+                move_to_end = False
+            else:
+                while j < len(steps):
+                    if type(steps[j]) == CleanVessel:
+                        j += 1
+                        continue
+                    if vessel in steps[j].properties.values():
+                        move_to_end = False
+                        break
+                    j += 1
+            if move_to_end:
+                steps_to_move.append(i)
+
+    for i in reversed(steps_to_move):
+        steps.append(steps.pop(i))
+
     return steps
 
 ####################################

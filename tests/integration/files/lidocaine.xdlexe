@@ -1656,7 +1656,8 @@
         aspiration_speed="10"
         move_speed="40"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="None">
         <CMove
           from_vessel="filter1"
           to_vessel="flask_separator"
