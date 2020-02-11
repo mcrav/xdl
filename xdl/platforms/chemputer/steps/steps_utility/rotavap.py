@@ -80,6 +80,7 @@ class RotavapStir(AbstractStep):
     Args:
         rotavap_name (str): Rotavap name to start rotation for.
         time (float): Time to stir for.
+        continue_stirring (bool): Continue stirring after stirring time elapses.
         stir_speed (float): Speed to rotate rotavap flask at.
     """
 
@@ -91,20 +92,27 @@ class RotavapStir(AbstractStep):
         self,
         rotavap_name: str,
         time: float,
+        continue_stirring: bool = False,
         stir_speed: Optional[float] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
 
     def get_steps(self) -> List[Step]:
-        return [
+
+        steps = [
             RotavapStartRotation(
                 rotavap_name=self.rotavap_name,
                 rotation_speed=self.stir_speed
             ),
             Wait(time=self.time),
-            RotavapStopRotation(rotavap_name=self.rotavap_name)
         ]
+
+        if self.continue_stirring is True:
+            return steps
+        else:
+            steps.append(RotavapStopRotation(rotavap_name=self.rotavap_name))
+            return steps
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
