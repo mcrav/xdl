@@ -71,6 +71,14 @@ def test_xdlexe_decodes_symbols():
     XDL(test_path)
 
 @pytest.mark.unit
+def test_xdlexe_missing_properties():
+    test_path = os.path.join(FOLDER, "enolisation.xdlexe")
+
+    # Test misses the `max_retries` property in SeparatePhases step
+    with pytest.raises(XDLError):
+        XDL(test_path)
+
+@pytest.mark.unit
 def test_execute_dynamic_steps_inidividually():
     x = XDL(os.path.join(FOLDER, 'separate.xdlexe'))
     graph = os.path.join(FOLDER, 'bigrig.json')
