@@ -617,7 +617,8 @@
       aspiration_speed="10"
       move_speed="40"
       dispense_speed="40"
-      viscous="False">
+      viscous="False"
+      through_cartridge="cartridge_celite">
       <CMove
         from_vessel="rotavap"
         to_vessel="filter2"
@@ -628,7 +629,7 @@
         from_port="evaporate"
         to_port="top"
         unique="False"
-        through="None"
+        through="cartridge_celite"
         use_backbone="True" />
     </Transfer>
     <CleanBackbone
@@ -1244,12 +1245,13 @@
         volume="200 mL"
         from_port="bottom"
         to_port="evaporate"
-        through="cartridge_celite"
+        through="None"
         time="None"
         aspiration_speed="5"
         move_speed="5"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="filter2"
           to_vessel="rotavap"
@@ -1274,7 +1276,8 @@
         aspiration_speed="10"
         move_speed="40"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="filter2"
@@ -1285,7 +1288,7 @@
           from_port="0"
           to_port="top"
           unique="False"
-          through="None"
+          through="cartridge_celite"
           use_backbone="True" />
       </Transfer>
       <Transfer
@@ -1294,12 +1297,13 @@
         volume="25 mL"
         from_port="bottom"
         to_port="evaporate"
-        through="cartridge_celite"
+        through="None"
         time="None"
         aspiration_speed="5"
         move_speed="5"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="filter2"
           to_vessel="rotavap"
@@ -1324,7 +1328,8 @@
         aspiration_speed="10"
         move_speed="40"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="filter2"
@@ -1335,7 +1340,7 @@
           from_port="0"
           to_port="top"
           unique="False"
-          through="None"
+          through="cartridge_celite"
           use_backbone="True" />
       </Transfer>
       <Transfer
@@ -1344,12 +1349,13 @@
         volume="25 mL"
         from_port="bottom"
         to_port="evaporate"
-        through="cartridge_celite"
+        through="None"
         time="None"
         aspiration_speed="5"
         move_speed="5"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="filter2"
           to_vessel="rotavap"
@@ -1374,7 +1380,8 @@
         aspiration_speed="10"
         move_speed="40"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="filter2"
@@ -1385,7 +1392,7 @@
           from_port="0"
           to_port="top"
           unique="False"
-          through="None"
+          through="cartridge_celite"
           use_backbone="True" />
       </Transfer>
       <Transfer
@@ -1394,12 +1401,13 @@
         volume="25 mL"
         from_port="bottom"
         to_port="evaporate"
-        through="cartridge_celite"
+        through="None"
         time="None"
         aspiration_speed="5"
         move_speed="5"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="filter2"
           to_vessel="rotavap"
@@ -1419,12 +1427,13 @@
         volume="25 mL"
         from_port="0"
         to_port="evaporate"
-        through="cartridge_celite"
+        through="None"
         time="None"
         aspiration_speed="5"
         move_speed="5"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="flask_nitrogen"
           to_vessel="rotavap"
@@ -1589,7 +1598,8 @@
         aspiration_speed="10"
         move_speed="40"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="rotavap"
           to_vessel="waste_aqueous"
@@ -1600,7 +1610,7 @@
           from_port="collect"
           to_port="0"
           unique="False"
-          through="None"
+          through="cartridge_celite"
           use_backbone="True" />
       </Transfer>
     </Evaporate>
@@ -1750,12 +1760,13 @@
         volume="250 mL"
         from_port="evaporate"
         to_port="0"
-        through="cartridge_celite"
+        through="None"
         time="None"
         aspiration_speed="5"
         move_speed="5"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -1780,7 +1791,8 @@
         aspiration_speed="10"
         move_speed="40"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="rotavap"
@@ -1791,7 +1803,7 @@
           from_port="0"
           to_port="evaporate"
           unique="False"
-          through="None"
+          through="cartridge_celite"
           use_backbone="True" />
       </Transfer>
       <Transfer
@@ -1800,12 +1812,13 @@
         volume="25 mL"
         from_port="evaporate"
         to_port="0"
-        through="cartridge_celite"
+        through="None"
         time="None"
         aspiration_speed="5"
         move_speed="5"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -1830,7 +1843,8 @@
         aspiration_speed="10"
         move_speed="40"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="rotavap"
@@ -1841,7 +1855,7 @@
           from_port="0"
           to_port="evaporate"
           unique="False"
-          through="None"
+          through="cartridge_celite"
           use_backbone="True" />
       </Transfer>
       <Transfer
@@ -1850,12 +1864,13 @@
         volume="25 mL"
         from_port="evaporate"
         to_port="0"
-        through="cartridge_celite"
+        through="None"
         time="None"
         aspiration_speed="5"
         move_speed="5"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -1880,7 +1895,8 @@
         aspiration_speed="10"
         move_speed="40"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="flask_DCM"
           to_vessel="rotavap"
@@ -1891,7 +1907,7 @@
           from_port="0"
           to_port="evaporate"
           unique="False"
-          through="None"
+          through="cartridge_celite"
           use_backbone="True" />
       </Transfer>
       <Transfer
@@ -1900,12 +1916,13 @@
         volume="25 mL"
         from_port="evaporate"
         to_port="0"
-        through="cartridge_celite"
+        through="None"
         time="None"
         aspiration_speed="5"
         move_speed="5"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="rotavap"
           to_vessel="buffer_flask"
@@ -1925,12 +1942,13 @@
         volume="25 mL"
         from_port="0"
         to_port="0"
-        through="cartridge_celite"
+        through="None"
         time="None"
         aspiration_speed="5"
         move_speed="5"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="flask_nitrogen"
           to_vessel="buffer_flask"
@@ -2369,7 +2387,8 @@
       aspiration_speed="10"
       move_speed="40"
       dispense_speed="40"
-      viscous="False">
+      viscous="False"
+      through_cartridge="cartridge_celite">
       <CMove
         from_vessel="buffer_flask"
         to_vessel="rotavap"
@@ -2380,7 +2399,7 @@
         from_port="0"
         to_port="evaporate"
         unique="False"
-        through="None"
+        through="cartridge_celite"
         use_backbone="True" />
     </Transfer>
     <CleanBackbone
@@ -2689,7 +2708,8 @@
         aspiration_speed="5"
         move_speed="40"
         dispense_speed="40"
-        viscous="False">
+        viscous="False"
+        through_cartridge="cartridge_celite">
         <CMove
           from_vessel="rotavap"
           to_vessel="waste_aqueous"
@@ -2700,7 +2720,7 @@
           from_port="evaporate"
           to_port="0"
           unique="False"
-          through="None"
+          through="cartridge_celite"
           use_backbone="True" />
       </Transfer>
     </WashSolid>

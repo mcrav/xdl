@@ -3,7 +3,8 @@ from .test_clean_backbone import *
 from .test_clean_vessel import (
     test_clean_vessel,
     test_clean_vessel_no_vacuum,
-    test_clean_vessel_scheduling
+    test_clean_vessel_scheduling,
+    test_clean_vessel_move_to_end
 )
 from .test_filter_through import *
 from .test_filter import *

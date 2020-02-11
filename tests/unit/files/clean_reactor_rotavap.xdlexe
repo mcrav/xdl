@@ -1,7 +1,7 @@
 <?xdl version="0.2.1" ?>
 
 <Synthesis
-  graph_sha256="cef344b332797f0750a0a606242e459edb495c450f4fb762c6a38616b8f688a9"
+  graph_sha256="9ca6c87f7d5a38977f461c597fbcc682756032f15715f2b23251b7716b204db4"
 >
   <Hardware>
     <Component
