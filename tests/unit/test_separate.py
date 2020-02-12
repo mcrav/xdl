@@ -67,12 +67,11 @@ correct_step_info = [
         (Stir, {}),
         (Wait, {}),
         (SeparatePhases, {
-            'lower_phase_vessel': 'rotavap',
-            'lower_phase_port': 'evaporate',
+            'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'waste_separator',
         }),
         (Transfer, {
-            'from_vessel': 'rotavap',
+            'from_vessel': 'buffer_flask',
             'to_vessel': 'separator',
         }),
         (Add, {}),
@@ -392,6 +391,32 @@ correct_step_info = [
             'to_vessel': 'separator',
         }),
     ],
+
+    # Product top, 2 washes, waste_phase_to_waste, product phase to
+    # rotavap
+    [
+        (Add, {}),  # Solvent
+        (Stir, {}),
+        (Stir, {}),
+        (Wait, {}),
+        (SeparatePhases, {
+            'lower_phase_vessel': 'buffer_flask',
+            'upper_phase_vessel': 'waste_separator',
+        }),
+        (Transfer, {
+            'from_vessel': 'buffer_flask',
+            'to_vessel': 'separator',
+        }),
+        (Add, {}),  # Solvent
+        (Stir, {}),
+        (Stir, {}),
+        (Wait, {}),
+        (SeparatePhases, {
+            'lower_phase_vessel': 'rotavap',
+            'upper_phase_vessel': 'waste_separator',
+            'lower_phase_through': 'celite',
+        }),
+    ],
 ]
 
 def test_separate():
@@ -401,12 +426,25 @@ def test_separate():
     # generic_chempiler_test(xdl_f, graph_f)
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f)
+    assert (
+        len([step for step in x.steps if step.name == 'Separate'])
+        == len(correct_step_info)
+    )
     i = 0
     for step in x.steps:
         if type(step) == Separate:
             current_step_info = correct_step_info[i]
-            assert len(current_step_info) == len(step.steps)
+            try:
+                assert len(current_step_info) == len(step.steps)
+            except AssertionError:
+                raise AssertionError(
+                    f'Step: {i} ({len(current_step_info)} {len(step.steps)})\n\
+ {step.properties}\n\n{current_step_info}')
             for j, substep in enumerate(step.steps):
-                test_step(substep, current_step_info[j])
+                try:
+                    test_step(substep, current_step_info[j])
+                except AssertionError:
+                    raise AssertionError(
+                        f'Step: {i} {step.properties}\n\n{substep.properties}')
             i += 1
     assert i == len(correct_step_info)
