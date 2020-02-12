@@ -48,3 +48,4 @@ from .test_purge import test_purge
 from .test_default_props import test_default_props
 from .test_separate_phases import test_separate_phases
 from .test_transfer_through import test_transfer_through
+from .test_shutdown import test_xdl_ends_with_shutdown

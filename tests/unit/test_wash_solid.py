@@ -19,7 +19,9 @@ def test_wash_solid_stirring():
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f)
-    assert('StartStir' in [step.name for step in x.steps[-1].steps])
+
+    check_steps = x.steps[:-1]
+    assert('StartStir' in [step.name for step in check_steps[-1].steps])
 
 def test_wash_solid_dead_volume():
     """Test that WashSolid takes dead volume into account when deciding volume
@@ -33,7 +35,9 @@ def test_wash_solid_dead_volume():
     for xdl_f in xdl_fs:
         x = XDL(xdl_f)
         x.prepare_for_execution(graph_f)
-        for step in x.steps:
+
+        check_steps = x.steps[:-1]
+        for step in check_steps:
             if type(step) == WashSolid:
                 if step.vessel_type == 'filter':
                     for substep in step.steps:

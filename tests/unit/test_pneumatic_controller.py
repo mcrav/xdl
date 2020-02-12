@@ -12,7 +12,9 @@ def test_pneumatic_controller():
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f)
 
-    for step in x.steps:
+    # Ignores the shutdown at the end
+    check_steps = x.steps[:-1]
+    for step in check_steps:
         assert step.pneumatic_controller == 'pneumatic_controller'
 
         if step.vessel == 'flask':

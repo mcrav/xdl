@@ -13,10 +13,12 @@ def test_stirred_reagents():
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f)
-    assert type(x.steps[1]) == StartStir
-    assert x.steps[1].vessel == 'flask_water'
-    assert x.steps[1].stir_speed == DEFAULT_STIR_REAGENT_FLASK_SPEED
-    assert type(x.steps[-1]) == StopStir
+
+    check_steps = x.steps[:-1]
+    assert type(check_steps[1]) == StartStir
+    assert check_steps[1].vessel == 'flask_water'
+    assert check_steps[1].stir_speed == DEFAULT_STIR_REAGENT_FLASK_SPEED
+    assert type(check_steps[-1]) == StopStir
 
 def test_temp_controlled_reagents():
     """Test reagent flasks needing stirring work."""
@@ -24,10 +26,12 @@ def test_temp_controlled_reagents():
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f)
-    assert type(x.steps[0]) == StartHeatChill
-    assert x.steps[0].vessel == 'flask_water'
-    assert x.steps[0].temp == 5
-    assert type(x.steps[-1]) == StopHeatChill
+
+    check_steps = x.steps[:-1]
+    assert type(check_steps[0]) == StartHeatChill
+    assert check_steps[0].vessel == 'flask_water'
+    assert check_steps[0].temp == 5
+    assert type(check_steps[-1]) == StopHeatChill
 
 def test_last_minute_addition():
     """Test that last minute addition works."""
@@ -35,10 +39,12 @@ def test_last_minute_addition():
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f)
-    for i, step in enumerate(x.steps):
+
+    check_steps = x.steps[:-1]
+    for i, step in enumerate(check_steps):
         if type(step) == Wait:
-            last_minute_step = x.steps[i + 1]
-            add_step = x.steps[i + 2]
+            last_minute_step = check_steps[i + 1]
+            add_step = check_steps[i + 2]
             assert type(last_minute_step) == Add
             assert type(add_step) == Add
             assert last_minute_step.volume == 50

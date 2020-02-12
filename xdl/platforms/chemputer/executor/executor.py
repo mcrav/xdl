@@ -52,6 +52,7 @@ from ..steps import (
     CStopStir,
     CMove,
     CConnect,
+    Shutdown
 )
 from .tracking import iter_vessel_contents
 from .graph import (
@@ -1133,6 +1134,9 @@ class ChemputerExecutor(AbstractXDLExecutor):
             for substep in step.steps:
                 self._do_sanity_check(substep, level + 1)
 
+    def _add_in_final_shutdown(self):
+        self._xdl.steps.append(Shutdown())
+
     ##################
     # PUBLIC METHODS #
     ##################
@@ -1240,6 +1244,9 @@ class ChemputerExecutor(AbstractXDLExecutor):
                 self._add_clean_vessel_temps()
                 self._optimise_separation_steps()
                 self._remove_pointless_dry_return_to_rt()
+
+                self._add_in_final_shutdown()
+
                 self._add_internal_properties()
                 self._add_all_volumes()
                 self._add_filter_volumes()

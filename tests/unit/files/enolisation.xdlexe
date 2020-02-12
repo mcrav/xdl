@@ -646,7 +646,7 @@
     </Add>
     <HeatChill
       vessel="reactor"
-      temp="25째C"
+      temp="25캜"
       time="60 mins"
       stir="True"
       stir_speed="250 RPM"
@@ -663,7 +663,7 @@
       </StartStir>
       <HeatChillToTemp
         vessel="reactor"
-        temp="25째C"
+        temp="25캜"
         active="True"
         continue_heatchill="True"
         stir="True"
@@ -685,13 +685,13 @@
         </StartStir>
         <StartHeatChill
           vessel="reactor"
-          temp="25째C"
+          temp="25캜"
           vessel_type="reactor"
           heater="stirrer_reactor"
           chiller="chiller_reactor">
           <CChillerSetTemp
             vessel="reactor"
-            temp="25째C" />
+            temp="25캜" />
           <CStartChiller
             vessel="reactor" />
         </StartHeatChill>
@@ -731,7 +731,6 @@
       from_port="0"
       to_port="evaporate"
       through="None"
-      through_cartridge="None"
       time="None"
       aspiration_speed="10"
       move_speed="40"
@@ -910,7 +909,6 @@
       from_port="0"
       to_port="evaporate"
       through="None"
-      through_cartridge="None"
       time="None"
       aspiration_speed="10"
       move_speed="40"
@@ -1085,19 +1083,19 @@
     </CleanBackbone>
     <Evaporate
       rotavap_name="rotavap"
-      temp="50째C"
+      temp="50캜"
       pressure="699 mbar"
       time="30 mins"
-      rotation_speed="150.0"
+      rotation_speed="150"
       mode="auto"
       waste_vessel="waste_K"
       collection_flask_volume="None">
       <RotavapStartRotation
         rotavap_name="rotavap"
-        rotation_speed="150.0">
+        rotation_speed="150">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="150.0" />
+          rotation_speed="150" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </RotavapStartRotation>
@@ -1105,10 +1103,10 @@
         rotavap_name="rotavap" />
       <RotavapHeatToTemp
         rotavap_name="rotavap"
-        temp="50째C">
+        temp="50캜">
         <CRotavapSetTemp
           rotavap_name="rotavap"
-          temp="50째C" />
+          temp="50캜" />
         <CRotavapStartHeater
           rotavap_name="rotavap" />
       </RotavapHeatToTemp>
@@ -1138,7 +1136,6 @@
         from_port="collect"
         to_port="0"
         through="None"
-        through_cartridge="None"
         time="None"
         aspiration_speed="10"
         move_speed="40"
@@ -1187,7 +1184,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250.0" />
+          rotation_speed="250" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -1240,7 +1237,6 @@
       from_port="evaporate"
       to_port="bottom"
       through="None"
-      through_cartridge="None"
       time="None"
       aspiration_speed="10"
       move_speed="40"
@@ -1365,7 +1361,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250.0" />
+          rotation_speed="250" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -1418,7 +1414,6 @@
       from_port="evaporate"
       to_port="bottom"
       through="None"
-      through_cartridge="None"
       time="None"
       aspiration_speed="10"
       move_speed="40"
@@ -1543,7 +1538,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250.0" />
+          rotation_speed="250" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -1596,7 +1591,6 @@
       from_port="evaporate"
       to_port="bottom"
       through="None"
-      through_cartridge="None"
       time="None"
       aspiration_speed="10"
       move_speed="40"
@@ -1721,7 +1715,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250.0" />
+          rotation_speed="250" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -1774,7 +1768,6 @@
       from_port="evaporate"
       to_port="bottom"
       through="None"
-      through_cartridge="None"
       time="None"
       aspiration_speed="10"
       move_speed="40"
@@ -1976,7 +1969,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250.0" />
+          rotation_speed="250" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -2029,7 +2022,6 @@
       from_port="evaporate"
       to_port="0"
       through="None"
-      through_cartridge="None"
       time="None"
       aspiration_speed="10"
       move_speed="40"
@@ -2154,7 +2146,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250.0" />
+          rotation_speed="250" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -2207,7 +2199,6 @@
       from_port="evaporate"
       to_port="0"
       through="None"
-      through_cartridge="None"
       time="None"
       aspiration_speed="10"
       move_speed="40"
@@ -2332,7 +2323,7 @@
         stir_speed="250 RPM">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="250.0" />
+          rotation_speed="250" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </StartStir>
@@ -2385,7 +2376,6 @@
       from_port="evaporate"
       to_port="0"
       through="None"
-      through_cartridge="None"
       time="None"
       aspiration_speed="10"
       move_speed="40"
@@ -2738,8 +2728,7 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None"
-        max_retries="2" />
+        dead_volume_through="None" />
       <Add
         reagent="2 N hydrochloric acid"
         vessel="separator"
@@ -2902,8 +2891,7 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None"
-        max_retries="2" />
+        dead_volume_through="None" />
     </Separate>
     <CleanBackbone
       solvent="water"
@@ -2983,11 +2971,11 @@
         use_backbone="True" />
     </CleanBackbone>
     <CleanBackbone
-      solvent="methanol"
+      solvent="water"
       waste_vessels="waste_Z waste_H waste_G waste_Y waste_K waste_X"
-      solvent_vessel="MeOH">
+      solvent_vessel="water">
       <CMove
-        from_vessel="MeOH"
+        from_vessel="water"
         to_vessel="waste_Z"
         volume="3 mL"
         move_speed="40"
@@ -2999,7 +2987,7 @@
         through=""
         use_backbone="True" />
       <CMove
-        from_vessel="MeOH"
+        from_vessel="water"
         to_vessel="waste_H"
         volume="3 mL"
         move_speed="40"
@@ -3011,7 +2999,7 @@
         through=""
         use_backbone="True" />
       <CMove
-        from_vessel="MeOH"
+        from_vessel="water"
         to_vessel="waste_G"
         volume="3 mL"
         move_speed="40"
@@ -3023,7 +3011,7 @@
         through=""
         use_backbone="True" />
       <CMove
-        from_vessel="MeOH"
+        from_vessel="water"
         to_vessel="waste_Y"
         volume="3 mL"
         move_speed="40"
@@ -3035,7 +3023,7 @@
         through=""
         use_backbone="True" />
       <CMove
-        from_vessel="MeOH"
+        from_vessel="water"
         to_vessel="waste_K"
         volume="3 mL"
         move_speed="40"
@@ -3047,7 +3035,7 @@
         through=""
         use_backbone="True" />
       <CMove
-        from_vessel="MeOH"
+        from_vessel="water"
         to_vessel="waste_X"
         volume="3 mL"
         move_speed="40"
@@ -3239,8 +3227,7 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None"
-        max_retries="2" />
+        dead_volume_through="None" />
       <Add
         reagent="brine"
         vessel="separator"
@@ -3403,8 +3390,7 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="None"
-        dead_volume_through="None"
-        max_retries="2" />
+        dead_volume_through="None" />
       <Add
         reagent="brine"
         vessel="separator"
@@ -3567,15 +3553,14 @@
         dead_volume_port="0"
         lower_phase_through="None"
         upper_phase_through="K2CO3"
-        dead_volume_through="None"
-        max_retries="2" />
+        dead_volume_through="None" />
     </Separate>
     <CleanBackbone
-      solvent="methanol"
+      solvent="water"
       waste_vessels="waste_Z waste_H waste_G waste_Y waste_K waste_X"
-      solvent_vessel="MeOH">
+      solvent_vessel="water">
       <CMove
-        from_vessel="MeOH"
+        from_vessel="water"
         to_vessel="waste_Z"
         volume="3 mL"
         move_speed="40"
@@ -3587,7 +3572,7 @@
         through=""
         use_backbone="True" />
       <CMove
-        from_vessel="MeOH"
+        from_vessel="water"
         to_vessel="waste_H"
         volume="3 mL"
         move_speed="40"
@@ -3599,7 +3584,7 @@
         through=""
         use_backbone="True" />
       <CMove
-        from_vessel="MeOH"
+        from_vessel="water"
         to_vessel="waste_G"
         volume="3 mL"
         move_speed="40"
@@ -3611,7 +3596,7 @@
         through=""
         use_backbone="True" />
       <CMove
-        from_vessel="MeOH"
+        from_vessel="water"
         to_vessel="waste_Y"
         volume="3 mL"
         move_speed="40"
@@ -3623,7 +3608,7 @@
         through=""
         use_backbone="True" />
       <CMove
-        from_vessel="MeOH"
+        from_vessel="water"
         to_vessel="waste_K"
         volume="3 mL"
         move_speed="40"
@@ -3635,7 +3620,7 @@
         through=""
         use_backbone="True" />
       <CMove
-        from_vessel="MeOH"
+        from_vessel="water"
         to_vessel="waste_X"
         volume="3 mL"
         move_speed="40"
@@ -3649,19 +3634,19 @@
     </CleanBackbone>
     <Evaporate
       rotavap_name="rotavap"
-      temp="50째C"
+      temp="50캜"
       pressure="699 mbar"
       time="30 mins"
-      rotation_speed="150.0"
+      rotation_speed="150"
       mode="auto"
       waste_vessel="waste_K"
       collection_flask_volume="None">
       <RotavapStartRotation
         rotavap_name="rotavap"
-        rotation_speed="150.0">
+        rotation_speed="150">
         <CRotavapSetRotationSpeed
           rotavap_name="rotavap"
-          rotation_speed="150.0" />
+          rotation_speed="150" />
         <CRotavapStartRotation
           rotavap_name="rotavap" />
       </RotavapStartRotation>
@@ -3669,10 +3654,10 @@
         rotavap_name="rotavap" />
       <RotavapHeatToTemp
         rotavap_name="rotavap"
-        temp="50째C">
+        temp="50캜">
         <CRotavapSetTemp
           rotavap_name="rotavap"
-          temp="50째C" />
+          temp="50캜" />
         <CRotavapStartHeater
           rotavap_name="rotavap" />
       </RotavapHeatToTemp>
@@ -3702,7 +3687,6 @@
         from_port="collect"
         to_port="0"
         through="None"
-        through_cartridge="None"
         time="None"
         aspiration_speed="10"
         move_speed="40"
@@ -3725,7 +3709,7 @@
     <Dry
       vessel="rotavap"
       time="30 mins"
-      temp="50째C"
+      temp="50캜"
       waste_vessel="waste_K"
       aspiration_speed="5"
       vacuum="None"
@@ -3739,7 +3723,7 @@
       continue_heatchill="False">
       <HeatChillToTemp
         vessel="rotavap"
-        temp="50째C"
+        temp="50캜"
         active="True"
         continue_heatchill="True"
         stir="False"
@@ -3758,13 +3742,13 @@
         </StopStir>
         <StartHeatChill
           vessel="rotavap"
-          temp="50째C"
+          temp="50캜"
           vessel_type="rotavap"
           heater="None"
           chiller="None">
           <CRotavapSetTemp
             rotavap_name="rotavap"
-            temp="50째C" />
+            temp="50캜" />
           <CRotavapStartHeater
             rotavap_name="rotavap" />
         </StartHeatChill>
@@ -3831,7 +3815,7 @@
         vacuum_pressure="400 mbar" />
       <HeatChillToTemp
         vessel="rotavap"
-        temp="25째C"
+        temp="25캜"
         active="True"
         continue_heatchill="False"
         stir="False"
@@ -3850,13 +3834,13 @@
         </StopStir>
         <StartHeatChill
           vessel="rotavap"
-          temp="25째C"
+          temp="25캜"
           vessel_type="rotavap"
           heater="None"
           chiller="None">
           <CRotavapSetTemp
             rotavap_name="rotavap"
-            temp="25째C" />
+            temp="25캜" />
           <CRotavapStartHeater
             rotavap_name="rotavap" />
         </StartHeatChill>
