@@ -385,6 +385,9 @@ class ChemputerExecutor(AbstractXDLExecutor):
             if isinstance(step, AbstractDynamicStep):
                 step.prepare_for_execution(self._graph, self)
 
+            if 'children' in step.properties:
+                self._add_internal_properties_to_steps(step.children)
+
             if not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
                 self._add_internal_properties_to_steps(step.steps)
 

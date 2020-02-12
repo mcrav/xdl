@@ -17,7 +17,11 @@ from .test_separate_through import *
 from .test_filter_dead_volume import *
 from .test_filter_to import test_filter_to
 from .test_buffer_flask import *
-from .test_async import test_async_step, test_async_wrapper
+from .test_async import (
+    test_async_step,
+    test_async_wrapper,
+    test_async_wrapper_in_file
+)
 from .test_abstract_dynamic_step import test_abstract_dynamic_step
 from .test_pneumatic_controller import test_pneumatic_controller
 from .test_reagent_storage import *
