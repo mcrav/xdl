@@ -254,7 +254,7 @@ SYNTHESIS_ATTRS = [
     {
         'name': 'filter_dead_volume_method',
         'type': str,
-        'default': 'inert_gas',
+        'default': 'solvent',
     },
     {
         'name': 'filter_dead_volume_solvent',
