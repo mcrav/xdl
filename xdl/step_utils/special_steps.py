@@ -83,6 +83,9 @@ class Await(AbstractBaseStep):
                     time.sleep(1)
         return True
 
+    def locks(self, chempiler):
+        return [], [], []
+
 class Repeat(AbstractStep):
     """Repeat children of this step self.repeats times.
 
