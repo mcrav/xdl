@@ -155,6 +155,9 @@ def convert_val_to_std_units(val: str) -> float:
     Returns:
         float: Value in default units.
     """
+    if type(val) != str:
+        return val
+
     float_regex_pattern = r'([-]?[0-9]+(?:[.][0-9]+)?)'
     unit_search = re.search(r'[a-zA-Zμ°]+[3]?', val)
     val_search = re.search(float_regex_pattern, val)
