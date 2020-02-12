@@ -476,6 +476,9 @@ class Separate(AbstractStep):
     def human_readable(self, language='en') -> str:
         props = self.formatted_properties()
 
+        if not self.waste_phase_to_vessel:
+            props['waste_phase_to_vessel'] = 'waste'
+
         phases = ['bottom', 'top']
         # Remember True == 1 and False == 0
         props['waste_phase'] = phases[self.product_bottom]
