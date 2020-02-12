@@ -6,6 +6,7 @@ from ..steps import Step
 from ..constants import INTERNAL_PROPERTIES, XDL_VERSION
 from .constants import ALWAYS_WRITE
 from ..utils.misc import format_property
+from ..utils.sanitisation import convert_val_to_std_units
 
 class XDLGenerator(object):
     """
@@ -92,10 +93,13 @@ class XDLGenerator(object):
                 if val is not None or self.full_properties:
                     # if self.full_properties is False ignore some properties.
                     if not self.full_properties:
+
                         # Don't write properties that are the same as the
                         # default.
                         if (prop in step.DEFAULT_PROPS
-                                and step.DEFAULT_PROPS[prop] == val):
+                                and convert_val_to_std_units(
+                                    step.DEFAULT_PROPS[prop]) == val):
+
                             # Some things should always be written even if they
                             # are default.
                             if (not (step.name in ALWAYS_WRITE
