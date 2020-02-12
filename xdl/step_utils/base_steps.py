@@ -224,6 +224,12 @@ class AbstractAsyncStep(XDLBase):
         super().__init__(param_dict)
         self._should_end = False
 
+    def on_prepare_for_execution(self, graph):
+        return
+
+    def final_sanity_check(self, graph):
+        return
+
     def execute(self, chempiler, logger=None, level=0):
         self.thread = threading.Thread(
             target=self.async_execute, args=(chempiler, logger))
