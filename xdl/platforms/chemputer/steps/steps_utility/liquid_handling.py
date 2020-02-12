@@ -106,7 +106,7 @@ class Transfer(AbstractStep):
         except AssertionError:
             raise XDLError(
                 f'Trying to transfer through "{self.through}" but cannot find\
- cartridge containing {self.through}. {self.through_cartridge}')
+ cartridge containing {self.through}.')
 
     def on_prepare_for_execution(self, graph) -> str:
         """If self.port is None, return default port for different vessel types.

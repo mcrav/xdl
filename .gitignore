@@ -29,3 +29,4 @@ chempiler_output/
 # Allows
 !tests/unit/files/V60P0014_A.xdlexe
 !tests/unit/files/enolisation.xdlexe
+!tests/unit/files/separate.xdlexe
