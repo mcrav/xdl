@@ -24,3 +24,8 @@ tests/unit/chempiler_output
 .vscode
 test.py
 chempiler_output/
+*.xdlexe
+
+# Allows
+!tests/unit/files/V60P0014_A.xdlexe
+!tests/unit/files/enolisation.xdlexe
