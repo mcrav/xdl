@@ -2,6 +2,8 @@ import os
 from xdl import XDL
 from xdl.steps import (
     Evaporate,
+    CStopChiller,
+    CStartChiller,
     CRotavapAutoEvaporation,
     RotavapHeatToTemp,
     RotavapStopEverything
@@ -37,9 +39,9 @@ def test_rotavap_auto_mode():
     x.prepare_for_execution(graph_f, interactive=False)
     for step in x.steps:
         if type(step) == Evaporate:
-            assert type(step.steps[-2]) == RotavapStopEverything
-            assert type(step.steps[-3]) == CRotavapAutoEvaporation
-            assert type(step.steps[-4]) == RotavapHeatToTemp
+            assert type(step.steps[-3]) == RotavapStopEverything
+            assert type(step.steps[-4]) == CRotavapAutoEvaporation
+            assert type(step.steps[-5]) == RotavapHeatToTemp
             break
     generic_chempiler_test(xdl_f, graph_f)
 
@@ -62,3 +64,24 @@ def test_rotavap_rotation_speed():
     for step in x.base_steps:
         if step.name == 'CRotavapSetRotationSpeed':
             assert step.rotation_speed <= 300
+
+def test_rotavap_has_chiller():
+    """Test rotavap has a chiller attached."""
+    xdl_f = os.path.join(FOLDER, 'rotavap.xdl')
+    graph_f = os.path.join(FOLDER, 'bigrig.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)
+
+    step_types = {
+        "CStartChiller": CStartChiller,
+        "CStopChiller": CStopChiller
+    }
+
+    for step in x.steps:
+        if type(step) == Evaporate:
+            assert step.properties["has_chiller"] is True
+            for s in step.steps:
+                if type(s) in step_types.values():
+                    step_types.pop(s.name)
+
+            assert len(step_types) == 0

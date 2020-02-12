@@ -21,7 +21,8 @@
     <Evaporate
       rotavap_name="rotavap"
       temp="40"
-      pressure="50" />
+      pressure="50"
+      has_chiller="False"/>
 
   </Procedure>
 

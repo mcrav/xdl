@@ -40,7 +40,7 @@
     {
       "id": "rotavap",
       "type": "rotavap",
-      "x": 200,
+      "x": 240,
       "y": 200,
       "internalId": 3,
       "label": "rotavap",
@@ -491,6 +491,21 @@
       "chemical": "",
       "current_volume": 100,
       "max_volume": 100
+    },
+    {
+      "id": "rotavap_chiller",
+      "type": "chiller",
+      "x": 360,
+      "y": 280,
+      "class": "JULABOCF41",
+      "name": "rotavap_chiller",
+      "min_temp": -40,
+      "max_temp": 20,
+      "port": null,
+      "address": "",
+      "mode": "ethernet",
+      "internalId": 97,
+      "label": "rotavap_chiller"
     }
   ],
   "links": [
@@ -965,6 +980,14 @@
       "source": "valve_separator",
       "target": "cartridge_mgso4",
       "port": "(5,in)"
+    },
+    {
+      "id": 98,
+      "sourceInternal": 97,
+      "targetInternal": 3,
+      "source": "rotavap_chiller",
+      "target": "rotavap",
+      "port": "(,)"
     }
   ]
 }
