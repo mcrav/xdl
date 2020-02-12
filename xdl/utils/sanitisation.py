@@ -188,7 +188,8 @@ def clean_properties(xdl_class, properties):
         prop_type = annotations[prop]
 
         if prop_type in [str, Optional[str]]:
-            pass
+            if val:
+                properties[prop] = str(val)
 
         elif prop_type in [float, Optional[float]]:
             if type(val) == str:

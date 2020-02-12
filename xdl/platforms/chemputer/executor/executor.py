@@ -370,7 +370,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
                         self._graph, step.vessel, port))
 
             if ('through_cartridge' in step.properties
-                    and not step.through_cartridge):
+                    and not step.through_cartridge and step.through):
                 for cartridge in self._graph_hardware.cartridges:
                     if cartridge.chemical == step.through:
                         step.through_cartridge = cartridge.id
