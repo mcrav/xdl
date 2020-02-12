@@ -230,17 +230,14 @@ class Separate(AbstractStep):
                 steps.extend([
                     SeparatePhases(
                         separation_vessel=self.separation_vessel,
-                        lower_phase_vessel=self.to_vessel,
-                        lower_phase_port=self.to_port,
+                        lower_phase_vessel=self.buffer_flasks[0],
                         upper_phase_vessel=self.waste_phase_to_vessel,
                         upper_phase_port=self.waste_phase_to_port,
-                        lower_phase_through=self.through,
-                        dead_volume_through=self.through,
-                        dead_volume_vessel=self.to_vessel,
+                        dead_volume_vessel=self.buffer_flasks[0],
                     ),
                     # Move to_vessel to separation_vessel
                     Transfer(
-                        from_vessel=self.to_vessel,
+                        from_vessel=self.buffer_flasks[0],
                         to_vessel=self.separation_vessel,
                         volume='all'
                     ),
