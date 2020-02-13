@@ -67,12 +67,12 @@ def test_xdlexe_execute_wrong_graph():
 
 @pytest.mark.unit
 def test_xdlexe_decodes_symbols():
-    test_path = os.path.join(FOLDER, "V60P0014_A.xdlexe")
+    test_path = os.path.join(FOLDER, "xdlexe_test_iso8891.xdlexe")
     XDL(test_path)
 
 @pytest.mark.unit
 def test_xdlexe_missing_properties():
-    test_path = os.path.join(FOLDER, "enolisation.xdlexe")
+    test_path = os.path.join(FOLDER, "xdlexe_test_missing_properties.xdlexe")
 
     # Test misses the `max_retries` property in SeparatePhases step
     with pytest.raises(XDLError):
@@ -80,7 +80,7 @@ def test_xdlexe_missing_properties():
 
 @pytest.mark.unit
 def test_execute_dynamic_steps_inidividually():
-    x = XDL(os.path.join(FOLDER, 'separate.xdlexe'))
+    x = XDL(os.path.join(FOLDER, 'xdlexe_test_dynamic_steps.xdlexe'))
     graph = os.path.join(FOLDER, 'bigrig.json')
     c = get_chempiler(graph)
     steps = [

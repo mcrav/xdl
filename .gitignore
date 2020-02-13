@@ -27,6 +27,6 @@ chempiler_output/
 *.xdlexe
 
 # Allows
-!tests/unit/files/V60P0014_A.xdlexe
-!tests/unit/files/enolisation.xdlexe
-!tests/unit/files/separate.xdlexe
+!tests/unit/files/xdlexe_test_iso8891.xdlexe
+!tests/unit/files/xdlexe_test_missing_properties.xdlexe
+!tests/unit/files/xdlexe_test_dynamic_steps.xdlexe
