@@ -859,6 +859,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
     def _add_all_volumes_to_step(self, step, vessel_contents, definite):
         if type(step) in [Transfer, CMove]:
             if step.volume == 'all':
+                step.transfer_all = True
                 if definite and step.from_vessel in vessel_contents:
                     step.volume = vessel_contents[step.from_vessel].volume
                 else:

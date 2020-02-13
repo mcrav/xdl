@@ -17,6 +17,7 @@ from .test_separate_through import *
 from .test_filter_dead_volume import *
 from .test_filter_to import test_filter_to
 from .test_buffer_flask import *
+from .test_transfer import *
 from .test_async import (
     test_async_step,
     test_async_wrapper,
@@ -48,5 +49,5 @@ from .test_controller import test_controller
 from .test_purge import test_purge
 from .test_default_props import test_default_props
 from .test_separate_phases import test_separate_phases
-from .test_transfer_through import test_transfer_through
 from .test_shutdown import test_xdl_ends_with_shutdown
+from .test_standby import test_standby_mode
