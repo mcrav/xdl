@@ -88,8 +88,8 @@ def apply_step_record(step, step_record_step):
     for prop in step.properties:
         if prop not in step_record_step[1]:
             raise XDLError(f"Property {prop} missing from\
-Step {step_record_step[0]}\nThis file was most likely generated from an older\
-version of XDL. Regenerate the XDLEXE file using the latest version of XDL.")
+ Step {step_record_step[0]}\nThis file was most likely generated from an older\
+ version of XDL. Regenerate the XDLEXE file using the latest version of XDL.")
         step.properties[prop] = step_record_step[1][prop]
     step.update()
     if not isinstance(step, AbstractBaseStep):

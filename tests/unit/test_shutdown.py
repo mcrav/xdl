@@ -15,7 +15,7 @@ def test_xdl_ends_with_shutdown():
     assert type(x.steps[-1]) == Shutdown
     shutdown = x.steps[-1]
 
-    assert len(shutdown.steps) == 15
+    assert len(shutdown.steps) == 16
 
     chiller_shutdown = False
 
