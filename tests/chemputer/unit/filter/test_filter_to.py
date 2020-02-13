@@ -14,7 +14,5 @@ def test_filter_to():
     generic_chempiler_test(xdl_f, graph_f)
     with pytest.raises(XDLError):
         xdl_f = os.path.join(FOLDER, 'filter_to_error.xdl')
-        generic_chempiler_test(xdl_f, graph_f)
-    with pytest.raises(XDLError):
-        xdl_f = os.path.join(FOLDER, 'filter_to_error2.xdl')
+        graph_f = os.path.join(FOLDER, 'filter_to_error_graph.json')
         generic_chempiler_test(xdl_f, graph_f)

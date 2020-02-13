@@ -64,7 +64,7 @@
       "current_volume": 0,
       "max_volume": 100,
       "collection_flask_volume": 50,
-      "can_filter": false
+      "can_filter": true
     },
     {
       "id": "waste_rotavap",
@@ -527,14 +527,14 @@
       "type": "flask",
       "x": 320,
       "y": 360,
+      "internalId": 101,
+      "label": "product",
       "class": "ChemputerFlask",
       "name": "product",
       "chemical": "",
       "current_volume": 1000,
       "max_volume": 1000,
-      "can_filter": false,
-      "internalId": 101,
-      "label": "product"
+      "can_filter": false
     }
   ],
   "links": [
