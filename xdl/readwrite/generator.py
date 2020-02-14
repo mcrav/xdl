@@ -84,11 +84,15 @@ class XDLGenerator(object):
 
     def get_step_tree(self, step):
         step_tree = etree.Element(step.name)
+        children = False
         for prop, val in step.properties.items():
             if prop == 'children' and val:
+                children = True
+                children_tree = etree.Element('Children')
                 for child in val:
                     child_tree = self.get_step_tree(child)
-                    step_tree.append(child_tree)
+                    children_tree.append(child_tree)
+                step_tree.append(children_tree)
             else:
                 if val is not None or self.full_properties:
                     # if self.full_properties is False ignore some properties.
@@ -119,8 +123,16 @@ class XDLGenerator(object):
 
                     step_tree.attrib[prop] = formatted_property
         if self.full_tree:
-            for substep in step.steps:
-                step_tree.append(self.get_step_tree(substep))
+            # Nested elements like Repeat have Steps and Children instead of
+            # just raw steps
+            if children:
+                children_steps_tree = etree.Element('Steps')
+                for substep in step.steps:
+                    children_steps_tree.append(self.get_step_tree(substep))
+                step_tree.append(children_steps_tree)
+            else:
+                for substep in step.steps:
+                    step_tree.append(self.get_step_tree(substep))
         return step_tree
 
     def save(self, save_file: str) -> None:
