@@ -1,4 +1,4 @@
-from .....constants import BOTTOM_PORT
+from .....constants import BOTTOM_PORT, VALID_PORTS
 from .....utils.errors import XDLError
 from .....utils.graph import undirected_neighbors
 from .....step_utils.base_steps import AbstractDynamicStep
@@ -202,6 +202,42 @@ class SeparatePhases(AbstractDynamicStep):
         assert self.upper_phase_vessel
         assert self.separation_vessel
         assert self.separation_vessel_pump
+        self.sanity_check_transfer_ports(graph)
+
+    def sanity_check_transfer_ports(self, graph):
+        # Check that no incorrect ports are being used. Added as a bug with an
+        # invalid port assigned threw no errors in simulation, and messed up a
+        # physical run.
+        for fn in [
+            self.lower_phase_stepwise_withdraw_step,
+            self.lower_phase_separation_pump_dispense_step,
+            self.prime_sensor_step,
+            self.upper_phase_withdraw_step,
+            self.dead_volume_withdraw_step,
+            self.continue_retry,
+        ]:
+            steps = fn()
+            if type(steps) != list:
+                steps = [steps]
+            for step in steps:
+                if type(step) == Transfer:
+                    self.test_valid_transfer_ports(graph, step)
+
+    def test_valid_transfer_ports(self, graph, step):
+        if step.from_port is not None:
+            from_class = graph.nodes[step.from_vessel]['class']
+            try:
+                assert str(step.from_port) in VALID_PORTS[from_class]
+            except AssertionError:
+                raise XDLError(
+                    f'"{step.from_port}" is not a valid port for {from_class}')
+        if step.to_port is not None:
+            to_class = graph.nodes[step.to_vessel]['class']
+            try:
+                assert str(step.to_port) in VALID_PORTS[to_class]
+            except AssertionError:
+                raise XDLError(
+                    f'"{step.to_port}" is not a valid port for {to_class}')
 
     def on_start(self):
         """Initial conductivity sensor reading."""
@@ -307,8 +343,6 @@ class SeparatePhases(AbstractDynamicStep):
                 aspiration_speed=self.init_pump_speed,
                 move_speed=self.mid_pump_speed,
                 dispense_speed=self.end_pump_speed,
-                to_port=self.lower_phase_port,
-                through=self.lower_phase_through
             )
         ]
 
