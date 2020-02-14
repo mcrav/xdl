@@ -28,3 +28,11 @@ def test_filter_without_stirring():
         if type(step) == Filter:
             assert type(step.steps[0]) == StopStir
     generic_chempiler_test(xdl_f, graph_f)
+
+def test_filter_inline():
+    """Test that Filter step stir works with inline filter."""
+    xdl_f = os.path.join(FOLDER, 'filter_inline.xdl')
+    graph_f = os.path.join(FOLDER, 'bigrig.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f)
+    generic_chempiler_test(xdl_f, graph_f)

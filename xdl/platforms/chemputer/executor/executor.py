@@ -297,13 +297,15 @@ class ChemputerExecutor(AbstractXDLExecutor):
             if ('inert_gas' in step.properties):
                 step.inert_gas = self._get_inert_gas(step)
 
-            if ('vacuum_valve' in step.properties):
+            if ('vacuum_valve' in step.properties
+                    and 'vacuum' in step.properties):
                 if step.vacuum in self._valve_map:
                     step.vacuum_valve = self._valve_map[step.vacuum]
                     step.valve_unused_port = get_unused_valve_port(
                         graph=self._graph, valve_node=step.vacuum_valve)
 
-            if 'vacuum_device' in step.properties:
+            if ('vacuum_device' in step.properties
+                    and 'vacuum' in step.properties):
                 # Look for vacuum device attached to vacuum flask
                 step.vacuum_device = vacuum_device_attached_to_flask(
                     graph=self._graph, flask_node=step.vacuum)
@@ -361,13 +363,15 @@ class ChemputerExecutor(AbstractXDLExecutor):
             # Add pneumatic_controller to SwitchVacuum but not to CSwitchVacuum
             # as it is not an internal property in CSwitchVacuum
             if ('pneumatic_controller' in step.properties
-                    and 'vessel' in step.properties):
+                    and 'vessel' in step.properties
+                    and not step.pneumatic_controller):
                 port = None
                 if hasattr(step, 'port'):
                     port = step.port
-                step.pneumatic_controller, step.pneumatic_controller_port = (
-                    get_pneumatic_controller(
-                        self._graph, step.vessel, port))
+                if hasattr(step, 'pneumatic_controller_port'):
+                    step.pneumatic_controller, step.pneumatic_controller_port =\
+                        (get_pneumatic_controller(
+                            self._graph, step.vessel, port))
 
             if ('through_cartridge' in step.properties
                     and not step.through_cartridge and step.through):
@@ -889,7 +893,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
         prev_vessel_contents = {}
         for _, step, vessel_contents, _ in iter_vessel_contents(
                 self._xdl.steps, self._graph_hardware):
-            if type(step) == Filter:
+            if type(step) == Filter and not step.properties['inline_filter']:
                 if step.filter_vessel in prev_vessel_contents:
                     step.filter_top_volume = max(prev_vessel_contents[
                         step.filter_vessel].volume, 0)
@@ -899,6 +903,11 @@ class ChemputerExecutor(AbstractXDLExecutor):
                 else:
                     step.filter_top_volume = self._graph_hardware[
                         step.filter_vessel].max_volume
+
+                # Need this as setting max_volume reinitialises step and
+                # ApplyVacuum internal properties are lost.
+                for substep in step.steps:
+                    substep.on_prepare_for_execution(self._graph)
 
             prev_vessel_contents = vessel_contents
 
@@ -1224,8 +1233,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
                 self._get_hardware_map()
                 self._map_hardware_to_steps()
 
-                self._validate_ports()
-
                 enough_buffer_flasks, n_buffer_required, n_buffer_present =\
                     self._check_enough_buffer_flasks()
                 if not enough_buffer_flasks:
@@ -1234,9 +1241,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
 
                 self._add_internal_properties()
 
-                if sanity_check:
-                    for step in self._xdl.steps:
-                        self._do_sanity_check(step)
+                self._validate_ports()
 
                 # Add in steps implied by explicit steps.
                 self._add_implied_steps(interactive=interactive)
@@ -1250,6 +1255,10 @@ class ChemputerExecutor(AbstractXDLExecutor):
                 self._add_internal_properties()
                 self._add_all_volumes()
                 self._add_filter_volumes()
+
+                if sanity_check:
+                    for step in self._xdl.steps:
+                        self._do_sanity_check(step)
 
                 # Optimise procedure.
                 self._tidy_up_procedure()
