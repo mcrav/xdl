@@ -467,7 +467,11 @@ def get_clean_vessel_solvents(
                         solvents.append(organic_solvents[0])
     return solvents
 
-def add_vessel_cleaning_steps(xdl_obj: 'XDL', hardware: Hardware) -> 'XDL':
+def add_vessel_cleaning_steps(
+    xdl_obj: 'XDL',
+    hardware: Hardware,
+    interactive: bool
+) -> 'XDL':
     """Add CleanVessel steps to xdl_obj at appropriate places. Rule is that a
     CleanVessel step should be added after a vessel has been emptied only if the
     step before the emptying step was a Dissolve step. This ensures that any
@@ -487,6 +491,8 @@ def add_vessel_cleaning_steps(xdl_obj: 'XDL', hardware: Hardware) -> 'XDL':
             if 'water' not in solvent and xdl_obj.organic_cleaning_solvent:
                 solvent = xdl_obj.organic_cleaning_solvent
             xdl_obj.steps.insert(i, CleanVessel(vessel=vessel, solvent=solvent))
+    if interactive:
+        xdl_obj.steps = suggest_additional_clean_vessel_steps(xdl_obj)
     xdl_obj.steps = add_clean_vessel_temps(xdl_obj.steps)
     xdl_obj.steps = move_non_essential_clean_vessel_steps_to_end(xdl_obj.steps)
     return xdl_obj
@@ -610,6 +616,7 @@ def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
                     logger.info(f'Solvent changed to {chunk[i].solvent}\n')
                     time.sleep(1)
 
+
 def get_cleaning_chunks(xdl_obj: 'XDL') -> List[List[Step]]:
     """Takes slices out of xdl_obj steps showing context of cleaning. Chunks
     are the step before a set of CleanBackbone steps, the CleanBackbone steps,
@@ -638,3 +645,53 @@ def get_cleaning_chunks(xdl_obj: 'XDL') -> List[List[Step]]:
             i = chunk_end
         i += 1
     return chunks
+
+#######################################################
+# Interactive Suggestion of Additional Cleaning Steps #
+#######################################################
+
+def suggest_additional_clean_vessel_steps(xdl_obj: 'XDL') -> List[Step]:
+    """Suggest additional CleanVessel steps to user after all contents
+    transferred out of a given vessel.
+
+    Args:
+        xdl_obj (XDL): XDL object to verify cleaning steps.
+
+    Returns:
+        List[Step]: List of steps with new CleanVessel steps included.
+    """
+    suggest = None
+    while suggest not in ['y', 'n', '']:
+        suggest = input(
+            '\n\nReview suggested vessel cleaning steps? (y, [n])\n')
+    if suggest != 'y':
+        return xdl_obj.steps
+
+    # insert cleaning steps where instructed to do so interactively
+    available_solvents = get_available_solvents(xdl_obj)
+    for i, step in enumerate(xdl_obj.steps):
+        if step.name == 'Transfer' and step.properties['volume'] == 'all':
+            answer = None
+            while answer not in ['y', 'n', '']:
+                msg = f'\nClean vessel after this step? (y, [n])\n'
+                msg += f'\n  {step.name}'
+                msg += ''.join(
+                    [f'\n    {k}: {v}' for k, v in step.properties.items()]
+                ) + '\n'
+                answer = input(msg)
+                if answer == 'y':
+                    choice = None
+                    while not choice or choice not in available_solvents:
+                        msg = f'Which solvent should be used?\n\n'
+                        msg += '\n'.join(
+                            [f'    {solvent}' for solvent in available_solvents]
+                        ) + '\n'
+                        choice = input(msg)
+
+                    xdl_obj.steps.insert(
+                        (i + 1),
+                        CleanVessel(vessel=step.from_vessel, solvent=choice)
+                    )
+                else:
+                    continue
+    return xdl_obj.steps

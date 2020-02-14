@@ -607,7 +607,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
         """Add extra steps implied by explicit XDL steps."""
         self._add_filter_dead_volume_handling_steps()
         if self._xdl.auto_clean:
-            self._add_implied_clean_vessel_steps()
+            self._add_implied_clean_vessel_steps(interactive=interactive)
             self._add_implied_clean_backbone_steps(interactive=interactive)
         self._add_reagent_storage_steps()
         self._add_reagent_last_minute_addition_steps()
@@ -630,9 +630,9 @@ class ChemputerExecutor(AbstractXDLExecutor):
                 verify_cleaning_steps(self._xdl)
         self._add_internal_properties()
 
-    def _add_implied_clean_vessel_steps(self) -> None:
+    def _add_implied_clean_vessel_steps(self, interactive) -> None:
         """Add CleanVessel steps after steps which completely empty a vessel."""
-        add_vessel_cleaning_steps(self._xdl, self._graph_hardware)
+        add_vessel_cleaning_steps(self._xdl, self._graph_hardware, interactive)
         self._add_internal_properties()
 
     def _add_reagent_storage_steps(self) -> None:
