@@ -1,3 +1,4 @@
+from typing import Optional, List
 from ..steps_utility.pneumatic_controller import SwitchArgon
 from .general import Wait
 from ..steps_base import CConnect, CValveMoveToPosition
@@ -6,6 +7,7 @@ from .....step_utils.base_steps import AbstractStep
 from .....utils.graph import undirected_neighbors
 from .....constants import INERT_GAS_SYNONYMS
 from .....utils.errors import XDLError
+from ..steps_utility.cleaning import CleanBackbone
 
 def get_pneumatic_controller(graph, vessel):
     for node, data in undirected_neighbors(graph, vessel, data=True):
@@ -159,4 +161,52 @@ class Purge(AbstractStep):
             StartPurge(vessel=self.vessel),
             Wait(time=self.time),
             StopPurge(vessel=self.vessel)
+        ]
+
+class PurgeBackbone(AbstractStep):
+
+    def __init__(
+        self,
+        purge_gas: str = None,
+        purge_vessel: str = None,
+        waste_vessels: Optional[List[str]] = [],
+        **kwargs
+    ):
+        super().__init__(locals())
+
+    def final_sanity_check(self, graph):
+        try:
+            assert self.purge_vessel
+            assert_node_in_graph(graph, self.purge_vessel)
+        except AssertionError:
+            raise XDLError()
+
+        try:
+            for waste in self.waste_vessels:
+                assert_node_in_graph(graph, waste)
+        except AssertionError:
+            raise XDLError()
+
+    def on_prepare_for_execution(self, graph):
+        if self.purge_gas is None:
+            for node, data in graph.nodes(data=True):
+                if (data['class'] == 'ChemputerFlask'
+                        and data['chemical'] in INERT_GAS_SYNONYMS):
+                    self.purge_gas = data['chemical']
+                    break
+
+        elif self.purge_vessel is None:
+            for node, data in graph.nodes(data=True):
+                if (data['class'] == 'ChemputerFlask'
+                        and data['chemical'] == self.purge_gas):
+                    self.purge_vessel = node
+                    break
+
+    def get_steps(self):
+        return [
+            CleanBackbone(
+                solvent=self.purge_gas,
+                waste_vessels=self.waste_vessels,
+                solvent_vessel=self.purge_vessel
+            )
         ]

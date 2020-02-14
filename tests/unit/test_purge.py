@@ -43,3 +43,12 @@ def test_purge():
             assert step.steps[2].name == 'StopPurge'
 
     generic_chempiler_test(xdl_f, graph_f)
+
+
+def test_purge_backbone():
+    """Test purge step."""
+    xdl_f = os.path.join(FOLDER, 'purge_backbone.xdl')
+    graph_f = os.path.join(FOLDER, 'purge_graph.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f)
+    generic_chempiler_test(xdl_f, graph_f)
