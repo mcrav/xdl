@@ -4,7 +4,13 @@ import time
 import math
 from functools import partial
 
-from .base_steps import Step, AbstractAsyncStep, AbstractStep, AbstractBaseStep
+from .base_steps import (
+    Step,
+    AbstractAsyncStep,
+    AbstractStep,
+    AbstractBaseStep,
+    AbstractDynamicStep
+)
 
 if False:
     from chempiler import Chempiler
@@ -112,6 +118,33 @@ class Repeat(AbstractStep):
         for step in self.children:
             human_readable += f'    {step.human_readable()}\n'
         return human_readable
+
+class Loop(AbstractDynamicStep):
+    """Repeat children of this step indefinitely.
+
+    Args:
+        children (List[Step]): Child steps to repeat.
+
+    """
+    def __init__(
+        self, children: Union[Step, List[Step]]
+    ) -> None:
+        super().__init__(locals())
+
+        if type(children) != list:
+            self.children = [children]
+
+    def on_start(self):
+        """Nothing to be done."""
+        return []
+
+    def on_continue(self):
+        """Perform child steps"""
+        return self.children
+
+    def on_finish(self):
+        """Nothing to be done."""
+        return []
 
 class Parallelizer(object):
     """Parallelize given blocks of steps and offer stream of steps to execute at
