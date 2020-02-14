@@ -53,7 +53,9 @@
         move_speed="40"
         dispense_speed="40"
         viscous="False"
-        through_cartridge="None">
+        through_cartridge="None"
+        transfer_all="False"
+        from_vessel_has_stirrer="False">
         <CMove
           from_vessel="filter"
           to_vessel="separator"

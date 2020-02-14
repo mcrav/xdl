@@ -1,10 +1,16 @@
 from typing import Optional, List
 
-from .....constants import DEFAULT_PORTS, DEFAULT_VISCOUS_ASPIRATION_SPEED
+from .....constants import (
+    DEFAULT_PORTS,
+    DEFAULT_VISCOUS_ASPIRATION_SPEED,
+)
 from .....step_utils.base_steps import AbstractStep, Step
 from ..steps_base import CMove
+from .stirring import StopStir
 from .....localisation import HUMAN_READABLE_STEPS
 from .....utils.errors import XDLError
+from ...utils.execution import undirected_neighbors
+from .....constants import STIRRER_CLASSES
 
 class PrimePumpForAdd(AbstractStep):
     """Prime pump attached to given reagent flask in anticipation of Add step.
@@ -73,6 +79,8 @@ class Transfer(AbstractStep):
         dispense_speed: Optional[float] = 'default',
         viscous: Optional[bool] = 'default',
         through_cartridge: Optional[str] = None,
+        transfer_all: Optional[bool] = False,
+        from_vessel_has_stirrer: Optional[bool] = False,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -80,15 +88,21 @@ class Transfer(AbstractStep):
     def get_steps(self) -> List[Step]:
         dispense_speed = self.get_dispense_speed()
         aspiration_speed = self.get_aspiration_speed()
-        return [CMove(from_vessel=self.from_vessel,
-                      from_port=self.from_port,
-                      to_vessel=self.to_vessel,
-                      to_port=self.to_port,
-                      volume=self.volume,
-                      through=self.through_cartridge,
-                      aspiration_speed=aspiration_speed,
-                      move_speed=self.move_speed,
-                      dispense_speed=dispense_speed)]
+        steps = [CMove(from_vessel=self.from_vessel,
+                       from_port=self.from_port,
+                       to_vessel=self.to_vessel,
+                       to_port=self.to_port,
+                       volume=self.volume,
+                       through=self.through_cartridge,
+                       aspiration_speed=aspiration_speed,
+                       move_speed=self.move_speed,
+                       dispense_speed=dispense_speed)]
+
+        # Set by executor in _add_all_volumes
+        if self.transfer_all and self.from_vessel_has_stirrer:
+            steps.insert(0, StopStir(self.from_vessel))
+
+        return steps
 
     def final_sanity_check(self, graph):
         try:
@@ -123,6 +137,11 @@ class Transfer(AbstractStep):
             to_class = graph.nodes[self.to_vessel]['class']
             if to_class in DEFAULT_PORTS:
                 self.to_port = DEFAULT_PORTS[to_class]['to']
+
+        for _, data in undirected_neighbors(
+                graph, self.from_vessel, data=True):
+            if data['class'] in STIRRER_CLASSES:
+                self.from_vessel_has_stirrer = True
 
     def get_dispense_speed(self) -> float:
         if self.time and type(self.volume) != str:
