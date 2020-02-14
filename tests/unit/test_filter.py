@@ -36,3 +36,16 @@ def test_filter_inline():
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f)
     generic_chempiler_test(xdl_f, graph_f)
+
+def test_filter_use_filtrate():
+    """Test that no vacuum applied when using filtrate."""
+    xdl_f = os.path.join(FOLDER, 'filter_inline.xdl')
+    graph_f = os.path.join(FOLDER, 'bigrig.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f)
+    for step in x.steps:
+        if step.name == 'Filter':
+            assert (
+                not any([step.name == 'ApplyVacuum' for step in x.steps])
+                and step.vacuum_attached
+            )
