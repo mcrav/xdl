@@ -36,6 +36,7 @@ from .test_xdlexe import (
     test_xdlexe_missing_properties,
     test_execute_dynamic_steps_inidividually,
     test_xdlexe_decodes_symbols,
+    test_xdlexe_with_repeat
 )
 from .test_port_validation import test_port_validation
 from .test_get_graph_spec import test_get_graph_spec
