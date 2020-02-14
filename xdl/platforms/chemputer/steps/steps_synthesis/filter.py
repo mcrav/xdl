@@ -148,17 +148,28 @@ class Filter(AbstractStep):
         # Stirring already stopped at start of step
         if self.stir is False:
             return []
+
+        # Using filtrate so no point drying solid.
+        elif (self.filtrate_vessel is not None
+                and self.filtrate_vessel != self.waste_vessel):
+            return []
+
         else:
             return [self.get_stop_stir()]
 
     def apply_vacuum(self, port=None):
-        return [
-            ApplyVacuum(
-                vessel=self.filter_vessel,
-                time=self.wait_time,
-                port=port
-            )
-        ]
+        # Using filtrate so no point drying solid.
+        if (self.filtrate_vessel is not None
+                and self.filtrate_vessel != self.waste_vessel):
+            return []
+        else:
+            return [
+                ApplyVacuum(
+                    vessel=self.filter_vessel,
+                    time=self.wait_time,
+                    port=port
+                )
+            ]
 
     def get_aspiration_speed(self):
         aspiration_speed = self.aspiration_speed
