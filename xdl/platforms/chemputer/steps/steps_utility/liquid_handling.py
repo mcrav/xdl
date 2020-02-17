@@ -27,10 +27,17 @@ class PrimePumpForAdd(AbstractStep):
         'volume': '3 mL',
     }
 
+    INTERNAL_PROPS = [
+        'reagent_vessel',
+        'waste_vessel',
+    ]
+
     def __init__(
         self,
         reagent: str,
         volume: Optional[float] = 'default',
+
+        # Internal properties
         reagent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
         **kwargs
@@ -72,6 +79,12 @@ class Transfer(AbstractStep):
         'viscous': False,
     }
 
+    INTERNAL_PROPS = [
+        'through_cartridge',
+        'transfer_all',
+        'from_vessel_has_stirrer',
+    ]
+
     def __init__(
         self,
         from_vessel: str,
@@ -85,6 +98,8 @@ class Transfer(AbstractStep):
         move_speed: Optional[float] = 'default',
         dispense_speed: Optional[float] = 'default',
         viscous: Optional[bool] = 'default',
+
+        # Internal properties
         through_cartridge: Optional[str] = None,
         transfer_all: Optional[bool] = False,
         from_vessel_has_stirrer: Optional[bool] = False,

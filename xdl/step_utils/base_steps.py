@@ -21,6 +21,7 @@ class Step(XDLBase):
         properties (dict): Dictionary of step properties. Should be implemented
             in step __init__.
     """
+
     def __init__(self, param_dict):
         super().__init__(param_dict)
         if 'kwargs' in param_dict:

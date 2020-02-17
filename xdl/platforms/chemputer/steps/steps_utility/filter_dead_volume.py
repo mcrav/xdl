@@ -25,11 +25,23 @@ class AddFilterDeadVolume(AbstractStep):
         valve_unused_port (str): Given internally. Random unused position on
             valve.
     """
+
+    INTERNAL_PROPS = [
+        'waste_vessel',
+        'solvent_vessel',
+        'vacuum',
+        'inert_gas',
+        'vacuum_valve',
+        'valve_unused_port',
+    ]
+
     def __init__(
         self,
         filter_vessel: str,
         solvent: str,
         volume: float,
+
+        # Internal properties
         waste_vessel: Optional[str] = None,
         solvent_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,

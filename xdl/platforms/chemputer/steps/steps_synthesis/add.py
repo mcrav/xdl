@@ -71,6 +71,15 @@ class Add(AbstractStep):
         'anticlogging_reagent_volume': '10 mL',
     }
 
+    INTERNAL_PROPS = [
+        'through_cartridge',
+        'reagent_vessel',
+        'waste_vessel',
+        'flush_tube_vessel',
+        'vessel_type',
+        'anticlogging_solvent_vessel',
+    ]
+
     def __init__(
         self,
         reagent: str,
@@ -86,18 +95,19 @@ class Add(AbstractStep):
         time: Optional[float] = None,
         stir: Optional[bool] = False,
         stir_speed: Optional[float] = 'default',
-        through_cartridge: Optional[str] = None,
 
         anticlogging: Optional[bool] = 'default',
         anticlogging_solvent: Optional[str] = None,
         anticlogging_solvent_volume: Optional[float] = 'default',
         anticlogging_reagent_volume: Optional[float] = 'default',
-        anticlogging_solvent_vessel: Optional[str] = None,
 
+        # Internal properties
+        through_cartridge: Optional[str] = None,
         reagent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
         flush_tube_vessel: Optional[str] = None,
         vessel_type: Optional[str] = None,
+        anticlogging_solvent_vessel: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())

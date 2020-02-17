@@ -22,12 +22,18 @@ class RunColumn(AbstractStep):
         'move_speed': 5  # mL / min
     }
 
+    INTERNAL_PROPS = [
+        'buffer_flask',
+    ]
+
     def __init__(
         self,
         from_vessel: str,
         to_vessel: str,
         column: str = None,
         move_speed: Optional[float] = 'default',
+
+        # Internal properties
         buffer_flask: Optional[str] = None,
         **kwargs
     ) -> None:

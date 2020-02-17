@@ -102,55 +102,6 @@ DEFAULT_STIR_SPEED: int = 250
 #: Default speed to stir reagents that specify stirring in reagent flask.
 DEFAULT_STIR_REAGENT_FLASK_SPEED: int = 200
 
-
-INTERNAL_PROPERTIES = {
-    'Add': [
-        'reagent_vessel',
-        'waste_vessel',
-        'flush_tube_vessel',
-        'anticlogging_solvent_vessel'
-    ],
-    'AddCorrosive': ['reagent_vessel', 'air_vessel'],
-    'Filter': [
-        'waste_vessel',
-        'vacuum',
-        'inert_gas',
-        'filter_top_volume',
-        'vacuum_device'
-    ],
-    'WashSolid': [
-        'waste_vessel',
-        'vacuum',
-        'inert_gas',
-        'vacuum_device',
-        'vessel_type',
-        'valve_unused_port',
-        'vacuum_valve',
-    ],
-    'Dry': [
-        'waste_vessel',
-        'vacuum',
-        'inert_gas',
-        'vacuum_device',
-        'vacuum_valve',
-        'valve_unused_port',
-        'vessel_type',
-        'vessel_has_stirrer'
-    ],
-    'Separate': ['waste_vessel', 'buffer_flasks'],
-    'HeatChill': ['vessel_type'],
-    'PrimePumpForAdd': ['reagent_vessel', 'waste_vessel'],
-    'HeatChillToTemp': ['vessel_type'],
-    'StopHeatChill': ['vessel_type'],
-    'HeatChillReturnToRT': ['vessel_type'],
-    'CleanBackbone': ['solvent_vessel', 'waste_vessels'],
-    'AddFilterDeadVolume': ['waste_vessel', 'solvent_vessel'],
-    'RemoveFilterDeadVolume': ['waste_vessel'],
-    'Stir': ['vessel_type'],
-    'StopStir': ['vessel_has_stirrer'],
-}
-
-
 ################################
 # CHEMPUTER DEVICE CLASS NAMES #
 ################################

@@ -63,12 +63,23 @@ class ApplyVacuum(AbstractStep):
         'pressure': '400 mbar',
     }
 
+    INTERNAL_PROPS = [
+        'vacuum_valve',
+        'vacuum_source',
+        'vacuum_device',
+        'vacuum_valve_inert_gas',
+        'vacuum_valve_unused_port',
+        'pneumatic_controller'
+    ]
+
     def __init__(
         self,
         vessel: str,
         time: float,
         pressure: float = 'default',
         port: str = None,
+
+        # Internal properties
         vacuum_valve: str = None,
         vacuum_source: str = None,
         vacuum_device: str = None,

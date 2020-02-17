@@ -73,6 +73,17 @@ class WashSolid(AbstractStep):
         'anticlogging': False,
     }
 
+    INTERNAL_PROPS = [
+        'waste_vessel',
+        'vacuum',
+        'vacuum_device',
+        'inert_gas',
+        'vacuum_valve',
+        'valve_unused_port',
+        'vessel_type',
+        'filter_dead_volume',
+    ]
+
     def __init__(
         self,
         vessel: str,
@@ -83,9 +94,12 @@ class WashSolid(AbstractStep):
         stir: Optional[Union[bool, str]] = 'default',
         stir_time: Optional[float] = 'default',
         stir_speed: Optional[float] = 'default',
-        waste_vessel: Optional[str] = None,
-        filtrate_vessel: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
+        filtrate_vessel: Optional[str] = None,
+        anticlogging: Optional[bool] = 'default',
+
+        # Internal properties
+        waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
         vacuum_device: Optional[str] = None,
         inert_gas: Optional[str] = None,
@@ -93,7 +107,6 @@ class WashSolid(AbstractStep):
         valve_unused_port: Optional[Union[str, int]] = None,
         vessel_type: Optional[str] = None,
         filter_dead_volume: Optional[float] = None,
-        anticlogging: Optional[bool] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())

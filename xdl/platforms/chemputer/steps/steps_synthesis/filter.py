@@ -47,17 +47,26 @@ class Filter(AbstractStep):
         'anticlogging': False,
     }
 
+    INTERNAL_PROPS = [
+        'waste_vessel',
+        'filter_top_volume',
+        'inline_filter',
+        'vacuum_attached',
+    ]
+
     def __init__(
         self,
         filter_vessel: str,
-        filter_top_volume: Optional[float] = 0,
         wait_time: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
         stir: Optional[bool] = 'default',
         stir_speed: Optional[float] = 'default',
-        waste_vessel: Optional[str] = None,
         filtrate_vessel: Optional[str] = None,
         anticlogging: Optional[bool] = 'default',
+
+        # Internal properties
+        waste_vessel: Optional[str] = None,
+        filter_top_volume: Optional[float] = 0,
         inline_filter: Optional[bool] = False,
         vacuum_attached: Optional[bool] = False,
         **kwargs

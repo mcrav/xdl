@@ -48,6 +48,12 @@ class Separate(AbstractStep):
         'remove_dead_volume': True,
     }
 
+    INTERNAL_PROPS = [
+        'waste_vessel',
+        'buffer_flasks',
+        'through_cartridge',
+    ]
+
     def __init__(
         self,
         purpose: str,
@@ -57,16 +63,18 @@ class Separate(AbstractStep):
         product_bottom: bool,
         solvent: Optional[str] = None,
         through: Optional[str] = None,
-        through_cartridge: Optional[str] = None,
         from_port: Optional[str] = None,
         to_port: Optional[str] = None,
         solvent_volume: Optional[float] = 'default',
         n_separations: Optional[int] = 1,
         waste_phase_to_vessel: Optional[str] = None,
         waste_phase_to_port: Optional[str] = None,
+        remove_dead_volume: Optional[bool] = 'default',
+
+        # Internal properties
         waste_vessel: Optional[str] = None,
         buffer_flasks: Optional[List[str]] = [None, None],
-        remove_dead_volume: Optional[bool] = 'default',
+        through_cartridge: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
