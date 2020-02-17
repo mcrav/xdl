@@ -14,7 +14,7 @@ from ...utils.execution import (
     get_pneumatic_controller,
     get_vacuum_configuration,
 )
-from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
 
 class StartVacuum(AbstractStep):
     """Start vacuum pump attached to given vessel.
@@ -91,43 +91,36 @@ class ApplyVacuum(AbstractStep):
 
     def sanity_checks(self, graph):
         return [
-            (
-                self.vessel in graph.nodes(),
-                f'vessel {self.vessel} not found in graph.'
+            SanityCheck(
+                condition=self.vessel in graph.nodes(),
+                error_msg=f'vessel {self.vessel} not found in graph.',
             ),
 
-            (
-                (self.pneumatic_controller
-                 or (self.vacuum_valve and self.vacuum_source)),
-                f'Neither of valid hardware setups found.\n\
+            SanityCheck(
+                condition=(
+                    self.pneumatic_controller
+                    or (self.vacuum_valve and self.vacuum_source)
+                ),
+                error_msg=f'Neither of valid hardware setups found.\n\
  Option 1: vessel <-> pneumatic controller\n\
- Option 2: vessel <-> valve -> vacuum <- (Optional vacuum device)'
+ Option 2: vessel <-> valve -> vacuum <- (Optional vacuum device)',
             ),
 
-            (
-                (self.pneumatic_controller
-                 or (self.vacuum_valve_inert_gas is not None
-                     or self.vacuum_valve_unused_port is not None)),
-                f'Using vacuum valve, but cannot find inert gas or an unused\
- port to connect to after applying vacuum.'
+            SanityCheck(
+                condition=(
+                    self.pneumatic_controller
+                    or (self.vacuum_valve_inert_gas is not None
+                        or self.vacuum_valve_unused_port is not None)
+                ),
+                error_msg=f'Using vacuum valve, but cannot find inert gas or an unused\
+ port to connect to after applying vacuum.',
             ),
 
-            (
-                self.time > 0,
-                f'time property must be > 0'
-            ),
-
+            SanityCheck(
+                condition=self.time > 0,
+                error_msg=f'time property must be > 0',
+            )
         ]
-
-    def final_sanity_check(self, graph):
-        for condition, msg in self.sanity_checks(graph):
-            self.sanity_check(condition, msg)
-
-    def sanity_check(self, condition, msg):
-        try:
-            assert condition
-        except AssertionError:
-            raise XDLError(msg + '\n\n' + str(self.properties))
 
     def get_steps(self) -> List[Step]:
         if self.pneumatic_controller:

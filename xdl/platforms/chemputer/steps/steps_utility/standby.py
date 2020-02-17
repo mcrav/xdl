@@ -3,7 +3,7 @@ from .....step_utils import AbstractStep
 from .....step_utils.special_steps import Loop
 from .general import Wait
 from .cleaning import CleanBackbone
-from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
 
 class Standby(AbstractStep):
     """Move solvent around once every specified time interval to prevent
@@ -29,9 +29,11 @@ class Standby(AbstractStep):
         ]
         return [Loop(loop_steps)]
 
-    def final_sanity_check(self, graph):
-        try:
-            assert self.time_interval >= 3600.0
-        except AssertionError:
-            raise XDLError(
-                'Please specify standby time interval of at least 1 hour.')
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.time_interval >= 3600.0,
+                error_msg='Please specify standby time interval of at least 1\
+ hour.',
+            )
+        ]

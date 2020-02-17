@@ -1,4 +1,7 @@
 from typing import Any, Optional
+from .errors import XDLError
+if False:
+    from ..step_utils import Step
 
 def get_port_str(port: str) -> str:
     """Get str representing port for using in human_readable strings.
@@ -200,3 +203,21 @@ def format_val(val: float) -> str:
         val_str = val_str.rstrip('0')
 
     return val_str.rstrip('.')
+
+class SanityCheck(object):
+    """Class for Step sanity checks."""
+    def __init__(
+        self, condition: bool, error_msg: str = '', step: 'Step' = None
+    ) -> None:
+        self.condition = condition
+        self.error_msg = error_msg
+
+    def run(self, step):
+        try:
+            assert self.condition
+        except AssertionError:
+            raise XDLError(
+                f'{self.error_msg}\n\n\
+ {str(step.name)}\n\n\
+ {str(step.properties)}'
+            )
