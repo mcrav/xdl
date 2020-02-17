@@ -12,6 +12,7 @@ from ..steps_base import (
 from .general import Wait
 from .rotavap import RotavapStir
 from .....constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
+from ...utils.execution import get_vessel_stirrer
 
 class SetStirRate(AbstractStep):
     """Set stir rate. Works on rotavap, reactor or filter.
@@ -95,6 +96,12 @@ class StopStir(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if get_vessel_stirrer(graph, self.vessel):
+            self.vessel_has_stirrer = True
+        else:
+            self.vessel_has_stirrer = False
 
     def get_steps(self) -> List[Step]:
         if self.vessel_has_stirrer:

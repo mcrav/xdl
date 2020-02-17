@@ -32,6 +32,7 @@ from .....constants import (
 )
 from .....utils.misc import SanityCheck
 from .....localisation import HUMAN_READABLE_STEPS
+from ...utils.execution import get_heater_chiller
 
 def heater_chiller_sanity_checks(heater, chiller, temp):
     checks = []
@@ -89,6 +90,9 @@ class StartHeatChill(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []
@@ -177,6 +181,9 @@ class HeatChillSetTemp(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
+    def on_prepare_for_execution(self, graph):
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
+
     def get_steps(self) -> List[Step]:
         steps = []
         if self.vessel_type:
@@ -254,6 +261,9 @@ class HeatChillToTemp(AbstractStep):
     ) -> None:
         super().__init__(locals())
         assert temp is not None
+
+    def on_prepare_for_execution(self, graph):
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []
@@ -364,6 +374,9 @@ class StopHeatChill(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []

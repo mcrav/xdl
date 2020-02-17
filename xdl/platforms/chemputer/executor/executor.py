@@ -10,14 +10,10 @@ from ....constants import (
     DEFAULT_STIR_SPEED,
     DEFAULT_STIR_REAGENT_FLASK_SPEED,
     CHEMPUTER_FILTER_CLASS_NAME,
-    CHEMPUTER_VACUUM_CLASS_NAME,
-    CHEMPUTER_VALVE_CLASS_NAME,
-    HEATER_CLASSES,
-    CHILLER_CLASSES,
     FILTER_DEAD_VOLUME_INERT_GAS_METHOD,
     FILTER_DEAD_VOLUME_LIQUID_METHOD,
 )
-from ....utils.graph import get_graph, undirected_neighbors
+from ....utils.graph import get_graph
 from ....utils.errors import XDLError
 from ....step_utils import (
     AbstractBaseStep,
@@ -53,7 +49,6 @@ from ..steps import (
 from .tracking import iter_vessel_contents
 from .graph import (
     hardware_from_graph,
-    make_vessel_map,
 )
 from .utils import VesselContents, is_aqueous, validate_port
 from .cleaning import (
@@ -247,12 +242,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
         """
         for step in step_list:
 
-            if 'vessel_has_stirrer' in step.properties:
-                step.vessel_has_stirrer = step.vessel not in [
-                    item.id
-                    for item in self._graph_hardware.rotavaps
-                    + self._graph_hardware.flasks]
-
             if 'vessel_type' in step.properties and not step.vessel_type:
                 step.vessel_type = self._get_vessel_type(step.vessel)
 
@@ -298,10 +287,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
                         (get_pneumatic_controller(
                             self._graph, step.vessel, port))
 
-            if 'heater' in step.properties and 'chiller' in step.properties:
-                step.heater, step.chiller = self._find_heater_chiller(
-                    self._graph, step.vessel)
-
             self._add_default_ports(step)
 
             step.on_prepare_for_execution(self._graph)
@@ -336,16 +321,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
         if changed:
             step.update()
         return step
-
-    def _find_heater_chiller(self, graph, node):
-        heater, chiller = None, None
-        neighbors = undirected_neighbors(graph, node)
-        for neighbor in neighbors:
-            if graph.nodes[neighbor]['class'] in HEATER_CLASSES:
-                heater = neighbor
-            elif graph.nodes[neighbor]['class'] in CHILLER_CLASSES:
-                chiller = neighbor
-        return heater, chiller
 
     def _map_hardware_to_steps(self) -> None:
         """

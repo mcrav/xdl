@@ -3,7 +3,14 @@ from networkx import MultiDiGraph, NetworkXNoPath
 from networkx.algorithms import shortest_path_length
 from ....utils.graph import undirected_neighbors
 from ....constants import (
-    VACUUM_CLASSES, INERT_GAS_SYNONYMS, CHEMPUTER_FLASK, CHEMPUTER_CARTRIDGE)
+    VACUUM_CLASSES,
+    INERT_GAS_SYNONYMS,
+    CHEMPUTER_FLASK,
+    CHEMPUTER_CARTRIDGE,
+    STIRRER_CLASSES,
+    HEATER_CLASSES,
+    CHILLER_CLASSES
+)
 
 def get_unused_valve_port(graph, valve_node):
     used_ports = []
@@ -111,18 +118,15 @@ def get_buffer_flasks(graph: MultiDiGraph) -> List[str]:
             buffer_flasks.append(node)
     return buffer_flasks
 
-def get_neighboring_vacuum(graph: MultiDiGraph, vessel: str) -> str:
-    for neighbor, data in undirected_neighbors(graph, vessel, data=True):
-        neighbor_class = data['class']
-        if neighbor_class == 'ChemputerVacuum':
-            return neighbor
-        elif neighbor_class == 'ChemputerValve':
-            for valve_neighbor, valve_neighbor_data in undirected_neighbors(
-                    graph, neighbor, data=True):
-                if valve_neighbor_data['class'] == 'ChemputerVacuum':
-                    return neighbor
-    return None
-
+def get_heater_chiller(graph, node):
+    heater, chiller = None, None
+    neighbors = undirected_neighbors(graph, node)
+    for neighbor in neighbors:
+        if graph.nodes[neighbor]['class'] in HEATER_CLASSES:
+            heater = neighbor
+        elif graph.nodes[neighbor]['class'] in CHILLER_CLASSES:
+            chiller = neighbor
+    return heater, chiller
 
 def get_nearest_node(graph: MultiDiGraph, src: str, target_vessel_class: str):
     # Make graph undirected so actual closest waste vessels are found, not
@@ -146,6 +150,12 @@ def get_nearest_node(graph: MultiDiGraph, src: str, target_vessel_class: str):
             pass
 
     return closest_target_vessel
+
+def get_vessel_stirrer(graph, vessel):
+    for neighbor, data in undirected_neighbors(graph, vessel, data=True):
+        if data['class'] in STIRRER_CLASSES:
+            return neighbor
+    return None
 
 def get_reagent_vessel(
         graph: MultiDiGraph, reagent: str) -> Union[str, None]:

@@ -17,7 +17,8 @@ from .....constants import (
     ROOM_TEMPERATURE,
     CHEMPUTER_WASTE,
 )
-from ...utils.execution import get_nearest_node, get_vacuum_configuration
+from ...utils.execution import (
+    get_nearest_node, get_vacuum_configuration, get_vessel_stirrer)
 
 class Dry(AbstractStep):
     """Dry given vessel by applying vacuum for given time.
@@ -76,6 +77,11 @@ class Dry(AbstractStep):
         if not self.waste_vessel:
             self.waste_vessel = get_nearest_node(
                 graph, self.vessel, CHEMPUTER_WASTE)
+
+        if get_vessel_stirrer(graph, self.vessel):
+            self.vessel_has_stirrer = True
+        else:
+            self.vessel_has_stirrer = False
 
         vacuum_info = get_vacuum_configuration(graph, self.vessel)
         if not self.vacuum:

@@ -6,7 +6,11 @@ from ..steps_base import CMove
 from .dry import Dry
 from .....utils.misc import SanityCheck
 from ...utils.execution import (
-    get_vacuum_configuration, get_nearest_node, get_reagent_vessel)
+    get_vacuum_configuration,
+    get_nearest_node,
+    get_reagent_vessel,
+    get_heater_chiller,
+)
 from .....constants import CHEMPUTER_WASTE
 
 class CleanVessel(AbstractStep):
@@ -52,6 +56,9 @@ class CleanVessel(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
+
         if not self.waste_vessel:
             self.waste_vessel = get_nearest_node(
                 graph, self.vessel, CHEMPUTER_WASTE)

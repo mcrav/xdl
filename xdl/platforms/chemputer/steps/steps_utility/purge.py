@@ -2,10 +2,7 @@ from typing import Optional, List
 from ..steps_utility.pneumatic_controller import SwitchArgon
 from .general import Wait
 from ..steps_base import CConnect, CValveMoveToPosition
-from ...utils.execution import (
-    get_unused_valve_port, get_vacuum_configuration)
 from .....step_utils.base_steps import AbstractStep
-from .....utils.graph import undirected_neighbors
 from .....constants import INERT_GAS_SYNONYMS
 from .....utils.misc import SanityCheck
 from ..steps_utility.cleaning import CleanBackbone
@@ -34,7 +31,8 @@ class StartPurge(AbstractStep):
 
     def on_prepare_for_execution(self, graph):
         self.pneumatic_controller = self.inert_gas = None
-        self.pneumatic_controller, _ = get_pneumatic_controller(graph, self.vessel)
+        self.pneumatic_controller, _ = get_pneumatic_controller(
+            graph, self.vessel)
         if not self.pneumatic_controller:
             vacuum_info = get_vacuum_configuration(graph, self.vessel)
             if not self.pneumatic_controller and not self.inert_gas:
@@ -87,7 +85,8 @@ class StopPurge(AbstractStep):
 
     def on_prepare_for_execution(self, graph):
         self.pneumatic_controller = self.inert_gas = None
-        self.pneumatic_controller, _ = get_pneumatic_controller(graph, self.vessel)
+        self.pneumatic_controller, _ = get_pneumatic_controller(
+            graph, self.vessel)
         if not self.pneumatic_controller:
             vacuum_info = get_vacuum_configuration(graph, self.vessel)
             if not self.pneumatic_controller:

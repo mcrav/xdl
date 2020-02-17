@@ -10,8 +10,10 @@ from .stirring import StopStir
 from .....localisation import HUMAN_READABLE_STEPS
 from .....utils.misc import SanityCheck
 from ...utils.execution import (
-    undirected_neighbors, get_reagent_vessel, get_cartridge)
-from .....constants import STIRRER_CLASSES
+    get_reagent_vessel,
+    get_cartridge,
+    get_vessel_stirrer
+)
 
 class PrimePumpForAdd(AbstractStep):
     """Prime pump attached to given reagent flask in anticipation of Add step.
@@ -109,10 +111,10 @@ class Transfer(AbstractStep):
             if to_class in DEFAULT_PORTS:
                 self.to_port = DEFAULT_PORTS[to_class]['to']
 
-        for _, data in undirected_neighbors(
-                graph, self.from_vessel, data=True):
-            if data['class'] in STIRRER_CLASSES:
-                self.from_vessel_has_stirrer = True
+        if get_vessel_stirrer(graph, self.from_vessel):
+            self.from_vessel_has_stirrer = True
+        else:
+            self.from_vessel_has_stirrer = False
 
     def get_steps(self) -> List[Step]:
         dispense_speed = self.get_dispense_speed()

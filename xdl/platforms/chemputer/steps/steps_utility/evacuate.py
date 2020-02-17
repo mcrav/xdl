@@ -5,7 +5,7 @@ from ..steps_utility import (
 from ..steps_base import CConnect
 from .....step_utils.special_steps import Repeat
 from ...utils.execution import (
-    get_pneumatic_controller, get_nearest_node, get_vacuum_configuration)
+    get_pneumatic_controller, get_vacuum_configuration)
 from .....utils.misc import SanityCheck
 
 class Evacuate(AbstractStep):
