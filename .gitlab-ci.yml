@@ -25,9 +25,8 @@ stages:
     - pip freeze
 
   script:
-  - pytest tests/integration/test_prepare_for_execution.py -x
-  - pytest tests/unit/all_unit_tests.py -x
-  - pytest tests/integration/test_chempiler.py -x
+  - pytest tests/chemputer/ -m "unit" -x
+  - pytest tests/chemputer/ -m "integration" -x
 
 test-python:3.6:
     extends: ".test"

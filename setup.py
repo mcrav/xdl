@@ -20,6 +20,7 @@ setup(
             'localisation/chemputer/steps_utility/liquid_handling.txt',
             'localisation/chemputer/steps_utility/evacuate.txt',
             'localisation/chemputer/steps_utility/general.txt',
+            'localisation/chemputer/steps_utility/shutdown.txt',
             'localisation/chemputer/steps_utility/stirring.txt',
             'localisation/chemputer/steps_synthesis/heatchill.txt',
             'localisation/chemputer/steps_synthesis/clean_vessel.txt',

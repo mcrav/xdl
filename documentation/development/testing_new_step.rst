@@ -27,7 +27,7 @@ tutorial.
     from ..utils import generic_chempiler_test
 
     HERE = os.path.abspath(os.path.dirname(__file__))
-    FOLDER = os.path.join(HERE, 'files')
+    FOLDER = os.path.join(HERE, '..', 'files')
 
     def test_quantitative_transfer():
         """Test QuantitativeTransfer step."""
