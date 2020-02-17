@@ -1,13 +1,15 @@
+from typing import List
 from ..utils import XDLBase
 from ..constants import DEFAULT_INSTANT_DURATION
 import logging
 import threading
 import copy
 from abc import ABC, abstractmethod
-from ..utils.misc import format_property
+from ..utils.misc import format_property, SanityCheck
 from ..utils.graph import get_graph
 from ..utils.errors import XDLError
 from ..localisation import HUMAN_READABLE_STEPS
+from networkx import MultiDiGraph
 
 if False:
     from chempiler import Chempiler
@@ -44,6 +46,20 @@ class Step(XDLBase):
         else:
             human_readable = self.name
         return human_readable
+
+    def sanity_checks(self, graph: MultiDiGraph) -> List[SanityCheck]:
+        """Abstract methods that should return a list of SanityCheck objects
+        to be checked by final_sanity_check.
+        """
+        return []
+
+    def final_sanity_check(self, graph: MultiDiGraph):
+        """Run all SanityCheck objects returned by sanity_checks. Can be
+        extended if necessary but super().final_sanity_check() should always
+        be called.
+        """
+        for sanity_check in self.sanity_checks(graph):
+            sanity_check.run(self)
 
 class AbstractStep(Step, ABC):
     """Abstract base class for all steps that contain other steps.
@@ -84,7 +100,7 @@ class AbstractStep(Step, ABC):
             step.release_lock(chempiler, locking_pid)
 
     def final_sanity_check(self, graph):
-        pass
+        super().final_sanity_check(graph)
 
     def on_prepare_for_execution(self, graph):
         pass
@@ -179,7 +195,7 @@ class AbstractBaseStep(Step, ABC):
         pass
 
     def final_sanity_check(self, graph):
-        pass
+        super().final_sanity_check(graph)
 
     @property
     def requirements(self):
@@ -212,7 +228,7 @@ class AbstractBaseStep(Step, ABC):
         locks, _, unlocks = self.locks(chempiler)
         chempiler.release_lock(locks + unlocks, locking_pid)
 
-class AbstractAsyncStep(XDLBase):
+class AbstractAsyncStep(Step):
     """For executing code asynchronously. Can only be used programtically,
     no way of encoding this in XDL files.
 
@@ -228,7 +244,7 @@ class AbstractAsyncStep(XDLBase):
         return
 
     def final_sanity_check(self, graph):
-        return
+        super().final_sanity_check(graph)
 
     def execute(self, chempiler, logger=None, level=0):
         self.thread = threading.Thread(
@@ -246,7 +262,7 @@ class AbstractAsyncStep(XDLBase):
         self._should_end = True
 
 
-class AbstractDynamicStep(XDLBase):
+class AbstractDynamicStep(Step):
     """Step for containing dynamic experiments in which feedback from analytical
     equipment controls the flow of the experiment.
 
@@ -305,7 +321,7 @@ class AbstractDynamicStep(XDLBase):
         self.execute(chempiler, logger=logger, level=level)
 
     def final_sanity_check(self, graph):
-        pass
+        super().final_sanity_check(graph)
 
     def _post_finish(self):
         """Called after steps returned by on_finish have finished executing to
@@ -403,7 +419,7 @@ class UnimplementedStep(Step):
         return {}
 
     def final_sanity_check(self, graph):
-        pass
+        super().final_sanity_check(graph)
 
     def on_prepare_for_execution(self, graph):
         pass

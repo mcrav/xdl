@@ -30,31 +30,44 @@ from .....constants import (
     ROOM_TEMPERATURE,
     DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME
 )
-from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
 from .....localisation import HUMAN_READABLE_STEPS
 
-def heater_chiller_sanity_check(heater, chiller, temp):
+def heater_chiller_sanity_checks(heater, chiller, temp):
+    checks = []
     if not heater and chiller:
-        try:
-            assert temp <= CHILLER_MAX_TEMP
-            assert temp >= CHILLER_MIN_TEMP
-        except AssertionError:
-            raise XDLError(
-                f'{temp} is an invalid temperature for a chiller.')
+        for condition in [
+            temp <= CHILLER_MAX_TEMP,
+            temp >= CHILLER_MIN_TEMP
+        ]:
+            checks.append(
+                SanityCheck(
+                    condition=condition,
+                    error_msg=f'{temp} is an invalid temperature for a\
+ chiller.',
+                )
+            )
 
     if not chiller and heater:
-        try:
-            assert temp >= 18
-            assert temp <= HEATER_MAX_TEMP
-        except AssertionError:
-            raise XDLError(
-                f'{temp} is an invalid temperature for a heater.')
+        for condition in [
+            temp >= 18,
+            temp <= HEATER_MAX_TEMP
+        ]:
+            checks.append(
+                SanityCheck(
+                    condition=condition,
+                    error_msg=f'{temp} is an invalid temperature for a heater.'
+                )
+            )
 
-    try:
-        assert CHILLER_MIN_TEMP <= temp <= HEATER_MAX_TEMP
-    except AssertionError:
-        raise XDLError(
-            f'{temp} is an invalid temperature for a heater or a chiller.')
+    checks.append(
+        SanityCheck(
+            condition=CHILLER_MIN_TEMP <= temp <= HEATER_MAX_TEMP,
+            error_msg=f'{temp} is an invalid temperature for a heater or a\
+ chiller.'
+        )
+    )
+    return checks
 
 class StartHeatChill(AbstractStep):
     """Start heating/chilling vessel to given temp and leave heater/chiller on.
@@ -117,20 +130,23 @@ class StartHeatChill(AbstractStep):
             CRotavapStartHeater(rotavap_name=self.vessel),
         ]
 
-    def final_sanity_check(self, graph):
-        try:
-            assert self.heater or self.chiller or self.vessel_type == 'rotavap'
-        except AssertionError:
-            raise XDLError(f'Trying to heat/chill vessel "{self.vessel}" with\
- no heater or chiller attached.')
-
-        heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
-
-        try:
-            assert self.steps
-        except AssertionError:
-            raise XDLError(f'Unable to heat/chill vessel "{self.vessel}".\
- {self.properties}')
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=(
+                    self.heater
+                    or self.chiller
+                    or self.vessel_type == 'rotavap'
+                ),
+                error_msg=f'Trying to heat/chill vessel "{self.vessel}" with\
+ no heater or chiller attached.'
+            ),
+            SanityCheck(
+                condition=self.steps,
+                error_msg=f'Unable to heat/chill vessel "{self.vessel}".\
+ {self.properties}'
+            )
+        ] + heater_chiller_sanity_checks(self.heater, self.chiller, self.temp)
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
@@ -179,9 +195,12 @@ class HeatChillSetTemp(AbstractStep):
                     )
         return steps
 
-    def final_sanity_check(self, graph):
-        assert self.steps
-        heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.steps
+            )
+        ] + heater_chiller_sanity_checks(self.heater, self.chiller, self.temp)
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
@@ -266,8 +285,9 @@ class HeatChillToTemp(AbstractStep):
                 vessel=self.vessel, vessel_type=self.vessel_type))
         return steps
 
-    def final_sanity_check(self, graph):
-        heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
+    def sanity_checks(self, graph):
+        return heater_chiller_sanity_checks(
+            self.heater, self.chiller, self.temp)
 
     def get_chiller_steps(self):
         return [

@@ -5,7 +5,7 @@ from ..steps_utility import (
 from ..steps_base import CConnect
 from .....step_utils.special_steps import Repeat
 from ...utils.execution import get_pneumatic_controller
-from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
 
 class Evacuate(AbstractStep):
     """Evacuate given vessel with inert gas.
@@ -48,13 +48,14 @@ class Evacuate(AbstractStep):
         self.pneumatic_controller, _ = get_pneumatic_controller(
             graph, self.vessel)
 
-    def final_sanity_check(self, graph):
-        try:
-            assert self.pneumatic_controller or (self.vacuum and self.inert_gas)
-        except AssertionError:
-            raise XDLError(
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                self.pneumatic_controller or (self.vacuum and self.inert_gas),
                 f'Cannot find pneumatic controller or vacuum and inert gas\
- connected to {self.vessel}. No way to perform evacuation.')
+ connected to {self.vessel}. No way to perform evacuation.',
+            ),
+        ]
 
     def get_steps(self):
         if self.pneumatic_controller:

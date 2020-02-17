@@ -8,7 +8,7 @@ from .....step_utils.base_steps import AbstractStep, Step
 from ..steps_base import CMove
 from .stirring import StopStir
 from .....localisation import HUMAN_READABLE_STEPS
-from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
 from ...utils.execution import undirected_neighbors
 from .....constants import STIRRER_CLASSES
 
@@ -104,23 +104,22 @@ class Transfer(AbstractStep):
 
         return steps
 
-    def final_sanity_check(self, graph):
-        try:
-            assert self.from_vessel
-        except AssertionError:
-            raise XDLError('from_vessel must be node in graph.')
-
-        try:
-            assert self.to_vessel
-        except AssertionError:
-            raise XDLError('to_vessel must be node in graph.')
-
-        try:
-            assert not self.through or self.through_cartridge
-        except AssertionError:
-            raise XDLError(
-                f'Trying to transfer through "{self.through}" but cannot find\
- cartridge containing {self.through}.')
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.from_vessel,
+                error_msg='from_vessel must be node in graph.',
+            ),
+            SanityCheck(
+                condition=self.to_vessel,
+                error_msg='to_vessel must be node in graph.'
+            ),
+            SanityCheck(
+                condition=not self.through or self.through_cartridge,
+                error_msg=f'Trying to transfer through "{self.through}" but cannot find\
+ cartridge containing {self.through}.'
+            )
+        ]
 
     def on_prepare_for_execution(self, graph) -> str:
         """If self.port is None, return default port for different vessel types.

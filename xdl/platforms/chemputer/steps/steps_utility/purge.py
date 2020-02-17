@@ -6,7 +6,7 @@ from ...utils.execution import get_unused_valve_port
 from .....step_utils.base_steps import AbstractStep
 from .....utils.graph import undirected_neighbors
 from .....constants import INERT_GAS_SYNONYMS
-from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
 from ..steps_utility.cleaning import CleanBackbone
 
 def get_pneumatic_controller(graph, vessel):
@@ -25,8 +25,8 @@ def get_inert_gas(graph, vessel):
                     return node, valve_node
     return None, None
 
-def assert_node_in_graph(graph, node):
-    assert node in list(graph.nodes())
+def node_in_graph(graph, node):
+    return node in list(graph.nodes())
 
 class StartPurge(AbstractStep):
     def __init__(
@@ -38,13 +38,14 @@ class StartPurge(AbstractStep):
     ):
         super().__init__(locals())
 
-    def final_sanity_check(self, graph):
-        try:
-            assert self.pneumatic_controller or self.inert_gas
-        except AssertionError:
-            raise XDLError(
-                f'Cannot find pneumatic controller or inert gas connected to\
- {self.vessel} so cannot purge.')
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.pneumatic_controller or self.inert_gas,
+                error_msg=f'Cannot find pneumatic controller or inert gas connected to\
+ {self.vessel} so cannot purge.'
+            )
+        ]
 
     def on_prepare_for_execution(self, graph):
         self.pneumatic_controller = self.inert_gas = None
@@ -83,19 +84,19 @@ class StopPurge(AbstractStep):
     ):
         super().__init__(locals())
 
-    def final_sanity_check(self, graph):
-        try:
-            assert self.pneumatic_controller or self.inert_gas
-        except AssertionError:
-            raise XDLError(
-                f'Cannot find pneumatic controller or inert gas connected to\
- {self.vessel} so cannot purge.')
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.pneumatic_controller or self.inert_gas,
+                error_msg=f'Cannot find pneumatic controller or inert gas connected to\
+ {self.vessel} so cannot purge.'
+            ),
 
-        try:
-            assert_node_in_graph(graph, self.vessel)
-        except AssertionError:
-            raise XDLError(
-                f'Unable to find {self.vessel} in graph.')
+            SanityCheck(
+                condition=node_in_graph(graph, self.vessel),
+                error_msg=f'Unable to find {self.vessel} in graph.'
+            )
+        ]
 
     def on_prepare_for_execution(self, graph):
         self.pneumatic_controller = self.inert_gas = None
@@ -141,17 +142,17 @@ class Purge(AbstractStep):
     ):
         super().__init__(locals())
 
-    def final_sanity_check(self, graph):
-        try:
-            assert_node_in_graph(graph, self.vessel)
-        except AssertionError:
-            raise XDLError(
-                f'Unable to find {self.vessel} in graph.')
-
-        try:
-            assert self.time > 0
-        except AssertionError:
-            raise XDLError('Purge time must be > 0.')
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=node_in_graph(graph, self.vessel),
+                error_msg=f'Unable to find {self.vessel} in graph.',
+            ),
+            SanityCheck(
+                condition=self.time > 0,
+                error_msg='Purge time must be > 0.'
+            )
+        ]
 
     def on_prepare_for_execution(self, graph):
         return
@@ -174,18 +175,22 @@ class PurgeBackbone(AbstractStep):
     ):
         super().__init__(locals())
 
-    def final_sanity_check(self, graph):
-        try:
-            assert self.purge_vessel
-            assert_node_in_graph(graph, self.purge_vessel)
-        except AssertionError:
-            raise XDLError()
-
-        try:
-            for waste in self.waste_vessels:
-                assert_node_in_graph(graph, waste)
-        except AssertionError:
-            raise XDLError()
+    def sanity_checks(self, graph):
+        checks = [
+            SanityCheck(
+                condition=self.purge_vessel,
+            ),
+            SanityCheck(
+                condition=node_in_graph(graph, self.purge_vessel)
+            )
+        ]
+        waste_checks = [
+            SanityCheck(
+                node_in_graph(graph, waste)
+                for waste in self.waste_vessels
+            )
+        ]
+        return checks + waste_checks
 
     def on_prepare_for_execution(self, graph):
         if self.purge_gas is None:

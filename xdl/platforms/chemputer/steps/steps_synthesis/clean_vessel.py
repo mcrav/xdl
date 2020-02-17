@@ -4,7 +4,7 @@ from ..steps_utility import (
     StartStir, StopStir, Wait, HeatChillToTemp, HeatChillReturnToRT)
 from ..steps_base import CMove
 from .dry import Dry
-from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
 from ...utils.execution import get_neighboring_vacuum
 
 class CleanVessel(AbstractStep):
@@ -49,31 +49,30 @@ class CleanVessel(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    def final_sanity_check(self, graph):
-        try:
-            assert self.solvent_vessel
-        except AssertionError:
-            raise XDLError(
-                f'No solvent vessel found in graph for {self.solvent}')
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.solvent_vessel,
+                error_msg=f'No solvent vessel found in graph for {self.solvent}'
+            ),
 
-        try:
-            assert self.waste_vessel
-        except AssertionError:
-            raise XDLError(
-                f'No waste vessel found for "{self.vessel}".')
+            SanityCheck(
+                condition=self.waste_vessel,
+                error_msg=f'No waste vessel found for "{self.vessel}".'
+            ),
 
-        try:
-            assert self.cleans > 0
-        except AssertionError:
-            raise XDLError(
-                f'`cleans` property must be > 0. {self.cleans} is an invalid\
- value.')
+            SanityCheck(
+                condition=self.cleans > 0,
+                error_msg=f'`cleans` property must be > 0. {self.cleans} is an\
+ invalid value.'
+            ),
 
-        try:
-            assert self.volume and self.volume > 0
-        except AssertionError:
-            raise XDLError(
-                f'`volume` must be > 0. {self.volume} is an invalid value.')
+            SanityCheck(
+                condition=self.volume and self.volume > 0,
+                error_msg=f'`volume` must be > 0. {self.volume} is an invalid\
+ value.'
+            ),
+        ]
 
     def on_prepare_for_execution(self, graph):
         for node in graph.nodes():

@@ -8,7 +8,7 @@ from .....constants import (
     DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
     DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED,
 )
-from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
 from ...utils.execution import get_vacuum_configuration
 
 class Filter(AbstractStep):
@@ -208,16 +208,18 @@ class FilterTo(AbstractStep):
             )
         ]
 
-    def final_sanity_check(self, graph):
-        try:
-            full_node = graph.nodes[self.from_vessel]
-            assert 'can_filter' in full_node and full_node['can_filter']
-        except AssertionError:
-            raise XDLError(f"from_vessel ({self.from_vessel}) doesn't have\
- can_filter property == True")
+    def sanity_checks(self, graph):
+        full_node = graph.nodes[self.from_vessel]
+        return [
+            SanityCheck(
+                condition='can_filter' in full_node and full_node['can_filter'],
+                error_msg=f"from_vessel ({self.from_vessel}) doesn't have\
+ can_filter property == True"
+            ),
 
-        try:
-            assert self.from_vessel != self.to_vessel
-        except AssertionError:
-            raise XDLError(f"from_vessel and to_vessel can't be the same node\
- ({self.from_vessel}).")
+            SanityCheck(
+                condition=self.from_vessel != self.to_vessel,
+                error_msg=f"from_vessel and to_vessel can't be the same node\
+ ({self.from_vessel})."
+            )
+        ]

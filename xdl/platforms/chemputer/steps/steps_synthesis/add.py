@@ -9,7 +9,7 @@ from .....constants import (
     DEFAULT_VISCOUS_ASPIRATION_SPEED,
 )
 from .....localisation import HUMAN_READABLE_STEPS
-from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
 
 class Add(AbstractStep):
     """Add given volume of given reagent to given vessel.
@@ -203,10 +203,11 @@ class Add(AbstractStep):
             return self.volume / (self.time / 60)
         return self.dispense_speed
 
-    def final_sanity_check(self, graph):
-        try:
-            assert not self.through or self.through_cartridge
-        except AssertionError:
-            raise XDLError(
-                f'Trying to add through "{self.through}" but cannot find\
- cartridge containing {self.through}.')
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=not self.through or self.through_cartridge,
+                error_msg=f'Trying to add through "{self.through}" but cannot\
+ find cartridge containing {self.through}.'
+            )
+        ]

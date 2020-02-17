@@ -11,6 +11,7 @@ from .....constants import (
     DEFAULT_SEPARATION_SETTLE_TIME,
 )
 from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
 from .....localisation import HUMAN_READABLE_STEPS
 from ...utils.execution import get_buffer_flasks
 
@@ -413,39 +414,39 @@ class Separate(AbstractStep):
     #  Abstract Method implementations #
     ####################################
 
-    def final_sanity_check(self, graph):
+    def sanity_checks(self, graph):
         buffer_flasks = get_buffer_flasks(graph)
-        try:
-            assert len(buffer_flasks) >= self.buffer_flasks_required
-        except AssertionError:
-            raise XDLError('Not enough buffer flasks in graph. Create buffer\
- flasks as ChemputerFlask nodes with an empty chemical property.')
+        return [
+            SanityCheck(
+                condition=len(buffer_flasks) >= self.buffer_flasks_required,
+                error_msg='Not enough buffer flasks in graph. Create buffer\
+ flasks as ChemputerFlask nodes with an empty chemical property.'
+            ),
 
-        try:
-            assert self.to_vessel != self.waste_phase_to_vessel
-        except AssertionError:
-            raise XDLError('Separate step `to_vessel` must be different to\
- `waste_phase_to_vessel` otherwise both phases end up in the same vessel.')
+            SanityCheck(
+                condition=self.to_vessel != self.waste_phase_to_vessel,
+                error_msg='Separate step `to_vessel` must be different to\
+ `waste_phase_to_vessel` otherwise both phases end up in the same vessel.'
+            ),
 
-        try:
-            assert not self.solvent or self.solvent_volume > 0
-        except AssertionError:
-            raise XDLError(
-                'Solvent volume must be greater than 0 mL if solvent\
- specified.')
+            SanityCheck(
+                condition=not self.solvent or self.solvent_volume > 0,
+                error_msg='Solvent volume must be greater than 0 mL if solvent\
+ specified.'
+            ),
 
-        try:
-            assert self.purpose in ['extract', 'wash']
-        except AssertionError:
-            raise XDLError(f'"{self.purpose}" is invalid for Separate `purpose`\
- property. Valid values: "extract" or "wash".')
+            SanityCheck(
+                condition=self.purpose in ['extract', 'wash'],
+                error_msg=f'"{self.purpose}" is invalid for Separate `purpose`\
+ property. Valid values: "extract" or "wash".'
+            ),
 
-        try:
-            assert self.n_separations > 0
-        except AssertionError:
-            raise XDLError(
-                f'Separate `n_separations` property must be > 1.\
- {self.n_separations} is an invalid value.')
+            SanityCheck(
+                condition=self.n_separations > 0,
+                error_msg=f'Separate `n_separations` property must be > 1.\
+ {self.n_separations} is an invalid value.'
+            )
+        ]
 
     @property
     def buffer_flasks_required(self):
