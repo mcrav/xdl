@@ -127,8 +127,6 @@ class Evaporate(AbstractStep):
             CRotavapLiftDown(self.rotavap_name),
             # Start chiller if present
             self.get_chiller_steps_if_present(),
-            # Start vacuum
-            RotavapStartVacuum(self.rotavap_name, self.pressure),
             # Start heating
             RotavapHeatToTemp(self.rotavap_name, self.temp),
             # Auto Evaporation
