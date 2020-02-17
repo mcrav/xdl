@@ -4,7 +4,8 @@ from ..steps_utility import (
     Wait, StartVacuum, StopVacuum, SwitchArgon, SwitchVacuum)
 from ..steps_base import CConnect
 from .....step_utils.special_steps import Repeat
-from ...utils.execution import get_pneumatic_controller
+from ...utils.execution import (
+    get_pneumatic_controller, get_nearest_node, get_vacuum_configuration)
 from .....utils.misc import SanityCheck
 
 class Evacuate(AbstractStep):
@@ -47,6 +48,14 @@ class Evacuate(AbstractStep):
     def on_prepare_for_execution(self, graph):
         self.pneumatic_controller, _ = get_pneumatic_controller(
             graph, self.vessel)
+
+        vacuum_info = get_vacuum_configuration(graph, self.vessel)
+        if not self.vacuum:
+            self.vacuum = vacuum_info['source']
+        if not self.vacuum_device:
+            self.vacuum_device = vacuum_info['device']
+        if not self.inert_gas:
+            self.inert_gas = vacuum_info['valve_inert_gas']
 
     def sanity_checks(self, graph):
         return [

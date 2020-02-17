@@ -6,7 +6,7 @@ from ..steps_base import CMove
 from .dry import Dry
 from .....utils.misc import SanityCheck
 from ...utils.execution import (
-    get_neighboring_vacuum, get_nearest_node, get_reagent_vessel)
+    get_vacuum_configuration, get_nearest_node, get_reagent_vessel)
 from .....constants import CHEMPUTER_WASTE
 
 class CleanVessel(AbstractStep):
@@ -38,7 +38,7 @@ class CleanVessel(AbstractStep):
         stir_time: Optional[float] = 'default',
         stir_speed: Optional[float] = 'default',
         temp: Optional[float] = None,
-        dry: Optional[bool] = True,
+        dry: Optional[bool] = False,
         volume: Optional[float] = None,
         cleans: Optional[int] = 2,
         solvent_vessel: Optional[str] = None,
@@ -59,18 +59,18 @@ class CleanVessel(AbstractStep):
         if not self.solvent_vessel:
             self.solvent_vessel = get_reagent_vessel(graph, self.solvent)
 
+        vacuum_info = get_vacuum_configuration(graph, self.vessel)
+        if vacuum_info['source']:
+            self.dry = True
+            if not self.vacuum:
+                self.vacuum = vacuum_info['source']
+
         for node in graph.nodes():
             if graph.nodes[node]['class'] == 'ChemputerFlask':
                 if graph.nodes[node]['chemical'] == self.solvent:
                     self.solvent_vessel = node
                     break
-        self.check_for_vacuum_pump(graph)
         self.check_for_heater()
-
-    def check_for_vacuum_pump(self, graph):
-        if self.dry and not self.vessel_type == 'rotavap':
-            if not get_neighboring_vacuum(graph, self.vessel):
-                self.dry = False
 
     def check_for_heater(self):
         if (self.temp is not None

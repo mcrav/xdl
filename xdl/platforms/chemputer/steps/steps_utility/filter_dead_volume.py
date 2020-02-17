@@ -4,7 +4,8 @@ from ..utils import get_vacuum_valve_reconnect_steps
 from .....step_utils.base_steps import AbstractStep, Step
 from ..steps_base import CMove
 from .....constants import BOTTOM_PORT, CHEMPUTER_WASTE
-from ...utils.execution import get_nearest_node, get_reagent_vessel
+from ...utils.execution import (
+    get_nearest_node, get_reagent_vessel, get_vacuum_configuration)
 
 class AddFilterDeadVolume(AbstractStep):
     """Fill bottom of filter vessel with solvent in anticipation of the filter
@@ -46,6 +47,16 @@ class AddFilterDeadVolume(AbstractStep):
 
         if not self.solvent_vessel:
             self.solvent_vessel = get_reagent_vessel(graph, self.solvent)
+
+        vacuum_info = get_vacuum_configuration(graph, self.filter_vessel)
+        if not self.vacuum:
+            self.vacuum = vacuum_info['source']
+        if not self.inert_gas:
+            self.inert_gas = vacuum_info['valve_inert_gas']
+        if not self.vacuum_valve:
+            self.vacuum_valve = vacuum_info['valve']
+        if not self.valve_unused_port:
+            self.valve_unused_port = vacuum_info['valve_unused_port']
 
     def get_steps(self) -> List[Step]:
         steps = [CMove(from_vessel=self.solvent_vessel,

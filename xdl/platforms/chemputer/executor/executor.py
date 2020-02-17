@@ -55,8 +55,6 @@ from .graph import (
     hardware_from_graph,
     make_vessel_map,
     make_inert_gas_map,
-    get_unused_valve_port,
-    vacuum_device_attached_to_flask,
 )
 from .utils import VesselContents, is_aqueous, validate_port
 from .cleaning import (
@@ -249,31 +247,10 @@ class ChemputerExecutor(AbstractXDLExecutor):
         """
         for step in step_list:
 
-            if 'vacuum' in step.properties and not step.vacuum:
-                step.vacuum = self._get_vacuum(step)
-
             # Filter, WashSolid, Dry need this filled in if inert gas
             # filter dead volume method being used.
             if ('inert_gas' in step.properties):
                 step.inert_gas = self._get_inert_gas(step)
-
-            if ('vacuum_valve' in step.properties
-                    and 'vacuum' in step.properties):
-                if step.vacuum in self._valve_map:
-                    step.vacuum_valve = self._valve_map[step.vacuum]
-                    step.valve_unused_port = get_unused_valve_port(
-                        graph=self._graph, valve_node=step.vacuum_valve)
-
-            if ('vacuum_device' in step.properties
-                    and 'vacuum' in step.properties):
-                # Look for vacuum device attached to vacuum flask
-                step.vacuum_device = vacuum_device_attached_to_flask(
-                    graph=self._graph, flask_node=step.vacuum)
-
-                # Look for vacuum device attached directly to vessel
-                if not step.vacuum_device and 'vessel' in step.properties:
-                    step.vacuum_device = vacuum_device_attached_to_flask(
-                        graph=self._graph, flask_node=step.vessel)
 
             if 'vessel_has_stirrer' in step.properties:
                 step.vessel_has_stirrer = step.vessel not in [
