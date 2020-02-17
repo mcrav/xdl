@@ -23,7 +23,8 @@ from .....constants import (
     DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED,
     CHEMPUTER_WASTE,
 )
-from ...utils.execution import get_nearest_node, get_vacuum_configuration
+from ...utils.execution import (
+    get_nearest_node, get_vacuum_configuration, get_vessel_type)
 
 class WashSolid(AbstractStep):
     """Wash filter cake with given volume of given solvent.
@@ -101,6 +102,9 @@ class WashSolid(AbstractStep):
         if not self.waste_vessel:
             self.waste_vessel = get_nearest_node(
                 graph, self.vessel, CHEMPUTER_WASTE)
+
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
         if not self.filter_dead_volume:
             vessel = graph.nodes[self.vessel]

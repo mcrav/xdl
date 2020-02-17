@@ -10,6 +10,7 @@ from ...utils.execution import (
     get_nearest_node,
     get_reagent_vessel,
     get_heater_chiller,
+    get_vessel_type,
 )
 from .....constants import CHEMPUTER_WASTE
 
@@ -56,6 +57,9 @@ class CleanVessel(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
         self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 

@@ -5,7 +5,7 @@ from ..steps_utility import (
 from ..steps_base import CConnect
 from .....step_utils.special_steps import Repeat
 from ...utils.execution import (
-    get_pneumatic_controller, get_vacuum_configuration)
+    get_pneumatic_controller, get_vacuum_configuration, get_vessel_type)
 from .....utils.misc import SanityCheck
 
 class Evacuate(AbstractStep):
@@ -48,6 +48,9 @@ class Evacuate(AbstractStep):
     def on_prepare_for_execution(self, graph):
         self.pneumatic_controller, _ = get_pneumatic_controller(
             graph, self.vessel)
+
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
         vacuum_info = get_vacuum_configuration(graph, self.vessel)
         if not self.vacuum:

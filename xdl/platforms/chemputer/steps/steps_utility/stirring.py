@@ -12,7 +12,7 @@ from ..steps_base import (
 from .general import Wait
 from .rotavap import RotavapStir
 from .....constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
-from ...utils.execution import get_vessel_stirrer
+from ...utils.execution import get_vessel_stirrer, get_vessel_type
 
 class SetStirRate(AbstractStep):
     """Set stir rate. Works on rotavap, reactor or filter.
@@ -26,6 +26,10 @@ class SetStirRate(AbstractStep):
         self, vessel: str, stir_speed: float, vessel_type: Optional[str] = None
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         if self.vessel_type == 'rotavap':
@@ -55,6 +59,10 @@ class StartStir(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         if self.vessel_type == 'rotavap':
@@ -98,6 +106,9 @@ class StopStir(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
         if get_vessel_stirrer(graph, self.vessel):
             self.vessel_has_stirrer = True
         else:
@@ -136,6 +147,10 @@ class Stir(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         if self.vessel_type == 'rotavap':

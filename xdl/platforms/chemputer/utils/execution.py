@@ -9,7 +9,12 @@ from ....constants import (
     CHEMPUTER_CARTRIDGE,
     STIRRER_CLASSES,
     HEATER_CLASSES,
-    CHILLER_CLASSES
+    CHILLER_CLASSES,
+    FILTER_CLASSES,
+    REACTOR_CLASSES,
+    ROTAVAP_CLASSES,
+    SEPARATOR_CLASSES,
+    FLASK_CLASSES,
 )
 
 def get_unused_valve_port(graph, valve_node):
@@ -191,6 +196,20 @@ def get_flush_tube_vessel(graph) -> Optional[str]:
         return inert_gas_flask
     elif air_flask:
         return air_flask
+    return None
+
+def get_vessel_type(graph, vessel):
+    vessel_class = graph.nodes[vessel]['class']
+    if vessel_class in FILTER_CLASSES:
+        return 'filter'
+    elif vessel_class in ROTAVAP_CLASSES:
+        return 'rotavap'
+    elif vessel_class in REACTOR_CLASSES:
+        return 'reactor'
+    elif vessel_class in SEPARATOR_CLASSES:
+        return 'separator'
+    elif vessel_class in FLASK_CLASSES:
+        return 'flask'
     return None
 
 def node_in_graph(graph, node):

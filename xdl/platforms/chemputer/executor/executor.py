@@ -242,9 +242,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
         """
         for step in step_list:
 
-            if 'vessel_type' in step.properties and not step.vessel_type:
-                step.vessel_type = self._get_vessel_type(step.vessel)
-
             if 'volume' in step.properties and type(step) == CleanVessel:
                 if step.volume is None:
                     step.volume = self._graph_hardware[
@@ -351,29 +348,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
         for step in steps:
             if type(step) == CleanBackbone and not step.waste_vessels:
                 step.waste_vessels = self._graph_hardware.waste_xids
-
-    def _get_vessel_type(self, vessel: str) -> str:
-        """Given vessel return type of vessel from options 'filter', 'rotavap',
-        'reactor', 'separator' or None if it isn't any of those options.
-
-        Args:
-            vessel (str): Vessel to get type of.
-
-        Returns:
-            str: Type of vessel, 'filter', 'reactor', 'rotavap', 'separator' or
-                None
-        """
-        vessel_types = [
-            ('filter', self._graph_hardware.filters),
-            ('rotavap', self._graph_hardware.rotavaps),
-            ('reactor', self._graph_hardware.reactors),
-            ('separator', self._graph_hardware.separators),
-            ('flask', self._graph_hardware.flasks)
-        ]
-        for vessel_type, hardware_list in vessel_types:
-            if vessel in [item.id for item in hardware_list]:
-                return vessel_type
-        return None
 
     def _get_buffer_flask(self, vessel: str, return_single=True) -> str:
         """Get buffer flask closest to given vessel.

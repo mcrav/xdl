@@ -32,7 +32,7 @@ from .....constants import (
 )
 from .....utils.misc import SanityCheck
 from .....localisation import HUMAN_READABLE_STEPS
-from ...utils.execution import get_heater_chiller
+from ...utils.execution import get_heater_chiller, get_vessel_type
 
 def heater_chiller_sanity_checks(heater, chiller, temp):
     checks = []
@@ -92,6 +92,9 @@ class StartHeatChill(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
         self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
@@ -182,6 +185,9 @@ class HeatChillSetTemp(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
         self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
@@ -263,6 +269,9 @@ class HeatChillToTemp(AbstractStep):
         assert temp is not None
 
     def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
         self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
@@ -376,6 +385,9 @@ class StopHeatChill(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
         self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
@@ -432,6 +444,10 @@ class HeatChillReturnToRT(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []

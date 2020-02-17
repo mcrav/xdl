@@ -12,7 +12,12 @@ from .....localisation import HUMAN_READABLE_STEPS
 from .....utils.misc import SanityCheck
 from .....constants import CHEMPUTER_WASTE
 from ...utils.execution import (
-    get_nearest_node, get_reagent_vessel, get_flush_tube_vessel, get_cartridge)
+    get_nearest_node,
+    get_reagent_vessel,
+    get_flush_tube_vessel,
+    get_cartridge,
+    get_vessel_type,
+)
 
 class Add(AbstractStep):
     """Add given volume of given reagent to given vessel.
@@ -114,6 +119,9 @@ class Add(AbstractStep):
 
         if not self.through_cartridge and self.through:
             self.through_cartridge = get_cartridge(graph, self.through)
+
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []
