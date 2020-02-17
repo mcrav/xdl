@@ -1,6 +1,7 @@
 from typing import Optional
 from .....step_utils.base_steps import AbstractStep
 from .filter_through import FilterThrough
+from ...utils.execution import get_buffer_flask
 
 class RunColumn(AbstractStep):
     """Purify using column chromatography.
@@ -31,6 +32,11 @@ class RunColumn(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.buffer_flask:
+            self.buffer_flask = get_buffer_flask(
+                graph, self.from_vessel, return_single=True)
 
     @property
     def buffer_flasks_required(self):

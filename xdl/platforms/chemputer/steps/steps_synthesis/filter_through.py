@@ -4,6 +4,8 @@ from .....step_utils.base_steps import Step, AbstractStep
 from ..steps_utility import Transfer
 from .....localisation import HUMAN_READABLE_STEPS
 from .....utils.misc import SanityCheck
+from ...utils.execution import (
+    get_reagent_vessel, get_flush_tube_vessel, get_cartridge, get_buffer_flask)
 
 class FilterThrough(AbstractStep):
     """Filter contents of from_vessel through a cartridge,
@@ -62,6 +64,36 @@ class FilterThrough(AbstractStep):
     ):
         super().__init__(locals())
 
+    def on_prepare_for_execution(self, graph):
+
+        if not self.buffer_flask:
+            self.buffer_flask = get_buffer_flask(
+                graph, self.from_vessel, return_single=True)
+
+        if self.eluting_solvent:
+            if not self.eluting_solvent_vessel:
+                self.eluting_solvent_vessel = get_reagent_vessel(
+                    graph, self.eluting_solvent)
+
+        if not self.flush_cartridge_vessel:
+            self.flush_cartridge_vessel = get_flush_tube_vessel(graph)
+
+        if self.buffer_flask:
+            self.buffer_flask_max_volume = graph.nodes[
+                self.buffer_flask]['max_volume']
+
+        if self.to_vessel:
+            self.to_vessel_max_volume = graph.nodes[
+                self.to_vessel]['max_volume']
+
+        if not self.through_cartridge:
+            self.through_cartridge = get_cartridge(graph, self.through)
+
+        if not self.cartridge_dead_volume:
+            cartridge = graph.nodes[self.through_cartridge]
+            if 'dead_volume' in cartridge:
+                self.cartridge_dead_volume = cartridge['dead_volume']
+
     def sanity_checks(self, graph):
         checks = []
         if self.eluting_solvent:
@@ -91,15 +123,6 @@ class FilterThrough(AbstractStep):
         )
 
         return checks
-
-    def on_prepare_for_execution(self, graph):
-        if self.buffer_flask:
-            self.buffer_flask_max_volume = graph.nodes[
-                self.buffer_flask]['max_volume']
-
-        if self.to_vessel:
-            self.to_vessel_max_volume = graph.nodes[
-                self.to_vessel]['max_volume']
 
     def get_steps(self) -> List[Step]:
         filter_through_to_vessel = self.to_vessel

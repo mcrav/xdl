@@ -34,7 +34,7 @@ def test_purge():
             elif step.vessel == 'filter':
                 assert step.steps[0].name == 'CValveMoveToPosition'
                 assert step.steps[0].valve_name == 'inert_gas_valve'
-                assert str(step.steps[0].position) == '1'
+                assert str(step.steps[0].position) == '2'
 
         elif step.name == 'Purge':
             assert step.steps[0].name == 'StartPurge'

@@ -2,6 +2,7 @@ from typing import Optional, List
 from .....step_utils.base_steps import Step, AbstractStep
 from ..steps_utility import Transfer
 from ..steps_base import CStir, CStopStir
+from ...utils.execution import get_reagent_vessel
 
 class AddCorrosive(AbstractStep):
     """Add corrosive reagent that can't come into contact with a valve.
@@ -25,6 +26,10 @@ class AddCorrosive(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.reagent_vessel:
+            self.reagent_vessel = get_reagent_vessel(graph, self.reagent)
 
     def get_steps(self) -> List[Step]:
         steps = [

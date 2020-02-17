@@ -13,6 +13,7 @@ from ..steps_base import (
 )
 from .add import Add
 from .....constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
+from ...utils.execution import get_reagent_vessel, get_vessel_type
 
 class Dissolve(AbstractStep):
 
@@ -50,6 +51,13 @@ class Dissolve(AbstractStep):
         **kwargs,
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.solvent_vessel:
+            self.solvent_vessel = get_reagent_vessel(graph, self.solvent)
+
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         if self.vessel_type == 'rotavap':

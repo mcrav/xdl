@@ -9,7 +9,8 @@ from .....constants import (
     DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED,
 )
 from .....utils.misc import SanityCheck
-from ...utils.execution import get_vacuum_configuration
+from ...utils.execution import get_vacuum_configuration, get_nearest_node
+from .....constants import CHEMPUTER_WASTE
 
 class Filter(AbstractStep):
     """Filter contents of filter vessel. Apply vacuum for given time.
@@ -32,8 +33,6 @@ class Filter(AbstractStep):
         vacuum_device (str): Given internally. Name of vacuum device attached to
             vacuum flask. Can be None if vacuum is just from fumehood vacuum
             line.
-        inert_gas (str): Given internally. Name of node supplying inert gas.
-            Only used if inert gas filter dead volume method is being used.
         vacuum_valve (str): Given internally. Name of valve connecting filter
             bottom to vacuum.
         valve_unused_port (str): Given internally. Random unused position on
@@ -66,6 +65,10 @@ class Filter(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.filter_vessel, CHEMPUTER_WASTE)
+
         filter_vessel = graph.nodes[self.filter_vessel]
         if (filter_vessel['class'] != 'ChemputerFilter'
                 and ('can_filter' in filter_vessel

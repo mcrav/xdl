@@ -9,8 +9,11 @@ from ..steps_base import CMove
 from .stirring import StopStir
 from .....localisation import HUMAN_READABLE_STEPS
 from .....utils.misc import SanityCheck
-from ...utils.execution import undirected_neighbors
-from .....constants import STIRRER_CLASSES
+from ...utils.execution import (
+    get_reagent_vessel,
+    get_cartridge,
+    get_vessel_stirrer
+)
 
 class PrimePumpForAdd(AbstractStep):
     """Prime pump attached to given reagent flask in anticipation of Add step.
@@ -33,6 +36,10 @@ class PrimePumpForAdd(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.reagent_vessel:
+            self.reagent_vessel = get_reagent_vessel(graph, self.reagent)
 
     def get_steps(self) -> List[Step]:
         return [CMove(from_vessel=self.reagent_vessel,
@@ -85,6 +92,30 @@ class Transfer(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
+    def on_prepare_for_execution(self, graph) -> str:
+        """If self.port is None, return default port for different vessel types.
+
+        Returns:
+            str: Vessel port to add to.
+        """
+        if not self.through_cartridge and self.through:
+            self.through_cartridge = get_cartridge(graph, self.through)
+
+        if self.from_port in [None, ''] and self.from_vessel:
+            from_class = graph.nodes[self.from_vessel]['class']
+            if from_class in DEFAULT_PORTS:
+                self.from_port = DEFAULT_PORTS[from_class]['from']
+
+        if self.to_port in [None, ''] and self.to_vessel:
+            to_class = graph.nodes[self.to_vessel]['class']
+            if to_class in DEFAULT_PORTS:
+                self.to_port = DEFAULT_PORTS[to_class]['to']
+
+        if get_vessel_stirrer(graph, self.from_vessel):
+            self.from_vessel_has_stirrer = True
+        else:
+            self.from_vessel_has_stirrer = False
+
     def get_steps(self) -> List[Step]:
         dispense_speed = self.get_dispense_speed()
         aspiration_speed = self.get_aspiration_speed()
@@ -120,27 +151,6 @@ class Transfer(AbstractStep):
  cartridge containing {self.through}.'
             )
         ]
-
-    def on_prepare_for_execution(self, graph) -> str:
-        """If self.port is None, return default port for different vessel types.
-
-        Returns:
-            str: Vessel port to add to.
-        """
-        if self.from_port in [None, ''] and self.from_vessel:
-            from_class = graph.nodes[self.from_vessel]['class']
-            if from_class in DEFAULT_PORTS:
-                self.from_port = DEFAULT_PORTS[from_class]['from']
-
-        if self.to_port in [None, ''] and self.to_vessel:
-            to_class = graph.nodes[self.to_vessel]['class']
-            if to_class in DEFAULT_PORTS:
-                self.to_port = DEFAULT_PORTS[to_class]['to']
-
-        for _, data in undirected_neighbors(
-                graph, self.from_vessel, data=True):
-            if data['class'] in STIRRER_CLASSES:
-                self.from_vessel_has_stirrer = True
 
     def get_dispense_speed(self) -> float:
         if self.time and type(self.volume) != str:

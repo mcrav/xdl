@@ -119,106 +119,119 @@
       "type": "valve",
       "x": 440,
       "y": -40,
+      "internalId": 2,
+      "label": "valve3",
       "class": "ChemputerValve",
       "name": "valve3",
       "address": "",
-      "current_volume": 0,
-      "internalId": 2,
-      "label": "valve3"
+      "current_volume": 0
     },
     {
       "id": "pump3",
       "type": "pump",
       "x": 440,
       "y": -160,
+      "internalId": 25,
+      "label": "pump3",
       "class": "ChemputerPump",
       "name": "pump3",
       "address": "",
       "max_volume": 100,
-      "current_volume": 0,
-      "internalId": 25,
-      "label": "pump3"
+      "current_volume": 0
     },
     {
       "id": "flask_nitrogen",
       "type": "flask",
       "x": 440,
       "y": 80,
+      "internalId": 28,
+      "label": "flask_nitrogen",
       "class": "ChemputerFlask",
       "name": "flask_nitrogen",
       "chemical": "",
       "current_volume": 100,
       "max_volume": 100,
-      "can_filter": false,
-      "internalId": 28,
-      "label": "flask_nitrogen"
+      "can_filter": false
     },
     {
       "id": "valve4",
       "type": "valve",
       "x": 600,
       "y": -40,
+      "internalId": 31,
+      "label": "valve4",
       "class": "ChemputerValve",
       "name": "valve4",
       "address": "",
-      "current_volume": 0,
-      "internalId": 31,
-      "label": "valve4"
+      "current_volume": 0
     },
     {
       "id": "pump4",
       "type": "pump",
       "x": 600,
       "y": -160,
+      "internalId": 34,
+      "label": "pump4",
       "class": "ChemputerPump",
       "name": "pump4",
       "address": "",
       "max_volume": 100,
-      "current_volume": 0,
-      "internalId": 34,
-      "label": "pump4"
+      "current_volume": 0
     },
     {
       "id": "reactor2",
       "type": "reactor",
       "x": 600,
       "y": 80,
+      "internalId": 40,
+      "label": "reactor2",
       "class": "ChemputerReactor",
       "name": "reactor2",
       "current_volume": 0,
       "max_volume": 100,
       "necks": 1,
-      "can_filter": false,
-      "internalId": 40,
-      "label": "reactor2"
+      "can_filter": false
     },
     {
       "id": "waste1",
       "type": "waste",
       "x": 720,
       "y": -120,
+      "internalId": 37,
+      "label": "waste1",
       "class": "ChemputerWaste",
       "name": "waste1",
       "current_volume": 0,
       "max_volume": 100,
       "necks": 1,
-      "can_filter": false,
-      "internalId": 37,
-      "label": "waste1"
+      "can_filter": false
     },
     {
       "id": "waste2",
       "type": "waste",
       "x": -40,
       "y": -40,
+      "internalId": 39,
+      "label": "waste2",
       "class": "ChemputerWaste",
       "name": "waste2",
       "current_volume": 0,
       "max_volume": 100,
       "necks": 1,
-      "can_filter": false,
-      "internalId": 39,
-      "label": "waste2"
+      "can_filter": false
+    },
+    {
+      "id": "filter_vacuum",
+      "type": "vacuum",
+      "x": 40,
+      "y": 280,
+      "class": "ChemputerVacuum",
+      "name": "filter_vacuum",
+      "port": null,
+      "address": "",
+      "mode": "ethernet",
+      "internalId": 45,
+      "label": "filter_vacuum"
     }
   ],
   "links": [
@@ -445,6 +458,14 @@
       "source": "flask_argon",
       "target": "valve1",
       "port": "(0,4)"
+    },
+    {
+      "id": 46,
+      "sourceInternal": 5,
+      "targetInternal": 45,
+      "source": "inert_gas_valve",
+      "target": "filter_vacuum",
+      "port": "(1,0)"
     }
   ]
 }

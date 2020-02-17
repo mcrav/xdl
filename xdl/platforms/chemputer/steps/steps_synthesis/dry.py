@@ -14,7 +14,14 @@ from .....constants import (
     BOTTOM_PORT,
     DEFAULT_DRY_WASTE_VOLUME,
     DEFAULT_FILTER_VACUUM_PRESSURE,
-    ROOM_TEMPERATURE
+    ROOM_TEMPERATURE,
+    CHEMPUTER_WASTE,
+)
+from ...utils.execution import (
+    get_nearest_node,
+    get_vacuum_configuration,
+    get_vessel_stirrer,
+    get_vessel_type,
 )
 
 class Dry(AbstractStep):
@@ -69,6 +76,31 @@ class Dry(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.vessel, CHEMPUTER_WASTE)
+
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
+        if get_vessel_stirrer(graph, self.vessel):
+            self.vessel_has_stirrer = True
+        else:
+            self.vessel_has_stirrer = False
+
+        vacuum_info = get_vacuum_configuration(graph, self.vessel)
+        if not self.vacuum:
+            self.vacuum = vacuum_info['source']
+        if not self.inert_gas:
+            self.inert_gas = vacuum_info['valve_inert_gas']
+        if not self.vacuum_valve:
+            self.vacuum_valve = vacuum_info['valve']
+        if not self.valve_unused_port:
+            self.valve_unused_port = vacuum_info['valve_unused_port']
+        if not self.vacuum_device:
+            self.vacuum_device = vacuum_info['device']
 
     def get_steps(self) -> List[Step]:
         steps = []

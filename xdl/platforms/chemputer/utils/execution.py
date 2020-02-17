@@ -1,7 +1,21 @@
-from typing import Tuple, List, Dict
-from networkx import MultiDiGraph
+from typing import Tuple, Dict, Union, Optional
+from networkx import MultiDiGraph, NetworkXNoPath
+from networkx.algorithms import shortest_path_length
 from ....utils.graph import undirected_neighbors
-from ....constants import VACUUM_CLASSES, INERT_GAS_SYNONYMS
+from ....constants import (
+    VACUUM_CLASSES,
+    INERT_GAS_SYNONYMS,
+    CHEMPUTER_FLASK,
+    CHEMPUTER_CARTRIDGE,
+    STIRRER_CLASSES,
+    HEATER_CLASSES,
+    CHILLER_CLASSES,
+    FILTER_CLASSES,
+    REACTOR_CLASSES,
+    ROTAVAP_CLASSES,
+    SEPARATOR_CLASSES,
+    FLASK_CLASSES,
+)
 
 def get_unused_valve_port(graph, valve_node):
     used_ports = []
@@ -102,21 +116,172 @@ def get_vacuum_configuration(
         'valve_inert_gas': valve_inert_gas,
     }
 
-def get_buffer_flasks(graph: MultiDiGraph) -> List[str]:
-    buffer_flasks = []
-    for node, data in graph.nodes(data=True):
-        if data['class'] == 'ChemputerFlask' and not data['chemical']:
-            buffer_flasks.append(node)
-    return buffer_flasks
+def get_buffer_flask(
+        graph: MultiDiGraph, vessel: str, return_single=True) -> str:
+    """Get buffer flask closest to given vessel.
 
-def get_neighboring_vacuum(graph: MultiDiGraph, vessel: str) -> str:
+    Args:
+        vessel (str): Node name in graph.
+
+    Returns:
+        str: Node name of buffer flask (unused reactor) nearest vessel.
+    """
+    # Get all reactor IDs
+    flasks = [
+        flask
+        for flask, data in graph_flasks(graph, data=True)
+        if not data['chemical']
+    ]
+
+    # From remaining reactor IDs, return nearest to vessel.
+    if flasks:
+        if len(flasks) == 1:
+            if return_single:
+                return flasks[0]
+            else:
+                return [flasks[0]]
+        else:
+            shortest_paths = []
+            for flask in flasks:
+                shortest_paths.append((
+                    flask,
+                    shortest_path_length(
+                        graph, source=vessel, target=flask)))
+            if return_single:
+                return sorted(shortest_paths, key=lambda x: x[1])[0][0]
+            else:
+                return [
+                    item[0]
+                    for item in sorted(shortest_paths, key=lambda x: x[1])
+                ]
+    if return_single:
+        return None
+    else:
+        return [None, None]
+
+def get_heater_chiller(graph, node):
+    heater, chiller = None, None
+    neighbors = undirected_neighbors(graph, node)
+    for neighbor in neighbors:
+        if graph.nodes[neighbor]['class'] in HEATER_CLASSES:
+            heater = neighbor
+        elif graph.nodes[neighbor]['class'] in CHILLER_CLASSES:
+            chiller = neighbor
+    return heater, chiller
+
+def get_nearest_node(graph: MultiDiGraph, src: str, target_vessel_class: str):
+    # Make graph undirected so actual closest waste vessels are found, not
+    # closest in liquid flow path. As long as vessels are all attached to a
+    # valve which is attached to a waste vessel this should be fine.
+    target_vessels = [
+        node for node in graph.nodes()
+        if (graph.nodes[node]['class']
+            == target_vessel_class)
+    ]
+    shortest_path_found = 100000
+    closest_target_vessel = None
+    for target_vessel in target_vessels:
+        try:
+            shortest_path_to_target_vessel = shortest_path_length(
+                graph, source=src, target=target_vessel)
+            if shortest_path_to_target_vessel < shortest_path_found:
+                shortest_path_found = shortest_path_to_target_vessel
+                closest_target_vessel = target_vessel
+        except NetworkXNoPath:
+            pass
+
+    return closest_target_vessel
+
+def get_vessel_stirrer(graph, vessel):
     for neighbor, data in undirected_neighbors(graph, vessel, data=True):
-        neighbor_class = data['class']
-        if neighbor_class == 'ChemputerVacuum':
+        if data['class'] in STIRRER_CLASSES:
             return neighbor
-        elif neighbor_class == 'ChemputerValve':
-            for valve_neighbor, valve_neighbor_data in undirected_neighbors(
-                    graph, neighbor, data=True):
-                if valve_neighbor_data['class'] == 'ChemputerVacuum':
-                    return neighbor
     return None
+
+def get_reagent_vessel(
+        graph: MultiDiGraph, reagent: str) -> Union[str, None]:
+    """Get vessel containing given reagent.
+
+    Args:
+        reagent (str): Name of reagent to find vessel for.
+
+    Returns:
+        str: ID of vessel containing given reagent.
+    """
+    for node, data in graph.nodes(data=True):
+        if data['class'] == CHEMPUTER_FLASK:
+            if data['chemical'] == reagent:
+                return node
+    return None
+
+def get_flush_tube_vessel(graph) -> Optional[str]:
+    """Look for gas vessel to flush tube with after Add steps.
+
+    Returns:
+        str: Flask to use for flushing tube.
+            Preference is nitrogen > air > None.
+    """
+    inert_gas_flask = None
+    air_flask = None
+    for flask, data in graph_flasks(graph, data=True):
+        if data['chemical'].lower() in INERT_GAS_SYNONYMS:
+            inert_gas_flask = flask
+        elif data['chemical'].lower() == 'air':
+            air_flask = flask
+    if inert_gas_flask:
+        return inert_gas_flask
+    elif air_flask:
+        return air_flask
+    return None
+
+def get_vessel_type(graph, vessel):
+    vessel_class = graph.nodes[vessel]['class']
+    if vessel_class in FILTER_CLASSES:
+        return 'filter'
+    elif vessel_class in ROTAVAP_CLASSES:
+        return 'rotavap'
+    elif vessel_class in REACTOR_CLASSES:
+        return 'reactor'
+    elif vessel_class in SEPARATOR_CLASSES:
+        return 'separator'
+    elif vessel_class in FLASK_CLASSES:
+        return 'flask'
+    return None
+
+def node_in_graph(graph, node):
+    return node in graph.nodes()
+
+def get_cartridge(graph, chemical):
+    for cartridge, data in graph_cartridges(graph, data=True):
+        if data['chemical'] == chemical:
+            return cartridge
+    return None
+
+def graph_flasks(graph, data=False):
+    """Generator to iterate through all ChemputerFlasks in graph.
+
+    Args:
+        graph (MultiDiGraph): Graph
+        data (bool): Give node data in (node, data) tuple. Defaults to False.
+    """
+    for item in graph_iter_class(graph, CHEMPUTER_FLASK, data=data):
+        yield item
+
+def graph_cartridges(graph, data=False):
+    """Generator to iterate through all ChemputerCartridges in graph.
+
+    Args:
+        graph (MultiDiGraph): Graph
+        data (bool): Give node data in (node, data) tuple. Defaults to False.
+    """
+    for item in graph_iter_class(graph, CHEMPUTER_CARTRIDGE, data=data):
+        yield item
+
+
+def graph_iter_class(graph, target_class, data=False):
+    for node, data in graph.nodes(data=True):
+        if data['class'] == target_class:
+            if data:
+                yield node, data
+            else:
+                yield node

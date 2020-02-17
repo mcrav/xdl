@@ -2,6 +2,7 @@ from typing import Optional, List, Dict, Any
 from .....step_utils.base_steps import Step, AbstractStep
 from ..steps_utility import (
     Wait, HeatChillToTemp, StopHeatChill, StartStir, StopStir)
+from ...utils.execution import get_vessel_type
 
 class HeatChill(AbstractStep):
     """Heat or chill vessel to given temp for given time.
@@ -32,6 +33,10 @@ class HeatChill(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = [

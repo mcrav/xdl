@@ -32,6 +32,7 @@ from .....constants import (
 )
 from .....utils.misc import SanityCheck
 from .....localisation import HUMAN_READABLE_STEPS
+from ...utils.execution import get_heater_chiller, get_vessel_type
 
 def heater_chiller_sanity_checks(heater, chiller, temp):
     checks = []
@@ -89,6 +90,12 @@ class StartHeatChill(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []
@@ -177,6 +184,12 @@ class HeatChillSetTemp(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
+
     def get_steps(self) -> List[Step]:
         steps = []
         if self.vessel_type:
@@ -254,6 +267,12 @@ class HeatChillToTemp(AbstractStep):
     ) -> None:
         super().__init__(locals())
         assert temp is not None
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []
@@ -365,6 +384,12 @@ class StopHeatChill(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
+
     def get_steps(self) -> List[Step]:
         steps = []
         if self.vessel_type:
@@ -419,6 +444,10 @@ class HeatChillReturnToRT(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []
@@ -492,8 +521,7 @@ class ChillerReturnToRT(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
-        self.properties['vessel_class'] = graph.nodes[self.vessel]['class']
-        self.update()
+        self.vessel_class = graph.nodes[self.vessel]['class']
 
     def get_steps(self):
         if self.vessel_class == 'JULABOCF41':
