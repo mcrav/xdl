@@ -102,6 +102,11 @@ class WashSolid(AbstractStep):
             self.waste_vessel = get_nearest_node(
                 graph, self.vessel, CHEMPUTER_WASTE)
 
+        if not self.filter_dead_volume:
+            vessel = graph.nodes[self.vessel]
+            if 'dead_volume' in vessel:
+                self.filter_dead_volume = vessel['dead_volume']
+
     def get_steps(self) -> List[Step]:
         steps = []
         # Volume to withdraw after solvent is added.

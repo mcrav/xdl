@@ -249,13 +249,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
         """
         for step in step_list:
 
-            # FilterThrough needs to know what dead volume of cartridge is. If
-            # it is not provided in the graph it falls back to default.
-            if 'cartridge_dead_volume' in step.properties:
-                cartridge = self._graph_hardware[step.through_cartridge]
-                if cartridge and 'dead_volume' in cartridge.properties:
-                    step.cartridge_dead_volume = cartridge.dead_volume
-
             if 'vacuum' in step.properties and not step.vacuum:
                 step.vacuum = self._get_vacuum(step)
 
@@ -320,13 +313,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
                 step.buffer_flasks = self._get_buffer_flask(
                     step.separation_vessel, return_single=False)
 
-            # Add filter dead volume to WashSolid steps
-            if ('filter_dead_volume' in step.properties
-                    and not step.filter_dead_volume):
-                vessel = self._graph_hardware[step.vessel]
-                if 'dead_volume' in vessel.properties:
-                    step.filter_dead_volume = vessel.dead_volume
-
             # Add pneumatic_controller to SwitchVacuum but not to CSwitchVacuum
             # as it is not an internal property in CSwitchVacuum
             if ('pneumatic_controller' in step.properties
@@ -339,12 +325,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
                     step.pneumatic_controller, step.pneumatic_controller_port =\
                         (get_pneumatic_controller(
                             self._graph, step.vessel, port))
-
-            if ('through_cartridge' in step.properties
-                    and not step.through_cartridge and step.through):
-                for cartridge in self._graph_hardware.cartridges:
-                    if cartridge.chemical == step.through:
-                        step.through_cartridge = cartridge.id
 
             if 'heater' in step.properties and 'chiller' in step.properties:
                 step.heater, step.chiller = self._find_heater_chiller(

@@ -2,7 +2,8 @@ from typing import Tuple, List, Dict, Union, Optional
 from networkx import MultiDiGraph, NetworkXNoPath
 from networkx.algorithms import shortest_path_length
 from ....utils.graph import undirected_neighbors
-from ....constants import VACUUM_CLASSES, INERT_GAS_SYNONYMS, CHEMPUTER_FLASK
+from ....constants import (
+    VACUUM_CLASSES, INERT_GAS_SYNONYMS, CHEMPUTER_FLASK, CHEMPUTER_CARTRIDGE)
 
 def get_unused_valve_port(graph, valve_node):
     used_ports = []
@@ -182,6 +183,12 @@ def get_flush_tube_vessel(graph) -> Optional[str]:
         return air_flask
     return None
 
+def get_cartridge(graph, chemical):
+    for cartridge, data in graph_cartridges(graph, data=True):
+        if data['chemical'] == chemical:
+            return cartridge
+    return None
+
 def graph_flasks(graph, data=False):
     """Generator to iterate through all ChemputerFlasks in graph.
 
@@ -189,8 +196,23 @@ def graph_flasks(graph, data=False):
         graph (MultiDiGraph): Graph
         data (bool): Give node data in (node, data) tuple. Defaults to False.
     """
+    for item in graph_iter_class(graph, CHEMPUTER_FLASK, data=data):
+        yield item
+
+def graph_cartridges(graph, data=False):
+    """Generator to iterate through all ChemputerCartridges in graph.
+
+    Args:
+        graph (MultiDiGraph): Graph
+        data (bool): Give node data in (node, data) tuple. Defaults to False.
+    """
+    for item in graph_iter_class(graph, CHEMPUTER_CARTRIDGE, data=data):
+        yield item
+
+
+def graph_iter_class(graph, target_class, data=False):
     for node, data in graph.nodes(data=True):
-        if data['class'] == CHEMPUTER_FLASK:
+        if data['class'] == target_class:
             if data:
                 yield node, data
             else:
