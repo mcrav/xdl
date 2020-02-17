@@ -1,6 +1,7 @@
 from .....step_utils.base_steps import AbstractStep
 from ..steps_base import CSwitchVacuum, CSwitchArgon
 from .general import Wait
+from ...utils.execution import get_pneumatic_controller
 
 #: Time to wait after switching between argon/vacuum for pressure to change.
 WAIT_AFTER_SWITCH_TIME = 30  # s
@@ -31,6 +32,11 @@ class SwitchVacuum(AbstractStep):
         **kwargs,
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.pneumatic_controller:
+            self.pneumatic_controller, self.pneumatic_controller_port =\
+                get_pneumatic_controller(graph, self.vessel, self.port)
 
     def get_steps(self):
         steps = [
@@ -73,6 +79,11 @@ class SwitchArgon(AbstractStep):
         **kwargs,
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.pneumatic_controller:
+            self.pneumatic_controller, self.pneumatic_controller_port =\
+                get_pneumatic_controller(graph, self.vessel, self.port)
 
     def get_steps(self):
         steps = [

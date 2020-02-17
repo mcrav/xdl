@@ -79,8 +79,8 @@ class ApplyVacuum(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
-        self.pneumatic_controller = get_pneumatic_controller(
-            graph, self.vessel)[0]
+        self.pneumatic_controller, _ = get_pneumatic_controller(
+            graph, self.vessel)
         if not self.pneumatic_controller:
             vacuum_info = get_vacuum_configuration(graph, self.vessel)
             self.vacuum_valve = vacuum_info['valve']

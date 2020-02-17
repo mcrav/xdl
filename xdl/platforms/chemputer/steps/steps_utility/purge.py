@@ -20,15 +20,6 @@ class StartPurge(AbstractStep):
     ):
         super().__init__(locals())
 
-    def sanity_checks(self, graph):
-        return [
-            SanityCheck(
-                condition=self.pneumatic_controller or self.inert_gas,
-                error_msg=f'Cannot find pneumatic controller or inert gas connected to\
- {self.vessel} so cannot purge.'
-            )
-        ]
-
     def on_prepare_for_execution(self, graph):
         self.pneumatic_controller = self.inert_gas = None
         self.pneumatic_controller, _ = get_pneumatic_controller(
@@ -37,6 +28,15 @@ class StartPurge(AbstractStep):
             vacuum_info = get_vacuum_configuration(graph, self.vessel)
             if not self.pneumatic_controller and not self.inert_gas:
                 self.inert_gas = vacuum_info['valve_inert_gas']
+
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.pneumatic_controller or self.inert_gas,
+                error_msg=f'Cannot find pneumatic controller or inert gas connected to\
+ {self.vessel} so cannot purge.'
+            )
+        ]
 
     def get_steps(self):
         if self.pneumatic_controller:

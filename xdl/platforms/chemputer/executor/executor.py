@@ -62,7 +62,7 @@ from .constants import (
     NON_RECURSIVE_ABSTRACT_STEPS
 )
 from ..utils.execution import (
-    get_pneumatic_controller, get_vacuum_configuration, get_buffer_flask)
+    get_vacuum_configuration, get_buffer_flask)
 
 class ChemputerExecutor(AbstractXDLExecutor):
 
@@ -239,19 +239,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
             step_list (List[Step]): List of steps to add internal properties to.
         """
         for step in step_list:
-
-            # Add pneumatic_controller to SwitchVacuum but not to CSwitchVacuum
-            # as it is not an internal property in CSwitchVacuum
-            if ('pneumatic_controller' in step.properties
-                    and 'vessel' in step.properties
-                    and not step.pneumatic_controller):
-                port = None
-                if hasattr(step, 'port'):
-                    port = step.port
-                if hasattr(step, 'pneumatic_controller_port'):
-                    step.pneumatic_controller, step.pneumatic_controller_port =\
-                        (get_pneumatic_controller(
-                            self._graph, step.vessel, port))
 
             self._add_default_ports(step)
 
