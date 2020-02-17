@@ -58,7 +58,6 @@ from .cleaning import (
     get_cleaning_schedule
 )
 from .constants import (
-    CLEAN_VESSEL_VOLUME_FRACTION,
     SOLVENT_BOILING_POINTS,
     CLEAN_VESSEL_BOILING_POINT_FACTOR,
     NON_RECURSIVE_ABSTRACT_STEPS
@@ -241,18 +240,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
             step_list (List[Step]): List of steps to add internal properties to.
         """
         for step in step_list:
-
-            if 'volume' in step.properties and type(step) == CleanVessel:
-                if step.volume is None:
-                    step.volume = self._graph_hardware[
-                        step.vessel].max_volume * CLEAN_VESSEL_VOLUME_FRACTION
-
-            if ('collection_flask_volume' in step.properties
-                    and not step.collection_flask_volume):
-                rotavap = self._graph_hardware[step.rotavap_name]
-                if 'collection_flask_volume' in rotavap.properties:
-                    step.collection_flask_volume =\
-                        rotavap.collection_flask_volume
 
             # When doing FilterThrough or RunColumn and from_vessel and to
             # vessel are the same, find an unused reactor to use as a buffer

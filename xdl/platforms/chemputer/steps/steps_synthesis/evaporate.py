@@ -62,6 +62,12 @@ class Evaporate(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+        if not self.collection_flask_volume:
+            rotavap = graph.nodes[self.rotavap_name]
+            if 'collection_flask_volume' in rotavap:
+                self.collection_flask_volume = rotavap[
+                    'collection_flask_volume']
+
         if not self.waste_vessel:
             self.waste_vessel = get_nearest_node(
                 graph, self.rotavap_name, CHEMPUTER_WASTE)

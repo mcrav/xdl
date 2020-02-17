@@ -36,6 +36,9 @@ class CleanVessel(AbstractStep):
         'stir_speed': '500 RPM',
     }
 
+    #: Fraction of vessel max volume to use as solvent volume in CleanVessel step.
+    CLEAN_VESSEL_VOLUME_FRACTION: float = 0.5
+
     def __init__(
         self,
         vessel: str,
@@ -57,6 +60,12 @@ class CleanVessel(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+
+        if self.volume is None:
+            self.volume = (
+                graph.nodes[self.vessel]['max_volume']
+                * self.CLEAN_VESSEL_VOLUME_FRACTION
+            )
 
         if not self.vessel_type:
             self.vessel_type = get_vessel_type(graph, self.vessel)
