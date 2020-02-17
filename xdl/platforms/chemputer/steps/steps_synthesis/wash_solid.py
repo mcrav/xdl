@@ -21,7 +21,9 @@ from .....constants import (
     DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
     DEFAULT_FILTER_VACUUM_PRESSURE,
     DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED,
+    CHEMPUTER_WASTE,
 )
+from ...utils.execution import get_nearest_node
 
 class WashSolid(AbstractStep):
     """Wash filter cake with given volume of given solvent.
@@ -94,6 +96,11 @@ class WashSolid(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.vessel, CHEMPUTER_WASTE)
 
     def get_steps(self) -> List[Step]:
         steps = []

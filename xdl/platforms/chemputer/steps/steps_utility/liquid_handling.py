@@ -9,7 +9,7 @@ from ..steps_base import CMove
 from .stirring import StopStir
 from .....localisation import HUMAN_READABLE_STEPS
 from .....utils.misc import SanityCheck
-from ...utils.execution import undirected_neighbors
+from ...utils.execution import undirected_neighbors, get_reagent_vessel
 from .....constants import STIRRER_CLASSES
 
 class PrimePumpForAdd(AbstractStep):
@@ -33,6 +33,10 @@ class PrimePumpForAdd(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.reagent_vessel:
+            self.reagent_vessel = get_reagent_vessel(graph, self.reagent)
 
     def get_steps(self) -> List[Step]:
         return [CMove(from_vessel=self.reagent_vessel,

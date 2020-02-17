@@ -9,7 +9,8 @@ from .....constants import (
     DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED,
 )
 from .....utils.misc import SanityCheck
-from ...utils.execution import get_vacuum_configuration
+from ...utils.execution import get_vacuum_configuration, get_nearest_node
+from .....constants import CHEMPUTER_WASTE
 
 class Filter(AbstractStep):
     """Filter contents of filter vessel. Apply vacuum for given time.
@@ -66,6 +67,10 @@ class Filter(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.filter_vessel, CHEMPUTER_WASTE)
+
         filter_vessel = graph.nodes[self.filter_vessel]
         if (filter_vessel['class'] != 'ChemputerFilter'
                 and ('can_filter' in filter_vessel

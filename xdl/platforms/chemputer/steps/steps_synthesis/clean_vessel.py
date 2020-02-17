@@ -5,7 +5,9 @@ from ..steps_utility import (
 from ..steps_base import CMove
 from .dry import Dry
 from .....utils.misc import SanityCheck
-from ...utils.execution import get_neighboring_vacuum
+from ...utils.execution import (
+    get_neighboring_vacuum, get_nearest_node, get_reagent_vessel)
+from .....constants import CHEMPUTER_WASTE
 
 class CleanVessel(AbstractStep):
     """Clean given vessel with given solvent.
@@ -49,6 +51,33 @@ class CleanVessel(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
+    def on_prepare_for_execution(self, graph):
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.vessel, CHEMPUTER_WASTE)
+
+        if not self.solvent_vessel:
+            self.solvent_vessel = get_reagent_vessel(graph, self.solvent)
+
+        for node in graph.nodes():
+            if graph.nodes[node]['class'] == 'ChemputerFlask':
+                if graph.nodes[node]['chemical'] == self.solvent:
+                    self.solvent_vessel = node
+                    break
+        self.check_for_vacuum_pump(graph)
+        self.check_for_heater()
+
+    def check_for_vacuum_pump(self, graph):
+        if self.dry and not self.vessel_type == 'rotavap':
+            if not get_neighboring_vacuum(graph, self.vessel):
+                self.dry = False
+
+    def check_for_heater(self):
+        if (self.temp is not None
+            and not (self.heater or self.chiller
+                     or self.vessel_type == 'rotavap')):
+            self.temp = None
+
     def sanity_checks(self, graph):
         return [
             SanityCheck(
@@ -73,26 +102,6 @@ class CleanVessel(AbstractStep):
  value.'
             ),
         ]
-
-    def on_prepare_for_execution(self, graph):
-        for node in graph.nodes():
-            if graph.nodes[node]['class'] == 'ChemputerFlask':
-                if graph.nodes[node]['chemical'] == self.solvent:
-                    self.solvent_vessel = node
-                    break
-        self.check_for_vacuum_pump(graph)
-        self.check_for_heater()
-
-    def check_for_vacuum_pump(self, graph):
-        if self.dry and not self.vessel_type == 'rotavap':
-            if not get_neighboring_vacuum(graph, self.vessel):
-                self.dry = False
-
-    def check_for_heater(self):
-        if (self.temp is not None
-            and not (self.heater or self.chiller
-                     or self.vessel_type == 'rotavap')):
-            self.temp = None
 
     def get_steps(self):
         steps = []

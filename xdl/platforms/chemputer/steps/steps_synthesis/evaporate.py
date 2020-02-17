@@ -18,8 +18,10 @@ from ..steps_base.chiller import (
     CStopChiller
 )
 
-from .....constants import COLLECT_PORT, ROTAVAP_CLASSES, CHILLER_CLASSES
+from .....constants import (
+    COLLECT_PORT, ROTAVAP_CLASSES, CHILLER_CLASSES, CHEMPUTER_WASTE)
 from .....graphgen.utils import undirected_neighbors
+from ...utils.execution import get_nearest_node
 
 class Evaporate(AbstractStep):
     """Evaporate contents of given vessel at given temp and given pressure for
@@ -60,6 +62,10 @@ class Evaporate(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.rotavap_name, CHEMPUTER_WASTE)
+
         for node, data in graph.nodes(data=True):
             attached_vessels = [i for i in undirected_neighbors(graph, node)]
 

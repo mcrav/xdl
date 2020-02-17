@@ -1,7 +1,8 @@
-from typing import Tuple, List, Dict
-from networkx import MultiDiGraph
+from typing import Tuple, List, Dict, Union
+from networkx import MultiDiGraph, NetworkXNoPath
+from networkx.algorithms import shortest_path_length
 from ....utils.graph import undirected_neighbors
-from ....constants import VACUUM_CLASSES, INERT_GAS_SYNONYMS
+from ....constants import VACUUM_CLASSES, INERT_GAS_SYNONYMS, CHEMPUTER_FLASK
 
 def get_unused_valve_port(graph, valve_node):
     used_ports = []
@@ -119,4 +120,44 @@ def get_neighboring_vacuum(graph: MultiDiGraph, vessel: str) -> str:
                     graph, neighbor, data=True):
                 if valve_neighbor_data['class'] == 'ChemputerVacuum':
                     return neighbor
+    return None
+
+
+def get_nearest_node(graph: MultiDiGraph, src: str, target_vessel_class: str):
+    # Make graph undirected so actual closest waste vessels are found, not
+    # closest in liquid flow path. As long as vessels are all attached to a
+    # valve which is attached to a waste vessel this should be fine.
+    target_vessels = [
+        node for node in graph.nodes()
+        if (graph.nodes[node]['class']
+            == target_vessel_class)
+    ]
+    shortest_path_found = 100000
+    closest_target_vessel = None
+    for target_vessel in target_vessels:
+        try:
+            shortest_path_to_target_vessel = shortest_path_length(
+                graph, source=src, target=target_vessel)
+            if shortest_path_to_target_vessel < shortest_path_found:
+                shortest_path_found = shortest_path_to_target_vessel
+                closest_target_vessel = target_vessel
+        except NetworkXNoPath:
+            pass
+
+    return closest_target_vessel
+
+def get_reagent_vessel(
+        graph: MultiDiGraph, reagent: str) -> Union[str, None]:
+    """Get vessel containing given reagent.
+
+    Args:
+        reagent (str): Name of reagent to find vessel for.
+
+    Returns:
+        str: ID of vessel containing given reagent.
+    """
+    for node, data in graph.nodes(data=True):
+        if data['class'] == CHEMPUTER_FLASK:
+            if data['chemical'] == reagent:
+                return node
     return None

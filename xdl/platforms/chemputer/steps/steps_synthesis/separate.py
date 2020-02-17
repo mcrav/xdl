@@ -13,7 +13,8 @@ from .....constants import (
 from .....utils.errors import XDLError
 from .....utils.misc import SanityCheck
 from .....localisation import HUMAN_READABLE_STEPS
-from ...utils.execution import get_buffer_flasks
+from .....constants import CHEMPUTER_WASTE
+from ...utils.execution import get_buffer_flasks, get_nearest_node
 
 class Separate(AbstractStep):
     """Extract contents of from_vessel using given amount of given solvent.
@@ -68,6 +69,11 @@ class Separate(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.separation_vessel, CHEMPUTER_WASTE)
 
     @property
     def dead_volume_target(self):

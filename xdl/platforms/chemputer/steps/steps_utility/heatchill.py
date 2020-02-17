@@ -492,8 +492,7 @@ class ChillerReturnToRT(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
-        self.properties['vessel_class'] = graph.nodes[self.vessel]['class']
-        self.update()
+        self.vessel_class = graph.nodes[self.vessel]['class']
 
     def get_steps(self):
         if self.vessel_class == 'JULABOCF41':

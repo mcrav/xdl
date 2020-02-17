@@ -14,8 +14,10 @@ from .....constants import (
     BOTTOM_PORT,
     DEFAULT_DRY_WASTE_VOLUME,
     DEFAULT_FILTER_VACUUM_PRESSURE,
-    ROOM_TEMPERATURE
+    ROOM_TEMPERATURE,
+    CHEMPUTER_WASTE,
 )
+from ...utils.execution import get_nearest_node
 
 class Dry(AbstractStep):
     """Dry given vessel by applying vacuum for given time.
@@ -69,6 +71,11 @@ class Dry(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.vessel, CHEMPUTER_WASTE)
 
     def get_steps(self) -> List[Step]:
         steps = []
