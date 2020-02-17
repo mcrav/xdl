@@ -11,7 +11,8 @@ from .....constants import (
 from .....localisation import HUMAN_READABLE_STEPS
 from .....utils.misc import SanityCheck
 from .....constants import CHEMPUTER_WASTE
-from ...utils.execution import get_nearest_node, get_reagent_vessel
+from ...utils.execution import (
+    get_nearest_node, get_reagent_vessel, get_flush_tube_vessel)
 
 class Add(AbstractStep):
     """Add given volume of given reagent to given vessel.
@@ -107,6 +108,9 @@ class Add(AbstractStep):
         if self.anticlogging_solvent and not self.anticlogging_solvent_vessel:
             self.anticlogging_solvent_vessel = get_reagent_vessel(
                 graph, self.anticlogging_solvent)
+
+        if not self.flush_tube_vessel:
+            self.flush_tube_vessel = get_flush_tube_vessel(graph)
 
     def get_steps(self) -> List[Step]:
         steps = []

@@ -1,4 +1,4 @@
-from typing import List, Union, Tuple, Dict, Optional
+from typing import List, Union, Tuple, Dict
 
 from networkx import MultiDiGraph
 from networkx.algorithms.shortest_paths.generic import shortest_path_length
@@ -16,7 +16,6 @@ from ....constants import (
     CHILLER_CLASSES,
     FILTER_DEAD_VOLUME_INERT_GAS_METHOD,
     FILTER_DEAD_VOLUME_LIQUID_METHOD,
-    INERT_GAS_SYNONYMS,
 )
 from ....utils.graph import get_graph, undirected_neighbors
 from ....utils.errors import XDLError
@@ -249,15 +248,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
             step_list (List[Step]): List of steps to add internal properties to.
         """
         for step in step_list:
-
-            if ('flush_tube_vessel' in step.properties
-                    and not step.flush_tube_vessel):
-                step.flush_tube_vessel = self._get_flush_tube_vessel()
-
-            # FilterThrough step flushes cartridge with inert gas/air
-            if ('flush_cartridge_vessel' in step.properties
-                    and not step.flush_cartridge_vessel):
-                step.flush_cartridge_vessel = self._get_flush_tube_vessel()
 
             # FilterThrough needs to know what dead volume of cartridge is. If
             # it is not provided in the graph it falls back to default.
@@ -514,26 +504,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
         elif hasattr(step, 'vessel'):
             if step.vessel in self._inert_gas_map:
                 return self._inert_gas_map[step.vessel]
-        return None
-
-    def _get_flush_tube_vessel(self) -> Optional[str]:
-        """Look for gas vessel to flush tube with after Add steps.
-
-        Returns:
-            str: Flask to use for flushing tube.
-                Preference is nitrogen > air > None.
-        """
-        inert_gas_flask = None
-        air_flask = None
-        for flask in self._graph_hardware.flasks:
-            if flask.chemical.lower() in INERT_GAS_SYNONYMS:
-                inert_gas_flask = flask.id
-            elif flask.chemical.lower() == 'air':
-                air_flask = flask.id
-        if inert_gas_flask:
-            return inert_gas_flask
-        elif air_flask:
-            return air_flask
         return None
 
     #####################

@@ -4,7 +4,7 @@ from .....step_utils.base_steps import Step, AbstractStep
 from ..steps_utility import Transfer
 from .....localisation import HUMAN_READABLE_STEPS
 from .....utils.misc import SanityCheck
-from ...utils.execution import get_reagent_vessel
+from ...utils.execution import get_reagent_vessel, get_flush_tube_vessel
 
 class FilterThrough(AbstractStep):
     """Filter contents of from_vessel through a cartridge,
@@ -65,8 +65,13 @@ class FilterThrough(AbstractStep):
 
     def on_prepare_for_execution(self, graph):
         if self.eluting_solvent:
-            self.eluting_solvent_vessel = get_reagent_vessel(
-                graph, self.eluting_solvent)
+            if not self.eluting_solvent_vessel:
+                self.eluting_solvent_vessel = get_reagent_vessel(
+                    graph, self.eluting_solvent)
+
+        if not self.flush_cartridge_vessel:
+            self.flush_cartridge_vessel = get_flush_tube_vessel(graph)
+
         if self.buffer_flask:
             self.buffer_flask_max_volume = graph.nodes[
                 self.buffer_flask]['max_volume']

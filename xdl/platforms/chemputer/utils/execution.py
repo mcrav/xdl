@@ -1,4 +1,4 @@
-from typing import Tuple, List, Dict, Union
+from typing import Tuple, List, Dict, Union, Optional
 from networkx import MultiDiGraph, NetworkXNoPath
 from networkx.algorithms import shortest_path_length
 from ....utils.graph import undirected_neighbors
@@ -161,3 +161,37 @@ def get_reagent_vessel(
             if data['chemical'] == reagent:
                 return node
     return None
+
+def get_flush_tube_vessel(graph) -> Optional[str]:
+    """Look for gas vessel to flush tube with after Add steps.
+
+    Returns:
+        str: Flask to use for flushing tube.
+            Preference is nitrogen > air > None.
+    """
+    inert_gas_flask = None
+    air_flask = None
+    for flask, data in graph_flasks(graph, data=True):
+        if data['chemical'].lower() in INERT_GAS_SYNONYMS:
+            inert_gas_flask = flask
+        elif data['chemical'].lower() == 'air':
+            air_flask = flask
+    if inert_gas_flask:
+        return inert_gas_flask
+    elif air_flask:
+        return air_flask
+    return None
+
+def graph_flasks(graph, data=False):
+    """Generator to iterate through all ChemputerFlasks in graph.
+
+    Args:
+        graph (MultiDiGraph): Graph
+        data (bool): Give node data in (node, data) tuple. Defaults to False.
+    """
+    for node, data in graph.nodes(data=True):
+        if data['class'] == CHEMPUTER_FLASK:
+            if data:
+                yield node, data
+            else:
+                yield node
