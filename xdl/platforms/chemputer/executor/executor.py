@@ -1,7 +1,6 @@
-from typing import List, Union, Tuple, Dict
+from typing import Union, Tuple, Dict, List
 
 from networkx import MultiDiGraph
-from networkx.algorithms.shortest_paths.generic import shortest_path_length
 
 from ....execution.abstract_executor import AbstractXDLExecutor
 from ....constants import (
@@ -63,7 +62,7 @@ from .constants import (
     NON_RECURSIVE_ABSTRACT_STEPS
 )
 from ..utils.execution import (
-    get_pneumatic_controller, get_vacuum_configuration)
+    get_pneumatic_controller, get_vacuum_configuration, get_buffer_flask)
 
 class ChemputerExecutor(AbstractXDLExecutor):
 
@@ -117,8 +116,8 @@ class ChemputerExecutor(AbstractXDLExecutor):
         if buffer_flasks_required:
             buffer_flasks_required = max(buffer_flasks_required)
             for vessel in list(set(vessels_for_search)):
-                vessel_buffer_flasks = self._get_buffer_flask(
-                    vessel, return_single=False)
+                vessel_buffer_flasks = get_buffer_flask(
+                    self._graph, vessel, return_single=False)
                 if vessel_buffer_flasks:
                     buffer_flasks_present.extend(vessel_buffer_flasks)
             buffer_flasks_present = len(buffer_flasks_present)
@@ -241,23 +240,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
         """
         for step in step_list:
 
-            # When doing FilterThrough or RunColumn and from_vessel and to
-            # vessel are the same, find an unused reactor to use as a buffer
-            # flask.
-            if 'buffer_flask' in step.properties:
-                if type(step) in [FilterThrough, RunColumn]:
-                    if (step.from_vessel == step.to_vessel
-                            and not step.buffer_flask):
-                        step.buffer_flask = self._get_buffer_flask(
-                            step.from_vessel)
-                elif type(step) == Separate:
-                    step.buffer_flask = self._get_buffer_flask(
-                        step.separation_vessel)
-
-            if 'buffer_flasks' in step.properties:
-                step.buffer_flasks = self._get_buffer_flask(
-                    step.separation_vessel, return_single=False)
-
             # Add pneumatic_controller to SwitchVacuum but not to CSwitchVacuum
             # as it is not an internal property in CSwitchVacuum
             if ('pneumatic_controller' in step.properties
@@ -335,46 +317,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
         for step in steps:
             if type(step) == CleanBackbone and not step.waste_vessels:
                 step.waste_vessels = self._graph_hardware.waste_xids
-
-    def _get_buffer_flask(self, vessel: str, return_single=True) -> str:
-        """Get buffer flask closest to given vessel.
-
-        Args:
-            vessel (str): Node name in graph.
-
-        Returns:
-            str: Node name of buffer flask (unused reactor) nearest vessel.
-        """
-        # Get all reactor IDs
-        flasks = [flask.id
-                  for flask in self._graph_hardware.flasks
-                  if not flask.chemical]
-
-        # From remaining reactor IDs, return nearest to vessel.
-        if flasks:
-            if len(flasks) == 1:
-                if return_single:
-                    return flasks[0]
-                else:
-                    return [flasks[0]]
-            else:
-                shortest_paths = []
-                for reactor in flasks:
-                    shortest_paths.append((
-                        reactor,
-                        shortest_path_length(
-                            self._graph, source=vessel, target=reactor)))
-                if return_single:
-                    return sorted(shortest_paths, key=lambda x: x[1])[0][0]
-                else:
-                    return [
-                        item[0]
-                        for item in sorted(shortest_paths, key=lambda x: x[1])
-                    ]
-        if return_single:
-            return None
-        else:
-            return [None, None]
 
     #####################
     # ADD IMPLIED STEPS #

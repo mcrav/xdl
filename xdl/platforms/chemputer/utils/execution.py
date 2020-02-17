@@ -1,4 +1,4 @@
-from typing import Tuple, List, Dict, Union, Optional
+from typing import Tuple, Dict, Union, Optional
 from networkx import MultiDiGraph, NetworkXNoPath
 from networkx.algorithms import shortest_path_length
 from ....utils.graph import undirected_neighbors
@@ -116,12 +116,48 @@ def get_vacuum_configuration(
         'valve_inert_gas': valve_inert_gas,
     }
 
-def get_buffer_flasks(graph: MultiDiGraph) -> List[str]:
-    buffer_flasks = []
-    for node, data in graph.nodes(data=True):
-        if data['class'] == 'ChemputerFlask' and not data['chemical']:
-            buffer_flasks.append(node)
-    return buffer_flasks
+def get_buffer_flask(
+        graph: MultiDiGraph, vessel: str, return_single=True) -> str:
+    """Get buffer flask closest to given vessel.
+
+    Args:
+        vessel (str): Node name in graph.
+
+    Returns:
+        str: Node name of buffer flask (unused reactor) nearest vessel.
+    """
+    # Get all reactor IDs
+    flasks = [
+        flask
+        for flask, data in graph_flasks(graph, data=True)
+        if not data['chemical']
+    ]
+
+    # From remaining reactor IDs, return nearest to vessel.
+    if flasks:
+        if len(flasks) == 1:
+            if return_single:
+                return flasks[0]
+            else:
+                return [flasks[0]]
+        else:
+            shortest_paths = []
+            for flask in flasks:
+                shortest_paths.append((
+                    flask,
+                    shortest_path_length(
+                        graph, source=vessel, target=flask)))
+            if return_single:
+                return sorted(shortest_paths, key=lambda x: x[1])[0][0]
+            else:
+                return [
+                    item[0]
+                    for item in sorted(shortest_paths, key=lambda x: x[1])
+                ]
+    if return_single:
+        return None
+    else:
+        return [None, None]
 
 def get_heater_chiller(graph, node):
     heater, chiller = None, None

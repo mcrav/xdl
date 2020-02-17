@@ -5,7 +5,7 @@ from ..steps_utility import Transfer
 from .....localisation import HUMAN_READABLE_STEPS
 from .....utils.misc import SanityCheck
 from ...utils.execution import (
-    get_reagent_vessel, get_flush_tube_vessel, get_cartridge)
+    get_reagent_vessel, get_flush_tube_vessel, get_cartridge, get_buffer_flask)
 
 class FilterThrough(AbstractStep):
     """Filter contents of from_vessel through a cartridge,
@@ -65,6 +65,11 @@ class FilterThrough(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+
+        if not self.buffer_flask:
+            self.buffer_flask = get_buffer_flask(
+                graph, self.from_vessel, return_single=True)
+
         if self.eluting_solvent:
             if not self.eluting_solvent_vessel:
                 self.eluting_solvent_vessel = get_reagent_vessel(

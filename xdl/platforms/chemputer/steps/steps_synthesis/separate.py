@@ -15,7 +15,7 @@ from .....utils.misc import SanityCheck
 from .....localisation import HUMAN_READABLE_STEPS
 from .....constants import CHEMPUTER_WASTE
 from ...utils.execution import (
-    get_buffer_flasks, get_nearest_node, get_cartridge)
+    get_buffer_flask, get_nearest_node, get_cartridge)
 
 class Separate(AbstractStep):
     """Extract contents of from_vessel using given amount of given solvent.
@@ -72,6 +72,10 @@ class Separate(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+        if not self.buffer_flasks[0]:
+            self.buffer_flasks = get_buffer_flask(
+                graph, self.separation_vessel, return_single=False)
+
         if not self.waste_vessel:
             self.waste_vessel = get_nearest_node(
                 graph, self.separation_vessel, CHEMPUTER_WASTE)
@@ -425,10 +429,10 @@ class Separate(AbstractStep):
     ####################################
 
     def sanity_checks(self, graph):
-        buffer_flasks = get_buffer_flasks(graph)
         return [
             SanityCheck(
-                condition=len(buffer_flasks) >= self.buffer_flasks_required,
+                condition=(len(self.buffer_flasks)
+                           >= self.buffer_flasks_required),
                 error_msg='Not enough buffer flasks in graph. Create buffer\
  flasks as ChemputerFlask nodes with an empty chemical property.'
             ),

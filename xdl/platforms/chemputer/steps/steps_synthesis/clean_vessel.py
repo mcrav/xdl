@@ -36,7 +36,8 @@ class CleanVessel(AbstractStep):
         'stir_speed': '500 RPM',
     }
 
-    #: Fraction of vessel max volume to use as solvent volume in CleanVessel step.
+    #: Fraction of vessel max volume to use as solvent volume in CleanVessel
+    # step.
     CLEAN_VESSEL_VOLUME_FRACTION: float = 0.5
 
     def __init__(
