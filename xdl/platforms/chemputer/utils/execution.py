@@ -183,6 +183,9 @@ def get_flush_tube_vessel(graph) -> Optional[str]:
         return air_flask
     return None
 
+def node_in_graph(graph, node):
+    return node in graph.nodes()
+
 def get_cartridge(graph, chemical):
     for cartridge, data in graph_cartridges(graph, data=True):
         if data['chemical'] == chemical:

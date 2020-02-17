@@ -54,7 +54,6 @@ from .tracking import iter_vessel_contents
 from .graph import (
     hardware_from_graph,
     make_vessel_map,
-    make_inert_gas_map,
 )
 from .utils import VesselContents, is_aqueous, validate_port
 from .cleaning import (
@@ -69,7 +68,8 @@ from .constants import (
     CLEAN_VESSEL_BOILING_POINT_FACTOR,
     NON_RECURSIVE_ABSTRACT_STEPS
 )
-from ..utils.execution import get_pneumatic_controller
+from ..utils.execution import (
+    get_pneumatic_controller, get_vacuum_configuration)
 
 class ChemputerExecutor(AbstractXDLExecutor):
 
@@ -246,11 +246,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
             step_list (List[Step]): List of steps to add internal properties to.
         """
         for step in step_list:
-
-            # Filter, WashSolid, Dry need this filled in if inert gas
-            # filter dead volume method being used.
-            if ('inert_gas' in step.properties):
-                step.inert_gas = self._get_inert_gas(step)
 
             if 'vessel_has_stirrer' in step.properties:
                 step.vessel_has_stirrer = step.vessel not in [
@@ -444,24 +439,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
             return None
         else:
             return [None, None]
-
-    def _get_vacuum(self, step: Step) -> str:
-        if hasattr(step, 'filter_vessel'):
-            if step.filter_vessel in self._vacuum_map:
-                return self._vacuum_map[step.filter_vessel]
-        elif hasattr(step, 'vessel'):
-            if step.vessel in self._vacuum_map:
-                return self._vacuum_map[step.vessel]
-        return None
-
-    def _get_inert_gas(self, step: Step) -> str:
-        if hasattr(step, 'filter_vessel'):
-            if step.filter_vessel in self._inert_gas_map:
-                return self._inert_gas_map[step.filter_vessel]
-        elif hasattr(step, 'vessel'):
-            if step.vessel in self._inert_gas_map:
-                return self._inert_gas_map[step.vessel]
-        return None
 
     #####################
     # ADD IMPLIED STEPS #
@@ -708,10 +685,12 @@ class ChemputerExecutor(AbstractXDLExecutor):
         """
         # Connect inert gas to bottom of filter flasks at start of procedure.
         for filter_vessel in self._graph_hardware.filters:
-            if filter_vessel.id in self._inert_gas_map:
+            vacuum_info = get_vacuum_configuration(
+                self._graph, filter_vessel.id)
+            if vacuum_info['valve_inert_gas']:
                 self._xdl.steps.insert(
                     0, CConnect(
-                        from_vessel=self._inert_gas_map[filter_vessel.id],
+                        from_vessel=vacuum_info['valve_inert_gas'],
                         to_vessel=filter_vessel.id,
                         to_port=BOTTOM_PORT)
                 )
@@ -1030,11 +1009,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
         else:
             self._graph = graph_file
         self._graph_hardware = hardware_from_graph(self._graph)
-        self._vacuum_map = make_vessel_map(
-            self._graph, CHEMPUTER_VACUUM_CLASS_NAME)
-        self._inert_gas_map = make_inert_gas_map(self._graph)
-        self._valve_map = make_vessel_map(
-            self._graph, CHEMPUTER_VALVE_CLASS_NAME)
 
         self._add_internal_properties(steps=block)
         self._validate_ports(steps=block)
@@ -1072,11 +1046,6 @@ class ChemputerExecutor(AbstractXDLExecutor):
             # Load graph, make Hardware object from graph, and map nearest
             # waste vessels to every node.
             self._graph_hardware = hardware_from_graph(self._graph)
-            self._vacuum_map = make_vessel_map(
-                self._graph, CHEMPUTER_VACUUM_CLASS_NAME)
-            self._inert_gas_map = make_inert_gas_map(self._graph)
-            self._valve_map = make_vessel_map(
-                self._graph, CHEMPUTER_VALVE_CLASS_NAME)
 
             # Check hardware compatibility
             if self._hardware_is_compatible():

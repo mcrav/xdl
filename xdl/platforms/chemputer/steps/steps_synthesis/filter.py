@@ -33,8 +33,6 @@ class Filter(AbstractStep):
         vacuum_device (str): Given internally. Name of vacuum device attached to
             vacuum flask. Can be None if vacuum is just from fumehood vacuum
             line.
-        inert_gas (str): Given internally. Name of node supplying inert gas.
-            Only used if inert gas filter dead volume method is being used.
         vacuum_valve (str): Given internally. Name of valve connecting filter
             bottom to vacuum.
         valve_unused_port (str): Given internally. Random unused position on

@@ -2,31 +2,16 @@ from typing import Optional, List
 from ..steps_utility.pneumatic_controller import SwitchArgon
 from .general import Wait
 from ..steps_base import CConnect, CValveMoveToPosition
-from ...utils.execution import get_unused_valve_port
+from ...utils.execution import (
+    get_unused_valve_port, get_vacuum_configuration)
 from .....step_utils.base_steps import AbstractStep
 from .....utils.graph import undirected_neighbors
 from .....constants import INERT_GAS_SYNONYMS
 from .....utils.misc import SanityCheck
 from ..steps_utility.cleaning import CleanBackbone
-
-def get_pneumatic_controller(graph, vessel):
-    for node, data in undirected_neighbors(graph, vessel, data=True):
-        if data['class'] == 'PneumaticController':
-            return node
-    return None
-
-def get_inert_gas(graph, vessel):
-    for node, data in undirected_neighbors(graph, vessel, data=True):
-        if data['class'] == 'ChemputerValve':
-            for valve_node, valve_data in undirected_neighbors(
-                    graph, node, data=True):
-                if (valve_data['class'] == 'ChemputerFlask'
-                        and valve_data['chemical'] in INERT_GAS_SYNONYMS):
-                    return node, valve_node
-    return None, None
-
-def node_in_graph(graph, node):
-    return node in list(graph.nodes())
+from ...utils.execution import (
+    get_vacuum_configuration, get_pneumatic_controller, node_in_graph
+)
 
 class StartPurge(AbstractStep):
     def __init__(
@@ -49,9 +34,11 @@ class StartPurge(AbstractStep):
 
     def on_prepare_for_execution(self, graph):
         self.pneumatic_controller = self.inert_gas = None
-        self.pneumatic_controller = get_pneumatic_controller(graph, self.vessel)
+        self.pneumatic_controller, _ = get_pneumatic_controller(graph, self.vessel)
         if not self.pneumatic_controller:
-            _, self.inert_gas = get_inert_gas(graph, self.vessel)
+            vacuum_info = get_vacuum_configuration(graph, self.vessel)
+            if not self.pneumatic_controller and not self.inert_gas:
+                self.inert_gas = vacuum_info['valve_inert_gas']
 
     def get_steps(self):
         if self.pneumatic_controller:
@@ -100,14 +87,17 @@ class StopPurge(AbstractStep):
 
     def on_prepare_for_execution(self, graph):
         self.pneumatic_controller = self.inert_gas = None
-        self.pneumatic_controller = get_pneumatic_controller(graph, self.vessel)
+        self.pneumatic_controller, _ = get_pneumatic_controller(graph, self.vessel)
         if not self.pneumatic_controller:
-            self.inert_gas_valve, self.inert_gas = get_inert_gas(
-                graph, self.vessel)
-            if self.inert_gas:
-                self.inert_gas_valve_unused_port =\
-                    get_unused_valve_port(
-                        graph, self.inert_gas_valve)
+            vacuum_info = get_vacuum_configuration(graph, self.vessel)
+            if not self.pneumatic_controller:
+                if not self.inert_gas:
+                    self.inert_gas = vacuum_info['valve_inert_gas']
+                if not self.inert_gas_valve:
+                    self.inert_gas_valve = vacuum_info['valve']
+                if self.inert_gas_valve_unused_port is None:
+                    self.inert_gas_valve_unused_port = vacuum_info[
+                        'valve_unused_port']
 
     def get_steps(self):
         if self.pneumatic_controller:

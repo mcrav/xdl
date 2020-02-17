@@ -111,6 +111,14 @@ class RemoveFilterDeadVolume(AbstractStep):
         self.waste_vessel = get_nearest_node(
             graph, self.filter_vessel, CHEMPUTER_WASTE)
 
+        vacuum_info = get_vacuum_configuration(graph, self.filter_vessel)
+        if not self.vacuum:
+            self.vacuum = vacuum_info['source']
+        if not self.vacuum_valve:
+            self.vacuum_valve = vacuum_info['valve']
+        if not self.valve_unused_port:
+            self.valve_unused_port = vacuum_info['valve_unused_port']
+
     def get_steps(self) -> List[Step]:
         steps = [CMove(from_vessel=self.filter_vessel,
                        from_port=BOTTOM_PORT,
