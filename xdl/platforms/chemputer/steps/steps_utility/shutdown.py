@@ -28,8 +28,18 @@ class Shutdown(AbstractStep):
     Inherits:
         AbstractStep
     """
+
+    INTERNAL_PROPS = [
+        'vacuums',
+        'heaters',
+        'stirrers',
+        'rotavaps',
+        'chillers'
+    ]
+
     def __init__(
         self,
+        # Internal properties
         vacuums: List[str] = [],
         heaters: List[str] = [],
         stirrers: List[str] = [],

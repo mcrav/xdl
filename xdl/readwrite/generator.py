@@ -3,7 +3,7 @@ from lxml import etree
 from ..reagents import Reagent
 from ..hardware import Hardware
 from ..steps import Step
-from ..constants import INTERNAL_PROPERTIES, XDL_VERSION
+from ..constants import XDL_VERSION
 from .constants import ALWAYS_WRITE
 from ..utils.misc import format_property
 from ..utils.sanitisation import convert_val_to_std_units
@@ -111,8 +111,7 @@ class XDLGenerator(object):
                                 continue
 
                         # Don't write internal properties.
-                        if (step.name in INTERNAL_PROPERTIES
-                                and prop in INTERNAL_PROPERTIES[step.name]):
+                        if prop in step.INTERNAL_PROPS:
                             continue
                     # Convert value to nice units and add to element attrib.
                     formatted_property = format_property(

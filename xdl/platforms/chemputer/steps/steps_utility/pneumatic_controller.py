@@ -22,13 +22,20 @@ class SwitchVacuum(AbstractStep):
         'after_switch_wait': '30 seconds',
     }
 
+    INTERNAL_PROPS = [
+        'pneumatic_controller',
+        'pneumatic_controller_port',
+    ]
+
     def __init__(
         self,
         vessel: str,
         port: str = None,
+        after_switch_wait: float = 'default',
+
+        # Internal properties
         pneumatic_controller: str = None,
         pneumatic_controller_port: str = None,
-        after_switch_wait: float = 'default',
         **kwargs,
     ) -> None:
         super().__init__(locals())
@@ -68,14 +75,21 @@ class SwitchArgon(AbstractStep):
         'after_switch_wait': '30 seconds',
     }
 
+    INTERNAL_PROPS = [
+        'pneumatic_controller',
+        'pneumatic_controller_port',
+    ]
+
     def __init__(
         self,
         vessel: str,
         port: str = None,
         pressure: str = 'low',
+        after_switch_wait: float = None,
+
+        # Internal properties
         pneumatic_controller: str = None,
         pneumatic_controller_port: str = None,
-        after_switch_wait: float = None,
         **kwargs,
     ) -> None:
         super().__init__(locals())

@@ -36,6 +36,15 @@ class CleanVessel(AbstractStep):
         'stir_speed': '500 RPM',
     }
 
+    INTERNAL_PROPS = [
+        'solvent_vessel',
+        'waste_vessel',
+        'vacuum',
+        'vessel_type',
+        'heater',
+        'chiller',
+    ]
+
     #: Fraction of vessel max volume to use as solvent volume in CleanVessel
     # step.
     CLEAN_VESSEL_VOLUME_FRACTION: float = 0.5
@@ -50,6 +59,8 @@ class CleanVessel(AbstractStep):
         dry: Optional[bool] = False,
         volume: Optional[float] = None,
         cleans: Optional[int] = 2,
+
+        # Internal properties
         solvent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,

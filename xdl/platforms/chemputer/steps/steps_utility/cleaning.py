@@ -6,9 +6,16 @@ from ...utils.execution import get_reagent_vessel
 
 class CleanBackbone(AbstractStep):
 
+    INTERNAL_PROPS = [
+        'waste_vessels',
+        'solvent_vessel',
+    ]
+
     def __init__(
         self,
         solvent: str,
+
+        # Internal properties
         waste_vessels: Optional[List[str]] = [],
         solvent_vessel: Optional[str] = None,
         **kwargs

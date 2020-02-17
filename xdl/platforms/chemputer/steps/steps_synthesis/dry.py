@@ -57,6 +57,17 @@ class Dry(AbstractStep):
         'continue_heatchill': False,
     }
 
+    INTERNAL_PROPS = [
+        'vacuum',
+        'vacuum_device',
+        'vacuum_pressure',
+        'inert_gas',
+        'vacuum_valve',
+        'valve_unused_port',
+        'vessel_type',
+        'vessel_has_stirrer',
+    ]
+
     def __init__(
         self,
         vessel: str,
@@ -64,6 +75,9 @@ class Dry(AbstractStep):
         temp: Optional[float] = None,
         waste_vessel: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
+        continue_heatchill: Optional[bool] = 'default',
+
+        # Internal properties
         vacuum: Optional[str] = None,
         vacuum_device: Optional[str] = False,
         vacuum_pressure: Optional[float] = 'default',
@@ -72,7 +86,6 @@ class Dry(AbstractStep):
         valve_unused_port: Optional[Union[str, int]] = None,
         vessel_type: Optional[str] = None,
         vessel_has_stirrer: Optional[bool] = True,
-        continue_heatchill: Optional[bool] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())

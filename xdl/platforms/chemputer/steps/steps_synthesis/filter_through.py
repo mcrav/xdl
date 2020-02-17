@@ -43,6 +43,16 @@ class FilterThrough(AbstractStep):
         'cartridge_dead_volume': '25 mL',
     }
 
+    INTERNAL_PROPS = [
+        'eluting_solvent_vessel',
+        'flush_cartridge_vessel',
+        'through_cartridge',
+        'cartridge_dead_volume',
+        'buffer_flask',
+        'buffer_flask_max_volume',
+        'to_vessel_max_volume',
+    ]
+
     def __init__(
         self,
         from_vessel: str,
@@ -53,6 +63,8 @@ class FilterThrough(AbstractStep):
         eluting_repeats: Optional[int] = 'default',
         move_speed: Optional[float] = 'default',
         aspiration_speed: Optional[float] = 'default',
+
+        # Internal properties
         eluting_solvent_vessel: Optional[str] = None,
         flush_cartridge_vessel: Optional[str] = None,
         through_cartridge: Optional[str] = None,

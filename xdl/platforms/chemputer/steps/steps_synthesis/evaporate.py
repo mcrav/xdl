@@ -46,6 +46,12 @@ class Evaporate(AbstractStep):
         'rotation_speed': '150 RPM'
     }
 
+    INTERNAL_PROPS = [
+        'waste_vessel',
+        'collection_flask_volume',
+        'has_chiller',
+    ]
+
     def __init__(
         self,
         rotavap_name: str,
@@ -54,6 +60,8 @@ class Evaporate(AbstractStep):
         time: Optional[float] = 'default',
         rotation_speed: Optional[float] = 'default',
         mode: Optional[str] = 'manual',
+
+        # Internal properties
         waste_vessel: Optional[str] = None,
         collection_flask_volume: Optional[float] = None,
         has_chiller: bool = False,

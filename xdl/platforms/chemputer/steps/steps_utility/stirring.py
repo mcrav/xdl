@@ -22,8 +22,17 @@ class SetStirRate(AbstractStep):
         stir_speed (float): Stir rate in RPM
         vessel_type (str): Given internally. 'filter', 'rotavap' or 'reactor'.
     """
+
+    INTERNAL_PROPS = [
+        'vessel_type',
+    ]
+
     def __init__(
-        self, vessel: str, stir_speed: float, vessel_type: Optional[str] = None
+        self, vessel: str,
+        stir_speed: float,
+
+        # Internal properties
+        vessel_type: Optional[str] = None
     ) -> None:
         super().__init__(locals())
 
@@ -51,11 +60,17 @@ class StartStir(AbstractStep):
         'stir_speed': '250 RPM',
     }
 
+    INTERNAL_PROPS = [
+        'vessel_type'
+    ]
+
     def __init__(
         self,
         vessel: str,
-        vessel_type: Optional[str] = None,
         stir_speed: Optional[float] = 'default',
+
+        # Internal properties
+        vessel_type: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -96,9 +111,17 @@ class StopStir(AbstractStep):
             The point of this is that StopStir can be used and if there is no
             stirrer then it is just ignored rather than an error being raised.
     """
+
+    INTERNAL_PROPS = [
+        'vessel_type',
+        'vessel_has_stirrer',
+    ]
+
     def __init__(
         self,
         vessel: str,
+
+        # Internal properties
         vessel_type: str = None,
         vessel_has_stirrer: bool = True,
         **kwargs
@@ -137,12 +160,18 @@ class Stir(AbstractStep):
         'stir_speed': '250 RPM',
     }
 
+    INTERNAL_PROPS = [
+        'vessel_type'
+    ]
+
     def __init__(
         self,
         vessel: str,
         time: float,
         continue_stirring: bool = False,
         stir_speed: Optional[float] = 'default',
+
+        # Internal properties
         vessel_type: Optional[str] = None,
         **kwargs
     ) -> None:

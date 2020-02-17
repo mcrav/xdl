@@ -22,6 +22,10 @@ class HeatChill(AbstractStep):
         'stir_speed': '250 RPM',
     }
 
+    INTERNAL_PROPS = [
+        'vessel_type',
+    ]
+
     def __init__(
         self,
         vessel: str,
@@ -29,6 +33,8 @@ class HeatChill(AbstractStep):
         time: float,
         stir: bool = 'default',
         stir_speed: float = 'default',
+
+        # Internal properties
         vessel_type: Optional[str] = None,
         **kwargs
     ) -> None:

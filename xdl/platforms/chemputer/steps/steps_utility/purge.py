@@ -1,4 +1,3 @@
-from typing import Optional, List
 from ..steps_utility.pneumatic_controller import SwitchArgon
 from .general import Wait
 from ..steps_base import CConnect, CValveMoveToPosition
@@ -11,9 +10,17 @@ from ...utils.execution import (
 )
 
 class StartPurge(AbstractStep):
+
+    INTERNAL_PROPS = [
+        'pneumatic_controller',
+        'inert_gas'
+    ]
+
     def __init__(
         self,
         vessel: str,
+
+        # Internal properties
         pneumatic_controller: str = None,
         inert_gas: str = None,
         **kwargs,
@@ -58,14 +65,24 @@ class StartPurge(AbstractStep):
             return []
 
 class StopPurge(AbstractStep):
+
+    INTERNAL_PROPS = [
+        'pneumatic_controller',
+        'inert_gas',
+        'inert_gas_valve',
+        'inert_gas_valve_unused_port',
+    ]
+
     def __init__(
         self,
         vessel: str,
+
+        # Internal properties
         pneumatic_controller: str = None,
         inert_gas: str = None,
         inert_gas_valve: str = None,
         inert_gas_valve_unused_port: str = None,
-        **kwargs,
+        **kwargs
     ):
         super().__init__(locals())
 
@@ -158,49 +175,28 @@ class PurgeBackbone(AbstractStep):
     def __init__(
         self,
         purge_gas: str = None,
-        purge_vessel: str = None,
-        waste_vessels: Optional[List[str]] = [],
         **kwargs
     ):
         super().__init__(locals())
 
-    def sanity_checks(self, graph):
-        checks = [
-            SanityCheck(
-                condition=self.purge_vessel,
-            ),
-            SanityCheck(
-                condition=node_in_graph(graph, self.purge_vessel)
-            )
-        ]
-        waste_checks = [
-            SanityCheck(
-                node_in_graph(graph, waste)
-                for waste in self.waste_vessels
-            )
-        ]
-        return checks + waste_checks
-
     def on_prepare_for_execution(self, graph):
         if self.purge_gas is None:
-            for node, data in graph.nodes(data=True):
+            for _, data in graph.nodes(data=True):
                 if (data['class'] == 'ChemputerFlask'
                         and data['chemical'] in INERT_GAS_SYNONYMS):
                     self.purge_gas = data['chemical']
                     break
 
-        elif self.purge_vessel is None:
-            for node, data in graph.nodes(data=True):
-                if (data['class'] == 'ChemputerFlask'
-                        and data['chemical'] == self.purge_gas):
-                    self.purge_vessel = node
-                    break
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.purge_gas,
+            ),
+        ]
 
     def get_steps(self):
         return [
             CleanBackbone(
                 solvent=self.purge_gas,
-                waste_vessels=self.waste_vessels,
-                solvent_vessel=self.purge_vessel
             )
         ]

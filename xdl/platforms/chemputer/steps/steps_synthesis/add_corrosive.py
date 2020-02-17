@@ -15,14 +15,21 @@ class AddCorrosive(AbstractStep):
         air_vessel (str): Used internally. Vessel containing air.
     """
 
+    INTERNAL_PROPS = [
+        'reagent_vessel',
+        'air_vessel',
+    ]
+
     def __init__(
         self,
         reagent: str,
         vessel: str,
         volume: float,
+        stir: Optional[bool] = True,
+
+        # Internal properties
         reagent_vessel: Optional[str] = None,
         air_vessel: Optional[str] = None,
-        stir: Optional[bool] = True,
         **kwargs
     ) -> None:
         super().__init__(locals())

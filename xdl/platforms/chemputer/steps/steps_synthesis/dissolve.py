@@ -16,13 +16,6 @@ from .....constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
 from ...utils.execution import get_reagent_vessel, get_vessel_type
 
 class Dissolve(AbstractStep):
-
-    DEFAULT_PROPS = {
-        'time': '20 minutes',
-        'temp': '25°C',
-        'stir_speed': '400 RPM',
-    }
-
     """Dissolve contents of vessel in given solvent.
 
     Args:
@@ -37,6 +30,18 @@ class Dissolve(AbstractStep):
         vessel_type (str): Given internally. 'reactor', 'filter', 'rotavap',
             'flask' or 'separator'.
     """
+
+    DEFAULT_PROPS = {
+        'time': '20 minutes',
+        'temp': '25°C',
+        'stir_speed': '400 RPM',
+    }
+
+    INTERNAL_PROPS = [
+        'solvent_vessel',
+        'vessel_type',
+    ]
+
     def __init__(
         self,
         vessel: str,
@@ -46,6 +51,8 @@ class Dissolve(AbstractStep):
         temp: Optional[float] = 'default',
         time: Optional[float] = 'default',
         stir_speed: Optional[float] = 'default',
+
+        # Internal properties
         solvent_vessel: Optional[str] = None,
         vessel_type: Optional[str] = None,
         **kwargs,

@@ -433,14 +433,20 @@ class HeatChillReturnToRT(AbstractStep):
         'after_recording_speed': 14,
     }
 
+    INTERNAL_PROPS = [
+        'vessel_type',
+    ]
+
     def __init__(
         self,
         vessel: str,
         stir: Optional[bool] = 'default',
         stir_speed: Optional[float] = 'default',
-        vessel_type: Optional[str] = None,
         wait_recording_speed: Optional[float] = 'default',
         after_recording_speed: Optional[float] = 'default',
+
+        # Internal properties
+        vessel_type: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -511,12 +517,18 @@ class ChillerReturnToRT(AbstractStep):
         'after_recording_speed': 14,
     }
 
+    INTERNAL_PROPS = [
+        'vessel_class'
+    ]
+
     def __init__(
         self,
         vessel: str,
-        vessel_class: str = None,
         wait_recording_speed: Optional[float] = 'default',
         after_recording_speed: Optional[float] = 'default',
+
+        # Internal properties
+        vessel_class: str = None,
     ):
         super().__init__(locals())
 
