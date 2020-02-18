@@ -22,7 +22,6 @@ tests/unit/chempiler_output
 
 # other
 .vscode
-test.py
 chempiler_output/
 *.xdlexe
 
