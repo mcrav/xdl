@@ -27,6 +27,14 @@ class SwitchVacuum(AbstractStep):
         'pneumatic_controller_port',
     ]
 
+    PROP_TYPES = {
+        'vessel': str,
+        'port': str,
+        'after_switch_wait': float,
+        'pneumatic_controller': str,
+        'pneumatic_controller_port': str
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -79,6 +87,15 @@ class SwitchArgon(AbstractStep):
         'pneumatic_controller',
         'pneumatic_controller_port',
     ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'port': str,
+        'pressure': str,
+        'after_switch_wait': float,
+        'pneumatic_controller': str,
+        'pneumatic_controller_port': str
+    }
 
     def __init__(
         self,

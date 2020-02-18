@@ -71,6 +71,32 @@ class Add(AbstractStep):
         'anticlogging_reagent_volume': '10 mL',
     }
 
+    PROP_TYPES = {
+        'reagent': str,
+        'vessel': str,
+        'volume': float,
+        'mass': float,
+        'port': str,
+        'through': str,
+        'move_speed': float,
+        'aspiration_speed': float,
+        'dispense_speed': float,
+        'viscous': bool,
+        'time': float,
+        'stir': bool,
+        'stir_speed': float,
+        'anticlogging': bool,
+        'anticlogging_solvent': str,
+        'anticlogging_solvent_volume': float,
+        'anticlogging_reagent_volume': float,
+        'through_cartridge': str,
+        'reagent_vessel': str,
+        'waste_vessel': str,
+        'flush_tube_vessel': str,
+        'vessel_type': str,
+        'anticlogging_solvent_vessel': str
+    }
+
     INTERNAL_PROPS = [
         'through_cartridge',
         'reagent_vessel',

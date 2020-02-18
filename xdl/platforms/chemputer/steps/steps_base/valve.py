@@ -8,6 +8,12 @@ class CValveMoveToPosition(AbstractBaseStep):
         valve_name (str): Node name of the valve to move.
         position (int): Position to move valve to.
     """
+
+    PROP_TYPES = {
+        'valve_name': str,
+        'position': int
+    }
+
     def __init__(self, valve_name: str, position: int) -> None:
         super().__init__(locals())
 

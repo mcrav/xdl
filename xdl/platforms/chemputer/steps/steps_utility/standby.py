@@ -14,6 +14,11 @@ class Standby(AbstractStep):
         time_interval (str): Activate periodically after this many hours.
     """
 
+    PROP_TYPES = {
+        'solvent': str,
+        'time_interval': float
+    }
+
     def __init__(
         self,
         solvent: str,

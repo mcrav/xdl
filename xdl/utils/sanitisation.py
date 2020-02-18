@@ -189,6 +189,7 @@ def clean_properties(xdl_class, properties):
             continue
 
         prop_type = annotations[prop]
+        print(prop_type, xdl_class.PROP_TYPES[prop], '$$$')
 
         if prop_type in [str, Optional[str]]:
             if val:

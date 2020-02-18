@@ -73,6 +73,28 @@ class WashSolid(AbstractStep):
         'anticlogging': False,
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'solvent': str,
+        'volume': float,
+        'temp': float,
+        'vacuum_time': float,
+        'stir': Union[bool, str],
+        'stir_time': float,
+        'stir_speed': float,
+        'aspiration_speed': float,
+        'filtrate_vessel': str,
+        'anticlogging': bool,
+        'waste_vessel': str,
+        'vacuum': str,
+        'vacuum_device': str,
+        'inert_gas': str,
+        'vacuum_valve': str,
+        'valve_unused_port': Union[str, int],
+        'vessel_type': str,
+        'filter_dead_volume': float
+    }
+
     INTERNAL_PROPS = [
         'waste_vessel',
         'vacuum',

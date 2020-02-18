@@ -27,6 +27,11 @@ class StartVacuum(AbstractStep):
         'pressure': '400 mbar',
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'pressure': float
+    }
+
     def __init__(
         self, vessel: str, pressure: float = 'default', **kwargs
     ) -> None:
@@ -45,6 +50,11 @@ class StopVacuum(AbstractStep):
     Args:
         vessel (str): Vessel name to stop vacuum on.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str, **kwargs) -> None:
         super().__init__(locals())
 
@@ -71,6 +81,19 @@ class ApplyVacuum(AbstractStep):
         'vacuum_valve_unused_port',
         'pneumatic_controller'
     ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'time': float,
+        'pressure': float,
+        'port': str,
+        'vacuum_valve': str,
+        'vacuum_source': str,
+        'vacuum_device': str,
+        'vacuum_valve_inert_gas': str,
+        'vacuum_valve_unused_port': str,
+        'pneumatic_controller': str
+    }
 
     def __init__(
         self,

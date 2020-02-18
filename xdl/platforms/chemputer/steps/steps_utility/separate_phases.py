@@ -20,6 +20,21 @@ SEPARATION_DEFAULT_END_PUMP_SPEED_CART = 5
 
 class SeparatePhases(AbstractDynamicStep):
 
+    PROP_TYPES = {
+        'separation_vessel': str,
+        'lower_phase_vessel': str,
+        'upper_phase_vessel': str,
+        'dead_volume_vessel': str,
+        'step_volume': float,
+        'lower_phase_port': str,
+        'upper_phase_port': str,
+        'dead_volume_port': str,
+        'lower_phase_through': str,
+        'upper_phase_through': str,
+        'dead_volume_through': str,
+        'max_retries': int
+    }
+
     FINISH = 0  # Finish successfully
     READ_CONDUCTIVITY = 1  # Take conductivity measurement
     WITHDRAW = 2  # Withdraw more liquid

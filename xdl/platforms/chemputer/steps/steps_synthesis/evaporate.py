@@ -46,6 +46,18 @@ class Evaporate(AbstractStep):
         'rotation_speed': '150 RPM'
     }
 
+    PROP_TYPES = {
+        'rotavap_name': str,
+        'temp': float,
+        'pressure': float,
+        'time': float,
+        'rotation_speed': float,
+        'mode': str,
+        'waste_vessel': str,
+        'collection_flask_volume': float,
+        'has_chiller': bool
+    }
+
     INTERNAL_PROPS = [
         'waste_vessel',
         'collection_flask_volume',

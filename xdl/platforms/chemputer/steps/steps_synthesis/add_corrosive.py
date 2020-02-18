@@ -15,6 +15,15 @@ class AddCorrosive(AbstractStep):
         air_vessel (str): Used internally. Vessel containing air.
     """
 
+    PROP_TYPES = {
+        'reagent': str,
+        'vessel': str,
+        'volume': float,
+        'stir': bool,
+        'reagent_vessel': str,
+        'air_vessel': str
+    }
+
     INTERNAL_PROPS = [
         'reagent_vessel',
         'air_vessel',

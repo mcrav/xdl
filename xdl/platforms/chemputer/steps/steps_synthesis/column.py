@@ -22,6 +22,14 @@ class RunColumn(AbstractStep):
         'move_speed': 5  # mL / min
     }
 
+    PROP_TYPES = {
+        'from_vessel': str,
+        'to_vessel': str,
+        'column': str,
+        'move_speed': float,
+        'buffer_flask': str
+    }
+
     INTERNAL_PROPS = [
         'buffer_flask',
     ]

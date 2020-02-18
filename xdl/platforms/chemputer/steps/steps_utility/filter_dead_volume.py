@@ -35,6 +35,18 @@ class AddFilterDeadVolume(AbstractStep):
         'valve_unused_port',
     ]
 
+    PROP_TYPES = {
+        'filter_vessel': str,
+        'solvent': str,
+        'volume': float,
+        'waste_vessel': str,
+        'solvent_vessel': str,
+        'vacuum': str,
+        'inert_gas': str,
+        'vacuum_valve': str,
+        'valve_unused_port': Union[str, int]
+    }
+
     def __init__(
         self,
         filter_vessel: str,
@@ -107,10 +119,29 @@ class RemoveFilterDeadVolume(AbstractStep):
         valve_unused_port (str): Given internally. Random unused position on
             valve.
     """
+
+    INTERNAL_PROPS = [
+        'waste_vessel',
+        'vacuum',
+        'vacuum_valve',
+        'valve_unused_port'
+    ]
+
+    PROP_TYPES = {
+        'filter_vessel': str,
+        'dead_volume': float,
+        'waste_vessel': str,
+        'vacuum': str,
+        'vacuum_valve': str,
+        'valve_unused_port': Union[str, int]
+    }
+
     def __init__(
         self,
         filter_vessel: str,
         dead_volume: Optional[float] = 0,
+
+        # Internal properties
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
         vacuum_valve: Optional[str] = None,

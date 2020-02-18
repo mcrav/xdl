@@ -45,6 +45,23 @@ class FilterThrough(AbstractStep):
         'cartridge_dead_volume': '25 mL',
     }
 
+    PROP_TYPES = {
+        'from_vessel': str,
+        'to_vessel': str,
+        'through': str,
+        'eluting_solvent': str,
+        'eluting_volume': float,
+        'eluting_repeats': int,
+        'move_speed': float,
+        'aspiration_speed': float,
+        'eluting_solvent_vessel': str,
+        'flush_cartridge_vessel': str,
+        'through_cartridge': str,
+        'cartridge_dead_volume': float,
+        'buffer_flask': str,
+        'from_vessel_max_volume': float
+    }
+
     INTERNAL_PROPS = [
         'eluting_solvent_vessel',
         'flush_cartridge_vessel',

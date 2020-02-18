@@ -35,6 +35,13 @@ class PrimePumpForAdd(AbstractStep):
         'waste_vessel',
     ]
 
+    PROP_TYPES = {
+        'reagent': str,
+        'volume': float,
+        'reagent_vessel': str,
+        'waste_vessel': str
+    }
+
     def __init__(
         self,
         reagent: str,
@@ -87,6 +94,25 @@ class Transfer(AbstractStep):
         'transfer_all',
         'from_vessel_has_stirrer',
     ]
+
+    PROP_TYPES = {
+        'from_vessel': str,
+        'to_vessel': str,
+        'volume': float,
+        'from_port': str,
+        'to_port': str,
+        'through': str,
+        'time': float,
+        'aspiration_speed': float,
+        'move_speed': float,
+        'dispense_speed': float,
+        'viscous': bool,
+        'through_cartridge': str,
+        'transfer_all': bool,
+        'from_vessel_has_stirrer': bool,
+        'from_vessel_has_heater': bool,
+        'from_vessel_has_chiller': bool
+    }
 
     def __init__(
         self,

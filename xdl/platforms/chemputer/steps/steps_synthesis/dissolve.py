@@ -37,6 +37,18 @@ class Dissolve(AbstractStep):
         'stir_speed': '400 RPM',
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'solvent': str,
+        'volume': float,
+        'port': str,
+        'temp': float,
+        'time': float,
+        'stir_speed': float,
+        'solvent_vessel': str,
+        'vessel_type': str
+    }
+
     INTERNAL_PROPS = [
         'solvent_vessel',
         'vessel_type',

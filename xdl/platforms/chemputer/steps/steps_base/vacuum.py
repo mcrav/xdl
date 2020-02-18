@@ -7,6 +7,11 @@ class CGetVacuumSetPoint(AbstractBaseStep):
     Args:
         vessel (str): Name of the node the vacuum pump is attached to.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
@@ -24,6 +29,12 @@ class CSetVacuumSetPoint(AbstractBaseStep):
         vessel (str): Name of the node the vacuum pump is attached to.
         vacuum_pressure (float): Vacuum pressure setpoint in mbar.
     """
+
+    PROP_TYPES = {
+        'vessel': str,
+        'vacuum_pressure': float
+    }
+
     def __init__(self, vessel: str, vacuum_pressure: float) -> None:
         super().__init__(locals())
 
@@ -41,6 +52,11 @@ class CStartVacuum(AbstractBaseStep):
     Args:
         vessel (str): Name of the node the vacuum pump is attached to.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
@@ -57,6 +73,11 @@ class CStopVacuum(AbstractBaseStep):
     Args:
         vessel (str): Name of the node the vacuum pump is attached to.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
@@ -73,6 +94,11 @@ class CVentVacuum(AbstractBaseStep):
     Args:
         vessel (str): Name of the node the vacuum pump is attached to.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
@@ -93,6 +119,12 @@ class CSetSpeedSetPoint(AbstractBaseStep):
         vessel (str): Name of the node the vacuum pump is attached to.
         vacuum_pump_speed (float): Vacuum pump speed in percent.
     """
+
+    PROP_TYPES = {
+        'vessel': str,
+        'vacuum_pump_speed': float
+    }
+
     def __init__(self, vessel: str, vacuum_pump_speed: float) -> None:
         super().__init__(locals())
 
@@ -111,6 +143,12 @@ class CSetEndVacuumSetPoint(AbstractBaseStep):
         vessel (str): Name of the node the vacuum pump is attached to.
         vacuum_set_point (int): Set point value to set vacuum to.
     """
+
+    PROP_TYPES = {
+        'vessel': str,
+        'vacuum_set_point': int
+    }
+
     def __init__(self, vessel: str, vacuum_set_point: int) -> None:
         super().__init__(locals())
 
@@ -129,6 +167,11 @@ class CGetEndVacuumSetPoint(AbstractBaseStep):
     Args:
         vessel (str): Name of the node the vacuum pump is attached to.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
@@ -147,6 +190,12 @@ class CSetRuntimeSetPoint(AbstractBaseStep):
         vessel (str): Name of the node the vacuum pump is attached to.
         time (float): Desired runtime.
     """
+
+    PROP_TYPES = {
+        'vessel': str,
+        'time': float
+    }
+
     def __init__(self, vessel: str, time: float) -> None:
         super().__init__(locals())
 
@@ -164,6 +213,11 @@ class CGetRuntimeSetPoint(AbstractBaseStep):
     Args:
         vessel (str): Name of the node the vacuum pump is attached to.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 

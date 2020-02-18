@@ -12,6 +12,20 @@ class CSeparatePhases(AbstractBaseStep):
         dead_volume_target (str): Name of waste vessel to transfer dead
                                     volume between phases to.
     """
+
+    PROP_TYPES = {
+        'lower_phase_vessel': str,
+        'upper_phase_vessel': str,
+        'separation_vessel': str,
+        'dead_volume_target': str,
+        'lower_phase_port': str,
+        'upper_phase_port': str,
+        'dead_volume_port': str,
+        'lower_phase_through': str,
+        'upper_phase_through': str,
+        'dead_volume_through': str,
+    }
+
     def __init__(
         self,
         lower_phase_vessel: str,

@@ -9,6 +9,10 @@ class Confirm(AbstractBaseStep):
         msg (str): Message to get user to confirm experiment should continue.
     """
 
+    PROP_TYPES = {
+        'msg': str
+    }
+
     def __init__(self, msg: str, **kwargs) -> None:
         super().__init__(locals())
 
@@ -30,6 +34,11 @@ class CSetRecordingSpeed(AbstractBaseStep):
         recording_speed (float): Factor by which the recording should be sped
             up, i.e. 2 would mean twice the normal speed. 1 means normal speed.
     """
+
+    PROP_TYPES = {
+        'recording_speed': float
+    }
+
     def __init__(self, recording_speed: float) -> None:
         super().__init__(locals())
 
@@ -48,6 +57,11 @@ class CWait(AbstractBaseStep):
     Args:
         time (int): Time to wait in seconds.
     """
+
+    PROP_TYPES = {
+        'time': float
+    }
+
     def __init__(self, time: float) -> None:
         super().__init__(locals())
 
@@ -96,6 +110,20 @@ class CMove(AbstractBaseStep):
         'aspiration_speed': 10,  # mL / min
         'dispense_speed': 40,  # mL / min
         'use_backbone': True,
+    }
+
+    PROP_TYPES = {
+        'from_vessel': str,
+        'to_vessel': str,
+        'volume': float,
+        'move_speed': float,
+        'aspiration_speed': float,
+        'dispense_speed': float,
+        'from_port': str,
+        'to_port': str,
+        'unique': bool,
+        'through': str,
+        'use_backbone': bool
     }
 
     def __init__(
@@ -164,6 +192,15 @@ class CConnect(AbstractBaseStep):
         to_port (str): Port name to connect to.
         unique (bool): Must use unique route.
     """
+
+    PROP_TYPES = {
+        'from_vessel': str,
+        'to_vessel': str,
+        'from_port': str,
+        'to_port': str,
+        'unique': bool
+    }
+
     def __init__(
         self,
         from_vessel: str,

@@ -22,6 +22,15 @@ class HeatChill(AbstractStep):
         'stir_speed': '250 RPM',
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'temp': float,
+        'time': float,
+        'stir': bool,
+        'stir_speed': float,
+        'vessel_type': str
+    }
+
     INTERNAL_PROPS = [
         'vessel_type',
     ]

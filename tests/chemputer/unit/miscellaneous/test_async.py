@@ -17,6 +17,12 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')
 
 class TestAsyncStep(AbstractAsyncStep):
+
+    PROP_TYPES = {
+        'callback': Callable,
+        'on_finish': Callable,
+    }
+
     def __init__(self, callback: Callable, on_finish: Callable):
         super().__init__(locals())
 

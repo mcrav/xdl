@@ -10,6 +10,11 @@ from typing import Callable
 HERE = os.path.abspath(os.path.dirname(__file__))
 
 class TestStep(AbstractStep):
+
+    PROP_TYPES = {
+        'on_finish': Callable,
+    }
+
     def __init__(self, on_finish: Callable):
         super().__init__(locals())
 

@@ -18,6 +18,12 @@ class Wait(AbstractStep):
         'after_recording_speed': 14,
     }
 
+    PROP_TYPES = {
+        'time': float,
+        'wait_recording_speed': float,
+        'after_recording_speed': float
+    }
+
     def __init__(
         self,
         time: float,

@@ -47,6 +47,20 @@ class Filter(AbstractStep):
         'anticlogging': False,
     }
 
+    PROP_TYPES = {
+        'filter_vessel': str,
+        'wait_time': float,
+        'aspiration_speed': float,
+        'stir': bool,
+        'stir_speed': float,
+        'filtrate_vessel': str,
+        'anticlogging': bool,
+        'waste_vessel': str,
+        'filter_top_volume': float,
+        'inline_filter': bool,
+        'vacuum_attached': bool
+    }
+
     INTERNAL_PROPS = [
         'waste_vessel',
         'filter_top_volume',
@@ -204,6 +218,12 @@ class Filter(AbstractStep):
         }
 
 class FilterTo(AbstractStep):
+
+    PROP_TYPES = {
+        'from_vessel': str,
+        'to_vessel': str,
+    }
+
     def __init__(
         self,
         from_vessel: str,
