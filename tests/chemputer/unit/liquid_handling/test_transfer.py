@@ -36,5 +36,8 @@ def test_transfer_all_stops_stirring():
         transfer_steps[1].steps[0].name == 'StopStir'
         and transfer_steps[1].steps[0].vessel == transfer_steps[1].from_vessel
     )
+    print(transfer_steps[1].properties)
+    assert transfer_steps[1].steps[-1].name == 'StopHeatChill'
+    assert transfer_steps[1].steps[-1].vessel == 'reactor'
 
     generic_chempiler_test(xdl_f, graph_f)
