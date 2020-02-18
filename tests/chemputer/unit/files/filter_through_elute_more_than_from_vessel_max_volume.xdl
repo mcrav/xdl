@@ -16,28 +16,21 @@
   <Procedure>
     <FilterThrough
       from_vessel="reactor"
-      to_vessel="rotavap"
+      to_vessel="product"
       through="celite"
       eluting_solvent="ether"
       eluting_volume="1 L"
       eluting_repeats="1" />
     <FilterThrough
       from_vessel="reactor"
-      to_vessel="rotavap"
-      through="celite"
-      eluting_solvent="ether"
-      eluting_volume="1 L"
-      eluting_repeats="2" />
-    <FilterThrough
-      from_vessel="reactor"
-      to_vessel="rotavap"
+      to_vessel="product"
       through="celite"
       eluting_solvent="ether"
       eluting_volume="25 mL"
       eluting_repeats="3" />
     <FilterThrough
       from_vessel="reactor"
-      to_vessel="rotavap"
+      to_vessel="product"
       through="celite"
       eluting_solvent="ether"
       eluting_volume="50 mL"

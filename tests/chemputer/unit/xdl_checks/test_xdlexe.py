@@ -39,7 +39,13 @@ def test_xdlexe():
 def test_steps_identical(step1, step2, test_file):
     assert type(step1) == type(step2)
     for prop, val in step1.properties.items():
-        if val or step2.properties[prop]:
+        if prop == 'children':
+            for j, child in enumerate(step1.children):
+                assert child.name == step2.children[j].name
+                for child_prop, child_val in child.properties.items():
+                    assert child_val == step2.children[j].properties[child_prop]
+
+        elif val or step2.properties[prop]:
             try:
                 if type(val) == float:
                     assert f'{step2.properties[prop]:.4f}' == f'{val:.4f}'

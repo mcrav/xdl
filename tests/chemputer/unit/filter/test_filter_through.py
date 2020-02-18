@@ -2,6 +2,7 @@ import os
 import pytest
 from ...utils import generic_chempiler_test
 from xdl import XDL
+from xdl.utils.errors import XDLError
 from xdl.steps import FilterThrough, CMove
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -30,23 +31,22 @@ def test_filter_through_buffer_flask():
     generic_chempiler_test(xdl_f, graph_f)
 
 @pytest.mark.unit
-def test_filter_eluting_with_more_than_max_volume():
+def test_filter_eluting_with_more_than_from_vessel_max_volume():
     xdl_f = os.path.join(
-        FOLDER, 'filter_through_elute_more_than_max_volume.xdl')
+        FOLDER, 'filter_through_elute_more_than_from_vessel_max_volume.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f)
-    total_vol_added = 0
-    total_elutes = 0
     tests = [
         (10, 1000),
-        (20, 2000),
         (3, 75),
         (3, 150)
     ]
     i = 0
     for step in x.steps:
         if type(step) == FilterThrough:
+            total_elutes = 0
+            total_vol_added = 0
             for substep in step.base_steps:
                 if type(substep) == CMove:
                     if (substep.from_vessel == 'flask_ether'
@@ -55,7 +55,21 @@ def test_filter_eluting_with_more_than_max_volume():
                         total_elutes += 1
             assert total_elutes == tests[i][0]
             assert total_vol_added == tests[i][1]
-            total_elutes = 0
-            total_vol_added = 0
             i += 1
     assert i == len(tests)
+
+@pytest.mark.unit
+def test_filter_eluting_with_more_than_to_vessel_max_volume():
+    with pytest.raises(XDLError):
+        xdl_f = os.path.join(
+            FOLDER, 'filter_through_elute_more_than_to_vessel_max_volume.xdl')
+        graph_f = os.path.join(FOLDER, 'bigrig.json')
+        x = XDL(xdl_f)
+        x.prepare_for_execution(graph_f)
+
+    with pytest.raises(XDLError):
+        xdl_f = os.path.join(
+            FOLDER, 'filter_through_elute_more_than_to_vessel_max_volume2.xdl')
+        graph_f = os.path.join(FOLDER, 'bigrig.json')
+        x = XDL(xdl_f)
+        x.prepare_for_execution(graph_f)
