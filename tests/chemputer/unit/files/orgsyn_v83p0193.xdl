@@ -104,7 +104,7 @@
       to_vessel="reactor"
       through="silica-gel"
       eluting_solvent="hexane"
-      eluting_volume="1000 mL" />
+      eluting_volume="100 mL" />
   </Procedure>
 
 </Synthesis>

@@ -512,15 +512,29 @@
       "type": "chiller",
       "x": 40,
       "y": 320,
+      "internalId": 99,
+      "label": "flask_chiller",
       "class": "JULABOCF41",
       "name": "flask_chiller",
       "min_temp": null,
       "max_temp": null,
       "port": null,
       "address": "",
-      "mode": "ethernet",
-      "internalId": 99,
-      "label": "flask_chiller"
+      "mode": "ethernet"
+    },
+    {
+      "id": "product",
+      "type": "flask",
+      "x": 320,
+      "y": 360,
+      "class": "ChemputerFlask",
+      "name": "product",
+      "chemical": "",
+      "current_volume": 1000,
+      "max_volume": 1000,
+      "can_filter": false,
+      "internalId": 101,
+      "label": "product"
     }
   ],
   "links": [
@@ -1011,6 +1025,14 @@
       "source": "flask_chiller",
       "target": "flask_water",
       "port": "(,)"
+    },
+    {
+      "id": 102,
+      "sourceInternal": 28,
+      "targetInternal": 101,
+      "source": "cartridge_celite",
+      "target": "product",
+      "port": "(out,0)"
     }
   ]
 }

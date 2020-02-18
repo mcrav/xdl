@@ -18,7 +18,7 @@ def main():
         raise FileNotFoundError(f"Can't find graph file '{args.graph_file}'.")
 
     x = XDL(args.xdl_file)
-    x.prepare_for_execution(args.graph_file)
+    x.prepare_for_execution(args.graph_file, interactive=False)
 
     c = Chempiler(
         experiment_code='test',
