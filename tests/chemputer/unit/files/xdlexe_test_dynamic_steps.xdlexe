@@ -55,6 +55,8 @@
         viscous="False"
         through_cartridge="None"
         transfer_all="False"
+        from_vessel_has_heater="False"
+        from_vessel_has_chiller="True"
         from_vessel_has_stirrer="False">
         <CMove
           from_vessel="filter"

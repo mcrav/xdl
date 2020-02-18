@@ -7,12 +7,15 @@ from .....constants import (
 from .....step_utils.base_steps import AbstractStep, Step
 from ..steps_base import CMove
 from .stirring import StopStir
+from .heatchill import StopHeatChill
 from .....localisation import HUMAN_READABLE_STEPS
 from .....utils.misc import SanityCheck
 from ...utils.execution import (
     get_reagent_vessel,
     get_cartridge,
-    get_vessel_stirrer
+    get_vessel_stirrer,
+    node_in_graph,
+    get_heater_chiller,
 )
 
 class PrimePumpForAdd(AbstractStep):
@@ -103,6 +106,8 @@ class Transfer(AbstractStep):
         through_cartridge: Optional[str] = None,
         transfer_all: Optional[bool] = False,
         from_vessel_has_stirrer: Optional[bool] = False,
+        from_vessel_has_heater: Optional[bool] = None,
+        from_vessel_has_chiller: Optional[bool] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -116,11 +121,6 @@ class Transfer(AbstractStep):
         if not self.through_cartridge and self.through:
             self.through_cartridge = get_cartridge(graph, self.through)
 
-        if self.from_port in [None, ''] and self.from_vessel:
-            from_class = graph.nodes[self.from_vessel]['class']
-            if from_class in DEFAULT_PORTS:
-                self.from_port = DEFAULT_PORTS[from_class]['from']
-
         if self.to_port in [None, ''] and self.to_vessel:
             to_class = graph.nodes[self.to_vessel]['class']
             if to_class in DEFAULT_PORTS:
@@ -130,6 +130,26 @@ class Transfer(AbstractStep):
             self.from_vessel_has_stirrer = True
         else:
             self.from_vessel_has_stirrer = False
+
+        if self.from_vessel:
+            from_class = graph.nodes[self.from_vessel]['class']
+
+            if self.from_port in [None, ''] and self.from_vessel:
+                if from_class in DEFAULT_PORTS:
+                    self.from_port = DEFAULT_PORTS[from_class]['from']
+
+            heater, chiller = get_heater_chiller(graph, self.from_vessel)
+            if self.from_vessel_has_heater is None:
+                if heater:
+                    self.from_vessel_has_heater = True
+                else:
+                    self.from_vessel_has_heater = False
+
+            if self.from_vessel_has_chiller is None:
+                if chiller:
+                    self.from_vessel_has_chiller = True
+                else:
+                    self.from_vessel_has_chiller = False
 
     def get_steps(self) -> List[Step]:
         dispense_speed = self.get_dispense_speed()
@@ -145,19 +165,25 @@ class Transfer(AbstractStep):
                        dispense_speed=dispense_speed)]
 
         # Set by executor in _add_all_volumes
-        if self.transfer_all and self.from_vessel_has_stirrer:
-            steps.insert(0, StopStir(self.from_vessel))
+        if self.transfer_all:
+            if self.from_vessel_has_stirrer:
+                steps.insert(0, StopStir(self.from_vessel))
+
+            if self.from_vessel_has_heater or self.from_vessel_has_chiller:
+                steps.append(StopHeatChill(vessel=self.from_vessel))
 
         return steps
 
     def sanity_checks(self, graph):
         return [
             SanityCheck(
-                condition=self.from_vessel,
+                condition=self.from_vessel and node_in_graph(
+                    graph, self.from_vessel),
                 error_msg='from_vessel must be node in graph.',
             ),
             SanityCheck(
-                condition=self.to_vessel,
+                condition=self.to_vessel and node_in_graph(
+                    graph, self.to_vessel),
                 error_msg='to_vessel must be node in graph.'
             ),
             SanityCheck(
