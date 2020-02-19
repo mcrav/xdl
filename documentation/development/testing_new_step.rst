@@ -14,7 +14,7 @@ Unit test functions should be written in `tests/unit` and imported in
 Example
 -------
 
-This example if for the :code:`QuantitativeTransfer` step shown in the "Making New Steps"
+This example is for the :code:`QuantitativeTransfer` step shown in the "Making New Steps"
 tutorial.
 
 
