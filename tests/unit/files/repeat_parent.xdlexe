@@ -1,7 +1,7 @@
-<?xdl version="0.3.0" ?>
+<?xdl version="0.2.1" ?>
 
 <Synthesis
-  graph_sha256="44f1e5ca420c904b3a3ca8f78a80191f69ac3131c6848fb78afe2a81c33d4d8e"
+  graph_sha256="470e4549c2f7965ca63db819c593a325d4df226adfbd16d95370e066c46233eb"
 >
   <Hardware>
   </Hardware>
@@ -94,7 +94,7 @@
       heaters="reactor"
       stirrers="reactor filter separator flask_water"
       rotavaps="rotavap"
-      chillers="filter rotavap flask_water">
+      chillers="filter rotavap">
       <CRotavapStopRotation
         rotavap_name="rotavap" />
       <CRotavapStopHeater
@@ -127,8 +127,6 @@
         vessel="filter" />
       <CStopChiller
         vessel="rotavap" />
-      <CStopChiller
-        vessel="flask_water" />
     </Shutdown>
   </Procedure>
 

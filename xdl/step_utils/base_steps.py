@@ -93,7 +93,8 @@ class AbstractStep(Step, ABC):
         self,
         chempiler: 'Chempiler',
         logger: logging.Logger = None,
-        level: int = 0
+        level: int = 0,
+        async_steps: list = []
     ) -> bool:
         """
         Execute self with given Chempiler object.
@@ -121,8 +122,14 @@ class AbstractStep(Step, ABC):
                         'Executing:\n{0}{1}\n{2}'.format(
                             '  ' * level, step.name, prop_str))
                     try:
-                        keep_going = step.execute(
-                            chempiler, logger, level=level)
+                        if step.name == 'Await':
+                            keep_going = step.execute(
+                                async_steps, self.logger)
+                        else:
+                            keep_going = step.execute(
+                                chempiler,
+                                self.logger
+                            )
                     except Exception as e:
                         logger.info(
                             'Step failed {0} {1}'.format(
@@ -230,7 +237,7 @@ class AbstractAsyncStep(XDLBase):
     def final_sanity_check(self, graph):
         return
 
-    def execute(self, chempiler, logger=None, level=0):
+    def execute(self, chempiler, logger=None, level=0, async_steps=[]):
         self.thread = threading.Thread(
             target=self.async_execute, args=(chempiler, logger))
         self.thread.start()
