@@ -4,11 +4,8 @@ from .add import Add
 from ..steps_utility import Transfer, Wait, Stir, SeparatePhases
 from .....constants import (
     BOTTOM_PORT,
-    DEFAULT_SEPARATION_FAST_STIR_TIME,
-    DEFAULT_SEPARATION_FAST_STIR_SPEED,
     DEFAULT_SEPARATION_SLOW_STIR_TIME,
-    DEFAULT_SEPARATION_SLOW_STIR_SPEED,
-    DEFAULT_SEPARATION_SETTLE_TIME,
+    DEFAULT_SEPARATION_SLOW_STIR_SPEED
 )
 from .....utils.errors import XDLError
 from .....utils.misc import SanityCheck
@@ -37,6 +34,12 @@ class Separate(AbstractStep):
         through_cartridge (str): Optional. Node name of cartridge to transfer
             product phase through on way to to_vessel. Supplied internally if
             through is given.
+        mixing_stir_speed (float): Optional. Stirring speed for fast
+            stirring step (slow stirring currently uses default in
+            xdl/constants.py),
+        mixing_time (float): Time spent stirring.
+        settling_time (float): Optional. Time to allow for phase separation
+            after stirring.
         n_separations (int): Number of separations to perform.
         waste_phase_to_vessel (str): Vessel to send waste phase to.
         waste_phase_to_port (str): waste_phase_to_vessel port to use.
@@ -46,6 +49,9 @@ class Separate(AbstractStep):
     DEFAULT_PROPS = {
         'solvent_volume': '30 mL',
         'remove_dead_volume': True,
+        'mixing_stir_speed': '600 rpm',
+        'mixing_time': '5 min',
+        'settling_time': '5 min'
     }
 
     PROP_TYPES = {
@@ -65,7 +71,10 @@ class Separate(AbstractStep):
         'remove_dead_volume': bool,
         'waste_vessel': str,
         'buffer_flasks': List[str],
-        'through_cartridge': str
+        'through_cartridge': str,
+        'mixing_stir_speed': float,
+        'mixing_time': float,
+        'settling_time': float
     }
 
     INTERNAL_PROPS = [
@@ -90,6 +99,9 @@ class Separate(AbstractStep):
         waste_phase_to_vessel: Optional[str] = None,
         waste_phase_to_port: Optional[str] = None,
         remove_dead_volume: Optional[bool] = 'default',
+        mixing_stir_speed: Optional[float] = 'default',
+        mixing_time: Optional[float] = 'default',
+        settling_time: Optional[float] = 'default',
 
         # Internal properties
         waste_vessel: Optional[str] = None,
@@ -188,13 +200,14 @@ class Separate(AbstractStep):
         return [
             # Stir separation_vessel
             Stir(vessel=self.separation_vessel,
-                 time=DEFAULT_SEPARATION_FAST_STIR_TIME,
-                 stir_speed=DEFAULT_SEPARATION_FAST_STIR_SPEED),
+                 time=self.mixing_time,
+                 stir_speed=self.mixing_stir_speed),
+            # why do we have a slow stirring step? Should this be removed
             Stir(vessel=self.separation_vessel,
                  time=DEFAULT_SEPARATION_SLOW_STIR_TIME,
                  stir_speed=DEFAULT_SEPARATION_SLOW_STIR_SPEED),
             # Wait for phases to separate
-            Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
+            Wait(time=self.settling_time),
         ]
 
     def _get_final_separate_phases_step(self):

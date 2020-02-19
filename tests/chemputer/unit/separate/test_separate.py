@@ -4,6 +4,7 @@ from xdl import XDL
 from xdl.steps import Transfer, Add, Stir, Wait, Separate, SeparatePhases
 from ...utils import test_step
 from xdl.utils.errors import XDLError
+from xdl.utils.sanitisation import convert_val_to_std_units
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')
@@ -355,9 +356,17 @@ correct_step_info = [
             'to_vessel': 'separator',
         }),
         (Add, {}),  # Solvent
+        (Stir, {
+            'stir_speed': convert_val_to_std_units(
+                Separate.DEFAULT_PROPS['mixing_stir_speed']),
+            'time': convert_val_to_std_units(
+                Separate.DEFAULT_PROPS['mixing_time'])
+        }),
         (Stir, {}),
-        (Stir, {}),
-        (Wait, {}),
+        (Wait, {
+            'time': convert_val_to_std_units(
+                Separate.DEFAULT_PROPS['settling_time'])
+        }),
         (SeparatePhases, {
             'lower_phase_vessel': 'buffer_flask',
             'upper_phase_vessel': 'rotavap',
@@ -418,7 +427,7 @@ correct_step_info = [
             'upper_phase_vessel': 'waste_separator',
             'lower_phase_through': 'celite',
         }),
-    ],
+    ]
 ]
 
 @pytest.mark.unit
