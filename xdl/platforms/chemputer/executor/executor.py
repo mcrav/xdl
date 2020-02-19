@@ -331,7 +331,8 @@ class ChemputerExecutor(AbstractXDLExecutor):
             verify = None
             while verify not in ['y', 'n', '']:
                 verify = input(
-                    'Verify solvents used in backbone cleaning? (y, [n])')
+                    'Verify solvents used in backbone and vessel \
+cleaning? (y, [n])\n')
             if verify == 'y':
                 verify_cleaning_steps(self._xdl)
         self._add_internal_properties()
