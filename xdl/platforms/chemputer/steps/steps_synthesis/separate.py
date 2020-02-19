@@ -111,6 +111,15 @@ class Separate(AbstractStep):
         if not self.through_cartridge and self.through:
             self.through_cartridge = get_cartridge(graph, self.through)
 
+        n_buffer_flasks = len([
+            buf for buf in self.buffer_flasks if buf is not None
+        ])
+        if n_buffer_flasks < self.buffer_flasks_required:
+            raise XDLError(
+                f'{self.buffer_flasks_required} buffer flasks required but\
+ {n_buffer_flasks} buffer flasks found in graph.'
+            )
+
     @property
     def dead_volume_target(self):
         return self.waste_vessel if self.remove_dead_volume else None
@@ -121,6 +130,7 @@ class Separate(AbstractStep):
         scenarios was took too long to see what was going on. Better just to
         have clear routines for every scenario.
         """
+
         if not self.waste_phase_to_vessel and self.waste_vessel:
             self.waste_phase_to_vessel = self.waste_vessel
         if not self.n_separations:
@@ -457,6 +467,7 @@ class Separate(AbstractStep):
     ####################################
 
     def sanity_checks(self, graph):
+        print(f"Buffer flasks required: {self.buffer_flasks_required}")
         return [
             SanityCheck(
                 condition=(len(self.buffer_flasks)
@@ -492,29 +503,36 @@ class Separate(AbstractStep):
 
     @property
     def buffer_flasks_required(self):
-        if (self.purpose == 'extract'
-                and self.n_separations > 1
-                and not self.product_bottom
-                and self.to_vessel == self.separation_vessel):
-            return 2
-        elif (
-            (self.product_bottom
-             and self.n_separations == 1
-             and self.to_vessel == self.separation_vessel)
-            or (self.n_separations > 1
-                and self.product_bottom
-                and self.to_vessel == self.separation_vessel
-                and self.purpose == 'wash')
-            or (self.purpose == 'extract'
-                and self.product_bottom
-                and self.to_vessel == self.separation_vessel
-                and self.n_separations > 1)
-            or (self.purpose == 'extract'
-                and not self.product_bottom
-                and self.n_separations > 1)
-        ):
-            return 1
-        return 0
+        """This was done pretty rigorously by going through get_steps and seeing
+        what happens in every situation. Please update this
+        if Separate get_steps is updated.
+        """
+        n_buffer_flasks_required = 0
+        if self.n_separations > 1:
+            if self.purpose == 'wash':
+                if self.product_bottom:
+                    n_buffer_flasks_required = 1
+                else:
+                    if self.waste_phase_to_vessel == self.separation_vessel:
+                        n_buffer_flasks_required = 1
+            elif self.purpose == 'extract':
+                if self.product_bottom:
+                    if self.to_vessel == self.separation_vessel:
+                        n_buffer_flasks_required = 1
+                else:
+                    if self.to_vessel == self.separation_vessel:
+                        n_buffer_flasks_required = 2
+                    else:
+                        n_buffer_flasks_required = 1
+        else:
+            if self.product_bottom:
+                if self.to_vessel == self.separation_vessel:
+                    n_buffer_flasks_required = 1
+
+            else:
+                if self.waste_phase_to_vessel == self.separation_vessel:
+                    n_buffer_flasks_required = 1
+        return n_buffer_flasks_required
 
     def human_readable(self, language='en') -> str:
         props = self.formatted_properties()

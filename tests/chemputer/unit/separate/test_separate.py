@@ -3,6 +3,7 @@ import pytest
 from xdl import XDL
 from xdl.steps import Transfer, Add, Stir, Wait, Separate, SeparatePhases
 from ...utils import test_step
+from xdl.utils.errors import XDLError
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')
@@ -450,3 +451,11 @@ def test_separate():
                         f'Step: {i} {step.properties}\n\n{substep.properties}')
             i += 1
     assert i == len(correct_step_info)
+
+@pytest.mark.unit
+def test_separate_without_enough_buffer_flasks():
+    with pytest.raises(XDLError):
+        xdl_f = os.path.join(FOLDER, 'separate_no_buffers.xdl')
+        graph_f = os.path.join(FOLDER, 'separate_no_buffers.json')
+        x = XDL(xdl_f)
+        x.prepare_for_execution(graph_f)
