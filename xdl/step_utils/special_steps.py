@@ -95,6 +95,7 @@ class Await(AbstractBaseStep):
         async_steps: List[Async],
         logger: logging.Logger = None
     ) -> None:
+
         for async_step in async_steps:
             if async_step.pid == self.pid:
                 while not async_step.finished:
