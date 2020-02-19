@@ -13,11 +13,15 @@ def parse_bool(s: str) -> bool:
     Raises:
         ValueError: If s.lower() is not 'true' or 'false'.
     """
-    if s.lower() == 'true':
-        return True
-    elif s.lower() == 'false':
-        return False
-    raise ValueError(f'{s} cannot be parsed as a bool.')
+    if type(s) == bool:
+        return s
+    elif type(s) == str:
+        if s.lower() == 'true':
+            return True
+        elif s.lower() == 'false':
+            return False
+    else:
+        return None
 
 def days_to_seconds(x):
     return x * 60 * 60 * 24
@@ -171,7 +175,7 @@ def convert_val_to_std_units(val: str) -> float:
     return val
 
 def clean_properties(xdl_class, properties):
-    annotations = xdl_class.__init__.__annotations__
+    prop_types = xdl_class.PROP_TYPES
     for prop, val in properties.items():
         if val == 'default' or prop == 'kwargs':
             continue
@@ -188,7 +192,7 @@ def clean_properties(xdl_class, properties):
             properties[prop] = val
             continue
 
-        prop_type = annotations[prop]
+        prop_type = prop_types[prop]
 
         if prop_type in [str, Optional[str]]:
             if val:
