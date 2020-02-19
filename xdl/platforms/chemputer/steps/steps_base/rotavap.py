@@ -9,6 +9,11 @@ class CRotavapStartHeater(AbstractBaseStep):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str
+    }
+
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
@@ -26,6 +31,11 @@ class CRotavapStopHeater(AbstractBaseStep):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str
+    }
+
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
@@ -43,6 +53,11 @@ class CRotavapStartRotation(AbstractBaseStep):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str
+    }
+
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
@@ -60,6 +75,11 @@ class CRotavapStopRotation(AbstractBaseStep):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str
+    }
+
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
@@ -77,6 +97,11 @@ class CRotavapLiftUp(AbstractBaseStep):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str
+    }
+
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
@@ -97,6 +122,11 @@ class CRotavapLiftDown(AbstractBaseStep):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str
+    }
+
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
@@ -118,6 +148,11 @@ class CRotavapReset(AbstractBaseStep):
     Args:
         rotavap_name (str): Name of the node representing the rotary evaporator.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str
+    }
+
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
@@ -136,6 +171,12 @@ class CRotavapSetTemp(AbstractBaseStep):
         rotavap_name (str): Name of the node representing the rotary evaporator.
         temp (float): Temperature in °C.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str,
+        'temp': float
+    }
+
     def __init__(self, rotavap_name: str, temp: float) -> None:
         super().__init__(locals())
 
@@ -154,6 +195,12 @@ class CRotavapSetRotationSpeed(AbstractBaseStep):
         rotavap_name (str): Name of the node representing the rotary evaporator.
         rotation_speed (float): Rotation speed setpoint in RPM.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str,
+        'rotation_speed': float
+    }
+
     def __init__(self, rotavap_name: str, rotation_speed: float) -> None:
         super().__init__(locals())
 
@@ -174,6 +221,12 @@ class CRotavapSetInterval(AbstractBaseStep):
         rotavap_name (str): Name of the node representing the rotary evaporator.
         interval (int): Interval time in seconds.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str,
+        'interval': int
+    }
+
     def __init__(self, rotavap_name: str, interval: int) -> None:
         super().__init__(locals())
 
@@ -197,6 +250,15 @@ class CRotavapAutoEvaporation(AbstractBaseStep):
         vent_after (bool): If True, vacuum will be vented after the process is
             complete.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str,
+        'sensitivity': int,
+        'vacuum_limit': float,
+        'time_limit': float,
+        'vent_after': bool
+    }
+
     def __init__(
         self,
         rotavap_name: str,

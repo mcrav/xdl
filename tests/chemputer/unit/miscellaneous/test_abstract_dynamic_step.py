@@ -11,6 +11,9 @@ from chempiler import Chempiler
 HERE = os.path.abspath(os.path.dirname(__file__))
 
 class TestDynamicStep(AbstractDynamicStep):
+
+    PROP_TYPES = {}
+
     def __init__(self):
         super().__init__(locals())
         self.state = {'i': 0}

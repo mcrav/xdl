@@ -59,6 +59,23 @@ class Dry(AbstractStep):
         'continue_heatchill': False,
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'time': float,
+        'temp': float,
+        'waste_vessel': str,
+        'aspiration_speed': float,
+        'continue_heatchill': bool,
+        'vacuum': str,
+        'vacuum_device': str,
+        'vacuum_pressure': float,
+        'inert_gas': str,
+        'vacuum_valve': str,
+        'valve_unused_port': Union[str, int],
+        'vessel_type': str,
+        'vessel_has_stirrer': bool
+    }
+
     INTERNAL_PROPS = [
         'vacuum',
         'vacuum_device',

@@ -19,6 +19,12 @@ class Precipitate(AbstractStep):
         'time': '60 mins',
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'temp': float,
+        'time': float
+    }
+
     def __init__(
         self,
         vessel: str,

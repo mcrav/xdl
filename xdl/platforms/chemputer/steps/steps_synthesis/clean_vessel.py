@@ -36,6 +36,23 @@ class CleanVessel(AbstractStep):
         'stir_speed': '500 RPM',
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'solvent': str,
+        'stir_time': float,
+        'stir_speed': float,
+        'temp': float,
+        'dry': bool,
+        'volume': float,
+        'cleans': int,
+        'solvent_vessel': str,
+        'waste_vessel': str,
+        'vacuum': str,
+        'vessel_type': str,
+        'heater': str,
+        'chiller': str
+    }
+
     INTERNAL_PROPS = [
         'solvent_vessel',
         'waste_vessel',

@@ -7,6 +7,12 @@ class CSwitchVacuum(AbstractBaseStep):
         pneumatic_controller (str): Name of PneumaticController node.
         port (int): Port of PneumaticController to supply vacuum from.
     """
+
+    PROP_TYPES = {
+        'pneumatic_controller': str,
+        'port': int
+    }
+
     def __init__(self, pneumatic_controller: str, port: int):
         super().__init__(locals())
 
@@ -26,6 +32,13 @@ class CSwitchArgon(AbstractBaseStep):
         port (int): Port of PneumaticController to supply argon from.
         pressure (str): 'low' or 'high'. Defaults to 'low'.
     """
+
+    PROP_TYPES = {
+        'pneumatic_controller': str,
+        'port': int,
+        'pressure': str
+    }
+
     def __init__(
         self,
         pneumatic_controller: str,

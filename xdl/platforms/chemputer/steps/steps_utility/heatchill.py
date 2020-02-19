@@ -80,6 +80,15 @@ class StartHeatChill(AbstractStep):
         vessel_type (str): Given internally. Used to know whether to use
             heater or chiller base steps. 'filter', 'rotavap' or 'reactor'
     """
+
+    PROP_TYPES = {
+        'vessel': str,
+        'temp': float,
+        'vessel_type': str,
+        'heater': str,
+        'chiller': str
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -173,6 +182,21 @@ class HeatChillSetTemp(AbstractStep):
         vessel_type (str): Given internally. Used to know whether to use
             heater or chiller base steps. 'filter', 'rotavap' or 'reactor'
     """
+
+    INTERNAL_PROPS = [
+        'vessel_type',
+        'heater',
+        'chiller'
+    ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'temp': float,
+        'vessel_type': str,
+        'heater': str,
+        'chiller': str
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -249,6 +273,26 @@ class HeatChillToTemp(AbstractStep):
         'wait_recording_speed': 2000,
         'after_recording_speed': 14,
     }
+
+    PROP_TYPES = {
+        'vessel': str,
+        'temp': float,
+        'active': bool,
+        'continue_heatchill': bool,
+        'stir': bool,
+        'stir_speed': float,
+        'vessel_type': str,
+        'wait_recording_speed': float,
+        'after_recording_speed': float,
+        'heater': str,
+        'chiller': str
+    }
+
+    INTERNAL_PROPS = [
+        'vessel_type',
+        'heater',
+        'chiller'
+    ]
 
     def __init__(
         self,
@@ -374,6 +418,20 @@ class StopHeatChill(AbstractStep):
             heater or chiller base steps. 'ChemputerFilter' or
             'ChemputerReactor'.
     """
+
+    PROP_TYPES = {
+        'vessel': str,
+        'vessel_type': str,
+        'heater': str,
+        'chiller': str
+    }
+
+    INTERNAL_PROPS = [
+        'vessel_type',
+        'heater',
+        'chiller'
+    ]
+
     def __init__(
         self,
         vessel: str,
@@ -437,6 +495,15 @@ class HeatChillReturnToRT(AbstractStep):
         'vessel_type',
     ]
 
+    PROP_TYPES = {
+        'vessel': str,
+        'stir': bool,
+        'stir_speed': float,
+        'wait_recording_speed': float,
+        'after_recording_speed': float,
+        'vessel_type': str
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -493,6 +560,12 @@ class StirrerReturnToRT(AbstractStep):
         'after_recording_speed': 14,
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'wait_recording_speed': float,
+        'after_recording_speed': float
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -520,6 +593,13 @@ class ChillerReturnToRT(AbstractStep):
     INTERNAL_PROPS = [
         'vessel_class'
     ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'wait_recording_speed': float,
+        'after_recording_speed': float,
+        'vessel_class': str
+    }
 
     def __init__(
         self,

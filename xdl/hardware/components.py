@@ -18,6 +18,13 @@ class Component(XDLBase):
         component_type (str): Type of the component i.e. 'ChemputerFlask'
         chemical (str): Optional. Chemical component contains.
     """
+
+    PROP_TYPES = {
+        'id': str,
+        'component_type': str,
+        'chemical': str,
+    }
+
     def __init__(
             self, id: str, component_type: str, chemical: str = None) -> None:
         super().__init__(locals())

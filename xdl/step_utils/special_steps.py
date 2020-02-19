@@ -32,6 +32,13 @@ class Async(AbstractAsyncStep):
         on_finish (Callable): Callback function to call after execution of steps
             has finished.
     """
+
+    PROP_TYPES = {
+        'children': Union[Step, List[Step]],
+        'pid': str,
+        'on_finish': Callable,
+    }
+
     def __init__(
         self,
         children: Union[Step, List[Step]],
@@ -74,6 +81,11 @@ class Await(AbstractBaseStep):
     Args:
         pid (str): pid of Async step to wait for.
     """
+
+    PROP_TYPES = {
+        'pid': str,
+    }
+
     def __init__(self, pid: str, **kwargs):
         super().__init__(locals())
         self.steps = []
@@ -99,6 +111,12 @@ class Repeat(AbstractStep):
         repeats (int): Number of times to repeat children.
         children (List[Step]): Child steps to repeat.
     """
+
+    PROP_TYPES = {
+        'repeats': int,
+        'children': Union[Step, List[Step]]
+    }
+
     def __init__(
         self, repeats: int, children: Union[Step, List[Step]]
     ) -> None:
@@ -126,6 +144,11 @@ class Loop(AbstractDynamicStep):
         children (List[Step]): Child steps to repeat.
 
     """
+
+    PROP_TYPES = {
+        'children': Union[Step, List[Step]]
+    }
+
     def __init__(
         self, children: Union[Step, List[Step]]
     ) -> None:
@@ -473,6 +496,13 @@ class Parallelizer(object):
         print(f"    n_timesteps = {len(s[0].strip().split(' '))-1}")
 
 class Callback(AbstractBaseStep):
+
+    PROP_TYPES = {
+        'fn': Callable,
+        'args': List[Any],
+        'keyword_args': Dict[str, Any]
+    }
+
     def __init__(
         self,
         fn: Callable,

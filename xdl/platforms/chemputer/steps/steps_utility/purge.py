@@ -16,6 +16,12 @@ class StartPurge(AbstractStep):
         'inert_gas'
     ]
 
+    PROP_TYPES = {
+        'vessel': str,
+        'pneumatic_controller': str,
+        'inert_gas': str
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -72,6 +78,14 @@ class StopPurge(AbstractStep):
         'inert_gas_valve',
         'inert_gas_valve_unused_port',
     ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'pneumatic_controller': str,
+        'inert_gas': str,
+        'inert_gas_valve': str,
+        'inert_gas_valve_unused_port': str
+    }
 
     def __init__(
         self,
@@ -140,6 +154,11 @@ class Purge(AbstractStep):
         'time': '5 minutes',
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'time': float
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -171,6 +190,10 @@ class Purge(AbstractStep):
         ]
 
 class PurgeBackbone(AbstractStep):
+
+    PROP_TYPES = {
+        'purge_gas': str
+    }
 
     def __init__(
         self,

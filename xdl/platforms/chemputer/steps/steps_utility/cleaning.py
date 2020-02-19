@@ -11,6 +11,12 @@ class CleanBackbone(AbstractStep):
         'solvent_vessel',
     ]
 
+    PROP_TYPES = {
+        'solvent': str,
+        'waste_vessels': List[str],
+        'solvent_vessel': str
+    }
+
     def __init__(
         self,
         solvent: str,

@@ -48,6 +48,26 @@ class Separate(AbstractStep):
         'remove_dead_volume': True,
     }
 
+    PROP_TYPES = {
+        'purpose': str,
+        'from_vessel': str,
+        'separation_vessel': str,
+        'to_vessel': str,
+        'product_bottom': bool,
+        'solvent': str,
+        'through': str,
+        'from_port': str,
+        'to_port': str,
+        'solvent_volume': float,
+        'n_separations': int,
+        'waste_phase_to_vessel': str,
+        'waste_phase_to_port': str,
+        'remove_dead_volume': bool,
+        'waste_vessel': str,
+        'buffer_flasks': List[str],
+        'through_cartridge': str
+    }
+
     INTERNAL_PROPS = [
         'waste_vessel',
         'buffer_flasks',

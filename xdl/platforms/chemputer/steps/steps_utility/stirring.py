@@ -27,6 +27,11 @@ class SetStirRate(AbstractStep):
         'vessel_type',
     ]
 
+    PROP_TYPES = {
+        'vessel': str,
+        'stir_speed': float
+    }
+
     def __init__(
         self, vessel: str,
         stir_speed: float,
@@ -63,6 +68,12 @@ class StartStir(AbstractStep):
     INTERNAL_PROPS = [
         'vessel_type'
     ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'stir_speed': float,
+        'vessel_type': str,
+    }
 
     def __init__(
         self,
@@ -117,6 +128,12 @@ class StopStir(AbstractStep):
         'vessel_has_stirrer',
     ]
 
+    PROP_TYPES = {
+        'vessel': str,
+        'vessel_type': str,
+        'vessel_has_stirrer': bool
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -163,6 +180,14 @@ class Stir(AbstractStep):
     INTERNAL_PROPS = [
         'vessel_type'
     ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'time': float,
+        'continue_stirring': bool,
+        'stir_speed': float,
+        'vessel_type': str,
+    }
 
     def __init__(
         self,

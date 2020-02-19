@@ -3,6 +3,11 @@ from .....step_utils.base_steps import AbstractBaseStep
 
 class ReadConductivitySensor(AbstractBaseStep):
 
+    PROP_TYPES = {
+        'sensor': str,
+        'on_reading': Callable  # using typing because no built-in func type
+    }
+
     def __init__(self, sensor: str, on_reading: Callable):
         super().__init__(locals())
 

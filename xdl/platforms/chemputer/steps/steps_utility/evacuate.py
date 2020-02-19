@@ -37,6 +37,19 @@ class Evacuate(AbstractStep):
         'pneumatic_controller',
     ]
 
+    PROP_TYPES = {
+        'vessel': str,
+        'evacuations': int,
+        'after_inert_gas_wait_time': float,
+        'after_vacuum_wait_time': float,
+        'vacuum_pressure': float,
+        'inert_gas': str,
+        'vacuum': str,
+        'vacuum_device': str,
+        'vessel_type': str,
+        'pneumatic_controller': str
+    }
+
     def __init__(
         self,
         vessel: str,
