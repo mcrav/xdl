@@ -3,7 +3,7 @@ import logging
 import time
 import math
 from functools import partial
-
+from ..utils.logging import get_logger
 from .base_steps import (
     Step,
     AbstractAsyncStep,
@@ -198,6 +198,8 @@ class Parallelizer(object):
         self.time_step = time_step
 
         self.locks = []
+
+        self.logger = get_logger()
 
         # Initialise lockmatrix and exstream
         self.process_first_block()
@@ -429,17 +431,17 @@ class Parallelizer(object):
 
     def print_exstream(self) -> None:
         """Print entire contents of execution stream."""
-        print('Execution stream\n----------------\n')
+        self.logger.info('Execution stream\n----------------\n')
         for block in self.exstream:
             for step in block:
-                print(step.human_readable())
-            print('')
+                self.logger.info(step.human_readable())
+            self.logger.info('')
 
     def execute_time_step(self) -> None:
         """Execute current time step."""
         time_step = self.exstream.pop(0)
         if not time_step:
-            print('Popping empty time step...')
+            self.logger.info('Popping empty time step...')
 
         while time_step:
             # Execute all steps scheduled for current time step.
@@ -452,9 +454,10 @@ class Parallelizer(object):
             # If some steps could not be executed due to unreleased lock, wait
             # then try again.
             if time_step:
-                print(f'Waiting to execute {len(time_step)} more steps in\
- current time step...')
-                print([
+                self.logger.info(
+                    f'Waiting to execute {len(time_step)} more steps in current\
+ time step...')
+                self.logger.info([
                     node
                     for node in self.chempiler.graph.nodes()
                     if self.chempiler.graph[node]['lock'] is not None
@@ -492,9 +495,9 @@ class Parallelizer(object):
                 # No lock
                 else:
                     s[i] += f'{str(item):2}'
-
-        print('\n'.join(s))
-        print(f"    n_timesteps = {len(s[0].strip().split(' '))-1}")
+        self.logger.info('\n'.join(s))
+        self.logger.info(
+            f"    n_timesteps = {len(s[0].strip().split(' '))-1}")
 
 class Callback(AbstractBaseStep):
 

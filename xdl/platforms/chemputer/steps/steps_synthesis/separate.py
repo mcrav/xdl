@@ -467,7 +467,6 @@ class Separate(AbstractStep):
     ####################################
 
     def sanity_checks(self, graph):
-        print(f"Buffer flasks required: {self.buffer_flasks_required}")
         return [
             SanityCheck(
                 condition=(len(self.buffer_flasks)
