@@ -30,3 +30,4 @@ chempiler_output/
 !tests/chemputer/unit/files/xdlexe_test_missing_properties.xdlexe
 !tests/chemputer/unit/files/xdlexe_test_dynamic_steps.xdlexe
 !tests/chemputer/unit/files/repeat_parent.xdlexe
+!*.flake8*
