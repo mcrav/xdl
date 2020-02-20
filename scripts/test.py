@@ -9,6 +9,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('xdl_file', type=str)
     parser.add_argument('graph_file', type=str)
+    parser.add_argument('--interactive', action='store_true')
     args = parser.parse_args()
 
     if not os.path.exists(args.xdl_file):
@@ -18,7 +19,7 @@ def main():
         raise FileNotFoundError(f"Can't find graph file '{args.graph_file}'.")
 
     x = XDL(args.xdl_file)
-    x.prepare_for_execution(args.graph_file, interactive=False)
+    x.prepare_for_execution(args.graph_file, interactive=args.interactive)
 
     c = Chempiler(
         experiment_code='test',

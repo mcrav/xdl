@@ -567,57 +567,63 @@ def verify_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
         xdl_obj (XDL): XDL object with cleaning steps amended according to user
             input.
     """
-    logger = get_logger()
-    logger.info('\nVerifying Cleaning Steps\n------------------------\n')
-    logger.info('* CleanBackbone solvent indicates the step which is being\
- verified. Other steps are shown for context.\n\n')
-    available_solvents = get_available_solvents(xdl_obj)
-    chunks = get_cleaning_chunks(xdl_obj)
-    logger.info('Procedure Start')
-    for chunk in chunks:
-        for i in range(len(chunk)):
-            if type(chunk[i]) == CleanBackbone:
-                logger.info('---------------\n')
-                for j, step in enumerate(chunk):
-                    if j == i:
-                        logger.info(f'* CleanBackbone {step.solvent}')
-                    elif type(step) == CleanBackbone:
-                        logger.info(f'CleanBackbone {step.solvent}')
+    for cleaning_step_type in [CleanBackbone, CleanVessel]:
+        logger = get_logger()
+        if cleaning_step_type == CleanBackbone:
+            name = 'CleanBackbone'
+        else:
+            name = 'CleanVessel'
+        logger.info(f'\n\nVerifying {name} Steps\n--------------------------\
+---\n')
+        logger.info(f'* {name} solvent indicates the step which is being \
+verified. Other steps are shown for context.\n\n')
+        solvents = get_available_solvents(xdl_obj)
+        chunks = get_cleaning_chunks(xdl_obj, step_type=cleaning_step_type)
+        logger.info('Procedure Start')
+        for chunk in chunks:
+            for i in range(len(chunk)):
+                if type(chunk[i]) == cleaning_step_type:
+                    logger.info('---------------\n')
+                    for j, step in enumerate(chunk):
+                        if j == i:
+                            logger.info(f'* {name} {step.solvent}')
+                        elif type(step) == cleaning_step_type:
+                            logger.info(f'{name} {step.solvent}')
+                        else:
+                            logger.info(step.human_readable())
+                    answer = None
+                    # Get appropriate answer.
+                    while answer not in ['', 'y', 'n']:
+                        answer = input(
+                            f'\nIs {chunk[i].solvent} an appropriate cleaning \
+solvent? ([y], n)\n')
+                    # Leave solvent as is. Move onto next steps.
+                    if not answer or answer == 'y':
+                        continue
+                    # Get user to select new solvent.
                     else:
-                        logger.info(step.human_readable())
-                answer = None
-                # Get appropriate answer.
-                while answer not in ['', 'y', 'n']:
-                    answer = input(
-                        f'\nIs {chunk[i].solvent} an appropriate cleaning\
- solvent? ([y], n)\n')
-                # Leave solvent as is. Move onto next steps.
-                if not answer or answer == 'y':
-                    continue
-                # Get user to select new solvent.
-                else:
-                    new_solvent_index = None
-                    # Wait for user to give appropriate input.
-                    while new_solvent_index not in list(
-                            range(len(available_solvents))):
-                        input_msg = f'Select new solvent by number\n'
-                        input_msg += '\n'.join(
-                            [f'{solvent} ({i})'
-                             for i, solvent in enumerate(available_solvents)]
-                        ) + '\n'
-                        new_solvent_index = input(input_msg)
-                        try:
-                            new_solvent_index = int(new_solvent_index)
-                        except ValueError:
-                            logger.info('Input must be number corresponding to\
- solvent.')
-                    # Change CleanBackbone step solvent.
-                    chunk[i].solvent = available_solvents[new_solvent_index]
-                    logger.info(f'Solvent changed to {chunk[i].solvent}\n')
-                    time.sleep(1)
+                        new_solvent_index = None
+                        # Wait for user to give appropriate input.
+                        while new_solvent_index not in list(
+                                range(len(solvents))):
+                            input_msg = f'Select new solvent by number\n'
+                            input_msg += '\n'.join(
+                                [f'{solvent} ({i})'
+                                 for i, solvent in enumerate(solvents)]
+                            ) + '\n'
+                            new_solvent_index = input(input_msg)
+                            try:
+                                new_solvent_index = int(new_solvent_index)
+                            except ValueError:
+                                logger.info('Input must be number corresponding\
+to solvent.')
+                        # Change step solvent.
+                        chunk[i].solvent = solvents[new_solvent_index]
+                        logger.info(f'Solvent changed to {chunk[i].solvent}\n')
+                        time.sleep(1)
 
 
-def get_cleaning_chunks(xdl_obj: 'XDL') -> List[List[Step]]:
+def get_cleaning_chunks(xdl_obj: 'XDL', step_type: Step) -> List[List[Step]]:
     """Takes slices out of xdl_obj steps showing context of cleaning. Chunks
     are the step before a set of CleanBackbone steps, the CleanBackbone steps,
     and the step straight after, e.g. [Add, CleanBackbone, CleanBackbone, Add]
@@ -633,13 +639,13 @@ def get_cleaning_chunks(xdl_obj: 'XDL') -> List[List[Step]]:
     steps = xdl_obj.steps
     i = 0
     while i < len(steps):
-        if type(steps[i]) == CleanBackbone:
+        if type(steps[i]) == step_type:
             chunk_start = i
             if i > 0:
                 chunk_start = i - 1
             chunk_end = i
             while (chunk_end < len(steps)
-                   and type(steps[chunk_end]) == CleanBackbone):
+                   and type(steps[chunk_end]) == step_type):
                 chunk_end += 1
             chunks.append(steps[chunk_start:chunk_end + 1])
             i = chunk_end
