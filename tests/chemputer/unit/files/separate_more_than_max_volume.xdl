@@ -1,0 +1,29 @@
+<Synthesis auto_clean="false">
+  <Hardware>
+
+  </Hardware>
+
+  <Reagents>
+    <Reagent id="water" />
+    <Reagent id="ether" />
+  </Reagents>
+
+  <Procedure>
+
+    <Separate
+      purpose="wash"
+      from_vessel="filter"
+      separation_vessel="separator"
+      to_vessel="rotavap"
+      solvent="ether"
+      solvent_volume="150 mL"
+      product_bottom="False"
+      to_port="evaporate"
+      n_separations="1"
+      remove_dead_volume="true"
+      waste_phase_to_vessel="separator" />
+
+    />
+  </Procedure>
+
+</Synthesis>

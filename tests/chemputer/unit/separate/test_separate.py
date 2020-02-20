@@ -468,3 +468,14 @@ def test_separate_without_enough_buffer_flasks():
         graph_f = os.path.join(FOLDER, 'separate_no_buffers.json')
         x = XDL(xdl_f)
         x.prepare_for_execution(graph_f)
+
+@pytest.mark.unit
+def test_separate_more_than_max_volume():
+    xdl_f = os.path.join(FOLDER, 'separate_more_than_max_volume.xdl')
+    graph_f = os.path.join(FOLDER, 'bigrig.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f)
+    for step in x.steps:
+        if step.name == 'Separate':
+            assert step.n_separations == 2
+            assert step.solvent_volume == 75
