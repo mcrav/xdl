@@ -24,3 +24,10 @@ zh
 
 ru
 Экстрагировать содержимое {from_vessel} с помощью {solvent} ({n_separations} раз(а) по {solvent_volume}). Отработанную фазу ({waste_phase}) слить в {waste_phase_to_vessel}, фазу с продуктом ({product_phase}) - в {to_vessel}.
+
+!Separate (solvent_free)
+
+# Example: Separate two-phase mixture in separator, transfer waste phase (top) to separator and product phase (bottom) to buffer_flask
+
+en
+Separate two-phase mixture in {separator}, transfer {waste_phase} (top) to {separator} and {product_phase} (bottom) to {buffer_flask}.
