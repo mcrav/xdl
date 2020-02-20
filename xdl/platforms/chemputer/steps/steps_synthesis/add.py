@@ -9,6 +9,7 @@ from .....constants import (
     DEFAULT_VISCOUS_ASPIRATION_SPEED,
 )
 from .....localisation import HUMAN_READABLE_STEPS
+from .....utils.errors import XDLError
 
 class Add(AbstractStep):
     """Add given volume of given reagent to given vessel.
@@ -18,6 +19,7 @@ class Add(AbstractStep):
         volume (float): Volume of reagent to add.
         vessel (str): Vessel name to add reagent to.
         port (str): vessel port to use.
+        through (str): Substrate to pass reagent through on way to vessel
         move_speed (float): Speed in mL / min to move liquid at. (optional)
         aspiration_speed (float): Aspiration speed (speed at which liquid is
             pulled out of reagent_vessel).
@@ -29,6 +31,8 @@ class Add(AbstractStep):
             pump into self.vessel during the addition.
         stir (bool): If True, stirring will be started before addition.
         stir_speed (float): RPM to stir at, only relevant if stir = True.
+        through_cartridge (str): Internal property. Node name of cartridge to
+            pass reagent through on way to vessel.
 
         anticlogging (bool): If True, a technique will be used to avoid clogging
             where reagent is added in small portions, each one followed by a
@@ -47,6 +51,18 @@ class Add(AbstractStep):
         flush_tube_vessel (str): Given internally. Air/nitrogen vessel to use to
             flush liquid out of the valve -> vessel tube.
     """
+
+    DEFAULT_PROPS = {
+        'move_speed': 40,  # mL / min
+        'aspiration_speed': 10,  # mL / min
+        'dispense_speed': 40,  # mL / min
+        'viscous': False,
+        'stir_speed': '250 RPM',
+        'anticlogging': False,
+        'anticlogging_solvent_volume': '2 mL',
+        'anticlogging_reagent_volume': '10 mL',
+    }
+
     def __init__(
         self,
         reagent: str,
@@ -62,6 +78,7 @@ class Add(AbstractStep):
         time: Optional[float] = None,
         stir: Optional[bool] = False,
         stir_speed: Optional[float] = 'default',
+        through_cartridge: Optional[str] = None,
 
         anticlogging: Optional[bool] = 'default',
         anticlogging_solvent: Optional[str] = None,
@@ -120,7 +137,7 @@ class Add(AbstractStep):
                 to_vessel=self.vessel,
                 to_port=self.port,
                 volume=self.volume,
-                through=self.through,
+                through=self.through_cartridge,
                 move_speed=self.move_speed,
                 aspiration_speed=aspiration_speed,
                 dispense_speed=self.get_dispense_speed()),
@@ -185,3 +202,11 @@ class Add(AbstractStep):
             # dispense_speed (mL / min) = volume (mL) / time (min)
             return self.volume / (self.time / 60)
         return self.dispense_speed
+
+    def final_sanity_check(self, graph):
+        try:
+            assert not self.through or self.through_cartridge
+        except AssertionError:
+            raise XDLError(
+                f'Trying to add through "{self.through}" but cannot find\
+ cartridge containing {self.through}.')

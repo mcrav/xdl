@@ -1,7 +1,7 @@
-<?xdl version="0.2.0" ?>
+<?xdl version="0.2.1" ?>
 
 <Synthesis
-  graph_sha256="cef344b332797f0750a0a606242e459edb495c450f4fb762c6a38616b8f688a9"
+  graph_sha256="470e4549c2f7965ca63db819c593a325d4df226adfbd16d95370e066c46233eb"
 >
   <Hardware>
   </Hardware>
@@ -18,73 +18,116 @@
       unique="True" />
     <Repeat
       repeats="2">
-      <Wait
-        time="5 secs"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="5 secs" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
-      <Wait
-        time="10 secs"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="10 secs" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
-      <Wait
-        time="5 secs"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="5 secs" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
-      <Wait
-        time="10 secs"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="10 secs" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
-      <Wait
-        time="5 secs"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="5 secs" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
-      <Wait
-        time="10 secs"
-        wait_recording_speed="2000"
-        after_recording_speed="14">
-        <CSetRecordingSpeed
-          recording_speed="2000" />
-        <CWait
-          time="10 secs" />
-        <CSetRecordingSpeed
-          recording_speed="14" />
-      </Wait>
+      <Children>
+        <Wait
+          time="5 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="5 secs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <Wait
+          time="10 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="10 secs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+      </Children>
+      <Steps>
+        <Wait
+          time="5 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="5 secs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <Wait
+          time="10 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="10 secs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <Wait
+          time="5 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="5 secs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+        <Wait
+          time="10 secs"
+          wait_recording_speed="2000"
+          after_recording_speed="14">
+          <CSetRecordingSpeed
+            recording_speed="2000" />
+          <CWait
+            time="10 secs" />
+          <CSetRecordingSpeed
+            recording_speed="14" />
+        </Wait>
+      </Steps>
     </Repeat>
+    <Shutdown
+      vacuums="rotavap vacuum_flask vacuum_reactor_flask"
+      heaters="reactor"
+      stirrers="reactor filter separator flask_water"
+      rotavaps="rotavap"
+      chillers="filter rotavap">
+      <CRotavapStopRotation
+        rotavap_name="rotavap" />
+      <CRotavapStopHeater
+        rotavap_name="rotavap" />
+      <CRotavapLiftUp
+        rotavap_name="rotavap" />
+      <CStopStir
+        vessel="reactor" />
+      <CStopStir
+        vessel="filter" />
+      <CStopStir
+        vessel="separator" />
+      <CStopStir
+        vessel="flask_water" />
+      <CStopHeat
+        vessel="reactor" />
+      <CStopVacuum
+        vessel="rotavap" />
+      <CVentVacuum
+        vessel="rotavap" />
+      <CStopVacuum
+        vessel="vacuum_flask" />
+      <CVentVacuum
+        vessel="vacuum_flask" />
+      <CStopVacuum
+        vessel="vacuum_reactor_flask" />
+      <CVentVacuum
+        vessel="vacuum_reactor_flask" />
+      <CStopChiller
+        vessel="filter" />
+      <CStopChiller
+        vessel="rotavap" />
+    </Shutdown>
   </Procedure>
 
 </Synthesis>

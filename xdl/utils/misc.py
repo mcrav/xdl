@@ -80,7 +80,7 @@ def format_stir_rpm(val: float) -> str:
     Returns:
         str: Formatted stir speed in RPM.
     """
-    return f'{val} RPM'
+    return f'{format_val(val)} RPM'
 
 def format_pressure(val_mbar: float) -> str:
     """Return formatted pressure in sensible units.
@@ -195,5 +195,8 @@ def format_val(val: float) -> str:
         str: Number rounded to two decimal places with trailing '0' and '.'
             removed.
     """
-    hours_str = f'{val:.4f}'
-    return hours_str.rstrip('0').rstrip('0').rstrip('.')
+    val_str = f'{val:.4f}'
+    while val_str.endswith('0'):
+        val_str = val_str.rstrip('0')
+
+    return val_str.rstrip('.')

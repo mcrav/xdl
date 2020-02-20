@@ -208,6 +208,16 @@ class HeatChillToTemp(AbstractStep):
         vessel_type (str): Given internally. Used to know whether to use
             heater or chiller base steps. 'filter', 'rotavap' or 'reactor'
     """
+
+    DEFAULT_PROPS = {
+        'active': True,
+        'continue_heatchill': True,
+        'stir': True,
+        'stir_speed': '250 RPM',
+        'wait_recording_speed': 2000,
+        'after_recording_speed': 14,
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -370,10 +380,18 @@ class HeatChillReturnToRT(AbstractStep):
             heater or chiller base steps. 'ChemputerFilter' or
             'ChemputerReactor'.
     """
+
+    DEFAULT_PROPS = {
+        'stir': True,
+        'stir_speed': '250 RPM',
+        'wait_recording_speed': 2000,
+        'after_recording_speed': 14,
+    }
+
     def __init__(
         self,
         vessel: str,
-        stir: Optional[bool] = True,
+        stir: Optional[bool] = 'default',
         stir_speed: Optional[float] = 'default',
         vessel_type: Optional[str] = None,
         wait_recording_speed: Optional[float] = 'default',
@@ -414,6 +432,12 @@ class HeatChillReturnToRT(AbstractStep):
         }
 
 class StirrerReturnToRT(AbstractStep):
+
+    DEFAULT_PROPS = {
+        'wait_recording_speed': 2000,
+        'after_recording_speed': 14,
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -432,6 +456,12 @@ class StirrerReturnToRT(AbstractStep):
         ]
 
 class ChillerReturnToRT(AbstractStep):
+
+    DEFAULT_PROPS = {
+        'wait_recording_speed': 2000,
+        'after_recording_speed': 14,
+    }
+
     def __init__(
         self,
         vessel: str,

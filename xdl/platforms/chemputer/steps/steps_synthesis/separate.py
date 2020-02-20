@@ -39,6 +39,12 @@ class Separate(AbstractStep):
         waste_phase_to_port (str): waste_phase_to_vessel port to use.
         waste_vessel (str): Given internally. Vessel to send waste to.
     """
+
+    DEFAULT_PROPS = {
+        'solvent_volume': '30 mL',
+        'remove_dead_volume': True,
+    }
+
     def __init__(
         self,
         purpose: str,
@@ -149,8 +155,8 @@ class Separate(AbstractStep):
                     upper_phase_vessel=self.waste_phase_to_vessel,
                     upper_phase_port=self.waste_phase_to_port,
                     dead_volume_vessel=self.dead_volume_target,
-                    dead_volume_through=self.through_cartridge,
-                    lower_phase_through=self.through_cartridge
+                    dead_volume_through=self.through,
+                    lower_phase_through=self.through
                 )]
             else:
                 return [
@@ -194,7 +200,7 @@ class Separate(AbstractStep):
                         upper_phase_vessel=self.to_vessel,
                         upper_phase_port=self.to_port,
                         dead_volume_vessel=self.dead_volume_target,
-                        upper_phase_through=self.through_cartridge
+                        upper_phase_through=self.through
                     ),
                     Transfer(
                         from_vessel=self.buffer_flasks[0],
@@ -210,7 +216,7 @@ class Separate(AbstractStep):
                 upper_phase_vessel=self.to_vessel,
                 upper_phase_port=self.to_port,
                 dead_volume_vessel=self.dead_volume_target,
-                upper_phase_through=self.through_cartridge
+                upper_phase_through=self.through
             )]
 
     def _get_multi_wash_loop_separate_phases(self):
@@ -224,17 +230,14 @@ class Separate(AbstractStep):
                 steps.extend([
                     SeparatePhases(
                         separation_vessel=self.separation_vessel,
-                        lower_phase_vessel=self.to_vessel,
-                        lower_phase_port=self.to_port,
+                        lower_phase_vessel=self.buffer_flasks[0],
                         upper_phase_vessel=self.waste_phase_to_vessel,
                         upper_phase_port=self.waste_phase_to_port,
-                        lower_phase_through=self.through_cartridge,
-                        dead_volume_through=self.through_cartridge,
-                        dead_volume_vessel=self.to_vessel,
+                        dead_volume_vessel=self.buffer_flasks[0],
                     ),
                     # Move to_vessel to separation_vessel
                     Transfer(
-                        from_vessel=self.to_vessel,
+                        from_vessel=self.buffer_flasks[0],
                         to_vessel=self.separation_vessel,
                         volume='all'
                     ),
@@ -288,10 +291,10 @@ class Separate(AbstractStep):
                         separation_vessel=self.separation_vessel,
                         lower_phase_vessel=self.to_vessel,
                         lower_phase_port=self.to_port,
-                        lower_phase_through=self.through_cartridge,
+                        lower_phase_through=self.through,
                         upper_phase_vessel=self.separation_vessel,
                         dead_volume_vessel=self.to_vessel,
-                        dead_volume_through=self.through_cartridge,
+                        dead_volume_through=self.through,
                     )
                 )
             else:
@@ -311,7 +314,7 @@ class Separate(AbstractStep):
                         lower_phase_vessel=self.buffer_flasks[0],
                         upper_phase_vessel=self.to_vessel,
                         upper_phase_port=self.to_port,
-                        upper_phase_through=self.through_cartridge,
+                        upper_phase_through=self.through,
                         dead_volume_vessel=self.buffer_flasks[0],
                     ),
                     # Move waste phase in buffer flask back to separation_vessel
@@ -472,6 +475,9 @@ class Separate(AbstractStep):
 
     def human_readable(self, language='en') -> str:
         props = self.formatted_properties()
+
+        if not self.waste_phase_to_vessel:
+            props['waste_phase_to_vessel'] = 'waste'
 
         phases = ['bottom', 'top']
         # Remember True == 1 and False == 0

@@ -13,6 +13,11 @@ class PrimePumpForAdd(AbstractStep):
         reagent (str): Reagent to prime pump for addition.
         move_speed (str): Speed to move reagent at. (optional)
     """
+
+    DEFAULT_PROPS = {
+        'volume': '3 mL',
+    }
+
     def __init__(
         self,
         reagent: str,
@@ -43,7 +48,17 @@ class Transfer(AbstractStep):
         move_speed (float): Speed in mL / min to move liquid at.
         dispense_speed (float): Speed in mL / min to push liquid out of pump
             into to_vessel.
+        through_cartridge (str): Internal property. Cartridge to pass through.
     """
+
+    DEFAULT_PROPS = {
+        'stir_speed': '250 RPM',
+        'aspiration_speed': 10,  # mL / min
+        'dispense_speed': 40,  # mL / min
+        'move_speed': 40,  # mL / min
+        'viscous': False,
+    }
+
     def __init__(
         self,
         from_vessel: str,
@@ -57,6 +72,7 @@ class Transfer(AbstractStep):
         move_speed: Optional[float] = 'default',
         dispense_speed: Optional[float] = 'default',
         viscous: Optional[bool] = 'default',
+        through_cartridge: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
@@ -69,7 +85,7 @@ class Transfer(AbstractStep):
                       to_vessel=self.to_vessel,
                       to_port=self.to_port,
                       volume=self.volume,
-                      through=self.through,
+                      through=self.through_cartridge,
                       aspiration_speed=aspiration_speed,
                       move_speed=self.move_speed,
                       dispense_speed=dispense_speed)]
@@ -84,6 +100,13 @@ class Transfer(AbstractStep):
             assert self.to_vessel
         except AssertionError:
             raise XDLError('to_vessel must be node in graph.')
+
+        try:
+            assert not self.through or self.through_cartridge
+        except AssertionError:
+            raise XDLError(
+                f'Trying to transfer through "{self.through}" but cannot find\
+ cartridge containing {self.through}.')
 
     def on_prepare_for_execution(self, graph) -> str:
         """If self.port is None, return default port for different vessel types.

@@ -1,6 +1,9 @@
 from typing import Callable
 import time
 import os
+import pytest
+import ChemputerAPI
+from chempiler import Chempiler
 
 from ..utils import generic_chempiler_test
 
@@ -8,9 +11,6 @@ from xdl import XDL
 from xdl.steps.base_steps import AbstractAsyncStep
 from xdl.steps.special_steps import Async
 from xdl.steps import Wait
-
-import ChemputerAPI
-from chempiler import Chempiler
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, 'files')
@@ -90,4 +90,10 @@ def test_async_wrapper_in_file():
         if step.name == 'Async':
             assert step.steps[0].reagent_vessel == 'flask_water'
 
+    generic_chempiler_test(xdl_f, graph_f)
+
+@pytest.mark.unit
+def test_advanced_async_case():
+    xdl_f = os.path.join(FOLDER, 'async_advanced.xdl')
+    graph_f = os.path.join(FOLDER, 'async_advanced.json')
     generic_chempiler_test(xdl_f, graph_f)

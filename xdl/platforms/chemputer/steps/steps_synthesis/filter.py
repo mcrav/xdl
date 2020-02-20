@@ -40,6 +40,15 @@ class Filter(AbstractStep):
         valve_unused_port (str): Given internally. Random unused position on
             valve.
     """
+
+    DEFAULT_PROPS = {
+        'wait_time': '2 minutes',
+        'aspiration_speed': 5,  # mL / min
+        'stir': True,
+        'stir_speed': '500 RPM',
+        'anticlogging': False,
+    }
+
     def __init__(
         self,
         filter_vessel: str,

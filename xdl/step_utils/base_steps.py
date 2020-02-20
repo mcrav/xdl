@@ -6,6 +6,7 @@ import copy
 from abc import ABC, abstractmethod
 from ..utils.misc import format_property
 from ..utils.graph import get_graph
+from ..utils.errors import XDLError
 from ..localisation import HUMAN_READABLE_STEPS
 
 if False:
@@ -92,7 +93,8 @@ class AbstractStep(Step, ABC):
         self,
         chempiler: 'Chempiler',
         logger: logging.Logger = None,
-        level: int = 0
+        level: int = 0,
+        async_steps: list = []
     ) -> bool:
         """
         Execute self with given Chempiler object.
@@ -120,8 +122,14 @@ class AbstractStep(Step, ABC):
                         'Executing:\n{0}{1}\n{2}'.format(
                             '  ' * level, step.name, prop_str))
                     try:
-                        keep_going = step.execute(
-                            chempiler, logger, level=level)
+                        if step.name == 'Await':
+                            keep_going = step.execute(
+                                async_steps, self.logger)
+                        else:
+                            keep_going = step.execute(
+                                chempiler,
+                                self.logger
+                            )
                     except Exception as e:
                         logger.info(
                             'Step failed {0} {1}'.format(
@@ -223,7 +231,13 @@ class AbstractAsyncStep(XDLBase):
         super().__init__(param_dict)
         self._should_end = False
 
-    def execute(self, chempiler, logger=None, level=0):
+    def on_prepare_for_execution(self, graph):
+        return
+
+    def final_sanity_check(self, graph):
+        return
+
+    def execute(self, chempiler, logger=None, level=0, async_steps=[]):
         self.thread = threading.Thread(
             target=self.async_execute, args=(chempiler, logger))
         self.thread.start()
@@ -334,6 +348,12 @@ class AbstractDynamicStep(XDLBase):
             self.reset()
 
         self.started = True
+
+        if not hasattr(self, 'start_block'):
+            raise XDLError('Dynamic step has not been prepared for execution.\
+ if executing steps individually, please use\
+ `xdl_obj.execute(platform_controller, step_index)` rather than\
+ `xdl_obj.steps[step_index].execute(platform_controller)`.')
 
         # Execute steps from on_start
         for step in self.start_block:

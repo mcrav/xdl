@@ -278,8 +278,8 @@ class XDL(object):
         for step in self.steps:
             if step.name not in UNSCALED_STEPS:
                 for prop, val in step.properties.items():
-                    if 'volume' in prop and type(val) == float:
-                        if val:
+                    if 'volume' in prop or 'mass' in prop:
+                        if val and type(val) == float:
                             step.properties[prop] = float(val) * scale
 
     @property
@@ -549,7 +549,7 @@ class XDL(object):
             self.logger.warning(
                 'Cannot call prepare for execution twice on same XDL object.')
 
-    def execute(self, chempiler: 'Chempiler') -> None:
+    def execute(self, chempiler: 'Chempiler', step: int = None) -> None:
         """Execute XDL using given Chempiler object. self.prepare_for_execution
         must have been called before calling thie method.
 
@@ -557,10 +557,27 @@ class XDL(object):
             chempiler (chempiler.Chempiler): Chempiler object instantiated with
                 modules and graph to run XDL on.
         """
+        # Check step not accidentally passed as platform controller
+        try:
+            assert type(chempiler) not in [int, str, list, dict]
+        except AssertionError:
+            raise XDLError(
+                f'Invalid platform controller supplied. Type:\
+ {type(chempiler)} Value: {chempiler}')
+
         if (self.prepared
                 or (hasattr(self, 'graph_sha256') and self.graph_sha256)):
             if hasattr(self, 'executor'):
-                self.executor.execute(chempiler)
+                if step is None:
+                    self.executor.execute(chempiler)
+                else:
+                    try:
+                        self.steps[step]
+                    except IndexError:
+                        raise XDLError(
+                            f'Trying to execute step {step} but step list has\
+ length {len(self.steps)}.')
+                    self.executor.execute_step(chempiler, self.steps[step])
             else:
                 raise RuntimeError(
                     'XDL executor not available. Call prepare_for_execution\

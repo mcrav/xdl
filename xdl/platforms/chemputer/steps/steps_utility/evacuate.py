@@ -20,12 +20,20 @@ class Evacuate(AbstractStep):
         inert_gas (str): Internal property. Inert gas flask.
         vacuum (str): Internal property. Valve connected to vacuum.
     """
+
+    DEFAULT_PROPS = {
+        'after_inert_gas_wait_time': '1 minute',
+        'after_vacuum_wait_time': '1 minute',
+        'evacuations': 3,
+        'vacuum_pressure': '50 mbar',
+    }
+
     def __init__(
         self,
         vessel: str,
         evacuations: int = 'default',
-        after_inert_gas_wait_time: Optional[int] = 'default',
-        after_vacuum_wait_time: Optional[int] = 'default',
+        after_inert_gas_wait_time: Optional[float] = 'default',
+        after_vacuum_wait_time: Optional[float] = 'default',
         inert_gas: Optional[str] = None,
         vacuum: Optional[str] = None,
         vacuum_device: Optional[str] = None,

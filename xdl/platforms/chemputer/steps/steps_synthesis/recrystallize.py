@@ -4,6 +4,11 @@ from .dissolve import Dissolve
 
 class Recrystallize(AbstractStep):
 
+    DEFAULT_PROPS = {
+        'time': '2 hrs',
+        'crystallize_temp': '25°C',
+    }
+
     def __init__(
         self,
         vessel: str,

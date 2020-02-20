@@ -28,9 +28,20 @@ def xdl_file_to_objs(
                 hardware: Hardware object.
                 reagents: List of Reagent objects.
     """
-    with open(xdl_file) as fileobj:
-        return xdl_str_to_objs(
-            xdl_str=fileobj.read(), logger=logger, platform=platform)
+    try:
+        with open(xdl_file) as fileobj:
+            xdlstr = fileobj.read()
+    except UnicodeDecodeError:
+        # Try different encoding to UTF-8
+        logger.debug(f"Unable to decode file using UTF-8\
+            Falling back to ISO-8859-1")
+
+        with open(xdl_file, encoding="iso-8859-1") as fileobj:
+            xdlstr = fileobj.read()
+
+    return xdl_str_to_objs(
+        xdl_str=xdlstr, logger=logger, platform=platform
+    )
 
 def xdl_str_to_objs(
     xdl_str: str,
@@ -75,10 +86,20 @@ def xdl_str_to_objs(
 def apply_step_record(step, step_record_step):
     assert step.name == step_record_step[0]
     for prop in step.properties:
-        step.properties[prop] = step_record_step[1][prop]
+        if prop != 'children':
+            if prop not in step_record_step[1]:
+                raise XDLError(f"Property {prop} missing from\
+ Step {step_record_step[0]}\nThis file was most likely generated from an\
+ older version of XDL. Regenerate the XDLEXE file using the latest\
+ version of XDL.")
+            step.properties[prop] = step_record_step[1][prop]
     step.update()
     if not isinstance(step, AbstractBaseStep):
-        assert len(step.steps) == len(step_record_step[2])
+        try:
+            assert len(step.steps) == len(step_record_step[2])
+        except AssertionError:
+            raise AssertionError(f'{step.steps}\n\n{step_record_step[2]}\
+ {len(step.steps)} {len(step_record_step[2])}')
         for j, substep in enumerate(step.steps):
             apply_step_record(substep, step_record_step[2][j])
 
@@ -194,10 +215,20 @@ def xdl_to_step(
     if xdl_step_element.tag not in step_type_dict:
         raise XDLError(f'{xdl_step_element.tag} is not a valid step type.')
 
-    children = xdl_step_element.findall('*')
+    child_element_tags = [e.tag for e in xdl_step_element.findall('*')]
     children_steps = []
-    for child in children:
-        children_steps.append(xdl_to_step(child, step_type_dict))
+    # Nested elements like Repeat have Steps and Children elements
+    # instead of just raw steps
+    if 'Steps' in child_element_tags and 'Children' in child_element_tags:
+        for child_element in xdl_step_element.findall('*'):
+            if child_element.tag == 'Children':
+                for child_step in child_element.findall('*'):
+                    children_steps.append(
+                        xdl_to_step(child_step, step_type_dict))
+    else:
+        children = xdl_step_element.findall('*')
+        for child in children:
+            children_steps.append(xdl_to_step(child, step_type_dict))
 
     step_type = step_type_dict[xdl_step_element.tag]
     # Check all attributes are valid.
@@ -298,6 +329,17 @@ def get_full_step_record(procedure_tree):
 
 def get_single_step_record(step_element):
     children = []
-    for step in step_element.findall('*'):
-        children.append(get_single_step_record(step))
+    child_element_tags = [
+        element.tag for element in step_element.findall('*')]
+    # Nested elements like Repeat have Steps and Children elements
+    # instead of just raw steps
+    if 'Steps' in child_element_tags and 'Children' in child_element_tags:
+        for child_element in step_element.findall('*'):
+            if child_element.tag == 'Steps':
+                for step in child_element.findall('*'):
+                    children.append(get_single_step_record(step))
+                break
+    else:
+        for step in step_element.findall('*'):
+            children.append(get_single_step_record(step))
     return (step_element.tag, step_element.attrib, children)

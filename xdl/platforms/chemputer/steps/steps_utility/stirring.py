@@ -41,6 +41,11 @@ class StartStir(AbstractStep):
         vessel (str): Vessel name to stir.
         stir_speed (int, optional): Speed in RPM to stir at.
     """
+
+    DEFAULT_PROPS = {
+        'stir_speed': '250 RPM',
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -104,14 +109,21 @@ class Stir(AbstractStep):
     Args:
         vessel (str): Vessel to stir.
         time (float): Time to stir for.
+        continue_stirring (bool): Continue stirring after stirring time elapses.
         stir_speed (float): Stir rate in RPM.
         vessel_type (str): Given internally. 'reactor', 'filter', 'rotavap',
             'flask' or 'separator'.
     """
+
+    DEFAULT_PROPS = {
+        'stir_speed': '250 RPM',
+    }
+
     def __init__(
         self,
         vessel: str,
         time: float,
+        continue_stirring: bool = False,
         stir_speed: Optional[float] = 'default',
         vessel_type: Optional[str] = None,
         **kwargs
@@ -127,14 +139,20 @@ class Stir(AbstractStep):
                 RotavapStir(
                     rotavap_name=self.vessel,
                     stir_speed=stir_speed,
-                    time=self.time),
+                    time=self.time,
+                    continue_stirring=self.continue_stirring,
+                ),
             ]
         else:
-            return [
+            steps = [
                 StartStir(vessel=self.vessel, stir_speed=self.stir_speed),
                 Wait(time=self.time),
-                StopStir(vessel=self.vessel),
             ]
+            if self.continue_stirring is True:
+                return steps
+            else:
+                steps.append(StopStir(vessel=self.vessel))
+                return steps
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:

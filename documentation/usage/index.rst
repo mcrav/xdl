@@ -9,3 +9,4 @@ Usage
    inspecting_xdl
    altering_xdl
    xdl_controller
+   submitting_issues

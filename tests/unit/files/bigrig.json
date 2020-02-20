@@ -40,7 +40,7 @@
     {
       "id": "rotavap",
       "type": "rotavap",
-      "x": 200,
+      "x": 240,
       "y": 200,
       "internalId": 3,
       "label": "rotavap",
@@ -459,8 +459,8 @@
     {
       "id": "cartridge_mgso4",
       "type": "cartridge",
-      "x": 160,
-      "y": 440,
+      "x": 200,
+      "y": 480,
       "internalId": 81,
       "label": "cartridge_mgso4",
       "class": "ChemputerCartridge",
@@ -491,6 +491,21 @@
       "chemical": "",
       "current_volume": 100,
       "max_volume": 100
+    },
+    {
+      "id": "rotavap_chiller",
+      "type": "chiller",
+      "x": 360,
+      "y": 280,
+      "class": "JULABOCF41",
+      "name": "rotavap_chiller",
+      "min_temp": -40,
+      "max_temp": 20,
+      "port": null,
+      "address": "",
+      "mode": "ethernet",
+      "internalId": 97,
+      "label": "rotavap_chiller"
     }
   ],
   "links": [
@@ -895,14 +910,6 @@
       "port": "(out,evaporate)"
     },
     {
-      "id": 82,
-      "sourceInternal": 69,
-      "targetInternal": 81,
-      "source": "separator",
-      "target": "cartridge_mgso4",
-      "port": "(bottom,in)"
-    },
-    {
       "id": 83,
       "sourceInternal": 81,
       "targetInternal": 3,
@@ -965,6 +972,22 @@
       "source": "valve_rotavap",
       "target": "cartridge_celite",
       "port": "(0,in)"
+    },
+    {
+      "id": 82,
+      "sourceInternal": 61,
+      "targetInternal": 81,
+      "source": "valve_separator",
+      "target": "cartridge_mgso4",
+      "port": "(5,in)"
+    },
+    {
+      "id": 98,
+      "sourceInternal": 97,
+      "targetInternal": 3,
+      "source": "rotavap_chiller",
+      "target": "rotavap",
+      "port": "(,)"
     }
   ]
 }

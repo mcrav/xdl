@@ -98,3 +98,16 @@ def test_clean_vessel_scheduling():
                         legit = False
                         break
                 assert legit
+
+def test_clean_vessel_move_to_end():
+    xdl_f = os.path.join(FOLDER, 'clean_vessel_at_end.xdl')
+    graph_f = os.path.join(FOLDER, 'bigrig.json')
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)
+
+    # Ignore the Shutdown at the end
+    check_steps = x.steps[:-1]
+    assert len(
+        [step for step in check_steps if step.name == 'CleanVessel']) == 1
+    assert check_steps[-2].name == 'CleanVessel'
+    generic_chempiler_test(xdl_f, graph_f)

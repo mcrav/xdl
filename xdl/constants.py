@@ -1,4 +1,4 @@
-from typing import Dict, List, Any
+from typing import Dict, List
 
 #: XDL version number. Remember to increment after merging into master. Used
 # in header at top of outputted XDL files.
@@ -11,19 +11,6 @@ XDL_VERSION: str = '0.2.1'
 ########
 # Move #
 ########
-#: Default speed to move liquid in mL / min.
-DEFAULT_MOVE_SPEED: int = 40
-
-#: Default aspiration speed (speed pulling liquid into pump) in mL / min. Lower
-#: than move speed to avoid air getting sucked in.
-DEFAULT_ASPIRATION_SPEED: int = 10
-
-#: Default dispence speed (speed pushing liquid out of pump) in mL / min.
-DEFAULT_DISPENSE_SPEED: int = DEFAULT_MOVE_SPEED
-
-#: Default volume of reagent to move to waste to prime the tubes before Add
-#: step.
-DEFAULT_PUMP_PRIME_VOLUME: int = 3  # mL
 
 DEFAULT_AIR_FLUSH_TUBE_VOLUME = 5  # mL
 
@@ -68,23 +55,9 @@ DEFAULT_AQUEOUS_CLEANING_SOLVENT: str = 'water'
 #: step.
 DEFAULT_CLEAN_BACKBONE_VOLUME: int = 3
 
-#: Default volume in mL of solvent to clean vessel with.
-DEFAULT_CLEAN_VESSEL_VOLUME: int = 10  # mL
-
-#: Default time in seconds to stir vessel during CleanVessel step.
-DEFAULT_CLEAN_VESSEL_STIR_TIME: int = 60
-
-#: Default stir rate in RPM for CleanVessel step.
-DEFAULT_CLEAN_VESSEL_STIR_SPEED: int = 500
-
 ###########
 # Rotavap #
 ###########
-#: Default time in seconds for evaporating mixture to dryness.
-DEFAULT_ROTAVAP_DRYING_TIME: int = 2 * 60 * 60
-
-#: Default rotation speed in RPM for rotavap.
-DEFAULT_ROTAVAP_ROTATION_SPEED: int = 150
 
 #: Default rotation speed in RPM for the rotavap when dissolving something.
 DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED: int = 250
@@ -95,53 +68,22 @@ DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME: int = 60 * 5
 #############
 # Filtering #
 #############
-#: Default aspiration speed for removing solvent from filter vessel.
-DEFAULT_FILTER_ASPIRATION_SPEED: int = 5
-
-#: Default time in seconds to wait with vacuum on while filtering.
-DEFAULT_FILTER_WAIT_TIME: int = 60 * 2
 
 #: Default pressure to set vacuum to while filtering.
 DEFAULT_FILTER_VACUUM_PRESSURE: int = 400  # mbar
-
-#: Default volume of solvent to use when washing a filter cake.
-DEFAULT_WASHFILTERCAKE_VOLUME: int = 20
-
-#: Default time to stir mixture for after adding solvent but before filtering.
-DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME: int = 30
-
-#: Default speed in RPM to stir mixture after adding solvent but before
-#: filtering.
-DEFAULT_WASHFILTERCAKE_STIR_SPEED: int = 500
-
-#: Default time in seconds to wait for with vacuum on when washing a filter
-#: cake.
-DEFAULT_WASHFILTERCAKE_VACUUM_TIME: int = 10
 
 #: Default volume factor to remove solvent after washing filter cake,
 # i.e. 1.5 means remove 1.5x the solvent volume.
 DEFAULT_FILTER_EXCESS_REMOVE_FACTOR: float = 1.5
 
-#: Default time in seconds to wait for with vacuum on when drying a filter cake.
-DEFAULT_DRY_TIME: int = 60 * 60
-
 #: Default volume in mL to transfer from bottom of filter flask to waste after
 #: drying filter cake.
 DEFAULT_DRY_WASTE_VOLUME: int = 5
 
-#: Default move speed in mL for transferring liquid through filtering cartridge.
-DEFAULT_FILTER_THROUGH_MOVE_SPEED: int = 5
-
-#: Default amount of nitrogen (or air) to push through cartridge after
-#: FilterThrough step to push out any remaining liquid.
-DEFAULT_CARTRIDGE_DEAD_VOLUME: int = 25
 
 #############
 # WashSolid #
 #############
-DEFAULT_WASH_SOLID_STIR_SPEED: int = 400
-
-DEFAULT_WASH_SOLID_STIR_TIME: int = 60 * 5
 
 DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED: int = 2
 
@@ -151,233 +93,15 @@ DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED: int = 2
 #: Default time in seconds to wait with stirring after addition of a reagent.
 DEFAULT_AFTER_ADD_WAIT_TIME: int = 10
 
-#: Default portion of reagent to transfer in each loop cycle of anticlogging add
-DEFAULT_ANTICLOGGING_REAGENT_VOLUME: int = 10
-
-#: Default portion of solvent to transfer in each loop cycle of anticlogging add
-DEFAULT_ANTICLOGGING_SOLVENT_VOLUME: int = 2
-
 ############
 # Stirring #
 ############
 #: Default speed in RPM to stir at.
 DEFAULT_STIR_SPEED: int = 250
 
-#: Default speed in RPM to stir at when dissolving.
-DEFAULT_DISSOLVE_STIR_SPEED: int = 400
-
 #: Default speed to stir reagents that specify stirring in reagent flask.
 DEFAULT_STIR_REAGENT_FLASK_SPEED: int = 200
 
-#################
-# Precipitation #
-#################
-#: Default time to stir for after precipitation temperature is reached.
-DEFAULT_PRECIPITATION_TIME = 60 * 60
-
-#: Default temp in celsius to chill to for precipitation.
-DEFAULT_PRECIPITATION_TEMP = 25
-
-#####################
-# Recrystallization #
-#####################
-
-DEFAULT_RECRYSTALLIZATION_WAIT_TIME: int = 60 * 60 * 2
-
-##############
-# Evacuation #
-##############
-
-#: Number of vacuum/inert gas cycles to do during Evacuate.
-DEFAULT_EVACUATE_N_EVACUTIONS: int = 3
-
-#: Time to wait for during Evacuate after vessel is connected to inert gas.
-DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME: float = 60
-
-#: Time to wait for during Evacuate after vessel is connected to vacuum.
-DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME: float = 60
-
-#: Default vacuum pressure when evacuating flask
-DEFAULT_EVACUATE_VACUUM_PRESSURE: float = 50  # mbar
-
-DEFAULT_PURGE_WAIT_TIME: int = 300  # seconds
-
-#####################
-# Recrystallization #
-#####################
-
-DEFAULT_RECRYSTALLIZE_WAIT_TIME = 60 * 120
-
-DEFAULT_RECRYSTALLIZE_TEMP = 25
-
-########################
-# Pneumatic Controller #
-########################
-
-DEFAULT_WAIT_AFTER_SWITCH_VACUUM_TIME: float = 30
-
-#########
-# Video #
-#########
-#: Default recording speed in multiples of real time speed.
-DEFAULT_RECORDING_SPEED: int = 14
-
-#: Default recording speed during wait step in multiples of real time speed.
-DEFAULT_WAIT_RECORDING_SPEED: int = 2000
-
-#: Dictionary of default values to provide to steps if no explicit values are
-#: given.
-DEFAULT_VALS: Dict[str, Dict[str, Any]] = {
-    'CMove': {
-        'move_speed': DEFAULT_MOVE_SPEED,
-        'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
-        'dispense_speed': DEFAULT_DISPENSE_SPEED,
-        'use_backbone': True,
-    },
-    'Separate': {
-        'solvent_volume': DEFAULT_SEPARATION_SOLVENT_VOLUME,
-        'remove_dead_volume': True,
-    },
-    'Filter': {
-        'wait_time': DEFAULT_FILTER_WAIT_TIME,
-        'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
-        'stir': True,
-        'stir_speed': DEFAULT_WASHFILTERCAKE_STIR_SPEED,
-        'anticlogging': False,
-    },
-    'Dry': {
-        'time': DEFAULT_DRY_TIME,
-        'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
-        'vacuum_pressure': DEFAULT_FILTER_VACUUM_PRESSURE,
-        'continue_heatchill': False,
-    },
-    'WashSolid': {
-        'volume': DEFAULT_WASHFILTERCAKE_VOLUME,
-        'move_speed': DEFAULT_MOVE_SPEED,
-        'vacuum_time': DEFAULT_WASHFILTERCAKE_VACUUM_TIME,
-        'stir': True,
-        'stir_time': DEFAULT_WASHFILTERCAKE_STIR_SOLVENT_TIME,
-        'stir_speed': DEFAULT_WASHFILTERCAKE_STIR_SPEED,
-        'aspiration_speed': DEFAULT_FILTER_ASPIRATION_SPEED,
-        'anticlogging': False,
-    },
-    'Transfer': {
-        'stir_speed': DEFAULT_STIR_SPEED,
-        'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
-        'dispense_speed': DEFAULT_DISPENSE_SPEED,
-        'move_speed': DEFAULT_MOVE_SPEED,
-        'viscous': False,
-    },
-    'Add': {
-        'move_speed': DEFAULT_MOVE_SPEED,
-        'aspiration_speed': DEFAULT_ASPIRATION_SPEED,
-        'dispense_speed': DEFAULT_DISPENSE_SPEED,
-        'stir_speed': DEFAULT_STIR_SPEED,
-        'anticlogging': False,
-        'anticlogging_solvent_volume': DEFAULT_ANTICLOGGING_SOLVENT_VOLUME,
-        'anticlogging_reagent_volume': DEFAULT_ANTICLOGGING_REAGENT_VOLUME,
-        'viscous': False,
-    },
-    'PrimePumpForAdd': {
-        'volume': DEFAULT_PUMP_PRIME_VOLUME,
-    },
-    'Wait': {
-        'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
-        'after_recording_speed': DEFAULT_RECORDING_SPEED,
-    },
-    'Evaporate': {
-        'time': DEFAULT_ROTAVAP_DRYING_TIME,
-        'rotation_speed': DEFAULT_ROTAVAP_ROTATION_SPEED,
-    },
-    'StirAtRT': {
-        'stir_speed': DEFAULT_STIR_SPEED,
-    },
-    'StartStir': {
-        'stir_speed': DEFAULT_STIR_SPEED,
-    },
-    'Stir': {
-        'stir_speed': DEFAULT_STIR_SPEED,
-    },
-    'HeatChill': {
-        'stir': True,
-        'stir_speed': DEFAULT_STIR_SPEED,
-    },
-    'HeatChillToTemp': {
-        'active': True,
-        'continue_heatchill': True,
-        'stir': True,
-        'stir_speed': DEFAULT_STIR_SPEED,
-        'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
-        'after_recording_speed': DEFAULT_RECORDING_SPEED,
-    },
-    'HeatChillReturnToRT': {
-        'stir': True,
-        'stir_speed': DEFAULT_STIR_SPEED,
-        'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
-        'after_recording_speed': DEFAULT_RECORDING_SPEED,
-    },
-    'ChillerReturnToRT': {
-        'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
-        'after_recording_speed': DEFAULT_RECORDING_SPEED,
-    },
-    'StirrerReturnToRT': {
-        'wait_recording_speed': DEFAULT_WAIT_RECORDING_SPEED,
-        'after_recording_speed': DEFAULT_RECORDING_SPEED,
-    },
-    'Dissolve': {
-        'time': 20 * 60,
-        'temp': 25,
-        'stir_speed': DEFAULT_DISSOLVE_STIR_SPEED,
-    },
-    'FilterThrough': {
-        'move_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
-        'aspiration_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
-        'eluting_repeats': 1,
-        'cartridge_dead_volume': DEFAULT_CARTRIDGE_DEAD_VOLUME,
-    },
-    'StartVacuum': {
-        'pressure': DEFAULT_FILTER_VACUUM_PRESSURE,
-    },
-    'RotavapStartRotation': {
-        'rotation_speed': DEFAULT_ROTAVAP_ROTATION_SPEED,
-    },
-    'RotavapStir': {
-        'rotation_speed': DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED,
-    },
-    'CleanVessel': {
-        'stir_time': DEFAULT_CLEAN_VESSEL_STIR_TIME,
-        'stir_speed': DEFAULT_CLEAN_VESSEL_STIR_SPEED,
-    },
-    'SetStirRate': {
-        'stir_speed': DEFAULT_STIR_SPEED,
-    },
-    'Precipitate': {
-        'time': DEFAULT_PRECIPITATION_TIME,
-        'temp': DEFAULT_PRECIPITATION_TEMP,
-    },
-    'RunColumn': {
-        'move_speed': DEFAULT_FILTER_THROUGH_MOVE_SPEED,
-    },
-    'Evacuate': {
-        'after_inert_gas_wait_time': DEFAULT_EVACUATE_AFTER_INERT_GAS_WAIT_TIME,
-        'after_vacuum_wait_time': DEFAULT_EVACUATE_AFTER_VACUUM_WAIT_TIME,
-        'evacuations': DEFAULT_EVACUATE_N_EVACUTIONS,
-        'vacuum_pressure': DEFAULT_EVACUATE_VACUUM_PRESSURE,
-    },
-    'Recrystallize': {
-        'time': DEFAULT_RECRYSTALLIZE_WAIT_TIME,
-        'crystallize_temp': DEFAULT_RECRYSTALLIZE_TEMP,
-    },
-    'Purge': {
-        'time': DEFAULT_PURGE_WAIT_TIME,
-    },
-    'SwitchVacuum': {
-        'after_switch_wait': DEFAULT_WAIT_AFTER_SWITCH_VACUUM_TIME,
-    },
-    'SwitchArgon': {
-        'after_switch_wait': DEFAULT_WAIT_AFTER_SWITCH_VACUUM_TIME,
-    }
-}
 
 INTERNAL_PROPERTIES = {
     'Add': [
@@ -443,10 +167,20 @@ JULABO_CF41_CLASS_NAME: str = 'JULABOCF41'
 HUBER_PETITE_FLEUR_CLASS_NAME: str = 'Huber'
 IKA_RCT_DIGITAL_CLASS_NAME: str = 'IKARCTDigital'
 IKA_RET_CONTROL_VISC: str = 'IKARETControlVisc'
+IKA_RV_10 = "IKARV10"
+CVC3000 = "CVC3000"
+IKA_MICROSTAR_75 = "IKAmicrostar75"
+RZR_2052 = "RZR_2052"
+HEIDOLPH_TORQUE_100 = "HeiTORQUE_100"
+
 
 HEATER_CLASSES: List[str] = [IKA_RCT_DIGITAL_CLASS_NAME, IKA_RET_CONTROL_VISC]
 CHILLER_CLASSES: List[str] = [
     JULABO_CF41_CLASS_NAME, HUBER_PETITE_FLEUR_CLASS_NAME]
+
+ROTAVAP_CLASSES: List[str] = [IKA_RV_10]
+VACUUM_CLASSES: List[str] = [CVC3000]
+STIRRER_CLASSES: List[str] = [IKA_MICROSTAR_75, RZR_2052, HEIDOLPH_TORQUE_100]
 
 CHILLER_MIN_TEMP: int = -40
 CHILLER_MAX_TEMP: int = 140
@@ -530,7 +264,7 @@ SYNTHESIS_ATTRS = [
     {
         'name': 'filter_dead_volume_method',
         'type': str,
-        'default': 'inert_gas',
+        'default': 'solvent',
     },
     {
         'name': 'filter_dead_volume_solvent',

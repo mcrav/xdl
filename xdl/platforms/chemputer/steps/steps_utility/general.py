@@ -13,6 +13,11 @@ class Wait(AbstractStep):
         after_recording_speed (int): Recording speed after wait (slower) ~14
     """
 
+    DEFAULT_PROPS = {
+        'wait_recording_speed': 2000,
+        'after_recording_speed': 14,
+    }
+
     def __init__(
         self,
         time: float,

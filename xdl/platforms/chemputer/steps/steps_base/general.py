@@ -90,6 +90,14 @@ class CMove(AbstractBaseStep):
         dispense_speed (float): Speed at which liquid dispenses from
             from_vessel. (optional)
     """
+
+    DEFAULT_PROPS = {
+        'move_speed': 40,  # mL / min
+        'aspiration_speed': 10,  # mL / min
+        'dispense_speed': 40,  # mL / min
+        'use_backbone': True,
+    }
+
     def __init__(
         self,
         from_vessel: str,

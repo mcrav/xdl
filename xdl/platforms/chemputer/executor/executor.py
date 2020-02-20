@@ -52,6 +52,7 @@ from ..steps import (
     CStopStir,
     CMove,
     CConnect,
+    Shutdown
 )
 from .tracking import iter_vessel_contents
 from .graph import (
@@ -223,9 +224,9 @@ class ChemputerExecutor(AbstractXDLExecutor):
         self._xdl.hardware_map = {}
         for xdl_hardware_list, graphml_hardware_list in zip(
             [self._xdl.hardware.reactors, self._xdl.hardware.filters,
-             self._xdl.hardware.separators],
+             self._xdl.hardware.separators, self._xdl.hardware.rotavaps],
             [self._graph_hardware.reactors, self._graph_hardware.filters,
-             self._graph_hardware.separators]
+             self._graph_hardware.separators, self._graph_hardware.rotavaps]
         ):
             for i in range(len(xdl_hardware_list)):
                 self._xdl.hardware_map[
@@ -369,7 +370,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
                         self._graph, step.vessel, port))
 
             if ('through_cartridge' in step.properties
-                    and not step.through_cartridge):
+                    and not step.through_cartridge and step.through):
                 for cartridge in self._graph_hardware.cartridges:
                     if cartridge.chemical == step.through:
                         step.through_cartridge = cartridge.id
@@ -384,6 +385,9 @@ class ChemputerExecutor(AbstractXDLExecutor):
 
             if isinstance(step, AbstractDynamicStep):
                 step.prepare_for_execution(self._graph, self)
+
+            if 'children' in step.properties:
+                self._add_internal_properties_to_steps(step.children)
 
             if not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
                 self._add_internal_properties_to_steps(step.steps)
@@ -1130,6 +1134,9 @@ class ChemputerExecutor(AbstractXDLExecutor):
             for substep in step.steps:
                 self._do_sanity_check(substep, level + 1)
 
+    def _add_in_final_shutdown(self):
+        self._xdl.steps.append(Shutdown())
+
     ##################
     # PUBLIC METHODS #
     ##################
@@ -1237,6 +1244,9 @@ class ChemputerExecutor(AbstractXDLExecutor):
                 self._add_clean_vessel_temps()
                 self._optimise_separation_steps()
                 self._remove_pointless_dry_return_to_rt()
+
+                self._add_in_final_shutdown()
+
                 self._add_internal_properties()
                 self._add_all_volumes()
                 self._add_filter_volumes()

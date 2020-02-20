@@ -1,10 +1,6 @@
 import os
 from xdl import XDL
 from xdl.steps import Add, CMove, Wait
-from xdl.constants import (
-    DEFAULT_ANTICLOGGING_REAGENT_VOLUME,
-    DEFAULT_ANTICLOGGING_SOLVENT_VOLUME
-)
 from ..utils import generic_chempiler_test
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -12,8 +8,12 @@ FOLDER = os.path.join(HERE, 'files')
 
 test_info = [
     {
-        'solvent_volume': DEFAULT_ANTICLOGGING_SOLVENT_VOLUME,
-        'reagent_volume': DEFAULT_ANTICLOGGING_REAGENT_VOLUME,
+        'solvent_volume': int(
+            Add.DEFAULT_PROPS['anticlogging_solvent_volume'].rstrip(' mL')
+        ),
+        'reagent_volume': int(
+            Add.DEFAULT_PROPS['anticlogging_reagent_volume'].rstrip(' mL')
+        ),
         'n_adds': 7,
     },
     {
