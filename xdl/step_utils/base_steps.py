@@ -182,7 +182,6 @@ class AbstractStep(Step, ABC):
     def duration(self, chempiler):
         duration = 0
         for step in self.base_steps:
-            print(step)
             duration += step.duration(chempiler)
         return duration
 
