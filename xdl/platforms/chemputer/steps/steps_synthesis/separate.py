@@ -1,4 +1,5 @@
 from typing import Optional, Dict, Any, List
+import math
 from .....step_utils.base_steps import Step, AbstractStep
 from .add import Add
 from ..steps_utility import Transfer, Wait, Stir, SeparatePhases
@@ -131,6 +132,18 @@ class Separate(AbstractStep):
                 f'{self.buffer_flasks_required} buffer flasks required but\
  {n_buffer_flasks} buffer flasks found in graph.'
             )
+
+        self.split_separations_if_necessary(graph)
+
+    def split_separations_if_necessary(self, graph):
+        """If solvent volume is greater than the separator max volume split the
+        separation into multiple smaller separations.
+        """
+        separator_max_volume = graph.nodes[self.separation_vessel]['max_volume']
+        if self.solvent_volume > separator_max_volume:
+            self.n_separations = math.ceil(
+                self.solvent_volume / separator_max_volume)
+            self.solvent_volume = self.solvent_volume / self.n_separations
 
     @property
     def dead_volume_target(self):
