@@ -575,8 +575,12 @@ class Separate(AbstractStep):
                 s = HUMAN_READABLE_STEPS['Separate (wash)'][language].format(
                     **props)
             elif self.purpose == 'extract':
-                s = HUMAN_READABLE_STEPS['Separate (extract)'][language].format(
-                    **props)
+                if not props['solvent']:
+                    s = HUMAN_READABLE_STEPS['Separate (solvent_free)'][
+                        language].format(**props)
+                else:
+                    s = HUMAN_READABLE_STEPS['Separate (extract)'][
+                        language].format(**props)
             return s[0].upper() + s[1:]
         except KeyError:
             return self.name
