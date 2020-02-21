@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 from xdl import XDL
 from xdl.steps import Confirm, Step, AbstractBaseStep, UnimplementedStep
@@ -8,6 +9,8 @@ import ChemputerAPI
 HERE = os.path.abspath(os.path.dirname(__file__))
 
 def get_chempiler(graph_file: str) -> Chempiler:
+    if os.path.isdir(os.path.join(HERE, 'chempiler_output')):
+        shutil.rmtree(os.path.join(HERE, 'chempiler_output'))
     return Chempiler(
         experiment_code='test',
         output_dir=os.path.join(HERE, 'chempiler_output'),
