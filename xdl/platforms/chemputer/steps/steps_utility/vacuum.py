@@ -13,8 +13,11 @@ from .general import Wait
 from ...utils.execution import (
     get_pneumatic_controller,
     get_vacuum_configuration,
+    get_vessel_type,
 )
 from .....utils.misc import SanityCheck
+from .....utils.graph import undirected_neighbors
+from .....constants import ROTAVAP_CLASSES, VACUUM_CLASSES
 
 class StartVacuum(AbstractStep):
     """Start vacuum pump attached to given vessel.
@@ -67,6 +70,8 @@ class ApplyVacuum(AbstractStep):
         (Optional CVC3000) -> ChemputerVacuum <- ChemputerValve <-> vessel
         OR
         pneumatic_controller <-> vessel
+        OR
+        rotavap
     """
 
     DEFAULT_PROPS = {
@@ -87,6 +92,7 @@ class ApplyVacuum(AbstractStep):
         'time': float,
         'pressure': float,
         'port': str,
+        'vessel_type': str,
         'vacuum_valve': str,
         'vacuum_source': str,
         'vacuum_device': str,
@@ -103,6 +109,7 @@ class ApplyVacuum(AbstractStep):
         port: str = None,
 
         # Internal properties
+        vessel_type: str = None,
         vacuum_valve: str = None,
         vacuum_source: str = None,
         vacuum_device: str = None,
@@ -113,15 +120,28 @@ class ApplyVacuum(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
-        self.pneumatic_controller, _ = get_pneumatic_controller(
-            graph, self.vessel)
-        if not self.pneumatic_controller:
-            vacuum_info = get_vacuum_configuration(graph, self.vessel)
-            self.vacuum_valve = vacuum_info['valve']
-            self.vacuum_source = vacuum_info['source']
-            self.vacuum_device = vacuum_info['device']
-            self.vacuum_valve_inert_gas_ = vacuum_info['valve_inert_gas']
-            self.vacuum_valve_unused_port = vacuum_info['valve_unused_port']
+        # Rotavap
+        self.vessel_type = get_vessel_type(graph, self.vessel)
+        if self.vessel_type in ROTAVAP_CLASSES:
+            for neighbor, data in undirected_neighbors(
+                    graph, self.vessel, data=True):
+                if data['class'] in VACUUM_CLASSES:
+                    self.vacuum_device = neighbor
+                    break
+
+        else:
+            # Pneumatic Controller
+            self.pneumatic_controller, _ = get_pneumatic_controller(
+                graph, self.vessel)
+
+            # Vacuum valve
+            if not self.pneumatic_controller:
+                vacuum_info = get_vacuum_configuration(graph, self.vessel)
+                self.vacuum_valve = vacuum_info['valve']
+                self.vacuum_source = vacuum_info['source']
+                self.vacuum_device = vacuum_info['device']
+                self.vacuum_valve_inert_gas_ = vacuum_info['valve_inert_gas']
+                self.vacuum_valve_unused_port = vacuum_info['valve_unused_port']
 
     def sanity_checks(self, graph):
         return [
@@ -134,6 +154,7 @@ class ApplyVacuum(AbstractStep):
                 condition=(
                     self.pneumatic_controller
                     or (self.vacuum_valve and self.vacuum_source)
+                    or (self.vessel_type == 'rotavap')
                 ),
                 error_msg=f'Neither of valid hardware setups found.\n\
  Option 1: vessel <-> pneumatic controller\n\
@@ -143,6 +164,7 @@ class ApplyVacuum(AbstractStep):
             SanityCheck(
                 condition=(
                     self.pneumatic_controller
+                    or self.vessel_type == 'rotavap'
                     or (self.vacuum_valve_inert_gas is not None
                         or self.vacuum_valve_unused_port is not None)
                 ),
@@ -160,8 +182,19 @@ class ApplyVacuum(AbstractStep):
         if self.pneumatic_controller:
             return self.get_pneumatic_controller_steps()
 
+        elif self.vessel_type == 'rotavap':
+            return self.get_rotavap_steps()
+
         else:
             return self.get_vacuum_valve_steps()
+
+    def get_rotavap_steps(self):
+        return (
+            self.get_start_vacuum_step()
+            + self.get_wait_step()
+            + self.get_stop_vacuum_step()
+            + self.get_vent_vacuum_step()
+        )
 
     def get_pneumatic_controller_steps(self):
         return [
