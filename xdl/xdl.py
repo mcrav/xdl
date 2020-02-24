@@ -24,7 +24,7 @@ from .platforms.chemputer.steps import (
     CChillerWaitForTemp,
     CStirrerWaitForTemp,
     CChillerSetTemp,
-    CStirrerSetTemp
+    CStirrerSetTemp,
 )
 from .utils.errors import XDLError
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
@@ -270,17 +270,31 @@ class XDL(object):
         self._xdlgenerator.save(save_file)
 
     def scale_procedure(self, scale: float) -> None:
-        """Scale all volumes in procedure.
+        """Scale all volumes and masses in procedure.
 
         Args:
-            scale (float): Number to scale all volumes by.
+            scale (float): Number to scale all volumes and masses by.
         """
         for step in self.steps:
-            if step.name not in UNSCALED_STEPS:
-                for prop, val in step.properties.items():
-                    if 'volume' in prop or 'mass' in prop:
-                        if val and type(val) == float:
-                            step.properties[prop] = float(val) * scale
+            self.apply_scaling(step, scale)
+
+    def apply_scaling(self, step: Step, scale: float) -> None:
+        """Apply scale to steps, recursively applying to any child steps if the
+        step has the attribute 'children', e.g. Repeat steps.
+
+        Args:
+            step (Step): Step to apply scaling to.
+            scale (float): Amount to scale volumes and masses.
+        """
+        if step.name not in UNSCALED_STEPS:
+            for prop, val in step.properties.items():
+                if 'volume' in prop or 'mass' in prop:
+                    if val and type(val) == float:
+                        step.properties[prop] = float(val) * scale
+
+        if hasattr(step, 'children') and step.children:
+            for substep in step.children:
+                self.apply_scaling(substep, scale)
 
     @property
     def estimated_duration(self) -> float:
