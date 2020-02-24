@@ -3,7 +3,8 @@ import pytest
 from ...utils import generic_chempiler_test
 from xdl import XDL
 from xdl.steps import WashSolid, CMove
-from xdl.constants import DEFAULT_FILTER_EXCESS_REMOVE_FACTOR
+from xdl.platforms.chemputer.constants import (
+    DEFAULT_FILTER_EXCESS_REMOVE_FACTOR)
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')
@@ -21,7 +22,7 @@ def test_wash_solid_stirring():
     xdl_f = os.path.join(FOLDER, 'wash_solid.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
 
     check_steps = x.steps[:-1]
     assert('StartStir' in [step.name for step in check_steps[-1].steps])
@@ -38,7 +39,7 @@ def test_wash_solid_dead_volume():
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     for xdl_f in xdl_fs:
         x = XDL(xdl_f)
-        x.prepare_for_execution(graph_f)
+        x.prepare_for_execution(graph_f, testing=True)
 
         check_steps = x.steps[:-1]
         for step in check_steps:

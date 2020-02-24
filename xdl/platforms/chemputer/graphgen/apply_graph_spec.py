@@ -1,6 +1,6 @@
 from .constants import DEFAULT_BUFFER_FLASK_VOLUME, DEFAULT_REAGENT_FLASK_VOLUME
 
-from ..constants import INERT_GAS_SYNONYMS
+from ....constants import INERT_GAS_SYNONYMS
 from .utils import (
     get_backbone_valve,
     undirected_neighbors,

@@ -18,7 +18,8 @@ from .constants import (
     MISSING_COMPONENT_TYPE_ERROR,
     MISSING_HEATER_OR_CHILLER_ERROR,
 )
-from ..constants import INERT_GAS_SYNONYMS, VALID_PORTS
+from ....constants import INERT_GAS_SYNONYMS
+from ..constants import VALID_PORTS
 
 def check_graph_spec(graph_spec, graph):
     fixable_issues, errors = [], []

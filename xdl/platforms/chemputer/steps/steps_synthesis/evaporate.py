@@ -18,9 +18,9 @@ from ..steps_base.chiller import (
     CStopChiller
 )
 
-from .....constants import (
+from ...constants import (
     COLLECT_PORT, ROTAVAP_CLASSES, CHILLER_CLASSES, CHEMPUTER_WASTE)
-from .....graphgen.utils import undirected_neighbors
+from .....utils.graph import undirected_neighbors
 from ...utils.execution import get_nearest_node
 
 class Evaporate(AbstractStep):

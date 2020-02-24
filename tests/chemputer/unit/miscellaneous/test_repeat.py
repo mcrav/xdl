@@ -13,7 +13,7 @@ def test_repeat():
     xdl_f = os.path.join(FOLDER, 'repeat_parent.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
 
     for step in x.steps:
         if type(step) == Repeat:
@@ -33,7 +33,7 @@ def test_repeat_scale_procedure():
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
     x.scale_procedure(0.1)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
 
     for step in x.steps:
         if type(step) == Repeat:

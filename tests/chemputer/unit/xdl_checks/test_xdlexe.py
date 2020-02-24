@@ -28,7 +28,7 @@ def test_xdlexe():
         print(test_xdl_f)
         x = XDL(test_xdl_f)
         x.prepare_for_execution(
-            test_graph_f, interactive=False, save_path=test_xdl_f + 'exe')
+            test_graph_f, testing=True, save_path=test_xdl_f + 'exe')
         xexe = XDL(test_xdl_f + 'exe')
         assert len(x.steps) == len(xexe.steps)
         for i, step in enumerate(x.steps):
@@ -66,13 +66,13 @@ def test_xdlexe_execute_wrong_graph():
     for test_xdl_f, test_graph_f in TESTS:
         with pytest.raises(XDLError):
             x = XDL(test_xdl_f)
-            x.prepare_for_execution(test_graph_f, interactive=False)
+            x.prepare_for_execution(test_graph_f, testing=True)
             x = XDL(test_xdl_f + 'exe')
             c = get_chempiler(os.path.join(FOLDER, 'bigrig.json'))
             x.execute(c)
 
         x = XDL(test_xdl_f)
-        x.prepare_for_execution(test_graph_f, interactive=False)
+        x.prepare_for_execution(test_graph_f, testing=True)
         x = XDL(test_xdl_f + 'exe')
         c = get_chempiler(test_graph_f)
         x.execute(c)
@@ -111,7 +111,7 @@ def test_execute_dynamic_steps_inidividually():
 @pytest.mark.unit
 def test_xdlexe_with_repeat():
     x = XDL(os.path.join(FOLDER, 'repeat_parent.xdl'))
-    x.prepare_for_execution(os.path.join(FOLDER, 'bigrig.json'))
+    x.prepare_for_execution(os.path.join(FOLDER, 'bigrig.json'), testing=True)
     xexe = XDL(os.path.join(FOLDER, 'repeat_parent.xdlexe'))
     for i, step in enumerate(x.steps):
         if step.name == 'Repeat':

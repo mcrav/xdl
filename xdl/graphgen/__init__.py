@@ -1,1 +1,1 @@
-from .generator import graph_from_template
+from ..platforms.chemputer.graphgen import graph_from_template

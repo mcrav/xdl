@@ -11,7 +11,7 @@ from ..steps_base import (
 )
 from .general import Wait
 from .rotavap import RotavapStir
-from .....constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
+from ...constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
 from ...utils.execution import get_vessel_stirrer, get_vessel_type
 
 class SetStirRate(AbstractStep):

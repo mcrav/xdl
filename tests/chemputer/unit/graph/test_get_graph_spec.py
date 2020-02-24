@@ -1,7 +1,7 @@
 import os
 import pytest
 from xdl import XDL
-from xdl.graphgen.get_graph_spec import get_graph_spec
+from xdl.platforms.chemputer.graphgen.get_graph_spec import get_graph_spec
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')

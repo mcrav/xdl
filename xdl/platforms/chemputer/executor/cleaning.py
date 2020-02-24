@@ -269,8 +269,9 @@ def add_cleaning_steps(xdl_obj: 'XDL') -> 'XDL':
         for i, solvent in reversed(clean_backbone_sequence):
             # If organic_cleaning_solvent is given use it otherwise use solvent
             # in synthesis.
-            if 'water' not in solvent and xdl_obj.organic_cleaning_solvent:
-                solvent = xdl_obj.organic_cleaning_solvent
+            if ('water' not in solvent
+                    and xdl_obj.executor._organic_cleaning_solvent):
+                solvent = xdl_obj.executor._organic_cleaning_solvent
             if i - 1 >= 0:
                 prev_step = xdl_obj.steps[i - 1]
                 clean = True
@@ -488,8 +489,9 @@ def add_vessel_cleaning_steps(
         for i, vessel, solvent in reversed(clean_vessel_sequence):
             # If organic_cleaning_solvent is given use it otherwise use solvent
             # in synthesis.
-            if 'water' not in solvent and xdl_obj.organic_cleaning_solvent:
-                solvent = xdl_obj.organic_cleaning_solvent
+            if ('water' not in solvent
+                    and xdl_obj.executor._organic_cleaning_solvent):
+                solvent = xdl_obj.executor._organic_cleaning_solvent
             xdl_obj.steps.insert(i, CleanVessel(vessel=vessel, solvent=solvent))
     if interactive:
         xdl_obj.steps = suggest_additional_clean_vessel_steps(xdl_obj)

@@ -15,7 +15,7 @@ from ..steps_utility import (
     StopHeatChill,
 )
 from ..steps_base import CMove, CConnect, CVentVacuum
-from .....constants import (
+from ...constants import (
     BOTTOM_PORT,
     TOP_PORT,
     DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,

@@ -30,7 +30,7 @@ def generic_chempiler_test(xdl_file: str, graph_file: str) -> None:
     for i in reversed(range(len(x.steps))):
         if isinstance(x.steps[i], UnimplementedStep):
             x.steps.pop(i)
-    x.prepare_for_execution(graph_file, interactive=False)
+    x.prepare_for_execution(graph_file, testing=True)
     x.steps = [
         remove_confirm_steps(step) for step in x.steps]
     old_stdout = sys.stdout

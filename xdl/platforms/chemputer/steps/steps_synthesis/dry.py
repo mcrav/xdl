@@ -7,19 +7,19 @@ from ..steps_utility import (
     HeatChillToTemp,
 )
 from ..steps_base import CMove
-from .....constants import (
+from ...constants import (
     BOTTOM_PORT,
     DEFAULT_DRY_WASTE_VOLUME,
-    ROOM_TEMPERATURE,
     CHEMPUTER_WASTE,
 )
+from .....constants import ROOM_TEMPERATURE
 from ...utils.execution import (
     get_nearest_node,
     get_vacuum_configuration,
     get_vessel_stirrer,
     get_vessel_type,
 )
-from .....constants import CHEMPUTER_FILTER
+from ...constants import CHEMPUTER_FILTER
 
 class Dry(AbstractStep):
     """Dry given vessel by applying vacuum for given time.

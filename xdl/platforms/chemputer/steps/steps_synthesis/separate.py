@@ -3,7 +3,7 @@ import math
 from .....step_utils.base_steps import Step, AbstractStep
 from .add import Add
 from ..steps_utility import Transfer, Wait, Stir, SeparatePhases
-from .....constants import (
+from ...constants import (
     BOTTOM_PORT,
     DEFAULT_SEPARATION_SLOW_STIR_TIME,
     DEFAULT_SEPARATION_SLOW_STIR_SPEED
@@ -11,7 +11,7 @@ from .....constants import (
 from .....utils.errors import XDLError
 from .....utils.misc import SanityCheck
 from .....localisation import HUMAN_READABLE_STEPS
-from .....constants import CHEMPUTER_WASTE
+from ...constants import CHEMPUTER_WASTE
 from ...utils.execution import (
     get_buffer_flask, get_nearest_node, get_cartridge)
 

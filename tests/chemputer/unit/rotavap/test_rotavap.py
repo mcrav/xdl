@@ -41,7 +41,7 @@ def test_rotavap_auto_mode():
     xdl_f = os.path.join(FOLDER, 'rotavap_auto.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f, interactive=False)
+    x.prepare_for_execution(graph_f, testing=True)
     for step in x.steps:
         if type(step) == Evaporate:
             assert type(step.steps[-3]) == RotavapStopEverything
@@ -56,7 +56,7 @@ def test_rotavap_collection_volume():
     xdl_f = os.path.join(FOLDER, 'rotavap.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f, interactive=False)
+    x.prepare_for_execution(graph_f, testing=True)
     for step in x.steps:
         if type(step) == Evaporate:
             # collection_flask_volume in graph
@@ -67,7 +67,7 @@ def test_rotavap_rotation_speed():
     xdl_f = os.path.join(FOLDER, 'alkyl_fluor_step4.xdl')
     graph_f = os.path.join(FOLDER, 'alkyl_fluor_step4.graphml')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f, interactive=False)
+    x.prepare_for_execution(graph_f, testing=True)
     for step in x.base_steps:
         if step.name == 'CRotavapSetRotationSpeed':
             assert step.rotation_speed <= 300
@@ -78,7 +78,7 @@ def test_rotavap_has_chiller():
     xdl_f = os.path.join(FOLDER, 'rotavap.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f, interactive=False)
+    x.prepare_for_execution(graph_f, testing=True)
 
     step_types = {
         "CStartChiller": CStartChiller,

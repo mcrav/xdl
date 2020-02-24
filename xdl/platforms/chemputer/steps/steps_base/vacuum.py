@@ -1,5 +1,5 @@
 from .....step_utils.base_steps import AbstractBaseStep
-from .....constants import DEFAULT_VACUUM_VENT_WAIT_TIME
+from ...constants import DEFAULT_VACUUM_VENT_WAIT_TIME
 
 class CGetVacuumSetPoint(AbstractBaseStep):
     """Reads the current vacuum setpoint.

@@ -9,7 +9,7 @@ FOLDER = os.path.join(HERE, '..', 'files')
 @pytest.mark.unit
 def test_add_all_volumes():
     x = XDL(os.path.join(FOLDER, 'add_all_volumes.xdl'))
-    x.prepare_for_execution(os.path.join(FOLDER, 'bigrig.json'))
+    x.prepare_for_execution(os.path.join(FOLDER, 'bigrig.json'), testing=True)
     volumes = [15, 15, 100]
     i = 0
     for step in x.steps:

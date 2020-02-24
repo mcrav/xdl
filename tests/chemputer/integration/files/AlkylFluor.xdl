@@ -1,4 +1,4 @@
-<Synthesis filter_dead_volume_method="solvent">
+<Synthesis>
   <Hardware>
       <Component
         id="jacketed_filter"

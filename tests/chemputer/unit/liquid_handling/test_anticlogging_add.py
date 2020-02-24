@@ -30,7 +30,7 @@ def test_anticlogging_add():
     xdl_f = os.path.join(FOLDER, 'anticlogging_add.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f, interactive=False)
+    x.prepare_for_execution(graph_f, testing=True)
 
     add_step_i = 0
 

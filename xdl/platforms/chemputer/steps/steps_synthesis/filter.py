@@ -3,14 +3,14 @@ from .....step_utils.base_steps import Step, AbstractStep
 from ..steps_base import CMove
 from ..steps_utility import (
     StopStir, StartStir, Transfer, ApplyVacuum)
-from .....constants import (
+from ...constants import (
     BOTTOM_PORT,
     DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
     DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED,
 )
 from .....utils.misc import SanityCheck
 from ...utils.execution import get_vacuum_configuration, get_nearest_node
-from .....constants import CHEMPUTER_WASTE
+from ...constants import CHEMPUTER_WASTE
 
 class Filter(AbstractStep):
     """Filter contents of filter vessel. Apply vacuum for given time.

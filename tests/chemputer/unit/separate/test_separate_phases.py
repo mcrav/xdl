@@ -32,7 +32,7 @@ def test_separate_phases_through_speed():
     xdl_f = os.path.join(FOLDER, 'separate_phases.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
     for step in x.steps:
         if step.name == 'SeparatePhases':
 

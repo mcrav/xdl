@@ -16,7 +16,8 @@ GRAPHGEN_TESTS = [
 
 TEST_FOLDER = os.path.dirname(HERE)
 ROOT_FOLDER = os.path.join(os.path.dirname(TEST_FOLDER), "..", "..")
-TEMPLATE_GRAPH = os.path.join(ROOT_FOLDER, 'xdl', 'graphgen', 'template.json')
+TEMPLATE_GRAPH = os.path.join(
+    ROOT_FOLDER, 'xdl', 'platforms', 'chemputer', 'graphgen', 'template.json')
 
 @pytest.mark.unit
 def test_graphgen():

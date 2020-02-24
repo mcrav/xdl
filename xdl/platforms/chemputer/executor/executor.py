@@ -3,7 +3,7 @@ from typing import Union, Tuple, Dict, List
 from networkx import MultiDiGraph
 
 from ....execution.abstract_executor import AbstractXDLExecutor
-from ....constants import (
+from ..constants import (
     DEFAULT_PORTS,
     BOTTOM_PORT,
     DEFAULT_STIR_SPEED,
@@ -312,7 +312,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
     def _add_implied_steps(self, interactive: bool = True) -> None:
         """Add extra steps implied by explicit XDL steps."""
         self._add_filter_dead_volume_handling_steps()
-        if self._xdl.auto_clean:
+        if self._auto_clean:
             self._add_implied_clean_vessel_steps(interactive=interactive)
             self._add_implied_clean_backbone_steps(interactive=interactive)
         self._add_reagent_storage_steps()
@@ -432,11 +432,11 @@ cleaning? (y, [n])\n')
         the flask is connected to a stream of inert gas that keeps the liquid in
         the top part of the filter where it is.
         """
-        if (self._xdl.filter_dead_volume_method
+        if (self._filter_dead_volume_method
                 == FILTER_DEAD_VOLUME_INERT_GAS_METHOD):
             self._add_filter_inert_gas_connect_steps()
 
-        elif (self._xdl.filter_dead_volume_method
+        elif (self._filter_dead_volume_method
               == FILTER_DEAD_VOLUME_LIQUID_METHOD):
             self._add_filter_liquid_dead_volume_steps()
 
@@ -800,7 +800,7 @@ cleaning? (y, [n])\n')
 
     def _no_waiting_if_dry_run(self) -> None:
         """Set all Wait step times to 1 second if the dry run flag is True."""
-        if self._xdl.dry_run:
+        if self._dry_run:
             for step in self._xdl.steps:
                 self._set_all_waits_to_one(step)
 
@@ -896,6 +896,12 @@ cleaning? (y, [n])\n')
         interactive: bool = True,
         save_path: str = '',
         sanity_check: bool = True,
+        auto_clean: bool = True,
+        filter_dead_volume_method: str = 'solvent',
+        filter_dead_volume_solvent: str = None,
+        organic_cleaning_solvent: str = None,
+        dry_run: bool = False,
+        testing: bool = False,
     ) -> None:
         """
         Prepare the XDL for execution on a Chemputer corresponding to the given
@@ -906,6 +912,14 @@ cleaning? (y, [n])\n')
                 JSON file with graph in node link format, or dict containing
                 graph in same format as JSON file.
         """
+        self._auto_clean = auto_clean
+        self._filter_dead_volume_method = filter_dead_volume_method
+        self._filter_dead_volume_solvent = filter_dead_volume_solvent
+        self._organic_cleaning_solvent = organic_cleaning_solvent
+        self._dry_run = dry_run
+        if testing:
+            self._auto_clean = interactive = False
+
         if not self._prepared_for_execution:
 
             self._graph, self._raw_graph = get_graph(graph_file)

@@ -1,4 +1,4 @@
-from .....constants import BOTTOM_PORT, VALID_PORTS
+from ...constants import BOTTOM_PORT, VALID_PORTS
 from .....utils.errors import XDLError
 from .....utils.misc import SanityCheck
 from .....utils.graph import undirected_neighbors
