@@ -1,6 +1,6 @@
 from .utils import parse_port, undirected_neighbors
 from ..constants import VALID_PORTS
-from ..utils.errors import XDLError
+from ....utils.errors import XDLError
 
 def fix_issue_src_port_invalid(graph, issue):
     for src, _, data in graph.edges(data=True):

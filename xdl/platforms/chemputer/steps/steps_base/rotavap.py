@@ -1,7 +1,7 @@
 from typing import Optional
 
 from .....step_utils.base_steps import AbstractBaseStep
-from .....constants import DEFAULT_ROTAVAP_WAIT_FOR_ARM_TIME
+from ...constants import DEFAULT_ROTAVAP_WAIT_FOR_ARM_TIME
 
 class CRotavapStartHeater(AbstractBaseStep):
     """Starts the heating bath of a rotary evaporator.

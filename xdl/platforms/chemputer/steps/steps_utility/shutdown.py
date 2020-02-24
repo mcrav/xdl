@@ -1,6 +1,6 @@
 from typing import List
 from itertools import chain
-from .....constants import (
+from ...constants import (
     CHILLER_CLASSES,
     HEATER_CLASSES,
     ROTAVAP_CLASSES,
@@ -19,7 +19,7 @@ from ..steps_base import (
     CRotavapStopRotation
 )
 
-from .....graphgen.utils import undirected_neighbors
+from .....utils.graph import undirected_neighbors
 
 class Shutdown(AbstractStep):
     """XDL step to enact a Shutdown on the platform.

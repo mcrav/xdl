@@ -10,12 +10,6 @@
   </Reagents>
 
   <Procedure>
-    <CConnect
-      from_vessel="flask_nitrogen"
-      to_vessel="filter"
-      from_port="None"
-      to_port="bottom"
-      unique="True" />
     <Repeat
       repeats="2">
       <Children>

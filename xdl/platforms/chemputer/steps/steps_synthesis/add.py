@@ -3,14 +3,14 @@ from typing import Optional, List, Dict, Any
 from ..steps_utility import PrimePumpForAdd, Wait, StopStir, StartStir
 from ..steps_base import CMove, Confirm
 from .....step_utils.base_steps import Step, AbstractStep
-from .....constants import (
+from ...constants import (
     DEFAULT_AFTER_ADD_WAIT_TIME,
     DEFAULT_AIR_FLUSH_TUBE_VOLUME,
     DEFAULT_VISCOUS_ASPIRATION_SPEED,
 )
 from .....localisation import HUMAN_READABLE_STEPS
 from .....utils.misc import SanityCheck
-from .....constants import CHEMPUTER_WASTE
+from ...constants import CHEMPUTER_WASTE
 from ...utils.execution import (
     get_nearest_node,
     get_reagent_vessel,

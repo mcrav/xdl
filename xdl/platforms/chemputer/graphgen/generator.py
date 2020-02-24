@@ -21,7 +21,7 @@ from .check_graph_spec import check_graph_spec
 from .get_graph_spec import get_graph_spec
 from .apply_graph_spec import apply_spec_to_template
 
-from ..utils.errors import XDLError
+from ....utils.errors import XDLError
 from networkx.readwrite import node_link_data, node_link_graph
 
 HERE = os.path.abspath(os.path.dirname(__file__))

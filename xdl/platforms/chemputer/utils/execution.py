@@ -2,9 +2,9 @@ from typing import Tuple, Dict, Union, Optional
 from networkx import MultiDiGraph, NetworkXNoPath
 from networkx.algorithms import shortest_path_length
 from ....utils.graph import undirected_neighbors
-from ....constants import (
+from ....constants import INERT_GAS_SYNONYMS
+from ..constants import (
     VACUUM_CLASSES,
-    INERT_GAS_SYNONYMS,
     CHEMPUTER_FLASK,
     CHEMPUTER_CARTRIDGE,
     STIRRER_CLASSES,

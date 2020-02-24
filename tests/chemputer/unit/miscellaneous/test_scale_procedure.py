@@ -6,7 +6,7 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')
 
 @pytest.mark.unit
-def test_dry_in_filter():
+def test_scaling():
     """Test that dry step at specific pressure works in filter."""
     xdl_f = os.path.join(FOLDER, 'scale_procedure.xdl')
     x = XDL(xdl_f)

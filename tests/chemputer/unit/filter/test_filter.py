@@ -13,7 +13,7 @@ def test_filter_with_stirring():
     xdl_f = os.path.join(FOLDER, 'filter_with_stirring.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
     for step in x.steps:
         if type(step) == Filter:
             assert type(step.steps[0]) == StartStir
@@ -26,7 +26,7 @@ def test_filter_without_stirring():
     xdl_f = os.path.join(FOLDER, 'filter_without_stirring.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
     for step in x.steps:
         if type(step) == Filter:
             assert type(step.steps[0]) == StopStir
@@ -38,7 +38,7 @@ def test_filter_inline():
     xdl_f = os.path.join(FOLDER, 'filter_inline.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
     generic_chempiler_test(xdl_f, graph_f)
 
 @pytest.mark.unit
@@ -47,7 +47,7 @@ def test_filter_use_filtrate():
     xdl_f = os.path.join(FOLDER, 'filter_inline.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
     for step in x.steps:
         if step.name == 'Filter':
             assert (

@@ -3,7 +3,7 @@ from typing import Optional, List, Dict, Any, Union
 from ..utils import get_vacuum_valve_reconnect_steps
 from .....step_utils.base_steps import AbstractStep, Step
 from ..steps_base import CMove
-from .....constants import BOTTOM_PORT, CHEMPUTER_WASTE
+from ...constants import BOTTOM_PORT, CHEMPUTER_WASTE
 from ...utils.execution import (
     get_nearest_node, get_reagent_vessel, get_vacuum_configuration)
 
@@ -46,6 +46,8 @@ class AddFilterDeadVolume(AbstractStep):
         'vacuum_valve': str,
         'valve_unused_port': Union[str, int]
     }
+
+    DO_NOT_SCALE = True
 
     def __init__(
         self,
@@ -135,6 +137,8 @@ class RemoveFilterDeadVolume(AbstractStep):
         'vacuum_valve': str,
         'valve_unused_port': Union[str, int]
     }
+
+    DO_NOT_SCALE = True
 
     def __init__(
         self,

@@ -37,7 +37,10 @@ def test_dry_inert_gas_connection():
     generic_chempiler_test(xdl_f, graph_f)
 
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(
+        graph_f,
+        testing=True,
+    )
     for step in x.steps:
         if step.name == 'Dry':
             for substep in step.steps:

@@ -1,7 +1,7 @@
 from typing import Optional, List
 from .....step_utils import AbstractStep, Step
 from ..steps_base import CMove
-from .....constants import DEFAULT_CLEAN_BACKBONE_VOLUME
+from ...constants import DEFAULT_CLEAN_BACKBONE_VOLUME
 from ...utils.execution import get_reagent_vessel
 
 class CleanBackbone(AbstractStep):

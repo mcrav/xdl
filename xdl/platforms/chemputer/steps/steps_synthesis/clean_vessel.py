@@ -12,7 +12,7 @@ from ...utils.execution import (
     get_heater_chiller,
     get_vessel_type,
 )
-from .....constants import CHEMPUTER_WASTE
+from ...constants import CHEMPUTER_WASTE
 
 class CleanVessel(AbstractStep):
     """Clean given vessel with given solvent.
@@ -61,6 +61,8 @@ class CleanVessel(AbstractStep):
         'heater',
         'chiller',
     ]
+
+    DO_NOT_SCALE = True
 
     #: Fraction of vessel max volume to use as solvent volume in CleanVessel
     # step.

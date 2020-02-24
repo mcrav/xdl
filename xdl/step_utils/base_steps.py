@@ -22,6 +22,10 @@ class Step(XDLBase):
             in step __init__.
     """
 
+    #: Set to True if mass/volume of step shouldn't be scaled when the
+    # rest of the procedure is scaled.
+    DO_NOT_SCALE: bool = False
+
     def __init__(self, param_dict):
         super().__init__(param_dict)
         if 'kwargs' in param_dict:

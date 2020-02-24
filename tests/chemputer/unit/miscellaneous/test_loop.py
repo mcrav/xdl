@@ -11,7 +11,7 @@ def test_loop():
     xdl_f = os.path.join(FOLDER, 'loop_parent.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
 
     for step in x.steps:
         if step.name == 'Loop':

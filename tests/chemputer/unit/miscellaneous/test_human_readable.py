@@ -19,7 +19,7 @@ def test_human_readable():
     """Test that human_readable generation works."""
     for xdl_f, graph_f in files:
         x = XDL(xdl_f)
-        x.prepare_for_execution(graph_f, interactive=False)
+        x.prepare_for_execution(graph_f, testing=True)
         for step in x.steps:
             if not isinstance(step, AbstractBaseStep):
                 # No language given

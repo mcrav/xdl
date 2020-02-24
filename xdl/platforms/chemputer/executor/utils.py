@@ -1,6 +1,6 @@
 from typing import List
 from .constants import AQUEOUS_KEYWORDS
-from ....constants import VALID_PORTS
+from ..constants import VALID_PORTS
 from ....utils.errors import IllegalPortError
 
 class VesselContents(object):

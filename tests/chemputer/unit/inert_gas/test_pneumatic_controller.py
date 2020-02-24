@@ -12,7 +12,7 @@ def test_pneumatic_controller():
     xdl_f = os.path.join(FOLDER, 'pneumatic_controller.xdl')
     graph_f = os.path.join(FOLDER, 'pneumatic_controller.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
 
     # Ignores the shutdown at the end
     check_steps = x.steps[:-1]

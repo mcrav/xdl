@@ -36,7 +36,7 @@ def test_filter_eluting_with_more_than_from_vessel_max_volume():
         FOLDER, 'filter_through_elute_more_than_from_vessel_max_volume.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, interactive=False)
     tests = [
         (10, 1000),
         (3, 75),
@@ -65,11 +65,11 @@ def test_filter_eluting_with_more_than_to_vessel_max_volume():
             FOLDER, 'filter_through_elute_more_than_to_vessel_max_volume.xdl')
         graph_f = os.path.join(FOLDER, 'bigrig.json')
         x = XDL(xdl_f)
-        x.prepare_for_execution(graph_f)
+        x.prepare_for_execution(graph_f, interactive=False)
 
     with pytest.raises(XDLError):
         xdl_f = os.path.join(
             FOLDER, 'filter_through_elute_more_than_to_vessel_max_volume2.xdl')
         graph_f = os.path.join(FOLDER, 'bigrig.json')
         x = XDL(xdl_f)
-        x.prepare_for_execution(graph_f)
+        x.prepare_for_execution(graph_f, interactive=False)

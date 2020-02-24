@@ -1,7 +1,7 @@
 from typing import Optional, List, Dict, Any
 
 from .....step_utils.base_steps import AbstractStep, Step
-from .....constants import (
+from ...constants import (
     CHILLER_MIN_TEMP,
     CHILLER_MAX_TEMP,
     HEATER_MAX_TEMP,
@@ -26,10 +26,10 @@ from ..steps_base import (
 )
 from .general import Wait
 from .stirring import StopStir, StartStir
-from .....constants import (
-    ROOM_TEMPERATURE,
+from ...constants import (
     DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME
 )
+from .....constants import ROOM_TEMPERATURE
 from .....utils.misc import SanityCheck
 from .....localisation import HUMAN_READABLE_STEPS
 from ...utils.execution import get_heater_chiller, get_vessel_type

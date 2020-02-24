@@ -4,8 +4,6 @@ import copy
 from typing import List, Dict
 from math import ceil
 
-from .constants import (
-    DEFAULT_AUTO_CLEAN, DEFAULT_AQUEOUS_CLEANING_SOLVENT, UNSCALED_STEPS)
 from .localisation import HUMAN_READABLE_STEPS
 from .graphgen import graph_from_template
 from .graphgen_deprecated import get_graph
@@ -73,13 +71,7 @@ class XDL(object):
         self.logging_level = logging_level
 
         self._xdl_file = None
-        self.auto_clean = DEFAULT_AUTO_CLEAN
-        self.organic_cleaning_solvent = None
         self.graph_sha256 = None
-        self.aqueous_cleaning_solvent = DEFAULT_AQUEOUS_CLEANING_SOLVENT
-        self.dry_run = False
-        self.filter_dead_volume_method = 'inert_gas'
-        self.filter_dead_volume_solvent = None
         self.prepared = False
         self._validate_platform(platform)
         if xdl:
@@ -286,7 +278,7 @@ class XDL(object):
             step (Step): Step to apply scaling to.
             scale (float): Amount to scale volumes and masses.
         """
-        if step.name not in UNSCALED_STEPS:
+        if not step.DO_NOT_SCALE:
             for prop, val in step.properties.items():
                 if 'volume' in prop or 'mass' in prop:
                     if val and type(val) == float:
@@ -531,6 +523,7 @@ class XDL(object):
         interactive: bool = True,
         save_path: str = '',
         sanity_check: bool = True,
+        **kwargs
     ) -> None:
         """Check hardware compatibility and prepare XDL for execution on given
         setup.
@@ -551,6 +544,7 @@ class XDL(object):
                 interactive=interactive,
                 save_path=save_path,
                 sanity_check=sanity_check,
+                **kwargs
             )
 
             if self.executor._prepared_for_execution:

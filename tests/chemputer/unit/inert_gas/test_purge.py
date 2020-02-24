@@ -12,7 +12,7 @@ def test_purge():
     xdl_f = os.path.join(FOLDER, 'purge.xdl')
     graph_f = os.path.join(FOLDER, 'purge_graph.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
     for step in x.steps:
         if step.name == 'StartPurge':
             if step.vessel == 'reactor':
@@ -52,5 +52,5 @@ def test_purge_backbone():
     xdl_f = os.path.join(FOLDER, 'purge_backbone.xdl')
     graph_f = os.path.join(FOLDER, 'purge_graph.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
     generic_chempiler_test(xdl_f, graph_f)

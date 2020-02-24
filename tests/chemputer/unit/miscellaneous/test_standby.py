@@ -12,7 +12,7 @@ def test_standby_mode():
     graph_f = os.path.join(FOLDER, 'bigrig.json')
 
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f, interactive=False)
+    x.prepare_for_execution(graph_f, testing=True)
 
     for step in x.steps:
         if step.name == 'Standby':

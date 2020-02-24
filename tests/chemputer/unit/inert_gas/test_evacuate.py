@@ -29,7 +29,7 @@ def test_evacuate():
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     generic_chempiler_test(xdl_f, graph_f)
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
     for step in x.steps:
         if type(step) == Evacuate:
             assert len(step.steps) == 7
@@ -56,7 +56,7 @@ def test_evacuate_pneumatic_controller():
     xdl_f = os.path.join(FOLDER, 'evacuate.xdl')
     graph_f = os.path.join(FOLDER, 'pneumatic_controller.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
     for step in x.steps:
         if type(step) == Evacuate:
             assert len(step.steps) == 2

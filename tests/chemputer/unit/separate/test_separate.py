@@ -437,7 +437,7 @@ def test_separate():
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     # generic_chempiler_test(xdl_f, graph_f)
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
     assert (
         len([step for step in x.steps if step.name == 'Separate'])
         == len(correct_step_info)
@@ -467,14 +467,14 @@ def test_separate_without_enough_buffer_flasks():
         xdl_f = os.path.join(FOLDER, 'separate_no_buffers.xdl')
         graph_f = os.path.join(FOLDER, 'separate_no_buffers.json')
         x = XDL(xdl_f)
-        x.prepare_for_execution(graph_f)
+        x.prepare_for_execution(graph_f, testing=True)
 
 @pytest.mark.unit
 def test_separate_more_than_max_volume():
     xdl_f = os.path.join(FOLDER, 'separate_more_than_max_volume.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
     for step in x.steps:
         if step.name == 'Separate':
             assert step.n_separations == 2

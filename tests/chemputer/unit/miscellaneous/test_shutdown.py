@@ -11,7 +11,7 @@ INTEGRATION_FOLDER = os.path.join(os.path.dirname(HERE), 'integration', 'files')
 def test_xdl_ends_with_shutdown():
     x = XDL(os.path.join(FOLDER, "dissolve_in_rotavap.xdl"))
     graph_f = os.path.join(FOLDER, "bigrig.json")
-    x.prepare_for_execution(graph_f, interactive=False)
+    x.prepare_for_execution(graph_f, testing=True)
     assert type(x.steps[-1]) == Shutdown
     shutdown = x.steps[-1]
 

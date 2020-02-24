@@ -12,7 +12,7 @@ def test_default_ports():
     xdl_f = os.path.join(FOLDER, 'add_default_port.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f, interactive=False)
+    x.prepare_for_execution(graph_f, testing=True)
     correct_ports = [
         'top',  # filter default
         '0',  # reactor default

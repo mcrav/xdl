@@ -17,7 +17,7 @@ from ...utils.execution import (
 )
 from .....utils.misc import SanityCheck
 from .....utils.graph import undirected_neighbors
-from .....constants import ROTAVAP_CLASSES, VACUUM_CLASSES
+from ...constants import ROTAVAP_CLASSES, VACUUM_CLASSES
 
 class StartVacuum(AbstractStep):
     """Start vacuum pump attached to given vessel.

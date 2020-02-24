@@ -12,7 +12,7 @@ from ..steps_base import (
     CRotavapLiftUp,
 )
 from .add import Add
-from .....constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
+from ...constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
 from ...utils.execution import get_reagent_vessel, get_vessel_type
 
 class Dissolve(AbstractStep):

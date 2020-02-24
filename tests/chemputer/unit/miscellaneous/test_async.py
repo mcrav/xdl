@@ -94,7 +94,7 @@ def test_async_wrapper_in_file():
     graph_f = os.path.join(FOLDER, 'bigrig.json')
 
     x = XDL(xdl_f)
-    x.prepare_for_execution(graph_f)
+    x.prepare_for_execution(graph_f, testing=True)
     for step in x.steps:
         if step.name == 'Async':
             assert step.steps[0].reagent_vessel == 'flask_water'
