@@ -1,7 +1,7 @@
 import os
 import logging
 import copy
-from typing import List, Dict
+from typing import List, Dict, Any
 from math import ceil
 
 from .localisation import HUMAN_READABLE_STEPS
@@ -32,10 +32,6 @@ from .reagents import Reagent
 from .platforms.abstract_platform import AbstractPlatform
 from .platforms.chemputer import ChemputerPlatform
 from .platforms.modular_wheel import ModularWheelPlatform
-
-# For type annotations
-if False:
-    from chempiler import Chempiler
 
 class XDL(object):
     """
@@ -557,27 +553,28 @@ class XDL(object):
             self.logger.warning(
                 'Cannot call prepare for execution twice on same XDL object.')
 
-    def execute(self, chempiler: 'Chempiler', step: int = None) -> None:
-        """Execute XDL using given Chempiler object. self.prepare_for_execution
-        must have been called before calling thie method.
+    def execute(self, platform_controller: Any, step: int = None) -> None:
+        """Execute XDL using given platform controller object.
+        self.prepare_for_execution must have been called before calling this
+        method.
 
         Args:
-            chempiler (chempiler.Chempiler): Chempiler object instantiated with
-                modules and graph to run XDL on.
+            platform_controller (Any): Platform controller object instantiated
+            with modules and graph to run XDL on.
         """
         # Check step not accidentally passed as platform controller
         try:
-            assert type(chempiler) not in [int, str, list, dict]
+            assert type(platform_controller) not in [int, str, list, dict]
         except AssertionError:
             raise XDLError(
                 f'Invalid platform controller supplied. Type:\
- {type(chempiler)} Value: {chempiler}')
+ {type(platform_controller)} Value: {platform_controller}')
 
         if (self.prepared
                 or (hasattr(self, 'graph_sha256') and self.graph_sha256)):
             if hasattr(self, 'executor'):
                 if step is None:
-                    self.executor.execute(chempiler)
+                    self.executor.execute(platform_controller)
                 else:
                     try:
                         self.steps[step]
@@ -585,7 +582,8 @@ class XDL(object):
                         raise XDLError(
                             f'Trying to execute step {step} but step list has\
  length {len(self.steps)}.')
-                    self.executor.execute_step(chempiler, self.steps[step])
+                    self.executor.execute_step(
+                        platform_controller, self.steps[step])
             else:
                 raise RuntimeError(
                     'XDL executor not available. Call prepare_for_execution\
@@ -607,20 +605,6 @@ class XDL(object):
             steps.extend(xdl_obj.steps)
             components.extend(list(xdl_obj.hardware))
         new_xdl_obj = XDL(steps=steps, reagents=reagents, hardware=components)
-        if self.filter_dead_volume_method != other.filter_dead_volume_method:
-            raise ValueError(
-                "Can't combine two XDL objects with different\
- filter_dead_volume_methods")
-        if self.filter_dead_volume_solvent != other.filter_dead_volume_solvent:
-            raise ValueError(
-                "Can't combine two XDL objects with different\
- filter_dead_volume_solvents")
-        if self.auto_clean != other.auto_clean:
-            raise ValueError(
-                "Can't combine two XDL objects with different auto_clean flags")
-        new_xdl_obj.auto_clean = self.auto_clean
-        new_xdl_obj.filter_dead_volume_method = self.filter_dead_volume_method
-        new_xdl_obj.filter_dead_volume_solvent = self.filter_dead_volume_solvent
         return new_xdl_obj
 
 def xdl_copy(xdl_obj: XDL) -> XDL:
