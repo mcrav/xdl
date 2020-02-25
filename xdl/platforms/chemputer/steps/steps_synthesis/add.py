@@ -276,3 +276,6 @@ class Add(AbstractStep):
  find cartridge containing {self.through}.'
             )
         ]
+
+    def scale(self, scale):
+        self.volume *= scale

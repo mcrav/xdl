@@ -124,3 +124,6 @@ class Dissolve(AbstractStep):
                 'stir': True,
             }
         }
+
+    def scale(self, scale):
+        self.scale *= scale

@@ -276,3 +276,6 @@ class WashSolid(AbstractStep):
                 'stir': self.stir is False,
             }
         }
+
+    def scale(self, scale):
+        self.volume *= scale
