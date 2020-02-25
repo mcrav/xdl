@@ -274,12 +274,7 @@ class XDL(object):
             step (Step): Step to apply scaling to.
             scale (float): Amount to scale volumes and masses.
         """
-        if not step.DO_NOT_SCALE:
-            for prop, val in step.properties.items():
-                if 'volume' in prop or 'mass' in prop:
-                    if val and type(val) == float:
-                        step.properties[prop] = float(val) * scale
-
+        step.scale(scale)
         if hasattr(step, 'children') and step.children:
             for substep in step.children:
                 self.apply_scaling(substep, scale)

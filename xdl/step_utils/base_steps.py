@@ -66,6 +66,13 @@ class Step(XDLBase):
         for sanity_check in self.sanity_checks(graph):
             sanity_check.run(self)
 
+    def scale(self, scale: float) -> None:
+        """Method to override to handle scaling if procedure is scaled.
+        Should update step properties accordingly with given scale. Doesn't
+        need to return anything.
+        """
+        return
+
 class AbstractStep(Step, ABC):
     """Abstract base class for all steps that contain other steps.
     Subclasses must implement steps and human_readable, and can also override
