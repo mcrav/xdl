@@ -1,6 +1,10 @@
 from typing import Optional
 from logging import Logger
 from .....step_utils.base_steps import AbstractBaseStep
+from .....localisation import HUMAN_READABLE_STEPS
+from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
+import datetime
 
 class Confirm(AbstractBaseStep):
     """Get the user to confirm something before execution continues.
@@ -74,6 +78,160 @@ class CWait(AbstractBaseStep):
 
     def duration(self, chempiler):
         return self.time
+
+class CWaitUntil(AbstractBaseStep):
+    """Waits until a specified start time has been reached. This command will
+    immediately reply with an estimate of when the waiting will be finished,
+    and also give regular updates indicating that it is still alive.
+
+    Args:
+        second (float): Optional. Start time in seconds
+        minute (float): Optional. Start time in minutes
+        day (float): Optional. Specific day of start time
+        month (float): Optional. Specific month of start time
+        year (float): Optional. Specific year of start time
+        hour (float): Specific hour of start time
+    """
+
+    DEFAULT_PROPS = {
+        'second': 0,  # seconds
+        'minute': 0,  # minutes
+        'day': 0,  # days
+        'month': 0,  # month
+        'year': 0  # year
+    }
+
+    PROP_TYPES = {
+        'hour': int,
+        'minute': int,
+        'second': float,
+        'day': int,
+        'month': int,
+        'year': int
+    }
+
+    def __init__(
+        self,
+        hour: int,
+        second: Optional[float] = 'default',
+        minute: Optional[int] = 'default',
+        day: Optional[int] = 'default',
+        month: Optional[int] = 'default',
+        year: Optional[int] = 'default',
+    ) -> None:
+        super().__init__(locals())
+
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=0 <= self.hour <= 23,
+                error_msg=f'Hour property must be one of 0-23.\
+ {self.hour} is invalid.'
+            ),
+
+            SanityCheck(
+                condition=0 <= self.minute <= 60,
+                error_msg=f'Minute property must be one of 0-59.\
+ {self.minute} is invalid.'
+            ),
+
+            SanityCheck(
+                condition=0 <= self.second <= 60,
+                error_msg=f'Second property must be one of 0-59.\
+ {self.second} is invalid.'
+            ),
+
+            SanityCheck(
+                condition=0 <= self.day <= 31,
+                error_msg=f'Day property must be one of 1-31.\
+ {self.day} is invalid.'
+            ),
+
+            SanityCheck(
+                condition=0 <= self.month <= 12,
+                error_msg=f'Month property must be one of 1-12.\
+ {self.month} is invalid.'
+            ),
+
+            SanityCheck(
+                condition=0 <= self.year <= datetime.MAXYEAR,
+                error_msg=f'Year property out of range.\
+ {self.year} is invalid.'
+            ),
+        ]
+
+    def get_target_datetime(self) -> dict:
+        """Get the datetime to wait until. If a date has not been specified, use
+        today or tomorrow if given time has already passed today.
+        """
+        today = datetime.datetime.today()
+
+        # If date not given use today.
+        if not self.day:
+            year = today.year
+            month = today.month
+            day = today.day
+
+            target_datetime = datetime.datetime(
+                year=year,
+                month=month,
+                day=day,
+                hour=self.hour,
+                minute=self.minute,
+                second=self.second
+            )
+
+            # Start time is in the past, go forward a day.
+            if target_datetime < today:
+                target_datetime += datetime.timedelta(days=1)
+
+        else:
+            year = self.year
+            month = self.month
+            day = self.day
+
+            target_datetime = datetime.datetime(
+                year=year,
+                month=month,
+                day=day,
+                hour=self.hour,
+                minute=self.minute,
+                second=self.second
+            )
+
+        return target_datetime
+
+    def get_wait_time(self) -> float:
+        """Get time to wait for. Should be called at the time the step is being
+        executed as it uses the current time.
+        """
+        target_datetime = self.get_target_datetime()
+        wait_time = (
+            target_datetime - datetime.datetime.today()).total_seconds()
+
+        # Check not waiting until time in the past.
+        if wait_time < 0:
+            raise XDLError(
+                f'Trying to wait until time in the past {target_datetime}.')
+
+        return wait_time
+
+    def execute(self, chempiler, logger=None, level=0):
+        chempiler.wait(self.get_wait_time())
+        return True
+
+    def locks(self, chempiler):
+        return [], [], []
+
+    def duration(self, chempiler):
+        return self.time_diff
+
+    def human_readable(self, language='en') -> str:
+        props = self.formatted_properties()
+        props.update({
+            'target_datetime': self.get_target_datetime()})
+        return HUMAN_READABLE_STEPS['WaitUntil'][language].format(
+            **props)
 
 class CBreakpoint(AbstractBaseStep):
     """Introduces a breakpoint in the script. The execution is halted until the

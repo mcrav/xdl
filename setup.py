@@ -36,6 +36,7 @@ setup(
             'localisation/chemputer/steps_synthesis/recrystallize.txt',
             'localisation/chemputer/steps_synthesis/precipitate.txt',
             'localisation/chemputer/steps_synthesis/column.txt',
+            'localisation/chemputer/steps_base/general.txt',
             'localisation/chemputer/unimplemented_steps.txt',
 
             'graphgen_deprecated/chemputer_std6.json',

@@ -34,9 +34,10 @@ def read_localisation_file(f):
 def load_localisations():
     steps_utility = os.path.join(HERE, 'chemputer', 'steps_utility')
     steps_synthesis = os.path.join(HERE, 'chemputer', 'steps_synthesis')
+    steps_base = os.path.join(HERE, 'chemputer', 'steps_base')
 
     localisations = []
-    for folder in [steps_utility, steps_synthesis]:
+    for folder in [steps_utility, steps_synthesis, steps_base]:
         for f in os.listdir(folder):
             f_path = os.path.join(folder, f)
             localisations.extend(read_localisation_file(f_path))
