@@ -28,6 +28,7 @@ class Reagent(XDLBase):
         'role': str,
         'last_minute_addition': str,
         'last_minute_addition_volume': float,
+        'preserve': bool
     }
 
     def __init__(
@@ -41,6 +42,7 @@ class Reagent(XDLBase):
         role: str = None,
         last_minute_addition: str = None,
         last_minute_addition_volume: float = None,
+        preserve: bool = False
     ) -> None:
         super().__init__(locals())
         self.validate_role()

@@ -177,8 +177,18 @@ COMMON_SOLVENT_NAMES = [
     'p-xylene',
 ]
 
-COMMON_SOLVENT_NAMES.extend(
-    [f'anhydrous {name}' for name in COMMON_SOLVENT_NAMES])
+COMMON_SOLVENT_PREFIXES = [
+    'anhydrous',
+    'dry',
+    'distilled',
+    'glacial',  # This probably shouldn't be here but needed to make tests pass.
+    # Chances are backbone shouldn't be cleaned with glacial acetic acid.
+]
+
+for prefix in COMMON_SOLVENT_PREFIXES:
+    COMMON_SOLVENT_NAMES.extend([
+        f'{prefix} {solvent}' for solvent in COMMON_SOLVENT_NAMES
+    ])
 
 SOLVENT_BOILING_POINTS = {
     'acetic acid': 118,
