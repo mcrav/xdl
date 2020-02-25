@@ -1,6 +1,6 @@
 import os
-import shutil
 import sys
+import shutil
 from xdl import XDL
 from xdl.steps import Confirm, Step, AbstractBaseStep, UnimplementedStep
 from chempiler import Chempiler
@@ -17,6 +17,7 @@ def get_chempiler(graph_file: str) -> Chempiler:
         simulation=True,
         graph_file=graph_file,
         device_modules=[ChemputerAPI])
+
 
 def generic_chempiler_test(xdl_file: str, graph_file: str) -> None:
     """Given XDL file and graph file, try and execute Chempiler simulation
