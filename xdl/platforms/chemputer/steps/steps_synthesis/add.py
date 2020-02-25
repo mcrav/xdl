@@ -278,4 +278,7 @@ class Add(AbstractStep):
         ]
 
     def scale(self, scale):
-        self.volume *= scale
+        if self.volume is not None:
+            self.volume *= scale
+        if self.mass is not None:
+            self.mass *= scale
