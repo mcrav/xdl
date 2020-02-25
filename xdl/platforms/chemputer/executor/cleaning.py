@@ -67,26 +67,42 @@ def get_available_solvents(xdl_obj: 'XDL') -> List[str]:
         List[str]: List of common solvents contained in reagents.
     """
     solvents = []
-    reagents = [reagent.id for reagent in xdl_obj.reagents]
+    reagents = [
+        reagent.id for reagent in xdl_obj.reagents if not reagent.preserve
+    ]
+
     graph_hardware = xdl_obj.executor._graph_hardware
     reagents.extend([flask.chemical for flask in graph_hardware.flasks])
+
     reagents = sorted(list(set(reagents)))
     for reagent in reagents:
         if 'solution' not in reagent.lower():
             for solvent in COMMON_SOLVENT_NAMES:
-                # Look for stuff like 'X in THF' as well as plain 'THF'.
-                if re.search(
-                    r'(?:[ _]|^)' + solvent + r'(?:[ _]|$)',
-                    reagent.lower()
-                ):
+                if solvent == reagent.lower():
+
                     # Don't want to use solvents that damage parts of Chemputer.
                     if not reagent.lower() in CLEANING_SOLVENT_BLACKLIST:
                         solvents.append(reagent)
+
     solvents.extend([
         reagent.id
         for reagent in xdl_obj.reagents
         if reagent.use_for_cleaning
     ])
+
+    # This is to remove preserved solvents from the cleaning routines
+    # as they may be expensive
+    preserved_solvents = []
+    for solvent in solvents:
+        for reagent in xdl_obj.reagents:
+            if reagent.id == solvent and reagent.preserve:
+                preserved_solvents.append(solvent)
+
+    # Remove the solvents from the list
+    solvents = [
+        solvent for solvent in solvents if solvent not in preserved_solvents
+    ]
+
     return sorted(list(set(solvents)))
 
 def get_cleaning_schedule(xdl_obj: 'XDL') -> List[str]:

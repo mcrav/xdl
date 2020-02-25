@@ -47,6 +47,10 @@ ALKYL_FLUOR_STEP4_CLEANING_SCHEDULE = [
     'acetonitrile'
 ]
 
+EXPENSIVE_SOLVENTS = [
+    "ethyl vinyl ether"
+]
+
 @pytest.mark.unit
 def test_cleaning_schedule():
     """Test that cleaning scheduling algorithm works correctly."""
@@ -68,3 +72,20 @@ def test_cleaning_no_solvents():
     xdl_f = os.path.join(FOLDER, 'no_cleaning_solvents.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig.json')
     generic_chempiler_test(xdl_f, graph_f)
+
+@pytest.mark.unit
+def test_cleaning_no_preserved_solvents():
+    """ Tests that this routine does not use the expensive solvent
+    ethyl vinyl ether
+    """
+
+    xdl_f = os.path.join(FOLDER, "no_expensive_solvents.xdl")
+    graph_f = os.path.join(FOLDER, "no_expensive_solvents.json")
+    generic_chempiler_test(xdl_f, graph_f)
+
+    x = XDL(xdl_f)
+    x.prepare_for_execution(graph_f, interactive=False)
+
+    for step in x.steps:
+        if isinstance(step, CleanBackbone):
+            assert step.solvent not in EXPENSIVE_SOLVENTS
