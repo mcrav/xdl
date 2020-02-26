@@ -14,6 +14,10 @@ VALID_PLATFORMS: List[str] = ['chemputer', 'chemobot']
 #: Chemicals that will be recognised as inert gas.
 INERT_GAS_SYNONYMS: List[str] = ['nitrogen', 'n2', 'ar', 'argon']
 
+
+#: Chemical name if found in graph to used as air source.
+AIR: str = 'air'
+
 #: Default duration for base steps when the command is basically instantaneous
 DEFAULT_INSTANT_DURATION = 1  # s
 
