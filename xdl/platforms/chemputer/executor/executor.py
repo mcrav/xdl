@@ -1,4 +1,5 @@
 from typing import Union, Tuple, Dict, List
+import time
 
 from networkx import MultiDiGraph
 
@@ -54,7 +55,9 @@ from .cleaning import (
     add_cleaning_steps,
     add_vessel_cleaning_steps,
     verify_cleaning_steps,
-    get_cleaning_schedule
+    get_cleaning_schedule,
+    get_available_solvents,
+    get_cleaning_chunks
 )
 from .constants import (
     SOLVENT_BOILING_POINTS,
@@ -311,7 +314,7 @@ class ChemputerExecutor(AbstractXDLExecutor):
 
     def _add_implied_steps(self, interactive: bool = True) -> None:
         """Add extra steps implied by explicit XDL steps."""
-        self._add_filter_dead_volume_handling_steps()
+        self._add_filter_dead_volume_handling_steps(interactive=interactive)
         if self._auto_clean:
             self._add_implied_clean_vessel_steps(interactive=interactive)
             self._add_implied_clean_backbone_steps(interactive=interactive)
@@ -418,7 +421,7 @@ cleaning? (y, [n])\n')
     # FILTER DEAD VOLUME HANDLING #
     ###############################
 
-    def _add_filter_dead_volume_handling_steps(self) -> None:
+    def _add_filter_dead_volume_handling_steps(self, interactive) -> None:
         """Add steps to handle the filter dead volume. This can be handled in
         two ways determined by the XDL object's filter_dead_volume_method
         attribute (default is 'solvent', alternative is 'inert_gas').
@@ -432,6 +435,10 @@ cleaning? (y, [n])\n')
         the flask is connected to a stream of inert gas that keeps the liquid in
         the top part of the filter where it is.
         """
+
+        if interactive:
+            self._confirm_dead_volume_handling_behaviour()
+
         if (self._filter_dead_volume_method
                 == FILTER_DEAD_VOLUME_INERT_GAS_METHOD):
             self._add_filter_inert_gas_connect_steps()
@@ -439,6 +446,8 @@ cleaning? (y, [n])\n')
         elif (self._filter_dead_volume_method
               == FILTER_DEAD_VOLUME_LIQUID_METHOD):
             self._add_filter_liquid_dead_volume_steps()
+            if interactive:
+                self._confirm_dead_volume_solvents()
 
     def _add_filter_liquid_dead_volume_steps(self) -> None:
         """Using 'solvent' method for handling filter dead volume, add
@@ -560,6 +569,96 @@ cleaning? (y, [n])\n')
                         to_vessel=filter_vessel.id,
                         to_port=BOTTOM_PORT)
                 )
+
+    def _confirm_dead_volume_handling_behaviour(self) -> None:
+        msg = f'\n  Filter dead volume is currently handled by'
+        msg += f' {self._filter_dead_volume_method}.'
+        msg += f'\n  Would you like to switch dead the volume handling method?'
+        msg += ' (y, [n])\n'
+        verify = None
+        while verify not in ['y', 'n', '']:
+            verify = input(msg)
+            if verify == 'y':
+                available_methods = [
+                    FILTER_DEAD_VOLUME_LIQUID_METHOD,
+                    FILTER_DEAD_VOLUME_INERT_GAS_METHOD
+                ]
+                choice = None
+                while choice not in available_methods:
+                    msg = '\n Please select desired method:'
+                    msg += f'\n    {FILTER_DEAD_VOLUME_LIQUID_METHOD}'
+                    msg += f'\n    {FILTER_DEAD_VOLUME_INERT_GAS_METHOD}\n'
+                    choice = input(msg)
+                self._filter_dead_volume_method = choice
+
+    def _confirm_dead_volume_solvents(self):
+        """Allow user to see filter dead volume steps being added and make
+        changes to what solvents are used.
+        """
+        msg = f'\n  Would you like to review dead volume solvents?'
+        msg += ' (y, [n])\n'
+        verify = None
+        while verify not in ['y', 'n', '']:
+            verify = input(msg)
+
+        if verify:
+            self.logger.info(f'\n\nVerifying AddFilterDeadVolume Steps\n------\
+---------------------------------------\n')
+            self.logger.info(f'* indicates the step which is being verified. \
+Other steps are shown for context.\n\n')
+            solvents = get_available_solvents(self._xdl)
+            chunks = get_cleaning_chunks(
+                self._xdl,
+                step_type=AddFilterDeadVolume
+            )
+            self.logger.info('Procedure Start')
+            for chunk in chunks:
+                for i in range(len(chunk)):
+                    if type(chunk[i]) == AddFilterDeadVolume:
+                        self.logger.info('---------------\n')
+                        for j, step in enumerate(chunk):
+                            if j == i:
+                                self.logger.info(
+                                    f'* AddFilterDeadVolume {step.solvent}'
+                                )
+                            elif type(step) == AddFilterDeadVolume:
+                                self.logger.info(
+                                    f'AddFilterDeadVolume {step.solvent}'
+                                )
+                            else:
+                                self.logger.info(step.human_readable())
+                        answer = None
+                        # Get appropriate answer.
+                        while answer not in ['', 'y', 'n']:
+                            answer = input(
+                                f'\nIs {chunk[i].solvent} an appropriate dead \
+volume solvent? ([y], n)\n')
+                        # Leave solvent as is. Move onto next steps.
+                        if not answer or answer == 'y':
+                            continue
+                        # Get user to select new solvent.
+                        else:
+                            new_solvent_index = None
+                            # Wait for user to give appropriate input.
+                            while new_solvent_index not in list(
+                                    range(len(solvents))):
+                                input_msg = f'Select new solvent by number\n'
+                                input_msg += '\n'.join(
+                                    [f'{solvent} ({i})'
+                                     for i, solvent in enumerate(solvents)]
+                                ) + '\n'
+                                new_solvent_index = input(input_msg)
+                                try:
+                                    new_solvent_index = int(new_solvent_index)
+                                except ValueError:
+                                    self.logger.info('Input must be number \
+corresponding to solvent.')
+                            # Change step solvent.
+                            chunk[i].solvent = solvents[new_solvent_index]
+                            self.logger.info(
+                                f'Solvent changed to {chunk[i].solvent}\n'
+                            )
+                            time.sleep(1)
 
     ###############################
     # SOLIDIFY IMPLIED PROPERTIES #
