@@ -235,7 +235,8 @@ class Separate(AbstractStep):
                     upper_phase_port=self.waste_phase_to_port,
                     dead_volume_vessel=self.dead_volume_target,
                     dead_volume_through=self.through,
-                    lower_phase_through=self.through
+                    lower_phase_through=self.through,
+                    failure_vessel=self.to_vessel
                 )]
             else:
                 return [
@@ -245,6 +246,7 @@ class Separate(AbstractStep):
                         upper_phase_vessel=self.waste_phase_to_vessel,
                         upper_phase_port=self.waste_phase_to_port,
                         dead_volume_vessel=self.dead_volume_target,
+                        failure_vessel=self.to_vessel
                     ),
                     Transfer(
                         from_vessel=self.buffer_flasks[0],
@@ -263,6 +265,7 @@ class Separate(AbstractStep):
                         lower_phase_port=self.waste_phase_to_port,
                         upper_phase_vessel=self.to_vessel,
                         dead_volume_vessel=self.dead_volume_target,
+                        failure_vessel=self.to_vessel
                     ),
                     Transfer(
                         from_vessel=self.buffer_flasks[1],
@@ -279,7 +282,8 @@ class Separate(AbstractStep):
                         upper_phase_vessel=self.to_vessel,
                         upper_phase_port=self.to_port,
                         dead_volume_vessel=self.dead_volume_target,
-                        upper_phase_through=self.through
+                        upper_phase_through=self.through,
+                        failure_vessel=self.to_vessel
                     ),
                     Transfer(
                         from_vessel=self.buffer_flasks[0],
@@ -295,7 +299,8 @@ class Separate(AbstractStep):
                 upper_phase_vessel=self.to_vessel,
                 upper_phase_port=self.to_port,
                 dead_volume_vessel=self.dead_volume_target,
-                upper_phase_through=self.through
+                upper_phase_through=self.through,
+                failure_vessel=self.to_vessel
             )]
 
     def _get_multi_wash_loop_separate_phases(self):
@@ -313,6 +318,7 @@ class Separate(AbstractStep):
                         upper_phase_vessel=self.waste_phase_to_vessel,
                         upper_phase_port=self.waste_phase_to_port,
                         dead_volume_vessel=self.buffer_flasks[0],
+                        failure_vessel=self.to_vessel
                     ),
                     # Move to_vessel to separation_vessel
                     Transfer(
@@ -329,6 +335,7 @@ class Separate(AbstractStep):
                         upper_phase_vessel=self.waste_phase_to_vessel,
                         upper_phase_port=self.waste_phase_to_port,
                         dead_volume_vessel=self.buffer_flasks[0],
+                        failure_vessel=self.to_vessel
                     ),
                     Transfer(
                         from_vessel=self.buffer_flasks[0],
@@ -345,6 +352,7 @@ class Separate(AbstractStep):
                         lower_phase_port=self.waste_phase_to_port,
                         upper_phase_vessel=self.separation_vessel,
                         dead_volume_vessel=self.waste_phase_to_vessel,
+                        failure_vessel=self.to_vessel
                     )
                 )
             else:
@@ -354,6 +362,7 @@ class Separate(AbstractStep):
                         lower_phase_vessel=self.buffer_flasks[0],
                         upper_phase_vessel=self.separation_vessel,
                         dead_volume_vessel=self.buffer_flasks[0],
+                        failure_vessel=self.to_vessel
                     )
                 )
         return steps
@@ -374,6 +383,7 @@ class Separate(AbstractStep):
                         upper_phase_vessel=self.separation_vessel,
                         dead_volume_vessel=self.to_vessel,
                         dead_volume_through=self.through,
+                        failure_vessel=self.to_vessel
                     )
                 )
             else:
@@ -383,6 +393,7 @@ class Separate(AbstractStep):
                         lower_phase_vessel=self.buffer_flasks[0],
                         upper_phase_vessel=self.separation_vessel,
                         dead_volume_vessel=self.buffer_flasks[0],
+                        failure_vessel=self.to_vessel
                     )
                 )
         else:
@@ -395,6 +406,7 @@ class Separate(AbstractStep):
                         upper_phase_port=self.to_port,
                         upper_phase_through=self.through,
                         dead_volume_vessel=self.buffer_flasks[0],
+                        failure_vessel=self.to_vessel
                     ),
                     # Move waste phase in buffer flask back to separation_vessel
                     Transfer(
@@ -410,6 +422,7 @@ class Separate(AbstractStep):
                         lower_phase_vessel=self.buffer_flasks[0],
                         upper_phase_vessel=self.buffer_flasks[1],
                         dead_volume_vessel=self.buffer_flasks[0],
+                        failure_vessel=self.to_vessel
                     ),
                     Transfer(
                         from_vessel=self.buffer_flasks[0],
