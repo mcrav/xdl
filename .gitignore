@@ -24,6 +24,7 @@ tests/unit/chempiler_output
 .vscode
 chempiler_output/
 *.xdlexe
+xdl_chemputer_schema.xsd
 
 # Allows
 !tests/chemputer/unit/files/xdlexe_test_iso8891.xdlexe

@@ -92,7 +92,8 @@ class WashSolid(AbstractStep):
         'vacuum_valve': str,
         'valve_unused_port': Union[str, int],
         'vessel_type': str,
-        'filter_dead_volume': float
+        'filter_dead_volume': float,
+        'repeat': bool
     }
 
     INTERNAL_PROPS = [
