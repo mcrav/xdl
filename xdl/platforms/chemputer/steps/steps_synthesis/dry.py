@@ -72,7 +72,6 @@ class Dry(AbstractStep):
     INTERNAL_PROPS = [
         'vacuum',
         'vacuum_device',
-        'vacuum_pressure',
         'inert_gas',
         'vacuum_valve',
         'valve_unused_port',
