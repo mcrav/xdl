@@ -32,6 +32,7 @@ class SeparatePhases(AbstractDynamicStep):
         'lower_phase_through': str,
         'upper_phase_through': str,
         'dead_volume_through': str,
+        'failure_vessel': str,
         'max_retries': int
     }
 
@@ -39,7 +40,8 @@ class SeparatePhases(AbstractDynamicStep):
     READ_CONDUCTIVITY = 1  # Take conductivity measurement
     WITHDRAW = 2  # Withdraw more liquid
     RETRY = 3  # Try separation again if phase change undetected
-    TERMINATE = 4  # If phase change undetected 3 times raise XDLError.
+    TERMINATE = 4  # If phase change undetected 3 times graceful exit.
+    RAISE_ERROR = 5  # Raise the error once done
 
     pump_max_volume = None
     conductivity_sensor = None
@@ -59,6 +61,7 @@ class SeparatePhases(AbstractDynamicStep):
         lower_phase_through: str = None,
         upper_phase_through: str = None,
         dead_volume_through: str = None,
+        failure_vessel: str = None,
         max_retries: int = 2,
         **kwargs,
     ) -> None:
@@ -101,6 +104,7 @@ class SeparatePhases(AbstractDynamicStep):
             self.WITHDRAW: self.continue_withdraw,
             self.RETRY: self.continue_retry,
             self.TERMINATE: self.continue_terminate,
+            self.RAISE_ERROR: self.continue_raise_error
         }
         self.discriminant = self.default_discriminant(True, True)
         self.reset()
@@ -330,8 +334,35 @@ class SeparatePhases(AbstractDynamicStep):
         return steps
 
     def continue_terminate(self):
+        self.continue_option = self.RAISE_ERROR
+
+        steps = []
+        steps.append(
+            Transfer(
+                from_vessel=self.separation_vessel_pump,
+                to_vessel=self.failure_vessel,
+                volume=self.pump_current_volume,
+                aspiration_speed=SEPARATION_DEFAULT_INITIAL_PUMP_SPEED,
+                move_speed=SEPARATION_DEFAULT_MID_PUMP_SPEED,
+                dispense_speed=SEPARATION_DEFAULT_END_PUMP_SPEED,
+            )
+        )
+
+        steps.append(
+            Transfer(
+                from_vessel=self.lower_phase_vessel,
+                to_vessel=self.failure_vessel,
+                volume=self.total_withdrawn - self.pump_current_volume
+            )
+        )
+
+        return steps
+
+    def continue_raise_error(self):
         raise XDLError(
             f'Attempted and failed separation {self.retries + 1} times.\
+Lower phase sent to \"{self.failure_vessel}\".\n\
+Please check the appropriate log files for conductivity sensor readings.\
 \n{self.properties}')
 
     def on_finish(self):
