@@ -19,7 +19,8 @@ class RunColumn(AbstractStep):
     """
 
     DEFAULT_PROPS = {
-        'move_speed': 5  # mL / min
+        'move_speed': 5,  # mL / min
+        'eluting_repeats': 1,
     }
 
     PROP_TYPES = {
@@ -27,7 +28,10 @@ class RunColumn(AbstractStep):
         'to_vessel': str,
         'column': str,
         'move_speed': float,
-        'buffer_flask': str
+        'buffer_flask': str,
+        'eluting_solvent': str,
+        'eluting_volume': float,
+        'eluting_repeats': int,
     }
 
     INTERNAL_PROPS = [
@@ -39,6 +43,9 @@ class RunColumn(AbstractStep):
         from_vessel: str,
         to_vessel: str,
         column: str = None,
+        eluting_solvent: str = None,
+        eluting_volume: float = None,
+        eluting_repeats: int = 'default',
         move_speed: Optional[float] = 'default',
 
         # Internal properties
@@ -66,6 +73,9 @@ class RunColumn(AbstractStep):
                 through_cartridge=self.column,
                 move_speed=self.move_speed,
                 buffer_flask=self.buffer_flask,
+                eluting_repeats=self.eluting_repeats,
+                eluting_solvent=self.eluting_solvent,
+                eluting_volume=self.eluting_volume
             )
         ]
 
