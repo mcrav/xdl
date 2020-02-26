@@ -39,8 +39,7 @@ def test_separate_phases_through_speed():
             steps = ([
                 step.prime_sensor_step(),
                 step.lower_phase_separation_pump_dispense_step()
-            ] + step.lower_phase_stepwise_withdraw_step()
-              + step.upper_phase_withdraw_step()
+            ] + step.upper_phase_withdraw_step()
               + step.dead_volume_withdraw_step())
 
             assert steps
