@@ -22,7 +22,6 @@
       remove_dead_volume="true"
       waste_phase_to_vessel="separator" />
 
-    />
   </Procedure>
 
 </Synthesis>

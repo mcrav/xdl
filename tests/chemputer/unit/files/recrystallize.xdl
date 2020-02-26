@@ -1,11 +1,9 @@
 <Synthesis auto_clean="false">
   <Hardware>
->
     <Component
       id="filter"
       type="filter"
     />
->
   </Hardware>
 
   <Reagents />
