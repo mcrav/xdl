@@ -106,7 +106,8 @@ class FilterThrough(AbstractStep):
                     graph, self.eluting_solvent)
 
         if not self.flush_cartridge_vessel:
-            self.flush_cartridge_vessel = get_flush_tube_vessel(graph)
+            self.flush_cartridge_vessel = get_flush_tube_vessel(
+                graph, self.to_vessel)
 
         if not self.from_vessel_max_volume:
             self.from_vessel_max_volume = graph.nodes[

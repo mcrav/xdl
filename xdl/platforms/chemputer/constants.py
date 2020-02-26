@@ -118,6 +118,8 @@ CHEMPUTER_WASTE: str = 'ChemputerWaste'
 CHEMPUTER_FLASK: str = 'ChemputerFlask'
 CHEMPUTER_VACUUM: str = 'ChemputerVacuum'
 CHEMPUTER_SEPARATOR: str = 'ChemputerSeparator'
+CHEMPUTER_VALVE: str = 'ChemputerValve'
+CHEMPUTER_PUMP: str = 'ChemputerPump'
 
 JULABO_CF41_CLASS_NAME: str = 'JULABOCF41'
 HUBER_PETITE_FLEUR_CLASS_NAME: str = 'Huber'
