@@ -1,7 +1,6 @@
 from typing import Optional, List, Dict, Any, Union
 from .....step_utils.base_steps import Step, AbstractStep
 from ..steps_utility.vacuum import ApplyVacuum
-from .....utils.misc import SanityCheck
 from ..steps_utility import (
     StopStir,
     HeatChillToTemp,
@@ -19,7 +18,6 @@ from ...utils.execution import (
     get_vessel_stirrer,
     get_vessel_type,
 )
-from ...constants import CHEMPUTER_FILTER
 
 class Dry(AbstractStep):
     """Dry given vessel by applying vacuum for given time.
@@ -105,21 +103,7 @@ class Dry(AbstractStep):
         super().__init__(locals())
 
     def sanity_checks(self, graph):
-        checks = []
-        vessel_node = graph.nodes[self.vessel]
-        vessel_class = vessel_node['class']
-        if vessel_class != CHEMPUTER_FILTER:
-            checks.append(
-                SanityCheck(
-                    condition=(
-                        'can_filter' in vessel_node
-                        and vessel_node['can_filter']
-                    ),
-                    error_msg=f'Using non-standard vessel "{self.vessel}" to\
- dry with but can_filter=True not found in graph.'
-                )
-            )
-        return checks
+        return []
 
     def on_prepare_for_execution(self, graph):
         if not self.waste_vessel:
