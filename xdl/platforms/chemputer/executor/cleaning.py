@@ -71,6 +71,12 @@ def get_available_solvents(xdl_obj: 'XDL') -> List[str]:
         reagent.id for reagent in xdl_obj.reagents if not reagent.preserve
     ]
 
+    # get list of solvents that are incompatible with one or more reagents
+    disqualified_solvents = []
+    for reagent in xdl_obj.reagents:
+        disqualified_solvents.extend(
+            reagent.incompatible_reagents)
+
     graph_hardware = xdl_obj.executor._graph_hardware
     reagents.extend([flask.chemical for flask in graph_hardware.flasks])
 
@@ -84,6 +90,7 @@ def get_available_solvents(xdl_obj: 'XDL') -> List[str]:
                     if not reagent.lower() in CLEANING_SOLVENT_BLACKLIST:
                         solvents.append(reagent)
 
+    # add reagents used for cleaning to solvents
     solvents.extend([
         reagent.id
         for reagent in xdl_obj.reagents
@@ -100,7 +107,9 @@ def get_available_solvents(xdl_obj: 'XDL') -> List[str]:
 
     # Remove the solvents from the list
     solvents = [
-        solvent for solvent in solvents if solvent not in preserved_solvents
+        solvent for solvent in solvents
+        if (solvent not in preserved_solvents
+            and solvent not in disqualified_solvents)
     ]
 
     return sorted(list(set(solvents)))
@@ -209,7 +218,8 @@ def get_reagent_cleaning_solvent(
 
     for xdl_reagent in xdl_reagents:
         if xdl_reagent.id == reagent_name and xdl_reagent.cleaning_solvent:
-            return xdl_reagent.cleaning_solvent
+            if xdl_reagent.cleaning_solvent in available_solvents:
+                return xdl_reagent.cleaning_solvent
 
     for word in AQUEOUS_KEYWORDS:
         if word in reagent_name:

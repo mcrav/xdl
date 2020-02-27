@@ -1,7 +1,7 @@
 <?xdl version="0.3.0" ?>
 
 <Synthesis
-  graph_sha256="acd51f8cd491d4ef7aa330f864b43ead449f73684d45afd9b91a2e2dd300fda5"
+  graph_sha256="82cd924bdb449e0fdde51c7c55bec30468c92ecc2239e8164e8e4e4c7f433963"
 >
   <Hardware>
   </Hardware>
@@ -57,7 +57,7 @@
           through_cartridge="None"
           reagent_vessel="flask_ether"
           waste_vessel="waste_filter"
-          flush_tube_vessel="flask_nitrogen"
+          flush_tube_vessel="None"
           vessel_type="filter"
           anticlogging_solvent_vessel="None">
           <StopStir
@@ -108,18 +108,6 @@
             <CSetRecordingSpeed
               recording_speed="14" />
           </Wait>
-          <CMove
-            from_vessel="flask_nitrogen"
-            to_vessel="filter"
-            volume="5 mL"
-            move_speed="40"
-            aspiration_speed="10"
-            dispense_speed="40"
-            from_port="0"
-            to_port="top"
-            unique="False"
-            through=""
-            use_backbone="True" />
         </Add>
       </Children>
       <Steps>
@@ -167,7 +155,7 @@
           through_cartridge="None"
           reagent_vessel="flask_ether"
           waste_vessel="waste_filter"
-          flush_tube_vessel="flask_nitrogen"
+          flush_tube_vessel="None"
           vessel_type="filter"
           anticlogging_solvent_vessel="None">
           <StopStir
@@ -218,18 +206,6 @@
             <CSetRecordingSpeed
               recording_speed="14" />
           </Wait>
-          <CMove
-            from_vessel="flask_nitrogen"
-            to_vessel="filter"
-            volume="5 mL"
-            move_speed="40"
-            aspiration_speed="10"
-            dispense_speed="40"
-            from_port="0"
-            to_port="top"
-            unique="False"
-            through=""
-            use_backbone="True" />
         </Add>
         <Wait
           time="5 secs"
@@ -275,7 +251,7 @@
           through_cartridge="None"
           reagent_vessel="flask_ether"
           waste_vessel="waste_filter"
-          flush_tube_vessel="flask_nitrogen"
+          flush_tube_vessel="None"
           vessel_type="filter"
           anticlogging_solvent_vessel="None">
           <StopStir
@@ -326,18 +302,6 @@
             <CSetRecordingSpeed
               recording_speed="14" />
           </Wait>
-          <CMove
-            from_vessel="flask_nitrogen"
-            to_vessel="filter"
-            volume="5 mL"
-            move_speed="40"
-            aspiration_speed="10"
-            dispense_speed="40"
-            from_port="0"
-            to_port="top"
-            unique="False"
-            through=""
-            use_backbone="True" />
         </Add>
       </Steps>
     </Repeat>

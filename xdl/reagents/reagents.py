@@ -1,3 +1,4 @@
+from typing import List
 from ..utils.xdl_base import XDLBase
 from ..utils.errors import XDLError
 
@@ -28,7 +29,8 @@ class Reagent(XDLBase):
         'role': str,
         'last_minute_addition': str,
         'last_minute_addition_volume': float,
-        'preserve': bool
+        'preserve': bool,
+        'incompatible_reagents': List[str]
     }
 
     def __init__(
@@ -42,7 +44,8 @@ class Reagent(XDLBase):
         role: str = None,
         last_minute_addition: str = None,
         last_minute_addition_volume: float = None,
-        preserve: bool = False
+        preserve: bool = False,
+        incompatible_reagents: List[str] = []
     ) -> None:
         super().__init__(locals())
         self.validate_role()
