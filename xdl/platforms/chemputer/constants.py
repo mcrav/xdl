@@ -166,6 +166,7 @@ VALID_PORTS = {
     'ChemputerFlask': ['0'],
     'ChemputerCartridge': ['in', 'out'],
     'ChemputerVacuum': ['0'],
+    'CommanduinoLabwareDevice': ['0']
 }
 
 DEFAULT_PORTS: Dict[str, Dict[str, str]] = {
@@ -176,6 +177,7 @@ DEFAULT_PORTS: Dict[str, Dict[str, str]] = {
     'IKARV10': {'from': 'evaporate', 'to': 'evaporate'},
     'ChemputerFlask': {'from': 0, 'to': 0},
     'ChemputerWaste': {'from': 0, 'to': 0},
+    'CommanduinoLabwareDevice': {'from': 0, 'to': 0}
 }
 
 FILTER_DEAD_VOLUME_INERT_GAS_METHOD: str = 'inert_gas'

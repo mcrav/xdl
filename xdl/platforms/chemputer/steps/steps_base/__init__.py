@@ -7,3 +7,4 @@ from .rotavap import *
 from .valve import *
 from .pneumatic_controller import *
 from .conductivity_sensor import *
+from .commanduino_labware import *

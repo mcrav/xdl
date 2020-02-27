@@ -2,7 +2,8 @@ from typing import List, Dict, Generator, Optional, Tuple
 import copy
 from .utils import VesselContents
 from ....step_utils import Step
-from ..steps import Filter, WashSolid, Dry, Separate, CMove, Evaporate
+from ..steps import (
+    Filter, WashSolid, Dry, Separate, CMove, Evaporate)
 from ....hardware import Hardware
 from ....utils import raise_error
 from .constants import COMMON_SOLVENT_NAMES, NON_RECURSIVE_ABSTRACT_STEPS
@@ -155,6 +156,10 @@ def iter_vessel_contents(
                             from_vessel].chemical in INERT_GAS_SYNONYMS):
                         continue
                     for vessel in [from_vessel, to_vessel]:
+                        # if (hardware[vessel].properties['class']
+                        #         == "CommanduinoLabwareDevice"):
+                        #     setattr(hardware[vessel], "current_volume", 0)
+
                         vessel_contents.setdefault(
                             vessel,
                             VesselContents([], hardware[vessel].current_volume))
