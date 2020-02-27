@@ -88,6 +88,7 @@
         time="None"
         stir="False"
         stir_speed="250 RPM"
+        confirm_solid="True"
         through_cartridge="None"
         anticlogging="False"
         anticlogging_solvent="None"
