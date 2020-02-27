@@ -2,10 +2,12 @@ from typing import Tuple, Dict, Union, Optional
 from networkx import MultiDiGraph, NetworkXNoPath
 from networkx.algorithms import shortest_path_length
 from ....utils.graph import undirected_neighbors
-from ....constants import (
+from ....constants import INERT_GAS_SYNONYMS, AIR
+from ..constants import (
     VACUUM_CLASSES,
-    INERT_GAS_SYNONYMS,
     CHEMPUTER_FLASK,
+    CHEMPUTER_PUMP,
+    CHEMPUTER_VALVE,
     CHEMPUTER_CARTRIDGE,
     STIRRER_CLASSES,
     HEATER_CLASSES,
@@ -214,24 +216,67 @@ def get_reagent_vessel(
                 return node
     return None
 
-def get_flush_tube_vessel(graph) -> Optional[str]:
-    """Look for gas vessel to flush tube with after Add steps.
+def get_backbone(graph):
+    """Get list of all valves that have a pump attached."""
+    backbone = []
+    for valve in graph_valves(graph):
+        has_pump = False
+        for _, neighbor_data in undirected_neighbors(
+                graph, valve, data=True):
+            if neighbor_data['class'] == CHEMPUTER_PUMP:
+                has_pump = True
+                break
+        if has_pump:
+            backbone.append(valve)
+    return backbone
+
+def get_flush_tube_vessel(graph, vessel) -> Optional[str]:
+    """Look for gas vessel to flush tube with after Add steps. Vessel must be on
+    the backbone.
 
     Returns:
         str: Flask to use for flushing tube.
             Preference is nitrogen > air > None.
     """
-    inert_gas_flask = None
-    air_flask = None
-    for flask, data in graph_flasks(graph, data=True):
-        if data['chemical'].lower() in INERT_GAS_SYNONYMS:
-            inert_gas_flask = flask
-        elif data['chemical'].lower() == 'air':
-            air_flask = flask
-    if inert_gas_flask:
-        return inert_gas_flask
-    elif air_flask:
-        return air_flask
+    inert_gas_flasks = []
+    air_flasks = []
+    for valve in get_backbone(graph):
+        for neighbor, data in undirected_neighbors(graph, valve, data=True):
+            if data['class'] == CHEMPUTER_FLASK:
+                if data['chemical'].lower() in INERT_GAS_SYNONYMS:
+                    inert_gas_flasks.append(neighbor)
+
+                elif data['chemical'].lower() == AIR:
+                    air_flasks.append(neighbor)
+
+    if inert_gas_flasks:
+        if len(inert_gas_flasks) == 1:
+            return inert_gas_flasks[0]
+        else:
+            path_lengths = []
+            for inert_gas_flask in inert_gas_flasks:
+                path_lengths.append(
+                    inert_gas_flask,
+                    shortest_path_length(
+                        graph, inert_gas_flask, vessel
+                    )
+                )
+                return sorted(inert_gas_flasks, key=lambda x: x[1])[0][0]
+
+    elif air_flasks:
+        if len(air_flasks) == 1:
+            return air_flasks[0]
+        else:
+            path_lengths = []
+            for air_flask in air_flasks:
+                path_lengths.append(
+                    air_flask,
+                    shortest_path_length(
+                        graph, air_flask, vessel
+                    )
+                )
+            return sorted(air_flasks, key=lambda x: x[1])[0][0]
+
     return None
 
 def get_vessel_type(graph, vessel):
@@ -277,11 +322,20 @@ def graph_cartridges(graph, data=False):
     for item in graph_iter_class(graph, CHEMPUTER_CARTRIDGE, data=data):
         yield item
 
+def graph_valves(graph, data=False):
+    """Generator to iterate through all ChemputerValves in graph.
+
+    Args:
+        graph (MultiDiGraph): Graph
+        data (bool): Give node data in (node, data) tuple. Defaults to False.
+    """
+    for item in graph_iter_class(graph, CHEMPUTER_VALVE, data=data):
+        yield item
 
 def graph_iter_class(graph, target_class, data=False):
-    for node, data in graph.nodes(data=True):
-        if data['class'] == target_class:
+    for node, node_data in graph.nodes(data=True):
+        if node_data['class'] == target_class:
             if data:
-                yield node, data
+                yield node, node_data
             else:
                 yield node

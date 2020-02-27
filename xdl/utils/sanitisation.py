@@ -1,5 +1,6 @@
 from typing import Optional, Union, List
 import re
+from .errors import XDLError
 
 def parse_bool(s: str) -> bool:
     """Parse bool from string.
@@ -192,7 +193,11 @@ def clean_properties(xdl_class, properties):
             properties[prop] = val
             continue
 
-        prop_type = prop_types[prop]
+        try:
+            prop_type = prop_types[prop]
+        except AssertionError:
+            raise XDLError(
+                f'Missing prop type for "{prop}" in {xdl_class.__name__}')
 
         if prop_type in [str, Optional[str]]:
             if val:

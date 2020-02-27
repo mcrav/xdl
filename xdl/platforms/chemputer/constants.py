@@ -1,9 +1,5 @@
 from typing import Dict, List
 
-#: XDL version number. Remember to increment after merging into master. Used
-# in header at top of outputted XDL files.
-XDL_VERSION: str = '0.3.1'
-
 ######################
 # DEFAULT PARAMETERS #
 ######################
@@ -122,6 +118,8 @@ CHEMPUTER_WASTE: str = 'ChemputerWaste'
 CHEMPUTER_FLASK: str = 'ChemputerFlask'
 CHEMPUTER_VACUUM: str = 'ChemputerVacuum'
 CHEMPUTER_SEPARATOR: str = 'ChemputerSeparator'
+CHEMPUTER_VALVE: str = 'ChemputerValve'
+CHEMPUTER_PUMP: str = 'ChemputerPump'
 
 JULABO_CF41_CLASS_NAME: str = 'JULABOCF41'
 HUBER_PETITE_FLEUR_CLASS_NAME: str = 'Huber'
@@ -182,79 +180,6 @@ DEFAULT_PORTS: Dict[str, Dict[str, str]] = {
 
 FILTER_DEAD_VOLUME_INERT_GAS_METHOD: str = 'inert_gas'
 FILTER_DEAD_VOLUME_LIQUID_METHOD: str = 'solvent'
-
-
-########
-# MISC #
-########
-
-#: Valid platforms for XDL
-VALID_PLATFORMS: List[str] = ['chemputer', 'chemobot']
-
-#: Chemicals that will be recognised as inert gas.
-INERT_GAS_SYNONYMS: List[str] = ['nitrogen', 'n2', 'ar', 'argon']
-
-
-#: Chemical name if found in graph to used as air source.
-AIR: str = 'air'
-
-#: Default duration for base steps when the command is basically instantaneous
-DEFAULT_INSTANT_DURATION = 1  # s
-
-#: Room temperature in °C
-ROOM_TEMPERATURE: int = 25
-
-#: Keywords that if found in reagent name signify that the reagent is aqueous.
-AQUEOUS_KEYWORDS: List[str] = ['water', 'aqueous', 'acid', ' m ', 'hydroxide']
-
-#: Attributes of the <Synthesis> element.
-SYNTHESIS_ATTRS = [
-    {
-        'name': 'auto_clean',
-        'type': bool,
-        'default': True,
-    },
-    {
-        'name': 'organic_cleaning_solvent',
-        'type': str,
-        'default': 'ether',
-    },
-    {
-        'name': 'aqueous_cleaning_solvent',
-        'type': str,
-        'default': 'water',
-    },
-    {
-        'name': 'dry_run',
-        'type': bool,
-        'default': False,
-    },
-    {
-        'name': 'filter_dead_volume_method',
-        'type': str,
-        'default': 'solvent',
-    },
-    {
-        'name': 'filter_dead_volume_solvent',
-        'type': str,
-        'default': None,
-    },
-    {
-        'name': 'graph_sha256',
-        'type': str,
-        'default': '',
-    }
-]
-
-#: Steps for which the volume shouldn't be scaled if XDL.scale_procedure is
-# called.
-UNSCALED_STEPS = [
-    'CleanVessel', 'AddFilterDeadVolume', 'RemoveFilterDeadVolume']
-
-
-###################
-# Parallelisation #
-###################
 
 #: Time to wait during venting of vacuum to ambient pressure.
 DEFAULT_VACUUM_VENT_WAIT_TIME: float = 60

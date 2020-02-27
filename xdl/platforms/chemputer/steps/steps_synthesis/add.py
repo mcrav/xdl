@@ -151,7 +151,7 @@ class Add(AbstractStep):
                 graph, self.anticlogging_solvent)
 
         if not self.flush_tube_vessel:
-            self.flush_tube_vessel = get_flush_tube_vessel(graph)
+            self.flush_tube_vessel = get_flush_tube_vessel(graph, self.vessel)
 
         if not self.through_cartridge and self.through:
             self.through_cartridge = get_cartridge(graph, self.through)
