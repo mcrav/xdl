@@ -89,3 +89,46 @@ def test_cleaning_no_preserved_solvents():
     for step in x.steps:
         if isinstance(step, CleanBackbone):
             assert step.solvent not in EXPENSIVE_SOLVENTS
+
+@pytest.mark.unit
+def test_incompatible_solvents_reagents_dcm():
+    """
+    Tests whether solvents incompatible with specific reagents are ruled out
+    of cleaning (if otherwise appropriate). In this case, cleaning solvent
+    should be dcm for all CleanBackbone steps.
+    """
+
+    xdl_f_dcm = os.path.join(
+        FOLDER,
+        "incompatible_reagent_solvents_clean_dcm.xdl")
+    graph_f_dcm = os.path.join(FOLDER, "reagent_solvents_graph.json")
+    generic_chempiler_test(xdl_f_dcm, graph_f_dcm)
+
+    x_dcm = XDL(xdl_f_dcm)
+    x_dcm.prepare_for_execution(graph_f_dcm, interactive=False)
+
+    for step in x_dcm.steps:
+        if type(step) == CleanBackbone:
+            assert step.solvent == "dcm"
+
+@pytest.mark.unit
+def test_incompatible_solvents_reagents_ether():
+    """
+    Tests whether solvents incompatible with specific reagents are ruled out
+    of cleaning (if otherwise appropriate). In this case, the cleaning solvent
+    should be ether for all CleanBackbone steps.
+    """
+
+    xdl_f_ether = os.path.join(
+        FOLDER,
+        "incompatible_reagent_solvents_clean_ether.xdl"
+    )
+    graph_f_ether = os.path.join(FOLDER, "reagent_solvents_graph.json")
+    generic_chempiler_test(xdl_f_ether, graph_f_ether)
+
+    x_ether = XDL(xdl_f_ether)
+    x_ether.prepare_for_execution(graph_f_ether, interactive=False)
+
+    for step in x_ether.steps:
+        if type(step) == CleanBackbone:
+            assert step.solvent == "ether"
