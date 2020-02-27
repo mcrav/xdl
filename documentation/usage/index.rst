@@ -9,5 +9,6 @@ Usage
    inspecting_xdl
    altering_xdl
    the_graph
+   reagents
    xdl_controller
    submitting_issues
