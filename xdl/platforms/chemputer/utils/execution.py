@@ -5,7 +5,6 @@ from ....utils.graph import undirected_neighbors
 from ....constants import INERT_GAS_SYNONYMS, AIR
 from ..constants import (
     VACUUM_CLASSES,
-    INERT_GAS_SYNONYMS,
     CHEMPUTER_FLASK,
     CHEMPUTER_PUMP,
     CHEMPUTER_VALVE,

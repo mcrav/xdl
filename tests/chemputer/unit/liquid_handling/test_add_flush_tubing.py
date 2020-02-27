@@ -10,7 +10,7 @@ FOLDER = os.path.join(HERE, '..', 'files')
 def test_add_flush_tubing():
     x = XDL(os.path.join(FOLDER, 'repeat_parent.xdl'))
     x.prepare_for_execution(
-        os.path.join(FOLDER, 'bigrig.json'), testing=True)
+        os.path.join(FOLDER, 'bigrig.json'), interactive=False)
     for step in x.steps:
         if step.name == 'Repeat':
             for child in step.children:
@@ -29,7 +29,7 @@ def test_add_flush_tubing_no_backbone_inert_gas():
     x = XDL(os.path.join(FOLDER, 'repeat_parent.xdl'))
     x.prepare_for_execution(
         os.path.join(FOLDER, 'bigrig_no_backbone_inert_gas.json'),
-        testing=True,
+        interactive=False,
 
         # Avoid diff as repeat_parent.xdlexe is not in .gitignore.
         save_path=os.path.join(FOLDER, 'repeat_parent_no_inert_gas.xdlexe')
