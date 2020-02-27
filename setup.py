@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name='xdl',
-    version='0.3.0',
+    version='0.3.1',
     description='Package for working with XDL (chemical descriptive language).',
     author='Matthew Craven',
     author_email='matthew.craven@glasgow.ac.uk',
