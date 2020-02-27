@@ -19,6 +19,7 @@ def test_schema():
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
     for f in os.listdir(FOLDER):
+        print(f)
         if f.endswith('.xdl'):
             assert xmlschema.validate(etree.parse(os.path.join(FOLDER, f)))
 

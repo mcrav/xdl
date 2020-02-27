@@ -5,6 +5,7 @@ from xdl import XDL
 from xdl.steps import Confirm, Step, AbstractBaseStep, UnimplementedStep
 from chempiler import Chempiler
 import ChemputerAPI
+import commanduinolabware
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
@@ -16,7 +17,7 @@ def get_chempiler(graph_file: str) -> Chempiler:
         output_dir=os.path.join(HERE, 'chempiler_output'),
         simulation=True,
         graph_file=graph_file,
-        device_modules=[ChemputerAPI])
+        device_modules=[ChemputerAPI, commanduinolabware])
 
 
 def generic_chempiler_test(xdl_file: str, graph_file: str) -> None:
