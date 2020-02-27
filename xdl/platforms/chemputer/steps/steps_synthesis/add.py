@@ -41,6 +41,7 @@ class Add(AbstractStep):
         stir_speed (float): RPM to stir at, only relevant if stir = True.
         through_cartridge (str): Internal property. Node name of cartridge to
             pass reagent through on way to vessel.
+        confirm_solid (bool): If False, skip Confirm step for solid addition
 
         anticlogging (bool): If True, a technique will be used to avoid clogging
             where reagent is added in small portions, each one followed by a
@@ -69,6 +70,7 @@ class Add(AbstractStep):
         'anticlogging': False,
         'anticlogging_solvent_volume': '2 mL',
         'anticlogging_reagent_volume': '10 mL',
+        'confirm_solid': True,
     }
 
     PROP_TYPES = {
@@ -85,6 +87,7 @@ class Add(AbstractStep):
         'time': float,
         'stir': bool,
         'stir_speed': float,
+        'confirm_solid': bool,
         'anticlogging': bool,
         'anticlogging_solvent': str,
         'anticlogging_solvent_volume': float,
@@ -94,7 +97,7 @@ class Add(AbstractStep):
         'waste_vessel': str,
         'flush_tube_vessel': str,
         'vessel_type': str,
-        'anticlogging_solvent_vessel': str
+        'anticlogging_solvent_vessel': str,
     }
 
     INTERNAL_PROPS = [
@@ -121,6 +124,7 @@ class Add(AbstractStep):
         time: Optional[float] = None,
         stir: Optional[bool] = False,
         stir_speed: Optional[float] = 'default',
+        confirm_solid: Optional[bool] = True,
 
         anticlogging: Optional[bool] = 'default',
         anticlogging_solvent: Optional[str] = None,
@@ -162,7 +166,7 @@ class Add(AbstractStep):
     def get_steps(self) -> List[Step]:
         steps = []
         # Solid addition
-        if self.volume is None and self.mass is not None:
+        if self.volume is None and self.mass is not None and self.confirm_solid:
             steps = [Confirm('Is {reagent} ({mass} g) in {vessel}?'.format(
                 **self.properties))]
         # Liquid addition
