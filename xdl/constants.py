@@ -2,7 +2,7 @@ from typing import Dict, List
 
 #: XDL version number. Remember to increment after merging into master. Used
 # in header at top of outputted XDL files.
-XDL_VERSION: str = '0.2.1'
+XDL_VERSION: str = '0.3.1'
 
 ######################
 # DEFAULT PARAMETERS #
@@ -102,55 +102,6 @@ DEFAULT_STIR_SPEED: int = 250
 #: Default speed to stir reagents that specify stirring in reagent flask.
 DEFAULT_STIR_REAGENT_FLASK_SPEED: int = 200
 
-
-INTERNAL_PROPERTIES = {
-    'Add': [
-        'reagent_vessel',
-        'waste_vessel',
-        'flush_tube_vessel',
-        'anticlogging_solvent_vessel'
-    ],
-    'AddCorrosive': ['reagent_vessel', 'air_vessel'],
-    'Filter': [
-        'waste_vessel',
-        'vacuum',
-        'inert_gas',
-        'filter_top_volume',
-        'vacuum_device'
-    ],
-    'WashSolid': [
-        'waste_vessel',
-        'vacuum',
-        'inert_gas',
-        'vacuum_device',
-        'vessel_type',
-        'valve_unused_port',
-        'vacuum_valve',
-    ],
-    'Dry': [
-        'waste_vessel',
-        'vacuum',
-        'inert_gas',
-        'vacuum_device',
-        'vacuum_valve',
-        'valve_unused_port',
-        'vessel_type',
-        'vessel_has_stirrer'
-    ],
-    'Separate': ['waste_vessel', 'buffer_flasks'],
-    'HeatChill': ['vessel_type'],
-    'PrimePumpForAdd': ['reagent_vessel', 'waste_vessel'],
-    'HeatChillToTemp': ['vessel_type'],
-    'StopHeatChill': ['vessel_type'],
-    'HeatChillReturnToRT': ['vessel_type'],
-    'CleanBackbone': ['solvent_vessel', 'waste_vessels'],
-    'AddFilterDeadVolume': ['waste_vessel', 'solvent_vessel'],
-    'RemoveFilterDeadVolume': ['waste_vessel'],
-    'Stir': ['vessel_type'],
-    'StopStir': ['vessel_has_stirrer'],
-}
-
-
 ################################
 # CHEMPUTER DEVICE CLASS NAMES #
 ################################
@@ -163,6 +114,15 @@ CHEMPUTER_WASTE_CLASS_NAME: str = 'ChemputerWaste'
 CHEMPUTER_VACUUM_CLASS_NAME: str = 'ChemputerVacuum'
 CHEMPUTER_PUMP_CLASS_NAME: str = 'ChemputerPump'
 CHEMPUTER_VALVE_CLASS_NAME: str = 'ChemputerValve'
+
+CHEMPUTER_FILTER: str = 'ChemputerFilter'
+CHEMPUTER_REACTOR: str = 'ChemputerReactor'
+CHEMPUTER_CARTRIDGE: str = 'ChemputerCartridge'
+CHEMPUTER_WASTE: str = 'ChemputerWaste'
+CHEMPUTER_FLASK: str = 'ChemputerFlask'
+CHEMPUTER_VACUUM: str = 'ChemputerVacuum'
+CHEMPUTER_SEPARATOR: str = 'ChemputerSeparator'
+
 JULABO_CF41_CLASS_NAME: str = 'JULABOCF41'
 HUBER_PETITE_FLEUR_CLASS_NAME: str = 'Huber'
 IKA_RCT_DIGITAL_CLASS_NAME: str = 'IKARCTDigital'
@@ -181,6 +141,10 @@ CHILLER_CLASSES: List[str] = [
 ROTAVAP_CLASSES: List[str] = [IKA_RV_10]
 VACUUM_CLASSES: List[str] = [CVC3000]
 STIRRER_CLASSES: List[str] = [IKA_MICROSTAR_75, RZR_2052, HEIDOLPH_TORQUE_100]
+FILTER_CLASSES: List[str] = [CHEMPUTER_FILTER]
+REACTOR_CLASSES: List[str] = [CHEMPUTER_REACTOR]
+SEPARATOR_CLASSES: List[str] = [CHEMPUTER_SEPARATOR]
+FLASK_CLASSES: List[str] = [CHEMPUTER_FLASK]
 
 CHILLER_MIN_TEMP: int = -40
 CHILLER_MAX_TEMP: int = 140
@@ -229,6 +193,10 @@ VALID_PLATFORMS: List[str] = ['chemputer', 'chemobot']
 
 #: Chemicals that will be recognised as inert gas.
 INERT_GAS_SYNONYMS: List[str] = ['nitrogen', 'n2', 'ar', 'argon']
+
+
+#: Chemical name if found in graph to used as air source.
+AIR: str = 'air'
 
 #: Default duration for base steps when the command is basically instantaneous
 DEFAULT_INSTANT_DURATION = 1  # s

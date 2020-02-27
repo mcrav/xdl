@@ -14,21 +14,24 @@ Unit test functions should be written in `tests/unit` and imported in
 Example
 -------
 
-This example if for the :code:`QuantitativeTransfer` step shown in the "Making New Steps"
+This example is for the :code:`QuantitativeTransfer` step shown in the "Making New Steps"
 tutorial.
 
 
-`tests/unit/test_quantitative_transfer.py`
+`tests/chemputer/unit/liquid_handling/test_quantitative_transfer.py`
 
 .. code-block:: python
 
     import os
+    import pytest
     from xdl import XDL
     from ..utils import generic_chempiler_test
 
     HERE = os.path.abspath(os.path.dirname(__file__))
-    FOLDER = os.path.join(HERE, 'files')
+    FOLDER = os.path.join(HERE, '..', 'files')
 
+    # This decorator must be used for the test to be picked up by the CI.
+    @pytest.mark.unit
     def test_quantitative_transfer():
         """Test QuantitativeTransfer step."""
         # Instantiate XDL object from test XDL file and generic `bigrig.json` graph.
@@ -71,7 +74,7 @@ tutorial.
         generic_chempiler_test(xdl_f, graph_f)
 
 
-`tests/unit/files/quantitative_transfer.xdl`
+`tests/chemputer/unit/files/quantitative_transfer.xdl`
 
 .. code-block:: xml
 
@@ -109,10 +112,3 @@ tutorial.
       </Procedure>
 
     </Synthesis>
-
-
-When the test is complete and passes, add this line to `tests/unit/all_unit_tests.py`
-
-.. code-block:: python
-
-    from .test_quantitative_transfer import test_quantitative_transfer

@@ -9,6 +9,15 @@ class Recrystallize(AbstractStep):
         'crystallize_temp': '25°C',
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'time': float,
+        'dissolve_temp': float,
+        'crystallize_temp': float,
+        'solvent': str,
+        'solvent_volume': float
+    }
+
     def __init__(
         self,
         vessel: str,

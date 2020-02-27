@@ -6,6 +6,11 @@ class CStir(AbstractBaseStep):
     Args:
         vessel (str): Vessel name to stir.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
@@ -22,6 +27,11 @@ class CStirrerHeat(AbstractBaseStep):
     Args:
         vessel (str): Vessel name to heat.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
@@ -38,6 +48,11 @@ class CStopStir(AbstractBaseStep):
     Args:
         vessel (str): Vessel name to stop stirring.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
@@ -54,6 +69,11 @@ class CStopHeat(AbstractBaseStep):
     Args:
         vessel (str): Vessel name to stop heating.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
@@ -72,6 +92,12 @@ class CStirrerSetTemp(AbstractBaseStep):
         vessel (str): Vessel name to set temperature of hotplate stirrer.
         temp (float): Temperature in °C
     """
+
+    PROP_TYPES = {
+        'vessel': str,
+        'temp': float
+    }
+
     def __init__(self, vessel: str, temp: float) -> None:
         super().__init__(locals())
 
@@ -89,6 +115,12 @@ class CSetStirRate(AbstractBaseStep):
         vessel (str): Vessel name to set stir speed.
         stir_speed (float): Stir speed in RPM.
     """
+
+    PROP_TYPES = {
+        'vessel': str,
+        'stir_speed': float
+    }
+
     def __init__(self, vessel: str, stir_speed: float) -> None:
         super().__init__(locals())
 
@@ -107,6 +139,11 @@ class CStirrerWaitForTemp(AbstractBaseStep):
     Args:
         vessel (str): Vessel name to wait for temperature.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 

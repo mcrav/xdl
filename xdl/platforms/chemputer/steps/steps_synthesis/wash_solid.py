@@ -21,7 +21,10 @@ from .....constants import (
     DEFAULT_FILTER_EXCESS_REMOVE_FACTOR,
     DEFAULT_FILTER_VACUUM_PRESSURE,
     DEFAULT_FILTER_ANTICLOGGING_ASPIRATION_SPEED,
+    CHEMPUTER_WASTE,
 )
+from ...utils.execution import (
+    get_nearest_node, get_vacuum_configuration, get_vessel_type)
 
 class WashSolid(AbstractStep):
     """Wash filter cake with given volume of given solvent.
@@ -70,6 +73,39 @@ class WashSolid(AbstractStep):
         'anticlogging': False,
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'solvent': str,
+        'volume': float,
+        'temp': float,
+        'vacuum_time': float,
+        'stir': Union[bool, str],
+        'stir_time': float,
+        'stir_speed': float,
+        'aspiration_speed': float,
+        'filtrate_vessel': str,
+        'anticlogging': bool,
+        'waste_vessel': str,
+        'vacuum': str,
+        'vacuum_device': str,
+        'inert_gas': str,
+        'vacuum_valve': str,
+        'valve_unused_port': Union[str, int],
+        'vessel_type': str,
+        'filter_dead_volume': float
+    }
+
+    INTERNAL_PROPS = [
+        'waste_vessel',
+        'vacuum',
+        'vacuum_device',
+        'inert_gas',
+        'vacuum_valve',
+        'valve_unused_port',
+        'vessel_type',
+        'filter_dead_volume',
+    ]
+
     def __init__(
         self,
         vessel: str,
@@ -80,9 +116,12 @@ class WashSolid(AbstractStep):
         stir: Optional[Union[bool, str]] = 'default',
         stir_time: Optional[float] = 'default',
         stir_speed: Optional[float] = 'default',
-        waste_vessel: Optional[str] = None,
-        filtrate_vessel: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
+        filtrate_vessel: Optional[str] = None,
+        anticlogging: Optional[bool] = 'default',
+
+        # Internal properties
+        waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
         vacuum_device: Optional[str] = None,
         inert_gas: Optional[str] = None,
@@ -90,10 +129,34 @@ class WashSolid(AbstractStep):
         valve_unused_port: Optional[Union[str, int]] = None,
         vessel_type: Optional[str] = None,
         filter_dead_volume: Optional[float] = None,
-        anticlogging: Optional[bool] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.vessel, CHEMPUTER_WASTE)
+
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
+        if not self.filter_dead_volume:
+            vessel = graph.nodes[self.vessel]
+            if 'dead_volume' in vessel:
+                self.filter_dead_volume = vessel['dead_volume']
+
+        vacuum_info = get_vacuum_configuration(graph, self.vessel)
+        if not self.vacuum:
+            self.vacuum = vacuum_info['source']
+        if not self.inert_gas:
+            self.inert_gas = vacuum_info['valve_inert_gas']
+        if not self.vacuum_valve:
+            self.vacuum_valve = vacuum_info['valve']
+        if not self.valve_unused_port:
+            self.valve_unused_port = vacuum_info['valve_unused_port']
+        if not self.vacuum_device:
+            self.vacuum_device = vacuum_info['device']
 
     def get_steps(self) -> List[Step]:
         steps = []

@@ -1,6 +1,7 @@
 from typing import Optional
 from .....step_utils.base_steps import AbstractStep
 from .filter_through import FilterThrough
+from ...utils.execution import get_buffer_flask
 
 class RunColumn(AbstractStep):
     """Purify using column chromatography.
@@ -21,16 +22,35 @@ class RunColumn(AbstractStep):
         'move_speed': 5  # mL / min
     }
 
+    PROP_TYPES = {
+        'from_vessel': str,
+        'to_vessel': str,
+        'column': str,
+        'move_speed': float,
+        'buffer_flask': str
+    }
+
+    INTERNAL_PROPS = [
+        'buffer_flask',
+    ]
+
     def __init__(
         self,
         from_vessel: str,
         to_vessel: str,
         column: str = None,
         move_speed: Optional[float] = 'default',
+
+        # Internal properties
         buffer_flask: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.buffer_flask:
+            self.buffer_flask = get_buffer_flask(
+                graph, self.from_vessel, return_single=True)
 
     @property
     def buffer_flasks_required(self):

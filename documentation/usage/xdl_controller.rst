@@ -32,7 +32,7 @@ Use XDL Controller
 
 All XDL steps are available as methods of the controller, but with snake case
 instead of pascal case, for example :code:`CleanVessel` -> :code:`clean_vessel`.
-The method calls below will physical operate the platform.
+The method calls below will physically operate the platform.
 
 .. code-block:: python
 

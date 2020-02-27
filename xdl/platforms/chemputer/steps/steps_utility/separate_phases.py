@@ -1,5 +1,6 @@
 from .....constants import BOTTOM_PORT, VALID_PORTS
 from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
 from .....utils.graph import undirected_neighbors
 from .....step_utils.base_steps import AbstractDynamicStep
 from .liquid_handling import Transfer
@@ -11,13 +12,28 @@ SEPARATION_DEAD_VOLUME = 2.5
 SEPARATION_DEFAULT_PRIMING_VOLUME = 2.5
 SEPARATION_DEFAULT_INITIAL_PUMP_SPEED = 10
 SEPARATION_DEFAULT_MID_PUMP_SPEED = 40
-SEPARATION_DEFAULT_END_PUMP_SPEED = 40
+SEPARATION_DEFAULT_END_PUMP_SPEED = 5
 
 SEPARATION_DEFAULT_INITIAL_PUMP_SPEED_CART = 10
 SEPARATION_DEFAULT_MID_PUMP_SPEED_CART = 5
 SEPARATION_DEFAULT_END_PUMP_SPEED_CART = 5
 
 class SeparatePhases(AbstractDynamicStep):
+
+    PROP_TYPES = {
+        'separation_vessel': str,
+        'lower_phase_vessel': str,
+        'upper_phase_vessel': str,
+        'dead_volume_vessel': str,
+        'step_volume': float,
+        'lower_phase_port': str,
+        'upper_phase_port': str,
+        'dead_volume_port': str,
+        'lower_phase_through': str,
+        'upper_phase_through': str,
+        'dead_volume_through': str,
+        'max_retries': int
+    }
 
     FINISH = 0  # Finish successfully
     READ_CONDUCTIVITY = 1  # Take conductivity measurement
@@ -197,11 +213,24 @@ class SeparatePhases(AbstractDynamicStep):
                     self.lower_phase_vessel]['class'] == 'ChemputerWaste':
                 self.can_retry = False
 
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.lower_phase_vessel,
+            ),
+            SanityCheck(
+                condition=self.upper_phase_vessel,
+            ),
+            SanityCheck(
+                condition=self.separation_vessel,
+            ),
+            SanityCheck(
+                condition=self.separation_vessel_pump,
+            ),
+        ]
+
     def final_sanity_check(self, graph):
-        assert self.lower_phase_vessel
-        assert self.upper_phase_vessel
-        assert self.separation_vessel
-        assert self.separation_vessel_pump
+        super().final_sanity_check(graph)
         self.sanity_check_transfer_ports(graph)
 
     def sanity_check_transfer_ports(self, graph):

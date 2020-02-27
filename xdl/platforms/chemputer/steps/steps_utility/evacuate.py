@@ -4,8 +4,9 @@ from ..steps_utility import (
     Wait, StartVacuum, StopVacuum, SwitchArgon, SwitchVacuum)
 from ..steps_base import CConnect
 from .....step_utils.special_steps import Repeat
-from ...utils.execution import get_pneumatic_controller
-from .....utils.errors import XDLError
+from ...utils.execution import (
+    get_pneumatic_controller, get_vacuum_configuration, get_vessel_type)
+from .....utils.misc import SanityCheck
 
 class Evacuate(AbstractStep):
     """Evacuate given vessel with inert gas.
@@ -28,16 +29,39 @@ class Evacuate(AbstractStep):
         'vacuum_pressure': '50 mbar',
     }
 
+    INTERNAL_PROPS = [
+        'inert_gas',
+        'vacuum',
+        'vacuum_device',
+        'vessel_type',
+        'pneumatic_controller',
+    ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'evacuations': int,
+        'after_inert_gas_wait_time': float,
+        'after_vacuum_wait_time': float,
+        'vacuum_pressure': float,
+        'inert_gas': str,
+        'vacuum': str,
+        'vacuum_device': str,
+        'vessel_type': str,
+        'pneumatic_controller': str
+    }
+
     def __init__(
         self,
         vessel: str,
         evacuations: int = 'default',
         after_inert_gas_wait_time: Optional[float] = 'default',
         after_vacuum_wait_time: Optional[float] = 'default',
+        vacuum_pressure: Optional[float] = 'default',
+
+        # Internal properties
         inert_gas: Optional[str] = None,
         vacuum: Optional[str] = None,
         vacuum_device: Optional[str] = None,
-        vacuum_pressure: Optional[float] = 'default',
         vessel_type: Optional[str] = None,
         pneumatic_controller: Optional[str] = None,
         **kwargs
@@ -48,13 +72,25 @@ class Evacuate(AbstractStep):
         self.pneumatic_controller, _ = get_pneumatic_controller(
             graph, self.vessel)
 
-    def final_sanity_check(self, graph):
-        try:
-            assert self.pneumatic_controller or (self.vacuum and self.inert_gas)
-        except AssertionError:
-            raise XDLError(
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
+        vacuum_info = get_vacuum_configuration(graph, self.vessel)
+        if not self.vacuum:
+            self.vacuum = vacuum_info['source']
+        if not self.vacuum_device:
+            self.vacuum_device = vacuum_info['device']
+        if not self.inert_gas:
+            self.inert_gas = vacuum_info['valve_inert_gas']
+
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                self.pneumatic_controller or (self.vacuum and self.inert_gas),
                 f'Cannot find pneumatic controller or vacuum and inert gas\
- connected to {self.vessel}. No way to perform evacuation.')
+ connected to {self.vessel}. No way to perform evacuation.',
+            ),
+        ]
 
     def get_steps(self):
         if self.pneumatic_controller:

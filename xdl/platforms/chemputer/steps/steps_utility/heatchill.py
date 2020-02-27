@@ -30,31 +30,45 @@ from .....constants import (
     ROOM_TEMPERATURE,
     DEFAULT_ROTAVAP_WAIT_FOR_TEMP_TIME
 )
-from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
 from .....localisation import HUMAN_READABLE_STEPS
+from ...utils.execution import get_heater_chiller, get_vessel_type
 
-def heater_chiller_sanity_check(heater, chiller, temp):
+def heater_chiller_sanity_checks(heater, chiller, temp):
+    checks = []
     if not heater and chiller:
-        try:
-            assert temp <= CHILLER_MAX_TEMP
-            assert temp >= CHILLER_MIN_TEMP
-        except AssertionError:
-            raise XDLError(
-                f'{temp} is an invalid temperature for a chiller.')
+        for condition in [
+            temp <= CHILLER_MAX_TEMP,
+            temp >= CHILLER_MIN_TEMP
+        ]:
+            checks.append(
+                SanityCheck(
+                    condition=condition,
+                    error_msg=f'{temp} is an invalid temperature for a\
+ chiller.',
+                )
+            )
 
     if not chiller and heater:
-        try:
-            assert temp >= 18
-            assert temp <= HEATER_MAX_TEMP
-        except AssertionError:
-            raise XDLError(
-                f'{temp} is an invalid temperature for a heater.')
+        for condition in [
+            temp >= 18,
+            temp <= HEATER_MAX_TEMP
+        ]:
+            checks.append(
+                SanityCheck(
+                    condition=condition,
+                    error_msg=f'{temp} is an invalid temperature for a heater.'
+                )
+            )
 
-    try:
-        assert CHILLER_MIN_TEMP <= temp <= HEATER_MAX_TEMP
-    except AssertionError:
-        raise XDLError(
-            f'{temp} is an invalid temperature for a heater or a chiller.')
+    checks.append(
+        SanityCheck(
+            condition=CHILLER_MIN_TEMP <= temp <= HEATER_MAX_TEMP,
+            error_msg=f'{temp} is an invalid temperature for a heater or a\
+ chiller.'
+        )
+    )
+    return checks
 
 class StartHeatChill(AbstractStep):
     """Start heating/chilling vessel to given temp and leave heater/chiller on.
@@ -66,6 +80,15 @@ class StartHeatChill(AbstractStep):
         vessel_type (str): Given internally. Used to know whether to use
             heater or chiller base steps. 'filter', 'rotavap' or 'reactor'
     """
+
+    PROP_TYPES = {
+        'vessel': str,
+        'temp': float,
+        'vessel_type': str,
+        'heater': str,
+        'chiller': str
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -76,6 +99,12 @@ class StartHeatChill(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []
@@ -117,20 +146,23 @@ class StartHeatChill(AbstractStep):
             CRotavapStartHeater(rotavap_name=self.vessel),
         ]
 
-    def final_sanity_check(self, graph):
-        try:
-            assert self.heater or self.chiller or self.vessel_type == 'rotavap'
-        except AssertionError:
-            raise XDLError(f'Trying to heat/chill vessel "{self.vessel}" with\
- no heater or chiller attached.')
-
-        heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
-
-        try:
-            assert self.steps
-        except AssertionError:
-            raise XDLError(f'Unable to heat/chill vessel "{self.vessel}".\
- {self.properties}')
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=(
+                    self.heater
+                    or self.chiller
+                    or self.vessel_type == 'rotavap'
+                ),
+                error_msg=f'Trying to heat/chill vessel "{self.vessel}" with\
+ no heater or chiller attached.'
+            ),
+            SanityCheck(
+                condition=self.steps,
+                error_msg=f'Unable to heat/chill vessel "{self.vessel}".\
+ {self.properties}'
+            )
+        ] + heater_chiller_sanity_checks(self.heater, self.chiller, self.temp)
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
@@ -150,6 +182,21 @@ class HeatChillSetTemp(AbstractStep):
         vessel_type (str): Given internally. Used to know whether to use
             heater or chiller base steps. 'filter', 'rotavap' or 'reactor'
     """
+
+    INTERNAL_PROPS = [
+        'vessel_type',
+        'heater',
+        'chiller'
+    ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'temp': float,
+        'vessel_type': str,
+        'heater': str,
+        'chiller': str
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -160,6 +207,12 @@ class HeatChillSetTemp(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []
@@ -179,9 +232,12 @@ class HeatChillSetTemp(AbstractStep):
                     )
         return steps
 
-    def final_sanity_check(self, graph):
-        assert self.steps
-        heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.steps
+            )
+        ] + heater_chiller_sanity_checks(self.heater, self.chiller, self.temp)
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
@@ -218,6 +274,26 @@ class HeatChillToTemp(AbstractStep):
         'after_recording_speed': 14,
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'temp': float,
+        'active': bool,
+        'continue_heatchill': bool,
+        'stir': bool,
+        'stir_speed': float,
+        'vessel_type': str,
+        'wait_recording_speed': float,
+        'after_recording_speed': float,
+        'heater': str,
+        'chiller': str
+    }
+
+    INTERNAL_PROPS = [
+        'vessel_type',
+        'heater',
+        'chiller'
+    ]
+
     def __init__(
         self,
         vessel: str,
@@ -235,6 +311,12 @@ class HeatChillToTemp(AbstractStep):
     ) -> None:
         super().__init__(locals())
         assert temp is not None
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []
@@ -266,8 +348,9 @@ class HeatChillToTemp(AbstractStep):
                 vessel=self.vessel, vessel_type=self.vessel_type))
         return steps
 
-    def final_sanity_check(self, graph):
-        heater_chiller_sanity_check(self.heater, self.chiller, self.temp)
+    def sanity_checks(self, graph):
+        return heater_chiller_sanity_checks(
+            self.heater, self.chiller, self.temp)
 
     def get_chiller_steps(self):
         return [
@@ -335,6 +418,20 @@ class StopHeatChill(AbstractStep):
             heater or chiller base steps. 'ChemputerFilter' or
             'ChemputerReactor'.
     """
+
+    PROP_TYPES = {
+        'vessel': str,
+        'vessel_type': str,
+        'heater': str,
+        'chiller': str
+    }
+
+    INTERNAL_PROPS = [
+        'vessel_type',
+        'heater',
+        'chiller'
+    ]
+
     def __init__(
         self,
         vessel: str,
@@ -344,6 +441,12 @@ class StopHeatChill(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []
@@ -388,17 +491,36 @@ class HeatChillReturnToRT(AbstractStep):
         'after_recording_speed': 14,
     }
 
+    INTERNAL_PROPS = [
+        'vessel_type',
+    ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'stir': bool,
+        'stir_speed': float,
+        'wait_recording_speed': float,
+        'after_recording_speed': float,
+        'vessel_type': str
+    }
+
     def __init__(
         self,
         vessel: str,
         stir: Optional[bool] = 'default',
         stir_speed: Optional[float] = 'default',
-        vessel_type: Optional[str] = None,
         wait_recording_speed: Optional[float] = 'default',
         after_recording_speed: Optional[float] = 'default',
+
+        # Internal properties
+        vessel_type: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []
@@ -438,6 +560,12 @@ class StirrerReturnToRT(AbstractStep):
         'after_recording_speed': 14,
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'wait_recording_speed': float,
+        'after_recording_speed': float
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -462,18 +590,30 @@ class ChillerReturnToRT(AbstractStep):
         'after_recording_speed': 14,
     }
 
+    INTERNAL_PROPS = [
+        'vessel_class'
+    ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'wait_recording_speed': float,
+        'after_recording_speed': float,
+        'vessel_class': str
+    }
+
     def __init__(
         self,
         vessel: str,
-        vessel_class: str = None,
         wait_recording_speed: Optional[float] = 'default',
         after_recording_speed: Optional[float] = 'default',
+
+        # Internal properties
+        vessel_class: str = None,
     ):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
-        self.properties['vessel_class'] = graph.nodes[self.vessel]['class']
-        self.update()
+        self.vessel_class = graph.nodes[self.vessel]['class']
 
     def get_steps(self):
         if self.vessel_class == 'JULABOCF41':

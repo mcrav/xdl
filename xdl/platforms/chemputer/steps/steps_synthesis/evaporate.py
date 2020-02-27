@@ -18,8 +18,10 @@ from ..steps_base.chiller import (
     CStopChiller
 )
 
-from .....constants import COLLECT_PORT, ROTAVAP_CLASSES, CHILLER_CLASSES
+from .....constants import (
+    COLLECT_PORT, ROTAVAP_CLASSES, CHILLER_CLASSES, CHEMPUTER_WASTE)
 from .....graphgen.utils import undirected_neighbors
+from ...utils.execution import get_nearest_node
 
 class Evaporate(AbstractStep):
     """Evaporate contents of given vessel at given temp and given pressure for
@@ -44,6 +46,24 @@ class Evaporate(AbstractStep):
         'rotation_speed': '150 RPM'
     }
 
+    PROP_TYPES = {
+        'rotavap_name': str,
+        'temp': float,
+        'pressure': float,
+        'time': float,
+        'rotation_speed': float,
+        'mode': str,
+        'waste_vessel': str,
+        'collection_flask_volume': float,
+        'has_chiller': bool
+    }
+
+    INTERNAL_PROPS = [
+        'waste_vessel',
+        'collection_flask_volume',
+        'has_chiller',
+    ]
+
     def __init__(
         self,
         rotavap_name: str,
@@ -52,6 +72,8 @@ class Evaporate(AbstractStep):
         time: Optional[float] = 'default',
         rotation_speed: Optional[float] = 'default',
         mode: Optional[str] = 'manual',
+
+        # Internal properties
         waste_vessel: Optional[str] = None,
         collection_flask_volume: Optional[float] = None,
         has_chiller: bool = False,
@@ -60,6 +82,16 @@ class Evaporate(AbstractStep):
         super().__init__(locals())
 
     def on_prepare_for_execution(self, graph):
+        if not self.collection_flask_volume:
+            rotavap = graph.nodes[self.rotavap_name]
+            if 'collection_flask_volume' in rotavap:
+                self.collection_flask_volume = rotavap[
+                    'collection_flask_volume']
+
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.rotavap_name, CHEMPUTER_WASTE)
+
         for node, data in graph.nodes(data=True):
             attached_vessels = [i for i in undirected_neighbors(graph, node)]
 

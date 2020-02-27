@@ -28,6 +28,11 @@ class RotavapStartRotation(AbstractStep):
         'rotation_speed': '150 RPM',
     }
 
+    PROP_TYPES = {
+        'rotavap_name': str,
+        'rotation_speed': float
+    }
+
     def __init__(
         self,
         rotavap_name: str,
@@ -58,6 +63,11 @@ class RotavapStopRotation(AbstractStep):
     Args:
         rotavap_name (str): Rotavap name to start rotation for.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str
+    }
+
     def __init__(
         self, rotavap_name: str, **kwargs
     ) -> None:
@@ -86,6 +96,13 @@ class RotavapStir(AbstractStep):
 
     DEFAULT_PROPS = {
         'stir_speed': '250 RPM',
+    }
+
+    PROP_TYPES = {
+        'rotavap_name': str,
+        'time': float,
+        'continue_stirring': bool,
+        'stir_speed': float
     }
 
     def __init__(
@@ -129,6 +146,11 @@ class RotavapStopEverything(AbstractStep):
     Args:
         rotavap_name (str): Name of rotavap to stop evaporating with.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str
+    }
+
     def __init__(self, rotavap_name: str) -> None:
         super().__init__(locals())
 
@@ -156,6 +178,12 @@ class RotavapStartVacuum(AbstractStep):
         rotavap_name (str): Name of rotavap to start vacuum.
         pressure (float): Pressure in mbar to set vacuum to.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str,
+        'pressure': float
+    }
+
     def __init__(self, rotavap_name: str, pressure: float) -> None:
         super().__init__(locals())
 
@@ -180,6 +208,12 @@ class RotavapHeatToTemp(AbstractStep):
         rotavap_name (str): Name of rotavap to start heating.
         temp (float): Temperature to heat rotavap to.
     """
+
+    PROP_TYPES = {
+        'rotavap_name': str,
+        'temp': float
+    }
+
     def __init__(self, rotavap_name: str, temp: float) -> None:
         super().__init__(locals())
 

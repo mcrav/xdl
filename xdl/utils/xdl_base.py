@@ -7,6 +7,8 @@ class XDLBase(object):
     """Base object for Step, Component and Reagent objects."""
 
     DEFAULT_PROPS = {}
+    INTERNAL_PROPS = []
+    PROP_TYPES = {}
 
     def __init__(self, param_dict):
         params = {

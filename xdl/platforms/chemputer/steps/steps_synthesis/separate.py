@@ -4,15 +4,15 @@ from .add import Add
 from ..steps_utility import Transfer, Wait, Stir, SeparatePhases
 from .....constants import (
     BOTTOM_PORT,
-    DEFAULT_SEPARATION_FAST_STIR_TIME,
-    DEFAULT_SEPARATION_FAST_STIR_SPEED,
     DEFAULT_SEPARATION_SLOW_STIR_TIME,
-    DEFAULT_SEPARATION_SLOW_STIR_SPEED,
-    DEFAULT_SEPARATION_SETTLE_TIME,
+    DEFAULT_SEPARATION_SLOW_STIR_SPEED
 )
 from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
 from .....localisation import HUMAN_READABLE_STEPS
-from ...utils.execution import get_buffer_flasks
+from .....constants import CHEMPUTER_WASTE
+from ...utils.execution import (
+    get_buffer_flask, get_nearest_node, get_cartridge)
 
 class Separate(AbstractStep):
     """Extract contents of from_vessel using given amount of given solvent.
@@ -34,6 +34,12 @@ class Separate(AbstractStep):
         through_cartridge (str): Optional. Node name of cartridge to transfer
             product phase through on way to to_vessel. Supplied internally if
             through is given.
+        mixing_stir_speed (float): Optional. Stirring speed for fast
+            stirring step (slow stirring currently uses default in
+            xdl/constants.py),
+        mixing_time (float): Time spent stirring.
+        settling_time (float): Optional. Time to allow for phase separation
+            after stirring.
         n_separations (int): Number of separations to perform.
         waste_phase_to_vessel (str): Vessel to send waste phase to.
         waste_phase_to_port (str): waste_phase_to_vessel port to use.
@@ -43,7 +49,39 @@ class Separate(AbstractStep):
     DEFAULT_PROPS = {
         'solvent_volume': '30 mL',
         'remove_dead_volume': True,
+        'mixing_stir_speed': '600 rpm',
+        'mixing_time': '5 min',
+        'settling_time': '5 min'
     }
+
+    PROP_TYPES = {
+        'purpose': str,
+        'from_vessel': str,
+        'separation_vessel': str,
+        'to_vessel': str,
+        'product_bottom': bool,
+        'solvent': str,
+        'through': str,
+        'from_port': str,
+        'to_port': str,
+        'solvent_volume': float,
+        'n_separations': int,
+        'waste_phase_to_vessel': str,
+        'waste_phase_to_port': str,
+        'remove_dead_volume': bool,
+        'waste_vessel': str,
+        'buffer_flasks': List[str],
+        'through_cartridge': str,
+        'mixing_stir_speed': float,
+        'mixing_time': float,
+        'settling_time': float
+    }
+
+    INTERNAL_PROPS = [
+        'waste_vessel',
+        'buffer_flasks',
+        'through_cartridge',
+    ]
 
     def __init__(
         self,
@@ -54,19 +92,45 @@ class Separate(AbstractStep):
         product_bottom: bool,
         solvent: Optional[str] = None,
         through: Optional[str] = None,
-        through_cartridge: Optional[str] = None,
         from_port: Optional[str] = None,
         to_port: Optional[str] = None,
         solvent_volume: Optional[float] = 'default',
         n_separations: Optional[int] = 1,
         waste_phase_to_vessel: Optional[str] = None,
         waste_phase_to_port: Optional[str] = None,
+        remove_dead_volume: Optional[bool] = 'default',
+        mixing_stir_speed: Optional[float] = 'default',
+        mixing_time: Optional[float] = 'default',
+        settling_time: Optional[float] = 'default',
+
+        # Internal properties
         waste_vessel: Optional[str] = None,
         buffer_flasks: Optional[List[str]] = [None, None],
-        remove_dead_volume: Optional[bool] = 'default',
+        through_cartridge: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.buffer_flasks[0]:
+            self.buffer_flasks = get_buffer_flask(
+                graph, self.separation_vessel, return_single=False)
+
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.separation_vessel, CHEMPUTER_WASTE)
+
+        if not self.through_cartridge and self.through:
+            self.through_cartridge = get_cartridge(graph, self.through)
+
+        n_buffer_flasks = len([
+            buf for buf in self.buffer_flasks if buf is not None
+        ])
+        if n_buffer_flasks < self.buffer_flasks_required:
+            raise XDLError(
+                f'{self.buffer_flasks_required} buffer flasks required but\
+ {n_buffer_flasks} buffer flasks found in graph.'
+            )
 
     @property
     def dead_volume_target(self):
@@ -78,6 +142,7 @@ class Separate(AbstractStep):
         scenarios was took too long to see what was going on. Better just to
         have clear routines for every scenario.
         """
+
         if not self.waste_phase_to_vessel and self.waste_vessel:
             self.waste_phase_to_vessel = self.waste_vessel
         if not self.n_separations:
@@ -135,13 +200,14 @@ class Separate(AbstractStep):
         return [
             # Stir separation_vessel
             Stir(vessel=self.separation_vessel,
-                 time=DEFAULT_SEPARATION_FAST_STIR_TIME,
-                 stir_speed=DEFAULT_SEPARATION_FAST_STIR_SPEED),
+                 time=self.mixing_time,
+                 stir_speed=self.mixing_stir_speed),
+            # why do we have a slow stirring step? Should this be removed
             Stir(vessel=self.separation_vessel,
                  time=DEFAULT_SEPARATION_SLOW_STIR_TIME,
                  stir_speed=DEFAULT_SEPARATION_SLOW_STIR_SPEED),
             # Wait for phases to separate
-            Wait(time=DEFAULT_SEPARATION_SETTLE_TIME),
+            Wait(time=self.settling_time),
         ]
 
     def _get_final_separate_phases_step(self):
@@ -413,65 +479,72 @@ class Separate(AbstractStep):
     #  Abstract Method implementations #
     ####################################
 
-    def final_sanity_check(self, graph):
-        buffer_flasks = get_buffer_flasks(graph)
-        try:
-            assert len(buffer_flasks) >= self.buffer_flasks_required
-        except AssertionError:
-            raise XDLError('Not enough buffer flasks in graph. Create buffer\
- flasks as ChemputerFlask nodes with an empty chemical property.')
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=(len(self.buffer_flasks)
+                           >= self.buffer_flasks_required),
+                error_msg='Not enough buffer flasks in graph. Create buffer\
+ flasks as ChemputerFlask nodes with an empty chemical property.'
+            ),
 
-        try:
-            assert self.to_vessel != self.waste_phase_to_vessel
-        except AssertionError:
-            raise XDLError('Separate step `to_vessel` must be different to\
- `waste_phase_to_vessel` otherwise both phases end up in the same vessel.')
+            SanityCheck(
+                condition=self.to_vessel != self.waste_phase_to_vessel,
+                error_msg='Separate step `to_vessel` must be different to\
+ `waste_phase_to_vessel` otherwise both phases end up in the same vessel.'
+            ),
 
-        try:
-            assert not self.solvent or self.solvent_volume > 0
-        except AssertionError:
-            raise XDLError(
-                'Solvent volume must be greater than 0 mL if solvent\
- specified.')
+            SanityCheck(
+                condition=not self.solvent or self.solvent_volume > 0,
+                error_msg='Solvent volume must be greater than 0 mL if solvent\
+ specified.'
+            ),
 
-        try:
-            assert self.purpose in ['extract', 'wash']
-        except AssertionError:
-            raise XDLError(f'"{self.purpose}" is invalid for Separate `purpose`\
- property. Valid values: "extract" or "wash".')
+            SanityCheck(
+                condition=self.purpose in ['extract', 'wash'],
+                error_msg=f'"{self.purpose}" is invalid for Separate `purpose`\
+ property. Valid values: "extract" or "wash".'
+            ),
 
-        try:
-            assert self.n_separations > 0
-        except AssertionError:
-            raise XDLError(
-                f'Separate `n_separations` property must be > 1.\
- {self.n_separations} is an invalid value.')
+            SanityCheck(
+                condition=self.n_separations > 0,
+                error_msg=f'Separate `n_separations` property must be > 1.\
+ {self.n_separations} is an invalid value.'
+            )
+        ]
 
     @property
     def buffer_flasks_required(self):
-        if (self.purpose == 'extract'
-                and self.n_separations > 1
-                and not self.product_bottom
-                and self.to_vessel == self.separation_vessel):
-            return 2
-        elif (
-            (self.product_bottom
-             and self.n_separations == 1
-             and self.to_vessel == self.separation_vessel)
-            or (self.n_separations > 1
-                and self.product_bottom
-                and self.to_vessel == self.separation_vessel
-                and self.purpose == 'wash')
-            or (self.purpose == 'extract'
-                and self.product_bottom
-                and self.to_vessel == self.separation_vessel
-                and self.n_separations > 1)
-            or (self.purpose == 'extract'
-                and not self.product_bottom
-                and self.n_separations > 1)
-        ):
-            return 1
-        return 0
+        """This was done pretty rigorously by going through get_steps and seeing
+        what happens in every situation. Please update this
+        if Separate get_steps is updated.
+        """
+        n_buffer_flasks_required = 0
+        if self.n_separations > 1:
+            if self.purpose == 'wash':
+                if self.product_bottom:
+                    n_buffer_flasks_required = 1
+                else:
+                    if self.waste_phase_to_vessel == self.separation_vessel:
+                        n_buffer_flasks_required = 1
+            elif self.purpose == 'extract':
+                if self.product_bottom:
+                    if self.to_vessel == self.separation_vessel:
+                        n_buffer_flasks_required = 1
+                else:
+                    if self.to_vessel == self.separation_vessel:
+                        n_buffer_flasks_required = 2
+                    else:
+                        n_buffer_flasks_required = 1
+        else:
+            if self.product_bottom:
+                if self.to_vessel == self.separation_vessel:
+                    n_buffer_flasks_required = 1
+
+            else:
+                if self.waste_phase_to_vessel == self.separation_vessel:
+                    n_buffer_flasks_required = 1
+        return n_buffer_flasks_required
 
     def human_readable(self, language='en') -> str:
         props = self.formatted_properties()

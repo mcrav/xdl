@@ -8,5 +8,6 @@ Usage
    loading_xdl
    inspecting_xdl
    altering_xdl
+   the_graph
    xdl_controller
    submitting_issues

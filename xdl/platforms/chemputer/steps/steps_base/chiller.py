@@ -7,6 +7,11 @@ class CStartChiller(AbstractBaseStep):
         vessel (str): Vessel to chill. Name of the node the chiller is attached
         to.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
@@ -24,6 +29,11 @@ class CStopChiller(AbstractBaseStep):
         vessel (str): Vessel to stop chilling. Name of the node the chiller is
             attached to.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
@@ -42,6 +52,12 @@ class CChillerSetTemp(AbstractBaseStep):
             chiller is attached to.
         temp (float): Temperature in °C.
     """
+
+    PROP_TYPES = {
+        'vessel': str,
+        'temp': float
+    }
+
     def __init__(self, vessel: str, temp: float) -> None:
         super().__init__(locals())
 
@@ -60,6 +76,11 @@ class CChillerWaitForTemp(AbstractBaseStep):
         vessel (str): Vessel to wait for temperature. Name of the node the
             chiller is attached to.
     """
+
+    PROP_TYPES = {
+        'vessel': str
+    }
+
     def __init__(self, vessel: str) -> None:
         super().__init__(locals())
 
@@ -83,6 +104,13 @@ class CRampChiller(AbstractBaseStep):
         ramp_duration (int): Desired duration of the ramp in seconds.
         end_temperature (float): Final temperature of the ramp in °C.
     """
+
+    PROP_TYPES = {
+        'vessel': str,
+        'ramp_duration': int,
+        'end_temperature': float
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -110,6 +138,12 @@ class CSetCoolingPower(AbstractBaseStep):
             the chiller is attached to.
         cooling_power (float): Desired cooling power in percent.
     """
+
+    PROP_TYPES = {
+        'vessel': str,
+        'cooling_power': float
+    }
+
     def __init__(self, vessel: str, cooling_power: float) -> None:
         super().__init__(locals())
 

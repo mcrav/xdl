@@ -12,6 +12,7 @@ from ..steps_base import (
 from .general import Wait
 from .rotavap import RotavapStir
 from .....constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
+from ...utils.execution import get_vessel_stirrer, get_vessel_type
 
 class SetStirRate(AbstractStep):
     """Set stir rate. Works on rotavap, reactor or filter.
@@ -21,10 +22,28 @@ class SetStirRate(AbstractStep):
         stir_speed (float): Stir rate in RPM
         vessel_type (str): Given internally. 'filter', 'rotavap' or 'reactor'.
     """
+
+    INTERNAL_PROPS = [
+        'vessel_type',
+    ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'stir_speed': float
+    }
+
     def __init__(
-        self, vessel: str, stir_speed: float, vessel_type: Optional[str] = None
+        self, vessel: str,
+        stir_speed: float,
+
+        # Internal properties
+        vessel_type: Optional[str] = None
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         if self.vessel_type == 'rotavap':
@@ -46,14 +65,30 @@ class StartStir(AbstractStep):
         'stir_speed': '250 RPM',
     }
 
+    INTERNAL_PROPS = [
+        'vessel_type'
+    ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'stir_speed': float,
+        'vessel_type': str,
+    }
+
     def __init__(
         self,
         vessel: str,
-        vessel_type: Optional[str] = None,
         stir_speed: Optional[float] = 'default',
+
+        # Internal properties
+        vessel_type: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         if self.vessel_type == 'rotavap':
@@ -87,14 +122,37 @@ class StopStir(AbstractStep):
             The point of this is that StopStir can be used and if there is no
             stirrer then it is just ignored rather than an error being raised.
     """
+
+    INTERNAL_PROPS = [
+        'vessel_type',
+        'vessel_has_stirrer',
+    ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'vessel_type': str,
+        'vessel_has_stirrer': bool
+    }
+
     def __init__(
         self,
         vessel: str,
+
+        # Internal properties
         vessel_type: str = None,
         vessel_has_stirrer: bool = True,
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
+        if get_vessel_stirrer(graph, self.vessel):
+            self.vessel_has_stirrer = True
+        else:
+            self.vessel_has_stirrer = False
 
     def get_steps(self) -> List[Step]:
         if self.vessel_has_stirrer:
@@ -119,16 +177,34 @@ class Stir(AbstractStep):
         'stir_speed': '250 RPM',
     }
 
+    INTERNAL_PROPS = [
+        'vessel_type'
+    ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'time': float,
+        'continue_stirring': bool,
+        'stir_speed': float,
+        'vessel_type': str,
+    }
+
     def __init__(
         self,
         vessel: str,
         time: float,
         continue_stirring: bool = False,
         stir_speed: Optional[float] = 'default',
+
+        # Internal properties
         vessel_type: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         if self.vessel_type == 'rotavap':

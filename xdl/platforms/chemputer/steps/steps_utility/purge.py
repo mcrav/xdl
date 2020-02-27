@@ -1,54 +1,55 @@
 from ..steps_utility.pneumatic_controller import SwitchArgon
 from .general import Wait
 from ..steps_base import CConnect, CValveMoveToPosition
-from ...utils.execution import get_unused_valve_port
 from .....step_utils.base_steps import AbstractStep
-from .....utils.graph import undirected_neighbors
 from .....constants import INERT_GAS_SYNONYMS
-from .....utils.errors import XDLError
-
-def get_pneumatic_controller(graph, vessel):
-    for node, data in undirected_neighbors(graph, vessel, data=True):
-        if data['class'] == 'PneumaticController':
-            return node
-    return None
-
-def get_inert_gas(graph, vessel):
-    for node, data in undirected_neighbors(graph, vessel, data=True):
-        if data['class'] == 'ChemputerValve':
-            for valve_node, valve_data in undirected_neighbors(
-                    graph, node, data=True):
-                if (valve_data['class'] == 'ChemputerFlask'
-                        and valve_data['chemical'] in INERT_GAS_SYNONYMS):
-                    return node, valve_node
-    return None, None
-
-def assert_node_in_graph(graph, node):
-    assert node in list(graph.nodes())
+from .....utils.misc import SanityCheck
+from ..steps_utility.cleaning import CleanBackbone
+from ...utils.execution import (
+    get_vacuum_configuration, get_pneumatic_controller, node_in_graph
+)
 
 class StartPurge(AbstractStep):
+
+    INTERNAL_PROPS = [
+        'pneumatic_controller',
+        'inert_gas'
+    ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'pneumatic_controller': str,
+        'inert_gas': str
+    }
+
     def __init__(
         self,
         vessel: str,
+
+        # Internal properties
         pneumatic_controller: str = None,
         inert_gas: str = None,
         **kwargs,
     ):
         super().__init__(locals())
 
-    def final_sanity_check(self, graph):
-        try:
-            assert self.pneumatic_controller or self.inert_gas
-        except AssertionError:
-            raise XDLError(
-                f'Cannot find pneumatic controller or inert gas connected to\
- {self.vessel} so cannot purge.')
-
     def on_prepare_for_execution(self, graph):
         self.pneumatic_controller = self.inert_gas = None
-        self.pneumatic_controller = get_pneumatic_controller(graph, self.vessel)
+        self.pneumatic_controller, _ = get_pneumatic_controller(
+            graph, self.vessel)
         if not self.pneumatic_controller:
-            _, self.inert_gas = get_inert_gas(graph, self.vessel)
+            vacuum_info = get_vacuum_configuration(graph, self.vessel)
+            if not self.pneumatic_controller and not self.inert_gas:
+                self.inert_gas = vacuum_info['valve_inert_gas']
+
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.pneumatic_controller or self.inert_gas,
+                error_msg=f'Cannot find pneumatic controller or inert gas connected to\
+ {self.vessel} so cannot purge.'
+            )
+        ]
 
     def get_steps(self):
         if self.pneumatic_controller:
@@ -70,41 +71,63 @@ class StartPurge(AbstractStep):
             return []
 
 class StopPurge(AbstractStep):
+
+    INTERNAL_PROPS = [
+        'pneumatic_controller',
+        'inert_gas',
+        'inert_gas_valve',
+        'inert_gas_valve_unused_port',
+    ]
+
+    PROP_TYPES = {
+        'vessel': str,
+        'pneumatic_controller': str,
+        'inert_gas': str,
+        'inert_gas_valve': str,
+        'inert_gas_valve_unused_port': str
+    }
+
     def __init__(
         self,
         vessel: str,
+
+        # Internal properties
         pneumatic_controller: str = None,
         inert_gas: str = None,
         inert_gas_valve: str = None,
         inert_gas_valve_unused_port: str = None,
-        **kwargs,
+        **kwargs
     ):
         super().__init__(locals())
 
-    def final_sanity_check(self, graph):
-        try:
-            assert self.pneumatic_controller or self.inert_gas
-        except AssertionError:
-            raise XDLError(
-                f'Cannot find pneumatic controller or inert gas connected to\
- {self.vessel} so cannot purge.')
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.pneumatic_controller or self.inert_gas,
+                error_msg=f'Cannot find pneumatic controller or inert gas connected to\
+ {self.vessel} so cannot purge.'
+            ),
 
-        try:
-            assert_node_in_graph(graph, self.vessel)
-        except AssertionError:
-            raise XDLError(
-                f'Unable to find {self.vessel} in graph.')
+            SanityCheck(
+                condition=node_in_graph(graph, self.vessel),
+                error_msg=f'Unable to find {self.vessel} in graph.'
+            )
+        ]
 
     def on_prepare_for_execution(self, graph):
         self.pneumatic_controller = self.inert_gas = None
-        self.pneumatic_controller = get_pneumatic_controller(graph, self.vessel)
+        self.pneumatic_controller, _ = get_pneumatic_controller(
+            graph, self.vessel)
         if not self.pneumatic_controller:
-            self.inert_gas_valve, self.inert_gas = get_inert_gas(
-                graph, self.vessel)
-            if self.inert_gas:
-                self.inert_gas_valve_unused_port =\
-                    get_unused_valve_port(
-                        graph, self.inert_gas_valve)
+            vacuum_info = get_vacuum_configuration(graph, self.vessel)
+            if not self.pneumatic_controller:
+                if not self.inert_gas:
+                    self.inert_gas = vacuum_info['valve_inert_gas']
+                if not self.inert_gas_valve:
+                    self.inert_gas_valve = vacuum_info['valve']
+                if self.inert_gas_valve_unused_port is None:
+                    self.inert_gas_valve_unused_port = vacuum_info[
+                        'valve_unused_port']
 
     def get_steps(self):
         if self.pneumatic_controller:
@@ -131,6 +154,11 @@ class Purge(AbstractStep):
         'time': '5 minutes',
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'time': float
+    }
+
     def __init__(
         self,
         vessel: str,
@@ -139,17 +167,17 @@ class Purge(AbstractStep):
     ):
         super().__init__(locals())
 
-    def final_sanity_check(self, graph):
-        try:
-            assert_node_in_graph(graph, self.vessel)
-        except AssertionError:
-            raise XDLError(
-                f'Unable to find {self.vessel} in graph.')
-
-        try:
-            assert self.time > 0
-        except AssertionError:
-            raise XDLError('Purge time must be > 0.')
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=node_in_graph(graph, self.vessel),
+                error_msg=f'Unable to find {self.vessel} in graph.',
+            ),
+            SanityCheck(
+                condition=self.time > 0,
+                error_msg='Purge time must be > 0.'
+            )
+        ]
 
     def on_prepare_for_execution(self, graph):
         return
@@ -159,4 +187,39 @@ class Purge(AbstractStep):
             StartPurge(vessel=self.vessel),
             Wait(time=self.time),
             StopPurge(vessel=self.vessel)
+        ]
+
+class PurgeBackbone(AbstractStep):
+
+    PROP_TYPES = {
+        'purge_gas': str
+    }
+
+    def __init__(
+        self,
+        purge_gas: str = None,
+        **kwargs
+    ):
+        super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if self.purge_gas is None:
+            for _, data in graph.nodes(data=True):
+                if (data['class'] == 'ChemputerFlask'
+                        and data['chemical'] in INERT_GAS_SYNONYMS):
+                    self.purge_gas = data['chemical']
+                    break
+
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.purge_gas,
+            ),
+        ]
+
+    def get_steps(self):
+        return [
+            CleanBackbone(
+                solvent=self.purge_gas,
+            )
         ]

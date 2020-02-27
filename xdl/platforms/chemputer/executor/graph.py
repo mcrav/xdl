@@ -68,43 +68,6 @@ def make_vessel_map(
             vessel_map[node] = closest_target_vessel
     return vessel_map
 
-def make_inert_gas_map(graph: MultiDiGraph):
-    """Given graph, make dict with filter_vessel IDs as keys and nearest
-    inert gas flasks as values. i.e. { 'filter1': 'flask_nitrogen' }.
-
-    Args:
-        graph (networkx.MultiDiGraph): networkx graph of setup.
-
-    Returns:
-        Dict[str, str]: dict with filter vessels as keys and nearest nitrogen
-            flasks as values.
-    """
-    vessels = graph.nodes()
-    nitrogen_flasks = [
-        node
-        for node in graph.nodes()
-        if (graph.nodes[node]['type'] == 'ChemputerFlask'
-            and 'chemical' in graph.nodes[node]
-            and graph.nodes[node]['chemical'].lower() in [
-                'nitrogen', 'argon', 'n2', 'ar'])
-    ]
-    inert_gas_map = {}
-    for vessel in vessels:
-        shortest_path_found = 100000
-        closest_nitrogen_flask = None
-        for nitrogen_flask in nitrogen_flasks:
-            try:
-                shortest_path_to_nitrogen_flask = shortest_path_length(
-                    graph, source=nitrogen_flask, target=vessel)
-                if shortest_path_to_nitrogen_flask < shortest_path_found:
-                    shortest_path_found = shortest_path_to_nitrogen_flask
-                    closest_nitrogen_flask = nitrogen_flask
-            except NetworkXNoPath:
-                pass
-
-        inert_gas_map[vessel] = closest_nitrogen_flask
-    return inert_gas_map
-
 def get_unused_valve_port(valve_node: str, graph: MultiDiGraph) -> int:
     """Given a valve, return a position where the valve isn't connected to
     anything.

@@ -4,8 +4,15 @@ from ..steps_utility import (
     StartStir, StopStir, Wait, HeatChillToTemp, HeatChillReturnToRT)
 from ..steps_base import CMove
 from .dry import Dry
-from .....utils.errors import XDLError
-from ...utils.execution import get_neighboring_vacuum
+from .....utils.misc import SanityCheck
+from ...utils.execution import (
+    get_vacuum_configuration,
+    get_nearest_node,
+    get_reagent_vessel,
+    get_heater_chiller,
+    get_vessel_type,
+)
+from .....constants import CHEMPUTER_WASTE
 
 class CleanVessel(AbstractStep):
     """Clean given vessel with given solvent.
@@ -29,6 +36,36 @@ class CleanVessel(AbstractStep):
         'stir_speed': '500 RPM',
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'solvent': str,
+        'stir_time': float,
+        'stir_speed': float,
+        'temp': float,
+        'dry': bool,
+        'volume': float,
+        'cleans': int,
+        'solvent_vessel': str,
+        'waste_vessel': str,
+        'vacuum': str,
+        'vessel_type': str,
+        'heater': str,
+        'chiller': str
+    }
+
+    INTERNAL_PROPS = [
+        'solvent_vessel',
+        'waste_vessel',
+        'vacuum',
+        'vessel_type',
+        'heater',
+        'chiller',
+    ]
+
+    #: Fraction of vessel max volume to use as solvent volume in CleanVessel
+    # step.
+    CLEAN_VESSEL_VOLUME_FRACTION: float = 0.5
+
     def __init__(
         self,
         vessel: str,
@@ -36,9 +73,11 @@ class CleanVessel(AbstractStep):
         stir_time: Optional[float] = 'default',
         stir_speed: Optional[float] = 'default',
         temp: Optional[float] = None,
-        dry: Optional[bool] = True,
+        dry: Optional[bool] = False,
         volume: Optional[float] = None,
         cleans: Optional[int] = 2,
+
+        # Internal properties
         solvent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
@@ -49,51 +88,69 @@ class CleanVessel(AbstractStep):
     ) -> None:
         super().__init__(locals())
 
-    def final_sanity_check(self, graph):
-        try:
-            assert self.solvent_vessel
-        except AssertionError:
-            raise XDLError(
-                f'No solvent vessel found in graph for {self.solvent}')
-
-        try:
-            assert self.waste_vessel
-        except AssertionError:
-            raise XDLError(
-                f'No waste vessel found for "{self.vessel}".')
-
-        try:
-            assert self.cleans > 0
-        except AssertionError:
-            raise XDLError(
-                f'`cleans` property must be > 0. {self.cleans} is an invalid\
- value.')
-
-        try:
-            assert self.volume and self.volume > 0
-        except AssertionError:
-            raise XDLError(
-                f'`volume` must be > 0. {self.volume} is an invalid value.')
-
     def on_prepare_for_execution(self, graph):
+
+        if self.volume is None:
+            self.volume = (
+                graph.nodes[self.vessel]['max_volume']
+                * self.CLEAN_VESSEL_VOLUME_FRACTION
+            )
+
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
+
+        self.heater, self.chiller = get_heater_chiller(graph, self.vessel)
+
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.vessel, CHEMPUTER_WASTE)
+
+        if not self.solvent_vessel:
+            self.solvent_vessel = get_reagent_vessel(graph, self.solvent)
+
+        vacuum_info = get_vacuum_configuration(graph, self.vessel)
+        if vacuum_info['source']:
+            self.dry = True
+            if not self.vacuum:
+                self.vacuum = vacuum_info['source']
+
         for node in graph.nodes():
             if graph.nodes[node]['class'] == 'ChemputerFlask':
                 if graph.nodes[node]['chemical'] == self.solvent:
                     self.solvent_vessel = node
                     break
-        self.check_for_vacuum_pump(graph)
         self.check_for_heater()
-
-    def check_for_vacuum_pump(self, graph):
-        if self.dry and not self.vessel_type == 'rotavap':
-            if not get_neighboring_vacuum(graph, self.vessel):
-                self.dry = False
 
     def check_for_heater(self):
         if (self.temp is not None
             and not (self.heater or self.chiller
                      or self.vessel_type == 'rotavap')):
             self.temp = None
+
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.solvent_vessel,
+                error_msg=f'No solvent vessel found in graph for {self.solvent}'
+            ),
+
+            SanityCheck(
+                condition=self.waste_vessel,
+                error_msg=f'No waste vessel found for "{self.vessel}".'
+            ),
+
+            SanityCheck(
+                condition=self.cleans > 0,
+                error_msg=f'`cleans` property must be > 0. {self.cleans} is an\
+ invalid value.'
+            ),
+
+            SanityCheck(
+                condition=self.volume and self.volume > 0,
+                error_msg=f'`volume` must be > 0. {self.volume} is an invalid\
+ value.'
+            ),
+        ]
 
     def get_steps(self):
         steps = []

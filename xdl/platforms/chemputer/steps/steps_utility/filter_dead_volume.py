@@ -3,7 +3,9 @@ from typing import Optional, List, Dict, Any, Union
 from ..utils import get_vacuum_valve_reconnect_steps
 from .....step_utils.base_steps import AbstractStep, Step
 from ..steps_base import CMove
-from .....constants import BOTTOM_PORT
+from .....constants import BOTTOM_PORT, CHEMPUTER_WASTE
+from ...utils.execution import (
+    get_nearest_node, get_reagent_vessel, get_vacuum_configuration)
 
 class AddFilterDeadVolume(AbstractStep):
     """Fill bottom of filter vessel with solvent in anticipation of the filter
@@ -23,11 +25,35 @@ class AddFilterDeadVolume(AbstractStep):
         valve_unused_port (str): Given internally. Random unused position on
             valve.
     """
+
+    INTERNAL_PROPS = [
+        'waste_vessel',
+        'solvent_vessel',
+        'vacuum',
+        'inert_gas',
+        'vacuum_valve',
+        'valve_unused_port',
+    ]
+
+    PROP_TYPES = {
+        'filter_vessel': str,
+        'solvent': str,
+        'volume': float,
+        'waste_vessel': str,
+        'solvent_vessel': str,
+        'vacuum': str,
+        'inert_gas': str,
+        'vacuum_valve': str,
+        'valve_unused_port': Union[str, int]
+    }
+
     def __init__(
         self,
         filter_vessel: str,
         solvent: str,
         volume: float,
+
+        # Internal properties
         waste_vessel: Optional[str] = None,
         solvent_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
@@ -37,6 +63,24 @@ class AddFilterDeadVolume(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.filter_vessel, CHEMPUTER_WASTE)
+
+        if not self.solvent_vessel:
+            self.solvent_vessel = get_reagent_vessel(graph, self.solvent)
+
+        vacuum_info = get_vacuum_configuration(graph, self.filter_vessel)
+        if not self.vacuum:
+            self.vacuum = vacuum_info['source']
+        if not self.inert_gas:
+            self.inert_gas = vacuum_info['valve_inert_gas']
+        if not self.vacuum_valve:
+            self.vacuum_valve = vacuum_info['valve']
+        if not self.valve_unused_port:
+            self.valve_unused_port = vacuum_info['valve_unused_port']
 
     def get_steps(self) -> List[Step]:
         steps = [CMove(from_vessel=self.solvent_vessel,
@@ -75,10 +119,29 @@ class RemoveFilterDeadVolume(AbstractStep):
         valve_unused_port (str): Given internally. Random unused position on
             valve.
     """
+
+    INTERNAL_PROPS = [
+        'waste_vessel',
+        'vacuum',
+        'vacuum_valve',
+        'valve_unused_port'
+    ]
+
+    PROP_TYPES = {
+        'filter_vessel': str,
+        'dead_volume': float,
+        'waste_vessel': str,
+        'vacuum': str,
+        'vacuum_valve': str,
+        'valve_unused_port': Union[str, int]
+    }
+
     def __init__(
         self,
         filter_vessel: str,
         dead_volume: Optional[float] = 0,
+
+        # Internal properties
         waste_vessel: Optional[str] = None,
         vacuum: Optional[str] = None,
         vacuum_valve: Optional[str] = None,
@@ -86,6 +149,18 @@ class RemoveFilterDeadVolume(AbstractStep):
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        self.waste_vessel = get_nearest_node(
+            graph, self.filter_vessel, CHEMPUTER_WASTE)
+
+        vacuum_info = get_vacuum_configuration(graph, self.filter_vessel)
+        if not self.vacuum:
+            self.vacuum = vacuum_info['source']
+        if not self.vacuum_valve:
+            self.vacuum_valve = vacuum_info['valve']
+        if not self.valve_unused_port:
+            self.valve_unused_port = vacuum_info['valve_unused_port']
 
     def get_steps(self) -> List[Step]:
         steps = [CMove(from_vessel=self.filter_vessel,

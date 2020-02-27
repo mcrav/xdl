@@ -17,6 +17,19 @@ class Reagent(XDLBase):
             what solvent to use in CleanBackbone steps.
         cas (int, optional): Defaults to None. CAS number of reagent as int.
     """
+
+    PROP_TYPES = {
+        'id': str,
+        'cleaning_solvent': str,
+        'use_for_cleaning': str,
+        'stir': bool,
+        'cas': int,
+        'temp': float,
+        'role': str,
+        'last_minute_addition': str,
+        'last_minute_addition_volume': float,
+    }
+
     def __init__(
         self,
         id: str,

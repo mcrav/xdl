@@ -9,7 +9,15 @@ from .....constants import (
     DEFAULT_VISCOUS_ASPIRATION_SPEED,
 )
 from .....localisation import HUMAN_READABLE_STEPS
-from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
+from .....constants import CHEMPUTER_WASTE
+from ...utils.execution import (
+    get_nearest_node,
+    get_reagent_vessel,
+    get_flush_tube_vessel,
+    get_cartridge,
+    get_vessel_type,
+)
 
 class Add(AbstractStep):
     """Add given volume of given reagent to given vessel.
@@ -63,6 +71,41 @@ class Add(AbstractStep):
         'anticlogging_reagent_volume': '10 mL',
     }
 
+    PROP_TYPES = {
+        'reagent': str,
+        'vessel': str,
+        'volume': float,
+        'mass': float,
+        'port': str,
+        'through': str,
+        'move_speed': float,
+        'aspiration_speed': float,
+        'dispense_speed': float,
+        'viscous': bool,
+        'time': float,
+        'stir': bool,
+        'stir_speed': float,
+        'anticlogging': bool,
+        'anticlogging_solvent': str,
+        'anticlogging_solvent_volume': float,
+        'anticlogging_reagent_volume': float,
+        'through_cartridge': str,
+        'reagent_vessel': str,
+        'waste_vessel': str,
+        'flush_tube_vessel': str,
+        'vessel_type': str,
+        'anticlogging_solvent_vessel': str
+    }
+
+    INTERNAL_PROPS = [
+        'through_cartridge',
+        'reagent_vessel',
+        'waste_vessel',
+        'flush_tube_vessel',
+        'vessel_type',
+        'anticlogging_solvent_vessel',
+    ]
+
     def __init__(
         self,
         reagent: str,
@@ -78,21 +121,43 @@ class Add(AbstractStep):
         time: Optional[float] = None,
         stir: Optional[bool] = False,
         stir_speed: Optional[float] = 'default',
-        through_cartridge: Optional[str] = None,
 
         anticlogging: Optional[bool] = 'default',
         anticlogging_solvent: Optional[str] = None,
         anticlogging_solvent_volume: Optional[float] = 'default',
         anticlogging_reagent_volume: Optional[float] = 'default',
-        anticlogging_solvent_vessel: Optional[str] = None,
 
+        # Internal properties
+        through_cartridge: Optional[str] = None,
         reagent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
         flush_tube_vessel: Optional[str] = None,
         vessel_type: Optional[str] = None,
+        anticlogging_solvent_vessel: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.vessel, CHEMPUTER_WASTE)
+
+        if not self.reagent_vessel:
+            self.reagent_vessel = get_reagent_vessel(graph, self.reagent)
+
+        if self.anticlogging_solvent and not self.anticlogging_solvent_vessel:
+            self.anticlogging_solvent_vessel = get_reagent_vessel(
+                graph, self.anticlogging_solvent)
+
+        if not self.flush_tube_vessel:
+            self.flush_tube_vessel = get_flush_tube_vessel(graph, self.vessel)
+
+        if not self.through_cartridge and self.through:
+            self.through_cartridge = get_cartridge(graph, self.through)
+
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         steps = []
@@ -203,10 +268,11 @@ class Add(AbstractStep):
             return self.volume / (self.time / 60)
         return self.dispense_speed
 
-    def final_sanity_check(self, graph):
-        try:
-            assert not self.through or self.through_cartridge
-        except AssertionError:
-            raise XDLError(
-                f'Trying to add through "{self.through}" but cannot find\
- cartridge containing {self.through}.')
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=not self.through or self.through_cartridge,
+                error_msg=f'Trying to add through "{self.through}" but cannot\
+ find cartridge containing {self.through}.'
+            )
+        ]

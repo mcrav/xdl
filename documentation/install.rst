@@ -2,8 +2,9 @@
 Installation
 ============
 
-This package has been tested with Python 3.6 and Python 3.7 on Ubuntu 18.04
-and Windows 10.
+This package is automatically tested with Python 3.6, 3.7 and 3.8 on
+Ubuntu 18.04. It is also used extensively on Windows 10 so has been manually
+tested to a degree on Windows.
 
 Install from source::
 

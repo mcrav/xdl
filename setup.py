@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name='xdl',
-    version='0.2.1',
+    version='0.3.1',
     description='Package for working with XDL (chemical descriptive language).',
     author='Matthew Craven',
     author_email='matthew.craven@glasgow.ac.uk',
@@ -20,6 +20,7 @@ setup(
             'localisation/chemputer/steps_utility/liquid_handling.txt',
             'localisation/chemputer/steps_utility/evacuate.txt',
             'localisation/chemputer/steps_utility/general.txt',
+            'localisation/chemputer/steps_utility/shutdown.txt',
             'localisation/chemputer/steps_utility/stirring.txt',
             'localisation/chemputer/steps_synthesis/heatchill.txt',
             'localisation/chemputer/steps_synthesis/clean_vessel.txt',

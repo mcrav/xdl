@@ -13,15 +13,9 @@ from ..steps_base import (
 )
 from .add import Add
 from .....constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
+from ...utils.execution import get_reagent_vessel, get_vessel_type
 
 class Dissolve(AbstractStep):
-
-    DEFAULT_PROPS = {
-        'time': '20 minutes',
-        'temp': '25°C',
-        'stir_speed': '400 RPM',
-    }
-
     """Dissolve contents of vessel in given solvent.
 
     Args:
@@ -36,6 +30,30 @@ class Dissolve(AbstractStep):
         vessel_type (str): Given internally. 'reactor', 'filter', 'rotavap',
             'flask' or 'separator'.
     """
+
+    DEFAULT_PROPS = {
+        'time': '20 minutes',
+        'temp': '25°C',
+        'stir_speed': '400 RPM',
+    }
+
+    PROP_TYPES = {
+        'vessel': str,
+        'solvent': str,
+        'volume': float,
+        'port': str,
+        'temp': float,
+        'time': float,
+        'stir_speed': float,
+        'solvent_vessel': str,
+        'vessel_type': str
+    }
+
+    INTERNAL_PROPS = [
+        'solvent_vessel',
+        'vessel_type',
+    ]
+
     def __init__(
         self,
         vessel: str,
@@ -45,11 +63,20 @@ class Dissolve(AbstractStep):
         temp: Optional[float] = 'default',
         time: Optional[float] = 'default',
         stir_speed: Optional[float] = 'default',
+
+        # Internal properties
         solvent_vessel: Optional[str] = None,
         vessel_type: Optional[str] = None,
         **kwargs,
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.solvent_vessel:
+            self.solvent_vessel = get_reagent_vessel(graph, self.solvent)
+
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
     def get_steps(self) -> List[Step]:
         if self.vessel_type == 'rotavap':

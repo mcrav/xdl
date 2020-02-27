@@ -1,10 +1,22 @@
 from typing import Optional, List
 
-from .....constants import DEFAULT_PORTS, DEFAULT_VISCOUS_ASPIRATION_SPEED
+from .....constants import (
+    DEFAULT_PORTS,
+    DEFAULT_VISCOUS_ASPIRATION_SPEED,
+)
 from .....step_utils.base_steps import AbstractStep, Step
 from ..steps_base import CMove
+from .stirring import StopStir
+from .heatchill import StopHeatChill
 from .....localisation import HUMAN_READABLE_STEPS
-from .....utils.errors import XDLError
+from .....utils.misc import SanityCheck
+from ...utils.execution import (
+    get_reagent_vessel,
+    get_cartridge,
+    get_vessel_stirrer,
+    node_in_graph,
+    get_heater_chiller,
+)
 
 class PrimePumpForAdd(AbstractStep):
     """Prime pump attached to given reagent flask in anticipation of Add step.
@@ -18,15 +30,33 @@ class PrimePumpForAdd(AbstractStep):
         'volume': '3 mL',
     }
 
+    INTERNAL_PROPS = [
+        'reagent_vessel',
+        'waste_vessel',
+    ]
+
+    PROP_TYPES = {
+        'reagent': str,
+        'volume': float,
+        'reagent_vessel': str,
+        'waste_vessel': str
+    }
+
     def __init__(
         self,
         reagent: str,
         volume: Optional[float] = 'default',
+
+        # Internal properties
         reagent_vessel: Optional[str] = None,
         waste_vessel: Optional[str] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
+
+    def on_prepare_for_execution(self, graph):
+        if not self.reagent_vessel:
+            self.reagent_vessel = get_reagent_vessel(graph, self.reagent)
 
     def get_steps(self) -> List[Step]:
         return [CMove(from_vessel=self.reagent_vessel,
@@ -59,6 +89,31 @@ class Transfer(AbstractStep):
         'viscous': False,
     }
 
+    INTERNAL_PROPS = [
+        'through_cartridge',
+        'transfer_all',
+        'from_vessel_has_stirrer',
+    ]
+
+    PROP_TYPES = {
+        'from_vessel': str,
+        'to_vessel': str,
+        'volume': float,
+        'from_port': str,
+        'to_port': str,
+        'through': str,
+        'time': float,
+        'aspiration_speed': float,
+        'move_speed': float,
+        'dispense_speed': float,
+        'viscous': bool,
+        'through_cartridge': str,
+        'transfer_all': bool,
+        'from_vessel_has_stirrer': bool,
+        'from_vessel_has_heater': bool,
+        'from_vessel_has_chiller': bool
+    }
+
     def __init__(
         self,
         from_vessel: str,
@@ -72,41 +127,16 @@ class Transfer(AbstractStep):
         move_speed: Optional[float] = 'default',
         dispense_speed: Optional[float] = 'default',
         viscous: Optional[bool] = 'default',
+
+        # Internal properties
         through_cartridge: Optional[str] = None,
+        transfer_all: Optional[bool] = False,
+        from_vessel_has_stirrer: Optional[bool] = False,
+        from_vessel_has_heater: Optional[bool] = None,
+        from_vessel_has_chiller: Optional[bool] = None,
         **kwargs
     ) -> None:
         super().__init__(locals())
-
-    def get_steps(self) -> List[Step]:
-        dispense_speed = self.get_dispense_speed()
-        aspiration_speed = self.get_aspiration_speed()
-        return [CMove(from_vessel=self.from_vessel,
-                      from_port=self.from_port,
-                      to_vessel=self.to_vessel,
-                      to_port=self.to_port,
-                      volume=self.volume,
-                      through=self.through_cartridge,
-                      aspiration_speed=aspiration_speed,
-                      move_speed=self.move_speed,
-                      dispense_speed=dispense_speed)]
-
-    def final_sanity_check(self, graph):
-        try:
-            assert self.from_vessel
-        except AssertionError:
-            raise XDLError('from_vessel must be node in graph.')
-
-        try:
-            assert self.to_vessel
-        except AssertionError:
-            raise XDLError('to_vessel must be node in graph.')
-
-        try:
-            assert not self.through or self.through_cartridge
-        except AssertionError:
-            raise XDLError(
-                f'Trying to transfer through "{self.through}" but cannot find\
- cartridge containing {self.through}.')
 
     def on_prepare_for_execution(self, graph) -> str:
         """If self.port is None, return default port for different vessel types.
@@ -114,15 +144,80 @@ class Transfer(AbstractStep):
         Returns:
             str: Vessel port to add to.
         """
-        if self.from_port in [None, ''] and self.from_vessel:
-            from_class = graph.nodes[self.from_vessel]['class']
-            if from_class in DEFAULT_PORTS:
-                self.from_port = DEFAULT_PORTS[from_class]['from']
+        if not self.through_cartridge and self.through:
+            self.through_cartridge = get_cartridge(graph, self.through)
 
         if self.to_port in [None, ''] and self.to_vessel:
             to_class = graph.nodes[self.to_vessel]['class']
             if to_class in DEFAULT_PORTS:
                 self.to_port = DEFAULT_PORTS[to_class]['to']
+
+        if get_vessel_stirrer(graph, self.from_vessel):
+            self.from_vessel_has_stirrer = True
+        else:
+            self.from_vessel_has_stirrer = False
+
+        if self.from_vessel:
+            from_class = graph.nodes[self.from_vessel]['class']
+
+            if self.from_port in [None, ''] and self.from_vessel:
+                if from_class in DEFAULT_PORTS:
+                    self.from_port = DEFAULT_PORTS[from_class]['from']
+
+            heater, chiller = get_heater_chiller(graph, self.from_vessel)
+            if self.from_vessel_has_heater is None:
+                if heater:
+                    self.from_vessel_has_heater = True
+                else:
+                    self.from_vessel_has_heater = False
+
+            if self.from_vessel_has_chiller is None:
+                if chiller:
+                    self.from_vessel_has_chiller = True
+                else:
+                    self.from_vessel_has_chiller = False
+
+    def get_steps(self) -> List[Step]:
+        dispense_speed = self.get_dispense_speed()
+        aspiration_speed = self.get_aspiration_speed()
+        steps = [CMove(from_vessel=self.from_vessel,
+                       from_port=self.from_port,
+                       to_vessel=self.to_vessel,
+                       to_port=self.to_port,
+                       volume=self.volume,
+                       through=self.through_cartridge,
+                       aspiration_speed=aspiration_speed,
+                       move_speed=self.move_speed,
+                       dispense_speed=dispense_speed)]
+
+        # Set by executor in _add_all_volumes
+        if self.transfer_all:
+            if self.from_vessel_has_stirrer:
+                steps.insert(0, StopStir(self.from_vessel))
+
+            if self.from_vessel_has_heater or self.from_vessel_has_chiller:
+                steps.append(StopHeatChill(vessel=self.from_vessel))
+
+        return steps
+
+    def sanity_checks(self, graph):
+        return [
+            SanityCheck(
+                condition=self.from_vessel and node_in_graph(
+                    graph, self.from_vessel),
+                error_msg='from_vessel must be node in graph.',
+            ),
+            SanityCheck(
+                condition=self.to_vessel and node_in_graph(
+                    graph, self.to_vessel),
+                error_msg='to_vessel must be node in graph.'
+            ),
+            SanityCheck(
+                condition=not self.through or self.through_cartridge,
+                error_msg=f'Trying to transfer through "{self.through}" but cannot find\
+ cartridge containing {self.through}.'
+            )
+        ]
 
     def get_dispense_speed(self) -> float:
         if self.time and type(self.volume) != str:

@@ -22,12 +22,11 @@ tests/unit/chempiler_output
 
 # other
 .vscode
-test.py
 chempiler_output/
 *.xdlexe
 
 # Allows
-!tests/unit/files/xdlexe_test_iso8891.xdlexe
-!tests/unit/files/xdlexe_test_missing_properties.xdlexe
-!tests/unit/files/xdlexe_test_dynamic_steps.xdlexe
-!tests/unit/files/repeat_parent.xdlexe
+!tests/chemputer/unit/files/xdlexe_test_iso8891.xdlexe
+!tests/chemputer/unit/files/xdlexe_test_missing_properties.xdlexe
+!tests/chemputer/unit/files/xdlexe_test_dynamic_steps.xdlexe
+!tests/chemputer/unit/files/repeat_parent.xdlexe

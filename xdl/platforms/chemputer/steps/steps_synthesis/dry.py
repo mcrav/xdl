@@ -1,20 +1,22 @@
 from typing import Optional, List, Dict, Any, Union
-from ..utils import get_vacuum_valve_reconnect_steps
 from .....step_utils.base_steps import Step, AbstractStep
+from ..steps_utility.vacuum import ApplyVacuum
 from ..steps_utility import (
     StopStir,
     HeatChillToTemp,
-    Wait,
-    StartVacuum,
-    StopVacuum,
-    CSetVacuumSetPoint,
 )
-from ..steps_base import CMove, CConnect, CVentVacuum
+from ..steps_base import CMove
 from .....constants import (
     BOTTOM_PORT,
     DEFAULT_DRY_WASTE_VOLUME,
-    DEFAULT_FILTER_VACUUM_PRESSURE,
-    ROOM_TEMPERATURE
+    ROOM_TEMPERATURE,
+    CHEMPUTER_WASTE,
+)
+from ...utils.execution import (
+    get_nearest_node,
+    get_vacuum_configuration,
+    get_vessel_stirrer,
+    get_vessel_type,
 )
 
 class Dry(AbstractStep):
@@ -50,6 +52,34 @@ class Dry(AbstractStep):
         'continue_heatchill': False,
     }
 
+    PROP_TYPES = {
+        'vessel': str,
+        'time': float,
+        'temp': float,
+        'waste_vessel': str,
+        'aspiration_speed': float,
+        'continue_heatchill': bool,
+        'vacuum': str,
+        'vacuum_device': str,
+        'vacuum_pressure': float,
+        'inert_gas': str,
+        'vacuum_valve': str,
+        'valve_unused_port': Union[str, int],
+        'vessel_type': str,
+        'vessel_has_stirrer': bool
+    }
+
+    INTERNAL_PROPS = [
+        'vacuum',
+        'vacuum_device',
+        'vacuum_pressure',
+        'inert_gas',
+        'vacuum_valve',
+        'valve_unused_port',
+        'vessel_type',
+        'vessel_has_stirrer',
+    ]
+
     def __init__(
         self,
         vessel: str,
@@ -57,6 +87,9 @@ class Dry(AbstractStep):
         temp: Optional[float] = None,
         waste_vessel: Optional[str] = None,
         aspiration_speed: Optional[float] = 'default',
+        continue_heatchill: Optional[bool] = 'default',
+
+        # Internal properties
         vacuum: Optional[str] = None,
         vacuum_device: Optional[str] = False,
         vacuum_pressure: Optional[float] = 'default',
@@ -65,89 +98,94 @@ class Dry(AbstractStep):
         valve_unused_port: Optional[Union[str, int]] = None,
         vessel_type: Optional[str] = None,
         vessel_has_stirrer: Optional[bool] = True,
-        continue_heatchill: Optional[bool] = 'default',
         **kwargs
     ) -> None:
         super().__init__(locals())
 
-    def get_steps(self) -> List[Step]:
-        steps = []
-        if self.vessel_has_stirrer or self.vessel_type == 'rotavap':
-            steps.append(StopStir(vessel=self.vessel))
-        # Normally vacuum is a vacuum flask, but in the case of the rotavap,
-        # the node attached to the vacuum is the rotavap itself.
-        vacuum_vessel = self.vacuum
-        from_port = None
-        if self.vessel_type == 'rotavap':
-            vacuum_vessel = self.vessel
-            from_port = 'evaporate'
-        # from_port should be None unless drying is in a filter in which case
-        # use bottom port, or for a rotavap port 'evaporate' is used.
-        if self.vessel_type == 'filter':
-            from_port = BOTTOM_PORT
+    def sanity_checks(self, graph):
+        return []
 
-        no_vacuum_device_remove_i = -2
+    def on_prepare_for_execution(self, graph):
+        if not self.waste_vessel:
+            self.waste_vessel = get_nearest_node(
+                graph, self.vessel, CHEMPUTER_WASTE)
 
-        steps.extend([
-            # Move bulk of liquid to waste.
-            CMove(from_vessel=self.vessel,
-                  from_port=from_port,
-                  to_vessel=self.waste_vessel,
-                  volume=DEFAULT_DRY_WASTE_VOLUME,
-                  aspiration_speed=self.aspiration_speed),
+        if not self.vessel_type:
+            self.vessel_type = get_vessel_type(graph, self.vessel)
 
-            StartVacuum(vessel=vacuum_vessel, pressure=self.vacuum_pressure),
-            # Connect the vacuum.
-        ])
-        # If using rotavap CConnect not needed.
-        if vacuum_vessel != self.vessel:
-            no_vacuum_device_remove_i = -3
-            steps.append(
-                CConnect(from_vessel=self.vessel,
-                         to_vessel=vacuum_vessel,
-                         from_port=from_port))
+        if get_vessel_stirrer(graph, self.vessel):
+            self.vessel_has_stirrer = True
+        else:
+            self.vessel_has_stirrer = False
 
-        steps.append(Wait(self.time))
-
-        # If vacuum is just from vacuum line not device remove Start/Stop vacuum
-        # steps.
+        vacuum_info = get_vacuum_configuration(graph, self.vessel)
+        if not self.vacuum:
+            self.vacuum = vacuum_info['source']
+        if not self.inert_gas:
+            self.inert_gas = vacuum_info['valve_inert_gas']
+        if not self.vacuum_valve:
+            self.vacuum_valve = vacuum_info['valve']
+        if not self.valve_unused_port:
+            self.valve_unused_port = vacuum_info['valve_unused_port']
         if not self.vacuum_device:
-            steps.pop(no_vacuum_device_remove_i)
+            self.vacuum_device = vacuum_info['device']
 
-        if self.temp is not None:
-            steps.insert(0, HeatChillToTemp(
+    def get_steps(self) -> List[Step]:
+        return (
+            self.get_start_heatchill_steps()
+            + self.get_stop_stir_steps()
+            + self.get_move_steps()
+            + self.get_apply_vacuum_steps()
+            + self.get_end_heatchill_steps()
+        )
+
+    def get_start_heatchill_steps(self):
+        return ([
+            HeatChillToTemp(
                 vessel=self.vessel,
                 temp=self.temp,
-                vessel_type=self.vessel_type,
-                stir=False))
-
-        if self.vessel_type not in ['rotavap'] and self.vacuum:
-            steps.extend(get_vacuum_valve_reconnect_steps(
-                inert_gas=self.inert_gas,
-                vacuum_valve=self.vacuum_valve,
-                valve_unused_port=self.valve_unused_port,
-                vessel=self.vessel))
-
-        if self.vacuum_device:
-            steps.extend([
-                StopVacuum(vessel=vacuum_vessel),
-                CVentVacuum(vessel=vacuum_vessel),
-                CSetVacuumSetPoint(
-                    vessel=vacuum_vessel,
-                    vacuum_pressure=DEFAULT_FILTER_VACUUM_PRESSURE)
-            ])
-
-        if not self.continue_heatchill and self.temp:
-            steps.append(
-                HeatChillToTemp(
-                    vessel=self.vessel,
-                    temp=ROOM_TEMPERATURE,
-                    continue_heatchill=False,
-                    stir=False
-                )
+                stir=False
             )
+        ] if self.temp is not None else [])
 
-        return steps
+    def get_stop_stir_steps(self):
+        return (
+            [StopStir(vessel=self.vessel)]
+            if self.vessel_has_stirrer or self.vessel_type == 'rotavap'
+            else []
+        )
+
+    def get_move_steps(self):
+        from_port = BOTTOM_PORT if self.vessel_type == 'filter' else None
+        return ([
+            CMove(
+                from_vessel=self.vessel,
+                from_port=from_port,
+                to_vessel=self.waste_vessel,
+                volume=DEFAULT_DRY_WASTE_VOLUME,
+                aspiration_speed=self.aspiration_speed,
+            )
+        ] if self.vessel_type == 'filter' else [])
+
+    def get_apply_vacuum_steps(self):
+        port = BOTTOM_PORT if self.vessel_type == 'filter' else None
+        return [
+            ApplyVacuum(
+                vessel=self.vessel,
+                time=self.time,
+                port=port
+            )
+        ]
+
+    def get_end_heatchill_steps(self):
+        return ([
+            HeatChillToTemp(
+                vessel=self.vessel,
+                temp=ROOM_TEMPERATURE,
+                continue_heatchill=False,
+                stir=False
+            )
+        ] if self.temp and not self.continue_heatchill else [])
 
     @property
     def requirements(self) -> Dict[str, Dict[str, Any]]:
