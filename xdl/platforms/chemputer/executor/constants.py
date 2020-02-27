@@ -15,9 +15,9 @@ from ..steps import (
     FilterThrough,
 )
 
-############
-# CLEANING #
-############
+#: Amount extra to transfer when doing Transfer(volume='all') to account for
+# material lost in tubing etc.
+TRANSFER_ALL_VOLUME_FACTOR = 1.15
 
 #: Code for generic organic reagent when determining cleaning schedules
 GENERIC_ORGANIC: int = 0

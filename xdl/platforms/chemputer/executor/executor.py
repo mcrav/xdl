@@ -62,7 +62,8 @@ from .cleaning import (
 from .constants import (
     SOLVENT_BOILING_POINTS,
     CLEAN_VESSEL_BOILING_POINT_FACTOR,
-    NON_RECURSIVE_ABSTRACT_STEPS
+    NON_RECURSIVE_ABSTRACT_STEPS,
+    TRANSFER_ALL_VOLUME_FACTOR,
 )
 from ..utils.execution import (
     get_vacuum_configuration, get_buffer_flask)
@@ -669,7 +670,11 @@ corresponding to solvent.')
             if step.volume == 'all':
                 step.transfer_all = True
                 if definite and step.from_vessel in vessel_contents:
-                    step.volume = vessel_contents[step.from_vessel].volume
+                    step.volume = (
+                        vessel_contents[step.from_vessel].volume
+                        * TRANSFER_ALL_VOLUME_FACTOR
+                    )
+
                 else:
                     try:
                         step.volume = self._graph_hardware[
