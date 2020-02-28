@@ -371,28 +371,22 @@ class XDL(object):
         Returns:
             Dict[str, float]: Dict of { reagent_name: volume_used... }
         """
-        if not isinstance(self.platform, ChemputerPlatform):
-            self.logger.info('Reagent volume prediction only supported for\
- chemputer.')
-            return {}
 
         if not self.prepared:
-            self.logger.warning(
+            raise XDLError(
                 'prepare_for_execution must be called before reagent volumes\
  can be calculated.')
-            return {}
-        reagent_volumes = {}
-        flasks = self.executor._graph_hardware.flasks
-        flask_ids = [item.id for item in flasks]
-        for step in self.base_steps:
-            if type(step) == CMove and step.from_vessel in flask_ids:
-                reagent = self.executor._graph_hardware[
-                    step.from_vessel].chemical
-                if reagent:
-                    if reagent not in reagent_volumes:
-                        reagent_volumes[reagent] = 0
-                    reagent_volumes[reagent] += step.volume
-        return reagent_volumes
+
+        reagents_consumed = {}
+        for step in self.steps:
+            step_reagents_consumed = step.reagents_consumed(
+                self.executor._graph)
+            for reagent, volume in step_reagents_consumed.items():
+                if reagent in reagents_consumed:
+                    reagents_consumed[reagent] += volume
+                else:
+                    reagents_consumed[reagent] = volume
+        return reagents_consumed
 
     def print_reagent_volumes(self) -> None:
         """Pretty print table of reagent volumes used in procedure.

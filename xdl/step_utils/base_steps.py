@@ -73,6 +73,9 @@ class Step(XDLBase):
         """
         return
 
+    def reagents_consumed(self, graph):
+        return {}
+
 class AbstractStep(Step, ABC):
     """Abstract base class for all steps that contain other steps.
     Subclasses must implement steps and human_readable, and can also override
@@ -196,6 +199,21 @@ class AbstractStep(Step, ABC):
             duration += step.duration(chempiler)
         return duration
 
+    def reagents_consumed(self, graph):
+        """Return dictionary of reagents and volumes consumed in mL like this:
+        { reagent: volume... }. Can be overridden otherwise just recursively
+        adds up volumes used by base steps.
+        """
+        reagents_consumed = {}
+        for substep in self.steps:
+            step_reagents_consumed = substep.reagents_consumed(graph)
+            for reagent, volume in step_reagents_consumed.items():
+                if reagent in reagents_consumed:
+                    reagents_consumed[reagent] += volume
+                else:
+                    reagents_consumed[reagent] = volume
+        return reagents_consumed
+
 class AbstractBaseStep(Step, ABC):
     """Abstract base class for all steps that do not contain other steps and
     instead have an execute method that takes a chempiler object.
@@ -279,6 +297,20 @@ class AbstractAsyncStep(Step):
     def kill(self):
         self._should_end = True
 
+    def reagents_consumed(self, graph):
+        """Return dictionary of reagents and volumes consumed in mL like this:
+        { reagent: volume... }. Can be overridden otherwise just recursively
+        adds up volumes used by base steps.
+        """
+        reagents_consumed = {}
+        for substep in self.children:
+            step_reagents_consumed = substep.reagents_consumed(graph)
+            for reagent, volume in step_reagents_consumed.items():
+                if reagent in reagents_consumed:
+                    reagents_consumed[reagent] += volume
+                else:
+                    reagents_consumed[reagent] = volume
+        return reagents_consumed
 
 class AbstractDynamicStep(Step):
     """Step for containing dynamic experiments in which feedback from analytical
@@ -418,6 +450,21 @@ class AbstractDynamicStep(Step):
 
     def human_readable(self, language='en'):
         return
+
+    def reagents_consumed(self, graph):
+        """Return dictionary of reagents and volumes consumed in mL like this:
+        { reagent: volume... }. Can be overridden otherwise just recursively
+        adds up volumes used by base steps.
+        """
+        reagents_consumed = {}
+        for substep in self.start_block:
+            step_reagents_consumed = substep.reagents_consumed(graph)
+            for reagent, volume in step_reagents_consumed.items():
+                if reagent in reagents_consumed:
+                    reagents_consumed[reagent] += volume
+                else:
+                    reagents_consumed[reagent] = volume
+        return reagents_consumed
 
 class UnimplementedStep(Step):
     """Abstract base class for steps that have no implementation but are
