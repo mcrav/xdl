@@ -4,6 +4,7 @@ from .....step_utils.base_steps import AbstractBaseStep
 from .....localisation import HUMAN_READABLE_STEPS
 from .....utils.errors import XDLError
 from .....utils.misc import SanityCheck
+from ...constants import CHEMPUTER_FLASK
 import datetime
 
 class Confirm(AbstractBaseStep):
@@ -339,6 +340,13 @@ class CMove(AbstractBaseStep):
             through_nodes=self.through,
             use_backbone=self.use_backbone,
         )
+
+    def reagents_consumed(self, graph):
+        reagents_consumed = {}
+        node = graph.nodes[self.from_vessel]
+        if node['class'] == CHEMPUTER_FLASK and node['chemical']:
+            reagents_consumed[node['chemical']] = self.volume
+        return reagents_consumed
 
 class CConnect(AbstractBaseStep):
     """Connect two nodes together.

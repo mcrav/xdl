@@ -166,7 +166,7 @@ VALID_PORTS = {
     'ChemputerFlask': ['0'],
     'ChemputerCartridge': ['in', 'out'],
     'ChemputerVacuum': ['0'],
-    'CommanduinoLabwareDevice': ['0']
+    'CommanduinoLabwareDevice': ['0'],
 }
 
 DEFAULT_PORTS: Dict[str, Dict[str, str]] = {
