@@ -76,6 +76,9 @@ class Step(XDLBase):
     def reagents_consumed(self, graph):
         return {}
 
+    def duration(self, graph):
+        return DEFAULT_INSTANT_DURATION
+
 class AbstractStep(Step, ABC):
     """Abstract base class for all steps that contain other steps.
     Subclasses must implement steps and human_readable, and can also override
@@ -193,10 +196,10 @@ class AbstractStep(Step, ABC):
                 base_steps.extend(self.get_base_steps(step))
         return base_steps
 
-    def duration(self, chempiler):
+    def duration(self, graph):
         duration = 0
-        for step in self.base_steps:
-            duration += step.duration(chempiler)
+        for step in self.steps:
+            duration += step.duration(graph)
         return duration
 
     def reagents_consumed(self, graph):
@@ -311,6 +314,12 @@ class AbstractAsyncStep(Step):
                 else:
                     reagents_consumed[reagent] = volume
         return reagents_consumed
+
+    def duration(self, graph):
+        duration = 0
+        for step in self.children:
+            duration += step.duration(graph)
+        return duration
 
 class AbstractDynamicStep(Step):
     """Step for containing dynamic experiments in which feedback from analytical
@@ -465,6 +474,12 @@ class AbstractDynamicStep(Step):
                 else:
                     reagents_consumed[reagent] = volume
         return reagents_consumed
+
+    def duration(self, graph):
+        duration = 0
+        for step in self.start_block:
+            duration += step.duration(graph)
+        return duration
 
 class UnimplementedStep(Step):
     """Abstract base class for steps that have no implementation but are

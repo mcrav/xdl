@@ -107,7 +107,7 @@ class CVentVacuum(ChemputerStep, AbstractBaseStep):
     def locks(self, chempiler):
         return [self.vessel], [], []
 
-    def duration(self, chempiler):
+    def duration(self, graph):
         return DEFAULT_VACUUM_VENT_WAIT_TIME
 
     def execute(self, chempiler, logger=None, level=0):

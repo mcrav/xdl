@@ -11,16 +11,6 @@ from .steps import Step, AbstractBaseStep, UnimplementedStep
 from .platforms.chemputer.steps import (
     Add,
     FilterThrough,
-    CWait,
-    CMove,
-    CSetRecordingSpeed,
-    CSeparatePhases,
-    CRotavapAutoEvaporation,
-    CRampChiller,
-    CChillerWaitForTemp,
-    CStirrerWaitForTemp,
-    CChillerSetTemp,
-    CStirrerSetTemp,
 )
 from .utils.errors import XDLError
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
@@ -285,61 +275,16 @@ class XDL(object):
         Returns:
             float: Estimated runtime of procedure in seconds.
         """
-        if not isinstance(self.platform, ChemputerPlatform):
-            self.logger.info('Estimated duration only supported for Chemputer.')
-            return -1
         if not self.prepared:
             self.logger.warning(
                 'prepare_for_execution must be called before estimated duration\
  can be calculated.')
             return
-        total_time = 0
-        temps = {}
-        heatchill_time_per_degree = 60  # seconds. Pretty random guess.
-        fallback_wait_for_temp_time = 60 * 30  # seconds. Again random guess.
-        for step in self.base_steps:
-            (step.name, step.properties, '\n')
-            time = 0
-            if type(step) == CMove:
-                rate_seconds = (step.move_speed * 60
-                                + step.aspiration_speed * 60
-                                + step.dispense_speed * 60) / 3
-                time += step.volume / rate_seconds
-            elif type(step) == CWait:
-                time += step.time
-            elif type(step) == CSetRecordingSpeed:
-                pass
-            elif type(step) == CSeparatePhases:
-                # VERY APPROXIMATE. Assumes 250 mL separation funnel and
-                # 35 mL / min move speed (defined in Chempiler
-                # 481b10a1527280fa51a2134e536211614f8108e8).
-                volume = 250
-                move_speed = 35 * 60  # mL / s
-                time += (volume / 2) / move_speed
-                if step.upper_phase_vessel != step.separation_vessel:
-                    time += (volume / 2) / move_speed
-            elif type(step) == CRotavapAutoEvaporation:
-                time += step.time_limit
-            elif type(step) == CRampChiller:
-                time += step.ramp_duration
-            # EXTREMELY APPROXIMATE. Don't know what temp is in base steps or
-            elif type(step) in [CChillerWaitForTemp, CStirrerWaitForTemp]:
-                if step.vessel in temps:
-                    abs_delta = abs(
-                        temps[step.vessel][-1] - temps[step.vessel][-2])
-                    time += abs_delta * heatchill_time_per_degree
-                else:
-                    time += fallback_wait_for_temp_time
-            elif type(step) in [CChillerSetTemp, CStirrerSetTemp]:
-                temps.setdefault(step.vessel, [25, step.temp])
-                time += 1
-            else:
-                time += 1
-            repeat = 1
-            if 'repeat' in step.properties:
-                repeat = step.repeat
-            total_time += time * repeat
-        return total_time
+
+        duration = 0
+        for step in self.steps:
+            duration += step.duration(self.executor._graph)
+        return duration
 
     def print_estimated_duration(self) -> None:
         """Format estimated duration into hours, minutes and seconds and log it

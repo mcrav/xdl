@@ -67,6 +67,6 @@ class CSeparatePhases(ChemputerStep, AbstractBaseStep):
         ]
         return [vessel_locks], [], []
 
-    def duration(self, chempiler):
-        # 30 is abitrary atm
-        return 30 * chempiler[self.separation_vessel]['current_volume']
+    def duration(self, graph):
+        # 30 * 60 is abitrary atm
+        return 30 * 60

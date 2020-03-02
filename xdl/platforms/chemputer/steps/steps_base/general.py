@@ -5,8 +5,11 @@ from ..base_step import ChemputerStep
 from ...localisation import HUMAN_READABLE_STEPS
 from .....utils.errors import XDLError
 from .....utils.misc import SanityCheck
-from ...constants import CHEMPUTER_FLASK
+from ...utils.execution import get_backbone
+from ...constants import CHEMPUTER_FLASK, CHEMPUTER_PUMP
 import datetime
+from networkx import all_simple_paths
+import math
 
 class Confirm(ChemputerStep, AbstractBaseStep):
     """Get the user to confirm something before execution continues.
@@ -78,7 +81,7 @@ class CWait(ChemputerStep, AbstractBaseStep):
     def locks(self, chempiler):
         return [], [], []
 
-    def duration(self, chempiler):
+    def duration(self, graph):
         return self.time
 
 class CWaitUntil(ChemputerStep, AbstractBaseStep):
@@ -225,8 +228,8 @@ class CWaitUntil(ChemputerStep, AbstractBaseStep):
     def locks(self, chempiler):
         return [], [], []
 
-    def duration(self, chempiler):
-        return self.time_diff
+    def duration(self, graph):
+        return self.get_wait_time()
 
     def human_readable(self, language='en') -> str:
         props = self.formatted_properties()
@@ -317,7 +320,52 @@ class CMove(ChemputerStep, AbstractBaseStep):
         )
         return True
 
-    def duration(self, chempiler):
+    def duration(self, graph):
+        pump_max_vol = [
+            data
+            for _, data in graph.nodes(data=True)
+            if data['class'] == CHEMPUTER_PUMP
+        ][0]['max_volume']
+        backbone = get_backbone(graph)
+        paths = list(all_simple_paths(graph, self.from_vessel, self.to_vessel))
+        paths = [
+            path
+            for path in paths
+            if any([item for item in path if item in backbone])
+        ]
+        if paths:
+            n_backbone_valves = len([
+                node
+                for node in paths[0]
+                if node in backbone
+            ])
+
+            n_pump_volumes = math.ceil(self.volume / pump_max_vol)
+
+            if n_pump_volumes > 1:
+
+                expected_pump_step_groups = (
+                    (n_backbone_valves - 1)
+                    / (2 * (n_pump_volumes - 1))
+                )
+
+                pump_time_in_ml = (
+                    ((expected_pump_step_groups - 1) * pump_max_vol)
+                    + (self.volume % pump_max_vol)
+                )
+
+                return (
+                    pump_time_in_ml
+                    / min([
+                        self.move_speed,
+                        self.aspiration_speed,
+                        self.dispense_speed
+                    ])
+                )
+
+        return 0
+
+    def duration_accurate(self, chempiler):
         return chempiler.move_duration(
             src=self.from_vessel,
             dest=self.to_vessel,

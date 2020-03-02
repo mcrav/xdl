@@ -151,8 +151,8 @@ class CStirrerWaitForTemp(ChemputerStep, AbstractBaseStep):
     def locks(self, chempiler):
         return [], [self.vessel], []
 
-    def duration(self, chempiler):
-        return 2  # arbitrary value for the moment
+    def duration(self, graph):
+        return 60 * 60  # arbitrary value for the moment
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.stirrer.wait_for_temp(self.vessel)
