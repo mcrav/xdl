@@ -2,7 +2,7 @@ from typing import List
 from lxml import etree
 from ..reagents import Reagent
 from ..hardware import Hardware
-from ..steps import Step
+from ..step_utils import Step
 from ..constants import XDL_VERSION
 from .constants import ALWAYS_WRITE
 from ..utils.misc import format_property

@@ -4,7 +4,7 @@ from lxml import etree
 from .validation import check_attrs_are_valid
 from ..constants import SYNTHESIS_ATTRS
 from ..utils import parse_bool, XDLError, raise_error
-from ..steps import Step, AbstractBaseStep
+from ..step_utils import Step, AbstractBaseStep
 from ..reagents import Reagent
 from ..hardware import Hardware, Component
 
