@@ -108,6 +108,10 @@ class WashSolid(ChemputerStep, AbstractStep):
         'filter_dead_volume',
     ]
 
+    ALWAYS_WRITE = [
+        'volume',
+    ]
+
     def __init__(
         self,
         vessel: str,

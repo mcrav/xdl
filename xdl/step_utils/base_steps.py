@@ -24,6 +24,7 @@ class Step(XDLBase):
     #: Set to True if mass/volume of step shouldn't be scaled when the
     # rest of the procedure is scaled.
     DO_NOT_SCALE: bool = False
+    ALWAYS_WRITE: List[str] = []
     localisation: Dict[str, str] = {}
 
     def __init__(self, param_dict):
