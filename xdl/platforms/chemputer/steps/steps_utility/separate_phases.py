@@ -475,3 +475,12 @@ Please check the appropriate log files for conductivity sensor readings.\
 
         else:
             self.readings = [reading]
+
+    def duration(self, graph):
+        time = 0
+        volume = 250
+        move_speed = 35 * 60  # mL / s
+        time += (volume / 2) / move_speed
+        if self.upper_phase_vessel != self.separation_vessel:
+            time += (volume / 2) / move_speed
+        return time

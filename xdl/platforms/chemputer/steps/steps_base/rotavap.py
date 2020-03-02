@@ -109,7 +109,7 @@ class CRotavapLiftUp(ChemputerStep, AbstractBaseStep):
     def locks(self, ):
         return [self.rotavap_name], [], []
 
-    def duration(self, chempiler):
+    def duration(self, graph):
         return DEFAULT_ROTAVAP_WAIT_FOR_ARM_TIME
 
     def execute(self, chempiler, logger=None, level=0):
@@ -134,7 +134,7 @@ class CRotavapLiftDown(ChemputerStep, AbstractBaseStep):
     def locks(self, ):
         return [self.rotavap_name], [], []
 
-    def duration(self, chempiler):
+    def duration(self, graph):
         return DEFAULT_ROTAVAP_WAIT_FOR_ARM_TIME
 
     def execute(self, chempiler, logger=None, level=0):
@@ -282,5 +282,5 @@ class CRotavapAutoEvaporation(ChemputerStep, AbstractBaseStep):
     def locks(self, chempiler):
         return [self.rotavap_name], [], []
 
-    def duration(self, chempiler):
+    def duration(self, graph):
         return self.time_limit

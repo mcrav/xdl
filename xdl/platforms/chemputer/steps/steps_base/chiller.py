@@ -88,8 +88,8 @@ class CChillerWaitForTemp(ChemputerStep, AbstractBaseStep):
     def locks(self, chempiler):
         return [self.vessel], [], []
 
-    def duration(self, chempiler):
-        return 2 * 60  # arbitrary value given for the moment
+    def duration(self, graph):
+        return 60 * 60  # arbitrary value given for the moment
 
     def execute(self, chempiler, logger=None, level=0):
         chempiler.chiller.wait_for_temp(self.vessel)
@@ -128,7 +128,7 @@ class CRampChiller(ChemputerStep, AbstractBaseStep):
             self.vessel, self.ramp_duration, self.end_temperature)
         return True
 
-    def duration(self, chempiler):
+    def duration(self, graph):
         return self.ramp_duration
 
 class CSetCoolingPower(ChemputerStep, AbstractBaseStep):
