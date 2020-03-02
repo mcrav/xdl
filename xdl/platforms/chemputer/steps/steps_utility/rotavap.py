@@ -1,6 +1,7 @@
 from typing import Optional, List, Dict, Any
 
 from .....step_utils.base_steps import AbstractStep, Step
+from ..base_step import ChemputerStep
 from ..steps_base import (
     CRotavapSetRotationSpeed,
     CRotavapStartRotation,
@@ -16,7 +17,7 @@ from ..steps_base import (
 )
 from .general import Wait
 
-class RotavapStartRotation(AbstractStep):
+class RotavapStartRotation(ChemputerStep, AbstractStep):
     """Start stirring given vessel.
 
     Args:
@@ -57,7 +58,7 @@ class RotavapStartRotation(AbstractStep):
             }
         }
 
-class RotavapStopRotation(AbstractStep):
+class RotavapStopRotation(ChemputerStep, AbstractStep):
     """Stop stirring given vessel.
 
     Args:
@@ -84,7 +85,7 @@ class RotavapStopRotation(AbstractStep):
             }
         }
 
-class RotavapStir(AbstractStep):
+class RotavapStir(ChemputerStep, AbstractStep):
     """Stir given vessel for given time at room temperature.
 
     Args:
@@ -139,7 +140,7 @@ class RotavapStir(AbstractStep):
             }
         }
 
-class RotavapStopEverything(AbstractStep):
+class RotavapStopEverything(ChemputerStep, AbstractStep):
     """Stop vacuum, lift rotavap flask up, vent vacuum, stop heater and stop
     rotation.
 
@@ -171,7 +172,7 @@ class RotavapStopEverything(AbstractStep):
             }
         }
 
-class RotavapStartVacuum(AbstractStep):
+class RotavapStartVacuum(ChemputerStep, AbstractStep):
     """Start vacuum at given pressure.
 
     Args:
@@ -201,7 +202,7 @@ class RotavapStartVacuum(AbstractStep):
             }
         }
 
-class RotavapHeatToTemp(AbstractStep):
+class RotavapHeatToTemp(ChemputerStep, AbstractStep):
     """Set rotavap temperature to given temp and start heater.
 
     Args:

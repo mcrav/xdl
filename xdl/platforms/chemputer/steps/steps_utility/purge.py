@@ -2,6 +2,7 @@ from ..steps_utility.pneumatic_controller import SwitchArgon
 from .general import Wait
 from ..steps_base import CConnect, CValveMoveToPosition
 from .....step_utils.base_steps import AbstractStep
+from ..base_step import ChemputerStep
 from .....constants import INERT_GAS_SYNONYMS
 from .....utils.misc import SanityCheck
 from ..steps_utility.cleaning import CleanBackbone
@@ -9,7 +10,7 @@ from ...utils.execution import (
     get_vacuum_configuration, get_pneumatic_controller, node_in_graph
 )
 
-class StartPurge(AbstractStep):
+class StartPurge(ChemputerStep, AbstractStep):
 
     INTERNAL_PROPS = [
         'pneumatic_controller',
@@ -70,7 +71,7 @@ class StartPurge(AbstractStep):
         else:
             return []
 
-class StopPurge(AbstractStep):
+class StopPurge(ChemputerStep, AbstractStep):
 
     INTERNAL_PROPS = [
         'pneumatic_controller',
@@ -148,7 +149,7 @@ class StopPurge(AbstractStep):
         else:
             return []
 
-class Purge(AbstractStep):
+class Purge(ChemputerStep, AbstractStep):
 
     DEFAULT_PROPS = {
         'time': '5 minutes',
@@ -189,7 +190,7 @@ class Purge(AbstractStep):
             StopPurge(vessel=self.vessel)
         ]
 
-class PurgeBackbone(AbstractStep):
+class PurgeBackbone(ChemputerStep, AbstractStep):
 
     PROP_TYPES = {
         'purge_gas': str

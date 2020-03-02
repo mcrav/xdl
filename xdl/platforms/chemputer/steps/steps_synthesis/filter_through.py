@@ -2,14 +2,15 @@ from typing import Optional, List
 import math
 from .clean_vessel import CleanVessel
 from .....step_utils.base_steps import Step, AbstractStep
+from ..base_step import ChemputerStep
 from ..steps_utility import Transfer
 from .....step_utils.special_steps import Repeat
-from .....localisation import HUMAN_READABLE_STEPS
+from ...localisation import HUMAN_READABLE_STEPS
 from .....utils.misc import SanityCheck
 from ...utils.execution import (
     get_reagent_vessel, get_flush_tube_vessel, get_cartridge, get_buffer_flask)
 
-class FilterThrough(AbstractStep):
+class FilterThrough(ChemputerStep, AbstractStep):
     """Filter contents of from_vessel through a cartridge,
     e.g. a Celite cartridge, and optionally elute with a solvent as well.
 

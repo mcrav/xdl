@@ -1,10 +1,11 @@
 from typing import Optional, List
 from .....step_utils.base_steps import Step, AbstractStep
+from ..base_step import ChemputerStep
 from ..steps_utility import Transfer
 from ..steps_base import CStir, CStopStir
 from ...utils.execution import get_reagent_vessel
 
-class AddCorrosive(AbstractStep):
+class AddCorrosive(ChemputerStep, AbstractStep):
     """Add corrosive reagent that can't come into contact with a valve.
 
     Args:

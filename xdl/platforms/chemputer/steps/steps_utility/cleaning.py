@@ -1,10 +1,11 @@
 from typing import Optional, List
 from .....step_utils import AbstractStep, Step
+from ..base_step import ChemputerStep
 from ..steps_base import CMove
 from ...constants import DEFAULT_CLEAN_BACKBONE_VOLUME
 from ...utils.execution import get_reagent_vessel
 
-class CleanBackbone(AbstractStep):
+class CleanBackbone(ChemputerStep, AbstractStep):
 
     INTERNAL_PROPS = [
         'waste_vessels',

@@ -1,6 +1,7 @@
 from typing import Optional, List, Dict, Any
 
 from .....step_utils.base_steps import AbstractStep, Step
+from ..base_step import ChemputerStep
 from ...constants import (
     CHILLER_MIN_TEMP,
     CHILLER_MAX_TEMP,
@@ -31,7 +32,7 @@ from ...constants import (
 )
 from .....constants import ROOM_TEMPERATURE
 from .....utils.misc import SanityCheck
-from .....localisation import HUMAN_READABLE_STEPS
+from ...localisation import HUMAN_READABLE_STEPS
 from ...utils.execution import get_heater_chiller, get_vessel_type
 
 def heater_chiller_sanity_checks(heater, chiller, temp):
@@ -70,7 +71,7 @@ def heater_chiller_sanity_checks(heater, chiller, temp):
     )
     return checks
 
-class StartHeatChill(AbstractStep):
+class StartHeatChill(ChemputerStep, AbstractStep):
     """Start heating/chilling vessel to given temp and leave heater/chiller on.
     Don't wait to reach temp.
 
@@ -173,7 +174,7 @@ class StartHeatChill(AbstractStep):
             }
         }
 
-class HeatChillSetTemp(AbstractStep):
+class HeatChillSetTemp(ChemputerStep, AbstractStep):
     """Set temp on heater/chiller.
 
     Args:
@@ -248,7 +249,7 @@ class HeatChillSetTemp(AbstractStep):
             }
         }
 
-class HeatChillToTemp(AbstractStep):
+class HeatChillToTemp(ChemputerStep, AbstractStep):
     """Heat/Chill vessel to given temp.
 
     Args:
@@ -409,7 +410,7 @@ class HeatChillToTemp(AbstractStep):
             }
         }
 
-class StopHeatChill(AbstractStep):
+class StopHeatChill(ChemputerStep, AbstractStep):
     """Stop heater/chiller on given vessel..
 
     Args:
@@ -470,7 +471,7 @@ class StopHeatChill(AbstractStep):
             }
         }
 
-class HeatChillReturnToRT(AbstractStep):
+class HeatChillReturnToRT(ChemputerStep, AbstractStep):
     """Let heater/chiller return to room temperatre and then stop
     heating/chilling.
 
@@ -553,7 +554,7 @@ class HeatChillReturnToRT(AbstractStep):
             }
         }
 
-class StirrerReturnToRT(AbstractStep):
+class StirrerReturnToRT(ChemputerStep, AbstractStep):
 
     DEFAULT_PROPS = {
         'wait_recording_speed': 2000,
@@ -583,7 +584,7 @@ class StirrerReturnToRT(AbstractStep):
             CSetRecordingSpeed(self.after_recording_speed),
         ]
 
-class ChillerReturnToRT(AbstractStep):
+class ChillerReturnToRT(ChemputerStep, AbstractStep):
 
     DEFAULT_PROPS = {
         'wait_recording_speed': 2000,

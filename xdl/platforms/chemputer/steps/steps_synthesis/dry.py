@@ -1,5 +1,6 @@
 from typing import Optional, List, Dict, Any, Union
 from .....step_utils.base_steps import Step, AbstractStep
+from ..base_step import ChemputerStep
 from ..steps_utility.vacuum import ApplyVacuum
 from ..steps_utility import (
     StopStir,
@@ -19,7 +20,7 @@ from ...utils.execution import (
     get_vessel_type,
 )
 
-class Dry(AbstractStep):
+class Dry(ChemputerStep, AbstractStep):
     """Dry given vessel by applying vacuum for given time.
 
     Args:

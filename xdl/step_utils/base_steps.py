@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from ..utils import XDLBase
 from ..constants import DEFAULT_INSTANT_DURATION
 import logging
@@ -8,7 +8,6 @@ from abc import ABC, abstractmethod
 from ..utils.misc import format_property, SanityCheck
 from ..utils.graph import get_graph
 from ..utils.errors import XDLError
-from ..localisation import HUMAN_READABLE_STEPS
 from networkx import MultiDiGraph
 
 if False:
@@ -25,6 +24,7 @@ class Step(XDLBase):
     #: Set to True if mass/volume of step shouldn't be scaled when the
     # rest of the procedure is scaled.
     DO_NOT_SCALE: bool = False
+    localisation: Dict[str, str] = {}
 
     def __init__(self, param_dict):
         super().__init__(param_dict)
@@ -41,10 +41,10 @@ class Step(XDLBase):
         return formatted_props
 
     def human_readable(self, language='en'):
-        if self.name in HUMAN_READABLE_STEPS:
-            step_human_readables = HUMAN_READABLE_STEPS[self.name]
+        if self.name in self.localisation:
+            step_human_readables = self.localisation[self.name]
             if language in step_human_readables:
-                human_readable = HUMAN_READABLE_STEPS[
+                human_readable = self.localisation[
                     self.name][language].format(**self.formatted_properties())
             else:
                 human_readable = self.name

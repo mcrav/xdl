@@ -1,8 +1,9 @@
 from .....step_utils.base_steps import AbstractStep
+from ..base_step import ChemputerStep
 from .heatchill import HeatChill
 from .dissolve import Dissolve
 
-class Recrystallize(AbstractStep):
+class Recrystallize(ChemputerStep, AbstractStep):
 
     DEFAULT_PROPS = {
         'time': '2 hrs',

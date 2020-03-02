@@ -1,13 +1,14 @@
 from typing import Optional
 from logging import Logger
 from .....step_utils.base_steps import AbstractBaseStep
-from .....localisation import HUMAN_READABLE_STEPS
+from ..base_step import ChemputerStep
+from ...localisation import HUMAN_READABLE_STEPS
 from .....utils.errors import XDLError
 from .....utils.misc import SanityCheck
 from ...constants import CHEMPUTER_FLASK
 import datetime
 
-class Confirm(AbstractBaseStep):
+class Confirm(ChemputerStep, AbstractBaseStep):
     """Get the user to confirm something before execution continues.
 
     Args:
@@ -32,7 +33,7 @@ class Confirm(AbstractBaseStep):
             return True
         return False
 
-class CSetRecordingSpeed(AbstractBaseStep):
+class CSetRecordingSpeed(ChemputerStep, AbstractBaseStep):
     """Sets the timelapse speed of the camera module.
 
     Args:
@@ -54,7 +55,7 @@ class CSetRecordingSpeed(AbstractBaseStep):
         chempiler.camera.change_recording_speed(self.recording_speed)
         return True
 
-class CWait(AbstractBaseStep):
+class CWait(ChemputerStep, AbstractBaseStep):
     """Delays execution of the script for a set amount of time. This command
     will immediately reply with an estimate of when the waiting will be
     finished, and also give regular updates indicating that it is still alive.
@@ -80,7 +81,7 @@ class CWait(AbstractBaseStep):
     def duration(self, chempiler):
         return self.time
 
-class CWaitUntil(AbstractBaseStep):
+class CWaitUntil(ChemputerStep, AbstractBaseStep):
     """Waits until a specified start time has been reached. This command will
     immediately reply with an estimate of when the waiting will be finished,
     and also give regular updates indicating that it is still alive.
@@ -234,7 +235,7 @@ class CWaitUntil(AbstractBaseStep):
         return HUMAN_READABLE_STEPS['WaitUntil'][language].format(
             **props)
 
-class CBreakpoint(AbstractBaseStep):
+class CBreakpoint(ChemputerStep, AbstractBaseStep):
     """Introduces a breakpoint in the script. The execution is halted until the
     operator resumes it.
     """
@@ -248,7 +249,7 @@ class CBreakpoint(AbstractBaseStep):
         chempiler.breakpoint()
         return True
 
-class CMove(AbstractBaseStep):
+class CMove(ChemputerStep, AbstractBaseStep):
     """Moves a specified volume from one node in the graph to another. Moving
     from and to the same node is supported.
 
@@ -348,7 +349,7 @@ class CMove(AbstractBaseStep):
             reagents_consumed[node['chemical']] = self.volume
         return reagents_consumed
 
-class CConnect(AbstractBaseStep):
+class CConnect(ChemputerStep, AbstractBaseStep):
     """Connect two nodes together.
 
     Args:

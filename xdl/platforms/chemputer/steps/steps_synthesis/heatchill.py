@@ -1,10 +1,11 @@
 from typing import Optional, List, Dict, Any
 from .....step_utils.base_steps import Step, AbstractStep
+from ..base_step import ChemputerStep
 from ..steps_utility import (
     Wait, HeatChillToTemp, StopHeatChill, StartStir, StopStir)
 from ...utils.execution import get_vessel_type
 
-class HeatChill(AbstractStep):
+class HeatChill(ChemputerStep, AbstractStep):
     """Heat or chill vessel to given temp for given time.
 
     Args:

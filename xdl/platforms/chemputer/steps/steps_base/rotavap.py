@@ -1,9 +1,10 @@
 from typing import Optional
 
 from .....step_utils.base_steps import AbstractBaseStep
+from ..base_step import ChemputerStep
 from ...constants import DEFAULT_ROTAVAP_WAIT_FOR_ARM_TIME
 
-class CRotavapStartHeater(AbstractBaseStep):
+class CRotavapStartHeater(ChemputerStep, AbstractBaseStep):
     """Starts the heating bath of a rotary evaporator.
 
     Args:
@@ -25,7 +26,7 @@ class CRotavapStartHeater(AbstractBaseStep):
         rotavap.start_heater()
         return True
 
-class CRotavapStopHeater(AbstractBaseStep):
+class CRotavapStopHeater(ChemputerStep, AbstractBaseStep):
     """Stops the heating bath of a rotary evaporator.
 
     Args:
@@ -47,7 +48,7 @@ class CRotavapStopHeater(AbstractBaseStep):
         rotavap.stop_heater()
         return True
 
-class CRotavapStartRotation(AbstractBaseStep):
+class CRotavapStartRotation(ChemputerStep, AbstractBaseStep):
     """Starts the rotation of a rotary evaporator.
 
     Args:
@@ -69,7 +70,7 @@ class CRotavapStartRotation(AbstractBaseStep):
         rotavap.start_rotation()
         return True
 
-class CRotavapStopRotation(AbstractBaseStep):
+class CRotavapStopRotation(ChemputerStep, AbstractBaseStep):
     """Stops the rotation of a rotary evaporator.
 
     Args:
@@ -91,7 +92,7 @@ class CRotavapStopRotation(AbstractBaseStep):
         rotavap.stop_rotation()
         return True
 
-class CRotavapLiftUp(AbstractBaseStep):
+class CRotavapLiftUp(ChemputerStep, AbstractBaseStep):
     """Lifts the rotary evaporator arm up.
 
     Args:
@@ -116,7 +117,7 @@ class CRotavapLiftUp(AbstractBaseStep):
         rotavap.lift_up()
         return True
 
-class CRotavapLiftDown(AbstractBaseStep):
+class CRotavapLiftDown(ChemputerStep, AbstractBaseStep):
     """Lifts the rotary evaporator down.
 
     Args:
@@ -141,7 +142,7 @@ class CRotavapLiftDown(AbstractBaseStep):
         rotavap.lift_down()
         return True
 
-class CRotavapReset(AbstractBaseStep):
+class CRotavapReset(ChemputerStep, AbstractBaseStep):
     """
     Resets the rotary evaporator.
 
@@ -164,7 +165,7 @@ class CRotavapReset(AbstractBaseStep):
         rotavap.reset_rotavap()
         return True
 
-class CRotavapSetTemp(AbstractBaseStep):
+class CRotavapSetTemp(ChemputerStep, AbstractBaseStep):
     """Sets the temperature setpoint for the heating bath.
 
     Args:
@@ -188,7 +189,7 @@ class CRotavapSetTemp(AbstractBaseStep):
         rotavap.temperature_sp = self.temp
         return True
 
-class CRotavapSetRotationSpeed(AbstractBaseStep):
+class CRotavapSetRotationSpeed(ChemputerStep, AbstractBaseStep):
     """Sets the rotation speed setpoint for the rotary evaporator.
 
     Args:
@@ -212,7 +213,7 @@ class CRotavapSetRotationSpeed(AbstractBaseStep):
         rotavap.rotation_speed_sp = self.rotation_speed
         return True
 
-class CRotavapSetInterval(AbstractBaseStep):
+class CRotavapSetInterval(ChemputerStep, AbstractBaseStep):
     """Sets the interval time for the rotary evaporator, causing it to
     periodically switch direction. Setting this to 0 deactivates interval
     operation.
@@ -238,7 +239,7 @@ class CRotavapSetInterval(AbstractBaseStep):
         rotavap.set_interval(self.interval)
         return True
 
-class CRotavapAutoEvaporation(AbstractBaseStep):
+class CRotavapAutoEvaporation(ChemputerStep, AbstractBaseStep):
     """Perform the rotavap built-in auto-evaporation routine.
 
     Args:

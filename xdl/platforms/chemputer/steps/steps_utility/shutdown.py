@@ -8,6 +8,7 @@ from ...constants import (
     STIRRER_CLASSES
 )
 from .....step_utils import AbstractStep
+from ..base_step import ChemputerStep
 from ..steps_base import (
     CRotavapLiftUp,
     CStopChiller,
@@ -21,12 +22,12 @@ from ..steps_base import (
 
 from .....utils.graph import undirected_neighbors
 
-class Shutdown(AbstractStep):
+class Shutdown(ChemputerStep, AbstractStep):
     """XDL step to enact a Shutdown on the platform.
     Will iterate through all devices which can switch off.
 
     Inherits:
-        AbstractStep
+        AbstractStep, ChemputerStep
     """
 
     INTERNAL_PROPS = [

@@ -1,5 +1,6 @@
 from typing import Optional, List, Dict, Any
 from .....step_utils.base_steps import Step, AbstractStep
+from ..base_step import ChemputerStep
 from ..steps_utility import Wait, HeatChillToTemp, StopHeatChill
 from ..steps_base import (
     CRotavapSetRotationSpeed,
@@ -15,7 +16,7 @@ from .add import Add
 from ...constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
 from ...utils.execution import get_reagent_vessel, get_vessel_type
 
-class Dissolve(AbstractStep):
+class Dissolve(ChemputerStep, AbstractStep):
     """Dissolve contents of vessel in given solvent.
 
     Args:

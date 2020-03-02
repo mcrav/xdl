@@ -1,9 +1,10 @@
 from typing import Optional
 from .....step_utils.base_steps import AbstractStep
+from ..base_step import ChemputerStep
 from .filter_through import FilterThrough
 from ...utils.execution import get_buffer_flask
 
-class RunColumn(AbstractStep):
+class RunColumn(ChemputerStep, AbstractStep):
     """Purify using column chromatography.
 
     Args:

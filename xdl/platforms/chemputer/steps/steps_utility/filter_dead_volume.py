@@ -2,12 +2,13 @@ from typing import Optional, List, Dict, Any, Union
 
 from ..utils import get_vacuum_valve_reconnect_steps
 from .....step_utils.base_steps import AbstractStep, Step
+from ..base_step import ChemputerStep
 from ..steps_base import CMove
 from ...constants import BOTTOM_PORT, CHEMPUTER_WASTE
 from ...utils.execution import (
     get_nearest_node, get_reagent_vessel, get_vacuum_configuration)
 
-class AddFilterDeadVolume(AbstractStep):
+class AddFilterDeadVolume(ChemputerStep, AbstractStep):
     """Fill bottom of filter vessel with solvent in anticipation of the filter
     top being used.
 
@@ -105,7 +106,7 @@ class AddFilterDeadVolume(AbstractStep):
             }
         }
 
-class RemoveFilterDeadVolume(AbstractStep):
+class RemoveFilterDeadVolume(ChemputerStep, AbstractStep):
     """Remove dead volume (volume below filter) from filter vessel.
 
     Args:

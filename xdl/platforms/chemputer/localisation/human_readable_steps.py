@@ -32,9 +32,9 @@ def read_localisation_file(f):
     return step_localisations
 
 def load_localisations():
-    steps_utility = os.path.join(HERE, 'chemputer', 'steps_utility')
-    steps_synthesis = os.path.join(HERE, 'chemputer', 'steps_synthesis')
-    steps_base = os.path.join(HERE, 'chemputer', 'steps_base')
+    steps_utility = os.path.join(HERE, 'steps_utility')
+    steps_synthesis = os.path.join(HERE, 'steps_synthesis')
+    steps_base = os.path.join(HERE, 'steps_base')
 
     localisations = []
     for folder in [steps_utility, steps_synthesis, steps_base]:
@@ -44,7 +44,7 @@ def load_localisations():
 
     localisations.extend(
         read_localisation_file(
-            os.path.join(HERE, 'chemputer', 'unimplemented_steps.txt')))
+            os.path.join(HERE, 'unimplemented_steps.txt')))
     localisations.extend(
         read_localisation_file(os.path.join(HERE, 'special_steps.txt')))
 

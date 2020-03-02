@@ -1,7 +1,8 @@
 from typing import Optional
 from .....step_utils.base_steps import AbstractBaseStep
+from ..base_step import ChemputerStep
 
-class CSeparatePhases(AbstractBaseStep):
+class CSeparatePhases(ChemputerStep, AbstractBaseStep):
     """
     Args:
         lower_phase_vessel (str): Name of vessel to transfer lower phase to.

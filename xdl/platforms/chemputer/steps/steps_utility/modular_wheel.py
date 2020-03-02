@@ -3,9 +3,10 @@ from .liquid_handling import Transfer
 from .....utils.misc import SanityCheck
 from ...utils.execution import node_in_graph
 from .....step_utils.base_steps import AbstractStep
+from ..base_step import ChemputerStep
 from ..steps_base.commanduino_labware import CTurnMotor
 
-class MWAddAndTurn(AbstractStep):
+class MWAddAndTurn(ChemputerStep, AbstractStep):
     """Step for transfering liquid to the modular wheel and rotating it.
 
     Args:

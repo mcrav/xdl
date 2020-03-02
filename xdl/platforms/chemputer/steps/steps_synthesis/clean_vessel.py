@@ -1,5 +1,6 @@
 from typing import Optional
 from .....step_utils.base_steps import AbstractStep
+from ..base_step import ChemputerStep
 from ..steps_utility import (
     StartStir, StopStir, Wait, HeatChillToTemp, HeatChillReturnToRT)
 from ..steps_base import CMove
@@ -14,7 +15,7 @@ from ...utils.execution import (
 )
 from ...constants import CHEMPUTER_WASTE
 
-class CleanVessel(AbstractStep):
+class CleanVessel(ChemputerStep, AbstractStep):
     """Clean given vessel with given solvent.
 
     Args:

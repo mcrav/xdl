@@ -3,12 +3,13 @@ from typing import Optional, List, Dict, Any
 from ..steps_utility import PrimePumpForAdd, Wait, StopStir, StartStir
 from ..steps_base import CMove, Confirm
 from .....step_utils.base_steps import Step, AbstractStep
+from ..base_step import ChemputerStep
 from ...constants import (
     DEFAULT_AFTER_ADD_WAIT_TIME,
     DEFAULT_AIR_FLUSH_TUBE_VOLUME,
     DEFAULT_VISCOUS_ASPIRATION_SPEED,
 )
-from .....localisation import HUMAN_READABLE_STEPS
+from ...localisation import HUMAN_READABLE_STEPS
 from .....utils.misc import SanityCheck
 from ...constants import CHEMPUTER_WASTE
 from ...utils.execution import (
@@ -19,7 +20,7 @@ from ...utils.execution import (
     get_vessel_type,
 )
 
-class Add(AbstractStep):
+class Add(ChemputerStep, AbstractStep):
     """Add given volume of given reagent to given vessel.
 
     Args:

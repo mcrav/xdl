@@ -1,6 +1,7 @@
 from .....step_utils.base_steps import AbstractBaseStep
+from ..base_step import ChemputerStep
 
-class CStartChiller(AbstractBaseStep):
+class CStartChiller(ChemputerStep, AbstractBaseStep):
     """Starts the recirculation chiller.
 
     Args:
@@ -22,7 +23,7 @@ class CStartChiller(AbstractBaseStep):
         chempiler.chiller.start_chiller(self.vessel)
         return True
 
-class CStopChiller(AbstractBaseStep):
+class CStopChiller(ChemputerStep, AbstractBaseStep):
     """Stops the recirculation chiller.
 
     Args:
@@ -44,7 +45,7 @@ class CStopChiller(AbstractBaseStep):
         chempiler.chiller.stop_chiller(self.vessel)
         return True
 
-class CChillerSetTemp(AbstractBaseStep):
+class CChillerSetTemp(ChemputerStep, AbstractBaseStep):
     """Sets the temperature setpoint.
 
     Args:
@@ -68,7 +69,7 @@ class CChillerSetTemp(AbstractBaseStep):
         chempiler.chiller.set_temp(self.vessel, self.temp)
         return True
 
-class CChillerWaitForTemp(AbstractBaseStep):
+class CChillerWaitForTemp(ChemputerStep, AbstractBaseStep):
     """Delays the script execution until the current temperature of the chiller
     is within 0.5°C of the setpoint.
 
@@ -94,7 +95,7 @@ class CChillerWaitForTemp(AbstractBaseStep):
         chempiler.chiller.wait_for_temp(self.vessel)
         return True
 
-class CRampChiller(AbstractBaseStep):
+class CRampChiller(ChemputerStep, AbstractBaseStep):
     """Causes the chiller to ramp the temperature up or down. Only available for
     Petite Fleur.
 
@@ -130,7 +131,7 @@ class CRampChiller(AbstractBaseStep):
     def duration(self, chempiler):
         return self.ramp_duration
 
-class CSetCoolingPower(AbstractBaseStep):
+class CSetCoolingPower(ChemputerStep, AbstractBaseStep):
     """Sets the cooling power (0-100%). Only available for CF41.
 
     Args:

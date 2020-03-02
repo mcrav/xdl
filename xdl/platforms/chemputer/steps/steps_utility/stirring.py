@@ -1,6 +1,7 @@
 from typing import Optional, Dict, Any, List
 
 from .....step_utils.base_steps import AbstractStep, Step
+from ..base_step import ChemputerStep
 from ..steps_base import (
     CStir,
     CSetStirRate,
@@ -14,7 +15,7 @@ from .rotavap import RotavapStir
 from ...constants import DEFAULT_DISSOLVE_ROTAVAP_ROTATION_SPEED
 from ...utils.execution import get_vessel_stirrer, get_vessel_type
 
-class SetStirRate(AbstractStep):
+class SetStirRate(ChemputerStep, AbstractStep):
     """Set stir rate. Works on rotavap, reactor or filter.
 
     Args:
@@ -53,7 +54,7 @@ class SetStirRate(AbstractStep):
             return [
                 CSetStirRate(vessel=self.vessel, stir_speed=self.stir_speed)]
 
-class StartStir(AbstractStep):
+class StartStir(ChemputerStep, AbstractStep):
     """Start stirring given vessel.
 
     Args:
@@ -113,7 +114,7 @@ class StartStir(AbstractStep):
             }
         }
 
-class StopStir(AbstractStep):
+class StopStir(ChemputerStep, AbstractStep):
     """Stop stirring given vessel.
 
     Args:
@@ -161,7 +162,7 @@ class StopStir(AbstractStep):
             return [CRotavapStopRotation(rotavap_name=self.vessel)]
         return []
 
-class Stir(AbstractStep):
+class Stir(ChemputerStep, AbstractStep):
     """Stir given vessel for given time at room temperature.
 
     Args:

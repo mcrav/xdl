@@ -1,9 +1,10 @@
 from typing import List, Dict, Any, Optional
 
 from .....step_utils.base_steps import AbstractStep, Step
+from ..base_step import ChemputerStep
 from ..steps_utility import Stir, HeatChillToTemp
 
-class Precipitate(AbstractStep):
+class Precipitate(ChemputerStep, AbstractStep):
     """Step to cause precipitation by changing temperature and stirring for some
     time.
 

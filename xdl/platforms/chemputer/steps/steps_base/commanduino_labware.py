@@ -1,7 +1,8 @@
 from typing import Optional
 from .....step_utils.base_steps import AbstractBaseStep
+from ..base_step import ChemputerStep
 
-class CTurnMotor(AbstractBaseStep):
+class CTurnMotor(ChemputerStep, AbstractBaseStep):
     """Turns a motor on a Commanduino Labware device
 
     Args:
@@ -44,7 +45,7 @@ class CTurnMotor(AbstractBaseStep):
         )
         return True
 
-class CMoveMotor(AbstractBaseStep):
+class CMoveMotor(ChemputerStep, AbstractBaseStep):
     """Moves a motor a number of steps
 
     Args:
@@ -70,7 +71,7 @@ class CMoveMotor(AbstractBaseStep):
         device.move_motor(self.motor_name, self.steps)
         return True
 
-class CMoveMotorToPosition(AbstractBaseStep):
+class CMoveMotorToPosition(ChemputerStep, AbstractBaseStep):
     """Moves a motor to a given position, in steps
 
     Args:
@@ -96,7 +97,7 @@ class CMoveMotorToPosition(AbstractBaseStep):
         device.move_motor_to_position(self.motor_name, self.position)
         return True
 
-class CHomeMotor(AbstractBaseStep):
+class CHomeMotor(ChemputerStep, AbstractBaseStep):
     """Moves a motor to its home position.
     Requires a home switch to be present.
 
@@ -121,7 +122,7 @@ class CHomeMotor(AbstractBaseStep):
         device.home_motor(self.motor_name)
         return True
 
-class CRunMotor(AbstractBaseStep):
+class CRunMotor(ChemputerStep, AbstractBaseStep):
     """Runs a motor for a given period of time, in seconds
 
     Args:
@@ -163,7 +164,7 @@ class CRunMotor(AbstractBaseStep):
         )
         return True
 
-class CSetPin(AbstractBaseStep):
+class CSetPin(ChemputerStep, AbstractBaseStep):
     """Sets the value of a digital pin to HIGH or LOW state, dependent on level
 
     Args:
@@ -198,7 +199,7 @@ class CSetPin(AbstractBaseStep):
         device.set_pin(self.pin_name, level=self.level)
         return True
 
-class CSetPinPWM(AbstractBaseStep):
+class CSetPinPWM(ChemputerStep, AbstractBaseStep):
     """Sets the PWm value of an analog pin between 0 and 255.
 
     Args:
@@ -233,7 +234,7 @@ class CSetPinPWM(AbstractBaseStep):
         device.set_pin_pwm(self.pin_name, value=self.value)
         return True
 
-class CReadPin(AbstractBaseStep):
+class CReadPin(ChemputerStep, AbstractBaseStep):
     """Reads the current state of a digital pin. HIGH or LOW.
 
     Args:
@@ -257,7 +258,7 @@ class CReadPin(AbstractBaseStep):
         device.read_pin(self.pin_name)
         return True
 
-class CReadPinPWM(AbstractBaseStep):
+class CReadPinPWM(ChemputerStep, AbstractBaseStep):
     """Reads the current PWM value of an analog pin. Between 0 and 255.
 
     Args:
