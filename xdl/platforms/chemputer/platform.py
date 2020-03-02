@@ -3,6 +3,8 @@ from .steps.collection import STEP_OBJ_DICT
 from .executor import ChemputerExecutor
 from ..abstract_platform import AbstractPlatform
 from .graphgen import graph_from_template
+from ...utils import schema
+from .localisation import HUMAN_READABLE_STEPS
 
 class ChemputerPlatform(AbstractPlatform):
 
@@ -29,3 +31,11 @@ class ChemputerPlatform(AbstractPlatform):
             auto_fix_issues=auto_fix_issues,
             ignore_errors=ignore_errors
         )
+
+    @property
+    def schema(self):
+        return schema.generate_schema(STEP_OBJ_DICT)
+
+    @property
+    def localisation(self):
+        return HUMAN_READABLE_STEPS

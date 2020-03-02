@@ -1,4 +1,5 @@
 from .....step_utils.base_steps import AbstractStep
+from ..base_step import ChemputerStep
 from ..steps_base import CSwitchVacuum, CSwitchArgon
 from .general import Wait
 from ...utils.execution import get_pneumatic_controller
@@ -6,7 +7,7 @@ from ...utils.execution import get_pneumatic_controller
 #: Time to wait after switching between argon/vacuum for pressure to change.
 WAIT_AFTER_SWITCH_TIME = 30  # s
 
-class SwitchVacuum(AbstractStep):
+class SwitchVacuum(ChemputerStep, AbstractStep):
     """Supply given vessel with vacuum using PneumaticController.
 
     Args:
@@ -66,7 +67,7 @@ class SwitchVacuum(AbstractStep):
             )
         return steps
 
-class SwitchArgon(AbstractStep):
+class SwitchArgon(ChemputerStep, AbstractStep):
     """Supply given vessel with argon using PneumaticController.
 
     Args:

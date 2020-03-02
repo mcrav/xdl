@@ -1,5 +1,6 @@
 from typing import Optional, List, Dict, Any
 from .....step_utils.base_steps import Step, AbstractStep
+from ..base_step import ChemputerStep
 from ..steps_base import (
     CRotavapLiftDown,
     CRotavapAutoEvaporation,
@@ -23,7 +24,7 @@ from ...constants import (
 from .....utils.graph import undirected_neighbors
 from ...utils.execution import get_nearest_node
 
-class Evaporate(AbstractStep):
+class Evaporate(ChemputerStep, AbstractStep):
     """Evaporate contents of given vessel at given temp and given pressure for
     given time.
 

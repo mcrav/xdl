@@ -31,3 +31,7 @@ class AbstractPlatform(object):
     @property
     def schema(self):
         return generate_schema(self.step_library)
+
+    @property
+    def localisation(self):
+        return {}

@@ -1,5 +1,6 @@
 from typing import Optional
 from .....step_utils.base_steps import AbstractStep
+from ..base_step import ChemputerStep
 from ..steps_utility import (
     Wait, StartVacuum, StopVacuum, SwitchArgon, SwitchVacuum)
 from ..steps_base import CConnect
@@ -8,7 +9,7 @@ from ...utils.execution import (
     get_pneumatic_controller, get_vacuum_configuration, get_vessel_type)
 from .....utils.misc import SanityCheck
 
-class Evacuate(AbstractStep):
+class Evacuate(ChemputerStep, AbstractStep):
     """Evacuate given vessel with inert gas.
 
     Args:

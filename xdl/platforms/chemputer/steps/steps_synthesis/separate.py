@@ -1,6 +1,7 @@
 from typing import Optional, Dict, Any, List
 import math
 from .....step_utils.base_steps import Step, AbstractStep
+from ..base_step import ChemputerStep
 from .add import Add
 from ..steps_utility import Transfer, Wait, Stir, SeparatePhases
 from ...constants import (
@@ -10,12 +11,12 @@ from ...constants import (
 )
 from .....utils.errors import XDLError
 from .....utils.misc import SanityCheck
-from .....localisation import HUMAN_READABLE_STEPS
+from ...localisation import HUMAN_READABLE_STEPS
 from ...constants import CHEMPUTER_WASTE
 from ...utils.execution import (
     get_buffer_flask, get_nearest_node, get_cartridge)
 
-class Separate(AbstractStep):
+class Separate(ChemputerStep, AbstractStep):
     """Extract contents of from_vessel using given amount of given solvent.
     NOTE: If n_separations > 1, to_vessel/to_port must be capable of giving
     and receiving material.

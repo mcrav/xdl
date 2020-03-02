@@ -1,6 +1,7 @@
 from .....step_utils.base_steps import AbstractBaseStep
+from ..base_step import ChemputerStep
 
-class CStir(AbstractBaseStep):
+class CStir(ChemputerStep, AbstractBaseStep):
     """Starts the stirring operation of a hotplate or overhead stirrer.
 
     Args:
@@ -21,7 +22,7 @@ class CStir(AbstractBaseStep):
         chempiler.stirrer.stir(self.vessel)
         return True
 
-class CStirrerHeat(AbstractBaseStep):
+class CStirrerHeat(ChemputerStep, AbstractBaseStep):
     """Starts the heating operation of a hotplate stirrer.
 
     Args:
@@ -42,7 +43,7 @@ class CStirrerHeat(AbstractBaseStep):
         chempiler.stirrer.heat(self.vessel)
         return True
 
-class CStopStir(AbstractBaseStep):
+class CStopStir(ChemputerStep, AbstractBaseStep):
     """Stops the stirring operation of a hotplate or overhead stirrer.
 
     Args:
@@ -63,7 +64,7 @@ class CStopStir(AbstractBaseStep):
         chempiler.stirrer.stop_stir(self.vessel)
         return True
 
-class CStopHeat(AbstractBaseStep):
+class CStopHeat(ChemputerStep, AbstractBaseStep):
     """Stop heating hotplace stirrer.
 
     Args:
@@ -84,7 +85,7 @@ class CStopHeat(AbstractBaseStep):
         chempiler.stirrer.stop_heat(self.vessel)
         return True
 
-class CStirrerSetTemp(AbstractBaseStep):
+class CStirrerSetTemp(ChemputerStep, AbstractBaseStep):
     """Sets the temperature setpoint of a hotplate stirrer. This command is NOT
     available for overhead stirrers!
 
@@ -108,7 +109,7 @@ class CStirrerSetTemp(AbstractBaseStep):
         chempiler.stirrer.set_temp(self.vessel, self.temp)
         return True
 
-class CSetStirRate(AbstractBaseStep):
+class CSetStirRate(ChemputerStep, AbstractBaseStep):
     """Sets the stirring speed setpoint of a hotplate or overhead stirrer.
 
     Args:
@@ -131,7 +132,7 @@ class CSetStirRate(AbstractBaseStep):
         chempiler.stirrer.set_stir_rate(self.vessel, self.stir_speed)
         return True
 
-class CStirrerWaitForTemp(AbstractBaseStep):
+class CStirrerWaitForTemp(ChemputerStep, AbstractBaseStep):
     """Delays the script execution until the current temperature of the
     hotplate is within 0.5 °C of the setpoint. This command is NOT available
     for overhead stirrers!

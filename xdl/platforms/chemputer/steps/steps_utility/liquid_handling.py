@@ -5,10 +5,11 @@ from ...constants import (
     DEFAULT_VISCOUS_ASPIRATION_SPEED,
 )
 from .....step_utils.base_steps import AbstractStep, Step
+from ..base_step import ChemputerStep
 from ..steps_base import CMove
 from .stirring import StopStir
 from .heatchill import StopHeatChill
-from .....localisation import HUMAN_READABLE_STEPS
+from ...localisation import HUMAN_READABLE_STEPS
 from .....utils.misc import SanityCheck
 from ...utils.execution import (
     get_reagent_vessel,
@@ -18,7 +19,7 @@ from ...utils.execution import (
     get_heater_chiller,
 )
 
-class PrimePumpForAdd(AbstractStep):
+class PrimePumpForAdd(ChemputerStep, AbstractStep):
     """Prime pump attached to given reagent flask in anticipation of Add step.
 
     Args:
@@ -63,7 +64,7 @@ class PrimePumpForAdd(AbstractStep):
                       to_vessel=self.waste_vessel,
                       volume=self.volume)]
 
-class Transfer(AbstractStep):
+class Transfer(ChemputerStep, AbstractStep):
     """Transfer contents of one vessel to another.
 
     Args:

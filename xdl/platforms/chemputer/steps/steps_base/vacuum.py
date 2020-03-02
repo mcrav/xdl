@@ -1,7 +1,9 @@
 from .....step_utils.base_steps import AbstractBaseStep
+from ..base_step import ChemputerStep
 from ...constants import DEFAULT_VACUUM_VENT_WAIT_TIME
 
-class CGetVacuumSetPoint(AbstractBaseStep):
+
+class CGetVacuumSetPoint(ChemputerStep, AbstractBaseStep):
     """Reads the current vacuum setpoint.
 
     Args:
@@ -22,7 +24,7 @@ class CGetVacuumSetPoint(AbstractBaseStep):
         chempiler.vacuum.get_vacuum_set_point(self.vessel)
         return True
 
-class CSetVacuumSetPoint(AbstractBaseStep):
+class CSetVacuumSetPoint(ChemputerStep, AbstractBaseStep):
     """Sets a new vacuum setpoint.
 
     Args:
@@ -46,7 +48,7 @@ class CSetVacuumSetPoint(AbstractBaseStep):
             self.vessel, self.vacuum_pressure)
         return True
 
-class CStartVacuum(AbstractBaseStep):
+class CStartVacuum(ChemputerStep, AbstractBaseStep):
     """Starts the vacuum pump.
 
     Args:
@@ -67,7 +69,7 @@ class CStartVacuum(AbstractBaseStep):
         chempiler.vacuum.start_vacuum(self.vessel)
         return True
 
-class CStopVacuum(AbstractBaseStep):
+class CStopVacuum(ChemputerStep, AbstractBaseStep):
     """Stops the vacuum pump.
 
     Args:
@@ -88,7 +90,7 @@ class CStopVacuum(AbstractBaseStep):
         chempiler.vacuum.stop_vacuum(self.vessel)
         return True
 
-class CVentVacuum(AbstractBaseStep):
+class CVentVacuum(ChemputerStep, AbstractBaseStep):
     """Vents the vacuum pump to ambient pressure.
 
     Args:
@@ -112,7 +114,7 @@ class CVentVacuum(AbstractBaseStep):
         chempiler.vacuum.vent_vacuum(self.vessel)
         return True
 
-class CSetSpeedSetPoint(AbstractBaseStep):
+class CSetSpeedSetPoint(ChemputerStep, AbstractBaseStep):
     """Sets the speed of the vacuum pump (0-100%).
 
     Args:
@@ -135,7 +137,7 @@ class CSetSpeedSetPoint(AbstractBaseStep):
         chempiler.vacuum.set_speed_set_point(self.vessel, self.set_point)
         return True
 
-class CSetEndVacuumSetPoint(AbstractBaseStep):
+class CSetEndVacuumSetPoint(ChemputerStep, AbstractBaseStep):
     """
     Sets the switch off vacuum set point.
 
@@ -160,7 +162,7 @@ class CSetEndVacuumSetPoint(AbstractBaseStep):
             self.vessel, self.vacuum_set_point)
         return True
 
-class CGetEndVacuumSetPoint(AbstractBaseStep):
+class CGetEndVacuumSetPoint(ChemputerStep, AbstractBaseStep):
     """
     Gets the set point (target) for the switch off vacuum in mode Auto.
 
@@ -182,7 +184,7 @@ class CGetEndVacuumSetPoint(AbstractBaseStep):
         chempiler.vacuum.get_end_vacuum_set_point(self.vessel)
         return True
 
-class CSetRuntimeSetPoint(AbstractBaseStep):
+class CSetRuntimeSetPoint(ChemputerStep, AbstractBaseStep):
     """
     Sets the switch off vacuum set point.
 
@@ -206,7 +208,7 @@ class CSetRuntimeSetPoint(AbstractBaseStep):
         chempiler.vacuum.set_runtime_set_point(self.vessel, self.time)
         return True
 
-class CGetRuntimeSetPoint(AbstractBaseStep):
+class CGetRuntimeSetPoint(ChemputerStep, AbstractBaseStep):
     """
     Gets the set point (target) for the run time in mode Auto.
 

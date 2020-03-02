@@ -1,7 +1,8 @@
 from typing import Callable
 from .....step_utils.base_steps import AbstractBaseStep
+from ..base_step import ChemputerStep
 
-class ReadConductivitySensor(AbstractBaseStep):
+class ReadConductivitySensor(ChemputerStep, AbstractBaseStep):
 
     PROP_TYPES = {
         'sensor': str,

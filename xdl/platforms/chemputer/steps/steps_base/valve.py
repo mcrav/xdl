@@ -1,7 +1,8 @@
 # For type annotations
 from .....step_utils.base_steps import AbstractBaseStep
+from ..base_step import ChemputerStep
 
-class CValveMoveToPosition(AbstractBaseStep):
+class CValveMoveToPosition(ChemputerStep, AbstractBaseStep):
     """Move valve to given position.
 
     Args:

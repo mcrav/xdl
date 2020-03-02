@@ -3,6 +3,7 @@ from .....utils.errors import XDLError
 from .....utils.misc import SanityCheck
 from .....utils.graph import undirected_neighbors
 from .....step_utils.base_steps import AbstractDynamicStep
+from ..base_step import ChemputerStep
 from .liquid_handling import Transfer
 from ..steps_base import ReadConductivitySensor
 import statistics
@@ -18,7 +19,7 @@ SEPARATION_DEFAULT_INITIAL_PUMP_SPEED_CART = 10
 SEPARATION_DEFAULT_MID_PUMP_SPEED_CART = 5
 SEPARATION_DEFAULT_END_PUMP_SPEED_CART = 5
 
-class SeparatePhases(AbstractDynamicStep):
+class SeparatePhases(ChemputerStep, AbstractDynamicStep):
 
     PROP_TYPES = {
         'separation_vessel': str,

@@ -1,5 +1,6 @@
 from typing import Optional, List, Dict, Any
 from .....step_utils.base_steps import Step, AbstractStep
+from ..base_step import ChemputerStep
 from ..steps_base import CMove
 from ..steps_utility import (
     StopStir, StartStir, Transfer, ApplyVacuum)
@@ -12,7 +13,7 @@ from .....utils.misc import SanityCheck
 from ...utils.execution import get_vacuum_configuration, get_nearest_node
 from ...constants import CHEMPUTER_WASTE
 
-class Filter(AbstractStep):
+class Filter(ChemputerStep, AbstractStep):
     """Filter contents of filter vessel. Apply vacuum for given time.
     Assumes liquid is already in the top of the filter vessel.
 
@@ -217,7 +218,7 @@ class Filter(AbstractStep):
             }
         }
 
-class FilterTo(AbstractStep):
+class FilterTo(ChemputerStep, AbstractStep):
 
     PROP_TYPES = {
         'from_vessel': str,

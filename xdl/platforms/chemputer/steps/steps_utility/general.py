@@ -1,9 +1,10 @@
 from typing import Optional, List
 from .....step_utils.base_steps import AbstractStep, Step
+from ..base_step import ChemputerStep
 from ..steps_base import CSetRecordingSpeed, CWait, CWaitUntil
-from .....localisation import HUMAN_READABLE_STEPS
+from ...localisation import HUMAN_READABLE_STEPS
 
-class Wait(AbstractStep):
+class Wait(ChemputerStep, AbstractStep):
     """Wait for given time.
 
     Args:
@@ -39,7 +40,7 @@ class Wait(AbstractStep):
             CSetRecordingSpeed(self.after_recording_speed),
         ]
 
-class WaitUntil(AbstractStep):
+class WaitUntil(ChemputerStep, AbstractStep):
     """Waits until a specified start time has been reached. This command will
     immediately reply with an estimate of when the waiting will be finished,
     and also give regular updates indicating that it is still alive.

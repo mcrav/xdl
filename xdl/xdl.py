@@ -4,7 +4,6 @@ import copy
 from typing import List, Dict, Any
 from math import ceil
 
-from .localisation import HUMAN_READABLE_STEPS
 from .graphgen_deprecated import get_graph
 
 from .utils import get_logger
@@ -215,7 +214,7 @@ class XDL(object):
             List[str]: List of language codes, e.g. ['en', 'zh']
         """
         available_languages = []
-        for _, human_readables in HUMAN_READABLE_STEPS.items():
+        for _, human_readables in self.platform.localisation.items():
             for language in human_readables:
                 if language not in available_languages:
                     available_languages.append(language)

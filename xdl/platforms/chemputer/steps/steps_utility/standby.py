@@ -1,11 +1,12 @@
 from typing import Optional
 from .....step_utils import AbstractStep
+from ..base_step import ChemputerStep
 from .....step_utils.special_steps import Loop
 from .general import Wait
 from .cleaning import CleanBackbone
 from .....utils.misc import SanityCheck
 
-class Standby(AbstractStep):
+class Standby(ChemputerStep, AbstractStep):
     """Move solvent around once every specified time interval to prevent
     sticking of valves and pumps. Continues indefinitely.
 

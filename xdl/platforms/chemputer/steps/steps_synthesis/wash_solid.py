@@ -1,8 +1,9 @@
 from typing import Optional, Union, List, Dict, Any
 from .....step_utils.base_steps import Step, AbstractStep
+from ..base_step import ChemputerStep
 from .add import Add
 from ..utils import get_vacuum_valve_reconnect_steps
-from .....localisation import HUMAN_READABLE_STEPS
+from ...localisation import HUMAN_READABLE_STEPS
 from ..steps_utility import (
     Wait,
     StartStir,
@@ -26,7 +27,7 @@ from ...constants import (
 from ...utils.execution import (
     get_nearest_node, get_vacuum_configuration, get_vessel_type)
 
-class WashSolid(AbstractStep):
+class WashSolid(ChemputerStep, AbstractStep):
     """Wash filter cake with given volume of given solvent.
 
     Args:

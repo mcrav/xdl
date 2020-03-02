@@ -1,5 +1,6 @@
 from typing import List
 from .....step_utils.base_steps import Step, AbstractStep
+from ..base_step import ChemputerStep
 from ..steps_base import (
     CStartVacuum,
     CStopVacuum,
@@ -19,7 +20,7 @@ from .....utils.misc import SanityCheck
 from .....utils.graph import undirected_neighbors
 from ...constants import ROTAVAP_CLASSES, VACUUM_CLASSES
 
-class StartVacuum(AbstractStep):
+class StartVacuum(ChemputerStep, AbstractStep):
     """Start vacuum pump attached to given vessel.
 
     Args:
@@ -47,7 +48,7 @@ class StartVacuum(AbstractStep):
             CStartVacuum(vessel=self.vessel)
         ]
 
-class StopVacuum(AbstractStep):
+class StopVacuum(ChemputerStep, AbstractStep):
     """Stop vacuum pump attached to given vessel.
 
     Args:
@@ -64,7 +65,7 @@ class StopVacuum(AbstractStep):
     def get_steps(self) -> List[Step]:
         return [CStopVacuum(vessel=self.vessel)]
 
-class ApplyVacuum(AbstractStep):
+class ApplyVacuum(ChemputerStep, AbstractStep):
     """Apply vacuum to given vessel for given amount of time.
     Assumes one of following hardware setups:
         (Optional CVC3000) -> ChemputerVacuum <- ChemputerValve <-> vessel

@@ -1,6 +1,7 @@
 from .....step_utils.base_steps import AbstractBaseStep
+from ..base_step import ChemputerStep
 
-class CSwitchVacuum(AbstractBaseStep):
+class CSwitchVacuum(ChemputerStep, AbstractBaseStep):
     """Using PneumaticController switch given port to vacuum supply.
 
     Args:
@@ -24,7 +25,7 @@ class CSwitchVacuum(AbstractBaseStep):
         pneumatic_controller.switch_vacuum(self.port)
         return True
 
-class CSwitchArgon(AbstractBaseStep):
+class CSwitchArgon(ChemputerStep, AbstractBaseStep):
     """Using PneumaticController switch given port to argon supply.
 
     Args:
