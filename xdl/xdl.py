@@ -5,7 +5,6 @@ from typing import List, Dict, Any
 from math import ceil
 
 from .localisation import HUMAN_READABLE_STEPS
-from .graphgen import graph_from_template
 from .graphgen_deprecated import get_graph
 
 from .utils import get_logger
@@ -462,20 +461,18 @@ class XDL(object):
         self,
         graph_template=None,
         save=None,
-        auto_fix_issues=False,
-        ignore_errors=[]
+        **kwargs
     ):
         """Return graph to run procedure with, built on template.
 
         Returns:
             Dict: JSON node link graph as dictionary.
         """
-        return graph_from_template(
+        return self.platform.graph(
             self,
             template=graph_template,
             save=save,
-            auto_fix_issues=auto_fix_issues,
-            ignore_errors=ignore_errors,
+            **kwargs
         )
 
     def graph_deprecated(
