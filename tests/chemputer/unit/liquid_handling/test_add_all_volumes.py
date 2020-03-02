@@ -1,8 +1,8 @@
 import os
 import pytest
 from xdl import XDL
-from xdl.steps import Transfer
-from xdl.platforms.chemputer.executor.constants import (
+from chemputerxdl.steps import Transfer
+from chemputerxdl.executor.constants import (
     TRANSFER_ALL_VOLUME_FACTOR)
 
 HERE = os.path.abspath(os.path.dirname(__file__))

@@ -30,7 +30,7 @@ def test_dry_in_rotavap():
 def test_dry_inert_gas_connection():
     """Test confirms issue #112 fixed during reworking of Dry."""
     from xdl import XDL
-    from xdl.platforms.chemputer.steps.steps_base.general import CConnect
+    from chemputerxdl.steps.steps_base.general import CConnect
 
     xdl_f = os.path.join(FOLDER, 'dry.xdl')
     graph_f = os.path.join(FOLDER, 'bigrig_no_vacuum_device.json')

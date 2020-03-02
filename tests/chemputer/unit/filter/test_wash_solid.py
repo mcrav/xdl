@@ -2,8 +2,8 @@ import os
 import pytest
 from ...utils import generic_chempiler_test
 from xdl import XDL
-from xdl.steps import WashSolid, CMove
-from xdl.platforms.chemputer.constants import (
+from chemputerxdl.steps import WashSolid, CMove
+from chemputerxdl.constants import (
     DEFAULT_FILTER_EXCESS_REMOVE_FACTOR)
 
 HERE = os.path.abspath(os.path.dirname(__file__))

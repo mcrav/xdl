@@ -10,7 +10,7 @@ from ...utils import generic_chempiler_test
 from xdl import XDL
 from xdl.steps.base_steps import AbstractAsyncStep
 from xdl.steps.special_steps import Async
-from xdl.steps import Wait
+from chemputerxdl.steps import Wait
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')

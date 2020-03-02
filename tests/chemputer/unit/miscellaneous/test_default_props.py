@@ -1,5 +1,5 @@
 import pytest
-from xdl.steps import Dissolve, Filter
+from chemputerxdl.steps import Dissolve, Filter
 
 @pytest.mark.unit
 def test_default_props():

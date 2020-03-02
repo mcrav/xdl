@@ -2,7 +2,7 @@ import os
 import pytest
 from ...utils import generic_chempiler_test
 from xdl import XDL
-from xdl.steps import Filter, StopStir, StartStir
+from chemputerxdl.steps import Filter, StopStir, StartStir
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')

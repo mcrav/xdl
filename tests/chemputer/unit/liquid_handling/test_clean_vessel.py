@@ -3,7 +3,7 @@ import pytest
 from ...utils import generic_chempiler_test
 
 from xdl import XDL
-from xdl.steps import (
+from chemputerxdl.steps import (
     CleanBackbone,
     Dissolve,
     CleanVessel,
@@ -11,7 +11,7 @@ from xdl.steps import (
     HeatChillToTemp,
     HeatChillReturnToRT
 )
-from xdl.execution.constants import CLEAN_VESSEL_BOILING_POINT_FACTOR
+from chemputerxdl.executor.constants import CLEAN_VESSEL_BOILING_POINT_FACTOR
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')

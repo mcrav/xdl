@@ -2,7 +2,7 @@ import os
 import sys
 import shutil
 from xdl import XDL
-from xdl.steps import Confirm, Step, AbstractBaseStep, UnimplementedStep
+from xdl.steps import Step, AbstractBaseStep, UnimplementedStep
 from chempiler import Chempiler
 import ChemputerAPI
 import commanduinolabware
@@ -55,7 +55,7 @@ def remove_confirm_steps(step: Step) -> None:
         return step
     else:
         for i in reversed(range(len(step.steps))):
-            if type(step.steps[i]) == Confirm:
+            if step.steps[i].name == 'Confirm':
                 step.steps.pop(i)
             else:
                 step.steps[i] = remove_confirm_steps(step.steps[i])

@@ -3,10 +3,10 @@ import json
 import pytest
 from networkx.readwrite import node_link_graph
 from xdl import XDL
-from xdl.platforms.chemputer.graphgen.get_graph_spec import get_graph_spec
-from xdl.platforms.chemputer.graphgen.check_graph_spec import (
+from chemputerxdl.graphgen.get_graph_spec import get_graph_spec
+from chemputerxdl.graphgen.check_graph_spec import (
     check_template, check_graph_spec)
-from xdl.platforms.chemputer.graphgen.constants import (
+from chemputerxdl.graphgen.constants import (
     SWITCH_TO_OUT_EDGE,
     SWITCH_TO_IN_EDGE,
     REMOVE_DEST_PORT,

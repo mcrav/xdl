@@ -1,9 +1,0 @@
-!Repeat
-
-# Example: "Repeat 3 times:"
-
-en
-Repeat {repeats} times:
-
-ru
-Повторять {repeats} раз(а):

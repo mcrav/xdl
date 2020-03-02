@@ -3,7 +3,7 @@ import pytest
 from ...utils import generic_chempiler_test
 
 from xdl import XDL
-from xdl.steps import CleanBackbone
+from chemputerxdl.steps import CleanBackbone
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')
