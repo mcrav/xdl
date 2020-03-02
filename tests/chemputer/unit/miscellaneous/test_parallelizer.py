@@ -2,9 +2,9 @@ import os
 import json
 import pytest
 
-from xdl.steps import HeatChill, Transfer
+from chemputerxdl.steps import HeatChill, Transfer
 # from xdl.execution import XDLExecutor
-from xdl.platforms.chemputer.executor import ChemputerExecutor
+from chemputerxdl.executor import ChemputerExecutor
 from xdl.steps.special_steps import Parallelizer
 from networkx.readwrite.json_graph import node_link_graph
 

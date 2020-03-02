@@ -1,7 +1,7 @@
 import os
 import pytest
 from xdl import XDL
-from xdl.platforms.chemputer.steps.steps_utility.separate_phases import (
+from chemputerxdl.steps.steps_utility.separate_phases import (
     SEPARATION_DEFAULT_END_PUMP_SPEED_CART,
     SEPARATION_DEFAULT_END_PUMP_SPEED
 )

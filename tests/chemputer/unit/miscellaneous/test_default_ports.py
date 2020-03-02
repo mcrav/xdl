@@ -1,7 +1,7 @@
 import os
 import pytest
 from xdl import XDL
-from xdl.steps import Add, CMove, Dissolve, Transfer, Separate
+from chemputerxdl.steps import Add, CMove, Dissolve, Transfer, Separate
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')

@@ -3,7 +3,7 @@ import pytest
 from ...utils import generic_chempiler_test
 from xdl import XDL
 from xdl.utils.errors import XDLError
-from xdl.steps import FilterThrough, CMove
+from chemputerxdl.steps import FilterThrough, CMove
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')

@@ -1,7 +1,7 @@
 import os
 import pytest
 from xdl import XDL
-from xdl.steps import Add, CMove, Wait
+from chemputerxdl.steps import Add, CMove, Wait
 from ...utils import generic_chempiler_test
 
 HERE = os.path.abspath(os.path.dirname(__file__))

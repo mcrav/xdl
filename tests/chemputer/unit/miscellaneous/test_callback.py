@@ -1,6 +1,6 @@
 from xdl.steps.base_steps import AbstractStep
 from xdl.steps.special_steps import Callback
-from xdl.steps import Wait
+from chemputerxdl.steps import Wait
 from ...utils import get_chempiler
 
 import os

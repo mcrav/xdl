@@ -2,16 +2,16 @@ import os
 import pytest
 from ...utils import generic_chempiler_test, test_step
 from xdl import XDL
-from xdl.steps import (
+from chemputerxdl.steps import (
     Evacuate,
     CConnect,
     Wait,
-    Repeat,
     StartVacuum,
     StopVacuum,
     SwitchArgon,
     SwitchVacuum
 )
+from xdl.steps import Repeat
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')

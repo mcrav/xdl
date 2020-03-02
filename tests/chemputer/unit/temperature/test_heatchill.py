@@ -2,12 +2,12 @@ import os
 import pytest
 from ...utils import generic_chempiler_test
 from xdl import XDL
-from xdl.platforms.chemputer.constants import (
+from chemputerxdl.constants import (
     CHILLER_MIN_TEMP,
     CHILLER_MAX_TEMP,
     HEATER_MAX_TEMP
 )
-from xdl.steps import CChillerSetTemp, CStirrerSetTemp
+from chemputerxdl.steps import CChillerSetTemp, CStirrerSetTemp
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')

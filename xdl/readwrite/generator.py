@@ -2,7 +2,7 @@ from typing import List
 from lxml import etree
 from ..reagents import Reagent
 from ..hardware import Hardware
-from ..step_utils import Step
+from ..steps import Step
 from ..constants import XDL_VERSION
 from ..utils.misc import format_property
 from ..utils.sanitisation import convert_val_to_std_units

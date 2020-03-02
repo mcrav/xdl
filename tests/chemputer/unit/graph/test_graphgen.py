@@ -16,14 +16,12 @@ GRAPHGEN_TESTS = [
 
 TEST_FOLDER = os.path.dirname(HERE)
 ROOT_FOLDER = os.path.join(os.path.dirname(TEST_FOLDER), "..", "..")
-TEMPLATE_GRAPH = os.path.join(
-    ROOT_FOLDER, 'xdl', 'platforms', 'chemputer', 'graphgen', 'template.json')
 
 @pytest.mark.unit
 def test_graphgen():
     for xdl_f in GRAPHGEN_TESTS:
         x = XDL(os.path.join(FOLDER, xdl_f))
         save_path = os.path.join(OUTPUT_FOLDER, xdl_f.split('.')[0] + '.json')
-        x.graph(graph_template=TEMPLATE_GRAPH, save=save_path)
+        x.graph(save=save_path)
         print('\n')
         generic_chempiler_test(os.path.join(FOLDER, xdl_f), save_path)

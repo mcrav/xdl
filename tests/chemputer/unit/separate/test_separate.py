@@ -1,7 +1,8 @@
 import os
 import pytest
 from xdl import XDL
-from xdl.steps import Transfer, Add, Stir, Wait, Separate, SeparatePhases
+from chemputerxdl.steps import (
+    Transfer, Add, Stir, Wait, Separate, SeparatePhases)
 from ...utils import test_step
 from xdl.utils.errors import XDLError
 from xdl.utils.sanitisation import convert_val_to_std_units

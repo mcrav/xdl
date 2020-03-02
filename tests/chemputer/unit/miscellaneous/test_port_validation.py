@@ -1,5 +1,5 @@
-from xdl.platforms.chemputer.executor import ChemputerExecutor
-from xdl.steps import Add, Transfer
+from chemputerxdl.executor import ChemputerExecutor
+from chemputerxdl.steps import Add, Transfer
 from xdl.utils.errors import IllegalPortError
 import pytest
 import os

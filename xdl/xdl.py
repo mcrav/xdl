@@ -3,22 +3,18 @@ import logging
 import copy
 from typing import List, Dict, Any
 from math import ceil
+from chemputerxdl import ChemputerPlatform
 
 from .graphgen_deprecated import get_graph
 
 from .utils import get_logger
 from .steps import Step, AbstractBaseStep, UnimplementedStep
-from .platforms.chemputer.steps import (
-    Add,
-    FilterThrough,
-)
 from .utils.errors import XDLError
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 from .readwrite import XDLGenerator
 from .hardware import Hardware
 from .reagents import Reagent
 from .platforms.abstract_platform import AbstractPlatform
-from .platforms.chemputer import ChemputerPlatform
 from .platforms.modular_wheel import ModularWheelPlatform
 
 class XDL(object):
@@ -430,11 +426,11 @@ class XDL(object):
             liquid_reagents = [reagent.id for reagent in self.reagents]
             cartridge_reagents = []
             for step in self.steps:
-                if type(step) == Add and step.mass:
+                if step.name == 'Add' and step.mass:
                     if step.reagent in liquid_reagents:
                         liquid_reagents.remove(step.reagent)
 
-                elif type(step) == FilterThrough and step.through:
+                elif step.name == 'FilterThrough' and step.through:
                     cartridge_reagents.append(step.through)
             return get_graph(liquid_reagents, list(set(cartridge_reagents)))
 

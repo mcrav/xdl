@@ -1,7 +1,7 @@
 import os
 import pytest
 from xdl import XDL
-from xdl.steps import (
+from chemputerxdl.steps import (
     Evaporate,
     CStopChiller,
     CStartChiller,

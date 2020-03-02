@@ -1,9 +1,9 @@
 import os
 import pytest
 from xdl import XDL
-from xdl.steps import (
+from chemputerxdl.steps import (
     StartStir, StopStir, StartHeatChill, StopHeatChill, Wait, Add)
-from xdl.platforms.chemputer.constants import DEFAULT_STIR_REAGENT_FLASK_SPEED
+from chemputerxdl.constants import DEFAULT_STIR_REAGENT_FLASK_SPEED
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')

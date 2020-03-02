@@ -3,7 +3,7 @@ from typing import List, Dict
 from .constants import REAGENT_PROPS
 from ..hardware import Component
 from ..reagents import Reagent
-from ..step_utils import AbstractBaseStep, AbstractStep, Step
+from ..steps import AbstractBaseStep, AbstractStep, Step
 from ..utils import XDLError
 
 def get_valid_attrs(target_class: type) -> List[str]:

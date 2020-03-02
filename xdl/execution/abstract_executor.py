@@ -4,8 +4,8 @@ import appdirs
 import os
 from abc import ABC, abstractmethod
 from networkx.readwrite import node_link_data
-from ..step_utils.special_steps import Async, Await
-from ..step_utils.base_steps import (
+from ..steps.special_steps import Async, Await
+from ..steps.base_steps import (
     AbstractDynamicStep, AbstractAsyncStep, AbstractBaseStep)
 from ..readwrite.generator import XDLGenerator
 from ..utils.errors import XDLError

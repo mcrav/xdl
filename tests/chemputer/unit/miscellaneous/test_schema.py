@@ -1,4 +1,4 @@
-from xdl.platforms.chemputer.platform import ChemputerPlatform
+from chemputerxdl.platform import ChemputerPlatform
 from lxml import etree
 import os
 import pytest

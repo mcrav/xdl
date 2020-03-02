@@ -2,8 +2,9 @@ import os
 import time
 import pytest
 
-from xdl.steps import Wait, AbstractDynamicStep, Add
-from xdl.platforms.chemputer.executor import ChemputerExecutor
+from chemputerxdl.steps import Wait, Add
+from xdl.steps import AbstractDynamicStep
+from chemputerxdl.executor import ChemputerExecutor
 
 import ChemputerAPI
 from chempiler import Chempiler

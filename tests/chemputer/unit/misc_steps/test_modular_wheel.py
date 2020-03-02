@@ -1,7 +1,7 @@
 import os
 import pytest
 from xdl import XDL
-from xdl.steps import MWAddAndTurn, CTurnMotor, Transfer
+from chemputerxdl.steps import MWAddAndTurn, CTurnMotor, Transfer
 from ...utils import generic_chempiler_test
 
 HERE = os.path.abspath(os.path.dirname(__file__))

@@ -9,7 +9,7 @@
 
 from logging import Logger
 from typing import Optional
-from ....step_utils.base_steps import AbstractBaseStep
+from ....steps.base_steps import AbstractBaseStep
 
 class CBTurnWheel(AbstractBaseStep):
     """Turns the wheel on the Chemobot Modular Wheel system

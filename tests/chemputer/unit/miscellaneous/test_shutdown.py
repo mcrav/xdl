@@ -1,7 +1,7 @@
 import pytest
 import os
 from xdl import XDL
-from xdl.steps import Shutdown
+from chemputerxdl.steps import Shutdown
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')
