@@ -3,7 +3,6 @@ import logging
 import copy
 from typing import List, Dict, Any
 from math import ceil
-from chemputerxdl import ChemputerPlatform
 
 from .graphgen_deprecated import get_graph
 
@@ -93,6 +92,7 @@ class XDL(object):
 
     def _validate_platform(self, platform):
         if platform == 'chemputer':
+            from chemputerxdl import ChemputerPlatform
             self.platform = ChemputerPlatform()
         elif platform == 'modular_wheel':
             self.platform = ModularWheelPlatform()
@@ -100,7 +100,7 @@ class XDL(object):
             self.platform = platform()
         else:
             raise XDLError(f'{platform} is an invalid platform. Platform must\
- be "chemputer", "chemobot" or a subclass of AbstractPlatform.')
+ be "chemputer", "modular_wheel" or a subclass of AbstractPlatform.')
 
     def _get_exp_id(self, default: str = 'xdl_exp') -> str:
         """Get experiment ID name to give to the Chempiler."""
@@ -422,6 +422,7 @@ class XDL(object):
         Here to maintain SynthReader compatibility. Eventually SynthReader
         should use new graph generator.
         """
+        from chemputerxdl import ChemputerPlatform
         if type(self.platform) == ChemputerPlatform:
             liquid_reagents = [reagent.id for reagent in self.reagents]
             cartridge_reagents = []
