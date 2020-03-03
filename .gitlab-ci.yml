@@ -31,8 +31,8 @@ stages:
     - pip freeze
 
   script:
-  - pytest tests/chemputer/ -m "unit" -x
-  - pytest tests/chemputer/ -m "integration" -x
+  - pytest tests -m "unit" -x -rf
+  - pytest tests -m "integration" -x -rf
 
 test-python:3.6:
     extends: ".test"
