@@ -33,9 +33,7 @@ class AbstractXDLExecutor(ABC):
     def prepare_for_execution(
         self,
         graph_file: Union[str, Dict],
-        interactive: bool = True,
-        save_path: str = '',
-        sanity_check: bool = True,
+        **kwargs
     ) -> None:
         return
 
