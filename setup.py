@@ -8,6 +8,12 @@ setup(
     author='Matthew Craven',
     author_email='matthew.craven@glasgow.ac.uk',
     packages=find_packages(),
+    package_data={
+        'xdl': [
+            'graphgen_deprecated/chemputer_std6.json'
+        ]
+    },
+    include_package_data=True,
     install_requires=[
         'lxml>=4',
         'networkx>=2',
