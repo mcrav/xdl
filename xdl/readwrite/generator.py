@@ -54,7 +54,8 @@ class XDLGenerator(object):
         hardware_tree = etree.Element('Hardware')
         for component in self.hardware:
             component_tree = etree.Element('Component')
-            for prop, val in component.properties.items():
+            for prop in component.PROP_TYPES:
+                val = component.properties[prop]
                 if val is not None:
                     if prop == 'component_type':
                         component_tree.attrib['type'] = str(val)
@@ -68,7 +69,8 @@ class XDLGenerator(object):
         reagents_tree = etree.Element('Reagents')
         for reagent in self.reagents:
             reagent_tree = etree.Element('Reagent')
-            for prop, val in reagent.properties.items():
+            for prop in reagent.PROP_TYPES:
+                val = reagent.properties[prop]
                 if val:
                     reagent_tree.attrib[prop] = str(val)
             reagents_tree.append(reagent_tree)
@@ -84,41 +86,15 @@ class XDLGenerator(object):
     def get_step_tree(self, step):
         step_tree = etree.Element(step.name)
         children = False
-        for prop, val in step.properties.items():
-            if prop == 'children' and val:
+        for prop in step.PROP_TYPES:
+            if (prop == 'children'
+                and step.properties[prop]
+                    and self.full_properties):
                 children = True
-                children_tree = etree.Element('Children')
-                for child in val:
-                    child_tree = self.get_step_tree(child)
-                    children_tree.append(child_tree)
-                step_tree.append(children_tree)
-            else:
-                if val is not None or self.full_properties:
-                    # if self.full_properties is False ignore some properties.
-                    if not self.full_properties:
+            self.add_step_property(step_tree, step, prop)
+        if 'repeat' in step.properties:
+            self.add_step_property(step_tree, step, 'repeat')
 
-                        # Don't write properties that are the same as the
-                        # default.
-                        if (prop in step.DEFAULT_PROPS
-                                and convert_val_to_std_units(
-                                    step.DEFAULT_PROPS[prop]) == val):
-
-                            # Some things should always be written even if they
-                            # are default.
-                            if prop not in step.ALWAYS_WRITE:
-                                continue
-
-                        # Don't write internal properties.
-                        if prop in step.INTERNAL_PROPS:
-                            continue
-                    # Convert value to nice units and add to element attrib.
-                    formatted_property = format_property(
-                        prop, val, human_readable=False)
-
-                    if formatted_property is None:
-                        formatted_property = str(formatted_property)
-
-                    step_tree.attrib[prop] = formatted_property
         if self.full_tree:
             # Nested elements like Repeat have Steps and Children instead of
             # just raw steps
@@ -131,6 +107,46 @@ class XDLGenerator(object):
                 for substep in step.steps:
                     step_tree.append(self.get_step_tree(substep))
         return step_tree
+
+    def add_step_property(self, step_tree, step, prop):
+        val = step.properties[prop]
+        if prop == 'children' and val:
+            if self.full_properties:
+                children_tree = etree.Element('Children')
+                for child in val:
+                    child_tree = self.get_step_tree(child)
+                    children_tree.append(child_tree)
+                step_tree.append(children_tree)
+            else:
+                for child in val:
+                    step_tree.append(self.get_step_tree(child))
+        else:
+            if val is not None or self.full_properties:
+                # if self.full_properties is False ignore some properties.
+                if not self.full_properties:
+
+                    # Don't write properties that are the same as the
+                    # default.
+                    if (prop in step.DEFAULT_PROPS
+                            and convert_val_to_std_units(
+                                step.DEFAULT_PROPS[prop]) == val):
+
+                        # Some things should always be written even if they
+                        # are default.
+                        if prop not in step.ALWAYS_WRITE:
+                            return
+
+                    # Don't write internal properties.
+                    if prop in step.INTERNAL_PROPS:
+                        return
+                # Convert value to nice units and add to element attrib.
+                formatted_property = format_property(
+                    prop, val, human_readable=False)
+
+                if formatted_property is None:
+                    formatted_property = str(formatted_property)
+
+                step_tree.attrib[prop] = formatted_property
 
     def save(self, save_file: str) -> None:
         """Save XDL tree to given file path."""
