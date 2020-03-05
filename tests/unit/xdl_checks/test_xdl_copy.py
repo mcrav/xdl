@@ -8,7 +8,7 @@ INTEGRATION_FOLDER = os.path.join(
 )
 
 TESTS = [
-    os.path.join(INTEGRATION_FOLDER, 'DMP.xdl'),
+    os.path.join(INTEGRATION_FOLDER, 'orgsyn_v83p0184a.xdl'),
     os.path.join(INTEGRATION_FOLDER, 'lidocaine.xdl'),
     os.path.join(INTEGRATION_FOLDER, 'AlkylFluor.xdl'),
 ]

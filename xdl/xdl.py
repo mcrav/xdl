@@ -534,6 +534,25 @@ class XDL(object):
         new_xdl_obj = XDL(steps=steps, reagents=reagents, hardware=components)
         return new_xdl_obj
 
+def deep_copy_step(step):
+    """Return a deep copy of a step. Written this way with children handled
+    specially for compatibility with Python 3.6.
+    """
+    children = []
+    if 'children' in step.properties and step.children:
+        for child in children:
+            children.append(deep_copy_step(child))
+    try:
+        copy_props = {}
+        for k, v in step.properties.items():
+            if k != 'children':
+                copy_props[k] = v
+        copy_props['children'] = children
+        copied_step = type(step)(**copy_props)
+    except TypeError:
+        raise TypeError(f'{step.name}\n\n{step.properties}')
+    return copied_step
+
 def xdl_copy(xdl_obj: XDL) -> XDL:
     """Returns a deepcopy of a XDL object. copy.deepcopy can be used with
     Python 3.7, but for Python 3.6 you have to use this.
@@ -549,8 +568,7 @@ def xdl_copy(xdl_obj: XDL) -> XDL:
     copy_hardware = []
 
     for step in xdl_obj.steps:
-        copy_props = copy.deepcopy(step.properties)
-        copy_steps.append(type(step)(**copy_props))
+        copy_steps.append(deep_copy_step(step))
 
     for reagent in xdl_obj.reagents:
         copy_props = copy.deepcopy(reagent.properties)
