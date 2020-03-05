@@ -8,7 +8,7 @@ INTEGRATION_FOLDER = os.path.join(
 )
 
 TESTS = [
-    os.path.join(INTEGRATION_FOLDER, 'DMP.xdl'),
+    os.path.join(INTEGRATION_FOLDER, 'orgsyn_v83p0184a.xdl'),
     os.path.join(INTEGRATION_FOLDER, 'lidocaine.xdl'),
     os.path.join(INTEGRATION_FOLDER, 'AlkylFluor.xdl'),
 ]
@@ -17,7 +17,7 @@ def compare_xdls(xdl1, xdl2):
     for i, step in enumerate(xdl1.steps):
         assert step.name == xdl2.steps[i].name
         for prop, val in step.properties.items():
-            if prop not in step.INTERNAL_PROPS:
+            if prop not in step.INTERNAL_PROPS and prop != 'children':
                 assert val == xdl2.steps[i].properties[prop]
 
 @pytest.mark.unit
