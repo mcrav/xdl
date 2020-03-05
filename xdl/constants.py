@@ -2,7 +2,7 @@ from typing import List
 
 #: XDL version number. Remember to increment after merging into master. Used
 # in header at top of outputted XDL files.
-XDL_VERSION: str = '0.3.1'
+XDL_VERSION: str = '0.4.0'
 
 ########
 # MISC #
