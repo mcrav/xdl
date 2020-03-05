@@ -17,6 +17,29 @@ class Reagent(XDLBase):
         clean_type (str): 'organic' or 'aqueous'. Used by XDLExecutor to decide
             what solvent to use in CleanBackbone steps.
         cas (int, optional): Defaults to None. CAS number of reagent as int.
+        use_for_cleaning (str, optional): Defaults to False. Specifies whether
+            reagent can be used as a cleaning solvent. If the reagent is
+            recognised as a common solvent setting this property to False will
+            NOT stop it being used for cleaning.
+        stir (bool, optional): Defaults to False. Specifies whether reagent
+            flask should be stirred continuously.
+        temp (float, optional): Defaults to None. Specifies temperature (in
+            °C) to keep reagent flask at.
+        role (str, optional): Defaults to None. Specifies reagent role. NOTE:
+            must be a valid reagent role if specified (catalyst, reagent,
+            solvent, substrate).
+        last_minute_addition (str, optional): Defaults to None. Name of reagent
+            that must be added to reagent flask immediately prior to addition.
+        last_minute_addition_volume (float, optional): Defaults to None. Volume
+            of last minute addition.
+        preserve (bool, optional): Defaults to False. True if reagent is
+            expensive and should be preserved when possible; False if not.
+        incompatible_reagents (list, optional): Defaults to None. List of
+            reagents that are incompatible with this reagent and should never
+            be mixed in the backbone.
+        is_base (bool, optional): Defaults to False. Specifies whether reagent
+            is a base. If True, more thorough backbone cleaning will be carried
+            out after addition of this reagent.
     """
 
     PROP_TYPES = {
@@ -30,7 +53,12 @@ class Reagent(XDLBase):
         'last_minute_addition': str,
         'last_minute_addition_volume': float,
         'preserve': bool,
-        'incompatible_reagents': List[str]
+        'incompatible_reagents': List[str],
+        'is_base': bool
+    }
+
+    DEFAULT_PROPS = {
+        'is_base': False,
     }
 
     def __init__(
@@ -45,7 +73,8 @@ class Reagent(XDLBase):
         last_minute_addition: str = None,
         last_minute_addition_volume: float = None,
         preserve: bool = False,
-        incompatible_reagents: List[str] = []
+        incompatible_reagents: List[str] = [],
+        is_base: bool = 'default'
     ) -> None:
         super().__init__(locals())
         self.validate_role()
