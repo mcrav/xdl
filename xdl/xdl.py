@@ -1,43 +1,20 @@
 import os
 import logging
 import copy
-from typing import List, Dict
+from typing import List, Dict, Any
 from math import ceil
 
-from .constants import (
-    DEFAULT_AUTO_CLEAN, DEFAULT_AQUEOUS_CLEANING_SOLVENT, UNSCALED_STEPS)
-from .localisation import HUMAN_READABLE_STEPS
-from .graphgen import graph_from_template
 from .graphgen_deprecated import get_graph
 
 from .utils import get_logger
 from .steps import Step, AbstractBaseStep, UnimplementedStep
-from .platforms.chemputer.steps import (
-    Add,
-    FilterThrough,
-    CWait,
-    CMove,
-    CSetRecordingSpeed,
-    CSeparatePhases,
-    CRotavapAutoEvaporation,
-    CRampChiller,
-    CChillerWaitForTemp,
-    CStirrerWaitForTemp,
-    CChillerSetTemp,
-    CStirrerSetTemp
-)
 from .utils.errors import XDLError
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 from .readwrite import XDLGenerator
 from .hardware import Hardware
 from .reagents import Reagent
 from .platforms.abstract_platform import AbstractPlatform
-from .platforms.chemputer import ChemputerPlatform
 from .platforms.modular_wheel import ModularWheelPlatform
-
-# For type annotations
-if False:
-    from chempiler import Chempiler
 
 class XDL(object):
     """
@@ -73,13 +50,7 @@ class XDL(object):
         self.logging_level = logging_level
 
         self._xdl_file = None
-        self.auto_clean = DEFAULT_AUTO_CLEAN
-        self.organic_cleaning_solvent = None
         self.graph_sha256 = None
-        self.aqueous_cleaning_solvent = DEFAULT_AQUEOUS_CLEANING_SOLVENT
-        self.dry_run = False
-        self.filter_dead_volume_method = 'inert_gas'
-        self.filter_dead_volume_solvent = None
         self.prepared = False
         self._validate_platform(platform)
         if xdl:
@@ -121,6 +92,7 @@ class XDL(object):
 
     def _validate_platform(self, platform):
         if platform == 'chemputer':
+            from chemputerxdl import ChemputerPlatform
             self.platform = ChemputerPlatform()
         elif platform == 'modular_wheel':
             self.platform = ModularWheelPlatform()
@@ -128,7 +100,7 @@ class XDL(object):
             self.platform = platform()
         else:
             raise XDLError(f'{platform} is an invalid platform. Platform must\
- be "chemputer", "chemobot" or a subclass of AbstractPlatform.')
+ be "chemputer", "modular_wheel" or a subclass of AbstractPlatform.')
 
     def _get_exp_id(self, default: str = 'xdl_exp') -> str:
         """Get experiment ID name to give to the Chempiler."""
@@ -228,7 +200,7 @@ class XDL(object):
             List[str]: List of language codes, e.g. ['en', 'zh']
         """
         available_languages = []
-        for _, human_readables in HUMAN_READABLE_STEPS.items():
+        for _, human_readables in self.platform.localisation.items():
             for language in human_readables:
                 if language not in available_languages:
                     available_languages.append(language)
@@ -270,17 +242,26 @@ class XDL(object):
         self._xdlgenerator.save(save_file)
 
     def scale_procedure(self, scale: float) -> None:
-        """Scale all volumes in procedure.
+        """Scale all volumes and masses in procedure.
 
         Args:
-            scale (float): Number to scale all volumes by.
+            scale (float): Number to scale all volumes and masses by.
         """
         for step in self.steps:
-            if step.name not in UNSCALED_STEPS:
-                for prop, val in step.properties.items():
-                    if 'volume' in prop or 'mass' in prop:
-                        if val and type(val) == float:
-                            step.properties[prop] = float(val) * scale
+            self.apply_scaling(step, scale)
+
+    def apply_scaling(self, step: Step, scale: float) -> None:
+        """Apply scale to steps, recursively applying to any child steps if the
+        step has the attribute 'children', e.g. Repeat steps.
+
+        Args:
+            step (Step): Step to apply scaling to.
+            scale (float): Amount to scale volumes and masses.
+        """
+        step.scale(scale)
+        if hasattr(step, 'children') and step.children:
+            for substep in step.children:
+                self.apply_scaling(substep, scale)
 
     @property
     def estimated_duration(self) -> float:
@@ -290,61 +271,16 @@ class XDL(object):
         Returns:
             float: Estimated runtime of procedure in seconds.
         """
-        if not isinstance(self.platform, ChemputerPlatform):
-            self.logger.info('Estimated duration only supported for Chemputer.')
-            return -1
         if not self.prepared:
             self.logger.warning(
                 'prepare_for_execution must be called before estimated duration\
  can be calculated.')
             return
-        total_time = 0
-        temps = {}
-        heatchill_time_per_degree = 60  # seconds. Pretty random guess.
-        fallback_wait_for_temp_time = 60 * 30  # seconds. Again random guess.
-        for step in self.base_steps:
-            (step.name, step.properties, '\n')
-            time = 0
-            if type(step) == CMove:
-                rate_seconds = (step.move_speed * 60
-                                + step.aspiration_speed * 60
-                                + step.dispense_speed * 60) / 3
-                time += step.volume / rate_seconds
-            elif type(step) == CWait:
-                time += step.time
-            elif type(step) == CSetRecordingSpeed:
-                pass
-            elif type(step) == CSeparatePhases:
-                # VERY APPROXIMATE. Assumes 250 mL separation funnel and
-                # 35 mL / min move speed (defined in Chempiler
-                # 481b10a1527280fa51a2134e536211614f8108e8).
-                volume = 250
-                move_speed = 35 * 60  # mL / s
-                time += (volume / 2) / move_speed
-                if step.upper_phase_vessel != step.separation_vessel:
-                    time += (volume / 2) / move_speed
-            elif type(step) == CRotavapAutoEvaporation:
-                time += step.time_limit
-            elif type(step) == CRampChiller:
-                time += step.ramp_duration
-            # EXTREMELY APPROXIMATE. Don't know what temp is in base steps or
-            elif type(step) in [CChillerWaitForTemp, CStirrerWaitForTemp]:
-                if step.vessel in temps:
-                    abs_delta = abs(
-                        temps[step.vessel][-1] - temps[step.vessel][-2])
-                    time += abs_delta * heatchill_time_per_degree
-                else:
-                    time += fallback_wait_for_temp_time
-            elif type(step) in [CChillerSetTemp, CStirrerSetTemp]:
-                temps.setdefault(step.vessel, [25, step.temp])
-                time += 1
-            else:
-                time += 1
-            repeat = 1
-            if 'repeat' in step.properties:
-                repeat = step.repeat
-            total_time += time * repeat
-        return total_time
+
+        duration = 0
+        for step in self.steps:
+            duration += step.duration(self.executor._graph)
+        return duration
 
     def print_estimated_duration(self) -> None:
         """Format estimated duration into hours, minutes and seconds and log it
@@ -374,28 +310,22 @@ class XDL(object):
         Returns:
             Dict[str, float]: Dict of { reagent_name: volume_used... }
         """
-        if not isinstance(self.platform, ChemputerPlatform):
-            self.logger.info('Reagent volume prediction only supported for\
- chemputer.')
-            return {}
 
         if not self.prepared:
-            self.logger.warning(
+            raise XDLError(
                 'prepare_for_execution must be called before reagent volumes\
  can be calculated.')
-            return {}
-        reagent_volumes = {}
-        flasks = self.executor._graph_hardware.flasks
-        flask_ids = [item.id for item in flasks]
-        for step in self.base_steps:
-            if type(step) == CMove and step.from_vessel in flask_ids:
-                reagent = self.executor._graph_hardware[
-                    step.from_vessel].chemical
-                if reagent:
-                    if reagent not in reagent_volumes:
-                        reagent_volumes[reagent] = 0
-                    reagent_volumes[reagent] += step.volume
-        return reagent_volumes
+
+        reagents_consumed = {}
+        for step in self.steps:
+            step_reagents_consumed = step.reagents_consumed(
+                self.executor._graph)
+            for reagent, volume in step_reagents_consumed.items():
+                if reagent in reagents_consumed:
+                    reagents_consumed[reagent] += volume
+                else:
+                    reagents_consumed[reagent] = volume
+        return reagents_consumed
 
     def print_reagent_volumes(self) -> None:
         """Pretty print table of reagent volumes used in procedure.
@@ -471,20 +401,18 @@ class XDL(object):
         self,
         graph_template=None,
         save=None,
-        auto_fix_issues=False,
-        ignore_errors=[]
+        **kwargs
     ):
         """Return graph to run procedure with, built on template.
 
         Returns:
             Dict: JSON node link graph as dictionary.
         """
-        return graph_from_template(
+        return self.platform.graph(
             self,
             template=graph_template,
             save=save,
-            auto_fix_issues=auto_fix_issues,
-            ignore_errors=ignore_errors,
+            **kwargs
         )
 
     def graph_deprecated(
@@ -494,15 +422,16 @@ class XDL(object):
         Here to maintain SynthReader compatibility. Eventually SynthReader
         should use new graph generator.
         """
+        from chemputerxdl import ChemputerPlatform
         if type(self.platform) == ChemputerPlatform:
             liquid_reagents = [reagent.id for reagent in self.reagents]
             cartridge_reagents = []
             for step in self.steps:
-                if type(step) == Add and step.mass:
+                if step.name == 'Add' and step.mass:
                     if step.reagent in liquid_reagents:
                         liquid_reagents.remove(step.reagent)
 
-                elif type(step) == FilterThrough and step.through:
+                elif step.name == 'FilterThrough' and step.through:
                     cartridge_reagents.append(step.through)
             return get_graph(liquid_reagents, list(set(cartridge_reagents)))
 
@@ -517,6 +446,7 @@ class XDL(object):
         interactive: bool = True,
         save_path: str = '',
         sanity_check: bool = True,
+        **kwargs
     ) -> None:
         """Check hardware compatibility and prepare XDL for execution on given
         setup.
@@ -537,6 +467,7 @@ class XDL(object):
                 interactive=interactive,
                 save_path=save_path,
                 sanity_check=sanity_check,
+                **kwargs
             )
 
             if self.executor._prepared_for_execution:
@@ -549,27 +480,28 @@ class XDL(object):
             self.logger.warning(
                 'Cannot call prepare for execution twice on same XDL object.')
 
-    def execute(self, chempiler: 'Chempiler', step: int = None) -> None:
-        """Execute XDL using given Chempiler object. self.prepare_for_execution
-        must have been called before calling thie method.
+    def execute(self, platform_controller: Any, step: int = None) -> None:
+        """Execute XDL using given platform controller object.
+        self.prepare_for_execution must have been called before calling this
+        method.
 
         Args:
-            chempiler (chempiler.Chempiler): Chempiler object instantiated with
-                modules and graph to run XDL on.
+            platform_controller (Any): Platform controller object instantiated
+            with modules and graph to run XDL on.
         """
         # Check step not accidentally passed as platform controller
         try:
-            assert type(chempiler) not in [int, str, list, dict]
+            assert type(platform_controller) not in [int, str, list, dict]
         except AssertionError:
             raise XDLError(
                 f'Invalid platform controller supplied. Type:\
- {type(chempiler)} Value: {chempiler}')
+ {type(platform_controller)} Value: {platform_controller}')
 
         if (self.prepared
                 or (hasattr(self, 'graph_sha256') and self.graph_sha256)):
             if hasattr(self, 'executor'):
                 if step is None:
-                    self.executor.execute(chempiler)
+                    self.executor.execute(platform_controller)
                 else:
                     try:
                         self.steps[step]
@@ -577,7 +509,8 @@ class XDL(object):
                         raise XDLError(
                             f'Trying to execute step {step} but step list has\
  length {len(self.steps)}.')
-                    self.executor.execute_step(chempiler, self.steps[step])
+                    self.executor.execute_step(
+                        platform_controller, self.steps[step])
             else:
                 raise RuntimeError(
                     'XDL executor not available. Call prepare_for_execution\
@@ -599,20 +532,6 @@ class XDL(object):
             steps.extend(xdl_obj.steps)
             components.extend(list(xdl_obj.hardware))
         new_xdl_obj = XDL(steps=steps, reagents=reagents, hardware=components)
-        if self.filter_dead_volume_method != other.filter_dead_volume_method:
-            raise ValueError(
-                "Can't combine two XDL objects with different\
- filter_dead_volume_methods")
-        if self.filter_dead_volume_solvent != other.filter_dead_volume_solvent:
-            raise ValueError(
-                "Can't combine two XDL objects with different\
- filter_dead_volume_solvents")
-        if self.auto_clean != other.auto_clean:
-            raise ValueError(
-                "Can't combine two XDL objects with different auto_clean flags")
-        new_xdl_obj.auto_clean = self.auto_clean
-        new_xdl_obj.filter_dead_volume_method = self.filter_dead_volume_method
-        new_xdl_obj.filter_dead_volume_solvent = self.filter_dead_volume_solvent
         return new_xdl_obj
 
 def xdl_copy(xdl_obj: XDL) -> XDL:

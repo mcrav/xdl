@@ -1,9 +1,0 @@
-!RunColumn
-
-# Example: "The product was purified by column chromatography."
-
-en
-The product was purified by column chromatography.
-
-ru
-Очистить продукт с помощью колоночной хроматографии.

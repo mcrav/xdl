@@ -11,3 +11,11 @@ class ModularWheelPlatform(AbstractPlatform):
     @property
     def executor(self):
         return ModularWheelExecutor
+
+    def graph(
+        self,
+        template,
+        save,
+        **kwargs
+    ):
+        return None

@@ -1,7 +1,7 @@
 from typing import Any, Optional
 from .errors import XDLError
 if False:
-    from ..step_utils import Step
+    from ..steps import Step
 
 def get_port_str(port: str) -> str:
     """Get str representing port for using in human_readable strings.

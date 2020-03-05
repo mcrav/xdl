@@ -3,7 +3,7 @@ from typing import Dict
 from . import stirrer
 from . import base_steps
 from . import add
-from ....step_utils import special_steps
+from ....steps import special_steps
 import copy
 import inspect
 

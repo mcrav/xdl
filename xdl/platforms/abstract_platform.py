@@ -1,14 +1,10 @@
+from typing import Optional
 import abc
+from ..utils.schema import generate_schema
 
 class AbstractPlatform(object):
     """Container class to hold everything necessary for a platform to be used
     with the XDL framework.
-
-    Args:
-        executor (AbstractXDLExecutor): Implementation of
-            abstract class AbstractXDLExecutor.
-        step_library (Dict[str, Step]): Dictionary of step names and
-            corresponding step classes.
     """
     def __init__(self):
         pass
@@ -22,3 +18,20 @@ class AbstractPlatform(object):
     @abc.abstractmethod
     def step_library(self):
         return None
+
+    @abc.abstractmethod
+    def graph(
+        self,
+        graph_template: Optional[str] = None,
+        save: Optional[str] = None,
+        **kwargs
+    ):
+        return
+
+    @property
+    def schema(self):
+        return generate_schema(self.step_library)
+
+    @property
+    def localisation(self):
+        return {}

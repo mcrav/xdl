@@ -4,7 +4,6 @@ from ..reagents import Reagent
 from ..hardware import Hardware
 from ..steps import Step
 from ..constants import XDL_VERSION
-from .constants import ALWAYS_WRITE
 from ..utils.misc import format_property
 from ..utils.sanitisation import convert_val_to_std_units
 
@@ -106,8 +105,7 @@ class XDLGenerator(object):
 
                             # Some things should always be written even if they
                             # are default.
-                            if (not (step.name in ALWAYS_WRITE
-                                     and prop in ALWAYS_WRITE[step.name])):
+                            if prop not in step.ALWAYS_WRITE:
                                 continue
 
                         # Don't write internal properties.

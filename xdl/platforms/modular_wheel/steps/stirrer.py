@@ -1,6 +1,6 @@
 from typing import List
 from .base_steps import CBSetStirRate, CBWait
-from ....step_utils.base_steps import Step, AbstractStep
+from ....steps.base_steps import Step, AbstractStep
 
 class StartStir(AbstractStep):
     def __init__(
