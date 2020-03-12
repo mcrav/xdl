@@ -24,7 +24,7 @@ tests/unit/chempiler_output
 .vscode
 chempiler_output/
 *.xdlexe
-xdl_chemputer_schema.xsd
+*.xsd
 .coverage
 
 # Allows
