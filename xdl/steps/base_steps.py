@@ -252,7 +252,6 @@ class AbstractBaseStep(Step, ABC):
     def duration(self, chempiler):
         return DEFAULT_INSTANT_DURATION
 
-    @abstractmethod
     def locks(self, chempiler):
         return [], [], []
 
