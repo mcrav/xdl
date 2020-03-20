@@ -195,19 +195,19 @@ def clean_properties(xdl_class, properties):
 
         try:
             prop_type = prop_types[prop]
-        except AssertionError:
+        except KeyError:
             raise XDLError(
                 f'Missing prop type for "{prop}" in {xdl_class.__name__}')
 
-        if prop_type in [str, Optional[str]]:
+        if prop_type == str:
             if val:
                 properties[prop] = str(val)
 
-        elif prop_type in [float, Optional[float]]:
+        elif prop_type == float:
             if type(val) == str:
                 properties[prop] = convert_val_to_std_units(val)
 
-        elif prop_type in [bool, Optional[bool]]:
+        elif prop_type == bool:
             if type(val) == str:
                 properties[prop] = parse_bool(val)
 
@@ -236,13 +236,13 @@ def clean_properties(xdl_class, properties):
             if bool_val is not None:
                 properties[prop] = bool_val
 
-        elif prop_type in [int, Optional[int]]:
+        elif prop_type == int:
             try:
                 properties[prop] = int(val)
             except TypeError:
                 pass
 
-        elif prop_type in [List[str], Optional[List[str]]]:
+        elif prop_type == List[str]:
             if type(val) == str:
                 split_list = val.split()
                 for i in range(len(split_list)):
@@ -253,7 +253,7 @@ def clean_properties(xdl_class, properties):
             elif type(val) == list:
                 pass
 
-        elif prop_type in [Union[str, int], Optional[Union[str, int]]]:
+        elif prop_type == Union[str, int]:
             if type(val) == str:
                 if re.match(r'[0-9]+', val):
                     properties[prop] = int(val)

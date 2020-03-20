@@ -198,11 +198,7 @@ def format_val(val: float) -> str:
         str: Number rounded to two decimal places with trailing '0' and '.'
             removed.
     """
-    val_str = f'{val:.4f}'
-    while val_str.endswith('0'):
-        val_str = val_str.rstrip('0')
-
-    return val_str.rstrip('.')
+    return f'{val:.4f}'.rstrip('0').rstrip('.')
 
 class SanityCheck(object):
     """Class for Step sanity checks."""

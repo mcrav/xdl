@@ -184,10 +184,10 @@
       "y": 600,
       "internalId": 68,
       "label": "vacuum_filter",
-      "class": "ChemputerVacuum",
-      "name": "vacuum_filter",
       "current_volume": 0,
-      "max_volume": 100
+      "max_volume": 100,
+      "class": "ChemputerVacuum",
+      "name": "vacuum_filter"
     },
     {
       "id": "stirrer_filter",
@@ -446,6 +446,20 @@
       "chemical": "argon",
       "current_volume": 100,
       "max_volume": 100
+    },
+    {
+      "id": "waste_rotavap",
+      "type": "waste",
+      "x": 1320,
+      "y": 120,
+      "class": "ChemputerWaste",
+      "name": "waste_rotavap",
+      "current_volume": 0,
+      "max_volume": 100,
+      "necks": 1,
+      "can_filter": false,
+      "internalId": 87,
+      "label": "waste_rotavap"
     }
   ],
   "links": [
@@ -855,6 +869,14 @@
       "targetInternal": 3,
       "source": "flask_argon",
       "target": "valve_vacuum",
+      "port": "(0,0)"
+    },
+    {
+      "id": 88,
+      "sourceInternal": 72,
+      "targetInternal": 87,
+      "source": "valve_rotavap",
+      "target": "waste_rotavap",
       "port": "(0,0)"
     }
   ]

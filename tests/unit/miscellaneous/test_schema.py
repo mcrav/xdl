@@ -17,13 +17,18 @@ def test_schema():
 
     xmlschema_doc = etree.parse(xsd_path)
     xmlschema = etree.XMLSchema(xmlschema_doc)
+    parser = etree.XMLParser(schema=xmlschema)
 
     for f in os.listdir(FOLDER):
         print(f)
         if f.endswith('.xdl'):
-            assert xmlschema.validate(etree.parse(os.path.join(FOLDER, f)))
+            with open(os.path.join(FOLDER, f)) as fd:
+                etree.fromstring(fd.read(), parser)
+            # assert xmlschema.validate(etree.parse(os.path.join(FOLDER, f)))
 
     for f in os.listdir(INTEGRATION_FOLDER):
         if f.endswith('.xdl'):
-            assert xmlschema.validate(
-                etree.parse(os.path.join(INTEGRATION_FOLDER, f)))
+            with open(os.path.join(INTEGRATION_FOLDER, f)) as fd:
+                etree.fromstring(fd.read(), parser)
+            # assert xmlschema.validate(
+            #     etree.parse(os.path.join(INTEGRATION_FOLDER, f)))
