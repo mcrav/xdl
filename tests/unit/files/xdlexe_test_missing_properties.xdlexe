@@ -33,6 +33,7 @@
       move_speed="40"
       dispense_speed="40"
       viscous="False"
+      flush_tubing="False"
     >
       <CMove
         from_vessel="reactor"
@@ -45,6 +46,7 @@
         to_port="evaporate"
         unique="False"
         through="None"
+        repeats="1"
         use_backbone="True" />
     </Transfer>
   </Procedure>

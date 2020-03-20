@@ -1,4 +1,4 @@
-<?xdl version="0.3.1" ?>
+<?xdl version="0.4.0" ?>
 
 <Synthesis
   graph_sha256="acd51f8cd491d4ef7aa330f864b43ead449f73684d45afd9b91a2e2dd300fda5"
@@ -57,7 +57,6 @@
           through_cartridge="None"
           reagent_vessel="flask_ether"
           waste_vessel="waste_filter"
-          flush_tube_vessel="flask_nitrogen"
           vessel_type="filter"
           anticlogging_solvent_vessel="None">
           <StopStir
@@ -83,7 +82,8 @@
               to_port="0"
               unique="False"
               through=""
-              use_backbone="True" />
+              use_backbone="True"
+              repeats="1" />
           </PrimePumpForAdd>
           <CMove
             from_vessel="flask_ether"
@@ -96,7 +96,8 @@
             to_port="top"
             unique="False"
             through="None"
-            use_backbone="True" />
+            use_backbone="True"
+            repeats="1" />
           <Wait
             time="10 secs"
             wait_recording_speed="2000"
@@ -108,18 +109,27 @@
             <CSetRecordingSpeed
               recording_speed="14" />
           </Wait>
-          <CMove
-            from_vessel="flask_nitrogen"
+          <FlushTubing
             to_vessel="filter"
-            volume="5 mL"
-            move_speed="40"
-            aspiration_speed="10"
-            dispense_speed="40"
-            from_port="0"
             to_port="top"
-            unique="False"
-            through=""
-            use_backbone="True" />
+            volume="5 mL"
+            dispense_speed="40"
+            through_cartridge="None"
+            flush_tube_vessel="flask_nitrogen">
+            <CMove
+              from_vessel="flask_nitrogen"
+              to_vessel="filter"
+              volume="5 mL"
+              move_speed="40"
+              aspiration_speed="10"
+              dispense_speed="40"
+              from_port="0"
+              to_port="top"
+              unique="False"
+              through="None"
+              use_backbone="True"
+              repeats="1" />
+          </FlushTubing>
         </Add>
       </Children>
       <Steps>
@@ -167,7 +177,6 @@
           through_cartridge="None"
           reagent_vessel="flask_ether"
           waste_vessel="waste_filter"
-          flush_tube_vessel="flask_nitrogen"
           vessel_type="filter"
           anticlogging_solvent_vessel="None">
           <StopStir
@@ -193,7 +202,8 @@
               to_port="0"
               unique="False"
               through=""
-              use_backbone="True" />
+              use_backbone="True"
+              repeats="1" />
           </PrimePumpForAdd>
           <CMove
             from_vessel="flask_ether"
@@ -206,7 +216,8 @@
             to_port="top"
             unique="False"
             through="None"
-            use_backbone="True" />
+            use_backbone="True"
+            repeats="1" />
           <Wait
             time="10 secs"
             wait_recording_speed="2000"
@@ -218,18 +229,27 @@
             <CSetRecordingSpeed
               recording_speed="14" />
           </Wait>
-          <CMove
-            from_vessel="flask_nitrogen"
+          <FlushTubing
             to_vessel="filter"
-            volume="5 mL"
-            move_speed="40"
-            aspiration_speed="10"
-            dispense_speed="40"
-            from_port="0"
             to_port="top"
-            unique="False"
-            through=""
-            use_backbone="True" />
+            volume="5 mL"
+            dispense_speed="40"
+            through_cartridge="None"
+            flush_tube_vessel="flask_nitrogen">
+            <CMove
+              from_vessel="flask_nitrogen"
+              to_vessel="filter"
+              volume="5 mL"
+              move_speed="40"
+              aspiration_speed="10"
+              dispense_speed="40"
+              from_port="0"
+              to_port="top"
+              unique="False"
+              through="None"
+              use_backbone="True"
+              repeats="1" />
+          </FlushTubing>
         </Add>
         <Wait
           time="5 secs"
@@ -275,7 +295,6 @@
           through_cartridge="None"
           reagent_vessel="flask_ether"
           waste_vessel="waste_filter"
-          flush_tube_vessel="flask_nitrogen"
           vessel_type="filter"
           anticlogging_solvent_vessel="None">
           <StopStir
@@ -301,7 +320,8 @@
               to_port="0"
               unique="False"
               through=""
-              use_backbone="True" />
+              use_backbone="True"
+              repeats="1" />
           </PrimePumpForAdd>
           <CMove
             from_vessel="flask_ether"
@@ -314,7 +334,8 @@
             to_port="top"
             unique="False"
             through="None"
-            use_backbone="True" />
+            use_backbone="True"
+            repeats="1" />
           <Wait
             time="10 secs"
             wait_recording_speed="2000"
@@ -326,18 +347,27 @@
             <CSetRecordingSpeed
               recording_speed="14" />
           </Wait>
-          <CMove
-            from_vessel="flask_nitrogen"
+          <FlushTubing
             to_vessel="filter"
-            volume="5 mL"
-            move_speed="40"
-            aspiration_speed="10"
-            dispense_speed="40"
-            from_port="0"
             to_port="top"
-            unique="False"
-            through=""
-            use_backbone="True" />
+            volume="5 mL"
+            dispense_speed="40"
+            through_cartridge="None"
+            flush_tube_vessel="flask_nitrogen">
+            <CMove
+              from_vessel="flask_nitrogen"
+              to_vessel="filter"
+              volume="5 mL"
+              move_speed="40"
+              aspiration_speed="10"
+              dispense_speed="40"
+              from_port="0"
+              to_port="top"
+              unique="False"
+              through="None"
+              use_backbone="True"
+              repeats="1" />
+          </FlushTubing>
         </Add>
       </Steps>
     </Repeat>
