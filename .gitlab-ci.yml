@@ -25,7 +25,8 @@ stages:
 
     - pip install git+https://github.com/croningp/commanduino.git@master
     - pip install git+https://$COMMANDUINOLABWARE_USER:$COMMANDUINOLABWARE_PW@gitlab.com/croningroup/chemputer/commanduinolabware.git@master
-    - pip install git+https://$CHEMPUTERXDL_USER:$CHEMPUTERXDL_PW@gitlab.com/croningroup/chemputer/chemputerxdl.git@develop
+    - git clone https://$CHEMPUTERXDL_USER:$CHEMPUTERXDL_PW@gitlab.com/croningroup/chemputer/chemputerxdl.git
+    - cd chemputerxdl && git checkout MC/#215 && pip install . && cd ..
 
     # Install xdl
     - pip install .
@@ -63,7 +64,7 @@ lint:
   script:
     - pip install flake8
     - pip install flake8-print
-    - flake8 . --max-line-length=$FLAKE8_MAX_LINE_LENGTH --ignore=$FLAKE8_IGNORE --per-file-ignores=$FLAKE8_PER_FILE_IGNORE --exclude=$FLAKE8_EXCLUDE
+    - flake8 . --per-file-ignores=$FLAKE8_PER_FILE_IGNORE
 
 pages:
   stage: "deploy"

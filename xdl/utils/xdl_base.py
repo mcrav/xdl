@@ -10,6 +10,7 @@ class XDLBase(object):
     INTERNAL_PROPS = []
     PROP_TYPES = {}
     ALWAYS_WRITE = {}
+    PROP_LIMITS = {}
 
     def __init__(self, param_dict):
         params = {

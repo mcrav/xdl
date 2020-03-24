@@ -64,6 +64,7 @@ class AbstractPlatform(object):
                     'DEFAULT_PROPS': step.DEFAULT_PROPS,
                     'INTERNAL_PROPS': step.INTERNAL_PROPS,
                     'ALWAYS_WRITE': step.ALWAYS_WRITE,
+                    'PROP_LIMITS': step.PROP_LIMITS,
                 }
                 for step_name, step in self.step_library.items()
                 if (hasattr(step, 'PROP_TYPES')
