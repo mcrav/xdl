@@ -32,8 +32,8 @@ EQUIVALENT_PRESSURES = (1013.25, [
 EQUIVALENT_TEMPERATURES = (25, [
     '25',
     '25°C',
-    '77 f',
-    '298.15k',
+    '77 F',
+    '298.15K',
 ])
 
 EQUIVALENT_TIMES = (3600, [
