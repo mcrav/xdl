@@ -192,6 +192,8 @@ def clean_properties(xdl_class, properties):
     prop_limits = xdl_class.PROP_LIMITS
 
     for prop, val in properties.items():
+
+        # Check for special cases
         if val == 'default' or prop == 'kwargs':
             continue
 
@@ -207,6 +209,7 @@ def clean_properties(xdl_class, properties):
             properties[prop] = val
             continue
 
+        # Get prop type
         try:
             prop_type = prop_types[prop]
         except KeyError:
@@ -219,6 +222,7 @@ def clean_properties(xdl_class, properties):
                 val = val.replace('  ', ' ')
             val = val.strip()
 
+        # Validate val with prop limit
         try:
             prop_limit = prop_limits[prop]
         except KeyError:
@@ -226,6 +230,7 @@ def clean_properties(xdl_class, properties):
 
         test_prop_limit(prop_limit, prop_type, prop, val, xdl_class.__name__)
 
+        # Do type conversion, and conversion to std units
         if prop_type == str:
             if val:
                 properties[prop] = str(val)
@@ -238,7 +243,7 @@ def clean_properties(xdl_class, properties):
             if type(val) == str:
                 properties[prop] = parse_bool(val)
 
-        #  Used by 3 option stir property in WashSolid
+        # Used by 3 option stir property in WashSolid
         elif prop_type == Optional[Union[bool, str]]:
             if type(val) == str:
                 try:
