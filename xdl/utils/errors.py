@@ -15,3 +15,6 @@ def raise_error(e, msg=''):
         msg (str): Message to add to exception.
     """
     raise type(e)(f'{e} {msg}').with_traceback(sys.exc_info()[2])
+
+class XDLValueError(Exception):
+    pass

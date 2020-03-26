@@ -1,6 +1,6 @@
 from typing import Optional, Union, List
 import re
-from .errors import XDLError
+from .errors import XDLValueError, XDLError
 from .prop_limits import (
     POSITIVE_FLOAT_PROP_LIMIT,
     POSITIVE_INT_PROP_LIMIT,
@@ -311,9 +311,9 @@ def test_prop_limit(prop_limit, prop_type, prop, val, step_name):
 
     val = str(val)
     try:
-        assert re.match(prop_limit, val)
+        assert prop_limit.validate(val)
     except AssertionError:
-        raise XDLError(
+        raise XDLValueError(
             f'{step_name}: Value "{val}" does not match "{prop}" prop limit\
- {prop_limit}.'
+ {prop_limit}. {prop_limit.hint}'.strip()
         )
