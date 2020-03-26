@@ -4,6 +4,7 @@ import abc
 from ..utils.schema import generate_schema
 from ..steps import Step
 from ..reagents import Reagent
+from ..hardware import Component
 
 class AbstractPlatform(object):
     """Container class to hold everything necessary for a platform to be used
@@ -93,6 +94,23 @@ class AbstractPlatform(object):
                         'default': prop_limit.default,
                     }
                     for prop, prop_limit in Reagent.PROP_LIMITS.items()
+                }
+            },
+            'Component': {
+                'name': 'Component',
+                'PROP_TYPES': {
+                    k: type_str_dict[v] for k, v in Component.PROP_TYPES.items()
+                },
+                'DEFAULT_PROPS': Component.DEFAULT_PROPS,
+                'INTERNAL_PROPS': Component.INTERNAL_PROPS,
+                'ALWAYS_WRITE': Component.ALWAYS_WRITE,
+                'PROP_LIMITS': {
+                    prop: {
+                        'regex': prop_limit.regex,
+                        'hint': prop_limit.hint,
+                        'default': prop_limit.default,
+                    }
+                    for prop, prop_limit in Component.PROP_LIMITS.items()
                 }
             }
         }
