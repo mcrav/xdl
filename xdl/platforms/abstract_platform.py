@@ -64,7 +64,14 @@ class AbstractPlatform(object):
                     'DEFAULT_PROPS': step.DEFAULT_PROPS,
                     'INTERNAL_PROPS': step.INTERNAL_PROPS,
                     'ALWAYS_WRITE': step.ALWAYS_WRITE,
-                    'PROP_LIMITS': step.PROP_LIMITS,
+                    'PROP_LIMITS': {
+                        prop: {
+                            'regex': prop_limit.regex,
+                            'hint': prop_limit.hint,
+                            'default': prop_limit.default,
+                        }
+                        for prop, prop_limit in step.PROP_LIMITS.items()
+                    },
                     'localisation': self.localisation.get(step_name, {})
                 }
                 for step_name, step in self.step_library.items()
@@ -79,6 +86,14 @@ class AbstractPlatform(object):
                 'DEFAULT_PROPS': Reagent.DEFAULT_PROPS,
                 'INTERNAL_PROPS': Reagent.INTERNAL_PROPS,
                 'ALWAYS_WRITE': Reagent.ALWAYS_WRITE,
+                'PROP_LIMITS': {
+                    prop: {
+                        'regex': prop_limit.regex,
+                        'hint': prop_limit.hint,
+                        'default': prop_limit.default,
+                    }
+                    for prop, prop_limit in Reagent.PROP_LIMITS.items()
+                }
             }
         }
 
