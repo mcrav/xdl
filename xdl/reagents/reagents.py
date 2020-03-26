@@ -1,6 +1,7 @@
 from typing import List
 from ..utils.xdl_base import XDLBase
 from ..utils.errors import XDLError
+from ..utils.prop_limits import TEMP_PROP_LIMIT, VOLUME_PROP_LIMIT
 
 VALID_REAGENT_ROLES = [
     'catalyst',
@@ -59,6 +60,11 @@ class Reagent(XDLBase):
 
     DEFAULT_PROPS = {
         'is_base': False,
+    }
+
+    PROP_LIMITS = {
+        'temp': TEMP_PROP_LIMIT,
+        'last_minute_addition_volume': VOLUME_PROP_LIMIT,
     }
 
     def __init__(

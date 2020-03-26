@@ -300,7 +300,7 @@ def clean_properties(xdl_class, properties):
 
 def test_prop_limit(prop_limit, prop_type, prop, val, step_name):
     """Assert that given val is compatible with prop limit."""
-    if val is None:
+    if val is None or val == '':
         return
 
     if prop_limit is None:

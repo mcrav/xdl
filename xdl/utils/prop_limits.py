@@ -22,12 +22,12 @@ ROTATION_SPEED_UNITS_PATTERN = r'(rpm|RPM)?'
 ###############
 
 def generate_quantity_units_pattern(quantity_pattern, units_pattern):
-    return r'((^' + quantity_pattern + r'[ ]?'\
-        + units_pattern + r'$)|(^' + quantity_pattern + r'$))'
+    return r'^((' + quantity_pattern + r'[ ]?'\
+        + units_pattern + r')|(' + quantity_pattern + r'))$'
 
 
-VOLUME_PROP_LIMIT = r'(all|(^' + POSITIVE_FLOAT_PATTERN + r'[ ]?'\
-    + VOLUME_UNITS_PATTERN + r')$|(^' + POSITIVE_FLOAT_PATTERN + r'$))'
+VOLUME_PROP_LIMIT = r'^(all|(' + POSITIVE_FLOAT_PATTERN + r'[ ]?'\
+    + VOLUME_UNITS_PATTERN + r')|(' + POSITIVE_FLOAT_PATTERN + r'))$'
 
 MASS_PROP_LIMIT = generate_quantity_units_pattern(
     POSITIVE_FLOAT_PATTERN, MASS_UNITS_PATTERN)
@@ -44,14 +44,14 @@ PRESSURE_PROP_LIMIT = generate_quantity_units_pattern(
 ROTATION_SPEED_PROP_LIMIT = generate_quantity_units_pattern(
     POSITIVE_FLOAT_PATTERN, ROTATION_SPEED_UNITS_PATTERN)
 
-POSITIVE_INT_PROP_LIMIT = r'[0-9]+'
+POSITIVE_INT_PROP_LIMIT = r'^[0-9]+$'
 
-POSITIVE_FLOAT_PROP_LIMIT = POSITIVE_FLOAT_PATTERN
+POSITIVE_FLOAT_PROP_LIMIT = r'^' + POSITIVE_FLOAT_PATTERN + r'$'
 
-BOOL_PROP_LIMIT = r'(false|False|true|True)'
+BOOL_PROP_LIMIT = r'^(false|False|true|True)$'
 
 _hundred_float = r'(100(?:[.][0]+)?)'
 _ten_to_ninety_nine_float = r'([0-9][0-9](?:[.][0-9]+)?)'
 _zero_to_ten_float = r'([0-9](?:[.][0-9]+)?)'
-PERCENT_RANGE_PROP_LIMIT = r'^(' + _hundred_float + '|'\
-    + _ten_to_ninety_nine_float + '|' + _zero_to_ten_float + ')$'
+PERCENT_RANGE_PROP_LIMIT = r'^(' + _hundred_float + r'|'\
+    + _ten_to_ninety_nine_float + r'|' + _zero_to_ten_float + r')$'
