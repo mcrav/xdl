@@ -1,1 +1,1 @@
-from .utils.errors import XDLError
+from .utils.errors import XDLError, XDLValueError
