@@ -1,6 +1,17 @@
 from typing import Optional, Union, List
 import re
-from .errors import XDLError
+from .errors import XDLValueError, XDLError
+from .prop_limits import (
+    POSITIVE_FLOAT_PROP_LIMIT,
+    POSITIVE_INT_PROP_LIMIT,
+    BOOL_PROP_LIMIT
+)
+
+DEFAULT_PROP_LIMITS = {
+    float: POSITIVE_FLOAT_PROP_LIMIT,
+    int: POSITIVE_INT_PROP_LIMIT,
+    bool: BOOL_PROP_LIMIT,
+}
 
 def parse_bool(s: str) -> bool:
     """Parse bool from string.
@@ -102,6 +113,7 @@ UNIT_CONVERTERS = {
     'milligram': milligram_to_grams,
     'milligrams': milligram_to_grams,
     'ug': microgram_to_grams,
+    'μg': microgram_to_grams,
     'microgram': microgram_to_grams,
     'micrograms': microgram_to_grams,
 
@@ -177,7 +189,11 @@ def convert_val_to_std_units(val: str) -> float:
 
 def clean_properties(xdl_class, properties):
     prop_types = xdl_class.PROP_TYPES
+    prop_limits = xdl_class.PROP_LIMITS
+
     for prop, val in properties.items():
+
+        # Check for special cases
         if val == 'default' or prop == 'kwargs':
             continue
 
@@ -193,25 +209,41 @@ def clean_properties(xdl_class, properties):
             properties[prop] = val
             continue
 
+        # Get prop type
         try:
             prop_type = prop_types[prop]
-        except AssertionError:
+        except KeyError:
             raise XDLError(
                 f'Missing prop type for "{prop}" in {xdl_class.__name__}')
 
-        if prop_type in [str, Optional[str]]:
+        # Remove any whitespace errors
+        if type(val) == str:
+            while '  ' in val:
+                val = val.replace('  ', ' ')
+            val = val.strip()
+
+        # Validate val with prop limit
+        try:
+            prop_limit = prop_limits[prop]
+        except KeyError:
+            prop_limit = None
+
+        test_prop_limit(prop_limit, prop_type, prop, val, xdl_class.__name__)
+
+        # Do type conversion, and conversion to std units
+        if prop_type == str:
             if val:
                 properties[prop] = str(val)
 
-        elif prop_type in [float, Optional[float]]:
+        elif prop_type == float:
             if type(val) == str:
                 properties[prop] = convert_val_to_std_units(val)
 
-        elif prop_type in [bool, Optional[bool]]:
+        elif prop_type == bool:
             if type(val) == str:
                 properties[prop] = parse_bool(val)
 
-        #  Used by 3 option stir property in WashSolid
+        # Used by 3 option stir property in WashSolid
         elif prop_type == Optional[Union[bool, str]]:
             if type(val) == str:
                 try:
@@ -236,13 +268,13 @@ def clean_properties(xdl_class, properties):
             if bool_val is not None:
                 properties[prop] = bool_val
 
-        elif prop_type in [int, Optional[int]]:
+        elif prop_type == int:
             try:
                 properties[prop] = int(val)
             except TypeError:
                 pass
 
-        elif prop_type in [List[str], Optional[List[str]]]:
+        elif prop_type == List[str]:
             if type(val) == str:
                 split_list = val.split()
                 for i in range(len(split_list)):
@@ -253,7 +285,7 @@ def clean_properties(xdl_class, properties):
             elif type(val) == list:
                 pass
 
-        elif prop_type in [Union[str, int], Optional[Union[str, int]]]:
+        elif prop_type == Union[str, int]:
             if type(val) == str:
                 if re.match(r'[0-9]+', val):
                     properties[prop] = int(val)
@@ -265,3 +297,23 @@ def clean_properties(xdl_class, properties):
                 pass
 
     return properties
+
+def test_prop_limit(prop_limit, prop_type, prop, val, step_name):
+    """Assert that given val is compatible with prop limit."""
+    if val is None or val == '':
+        return
+
+    if prop_limit is None:
+        if prop_type in DEFAULT_PROP_LIMITS:
+            prop_limit = DEFAULT_PROP_LIMITS[prop_type]
+        else:
+            return
+
+    val = str(val)
+    try:
+        assert prop_limit.validate(val)
+    except AssertionError:
+        raise XDLValueError(
+            f'{step_name}: Value "{val}" does not match "{prop}" prop limit\
+ {prop_limit}. {prop_limit.hint}'.strip()
+        )

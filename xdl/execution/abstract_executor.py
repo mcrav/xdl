@@ -99,8 +99,9 @@ class AbstractXDLExecutor(ABC):
                 self.prepare_dynamic_steps_for_execution(substep, graph)
 
     def execute_step(self, platform_controller, step, async_steps=None):
-        self.prepare_dynamic_steps_for_execution(
-            step, platform_controller.graph.graph)
+        if hasattr(platform_controller, 'graph') and platform_controller.graph:
+            self.prepare_dynamic_steps_for_execution(
+                step, platform_controller.graph.graph)
 
         self.logger.info(step.name)
 

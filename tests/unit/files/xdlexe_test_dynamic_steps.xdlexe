@@ -58,6 +58,7 @@
         viscous="False"
         through_cartridge="None"
         transfer_all="False"
+        flush_tubing="False"
         from_vessel_has_heater="False"
         from_vessel_has_chiller="True"
         from_vessel_has_stirrer="False">
@@ -72,7 +73,16 @@
           to_port="bottom"
           unique="False"
           through="None"
-          use_backbone="True" />
+          use_backbone="True"
+          repeats="1" />
+        <StopHeatChill
+          vessel="filter"
+          vessel_type="filter"
+          heater="None"
+          chiller="filter_chiller"
+        >
+          <CStopChiller vessel="filter"/>
+        </StopHeatChill>
       </Transfer>
       <Add
         reagent="ether"
@@ -97,7 +107,6 @@
         anticlogging_solvent_vessel="None"
         reagent_vessel="flask_ether"
         waste_vessel="waste_separator"
-        flush_tube_vessel="flask_nitrogen"
         vessel_type="separator">
         <StopStir
           vessel="separator"
@@ -122,6 +131,7 @@
             to_port="0"
             unique="False"
             through=""
+            repeats="1"
             use_backbone="True" />
         </PrimePumpForAdd>
         <CMove
@@ -135,6 +145,7 @@
           to_port="bottom"
           unique="False"
           through="None"
+          repeats="1"
           use_backbone="True" />
         <Wait
           time="10 secs"
@@ -147,18 +158,27 @@
           <CSetRecordingSpeed
             recording_speed="14" />
         </Wait>
-        <CMove
-          from_vessel="flask_nitrogen"
+        <FlushTubing
           to_vessel="separator"
-          volume="5 mL"
-          move_speed="40"
-          aspiration_speed="10"
-          dispense_speed="40"
-          from_port="0"
           to_port="bottom"
-          unique="False"
-          through=""
-          use_backbone="True" />
+          volume="5 mL"
+          dispense_speed="40"
+          through_cartridge="None"
+          flush_tube_vessel="flask_nitrogen">
+          <CMove
+            from_vessel="flask_nitrogen"
+            to_vessel="separator"
+            volume="5 mL"
+            move_speed="40"
+            aspiration_speed="10"
+            dispense_speed="40"
+            from_port="0"
+            to_port="bottom"
+            unique="False"
+            through="None"
+            repeats="1"
+            use_backbone="True" />
+        </FlushTubing>
       </Add>
       <Stir
         vessel="separator"
