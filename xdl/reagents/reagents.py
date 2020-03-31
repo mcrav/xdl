@@ -60,6 +60,16 @@ class Reagent(XDLBase):
 
     DEFAULT_PROPS = {
         'is_base': False,
+        'cleaning_solvent': None,
+        'use_for_cleaning': False,
+        'stir': False,
+        'cas': None,
+        'temp': None,
+        'role': None,
+        'last_minute_addition': None,
+        'last_minute_addition_volume': None,
+        'preserve': False,
+        'incompatible_reagents': [],
     }
 
     PROP_LIMITS = {
@@ -70,16 +80,16 @@ class Reagent(XDLBase):
     def __init__(
         self,
         id: str,
-        cleaning_solvent: str = None,
-        use_for_cleaning: str = False,
-        stir: bool = False,
-        cas: int = None,
-        temp: float = None,
-        role: str = None,
-        last_minute_addition: str = None,
-        last_minute_addition_volume: float = None,
-        preserve: bool = False,
-        incompatible_reagents: List[str] = [],
+        cleaning_solvent: str = 'default',
+        use_for_cleaning: str = 'default',
+        stir: bool = 'default',
+        cas: int = 'default',
+        temp: float = 'default',
+        role: str = 'default',
+        last_minute_addition: str = 'default',
+        last_minute_addition_volume: float = 'default',
+        preserve: bool = 'default',
+        incompatible_reagents: List[str] = 'default',
         is_base: bool = 'default'
     ) -> None:
         super().__init__(locals())
