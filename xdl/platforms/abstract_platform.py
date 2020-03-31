@@ -2,7 +2,7 @@ from typing import Optional, Callable, Union, List, Dict, Any
 import json
 import abc
 from ..utils.schema import generate_schema
-from ..steps import Step
+from ..steps import Step, AbstractBaseStep
 from ..reagents import Reagent
 from ..hardware import Component
 
@@ -59,6 +59,7 @@ class AbstractPlatform(object):
             'steps': [
                 {
                     'name': step_name,
+                    'is_base_step': issubclass(step, AbstractBaseStep),
                     'PROP_TYPES': {
                         k: type_str_dict[v] for k, v in step.PROP_TYPES.items()
                     },
