@@ -1,7 +1,6 @@
 from typing import List
 from ..utils.xdl_base import XDLBase
-from ..utils.errors import XDLError
-from ..utils.prop_limits import TEMP_PROP_LIMIT, VOLUME_PROP_LIMIT
+from ..utils.prop_limits import TEMP_PROP_LIMIT, VOLUME_PROP_LIMIT, PropLimit
 
 VALID_REAGENT_ROLES = [
     'catalyst',
@@ -75,6 +74,9 @@ class Reagent(XDLBase):
     PROP_LIMITS = {
         'temp': TEMP_PROP_LIMIT,
         'last_minute_addition_volume': VOLUME_PROP_LIMIT,
+        'role': PropLimit(
+            enum=['reagent', 'solvent', 'substrate', 'catalyst']
+        )
     }
 
     def __init__(
@@ -93,11 +95,3 @@ class Reagent(XDLBase):
         is_base: bool = 'default'
     ) -> None:
         super().__init__(locals())
-        self.validate_role()
-
-    def validate_role(self):
-        try:
-            assert not self.role or self.role in VALID_REAGENT_ROLES
-        except AssertionError:
-            raise XDLError(f'Invalid role "{self.role}" given for reagent\
- "{self.id}". Valid roles: {", ".join(VALID_REAGENT_ROLES)}')

@@ -1,10 +1,10 @@
 import pytest
-from xdl.utils.errors import XDLError
+from xdl.utils.errors import XDLValueError
 from xdl.reagents import Reagent
 
 @pytest.mark.unit
 def test_reagent_roles():
-    with pytest.raises(XDLError):
+    with pytest.raises(XDLValueError):
         Reagent(id="irnbru", role="juice")
     Reagent(id="DCM", role="solvent")
     Reagent(id="Pd(DBA)2", role="catalyst")
