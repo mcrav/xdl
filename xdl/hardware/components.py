@@ -25,8 +25,16 @@ class Component(XDLBase):
         'chemical': str,
     }
 
+    DEFAULT_PROPS = {
+        'chemical': None,
+    }
+
     def __init__(
-            self, id: str, component_type: str, chemical: str = None) -> None:
+            self,
+            id: str,
+            component_type: str,
+            chemical: str = 'default'
+    ) -> None:
         super().__init__(locals())
 
 class Hardware(object):
