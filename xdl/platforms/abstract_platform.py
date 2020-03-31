@@ -92,6 +92,7 @@ class AbstractPlatform(object):
                 'PROP_LIMITS': {
                     prop: {
                         'regex': prop_limit.regex,
+                        'enum': prop_limit.enum,
                         'hint': prop_limit.hint,
                         'default': prop_limit.default,
                     }
@@ -109,6 +110,7 @@ class AbstractPlatform(object):
                 'PROP_LIMITS': {
                     prop: {
                         'regex': prop_limit.regex,
+                        'enum': prop_limit.enum,
                         'hint': prop_limit.hint,
                         'default': prop_limit.default,
                     }
