@@ -29,11 +29,6 @@ class Step(XDLBase):
 
     def __init__(self, param_dict):
         super().__init__(param_dict)
-        if 'kwargs' in param_dict:
-            kwargs = ['repeat']
-            for kwarg in kwargs:
-                if kwarg in param_dict['kwargs']:
-                    self.properties[kwarg] = param_dict['kwargs'][kwarg]
 
     def formatted_properties(self):
         formatted_props = copy.deepcopy(self.properties)
