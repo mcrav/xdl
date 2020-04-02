@@ -79,7 +79,8 @@ class AbstractPlatform(object):
                 }
                 for step_name, step in self.step_library.items()
                 if (hasattr(step, 'PROP_TYPES')
-                    and not step_name.startswith('Abstract'))
+                    and not step_name.startswith('Abstract')
+                    and step_name not in ['Step', 'UnimplementedStep'])
             ],
             'Reagent': {
                 'name': 'Reagent',
