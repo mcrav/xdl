@@ -540,7 +540,7 @@ def deep_copy_step(step):
     """
     children = []
     if 'children' in step.properties and step.children:
-        for child in children:
+        for child in step.children:
             children.append(deep_copy_step(child))
     try:
         copy_props = {}
