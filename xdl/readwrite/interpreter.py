@@ -29,14 +29,14 @@ def xdl_file_to_objs(
                 reagents: List of Reagent objects.
     """
     try:
-        with open(xdl_file) as fileobj:
+        with open(xdl_file, encoding='utf8') as fileobj:
             xdlstr = fileobj.read()
     except UnicodeDecodeError:
         # Try different encoding to UTF-8
-        logger.debug(f"Unable to decode file using UTF-8\
-            Falling back to ISO-8859-1")
+        logger.debug(f'Unable to decode file using UTF-8\
+Falling back to ISO-8859-1')
 
-        with open(xdl_file, encoding="iso-8859-1") as fileobj:
+        with open(xdl_file, encoding='iso-8859-1') as fileobj:
             xdlstr = fileobj.read()
 
     return xdl_str_to_objs(
