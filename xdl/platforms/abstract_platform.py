@@ -2,8 +2,9 @@ from typing import Optional, Callable, Union, List, Dict, Any
 import json
 import abc
 from ..utils.schema import generate_schema
-from ..steps import Step
+from ..steps import Step, AbstractBaseStep
 from ..reagents import Reagent
+from ..hardware import Component
 
 class AbstractPlatform(object):
     """Container class to hold everything necessary for a platform to be used
@@ -58,6 +59,7 @@ class AbstractPlatform(object):
             'steps': [
                 {
                     'name': step_name,
+                    'is_base_step': issubclass(step, AbstractBaseStep),
                     'PROP_TYPES': {
                         k: type_str_dict[v] for k, v in step.PROP_TYPES.items()
                     },
@@ -67,6 +69,7 @@ class AbstractPlatform(object):
                     'PROP_LIMITS': {
                         prop: {
                             'regex': prop_limit.regex,
+                            'enum': prop_limit.enum,
                             'hint': prop_limit.hint,
                             'default': prop_limit.default,
                         }
@@ -76,7 +79,8 @@ class AbstractPlatform(object):
                 }
                 for step_name, step in self.step_library.items()
                 if (hasattr(step, 'PROP_TYPES')
-                    and not step_name.startswith('Abstract'))
+                    and not step_name.startswith('Abstract')
+                    and step_name not in ['Step', 'UnimplementedStep'])
             ],
             'Reagent': {
                 'name': 'Reagent',
@@ -89,10 +93,29 @@ class AbstractPlatform(object):
                 'PROP_LIMITS': {
                     prop: {
                         'regex': prop_limit.regex,
+                        'enum': prop_limit.enum,
                         'hint': prop_limit.hint,
                         'default': prop_limit.default,
                     }
                     for prop, prop_limit in Reagent.PROP_LIMITS.items()
+                }
+            },
+            'Component': {
+                'name': 'Component',
+                'PROP_TYPES': {
+                    k: type_str_dict[v] for k, v in Component.PROP_TYPES.items()
+                },
+                'DEFAULT_PROPS': Component.DEFAULT_PROPS,
+                'INTERNAL_PROPS': Component.INTERNAL_PROPS,
+                'ALWAYS_WRITE': Component.ALWAYS_WRITE,
+                'PROP_LIMITS': {
+                    prop: {
+                        'regex': prop_limit.regex,
+                        'enum': prop_limit.enum,
+                        'hint': prop_limit.hint,
+                        'default': prop_limit.default,
+                    }
+                    for prop, prop_limit in Component.PROP_LIMITS.items()
                 }
             }
         }

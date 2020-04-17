@@ -1,4 +1,4 @@
-<?xdl version="0.4.0" ?>
+<?xdl version="0.4.2" ?>
 
 <Synthesis
   graph_sha256="acd51f8cd491d4ef7aa330f864b43ead449f73684d45afd9b91a2e2dd300fda5"
@@ -48,7 +48,7 @@
           viscous="False"
           time="None"
           stir="False"
-          stir_speed="250 RPM"
+          stir_speed="250.0"
           confirm_solid="True"
           anticlogging="False"
           anticlogging_solvent="None"
@@ -58,7 +58,8 @@
           reagent_vessel="flask_ether"
           waste_vessel="waste_filter"
           vessel_type="filter"
-          anticlogging_solvent_vessel="None">
+          anticlogging_solvent_vessel="None"
+          prime_n_times="1">
           <StopStir
             vessel="filter"
             vessel_type="filter"
@@ -70,20 +71,39 @@
             reagent="ether"
             volume="3 mL"
             reagent_vessel="flask_ether"
-            waste_vessel="waste_filter">
-            <CMove
-              from_vessel="flask_ether"
-              to_vessel="waste_filter"
-              volume="3 mL"
-              move_speed="40"
-              aspiration_speed="10"
-              dispense_speed="40"
-              from_port="0"
-              to_port="0"
-              unique="False"
-              through=""
-              use_backbone="True"
-              repeats="1" />
+            waste_vessel="waste_filter"
+            prime_n_times="1">
+            <Repeat
+              repeats="1">
+              <Children>
+                <CMove
+                  from_vessel="flask_ether"
+                  to_vessel="waste_filter"
+                  volume="3 mL"
+                  move_speed="40"
+                  aspiration_speed="10"
+                  dispense_speed="40"
+                  from_port="0"
+                  to_port="0"
+                  through=""
+                  use_backbone="True"
+                  repeats="1" />
+              </Children>
+              <Steps>
+                <CMove
+                  from_vessel="flask_ether"
+                  to_vessel="waste_filter"
+                  volume="3 mL"
+                  move_speed="40"
+                  aspiration_speed="10"
+                  dispense_speed="40"
+                  from_port="0"
+                  to_port="0"
+                  through=""
+                  use_backbone="True"
+                  repeats="1" />
+              </Steps>
+            </Repeat>
           </PrimePumpForAdd>
           <CMove
             from_vessel="flask_ether"
@@ -94,7 +114,6 @@
             dispense_speed="40"
             from_port="0"
             to_port="top"
-            unique="False"
             through="None"
             use_backbone="True"
             repeats="1" />
@@ -125,7 +144,6 @@
               dispense_speed="40"
               from_port="0"
               to_port="top"
-              unique="False"
               through="None"
               use_backbone="True"
               repeats="1" />
@@ -168,7 +186,7 @@
           viscous="False"
           time="None"
           stir="False"
-          stir_speed="250 RPM"
+          stir_speed="250.0"
           confirm_solid="True"
           anticlogging="False"
           anticlogging_solvent="None"
@@ -178,7 +196,8 @@
           reagent_vessel="flask_ether"
           waste_vessel="waste_filter"
           vessel_type="filter"
-          anticlogging_solvent_vessel="None">
+          anticlogging_solvent_vessel="None"
+          prime_n_times="1">
           <StopStir
             vessel="filter"
             vessel_type="filter"
@@ -190,20 +209,39 @@
             reagent="ether"
             volume="3 mL"
             reagent_vessel="flask_ether"
-            waste_vessel="waste_filter">
-            <CMove
-              from_vessel="flask_ether"
-              to_vessel="waste_filter"
-              volume="3 mL"
-              move_speed="40"
-              aspiration_speed="10"
-              dispense_speed="40"
-              from_port="0"
-              to_port="0"
-              unique="False"
-              through=""
-              use_backbone="True"
-              repeats="1" />
+            waste_vessel="waste_filter"
+            prime_n_times="1">
+            <Repeat
+              repeats="1">
+              <Children>
+                <CMove
+                  from_vessel="flask_ether"
+                  to_vessel="waste_filter"
+                  volume="3 mL"
+                  move_speed="40"
+                  aspiration_speed="10"
+                  dispense_speed="40"
+                  from_port="0"
+                  to_port="0"
+                  through=""
+                  use_backbone="True"
+                  repeats="1" />
+              </Children>
+              <Steps>
+                <CMove
+                  from_vessel="flask_ether"
+                  to_vessel="waste_filter"
+                  volume="3 mL"
+                  move_speed="40"
+                  aspiration_speed="10"
+                  dispense_speed="40"
+                  from_port="0"
+                  to_port="0"
+                  through=""
+                  use_backbone="True"
+                  repeats="1" />
+              </Steps>
+            </Repeat>
           </PrimePumpForAdd>
           <CMove
             from_vessel="flask_ether"
@@ -214,7 +252,6 @@
             dispense_speed="40"
             from_port="0"
             to_port="top"
-            unique="False"
             through="None"
             use_backbone="True"
             repeats="1" />
@@ -245,7 +282,6 @@
               dispense_speed="40"
               from_port="0"
               to_port="top"
-              unique="False"
               through="None"
               use_backbone="True"
               repeats="1" />
@@ -286,7 +322,7 @@
           viscous="False"
           time="None"
           stir="False"
-          stir_speed="250 RPM"
+          stir_speed="250.0"
           confirm_solid="True"
           anticlogging="False"
           anticlogging_solvent="None"
@@ -296,7 +332,8 @@
           reagent_vessel="flask_ether"
           waste_vessel="waste_filter"
           vessel_type="filter"
-          anticlogging_solvent_vessel="None">
+          anticlogging_solvent_vessel="None"
+          prime_n_times="1">
           <StopStir
             vessel="filter"
             vessel_type="filter"
@@ -308,20 +345,39 @@
             reagent="ether"
             volume="3 mL"
             reagent_vessel="flask_ether"
-            waste_vessel="waste_filter">
-            <CMove
-              from_vessel="flask_ether"
-              to_vessel="waste_filter"
-              volume="3 mL"
-              move_speed="40"
-              aspiration_speed="10"
-              dispense_speed="40"
-              from_port="0"
-              to_port="0"
-              unique="False"
-              through=""
-              use_backbone="True"
-              repeats="1" />
+            waste_vessel="waste_filter"
+            prime_n_times="1">
+            <Repeat
+              repeats="1">
+              <Children>
+                <CMove
+                  from_vessel="flask_ether"
+                  to_vessel="waste_filter"
+                  volume="3 mL"
+                  move_speed="40"
+                  aspiration_speed="10"
+                  dispense_speed="40"
+                  from_port="0"
+                  to_port="0"
+                  through=""
+                  use_backbone="True"
+                  repeats="1" />
+              </Children>
+              <Steps>
+                <CMove
+                  from_vessel="flask_ether"
+                  to_vessel="waste_filter"
+                  volume="3 mL"
+                  move_speed="40"
+                  aspiration_speed="10"
+                  dispense_speed="40"
+                  from_port="0"
+                  to_port="0"
+                  through=""
+                  use_backbone="True"
+                  repeats="1" />
+              </Steps>
+            </Repeat>
           </PrimePumpForAdd>
           <CMove
             from_vessel="flask_ether"
@@ -332,7 +388,6 @@
             dispense_speed="40"
             from_port="0"
             to_port="top"
-            unique="False"
             through="None"
             use_backbone="True"
             repeats="1" />
@@ -363,7 +418,6 @@
               dispense_speed="40"
               from_port="0"
               to_port="top"
-              unique="False"
               through="None"
               use_backbone="True"
               repeats="1" />

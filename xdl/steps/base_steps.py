@@ -29,16 +29,16 @@ class Step(XDLBase):
 
     def __init__(self, param_dict):
         super().__init__(param_dict)
-        if 'kwargs' in param_dict:
-            kwargs = ['repeat']
-            for kwarg in kwargs:
-                if kwarg in param_dict['kwargs']:
-                    self.properties[kwarg] = param_dict['kwargs'][kwarg]
 
     def formatted_properties(self):
         formatted_props = copy.deepcopy(self.properties)
         for prop, val in formatted_props.items():
-            formatted_props[prop] = format_property(prop, val)
+            formatted_props[prop] = format_property(
+                prop,
+                val,
+                self.PROP_TYPES[prop],
+                self.PROP_LIMITS.get(prop, None),
+            )
             if formatted_props[prop] == 'None':
                 formatted_props[prop] = ''
         return formatted_props

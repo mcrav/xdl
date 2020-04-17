@@ -43,7 +43,11 @@ def test_steps_identical(step1, step2, test_file):
             for j, child in enumerate(step1.children):
                 assert child.name == step2.children[j].name
                 for child_prop, child_val in child.properties.items():
-                    assert child_val == step2.children[j].properties[child_prop]
+                    if child_val or step2.children[j].properties[child_prop]:
+                        assert (
+                            child_val
+                            == step2.children[j].properties[child_prop]
+                        )
 
         elif val or step2.properties[prop]:
             try:

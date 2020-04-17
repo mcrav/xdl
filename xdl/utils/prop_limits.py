@@ -8,20 +8,55 @@ class PropLimit(object):
             match with invalid values.
         hint (str): Optional. Useful hint for what valid value should look like.
         default (str): Optional. Default valid value.
+        enum (List[str]): List of values that the prop can take.
     """
     def __init__(
         self,
-        regex,
+        regex=None,
         hint='',
         default='',
+        enum=[],
     ):
-        self.regex = regex
-        self.hint = hint
+        if not regex and not enum:
+            raise ValueError(
+                'Either `regex` or `enum` argument must be given.')
+
         self.default = default
+
+        # If enum given generate regex from this
+        self.enum = enum
+        if enum:
+            if not regex:
+                self.regex = self.generate_enum_regex()
+            else:
+                self.regex = regex
+
+            if not hint:
+                self.hint = self.generate_enum_hint()
+            else:
+                self.hint = hint
+
+        # Otherwise just set regex as attribute
+        else:
+            self.regex = regex
+            self.hint = hint
 
     def validate(self, value):
         return re.match(self.regex, value)
 
+    def generate_enum_regex(self):
+        regex = r'('
+        for item in self.enum:
+            regex += item + r'|'
+        regex = regex[:-1] + r')'
+        return regex
+
+    def generate_enum_hint(self):
+        s = 'Expecting one of '
+        for item in self.enum[:-1]:
+            s += f'"{item}", '
+        s = s[:-2] + f' or "{self.enum[-1]}".'
+        return s
 
 ##################
 # Regex patterns #
