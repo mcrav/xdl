@@ -26,6 +26,7 @@ chempiler_output/
 *.xdlexe
 xdl_chemputer_schema.xsd
 .coverage
+log_files
 
 # Allows
 !tests/unit/files/xdlexe_test_iso8891.xdlexe
