@@ -33,7 +33,12 @@ class Step(XDLBase):
     def formatted_properties(self):
         formatted_props = copy.deepcopy(self.properties)
         for prop, val in formatted_props.items():
-            formatted_props[prop] = format_property(prop, val)
+            formatted_props[prop] = format_property(
+                prop,
+                val,
+                self.PROP_TYPES[prop],
+                self.PROP_LIMITS.get(prop, None),
+            )
             if formatted_props[prop] == 'None':
                 formatted_props[prop] = ''
         return formatted_props

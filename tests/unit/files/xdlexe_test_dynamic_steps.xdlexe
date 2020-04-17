@@ -106,7 +106,8 @@
         anticlogging_solvent_vessel="None"
         reagent_vessel="flask_ether"
         waste_vessel="waste_separator"
-        vessel_type="separator">
+        vessel_type="separator"
+        prime_n_times="1">
         <StopStir
           vessel="separator"
           vessel_type="separator"
@@ -118,19 +119,22 @@
           reagent="ether"
           volume="3 mL"
           reagent_vessel="flask_ether"
-          waste_vessel="waste_separator">
-          <CMove
-            from_vessel="flask_ether"
-            to_vessel="waste_separator"
-            volume="3 mL"
-            move_speed="40"
-            aspiration_speed="10"
-            dispense_speed="40"
-            from_port="0"
-            to_port="0"
-            through=""
-            repeats="1"
-            use_backbone="True" />
+          waste_vessel="waste_separator"
+          prime_n_times="1">
+          <Repeat repeats="1">
+            <CMove
+              from_vessel="flask_ether"
+              to_vessel="waste_separator"
+              volume="3 mL"
+              move_speed="40"
+              aspiration_speed="10"
+              dispense_speed="40"
+              from_port="0"
+              to_port="0"
+              through=""
+              repeats="1"
+              use_backbone="True" />
+          </Repeat>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_ether"

@@ -1,5 +1,14 @@
 from typing import Any, Optional
 from .errors import XDLError
+from .prop_limits import (
+    PropLimit,
+    TEMP_PROP_LIMIT,
+    TIME_PROP_LIMIT,
+    ROTATION_SPEED_PROP_LIMIT,
+    VOLUME_PROP_LIMIT,
+    MASS_PROP_LIMIT,
+    PRESSURE_PROP_LIMIT,
+)
 if False:
     from ..steps import Step
 
@@ -17,7 +26,12 @@ def get_port_str(port: str) -> str:
     return ''
 
 def format_property(
-        prop: str, val: Any, human_readable: Optional[bool] = True) -> str:
+    prop: str,
+    val: Any,
+    prop_type: type,
+    prop_limit: PropLimit,
+    human_readable: Optional[bool] = True
+) -> str:
     """Given property key and value in standard units, convert value
     to sensitive units and return str ready for putting in XDL.
     E.g. time: 3600 -> '1 hr', volume 2000 -> '2 l'.
@@ -37,32 +51,32 @@ def format_property(
     if val is None:
         return None
 
-    if 'time' in prop:
+    if prop_limit is TIME_PROP_LIMIT:
         return format_time(val)
 
     elif prop == 'remove_dead_volume':
         return str(val)
 
     # endswith must be used as 'dead_volume_target' isn't a volume.
-    elif prop.endswith('volume'):
+    elif prop_limit is VOLUME_PROP_LIMIT:
         return format_volume(val)
 
-    elif 'mass' in prop:
+    elif prop_limit is MASS_PROP_LIMIT:
         return format_mass(val)
 
-    elif 'temp' in prop:
+    elif prop is TEMP_PROP_LIMIT:
         return format_temp(val)
 
-    elif 'pressure' in prop:
+    elif prop is PRESSURE_PROP_LIMIT:
         return format_pressure(val)
 
     elif 'port' in prop and human_readable:
         return get_port_str(val)
 
-    elif 'stir_speed' in prop:
+    elif prop is ROTATION_SPEED_PROP_LIMIT:
         return format_stir_rpm(val)
 
-    elif prop in ['n_separations', 'repeat', 'cleans', 'eluting_repeats']:
+    elif prop_type == int:
         return format_int(val)
 
     elif type(val) == list:

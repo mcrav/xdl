@@ -141,7 +141,12 @@ class XDLGenerator(object):
                         return
                 # Convert value to nice units and add to element attrib.
                 formatted_property = format_property(
-                    prop, val, human_readable=False)
+                    prop,
+                    val,
+                    step.PROP_TYPES[prop],
+                    step.PROP_LIMITS.get(prop, None),
+                    human_readable=False
+                )
 
                 if formatted_property is None:
                     formatted_property = str(formatted_property)
