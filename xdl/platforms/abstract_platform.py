@@ -43,6 +43,8 @@ class AbstractPlatform(object):
     @property
     def declaration(self):
         type_str_dict = {
+            'reagent': 'reagent',
+            'vessel': 'vessel',
             str: 'str',
             int: 'int',
             float: 'float',
