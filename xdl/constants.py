@@ -35,3 +35,9 @@ SYNTHESIS_ATTRS = [
         'default': '',
     }
 ]
+
+# Prop type if property should be reagent declared in Reagent section
+REAGENT_PROP_TYPE = 'reagent'
+
+# Prop type if property should be vessel declared in Hardware section
+VESSEL_PROP_TYPE = 'vessel'

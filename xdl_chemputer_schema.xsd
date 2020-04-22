@@ -37,6 +37,7 @@
                     <xs:attribute type="xs:string" name="last_minute_addition_volume" use="optional"/>
                     <xs:attribute type="xs:string" name="preserve" use="optional"/>
                     <xs:attribute type="xs:string" name="incompatible_reagents" use="optional"/>
+                    <xs:attribute type="xs:string" name="is_base" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -51,6 +52,7 @@
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -59,6 +61,7 @@
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -69,6 +72,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="temp" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -78,6 +82,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -90,7 +95,7 @@
                     <xs:attribute type="xs:string" name="to_vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="from_port" use="optional"/>
                     <xs:attribute type="xs:string" name="to_port" use="optional"/>
-                    <xs:attribute type="xs:string" name="unique" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -100,6 +105,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -109,6 +115,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -118,6 +125,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -128,6 +136,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="device_name" use="optional"/>
                     <xs:attribute type="xs:string" name="motor_name" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -144,9 +153,10 @@
                     <xs:attribute type="xs:string" name="dispense_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="from_port" use="optional"/>
                     <xs:attribute type="xs:string" name="to_port" use="optional"/>
-                    <xs:attribute type="xs:string" name="unique" use="optional"/>
                     <xs:attribute type="xs:string" name="through" use="optional"/>
                     <xs:attribute type="xs:string" name="use_backbone" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeats" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -158,6 +168,7 @@
                     <xs:attribute type="xs:string" name="device_name" use="optional"/>
                     <xs:attribute type="xs:string" name="motor_name" use="optional"/>
                     <xs:attribute type="xs:string" name="steps" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -169,6 +180,7 @@
                     <xs:attribute type="xs:string" name="device_name" use="optional"/>
                     <xs:attribute type="xs:string" name="motor_name" use="optional"/>
                     <xs:attribute type="xs:string" name="position" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -180,6 +192,7 @@
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="ramp_duration" use="optional"/>
                     <xs:attribute type="xs:string" name="end_temperature" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -190,6 +203,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="device_name" use="optional"/>
                     <xs:attribute type="xs:string" name="pin_name" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -200,6 +214,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="device_name" use="optional"/>
                     <xs:attribute type="xs:string" name="pin_name" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -213,6 +228,7 @@
                     <xs:attribute type="xs:string" name="vacuum_limit" use="optional"/>
                     <xs:attribute type="xs:string" name="time_limit" use="optional"/>
                     <xs:attribute type="xs:string" name="vent_after" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -222,6 +238,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -231,6 +248,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -240,6 +258,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -250,6 +269,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
                     <xs:attribute type="xs:string" name="interval" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -260,6 +280,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
                     <xs:attribute type="xs:string" name="rotation_speed" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -270,6 +291,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
                     <xs:attribute type="xs:string" name="temp" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -279,6 +301,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -288,6 +311,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -297,6 +321,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -306,6 +331,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -318,6 +344,7 @@
                     <xs:attribute type="xs:string" name="motor_name" use="optional"/>
                     <xs:attribute type="xs:string" name="timescale" use="optional"/>
                     <xs:attribute type="xs:string" name="increment" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -336,6 +363,7 @@
                     <xs:attribute type="xs:string" name="lower_phase_through" use="optional"/>
                     <xs:attribute type="xs:string" name="upper_phase_through" use="optional"/>
                     <xs:attribute type="xs:string" name="dead_volume_through" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -346,6 +374,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="cooling_power" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -356,6 +385,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="vacuum_set_point" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -367,6 +397,7 @@
                     <xs:attribute type="xs:string" name="device_name" use="optional"/>
                     <xs:attribute type="xs:string" name="pin_name" use="optional"/>
                     <xs:attribute type="xs:string" name="level" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -378,6 +409,7 @@
                     <xs:attribute type="xs:string" name="device_name" use="optional"/>
                     <xs:attribute type="xs:string" name="pin_name" use="optional"/>
                     <xs:attribute type="xs:string" name="value" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -387,6 +419,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="recording_speed" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -397,6 +430,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="time" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -407,6 +441,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="vacuum_pump_speed" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -417,6 +452,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="stir_speed" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -427,6 +463,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="vacuum_pressure" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -436,6 +473,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -445,6 +483,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -454,6 +493,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -463,6 +503,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -473,6 +514,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="temp" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -482,6 +524,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -491,6 +534,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -500,6 +544,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -509,6 +554,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -518,6 +564,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -529,6 +576,7 @@
                     <xs:attribute type="xs:string" name="pneumatic_controller" use="optional"/>
                     <xs:attribute type="xs:string" name="port" use="optional"/>
                     <xs:attribute type="xs:string" name="pressure" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -539,6 +587,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="pneumatic_controller" use="optional"/>
                     <xs:attribute type="xs:string" name="port" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -551,6 +600,7 @@
                     <xs:attribute type="xs:string" name="motor_name" use="optional"/>
                     <xs:attribute type="xs:string" name="n_turns" use="optional"/>
                     <xs:attribute type="xs:string" name="increment" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -561,6 +611,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="valve_name" use="optional"/>
                     <xs:attribute type="xs:string" name="position" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -570,6 +621,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -579,6 +631,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="time" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -593,6 +646,7 @@
                     <xs:attribute type="xs:string" name="day" use="optional"/>
                     <xs:attribute type="xs:string" name="month" use="optional"/>
                     <xs:attribute type="xs:string" name="year" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -602,6 +656,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="msg" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -612,6 +667,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="sensor" use="optional"/>
                     <xs:attribute type="xs:string" name="on_reading" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -620,6 +676,7 @@
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -637,6 +694,7 @@
                     <xs:attribute type="xs:string" name="inert_gas" use="optional"/>
                     <xs:attribute type="xs:string" name="vacuum_valve" use="optional"/>
                     <xs:attribute type="xs:string" name="valve_unused_port" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -656,6 +714,7 @@
                     <xs:attribute type="xs:string" name="vacuum_valve_inert_gas" use="optional"/>
                     <xs:attribute type="xs:string" name="vacuum_valve_unused_port" use="optional"/>
                     <xs:attribute type="xs:string" name="pneumatic_controller" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -668,6 +727,7 @@
                     <xs:attribute type="xs:string" name="wait_recording_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="after_recording_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="vessel_class" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -677,8 +737,26 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="solvent" use="optional"/>
+                    <xs:attribute type="xs:string" name="near_waste" use="optional"/>
+                    <xs:attribute type="xs:string" name="far_waste" use="optional"/>
+                    <xs:attribute type="xs:string" name="solvent_waste" use="optional"/>
+                    <xs:attribute type="xs:string" name="solvent_vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="solvent_valve" use="optional"/>
+                    <xs:attribute type="xs:string" name="n_cleans" use="optional"/>
+                    <xs:attribute type="xs:string" name="volume" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="CleanBackboneDeprecated" maxOccurs="unbounded" minOccurs="0">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="solvent" use="optional"/>
                     <xs:attribute type="xs:string" name="waste_vessels" use="optional"/>
                     <xs:attribute type="xs:string" name="solvent_vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -697,6 +775,22 @@
                     <xs:attribute type="xs:string" name="vacuum_device" use="optional"/>
                     <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
                     <xs:attribute type="xs:string" name="pneumatic_controller" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="FlushTubing" maxOccurs="unbounded" minOccurs="0">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="to_vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="to_port" use="optional"/>
+                    <xs:attribute type="xs:string" name="volume" use="optional"/>
+                    <xs:attribute type="xs:string" name="dispense_speed" use="optional"/>
+                    <xs:attribute type="xs:string" name="through_cartridge" use="optional"/>
+                    <xs:attribute type="xs:string" name="flush_tube_vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -711,6 +805,7 @@
                     <xs:attribute type="xs:string" name="wait_recording_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="after_recording_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -724,6 +819,7 @@
                     <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
                     <xs:attribute type="xs:string" name="heater" use="optional"/>
                     <xs:attribute type="xs:string" name="chiller" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -743,6 +839,7 @@
                     <xs:attribute type="xs:string" name="after_recording_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="heater" use="optional"/>
                     <xs:attribute type="xs:string" name="chiller" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -756,6 +853,7 @@
                     <xs:attribute type="xs:string" name="volume" use="optional"/>
                     <xs:attribute type="xs:string" name="motor_name" use="optional"/>
                     <xs:attribute type="xs:string" name="n_turns" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -768,6 +866,8 @@
                     <xs:attribute type="xs:string" name="volume" use="optional"/>
                     <xs:attribute type="xs:string" name="reagent_vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="waste_vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="prime_n_times" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -778,6 +878,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="time" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -787,6 +888,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="purge_gas" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -801,6 +903,7 @@
                     <xs:attribute type="xs:string" name="vacuum" use="optional"/>
                     <xs:attribute type="xs:string" name="vacuum_valve" use="optional"/>
                     <xs:attribute type="xs:string" name="valve_unused_port" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -811,6 +914,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
                     <xs:attribute type="xs:string" name="temp" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -821,6 +925,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
                     <xs:attribute type="xs:string" name="rotation_speed" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -831,6 +936,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
                     <xs:attribute type="xs:string" name="pressure" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -843,6 +949,7 @@
                     <xs:attribute type="xs:string" name="time" use="optional"/>
                     <xs:attribute type="xs:string" name="continue_stirring" use="optional"/>
                     <xs:attribute type="xs:string" name="stir_speed" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -852,6 +959,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -861,6 +969,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="rotavap_name" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -882,6 +991,7 @@
                     <xs:attribute type="xs:string" name="dead_volume_through" use="optional"/>
                     <xs:attribute type="xs:string" name="failure_vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="max_retries" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -892,6 +1002,9 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="stir_speed" use="optional"/>
+                    <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
+                    <xs:attribute type="xs:string" name="stirrer_is_heitorque" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -905,6 +1018,7 @@
                     <xs:attribute type="xs:string" name="stirrers" use="optional"/>
                     <xs:attribute type="xs:string" name="rotavaps" use="optional"/>
                     <xs:attribute type="xs:string" name="chillers" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -915,6 +1029,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="solvent" use="optional"/>
                     <xs:attribute type="xs:string" name="time_interval" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -928,6 +1043,7 @@
                     <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
                     <xs:attribute type="xs:string" name="heater" use="optional"/>
                     <xs:attribute type="xs:string" name="chiller" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -939,6 +1055,7 @@
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="pneumatic_controller" use="optional"/>
                     <xs:attribute type="xs:string" name="inert_gas" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -950,6 +1067,7 @@
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="stir_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -960,6 +1078,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="pressure" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -968,6 +1087,7 @@
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -981,6 +1101,7 @@
                     <xs:attribute type="xs:string" name="continue_stirring" use="optional"/>
                     <xs:attribute type="xs:string" name="stir_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -992,6 +1113,7 @@
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="wait_recording_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="after_recording_speed" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1004,6 +1126,7 @@
                     <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
                     <xs:attribute type="xs:string" name="heater" use="optional"/>
                     <xs:attribute type="xs:string" name="chiller" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1017,6 +1140,7 @@
                     <xs:attribute type="xs:string" name="inert_gas" use="optional"/>
                     <xs:attribute type="xs:string" name="inert_gas_valve" use="optional"/>
                     <xs:attribute type="xs:string" name="inert_gas_valve_unused_port" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1028,6 +1152,7 @@
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
                     <xs:attribute type="xs:string" name="vessel_has_stirrer" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1037,6 +1162,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1051,6 +1177,7 @@
                     <xs:attribute type="xs:string" name="after_switch_wait" use="optional"/>
                     <xs:attribute type="xs:string" name="pneumatic_controller" use="optional"/>
                     <xs:attribute type="xs:string" name="pneumatic_controller_port" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1064,6 +1191,7 @@
                     <xs:attribute type="xs:string" name="after_switch_wait" use="optional"/>
                     <xs:attribute type="xs:string" name="pneumatic_controller" use="optional"/>
                     <xs:attribute type="xs:string" name="pneumatic_controller_port" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1088,6 +1216,8 @@
                     <xs:attribute type="xs:string" name="from_vessel_has_stirrer" use="optional"/>
                     <xs:attribute type="xs:string" name="from_vessel_has_heater" use="optional"/>
                     <xs:attribute type="xs:string" name="from_vessel_has_chiller" use="optional"/>
+                    <xs:attribute type="xs:string" name="flush_tubing" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1099,6 +1229,7 @@
                     <xs:attribute type="xs:string" name="time" use="optional"/>
                     <xs:attribute type="xs:string" name="wait_recording_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="after_recording_speed" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1115,6 +1246,7 @@
                     <xs:attribute type="xs:string" name="year" use="optional"/>
                     <xs:attribute type="xs:string" name="wait_recording_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="after_recording_speed" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1144,9 +1276,10 @@
                     <xs:attribute type="xs:string" name="through_cartridge" use="optional"/>
                     <xs:attribute type="xs:string" name="reagent_vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="waste_vessel" use="optional"/>
-                    <xs:attribute type="xs:string" name="flush_tube_vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
                     <xs:attribute type="xs:string" name="anticlogging_solvent_vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="prime_n_times" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1161,6 +1294,7 @@
                     <xs:attribute type="xs:string" name="stir" use="optional"/>
                     <xs:attribute type="xs:string" name="reagent_vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="air_vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1183,6 +1317,8 @@
                     <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
                     <xs:attribute type="xs:string" name="heater" use="optional"/>
                     <xs:attribute type="xs:string" name="chiller" use="optional"/>
+                    <xs:attribute type="xs:string" name="has_stirrer" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1200,6 +1336,7 @@
                     <xs:attribute type="xs:string" name="stir_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="solvent_vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1222,6 +1359,7 @@
                     <xs:attribute type="xs:string" name="valve_unused_port" use="optional"/>
                     <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
                     <xs:attribute type="xs:string" name="vessel_has_stirrer" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1239,6 +1377,7 @@
                     <xs:attribute type="xs:string" name="waste_vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="collection_flask_volume" use="optional"/>
                     <xs:attribute type="xs:string" name="has_chiller" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1258,6 +1397,7 @@
                     <xs:attribute type="xs:string" name="filter_top_volume" use="optional"/>
                     <xs:attribute type="xs:string" name="inline_filter" use="optional"/>
                     <xs:attribute type="xs:string" name="vacuum_attached" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1280,6 +1420,7 @@
                     <xs:attribute type="xs:string" name="cartridge_dead_volume" use="optional"/>
                     <xs:attribute type="xs:string" name="buffer_flask" use="optional"/>
                     <xs:attribute type="xs:string" name="from_vessel_max_volume" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1290,6 +1431,7 @@
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="from_vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="to_vessel" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1304,6 +1446,7 @@
                     <xs:attribute type="xs:string" name="stir" use="optional"/>
                     <xs:attribute type="xs:string" name="stir_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="vessel_type" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1315,6 +1458,7 @@
                     <xs:attribute type="xs:string" name="vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="temp" use="optional"/>
                     <xs:attribute type="xs:string" name="time" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1329,6 +1473,23 @@
                     <xs:attribute type="xs:string" name="crystallize_temp" use="optional"/>
                     <xs:attribute type="xs:string" name="solvent" use="optional"/>
                     <xs:attribute type="xs:string" name="solvent_volume" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Recurse" maxOccurs="unbounded" minOccurs="0">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="n_cycles" use="optional"/>
+                    <xs:attribute type="xs:string" name="sampling_volume" use="optional"/>
+                    <xs:attribute type="xs:string" name="replenishment_volume" use="optional"/>
+                    <xs:attribute type="xs:string" name="children" use="optional"/>
+                    <xs:attribute type="xs:string" name="cycle_time" use="optional"/>
+                    <xs:attribute type="xs:string" name="clean_after_n_cycles" use="optional"/>
+                    <xs:attribute type="xs:string" name="cleaning_solvents" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1345,6 +1506,7 @@
                     <xs:attribute type="xs:string" name="eluting_solvent" use="optional"/>
                     <xs:attribute type="xs:string" name="eluting_volume" use="optional"/>
                     <xs:attribute type="xs:string" name="eluting_repeats" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1373,6 +1535,7 @@
                     <xs:attribute type="xs:string" name="mixing_stir_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="mixing_time" use="optional"/>
                     <xs:attribute type="xs:string" name="settling_time" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1409,6 +1572,7 @@
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1417,6 +1581,7 @@
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1426,6 +1591,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="pid" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1437,6 +1603,7 @@
                     <xs:attribute type="xs:string" name="fn" use="optional"/>
                     <xs:attribute type="xs:string" name="args" use="optional"/>
                     <xs:attribute type="xs:string" name="keyword_args" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1445,6 +1612,7 @@
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1453,6 +1621,7 @@
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1461,6 +1630,7 @@
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1469,6 +1639,7 @@
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1477,6 +1648,7 @@
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1485,6 +1657,7 @@
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
@@ -1553,7 +1726,9 @@
                   <xs:element name="ApplyVacuum" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="ChillerReturnToRT" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="CleanBackbone" maxOccurs="unbounded" minOccurs="0" />
+                  <xs:element name="CleanBackboneDeprecated" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="Evacuate" maxOccurs="unbounded" minOccurs="0" />
+                  <xs:element name="FlushTubing" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="HeatChillReturnToRT" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="HeatChillSetTemp" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="HeatChillToTemp" maxOccurs="unbounded" minOccurs="0" />
@@ -1600,6 +1775,7 @@
                   <xs:element name="HeatChill" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="Precipitate" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="Recrystallize" maxOccurs="unbounded" minOccurs="0" />
+                  <xs:element name="Recurse" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="RunColumn" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="Separate" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="WashSolid" maxOccurs="unbounded" minOccurs="0" />
@@ -1620,6 +1796,7 @@
               <xs:attribute type="xs:string" name="children" use="optional"/>
               <xs:attribute type="xs:string" name="pid" use="optional"/>
               <xs:attribute type="xs:string" name="on_finish" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
               </xs:complexType>
             </xs:element>
             <xs:element name="Repeat" maxOccurs="unbounded" minOccurs="0">
@@ -1686,7 +1863,9 @@
                   <xs:element name="ApplyVacuum" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="ChillerReturnToRT" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="CleanBackbone" maxOccurs="unbounded" minOccurs="0" />
+                  <xs:element name="CleanBackboneDeprecated" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="Evacuate" maxOccurs="unbounded" minOccurs="0" />
+                  <xs:element name="FlushTubing" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="HeatChillReturnToRT" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="HeatChillSetTemp" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="HeatChillToTemp" maxOccurs="unbounded" minOccurs="0" />
@@ -1733,6 +1912,7 @@
                   <xs:element name="HeatChill" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="Precipitate" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="Recrystallize" maxOccurs="unbounded" minOccurs="0" />
+                  <xs:element name="Recurse" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="RunColumn" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="Separate" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="WashSolid" maxOccurs="unbounded" minOccurs="0" />
@@ -1752,6 +1932,7 @@
                   </xs:choice>
               <xs:attribute type="xs:string" name="repeats" use="optional"/>
               <xs:attribute type="xs:string" name="children" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
               </xs:complexType>
             </xs:element>
             <xs:element name="Loop" maxOccurs="unbounded" minOccurs="0">
@@ -1818,7 +1999,9 @@
                   <xs:element name="ApplyVacuum" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="ChillerReturnToRT" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="CleanBackbone" maxOccurs="unbounded" minOccurs="0" />
+                  <xs:element name="CleanBackboneDeprecated" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="Evacuate" maxOccurs="unbounded" minOccurs="0" />
+                  <xs:element name="FlushTubing" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="HeatChillReturnToRT" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="HeatChillSetTemp" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="HeatChillToTemp" maxOccurs="unbounded" minOccurs="0" />
@@ -1865,6 +2048,7 @@
                   <xs:element name="HeatChill" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="Precipitate" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="Recrystallize" maxOccurs="unbounded" minOccurs="0" />
+                  <xs:element name="Recurse" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="RunColumn" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="Separate" maxOccurs="unbounded" minOccurs="0" />
                   <xs:element name="WashSolid" maxOccurs="unbounded" minOccurs="0" />
@@ -1883,6 +2067,7 @@
             <xs:element name="Loop" maxOccurs="unbounded" minOccurs="0" />
                   </xs:choice>
               <xs:attribute type="xs:string" name="children" use="optional"/>
+                    <xs:attribute type="xs:string" name="repeat" use="optional"/>
               </xs:complexType>
             </xs:element>
           </xs:choice>
