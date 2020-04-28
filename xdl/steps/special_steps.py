@@ -519,4 +519,4 @@ class Callback(AbstractBaseStep):
         self.fn(*self.args, **self.keyword_args)
 
     def locks(self, chempiler):
-        raise NotImplementedError(f"Function `locks` not implemented!")
+        return [], [], []
