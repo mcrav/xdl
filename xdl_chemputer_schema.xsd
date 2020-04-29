@@ -1535,6 +1535,7 @@
                     <xs:attribute type="xs:string" name="mixing_stir_speed" use="optional"/>
                     <xs:attribute type="xs:string" name="mixing_time" use="optional"/>
                     <xs:attribute type="xs:string" name="settling_time" use="optional"/>
+                    <xs:attribute type="xs:string" name="waste_phase_to_vessel_to_use" use="optional"/>
                     <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>

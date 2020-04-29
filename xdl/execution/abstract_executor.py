@@ -8,7 +8,7 @@ from ..steps.special_steps import Async, Await
 from ..steps.base_steps import (
     AbstractDynamicStep, AbstractAsyncStep, AbstractBaseStep)
 from ..readwrite.generator import XDLGenerator
-from ..utils.errors import XDLError
+from ..errors import XDLError
 from ..utils import get_logger
 if False:
     from ..xdl import XDL

@@ -1,7 +1,7 @@
 from typing import Union, Dict
 from ....execution.abstract_executor import AbstractXDLExecutor
 from ..steps import Add, CBTurnWheel
-from ....utils.errors import XDLError
+from ....errors import XDLError
 
 N_WHEEL_POSITIONS = 24
 
