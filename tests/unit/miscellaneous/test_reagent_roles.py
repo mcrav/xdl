@@ -1,5 +1,5 @@
 import pytest
-from xdl.utils.errors import XDLValueError
+from xdl.errors import XDLValueError
 from xdl.reagents import Reagent
 
 @pytest.mark.unit

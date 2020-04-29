@@ -1,6 +1,6 @@
 from typing import Optional, Union, List
 import re
-from .errors import XDLValueError, XDLError
+from ..errors import XDLValueError, XDLError
 from .prop_limits import (
     POSITIVE_FLOAT_PROP_LIMIT,
     POSITIVE_INT_PROP_LIMIT,

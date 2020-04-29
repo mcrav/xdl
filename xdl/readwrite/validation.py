@@ -4,7 +4,7 @@ from .constants import REAGENT_PROPS
 from ..hardware import Component
 from ..reagents import Reagent
 from ..steps import AbstractBaseStep, AbstractStep, Step
-from ..utils import XDLError
+from ..errors import XDLError
 
 def get_valid_attrs(target_class: type) -> List[str]:
     """Get valid attrs for passing to target_class __init__ methods.

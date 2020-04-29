@@ -7,7 +7,7 @@ import copy
 from abc import ABC, abstractmethod
 from ..utils.misc import format_property, SanityCheck
 from ..utils.graph import get_graph
-from ..utils.errors import XDLError
+from ..errors import XDLError
 from networkx import MultiDiGraph
 
 if False:

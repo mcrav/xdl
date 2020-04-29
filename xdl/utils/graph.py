@@ -1,8 +1,15 @@
 from typing import Union, Dict
 import copy
+import os
 import json
 from networkx.readwrite import json_graph
 from networkx import MultiDiGraph, read_graphml, relabel_nodes
+
+from ..errors import (
+    XDLGraphFileNotFoundError,
+    XDLGraphInvalidFileTypeError,
+    XDLGraphTypeError,
+)
 
 def undirected_neighbors(graph, node, data=False):
     yielded_neighbors = []
@@ -33,7 +40,11 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
         networkx.classes.multidigraph: MultiDiGraph object.
     """
     graph = None
+
     if type(graph_file) == str:
+        if not os.path.exists(graph_file):
+            raise XDLGraphFileNotFoundError(graph_file)
+
         if graph_file.lower().endswith('.graphml'):
             graph = MultiDiGraph(read_graphml(graph_file))
             raw_graph = copy.deepcopy(graph)
@@ -49,6 +60,9 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
                     json_data, directed=True, multigraph=True)
             raw_graph = copy.deepcopy(graph)
 
+        else:
+            raise XDLGraphInvalidFileTypeError(graph_file)
+
     elif type(graph_file) == dict:
         graph = json_graph.node_link_graph(
             graph_file, directed=True, multigraph=True)
@@ -57,6 +71,9 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
     elif type(graph_file) == MultiDiGraph:
         graph = graph_file
         raw_graph = None
+
+    else:
+        raise XDLGraphTypeError(graph_file)
 
     for edge in graph.edges:
         if 'port' in graph.edges[edge]:

@@ -2,7 +2,7 @@ import os
 import pytest
 from xdl import XDL
 from xdl.steps.base_steps import AbstractBaseStep, AbstractDynamicStep
-from xdl.utils.errors import XDLError
+from xdl.errors import XDLError
 from ...utils import get_chempiler, generic_chempiler_test
 
 HERE = os.path.abspath(os.path.dirname(__file__))
