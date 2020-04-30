@@ -58,7 +58,7 @@ def get_method_name(class_name):
 
 def xdl_controller_init(self, platform, platform_controller, graph_file):
     """Initialise XDL controller."""
-    self.graph, _ = get_graph(graph_file)
+    self.graph = get_graph(graph_file)
     self.platform = platform()
     self.executor = self.platform.executor()
     self.platform_controller = platform_controller
