@@ -1,5 +1,4 @@
 from typing import Union, Dict
-import copy
 import os
 import json
 from networkx.readwrite import json_graph
@@ -47,7 +46,6 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
 
         if graph_file.lower().endswith('.graphml'):
             graph = MultiDiGraph(read_graphml(graph_file))
-            raw_graph = copy.deepcopy(graph)
             name_mapping = {}
             for node in graph.nodes():
                 name_mapping[node] = graph.nodes[node]['label']
@@ -58,7 +56,6 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
                 json_data = json.load(fileobj)
                 graph = json_graph.node_link_graph(
                     json_data, directed=True, multigraph=True)
-            raw_graph = copy.deepcopy(graph)
 
         else:
             raise XDLGraphInvalidFileTypeError(graph_file)
@@ -66,11 +63,9 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
     elif type(graph_file) == dict:
         graph = json_graph.node_link_graph(
             graph_file, directed=True, multigraph=True)
-        raw_graph = copy.deepcopy(graph)
 
     elif type(graph_file) == MultiDiGraph:
         graph = graph_file
-        raw_graph = None
 
     else:
         raise XDLGraphTypeError(graph_file)
@@ -80,4 +75,4 @@ def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
             port_str = graph.edges[edge]['port']
             if type(port_str) == str:
                 graph.edges[edge]['port'] = port_str[1:-1].split(',')
-    return graph, raw_graph
+    return graph

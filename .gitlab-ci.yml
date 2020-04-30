@@ -25,7 +25,8 @@ stages:
 
     - pip install git+https://github.com/croningp/commanduino.git@master
     - pip install git+https://$COMMANDUINOLABWARE_USER:$COMMANDUINOLABWARE_PW@gitlab.com/croningroup/chemputer/commanduinolabware.git@master
-    - pip install git+https://$CHEMPUTERXDL_USER:$CHEMPUTERXDL_PW@gitlab.com/croningroup/chemputer/chemputerxdl.git@MC/error-handling
+    # - pip install git+https://$CHEMPUTERXDL_USER:$CHEMPUTERXDL_PW@gitlab.com/croningroup/chemputer/chemputerxdl.git@develop
+    - git clone https://$CHEMPUTERXDL_USER:$CHEMPUTERXDL_PW@gitlab.com/croningroup/chemputer/chemputerxdl.git && cd chemputerxdl && git checkout MC/#37 && pip install . && cd ..
 
     # Install xdl
     - pip install .

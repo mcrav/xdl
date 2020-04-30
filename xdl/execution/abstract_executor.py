@@ -40,7 +40,7 @@ class AbstractXDLExecutor(ABC):
     def _graph_hash(self, graph=None):
         """Get SHA 256 hash of graph."""
         if not graph:
-            graph = self._raw_graph
+            graph = self._graph
         return hashlib.sha256(
             str(node_link_data(graph)).encode('utf-8')
         ).hexdigest()
@@ -137,7 +137,7 @@ class AbstractXDLExecutor(ABC):
             # Currently, this check only performed for Chemputer
             if hasattr(platform_controller, 'graph'):
                 if self._xdl.graph_sha256 == self._graph_hash(
-                        platform_controller.graph.raw_graph):
+                        platform_controller.graph.graph):
                     self.logger.info('Executing xdlexe, graph hashes match.')
                     self._prepared_for_execution = True
                 else:

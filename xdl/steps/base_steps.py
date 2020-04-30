@@ -474,7 +474,7 @@ class AbstractDynamicStep(Step):
     def prepare_for_execution(self, graph, executor):
         self.executor = executor
         self.graph = graph
-        self.on_prepare_for_execution(get_graph(graph)[0])
+        self.on_prepare_for_execution(get_graph(graph))
         self.start_block = self.on_start()
         self.executor.prepare_block_for_execution(self.graph, self.start_block)
 
