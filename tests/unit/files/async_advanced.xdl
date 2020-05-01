@@ -4,7 +4,25 @@
   <Hardware>
     <Component
       type="reactor"
-      id="reactor" />
+      id="reactor1" />
+    <Component
+      type="reactor"
+      id="reactor2" />
+    <Component
+      type="reactor"
+      id="reactor3" />
+    <Component
+      type="reactor"
+      id="reactor4" />
+    <Component
+      id="waste1"
+      type="flask" />
+    <Component
+      id="waste2"
+      type="flask" />
+    <Component
+      id="waste3"
+      type="flask" />
   </Hardware>
 
   <Reagents>
@@ -116,12 +134,12 @@
           vessel="reactor4"
         />
       </Async>
-      <Await pid="reaction1" />  
+      <Await pid="reaction1" />
       <Transfer
         from_vessel="reactor1"
         to_vessel="waste1"
         volume="30 mL" />
-      <Await pid="reaction2" />  
+      <Await pid="reaction2" />
       <Transfer
         from_vessel="reactor2"
         to_vessel="waste2"
@@ -131,7 +149,7 @@
         from_vessel="reactor3"
         to_vessel="waste1"
         volume="30 mL" />
-      <Await pid="reaction4" />  
+      <Await pid="reaction4" />
       <Transfer
         from_vessel="reactor4"
         to_vessel="waste3"

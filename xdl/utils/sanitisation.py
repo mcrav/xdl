@@ -1,11 +1,12 @@
 from typing import Optional, Union, List
 import re
-from .errors import XDLValueError, XDLError
+from ..errors import XDLValueError, XDLError
 from .prop_limits import (
     POSITIVE_FLOAT_PROP_LIMIT,
     POSITIVE_INT_PROP_LIMIT,
     BOOL_PROP_LIMIT
 )
+from ..constants import REAGENT_PROP_TYPE, VESSEL_PROP_TYPE
 
 DEFAULT_PROP_LIMITS = {
     float: POSITIVE_FLOAT_PROP_LIMIT,
@@ -231,7 +232,7 @@ def clean_properties(xdl_class, properties):
         test_prop_limit(prop_limit, prop_type, prop, val, xdl_class.__name__)
 
         # Do type conversion, and conversion to std units
-        if prop_type == str:
+        if prop_type in [str, REAGENT_PROP_TYPE, VESSEL_PROP_TYPE]:
             if val:
                 properties[prop] = str(val)
 

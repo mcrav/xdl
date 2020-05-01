@@ -5,6 +5,9 @@
     <Component
       id="filter"
       type="filter" />
+    <Component
+      id="flask_washings"
+      type="flask" />
   </Hardware>
 
   <Reagents>

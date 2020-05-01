@@ -1,8 +1,16 @@
 <Synthesis>
   <Hardware>
-      <Component
-        id="jacketed_filter"
-        type="filter" />
+    <Component
+      id="jacketed_filter"
+      type="filter" />
+    <Component
+      id="rotavap"
+      type="rotavap"
+    />
+    <Component
+      id="buffer_flask"
+      type="flask"
+    />
   </Hardware>
 
   <Reagents>

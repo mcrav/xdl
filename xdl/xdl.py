@@ -8,7 +8,11 @@ from .graphgen_deprecated import get_graph
 
 from .utils import get_logger
 from .steps import Step, AbstractBaseStep, UnimplementedStep
-from .utils.errors import XDLError
+from .errors import (
+    XDLError,
+    XDLReagentNotDeclaredError,
+    XDLVesselNotDeclaredError,
+)
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
 from .readwrite import XDLGenerator
 from .hardware import Hardware
@@ -89,6 +93,38 @@ class XDL(object):
             raise ValueError(
                 "Can't create XDL object. Insufficient args given to __init__\
  method.")
+
+        self.is_xdlexe = self.graph_sha256 is not None
+
+        if not self.is_xdlexe:
+            self._validate_vessel_and_reagent_props()
+
+    def _validate_vessel_and_reagent_props(self):
+        reagent_ids = [reagent.id for reagent in self.reagents]
+        vessel_ids = [vessel.id for vessel in self.hardware]
+        for step in self.steps:
+            self._validate_vessel_and_reagent_props_step(
+                step, reagent_ids, vessel_ids
+            )
+
+    def _validate_vessel_and_reagent_props_step(
+            self, step, reagent_ids, vessel_ids):
+        for prop, prop_type in step.PROP_TYPES.items():
+            if prop_type == 'vessel':
+                vessel = step.properties[prop]
+                if vessel and vessel not in vessel_ids:
+                    raise XDLVesselNotDeclaredError(vessel)
+
+            elif prop_type == 'reagent':
+                reagent = step.properties[prop]
+                if reagent and reagent not in reagent_ids:
+                    raise XDLReagentNotDeclaredError(reagent)
+
+        if hasattr(step, 'children'):
+            for substep in step.children:
+                self._validate_vessel_and_reagent_props_step(
+                    substep, reagent_ids, vessel_ids
+                )
 
     def _validate_platform(self, platform):
         if platform == 'chemputer':

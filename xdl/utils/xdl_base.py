@@ -1,6 +1,6 @@
 from .sanitisation import clean_properties
 from .logging import get_logger
-from .errors import XDLError
+from ..errors import XDLError
 from typing import Dict, Any
 
 class XDLBase(object):

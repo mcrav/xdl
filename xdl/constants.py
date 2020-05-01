@@ -2,7 +2,7 @@ from typing import List
 
 #: XDL version number. Remember to increment after merging into master. Used
 # in header at top of outputted XDL files.
-XDL_VERSION: str = '0.4.2'
+XDL_VERSION: str = '0.4.4'
 
 ########
 # MISC #
@@ -35,3 +35,9 @@ SYNTHESIS_ATTRS = [
         'default': '',
     }
 ]
+
+# Prop type if property should be reagent declared in Reagent section
+REAGENT_PROP_TYPE = 'reagent'
+
+# Prop type if property should be vessel declared in Hardware section
+VESSEL_PROP_TYPE = 'vessel'

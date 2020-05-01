@@ -1,5 +1,5 @@
 from typing import Any, Optional
-from .errors import XDLError
+from ..errors import XDLError
 from .prop_limits import (
     PropLimit,
     TEMP_PROP_LIMIT,

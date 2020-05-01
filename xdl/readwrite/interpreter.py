@@ -3,7 +3,8 @@ from typing import Dict, List, Any
 from lxml import etree
 from .validation import check_attrs_are_valid
 from ..constants import SYNTHESIS_ATTRS
-from ..utils import parse_bool, XDLError, raise_error
+from ..utils import parse_bool
+from ..errors import XDLError
 from ..steps import Step, AbstractBaseStep
 from ..reagents import Reagent
 from ..hardware import Hardware, Component
@@ -60,25 +61,22 @@ def xdl_str_to_objs(
                   reagents: List of Reagent objects.
     """
     if xdl_str:
-        try:
-            steps, step_record = steps_from_xdl(xdl_str, platform)
-            hardware = hardware_from_xdl(xdl_str)
-            reagents = reagents_from_xdl(xdl_str)
-            synthesis_attrs = synthesis_attrs_from_xdl(xdl_str)
-            if 'graph_sha256' in synthesis_attrs:
-                assert len(steps) == len(step_record)
-                for i, step in enumerate(steps):
-                    apply_step_record(step, step_record[i])
+        steps, step_record = steps_from_xdl(xdl_str, platform)
+        hardware = hardware_from_xdl(xdl_str)
+        reagents = reagents_from_xdl(xdl_str)
+        synthesis_attrs = synthesis_attrs_from_xdl(xdl_str)
+        if 'graph_sha256' in synthesis_attrs:
+            assert len(steps) == len(step_record)
+            for i, step in enumerate(steps):
+                apply_step_record(step, step_record[i])
 
-            parsed_xdl = {
-                'steps': steps,
-                'hardware': hardware,
-                'reagents': reagents,
-            }
-            parsed_xdl['procedure_attrs'] = synthesis_attrs
-            return parsed_xdl
-        except Exception as e:
-            raise_error(e, 'Error parsing XDL.')
+        parsed_xdl = {
+            'steps': steps,
+            'hardware': hardware,
+            'reagents': reagents,
+        }
+        parsed_xdl['procedure_attrs'] = synthesis_attrs
+        return parsed_xdl
     else:
         raise XDLError('Empty XDL given.')
     return None
@@ -244,13 +242,7 @@ def xdl_to_step(
 
     # Try to instantiate step, any invalid values given will throw an error
     # here.
-    try:
-        step = step_type(**attrs)
-    except Exception as e:
-        raise_error(
-            e,
-            f'Error instantiating {step_type.__name__} step with following\
- properties: \n{attrs}')
+    step = step_type(**attrs)
     return step
 
 def xdl_to_component(xdl_component_element: etree._Element) -> Component:
@@ -280,14 +272,7 @@ def xdl_to_component(xdl_component_element: etree._Element) -> Component:
     del attrs['type']
     # Try to instantiate components, any invalid values given will throw an
     # error here.
-    try:
-        component = Component(**attrs)
-    except Exception as e:
-        raise_error(
-            e,
-            f'Error instantiating Component with following attributes:\n\
-{attrs}'
-        )
+    component = Component(**attrs)
     return component
 
 def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
@@ -307,13 +292,7 @@ def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
             "'id' attribute not specified for reagent.")
     check_attrs_are_valid(attrs, Reagent)
     # Try to instantiate Reagent object and return it.
-    try:
-        reagent = Reagent(**attrs)
-    except Exception as e:
-        raise_error(
-            e,
-            f'Error instantiating Reagent with following attributes: \n{attrs}'
-        )
+    reagent = Reagent(**attrs)
     return reagent
 
 

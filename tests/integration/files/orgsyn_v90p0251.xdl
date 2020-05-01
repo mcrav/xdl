@@ -18,6 +18,12 @@
     <Component
       id="separator"
       type="separator" />
+    <Component
+      id="phase_A"
+      type="flask" />
+    <Component
+      id="phase_B"
+      type="flask" />
   </Hardware>
 
   <Reagents>

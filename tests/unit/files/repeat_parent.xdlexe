@@ -1,12 +1,17 @@
 <?xdl version="0.4.2" ?>
 
 <Synthesis
-  graph_sha256="acd51f8cd491d4ef7aa330f864b43ead449f73684d45afd9b91a2e2dd300fda5"
+  graph_sha256="773155a5fbecd89c8e1bf4bfe1f9734f54a0e4e987c0941f9a85dd70db317b82"
 >
   <Hardware>
+    <Component
+      id="filter"
+      type="filter" />
   </Hardware>
 
   <Reagents>
+    <Reagent
+      id="ether" />
   </Reagents>
 
   <Procedure>
