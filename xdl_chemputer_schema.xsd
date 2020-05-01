@@ -991,6 +991,7 @@
                     <xs:attribute type="xs:string" name="dead_volume_through" use="optional"/>
                     <xs:attribute type="xs:string" name="failure_vessel" use="optional"/>
                     <xs:attribute type="xs:string" name="max_retries" use="optional"/>
+                    <xs:attribute type="xs:string" name="lower_phase_through_cartridge" use="optional"/>
                     <xs:attribute type="xs:string" name="repeat" use="optional"/>
                   </xs:extension>
                 </xs:simpleContent>
