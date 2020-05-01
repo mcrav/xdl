@@ -151,6 +151,8 @@ UNIT_CONVERTERS = {
     'pa': lambda x: x * 0.01,
 
     'rpm': lambda x: x,
+
+    'nm': lambda x: x,
 }
 
 
