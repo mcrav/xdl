@@ -1386,7 +1386,7 @@
       "targetInternal": 112,
       "source": "reactor1",
       "target": "filter1",
-      "port": "(,)"
+      "port": "(0,in)"
     },
     {
       "id": 142,
@@ -1394,7 +1394,7 @@
       "targetInternal": 106,
       "source": "filter1",
       "target": "valveanalysis",
-      "port": "(,3)"
+      "port": "(out,3)"
     },
     {
       "id": 145,
@@ -1402,7 +1402,7 @@
       "targetInternal": 106,
       "source": "filter2",
       "target": "valveanalysis",
-      "port": "(,4)"
+      "port": "(out,4)"
     },
     {
       "id": 141,
@@ -1410,7 +1410,7 @@
       "targetInternal": 106,
       "source": "filter3",
       "target": "valveanalysis",
-      "port": "(,5)"
+      "port": "(out,5)"
     },
     {
       "id": 144,
@@ -1418,7 +1418,7 @@
       "targetInternal": 113,
       "source": "reactor3",
       "target": "filter3",
-      "port": "(,)"
+      "port": "(0,in)"
     },
     {
       "id": 146,
@@ -1426,7 +1426,7 @@
       "targetInternal": 143,
       "source": "reactor2",
       "target": "filter2",
-      "port": "(,)"
+      "port": "(0,in)"
     },
     {
       "id": 147,
@@ -1434,7 +1434,7 @@
       "targetInternal": 111,
       "source": "reactor4",
       "target": "filter4",
-      "port": "(,)"
+      "port": "(0,in)"
     },
     {
       "id": 114,
@@ -1442,7 +1442,7 @@
       "targetInternal": 106,
       "source": "filter4",
       "target": "valveanalysis",
-      "port": "(,0)"
+      "port": "(out,0)"
     }
   ]
 }
