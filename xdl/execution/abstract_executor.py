@@ -1,12 +1,15 @@
-from typing import Any, Union, Dict
+from typing import Any, Union, Dict, List
 import hashlib
 import appdirs
 import os
 from abc import ABC, abstractmethod
 from networkx.readwrite import node_link_data
+from networkx import MultiDiGraph
+
 from ..steps.special_steps import Async, Await
 from ..steps.base_steps import (
-    AbstractDynamicStep, AbstractAsyncStep, AbstractBaseStep)
+    Step, AbstractDynamicStep, AbstractAsyncStep, AbstractBaseStep)
+from ..steps import NON_RECURSIVE_ABSTRACT_STEPS
 from ..readwrite.generator import XDLGenerator
 from ..errors import XDLError
 from ..utils import get_logger
@@ -83,10 +86,33 @@ class AbstractXDLExecutor(ABC):
             self.logger.warning(
                 f'Unable to save execution script in {save_folder}.')
 
-    def call_on_prepare_for_execution(self, step):
-        step.on_prepare_for_execution(self._graph)
-        for substep in step.steps:
-            self.call_on_prepare_for_execution(substep)
+    def add_internal_properties(
+        self, graph: MultiDiGraph, steps: List[Step]
+    ) -> None:
+        """Recursively add internal properties to all steps and substeps in
+        given list of steps.
+
+        Args:
+            steps (List[Step]): List of steps to add internal properties to.
+        """
+
+        # Iterate through each step
+        for step in steps:
+
+            # Prepare the step for execution
+            step.on_prepare_for_execution(graph)
+
+            # Special case for Dynamic steps
+            if isinstance(step, AbstractDynamicStep):
+                step.prepare_for_execution(graph, self)
+
+            # If the step has children, add internal properties to all children
+            if 'children' in step.properties:
+                self.add_internal_properties(graph, step.children)
+
+            # Recursive steps, add internal proerties to all substeps
+            if not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
+                self.add_internal_properties(graph, step.steps)
 
     def prepare_dynamic_steps_for_execution(self, step, graph):
         if isinstance(step, AbstractDynamicStep):
