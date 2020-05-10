@@ -6,6 +6,7 @@ from abc import ABC, abstractmethod
 from networkx.readwrite import node_link_data
 from networkx import MultiDiGraph
 
+from .utils import do_sanity_check
 from ..steps.special_steps import Async, Await
 from ..steps.base_steps import (
     Step, AbstractDynamicStep, AbstractAsyncStep, AbstractBaseStep)
@@ -19,6 +20,8 @@ if False:
 class AbstractXDLExecutor(ABC):
     _prepared_for_execution = False
     _xdl = None
+    _warnings = []  # TODO: Remove this, no longer needed
+    _graph = None
     logger = None
 
     def __init__(self, xdl: 'XDL' = None) -> None:
@@ -27,8 +30,6 @@ class AbstractXDLExecutor(ABC):
             self._xdl = xdl
         else:
             self.logger = get_logger()
-        self._warnings = []
-        self._raw_graph = None
         self._graph = None
         self._prepared_for_execution = False
 
@@ -47,6 +48,13 @@ class AbstractXDLExecutor(ABC):
         return hashlib.sha256(
             str(node_link_data(graph)).encode('utf-8')
         ).hexdigest()
+
+    def perform_sanity_checks(self, steps: List[Step] = None) -> None:
+        """Recursively perform sanity checks on every step in list."""
+        if steps is None:
+            steps = self._xdl.steps
+        for step in steps:
+            do_sanity_check(self._graph, step)
 
     def save_execution_script(self, save_path: str = '') -> None:
         """Generate and save execution script. Called at the end of
