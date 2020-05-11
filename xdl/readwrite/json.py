@@ -95,7 +95,9 @@ def xdl_step_from_json(step_json, platform):
             xdl_step_from_json(child, platform)
             for child in step_json['children']
         ]
-    return step_type(**step_properties)
+    step = step_type(**step_properties)
+    step.uuid = step_json['uuid']
+    return step
 
 def xdl_element_from_json(xdl_element_json, xdl_element_type):
     return xdl_element_type(**xdl_element_json['properties'])
@@ -128,7 +130,8 @@ def xdl_step_to_json(xdl_step, full_properties: bool = False):
     xdl_step_json = {
         'name': xdl_step.name,
         'properties': xdl_step_properties,
-        'children': [xdl_step_to_json(child) for child in children]
+        'children': [xdl_step_to_json(child) for child in children],
+        'uuid': xdl_step.uuid
     }
     return xdl_step_json
 

@@ -4,6 +4,7 @@ from ..constants import DEFAULT_INSTANT_DURATION
 import logging
 import threading
 import copy
+import uuid
 from abc import ABC, abstractmethod
 from ..utils.misc import format_property, SanityCheck
 from ..utils.graph import get_graph
@@ -19,6 +20,7 @@ class Step(XDLBase):
     Attributes:
         properties (dict): Dictionary of step properties. Should be implemented
             in step __init__.
+        uuid (str): Step unique universal identifier, generated automatically.
     """
 
     #: Set to True if mass/volume of step shouldn't be scaled when the
@@ -29,6 +31,7 @@ class Step(XDLBase):
 
     def __init__(self, param_dict):
         super().__init__(param_dict)
+        self.uuid = str(uuid.uuid4())
 
     def formatted_properties(self):
         formatted_props = copy.deepcopy(self.properties)

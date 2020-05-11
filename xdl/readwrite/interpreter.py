@@ -34,8 +34,8 @@ def xdl_file_to_objs(
             xdlstr = fileobj.read()
     except UnicodeDecodeError:
         # Try different encoding to UTF-8
-        logger.debug(f'Unable to decode file using UTF-8\
-Falling back to ISO-8859-1')
+        logger.debug('Unable to decode file using UTF-8.\
+ Falling back to ISO-8859-1')
 
         with open(xdl_file, encoding='iso-8859-1') as fileobj:
             xdlstr = fileobj.read()
@@ -84,7 +84,7 @@ def xdl_str_to_objs(
 def apply_step_record(step, step_record_step):
     assert step.name == step_record_step[0]
     for prop in step.properties:
-        if prop != 'children':
+        if prop != 'children' and prop != 'uuid':
             if prop not in step_record_step[1]:
                 raise XDLError(f"Property {prop} missing from\
  Step {step_record_step[0]}\nThis file was most likely generated from an\

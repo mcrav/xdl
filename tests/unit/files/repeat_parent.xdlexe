@@ -465,11 +465,14 @@
       <CVentVacuum
         vessel="vacuum_reactor_flask" />
       <CStopChiller
-        vessel="filter" />
+        vessel="filter"
+        chiller="filter_chiller" />
       <CStopChiller
-        vessel="rotavap" />
+        vessel="rotavap"
+        chiller="rotavap_chiller" />
       <CStopChiller
-        vessel="flask_water" />
+        vessel="flask_water"
+        chiller="flask_chiller" />
     </Shutdown>
   </Procedure>
 
