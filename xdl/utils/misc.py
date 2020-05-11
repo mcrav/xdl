@@ -231,3 +231,34 @@ class SanityCheck(object):
  {str(step.name)}\n\n\
  {str(step.properties)}'
             )
+
+def steps_are_equal(step, other_step):
+    """Return True if given two Step objects are equal in terms of type,
+    properties and children, otherwise return False.
+    """
+    if step.name != other_step.name:
+        return False
+    for prop, val in step.properties.items():
+        if prop != 'children':
+            if val != other_step.properties[prop]:
+                return False
+    if 'children' in step.properties and step.children:
+        if 'children' not in other_step.properties:
+            return False
+        if len(step.children) != len(other_step.children):
+            return False
+        for j, child in enumerate(step.children):
+            if not steps_are_equal(child, other_step.children[j]):
+                return False
+    return True
+
+def xdl_elements_are_equal(xdl_element, other_xdl_element):
+    """Return True if given Reagent or Component objects are equal in terms of
+    type and properties, otherwise return False.
+    """
+    if xdl_element.name != other_xdl_element.name:
+        return False
+    for prop, val in xdl_element.properties.items():
+        if val != other_xdl_element.properties[prop]:
+            return False
+    return True

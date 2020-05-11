@@ -12,6 +12,14 @@ class IllegalPortError(XDLError):
 class XDLValueError(XDLError):
     pass
 
+class XDLInvalidFileTypeError(XDLError):
+    def __init__(self, file_ext):
+        self.file_ext = file_ext
+
+    def __str__(self):
+        return f'{self.file_ext} is an invalid XDL file type. Valid file\
+ file types: .xdl, .xdlexe, .json'
+
 # Graph
 class XDLGraphError(XDLError):
     pass
