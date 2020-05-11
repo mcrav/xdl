@@ -8,27 +8,27 @@ class XDLInvalidJSONError(XDLReadError):
 
 class XDLJSONMissingHardwareError(XDLInvalidJSONError):
     def __str__(self):
-        return f'XDL JSON is missing "hardware" section.'
+        return 'XDL JSON is missing "hardware" section.'
 
 class XDLJSONMissingReagentsError(XDLInvalidJSONError):
     def __str__(self):
-        return f'XDL JSON is missing "reagents" section.'
+        return 'XDL JSON is missing "reagents" section.'
 
 class XDLJSONMissingStepsError(XDLInvalidJSONError):
     def __str__(self):
-        return f'XDL JSON is missing "steps" section.'
+        return 'XDL JSON is missing "steps" section.'
 
 class XDLJSONHardwareNotArrayError(XDLInvalidJSONError):
     def __str__(self):
-        return f'Hardware section should be an array.'
+        return 'Hardware section should be an array.'
 
 class XDLJSONReagentsNotArrayError(XDLInvalidJSONError):
     def __str__(self):
-        return f'Reagents section should be an array.'
+        return 'Reagents section should be an array.'
 
 class XDLJSONStepsNotArrayError(XDLInvalidJSONError):
     def __str__(self):
-        return f'Steps section should be an array.'
+        return 'Steps section should be an array.'
 
 class XDLJSONInvalidSectionError(XDLInvalidJSONError):
     def __init__(self, section_name):
@@ -47,8 +47,8 @@ class XDLInvalidStepTypeError(XDLReadError):
 
 class XDLJSONMissingStepNameError(XDLInvalidJSONError):
     def __str__(self):
-        return f'Step missing "name" parameter in XDL JSON.'
+        return 'Step missing "name" parameter in XDL JSON.'
 
 class XDLJSONMissingPropertiesError(XDLInvalidJSONError):
     def __str__(self):
-        return f'XDL element must have "properties" object in XDL JSON.'
+        return 'XDL element must have "properties" object in XDL JSON.'
