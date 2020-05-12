@@ -70,7 +70,7 @@ class Async(AbstractAsyncStep):
         return True
 
     def human_readable(self, language='en'):
-        human_readable = f'Asynchronous:\n'
+        human_readable = 'Asynchronous:\n'
         for step in self.children:
             human_readable += f'    {step.human_readable()}\n'
         return human_readable

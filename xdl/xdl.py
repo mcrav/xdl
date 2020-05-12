@@ -1,19 +1,23 @@
 import os
 import logging
 import copy
+import json
 from typing import List, Dict, Any
 from math import ceil
 
 from .graphgen_deprecated import get_graph
 
 from .utils import get_logger
+from .utils.misc import steps_are_equal, xdl_elements_are_equal
 from .steps import Step, AbstractBaseStep, UnimplementedStep
 from .errors import (
     XDLError,
     XDLReagentNotDeclaredError,
     XDLVesselNotDeclaredError,
+    XDLInvalidFileTypeError
 )
 from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
+from .readwrite.json import xdl_to_json, xdl_from_json_file
 from .readwrite import XDLGenerator
 from .hardware import Hardware
 from .reagents import Reagent
@@ -60,9 +64,19 @@ class XDL(object):
         if xdl:
             parsed_xdl = {}
             if os.path.exists(xdl):
-                self._xdl_file = xdl
-                parsed_xdl = xdl_file_to_objs(
-                    xdl_file=xdl, logger=self.logger, platform=self.platform)
+                file_ext = os.path.splitext(xdl)[1]
+                if file_ext == '.xdl' or file_ext == '.xdlexe':
+                    self._xdl_file = xdl
+                    parsed_xdl = xdl_file_to_objs(
+                        xdl_file=xdl,
+                        logger=self.logger,
+                        platform=self.platform
+                    )
+                elif file_ext == '.json':
+                    parsed_xdl = xdl_from_json_file(xdl, self.platform)
+
+                else:
+                    raise XDLInvalidFileTypeError(file_ext)
 
             # Check XDL is XDL str and not just mistyped XDL file path.
             elif '<Synthesis' in xdl and '<Procedure>' in xdl:
@@ -259,7 +273,19 @@ class XDL(object):
                                           reagents=self.reagents)
         return self._xdlgenerator.as_string()
 
-    def save(self, save_file: str, full_properties: bool = False) -> str:
+    def as_json_string(self, pretty=True) -> Dict:
+        """Return JSON str of procedure."""
+        xdl_json = xdl_to_json(self)
+        if pretty:
+            return json.dumps(xdl_json, indent=2)
+        return json.dumps(xdl_json)
+
+    def save(
+        self,
+        save_file: str,
+        full_properties: bool = False,
+        file_format: str = 'xml'
+    ) -> str:
         """Save as XDL file.
 
         Args:
@@ -271,11 +297,25 @@ class XDL(object):
                 that will stand the test of time, as defaults may change in new
                 versions of XDL.
         """
-        self._xdlgenerator = XDLGenerator(steps=self.steps,
-                                          hardware=self.hardware,
-                                          reagents=self.reagents,
-                                          full_properties=full_properties)
-        self._xdlgenerator.save(save_file)
+        if file_format == 'xml':
+            self._xdlgenerator = XDLGenerator(
+                steps=self.steps,
+                hardware=self.hardware,
+                reagents=self.reagents,
+                full_properties=full_properties
+            )
+            self._xdlgenerator.save(save_file)
+
+        elif file_format == 'json':
+            with open(save_file, 'w') as fd:
+                json.dump(
+                    xdl_to_json(self, full_properties=full_properties),
+                    fd, indent=2
+                )
+
+        else:
+            raise XDLError(f'{file_format} is an invalid file format for saving\
+ XDL. Valid file formats: "xml", "json".')
 
     def scale_procedure(self, scale: float) -> None:
         """Scale all volumes and masses in procedure.
@@ -569,6 +609,33 @@ class XDL(object):
             components.extend(list(xdl_obj.hardware))
         new_xdl_obj = XDL(steps=steps, reagents=reagents, hardware=components)
         return new_xdl_obj
+
+    def __eq__(self, other):
+        if type(other) != XDL:
+            raise NotImplementedError(
+                'Can only compare equality with XDL objects'
+            )
+        if len(self.steps) != len(other.steps):
+            return False
+        if len(self.reagents) != len(other.reagents):
+            return False
+        if len(self.hardware.components) != len(other.hardware.components):
+            return False
+
+        for i, step in enumerate(self.steps):
+            if not steps_are_equal(step, other.steps[i]):
+                return False
+
+        for i, reagent in enumerate(self.reagents):
+            if not xdl_elements_are_equal(reagent, other.reagents[i]):
+                return False
+
+        for i, component in enumerate(self.hardware.components):
+            if not xdl_elements_are_equal(
+                    component, other.hardware.components[i]):
+                return False
+
+        return True
 
 def deep_copy_step(step):
     """Return a deep copy of a step. Written this way with children handled
