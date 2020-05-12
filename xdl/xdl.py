@@ -16,9 +16,9 @@ from .errors import (
     XDLVesselNotDeclaredError,
     XDLInvalidFileTypeError
 )
-from .readwrite.interpreter import xdl_file_to_objs, xdl_str_to_objs
+from .readwrite.xml_interpreter import xdl_file_to_objs, xdl_str_to_objs
+from .readwrite.xml_generator import xdl_to_xml_string
 from .readwrite.json import xdl_to_json, xdl_from_json_file
-from .readwrite import XDLGenerator
 from .hardware import Hardware
 from .reagents import Reagent
 from .platforms.abstract_platform import AbstractPlatform
@@ -268,10 +268,7 @@ class XDL(object):
 
     def as_string(self) -> str:
         """Return XDL str of procedure."""
-        self._xdlgenerator = XDLGenerator(steps=self.steps,
-                                          hardware=self.hardware,
-                                          reagents=self.reagents)
-        return self._xdlgenerator.as_string()
+        return xdl_to_xml_string(self)
 
     def as_json_string(self, pretty=True) -> Dict:
         """Return JSON str of procedure."""
@@ -298,13 +295,10 @@ class XDL(object):
                 versions of XDL.
         """
         if file_format == 'xml':
-            self._xdlgenerator = XDLGenerator(
-                steps=self.steps,
-                hardware=self.hardware,
-                reagents=self.reagents,
-                full_properties=full_properties
-            )
-            self._xdlgenerator.save(save_file)
+            xml_string = xdl_to_xml_string(
+                self, full_properties=full_properties)
+            with open(save_file, 'w') as fd:
+                fd.write(xml_string)
 
         elif file_format == 'json':
             with open(save_file, 'w') as fd:

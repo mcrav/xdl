@@ -65,11 +65,6 @@ def add_steps(step_library):
             add_repeat = True
             for prop_name, prop_type in step.PROP_TYPES.items():
                 schema += f"\n                    <xs:attribute type=\"xs:string\" name=\"{prop_name}\" use=\"optional\"/>"
-                if prop_name == 'repeat':
-                    add_repeat = False
-            if add_repeat:
-                schema += f"\n                    <xs:attribute type=\"xs:string\" name=\"repeat\" use=\"optional\"/>"
-
 
             schema += "\n                  </xs:extension>"
             schema += "\n                </xs:simpleContent>"
@@ -95,22 +90,13 @@ def add_steps(step_library):
 
         schema += "\n                  </xs:choice>"
 
-        add_repeat = True
         for prop_name, prop_type in step_library[nested_step].PROP_TYPES.items():
             schema += f"\n              <xs:attribute type=\"xs:string\" name=\"{prop_name}\" use=\"optional\"/>"
-            if prop_name == 'repeat':
-                add_repeat = False
-        if add_repeat:
-            schema += f"\n                    <xs:attribute type=\"xs:string\" name=\"repeat\" use=\"optional\"/>"
 
         schema += "\n              </xs:complexType>"
         schema += "\n            </xs:element>"
 
-
-
     return schema
-
-
 
 def add_procedure_namespace(step_library):
     schema = ""
