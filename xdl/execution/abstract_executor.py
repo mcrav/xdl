@@ -11,7 +11,7 @@ from ..steps.special_steps import Async, Await
 from ..steps.base_steps import (
     Step, AbstractDynamicStep, AbstractAsyncStep, AbstractBaseStep)
 from ..steps import NON_RECURSIVE_ABSTRACT_STEPS
-from ..readwrite.generator import XDLGenerator
+from ..readwrite import xdl_to_xml_string
 from ..errors import XDLError
 from ..utils import get_logger
 if False:
@@ -62,14 +62,12 @@ class AbstractXDLExecutor(ABC):
         """
         # Generate execution script
 
-        exescript = XDLGenerator(
-            self._xdl.steps,
-            self._xdl.hardware,
-            self._xdl.reagents,
+        exescript = xdl_to_xml_string(
+            self._xdl,
             graph_hash=self._graph_hash(),
             full_properties=True,
             full_tree=True
-        ).as_string()
+        )
 
         # Generate file in user data dir using hash of execution script
         # as file name.
