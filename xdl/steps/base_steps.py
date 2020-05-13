@@ -1,18 +1,22 @@
+# Std
 from typing import List, Dict
-from ..utils import XDLBase
-from ..constants import DEFAULT_INSTANT_DURATION
 import logging
 import threading
 import copy
 import uuid
 from abc import ABC, abstractmethod
-from ..utils.misc import format_property, SanityCheck
-from ..utils.graph import get_graph
-from ..errors import XDLError
+
+# Other
 from networkx import MultiDiGraph
 
-if False:
-    from chempiler import Chempiler
+# Relative
+from ..constants import DEFAULT_INSTANT_DURATION
+from ..utils import XDLBase
+from ..utils.localisation import conditional_human_readable
+from ..utils.misc import format_property, SanityCheck
+from ..utils.graph import get_graph
+from ..utils.logging import get_logger
+from ..errors import XDLError
 
 class Step(XDLBase):
     """Base class for all step objects.
@@ -23,122 +27,41 @@ class Step(XDLBase):
         uuid (str): Step unique universal identifier, generated automatically.
     """
 
-    #: Set to True if mass/volume of step shouldn't be scaled when the
-    # rest of the procedure is scaled.
-    DO_NOT_SCALE: bool = False
+    # List of properties that should always be written, even if they are the
+    # same as default values. For example, you may have default 20 mL volume for
+    # WashSolid. This does not mean that you don't want to write it, otherwise
+    # the XDL is unclear over how much solvent is used when reading it.
     ALWAYS_WRITE: List[str] = []
+
+    # This property should be given by a second base class for steps. For
+    # example Chemputer steps all inherit Step and ChemputerStep. ChemputerStep
+    # provides all the Chemputer step localisation in this variable.
     localisation: Dict[str, str] = {}
 
     def __init__(self, param_dict):
         super().__init__(param_dict)
         self.uuid = str(uuid.uuid4())
 
-    def formatted_properties(self):
-        formatted_props = copy.deepcopy(self.properties)
-        for prop, val in formatted_props.items():
-            if prop != 'children':
-                formatted_props[prop] = format_property(
-                    prop,
-                    val,
-                    self.PROP_TYPES[prop],
-                    self.PROP_LIMITS.get(prop, None),
-                )
-            if formatted_props[prop] == 'None':
-                formatted_props[prop] = ''
-        return formatted_props
+    def on_prepare_for_execution(self, graph: MultiDiGraph):
+        """Abstract method to be overridden with logic to set internal
+        properties during procedure compilation. Doesn't use @abstractmethod
+        decorator as it's okay to leave this blank if there are no internal
+        properties.
 
-    def human_readable(self, language='en'):
-        if self.name in self.localisation:
-            step_human_readables = self.localisation[self.name]
-            if language in step_human_readables:
-                language_human_readable = step_human_readables[language]
+        This method is called during procedure compilation. Sanity checks are
+        called after this method, and are there to validate the internal
+        properties added during this stage.
 
-                # Traditional human readable template strings
-                if type(language_human_readable) == str:
-                    return language_human_readable.format(
-                        **self.formatted_properties())
-
-                # New conditional JSON object human readable format
-                else:
-                    # Get overall template str
-                    template_str = language_human_readable['full']
-
-                    # Get formatted properties
-                    formatted_properties = self.formatted_properties()
-
-                    # Resolve conditional template fragments and apply to full
-                    # template str
-                    for fragment_identifier, condition_prop_dict\
-                            in language_human_readable.items():
-
-                        # Ignore full template str
-                        if fragment_identifier != 'full':
-
-                            # Match prop conditions
-                            for condition_prop, condition_val_dict\
-                                    in condition_prop_dict.items():
-
-                                # Get actual val
-                                condition_actual_val = self.properties[
-                                    condition_prop]
-                                condition_actual_val_str =\
-                                    str(condition_actual_val).lower()
-
-                                sub_val = ''
-
-                                # Exact match
-                                if (condition_actual_val_str
-                                        in condition_val_dict):
-                                    sub_val = condition_val_dict[
-                                        condition_actual_val_str]
-
-                                # Any match
-                                elif (condition_actual_val is not None
-                                      and 'any' in condition_val_dict):
-                                    sub_val = condition_val_dict['any']
-
-                                # Else match
-                                else:
-                                    sub_val = condition_val_dict['else']
-
-                                # Fragment identifier is not a property, add it
-                                # to formatted properties.
-                                if fragment_identifier not in self.properties:
-                                    formatted_properties[fragment_identifier] =\
-                                        sub_val
-
-                                # Fragment identifier is a property, replace
-                                # the property in the template_str with the new
-                                # fragment, so .format is called on the new
-                                # fragment.
-                                template_str = template_str.replace(
-                                    '{' + fragment_identifier + '}', sub_val)
-
-                    # Postprocess
-                    human_readable = template_str.format(**formatted_properties)
-                    human_readable = self.postprocess_human_readable(
-                        human_readable)
-
-            else:
-                human_readable = self.name
-        else:
-            human_readable = self.name
-        return human_readable
-
-    def postprocess_human_readable(self, human_readable):
-        """Remove whitespace issues created by conditional template system.
-        Specifically ' ,', '  ' and ' .'.
+        Args:
+            graph (MultiDiGraph): networkx MultiDiGraph of graph that procedure
+                is compiling to.
         """
-        while '  ' in human_readable:
-            human_readable = human_readable.replace('  ', ' ')
-        human_readable = human_readable.replace(' ,', ',')
-        human_readable = human_readable.rstrip('. ')
-        human_readable += '.'
-        return human_readable
+        pass
 
     def sanity_checks(self, graph: MultiDiGraph) -> List[SanityCheck]:
         """Abstract methods that should return a list of SanityCheck objects
-        to be checked by final_sanity_check.
+        to be checked by final_sanity_check. Not compulsory so not using
+        @abstractmethod decorator.
         """
         return []
 
@@ -150,18 +73,139 @@ class Step(XDLBase):
         for sanity_check in self.sanity_checks(graph):
             sanity_check.run(self)
 
+    def formatted_properties(self) -> Dict[str, str]:
+        """Return properties as dictionary of { prop: formatted_val }. Used when
+        generating human readables.
+        """
+        # Copy properties dict
+        formatted_props = copy.deepcopy(self.properties)
+
+        # Add formatted properties for all properties
+        for prop, val in formatted_props.items():
+
+            # Ignore children
+            if prop != 'children':
+                formatted_props[prop] = format_property(
+                    prop,
+                    val,
+                    self.PROP_TYPES[prop],
+                    self.PROP_LIMITS.get(prop, None),
+                )
+
+            # Convert None properties to empty string
+            if formatted_props[prop] == 'None':
+                formatted_props[prop] = ''
+
+        return formatted_props
+
+    def human_readable(self, language: str = 'en') -> str:
+        """Return human readable sentence describing step."""
+        # Look for step name in localisation dict
+        if self.name in self.localisation:
+
+            # Get human readable template from localisation dict
+            step_human_readables = self.localisation[self.name]
+            if language in step_human_readables:
+                language_human_readable = step_human_readables[language]
+
+                # Traditional human readable template strings
+                if type(language_human_readable) == str:
+                    return language_human_readable.format(
+                        **self.formatted_properties())
+
+                # New conditional JSON object human readable format
+                else:
+                    return conditional_human_readable(
+                        self, language_human_readable)
+
+        # Return step name as a fallback if step not in localisation dict
+        return self.name
+
     def scale(self, scale: float) -> None:
         """Method to override to handle scaling if procedure is scaled.
         Should update step properties accordingly with given scale. Doesn't
-        need to return anything.
+        need to do/return anything.
         """
         return
 
-    def reagents_consumed(self, graph):
+    def reagents_consumed(self, graph: MultiDiGraph) -> Dict[str, float]:
+        """Method to override if step consumes reagents. Used to recursively
+        calculate volume of reagents consumed by procedure.
+        """
         return {}
 
-    def duration(self, graph):
+    def duration(self, graph: MultiDiGraph) -> int:
+        """Method to override to give approximate duration of step. Used to
+        recursively determine duration of procedure.
+        """
         return DEFAULT_INSTANT_DURATION
+
+    def locks(self, platform_controller):
+        """WIP: Abstract method used by parallelisation.
+
+        Returns locks, ongoing_locks and unlocks. Locks are nodes that are used
+        while the step is executing. Ongoing locks are nodes that will be in use
+        indefinitely after the step has finished (e.g. a vessel that the
+        reaction mixture has been added to). Unlocks are nodes that are no
+        longer being used after the step has finished (e.g. a vessel that the
+        reaction mixture has been removed from).
+        """
+        return [], [], []
+
+    @property
+    def requirements(self):
+        """Return dictionary of requirements of vessels used by the step.
+        Currently only used by SynthReader.
+        """
+        return {}
+
+
+class AbstractBaseStep(Step, ABC):
+    """Abstract base class for all steps that do not contain other steps and
+    instead have an execute method that takes a platform_controller object.
+
+    Subclasses must implement execute.
+    """
+    def __init__(self, param_dict):
+        super().__init__(param_dict)
+        self.steps = []
+
+    @abstractmethod
+    def execute(self, platform_controller) -> bool:
+        """Execute method to be overridden for all base steps. Take platform
+        controller and use it to execute the step. Return True if procedure
+        should continue after the step is completed, return False if the
+        procedure should break for some reason.
+        """
+        return False
+
+    @property
+    def base_steps(self):
+        """Just return self as the base_steps. Used by recursive base_steps
+        method of AbstractStep. No need to override this.
+        """
+        return [self]
+
+    def request_lock(self, platform_controller, locking_pid):
+        """WIP: Used by parallelisation to find out if the nodes required by
+        the step are available."""
+        locks, ongoing_locks, _ = self.locks(platform_controller)
+        return platform_controller.request_lock(
+            locks + ongoing_locks, locking_pid)
+
+    def acquire_lock(self, platform_controller, locking_pid):
+        """WIP: Used by parallelisation to let platform controller know what
+        nodes are in use by the step.
+        """
+        locks, ongoing_locks, _ = self.locks(platform_controller)
+        platform_controller.acquire_lock(locks + ongoing_locks, locking_pid)
+
+    def release_lock(self, platform_controller, locking_pid):
+        """WIP: Used by parallelisation to let platform controller know what
+        nodes are no longer in use by the step.
+        """
+        locks, _, unlocks = self.locks(platform_controller)
+        platform_controller.release_lock(locks + unlocks, locking_pid)
 
 class AbstractStep(Step, ABC):
     """Abstract base class for all steps that contain other steps.
@@ -178,115 +222,123 @@ class AbstractStep(Step, ABC):
         self.steps = self.get_steps()
 
     @abstractmethod
-    def get_steps(self):
+    def get_steps(self) -> List[Step]:
+        """Abstract method that must be overridden when creating non base steps.
+        Should return a list of steps to be sequentially executed when the step
+        is executed. No properties should be changed during this method. This is
+        a one way street to return a list of steps based on the current
+        properties of the step.
+
+        Returns:
+            List[Step]: List of steps to be sequentially executed when the step
+                is executed.
+        """
         return []
 
-    @property
-    def requirements(self):
-        return {}
-
-    def request_lock(self, chempiler, locking_pid):
+    def request_lock(self, platform_controller, locking_pid):
+        """WIP: Used by parallelisation to find out if the nodes required by
+        the step are available."""
         can_lock = True
         for step in self.base_steps:
-            if not step.request_lock(chempiler, locking_pid):
+            if not step.request_lock(platform_controller, locking_pid):
                 can_lock = False
                 break
         return can_lock
 
-    def acquire_lock(self, chempiler, locking_pid):
+    def acquire_lock(self, platform_controller, locking_pid):
+        """WIP: Used by parallelisation to let platform controller know what
+        nodes are in use by the step.
+        """
         for step in self.base_steps:
-            step.acquire_lock(chempiler, locking_pid)
+            step.acquire_lock(platform_controller, locking_pid)
 
-    def release_lock(self, chempiler, locking_pid):
+    def release_lock(self, platform_controller, locking_pid):
+        """WIP: Used by parallelisation to let platform controller know what
+        nodes are no longer in use by the step.
+        """
         for step in self.base_steps:
-            step.release_lock(chempiler, locking_pid)
-
-    def final_sanity_check(self, graph):
-        super().final_sanity_check(graph)
-
-    def on_prepare_for_execution(self, graph):
-        pass
+            step.release_lock(platform_controller, locking_pid)
 
     def execute(
         self,
-        chempiler: 'Chempiler',
+        platform_controller,
         logger: logging.Logger = None,
         level: int = 0,
         async_steps: list = []
     ) -> bool:
         """
-        Execute self with given Chempiler object.
+        Execute self with given platform controller object.
 
         Args:
-            chempiler (chempiler.Chempiler): Initialised Chempiler object.
+            platform_controller (platform_controller): Initialised platform
+                controller object.
             logger (logging.Logger): Logger to handle output step output.
             level (int): Level of recursion in step execution.
         """
-        self.final_sanity_check(chempiler.graph.graph)
+        # Bump recursion level
         level += 1
-        if not logger:
-            logger = logging.getLogger('xdl')
 
-        try:
-            repeats = 1
-            if 'repeat' in self.properties:
-                repeats = int(self.repeat)
-            for _ in range(repeats):
-                for step in self.steps:
-                    prop_str = ''
-                    for k, v in step.properties.items():
-                        prop_str += f'{"  " * level}  {k}: {v}\n'
-                    logger.info(
-                        'Executing:\n{0}{1}\n{2}'.format(
-                            '  ' * level, step.name, prop_str))
-                    try:
-                        if step.name == 'Await':
-                            keep_going = step.execute(
-                                async_steps, self.logger)
-                        else:
-                            keep_going = step.execute(
-                                chempiler,
-                                self.logger
-                            )
-                    except Exception as e:
-                        logger.info(
-                            'Step failed {0} {1}'.format(
-                                type(step), step.properties))
-                        raise e
-                    if not keep_going:
-                        return False
-            return True
-        except Exception as e:
-            if logger:
-                logger.exception(str(e), exc_info=1)
-            raise(e)
+        # Get logger
+        if not logger:
+            logger = get_logger()
+
+        for step in self.steps:
+            # Log step execution message
+            prop_str = ''
+            for k, v in step.properties.items():
+                # Log all properties except 'children'
+                if k != 'chilren':
+                    prop_str += f'{"  " * level}  {k}: {v}\n'
+            logger.info(f'Executing:\n{"  " * level}{step.name}\n{prop_str}')
+
+            # Execute step
+            try:
+                # Await async step finishing
+                if step.name == 'Await':
+                    keep_going = step.execute(async_steps, self.logger)
+
+                # Execute normal step
+                else:
+                    keep_going = step.execute(platform_controller, self.logger)
+
+            # It is disgusting to use except Exception, but the only reason
+            # here is just to provide a bit of debug information if a step
+            # crashes. Might want to remove this in future.
+            except Exception as e:
+                logger.info(f'Step failed {type(step)} {step.properties}')
+                raise e
+
+            # If keep_going is False break execution. This is used by the
+            # Confirm step to stop execution if the user doesn't wish to
+            # continue.
+            if not keep_going:
+                return False
+
+        return True
 
     @property
-    def base_steps(self):
+    def base_steps(self) -> List[AbstractBaseStep]:
+        """Return list of step's base steps."""
         base_steps = []
         for step in self.steps:
             if isinstance(step, AbstractBaseStep):
                 base_steps.append(step)
             else:
-                base_steps.extend(self.get_base_steps(step))
+                base_steps.extend(get_base_steps(step))
         return base_steps
 
-    def get_base_steps(self, step):
-        base_steps = []
-        for step in step.steps:
-            if isinstance(step, AbstractBaseStep):
-                base_steps.append(step)
-            else:
-                base_steps.extend(self.get_base_steps(step))
-        return base_steps
-
-    def duration(self, graph):
+    def duration(self, graph: MultiDiGraph) -> int:
+        """Return approximate duration in seconds of step calculated as sum of
+        durations of all substeps. This method should be overridden where an
+        exact or near exact duration is known. The fallback duration for base
+        steps is 1 sec.
+        """
         duration = 0
         for step in self.steps:
             duration += step.duration(graph)
         return duration
 
-    def reagents_consumed(self, graph):
+    def reagents_consumed(self, graph: MultiDiGraph) -> Dict[str, float]:
         """Return dictionary of reagents and volumes consumed in mL like this:
         { reagent: volume... }. Can be overridden otherwise just recursively
         adds up volumes used by base steps.
@@ -301,55 +353,6 @@ class AbstractStep(Step, ABC):
                     reagents_consumed[reagent] = volume
         return reagents_consumed
 
-class AbstractBaseStep(Step, ABC):
-    """Abstract base class for all steps that do not contain other steps and
-    instead have an execute method that takes a chempiler object.
-
-    Subclasses must implement execute.
-    """
-    def __init__(self, param_dict):
-        super().__init__(param_dict)
-        self.steps = []
-
-    def human_readable(self, language='en'):
-        return self.__class__.__name__
-
-    def on_prepare_for_execution(self, graph):
-        pass
-
-    def final_sanity_check(self, graph):
-        super().final_sanity_check(graph)
-
-    @property
-    def requirements(self):
-        return {}
-
-    @abstractmethod
-    def execute(self, chempiler: 'Chempiler'):
-        return False
-
-    @property
-    def base_steps(self):
-        return [self]
-
-    def duration(self, chempiler):
-        return DEFAULT_INSTANT_DURATION
-
-    def locks(self, chempiler):
-        return [], [], []
-
-    def request_lock(self, chempiler, locking_pid):
-        locks, ongoing_locks, _ = self.locks(chempiler)
-        return chempiler.request_lock(locks + ongoing_locks, locking_pid)
-
-    def acquire_lock(self, chempiler, locking_pid):
-        locks, ongoing_locks, _ = self.locks(chempiler)
-        chempiler.acquire_lock(locks + ongoing_locks, locking_pid)
-
-    def release_lock(self, chempiler, locking_pid):
-        locks, _, unlocks = self.locks(chempiler)
-        chempiler.release_lock(locks + unlocks, locking_pid)
-
 class AbstractAsyncStep(Step):
     """For executing code asynchronously. Can only be used programtically,
     no way of encoding this in XDL files.
@@ -362,25 +365,34 @@ class AbstractAsyncStep(Step):
         super().__init__(param_dict)
         self._should_end = False
 
-    def on_prepare_for_execution(self, graph):
-        return
-
-    def final_sanity_check(self, graph):
-        super().final_sanity_check(graph)
-
-    def execute(self, chempiler, logger=None, level=0, async_steps=[]):
+    def execute(
+            self, platform_controller, logger=None, level=0, async_steps=[]):
+        """Execute step in new thread."""
         self.thread = threading.Thread(
-            target=self.async_execute, args=(chempiler, logger))
+            target=self.async_execute, args=(platform_controller, logger))
         self.thread.start()
         return True
 
     @abstractmethod
     def async_execute(
-        self, chempiler: 'Chempiler', logger: logging.Logger = None
+        self, platform_controller, logger: logging.Logger = None
     ) -> bool:
+        """Abstract method. Should contain the execution logic that will be
+        executed in a separate thread. Equivalent to AbstractBaseStep execute
+        method, and similarly should return True if the procedure should
+        continue after the step has finished executing and False if the
+        procedure should break after the step has finished executing.
+
+        Not called execute like AbstractBaseStep to keep `step.execute` logic
+        in other places consistent and simple.
+        """
         return True
 
     def kill(self):
+        """Flick self._should_end killswitch to let async_execute know that it
+        should return to allow the thread to join. This relies on async_execute
+        having been implemented to take notice of this variable.
+        """
         self._should_end = True
 
     def reagents_consumed(self, graph):
@@ -389,6 +401,7 @@ class AbstractAsyncStep(Step):
         adds up volumes used by base steps.
         """
         reagents_consumed = {}
+        # Get reagents consumed from children (Async step)
         for substep in self.children:
             step_reagents_consumed = substep.reagents_consumed(graph)
             for reagent, volume in step_reagents_consumed.items():
@@ -399,6 +412,7 @@ class AbstractAsyncStep(Step):
         return reagents_consumed
 
     def duration(self, graph):
+        """Return duration of child steps (Async step)."""
         duration = 0
         for step in self.children:
             duration += step.duration(graph)
@@ -457,13 +471,10 @@ class AbstractDynamicStep(Step):
     def reset(self):
         self.state = []
 
-    def resume(self, chempiler, logger=None, level=0):
+    def resume(self, platform_controller, logger=None, level=0):
         self.started = False  # Hack to avoid reset.
         self.start_block = []  # Go straight to on_continue
-        self.execute(chempiler, logger=logger, level=level)
-
-    def final_sanity_check(self, graph):
-        super().final_sanity_check(graph)
+        self.execute(platform_controller, logger=logger, level=level)
 
     def _post_finish(self):
         """Called after steps returned by on_finish have finished executing to
@@ -472,9 +483,6 @@ class AbstractDynamicStep(Step):
         for async_step in self.async_steps:
             async_step.kill()
 
-    def on_prepare_for_execution(self, graph):
-        pass
-
     def prepare_for_execution(self, graph, executor):
         self.executor = executor
         self.graph = graph
@@ -482,13 +490,14 @@ class AbstractDynamicStep(Step):
         self.start_block = self.on_start()
         self.executor.prepare_block_for_execution(self.graph, self.start_block)
 
-    def execute(self, chempiler, logger=None, level=0):
+    def execute(self, platform_controller, logger=None, level=0):
         """Execute step lifecycle. on_start, followed by on_continue repeatedly
         until an empty list is returned, followed by on_finish, after which all
         threads are joined as fast as possible.
 
         Args:
-            chempiler (Chempiler): Chempiler object to use for executing steps.
+            platform_controller (Any): Platform controller object to use for
+                executing steps.
             logger (Logger): Logger object.
             level (int): Level of recursion in step execution.
 
@@ -508,7 +517,7 @@ class AbstractDynamicStep(Step):
 
         # Execute steps from on_start
         for step in self.start_block:
-            step.execute(chempiler, logger=logger, level=level)
+            step.execute(platform_controller, logger=logger, level=level)
             if isinstance(step, AbstractAsyncStep):
                 self.async_steps.append(step)
 
@@ -520,7 +529,7 @@ class AbstractDynamicStep(Step):
             for step in continue_block:
                 if isinstance(step, AbstractAsyncStep):
                     self.async_steps.append(step)
-                step.execute(chempiler, logger=logger, level=level)
+                step.execute(platform_controller, logger=logger, level=level)
 
             continue_block = self.on_continue()
             self.executor.prepare_block_for_execution(
@@ -531,7 +540,7 @@ class AbstractDynamicStep(Step):
         self.executor.prepare_block_for_execution(self.graph, finish_block)
 
         for step in finish_block:
-            step.execute(chempiler, logger=logger, level=level)
+            step.execute(platform_controller, logger=logger, level=level)
             if isinstance(step, AbstractAsyncStep):
                 self.async_steps.append(step)
 
@@ -539,9 +548,6 @@ class AbstractDynamicStep(Step):
         self._post_finish()
 
         return True
-
-    def human_readable(self, language='en'):
-        return
 
     def reagents_consumed(self, graph):
         """Return dictionary of reagents and volumes consumed in mL like this:
@@ -559,6 +565,8 @@ class AbstractDynamicStep(Step):
         return reagents_consumed
 
     def duration(self, graph):
+        """Return duration of start block, since duration after that is unknown.
+        """
         duration = 0
         for step in self.start_block:
             duration += step.duration(graph)
@@ -573,16 +581,19 @@ class UnimplementedStep(Step):
         super().__init__(param_dict)
         self.steps = []
 
-    def execute(self, chempiler, logger=None, level=0):
+    def execute(self, platform_controller, logger=None, level=0):
         raise NotImplementedError(
             f'{self.__class__.__name__} step is unimplemented.')
 
-    @property
-    def requirements(self):
-        return {}
-
-    def final_sanity_check(self, graph):
-        super().final_sanity_check(graph)
-
-    def on_prepare_for_execution(self, graph):
-        pass
+def get_base_steps(step):
+    """Return list of given step's base steps. Recursively descends step tree
+    to find base steps. Here rather than in utils as uses AbstractBaseStep type
+    so would cause circular import.
+    """
+    base_steps = []
+    for step in step.steps:
+        if isinstance(step, AbstractBaseStep):
+            base_steps.append(step)
+        else:
+            base_steps.extend(get_base_steps(step))
+    return base_steps
