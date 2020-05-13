@@ -606,9 +606,10 @@ class XDL(object):
 
     def __eq__(self, other):
         if type(other) != XDL:
-            raise NotImplementedError(
-                'Can only compare equality with XDL objects'
-            )
+            # Don't raise NotImplementedError here as it causes unnecessary
+            # crashes for example `if xdl_obj == None: ...`.
+            return False
+
         if len(self.steps) != len(other.steps):
             return False
         if len(self.reagents) != len(other.reagents):
