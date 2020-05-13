@@ -16,6 +16,7 @@ def test_schema():
         fd.write(schema)
 
     xmlschema_doc = etree.parse(xsd_path)
+    os.remove(xsd_path)
     xmlschema = etree.XMLSchema(xmlschema_doc)
     parser = etree.XMLParser(schema=xmlschema)
 
