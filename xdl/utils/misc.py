@@ -1,5 +1,6 @@
 from typing import Any, Optional
-from ..errors import XDLError
+from tabulate import tabulate
+
 from .prop_limits import (
     PropLimit,
     TEMP_PROP_LIMIT,
@@ -9,6 +10,7 @@ from .prop_limits import (
     MASS_PROP_LIMIT,
     PRESSURE_PROP_LIMIT,
 )
+from ..errors import XDLError
 if False:
     from ..steps import Step
 
@@ -262,3 +264,38 @@ def xdl_elements_are_equal(xdl_element, other_xdl_element):
         if val != other_xdl_element.properties[prop]:
             return False
     return True
+
+def reagent_volumes_table(reagent_volumes) -> str:
+    """Pretty print table of reagent volumes used in procedure."""
+
+    if not reagent_volumes:
+        return ''
+
+    # Convert reagent volumes to list of tuples
+    reagent_volumes = [
+        (reagent, volume)
+        for reagent, volume in reagent_volumes.items()
+    ]
+    # Sort reagent volumes by decreasing volume
+    reagent_volumes = sorted(reagent_volumes, key=lambda x: 1 / x[1])
+
+    # Convert volumes to formatted strings
+    table = []
+    for reagent, volume in reagent_volumes:
+        unit = 'mL'
+        if volume > 1000:
+            unit = 'L'
+            volume /= 1000
+        elif volume < 0.1:
+            volume *= 1000
+            unit = 'µL'
+        fmt_volume = f'{volume:.2f}'.rstrip('0').rstrip('0').rstrip('.')
+        fmt_volume += f' {unit}'
+        table.append((reagent, fmt_volume))
+
+    # Create table
+    return tabulate(
+        table,
+        headers=['Reagent', 'Volume Used'],
+        tablefmt='pretty'
+    )

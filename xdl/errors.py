@@ -31,6 +31,14 @@ class XDLInvalidFileTypeError(XDLError):
         return f'{self.file_ext} is an invalid XDL file type. Valid file\
  file types: .xdl, .xdlexe, .json'
 
+class XDLInvalidSaveFormatError(XDLError):
+    def  __init__(self, file_format):
+        self.file_format = file_format
+
+    def  __str__(self):
+        return f'"{self.file_format}" is an invalid file format for saving\
+ XDL. Valid file formats: "xml", "json".'
+
 class XDLVesselNotDeclaredError(XDLError):
     def __init__(self, vessel):
         self.vessel = vessel
@@ -122,6 +130,16 @@ class XDLExecutionBeforeCompilationError(XDLExecutionError):
         return 'Trying to execute procedure that has not been compiled. First\
  call xdl_obj.prepare_for_execution(graph).'
 
+class XDLDurationBeforeCompilationError(XDLExecutionError):
+    def __str__(self):
+        return 'Trying to calculate duration for procedure that has not been\
+ compiled. First call xdl_obj.prepare_for_execution(graph).'
+
+class XDLReagentVolumesBeforeCompilationError(XDLExecutionError):
+    def __str__(self):
+        return 'Trying to calculate reagent volumes for procedure that has not\
+ been compiled. First call xdl_obj.prepare_for_execution(graph).'
+
 ########
 # Misc #
 ########
@@ -142,3 +160,14 @@ class XDLInvalidPlatformError(XDLError):
     def __str__(self):
         return f'{self.platform} is an invalid platform. Platform must\
  be "chemputer" or a subclass of AbstractPlatform.'
+
+class XDLLanguageUnavailableError(XDLError):
+    def __init__(self, language, available_languages=None):
+        self.language = language
+        self.available_languages = available_languages
+
+    def __str__(self):
+        s = f'Language {self.language} not supported.'
+        if self.available_languages is not None:
+            s += f'Available languages: {", ".join(self.available_languages)}'
+        return s

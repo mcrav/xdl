@@ -164,8 +164,8 @@ class AbstractXDLExecutor(ABC):
             chempiler (chempiler.Chempiler): Chempiler object to execute XDL
                                              with.
         """
-        if (not self._prepared_for_execution
-                and hasattr(self._xdl, 'graph_sha256')):
+        # XDLEXE, check graph hashes match
+        if (not self._prepared_for_execution and self._xdl.compiled):
             # Currently, this check only performed for Chemputer
             if hasattr(platform_controller, 'graph'):
                 if self._xdl.graph_sha256 == self._graph_hash(
@@ -178,8 +178,8 @@ class AbstractXDLExecutor(ABC):
  was made with.')
 
         if self._prepared_for_execution:
-            self._xdl.print_full_xdl_tree()
-            self._xdl.log_human_readable()
+            self.logger.info(
+                f'Procedure\n---------\n\n{self._xdl.human_readable()}')
             self.logger.info('Execution\n---------\n')
             async_steps = []
 
