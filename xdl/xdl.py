@@ -1,33 +1,50 @@
+from typing import List, Dict, Any, Union, Optional
 import os
 import logging
-import copy
 import json
-from typing import List, Dict, Any
+import re
 from math import ceil
 
-from .graphgen_deprecated import get_graph
-
-from .utils import get_logger
-from .utils.misc import steps_are_equal, xdl_elements_are_equal
-from .steps import Step, AbstractBaseStep, UnimplementedStep
 from .errors import (
     XDLError,
     XDLReagentNotDeclaredError,
     XDLVesselNotDeclaredError,
-    XDLInvalidFileTypeError
+    XDLInvalidFileTypeError,
+    XDLInvalidPlatformControllerError,
+    XDLStepIndexError,
+    XDLExecutionBeforeCompilationError,
+    XDLInvalidPlatformError,
+    XDLInvalidInputError,
+    XDLFileNotFoundError,
+    XDLInvalidArgsError,
+    XDLDoubleCompilationError,
 )
-from .readwrite.xml_interpreter import xdl_file_to_objs, xdl_str_to_objs
+from .graphgen_deprecated import get_graph
+from .hardware import Hardware
+from .platforms.abstract_platform import AbstractPlatform
+from .reagents import Reagent
+from .readwrite.utils import read_file
+from .readwrite.xml_interpreter import xdl_str_to_objs
 from .readwrite.xml_generator import xdl_to_xml_string
 from .readwrite.json import xdl_to_json, xdl_from_json_file
-from .hardware import Hardware
-from .reagents import Reagent
-from .platforms.abstract_platform import AbstractPlatform
-from .platforms.modular_wheel import ModularWheelPlatform
+from .steps import Step, AbstractBaseStep, UnimplementedStep
+from .utils import get_logger
+from .utils.misc import steps_are_equal, xdl_elements_are_equal
 
 class XDL(object):
     """
     Interpets XDL (file or str) and provides an object for further use.
     """
+    # File name XDL was initialised from
+    _xdl_file = None
+
+    # Graph hash contained in <Synthesis> tag if XDL object is from xdlexe file
+    graph_sha256 = None
+
+    # True if XDL is loaded from xdlexe, or has been compiled, otherwise False
+    # self.compiled == True implies that procedure is ready to execute
+    compiled = False
+
     def __init__(
         self,
         xdl: str = None,
@@ -35,7 +52,7 @@ class XDL(object):
         hardware: Hardware = None,
         reagents: List[Reagent] = None,
         logging_level: int = logging.INFO,
-        platform: str = 'chemputer',
+        platform: Union[str, AbstractPlatform] = 'chemputer',
     ) -> None:
         """Init method for XDL object.
         One of xdl or (steps, hardware and reagents) must be given.
@@ -53,67 +70,167 @@ class XDL(object):
         Raises:
             ValueError: If insufficient args provided to instantiate object.
         """
+
+        self._initialize_logging(logging_level)
+        self._load_platform(platform)
+        self._load_xdl(xdl, steps=steps, hardware=hardware, reagents=reagents)
+
+        self.executor = self.platform.executor(self)
+        self.compiled = self.graph_sha256 is not None
+
+        self._validate_loaded_xdl()
+
+    ##################
+    # Initialization #
+    ##################
+
+    def _initialize_logging(self, logging_level: int) -> None:
+        """Initialize logger with given logging level."""
         self.logger = get_logger()
         self.logger.setLevel(logging_level)
         self.logging_level = logging_level
 
-        self._xdl_file = None
-        self.graph_sha256 = None
-        self.prepared = False
-        self._validate_platform(platform)
+    def _load_platform(self, platform: Union[str, AbstractPlatform]) -> None:
+        """Initialise given platform. If 'chemputer' given initialise
+        ChemputerPlatform otherwise platform should be a subclass of
+        AbstractPlatform.
+
+        Args:
+            platform (Union[str, AbstractPlatform])
+
+        Raises:
+            XDLInvalidPlatformError: If platform is not 'chemputer' or a
+                subclass of AbstractPlatform.
+        """
+        if platform == 'chemputer':
+            from chemputerxdl import ChemputerPlatform
+            self.platform = ChemputerPlatform()
+        elif issubclass(platform, AbstractPlatform):
+            self.platform = platform()
+        else:
+            raise XDLInvalidPlatformError(platform)
+
+    def _load_xdl(
+        self,
+        xdl: str,
+        steps: List[Step],
+        reagents: List[Reagent],
+        hardware: Hardware
+    ) -> None:
+        """Load XDL from given arguments. Valid argument combinations are
+        just xdl, or all of steps, reagents and hardware. xdl can be a path to a
+        .xdl, .xdlexe or .json file, or an XML string of the XDL.
+
+        Args:
+            xdl (str): Path to .xdl, .xdlexe or .json XDL file, or XML string.
+            steps (List[Step]): List of Step objects to instantiate XDL with.
+            reagents (List[Reagent]): List of Reagent objects to instantiate XDL
+                with.
+            hardware (Hardware): Hardware object to instantiate XDL with.
+
+        Raises:
+            XDLFileNotFoundError: xdl file given, but file not found.
+            XDLInvalidInputError: xdl is not file or valid XML string.
+            XDLInvalidArgsError: Invalid combination of arguments given.
+                Valid argument combinations are just xdl, or all of steps,
+                reagents and hardware.
+        """
+        # Load from XDL file or string
         if xdl:
-            parsed_xdl = {}
+            # Load from file
             if os.path.exists(xdl):
-                file_ext = os.path.splitext(xdl)[1]
-                if file_ext == '.xdl' or file_ext == '.xdlexe':
-                    self._xdl_file = xdl
-                    parsed_xdl = xdl_file_to_objs(
-                        xdl_file=xdl,
-                        logger=self.logger,
-                        platform=self.platform
-                    )
-                elif file_ext == '.json':
-                    parsed_xdl = xdl_from_json_file(xdl, self.platform)
+                self._load_xdl_from_file(xdl)
 
-                else:
-                    raise XDLInvalidFileTypeError(file_ext)
+            # Incorrect file path, raise error.
+            elif xdl.endswith(('.xdl', '.xdlexe', '.json')):
+                raise XDLFileNotFoundError(xdl)
 
-            # Check XDL is XDL str and not just mistyped XDL file path.
+            # Load XDL from string, check string is not mismatched file path.
             elif '<Synthesis' in xdl and '<Procedure>' in xdl:
-                parsed_xdl = xdl_str_to_objs(
-                    xdl_str=xdl, logger=self.logger, platform=self.platform)
-            else:
-                raise ValueError(
-                    f"Can't instantiate XDL from this: \n{xdl}"
-                )
-            if parsed_xdl:
-                self.steps = parsed_xdl['steps']
-                self.hardware = parsed_xdl['hardware']
-                self.reagents = parsed_xdl['reagents']
-                # Get attrs from <Synthesis> tag.
-                for k, v in parsed_xdl['procedure_attrs'].items():
-                    setattr(self, k, v)
-                self.executor = self.platform.executor(self)
+                self._load_xdl_from_xml_string(xdl)
 
+            # Invalid input, raise error
             else:
-                self.logger.info('Invalid XDL given.')
+                raise XDLInvalidInputError(xdl)
 
+        # Initialise XDL from lists of Step, Reagent and Component objects
         elif (steps is not None
               and reagents is not None
               and hardware is not None):
             self.steps, self.hardware, self.reagents = steps, hardware, reagents
             self.executor = self.platform.executor(self)
+
+        # Invalid combination of arguments given, raise error
         else:
-            raise ValueError(
-                "Can't create XDL object. Insufficient args given to __init__\
- method.")
+            raise XDLInvalidArgsError()
 
-        self.is_xdlexe = self.graph_sha256 is not None
+    def _load_xdl_from_file(self, xdl_file):
+        """Load XDL from .xdl, .xdlexe or .json file.
 
-        if not self.is_xdlexe:
+        Args:
+            xdl_file (str): .xdl, .xdlexe or .json file to load XDL from.
+
+        Raises:
+            XDLInvalidFileTypeError: If given file is not .xdl, .xdlexe or .json
+        """
+        file_ext = os.path.splitext(xdl_file)[1]
+
+        # Load from XML .xdl or .xdlexe file
+        if file_ext == '.xdl' or file_ext == '.xdlexe':
+            self._xdl_file = xdl_file
+            xdl_str = read_file(xdl_file)
+            self._load_xdl_from_xml_string(xdl_str)
+
+        # Load from .json file
+        elif file_ext == '.json':
+            parsed_xdl = xdl_from_json_file(xdl_file, self.platform)
+            self.steps = parsed_xdl['steps']
+            self.hardware = parsed_xdl['hardware']
+            self.reagents = parsed_xdl['reagents']
+
+        # Invalid file type, raise error
+        else:
+            raise XDLInvalidFileTypeError(file_ext)
+
+    def _load_xdl_from_xml_string(self, xdl_str):
+        """Load XDL from XML string.
+
+        Args:
+            xdl_str (str): XML string of XDL.
+        """
+        parsed_xdl = xdl_str_to_objs(
+            xdl_str=xdl_str, logger=self.logger, platform=self.platform)
+
+        self._load_graph_hash(xdl_str)
+
+        self.steps = parsed_xdl['steps']
+        self.hardware = parsed_xdl['hardware']
+        self.reagents = parsed_xdl['reagents']
+
+    def _load_graph_hash(self, xdl_str: str) -> Optional[str]:
+        """Obtain graph hash from given xdl str. If xdl str is not xdlexe, there
+        will be no graph hash so return None.
+        """
+        graph_hash_search = re.search(r'graph_sha256="([a-z0-9]+)"', xdl_str)
+        if graph_hash_search:
+            self.graph_sha256 = graph_hash_search[1]
+
+    def _validate_loaded_xdl(self):
+        """Validate loaded XDL at end of __init__"""
+        # Validate all vessels and reagents used in procedure are declared in
+        # corresponding sections of XDL. Don't do this if XDL object is compiled
+        # (xdlexe) as there will be lots of undeclared vessels from the graph.
+        if not self.compiled:
             self._validate_vessel_and_reagent_props()
 
     def _validate_vessel_and_reagent_props(self):
+        """Validate that all vessels and reagents used in procedure are declared
+        in corresponding sections of XDL.
+
+        Raises:
+            XDLReagentNotDeclaredError: If reagent used in step but not declared
+            XDLVesselNotDeclaredError: If vessel used in step but not declared
+        """
         reagent_ids = [reagent.id for reagent in self.reagents]
         vessel_ids = [vessel.id for vessel in self.hardware]
         for step in self.steps:
@@ -123,40 +240,42 @@ class XDL(object):
 
     def _validate_vessel_and_reagent_props_step(
             self, step, reagent_ids, vessel_ids):
+        """Validate that all vessels and reagents used in given step are
+        declared in corresponding sections of XDL.
+
+        Args:
+            step (Step): Step to validate all vessels and reagents declared.
+            reagent_ids (List[str]): List of all declared reagent ids.
+            vessel_ids (List[str]): List of all declared vessel ids.
+
+        Raises:
+            XDLReagentNotDeclaredError: If reagent used in step but not declared
+            XDLVesselNotDeclaredError: If vessel used in step but not declared
+        """
         for prop, prop_type in step.PROP_TYPES.items():
+            # Check vessel has been declared
             if prop_type == 'vessel':
                 vessel = step.properties[prop]
                 if vessel and vessel not in vessel_ids:
                     raise XDLVesselNotDeclaredError(vessel)
 
+            # Check reagent has been declared
             elif prop_type == 'reagent':
                 reagent = step.properties[prop]
                 if reagent and reagent not in reagent_ids:
                     raise XDLReagentNotDeclaredError(reagent)
 
+        # Check child steps, don't need to check substeps as they aren't
+        # obligated to have all vessels used explicitly declared.
         if hasattr(step, 'children'):
             for substep in step.children:
                 self._validate_vessel_and_reagent_props_step(
                     substep, reagent_ids, vessel_ids
                 )
 
-    def _validate_platform(self, platform):
-        if platform == 'chemputer':
-            from chemputerxdl import ChemputerPlatform
-            self.platform = ChemputerPlatform()
-        elif platform == 'modular_wheel':
-            self.platform = ModularWheelPlatform()
-        elif issubclass(platform, AbstractPlatform):
-            self.platform = platform()
-        else:
-            raise XDLError(f'{platform} is an invalid platform. Platform must\
- be "chemputer", "modular_wheel" or a subclass of AbstractPlatform.')
-
-    def _get_exp_id(self, default: str = 'xdl_exp') -> str:
-        """Get experiment ID name to give to the Chempiler."""
-        if self._xdl_file:
-            return os.path.splitext(os.path.split(self._xdl_file)[-1])[0]
-        return default
+    ###############
+    # Information #
+    ###############
 
     def climb_down_tree(
         self, step: Step, print_tree: bool = False, lvl: int = 0
@@ -341,7 +460,7 @@ class XDL(object):
         Returns:
             float: Estimated runtime of procedure in seconds.
         """
-        if not self.prepared:
+        if not self.compiled:
             self.logger.warning(
                 'prepare_for_execution must be called before estimated duration\
  can be calculated.')
@@ -381,7 +500,7 @@ class XDL(object):
             Dict[str, float]: Dict of { reagent_name: volume_used... }
         """
 
-        if not self.prepared:
+        if not self.compiled:
             raise XDLError(
                 'prepare_for_execution must be called before reagent volumes\
  can be calculated.')
@@ -526,7 +645,7 @@ class XDL(object):
                 JSON file with graph in node link format, or dict containing
                 graph in same format as JSON file.
         """
-        if not self.prepared:
+        if not self.compiled:
             if not save_path:
                 save_path = None
             if self._xdl_file:
@@ -541,61 +660,67 @@ class XDL(object):
             )
 
             if self.executor._prepared_for_execution:
-                self.prepared = True
+                self.compiled = True
                 self.logger.info('    Experiment Details\n')
                 self.print_reagent_volumes()
                 self.print_estimated_duration()
 
         else:
-            self.logger.warning(
-                'Cannot call prepare for execution twice on same XDL object.')
+            raise XDLDoubleCompilationError()
 
     def execute(self, platform_controller: Any, step: int = None) -> None:
         """Execute XDL using given platform controller object.
-        self.prepare_for_execution must have been called before calling this
-        method.
+        XDL object must either be loaded from a xdlexe file, or it must have
+        been prepared for execution.
 
         Args:
             platform_controller (Any): Platform controller object instantiated
             with modules and graph to run XDL on.
         """
         # Check step not accidentally passed as platform controller
-        try:
-            assert type(platform_controller) not in [int, str, list, dict]
-        except AssertionError:
-            raise XDLError(
-                f'Invalid platform controller supplied. Type:\
- {type(platform_controller)} Value: {platform_controller}')
+        if type(platform_controller) in [int, str, list, dict]:
+            raise XDLInvalidPlatformControllerError(platform_controller)
 
-        if (self.prepared
-                or (hasattr(self, 'graph_sha256') and self.graph_sha256)):
-            if hasattr(self, 'executor'):
-                if step is None:
-                    self.executor.execute(platform_controller)
-                else:
-                    try:
-                        self.steps[step]
-                    except IndexError:
-                        raise XDLError(
-                            f'Trying to execute step {step} but step list has\
- length {len(self.steps)}.')
-                    self.executor.execute_step(
-                        platform_controller, self.steps[step])
+        # Check XDL object has been compiled
+        if self.compiled:
+            # Execute full procedure
+            if step is None:
+                self.executor.execute(platform_controller)
+
+            # Execute individual step.
             else:
-                raise RuntimeError(
-                    'XDL executor not available. Call prepare_for_execution\
- before trying to execute.')
+                # Check step index is valid.
+                try:
+                    self.steps[step]
+                except IndexError:
+                    raise XDLStepIndexError(step, len(self.steps))
+
+                # Execute step
+                self.executor.execute_step(
+                    platform_controller, self.steps[step])
+
+        # XDL object not compiled, raise error
         else:
-            self.logger.warn('prepare_for_execution must be called before\
- executing.')
+            raise XDLExecutionBeforeCompilationError()
 
     @property
-    def base_steps(self):
-        return [step
-                for step in self._get_full_xdl_tree()
-                if isinstance(step, AbstractBaseStep)]
+    def base_steps(self) -> List[AbstractBaseStep]:
+        """Return full list of procedure base steps."""
+        return [
+            step
+            for step in self._get_full_xdl_tree()
+            if isinstance(step, AbstractBaseStep)
+        ]
 
-    def __add__(self, other):
+    #################
+    # Magic Methods #
+    #################
+
+    def __add__(self, other: 'XDL') -> 'XDL':
+        """Allow two XDL objects to be added together. Steps, reagents and
+        components of this object are added to the new object lists first,
+        followed by the same lists of the other object.
+        """
         reagents, steps, components = [], [], []
         for xdl_obj in [self, other]:
             reagents.extend(xdl_obj.reagents)
@@ -604,12 +729,18 @@ class XDL(object):
         new_xdl_obj = XDL(steps=steps, reagents=reagents, hardware=components)
         return new_xdl_obj
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'XDL') -> bool:
+        """Compare equality of XDL objects based on steps, reagents and
+        hardware. Steps are compared based step types and properties, including
+        all substeps and child steps. Reagents and Components are compared
+        based on properties.
+        """
         if type(other) != XDL:
             # Don't raise NotImplementedError here as it causes unnecessary
             # crashes for example `if xdl_obj == None: ...`.
             return False
 
+        # Compare lengths of lists first.
         if len(self.steps) != len(other.steps):
             return False
         if len(self.reagents) != len(other.reagents):
@@ -617,66 +748,21 @@ class XDL(object):
         if len(self.hardware.components) != len(other.hardware.components):
             return False
 
+        # Detailed comparison of all step types and properties, including all
+        # substeps and children.
         for i, step in enumerate(self.steps):
             if not steps_are_equal(step, other.steps[i]):
                 return False
 
+        # Compare properties of all reagents
         for i, reagent in enumerate(self.reagents):
             if not xdl_elements_are_equal(reagent, other.reagents[i]):
                 return False
 
+        # Compare properties of all components
         for i, component in enumerate(self.hardware.components):
             if not xdl_elements_are_equal(
                     component, other.hardware.components[i]):
                 return False
 
         return True
-
-def deep_copy_step(step):
-    """Return a deep copy of a step. Written this way with children handled
-    specially for compatibility with Python 3.6.
-    """
-    children = []
-    if 'children' in step.properties and step.children:
-        for child in step.children:
-            children.append(deep_copy_step(child))
-    try:
-        copy_props = {}
-        for k, v in step.properties.items():
-            if k != 'children':
-                copy_props[k] = v
-        copy_props['children'] = children
-        copied_step = type(step)(**copy_props)
-    except TypeError:
-        raise TypeError(f'{step.name}\n\n{step.properties}')
-    return copied_step
-
-def xdl_copy(xdl_obj: XDL) -> XDL:
-    """Returns a deepcopy of a XDL object. copy.deepcopy can be used with
-    Python 3.7, but for Python 3.6 you have to use this.
-
-    Args:
-        xdl_obj (XDL): XDL object to copy.
-
-    Returns:
-        XDL: Deep copy of xdl_obj.
-    """
-    copy_steps = []
-    copy_reagents = []
-    copy_hardware = []
-
-    for step in xdl_obj.steps:
-        copy_steps.append(deep_copy_step(step))
-
-    for reagent in xdl_obj.reagents:
-        copy_props = copy.deepcopy(reagent.properties)
-        copy_reagents.append(type(reagent)(**copy_props))
-
-    for component in xdl_obj.hardware:
-        copy_props = copy.deepcopy(component.properties)
-        copy_hardware.append(type(component)(**copy_props))
-
-    return XDL(steps=copy_steps,
-               reagents=copy_reagents,
-               hardware=Hardware(copy_hardware),
-               logging_level=xdl_obj.logging_level)

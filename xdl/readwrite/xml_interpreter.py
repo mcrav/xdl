@@ -2,6 +2,7 @@ import logging
 from typing import Dict, List, Any
 from lxml import etree
 from .validation import check_attrs_are_valid
+from .utils import read_file
 from ..constants import SYNTHESIS_ATTRS
 from ..utils import parse_bool
 from ..errors import XDLError
@@ -29,17 +30,7 @@ def xdl_file_to_objs(
                 hardware: Hardware object.
                 reagents: List of Reagent objects.
     """
-    try:
-        with open(xdl_file, encoding='utf8') as fileobj:
-            xdlstr = fileobj.read()
-    except UnicodeDecodeError:
-        # Try different encoding to UTF-8
-        logger.debug('Unable to decode file using UTF-8.\
- Falling back to ISO-8859-1')
-
-        with open(xdl_file, encoding='iso-8859-1') as fileobj:
-            xdlstr = fileobj.read()
-
+    xdlstr = read_file(xdl_file)
     return xdl_str_to_objs(
         xdl_str=xdlstr, logger=logger, platform=platform
     )
