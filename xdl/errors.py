@@ -1,16 +1,27 @@
 import sys
 
+###############
+# Base Errors #
+###############
+
 class XDLError(Exception):
+    pass
+
+class XDLGraphError(XDLError):
     pass
 
 class XDLCompilationError(XDLError):
     pass
 
-class IllegalPortError(XDLError):
+class XDLExecutionError(XDLError):
     pass
 
 class XDLValueError(XDLError):
     pass
+
+#######################
+# File I/O and Syntax #
+#######################
 
 class XDLInvalidFileTypeError(XDLError):
     def __init__(self, file_ext):
@@ -20,9 +31,47 @@ class XDLInvalidFileTypeError(XDLError):
         return f'{self.file_ext} is an invalid XDL file type. Valid file\
  file types: .xdl, .xdlexe, .json'
 
-# Graph
-class XDLGraphError(XDLError):
-    pass
+class XDLVesselNotDeclaredError(XDLError):
+    def __init__(self, vessel):
+        self.vessel = vessel
+
+    def __str__(self):
+        return f'"{self.vessel}" used as vessel in procedure but not declared\
+ in <Hardware> section of XDL'
+
+class XDLReagentNotDeclaredError(XDLError):
+    def __init__(self, reagent):
+        self.reagent = reagent
+
+    def __str__(self):
+        return f'"{self.reagent}" used as reagent in procedure but not declared\
+ in <Reagents> section of XDL'
+
+class XDLFileNotFoundError(XDLError):
+    def __init__(self, file_name):
+        self.file_name = file_name
+
+    def __str__(self):
+        return f'{self.file_name} does not exist.'
+
+class XDLInvalidInputError(XDLError):
+    def __init__(self, input_str):
+        self.input_str = input_str
+
+    def __str__(self):
+        return f'Cannot instantiate XDL from this. Invalid syntax.\
+     \n\n{self.input_str}'
+
+class XDLInvalidArgsError(XDLError):
+    def __str__(self):
+        return 'Unable to initialise XDL object, invalid argument combination\
+ given. Either xdl arg must be given with the name of a valid XDL\
+ file or XDL string, or steps, reagents and hardware arguments must\
+ all be given with lists of instantiated objects.'
+
+#########
+# Graph #
+#########
 
 class XDLGraphInvalidFileTypeError(XDLGraphError):
     def __init__(self, graph_file):
@@ -48,18 +97,48 @@ class XDLGraphTypeError(XDLGraphError):
  Accepted objects: Paths to .json or .graphml graph files. Contents of .json\
  graph as dict. Networkx MultiDiGraph.'
 
-class XDLVesselNotDeclaredError(XDLError):
-    def __init__(self, vessel):
-        self.vessel = vessel
+###############
+# Compilation #
+###############
+
+class XDLDoubleCompilationError(XDLCompilationError):
+    def __str__(self):
+        return 'Cannot compile same XDL object twice.'
+
+#############
+# Execution #
+#############
+
+class XDLInvalidPlatformControllerError(XDLExecutionError):
+    def __init__(self, platform_controller):
+        self.platform_controller = platform_controller
 
     def __str__(self):
-        return f'"{self.vessel}" used as vessel in procedure but not declared\
- in <Hardware> section of XDL'
+        return f'Invalid platform controller supplied. Type:\
+ {type(self.platform_controller)} Value: {self.platform_controller}'
 
-class XDLReagentNotDeclaredError(XDLError):
-    def __init__(self, reagent):
-        self.reagent = reagent
+class XDLExecutionBeforeCompilationError(XDLExecutionError):
+    def __str__(self):
+        return 'Trying to execute procedure that has not been compiled. First\
+ call xdl_obj.prepare_for_execution(graph).'
+
+########
+# Misc #
+########
+
+class XDLStepIndexError(XDLError):
+    def __init__(self, step_index, len_steps):
+        self.step_index = step_index
+        self.len_steps = len_steps
 
     def __str__(self):
-        return f'"{self.reagent}" used as reagent in procedure but not declared\
- in <Reagents> section of XDL'
+        return f'{self.step_index} is out of bounds for step list with length\
+ {self.len_steps}'
+
+class XDLInvalidPlatformError(XDLError):
+    def __init__(self, platform):
+        self.platform = platform
+
+    def __str__(self):
+        return f'{self.platform} is an invalid platform. Platform must\
+ be "chemputer" or a subclass of AbstractPlatform.'
