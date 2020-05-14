@@ -3,10 +3,9 @@ import os
 import logging
 import json
 import re
-from math import ceil
+import datetime
 
 from .errors import (
-    XDLError,
     XDLReagentNotDeclaredError,
     XDLVesselNotDeclaredError,
     XDLInvalidFileTypeError,
@@ -18,8 +17,11 @@ from .errors import (
     XDLFileNotFoundError,
     XDLInvalidArgsError,
     XDLDoubleCompilationError,
+    XDLLanguageUnavailableError,
+    XDLInvalidSaveFormatError,
+    XDLDurationBeforeCompilationError,
+    XDLReagentVolumesBeforeCompilationError,
 )
-from .graphgen_deprecated import get_graph
 from .hardware import Hardware
 from .platforms.abstract_platform import AbstractPlatform
 from .reagents import Reagent
@@ -27,13 +29,54 @@ from .readwrite.utils import read_file
 from .readwrite.xml_interpreter import xdl_str_to_objs
 from .readwrite.xml_generator import xdl_to_xml_string
 from .readwrite.json import xdl_to_json, xdl_from_json_file, xdl_from_json
-from .steps import Step, AbstractBaseStep, UnimplementedStep
+from .steps import Step, AbstractBaseStep
 from .utils import get_logger
-from .utils.misc import steps_are_equal, xdl_elements_are_equal
+from .utils.misc import (
+    steps_are_equal,
+    xdl_elements_are_equal,
+    reagent_volumes_table
+)
+from .utils.localisation import get_available_languages
 
 class XDL(object):
     """
     Interpets XDL (file or str) and provides an object for further use.
+
+    Attributes:
+        base_steps (List[AbstractBaseStep]): List of base steps used by
+            procedure.
+        compiled (bool): True if XDL procedure has been compiled and is ready to
+            execute, otherwise False.
+        graph_sha256 (str): Graph hash of the graph the procedure was compiled
+            with. If procedure has not been compiled, None.
+
+    Methods:
+        # Information
+        human_readable -> str: Returns entire procedure in human readable form.
+        duration(fmt=False) -> Union[int, str]: Returns time in seconds, or
+            formatted duration if fmt is True. Only callable after compilation.
+        reagent_volumes -> Dict[str, float]: Return Dict of reagents and the
+            total volumes of the reagents used in the procedure. Only callable
+            after compilation.
+
+        # Tools
+        scale_procedure(scale): Scale volumes in procedure by given scale factor
+        graph(graph_template, save) -> MultiDiGraph: Generate hardware graph to
+            use for compilation and execution. If graph template given, use this
+            to generate graph rather than default template. If save given,
+            save graph to this file.
+        prepare_for_execution(graph, **kwargs): Compile procedure for execution
+            on given graph.
+        execute(platform_controller, step): Execute compiled procedure using
+            given platform controller. If int is given for step, only execute
+            step at that index of self.steps.
+
+        # Output
+        as_string -> str: Return XML string of XDL
+        as_json -> Dict: Return XDL JSON format Dict
+        as_json_string -> str: Return XDL JSON format string
+        save(save_path, file_format): Save to given file in xml or json format.
+
     """
     # File name XDL was initialised from
     _xdl_file = None
@@ -293,67 +336,6 @@ class XDL(object):
     # Information #
     ###############
 
-    def climb_down_tree(
-        self, step: Step, print_tree: bool = False, lvl: int = 0
-    ) -> List[Step]:
-        """Go through given step's sub steps recursively until base steps are
-        reached. Return list containing the step, all sub steps and all base
-        steps.
-
-        Args:
-            step (Step): step to find all sub steps for.
-            print_tree (bool, optional): Defaults to False.
-                Print tree as well as returning it.
-            lvl (int, optional): Level of recursion. Defaults to 0.
-                Used to determine indent level when print_tree=True.
-
-        Returns:
-            List[Step]: List of all Steps involved with given step.
-                        Includes given step, and all sub steps all the way down
-                        to base steps.
-        """
-        indent = '  '
-        tree = [step]
-        if print_tree:
-            self.logger.info('{0}{1}'.format(indent * lvl, step.name))
-        if isinstance(step, AbstractBaseStep):
-            return tree
-        else:
-            lvl += 1
-            for step in step.steps:
-                if isinstance(step, AbstractBaseStep):
-                    if print_tree:
-                        self.logger.info(
-                            '{0}{1}'.format(indent * lvl, step.name))
-                    tree.append(step)
-                    continue
-                else:
-                    tree.extend(
-                        self.climb_down_tree(
-                            step, print_tree=print_tree, lvl=lvl))
-        return tree
-
-    def _get_full_xdl_tree(self) -> List[Step]:
-        """
-        Return list of all steps after unpacking nested steps.
-        Root steps are included followed by all their children in order,
-        recursively.
-
-        Returns:
-            List[Step]
-        """
-        tree = []
-        for step in self.steps:
-            tree.extend(self.climb_down_tree(step))
-        return tree
-
-    def print_full_xdl_tree(self) -> None:
-        """Print nested structure of all steps in XDL procedure."""
-        self.logger.info('\nOperation Tree\n--------------\n')
-        for step in self.steps:
-            self.climb_down_tree(step, print_tree=True)
-        self.logger.info('\n')
-
     def human_readable(self, language='en') -> str:
         """Return human-readable English description of XDL procedure.
 
@@ -365,86 +347,90 @@ class XDL(object):
         Returns:
             str: Human readable description of procedure.
         """
-        if self.platform == 'chemobot':
-            return '\n'.join([step.name for step in self.steps])
         s = ''
-        available_languages = self.get_available_languages()
+        # Get available languages
+        available_languages = get_available_languages(
+            self.platform.localisation)
+
+        # Print human readable for every step.
         if language in available_languages:
             for i, step in enumerate(self.steps):
                 s += f'{i+1}) {step.human_readable(language=language)}\n'
+
+        # Language unavailable, raise error
         else:
-            self.logger.error(f'Language {language} not supported. Available\
- languages: {", ".join(available_languages)}')
+            raise XDLLanguageUnavailableError(language, available_languages)
+
         return s
 
-    def get_available_languages(self) -> List[str]:
-        """Get languages for which every step in human readable can output
-        human_readable text in that language.
+    def duration(self, fmt=False) -> Union[int, str]:
+        """Estimated duration of procedure. It is approximate but should give a
+        give a rough idea how long the procedure should take.
 
         Returns:
-            List[str]: List of language codes, e.g. ['en', 'zh']
+            int: Estimated runtime of procedure in seconds.
         """
-        available_languages = []
-        for _, human_readables in self.platform.localisation.items():
-            for language in human_readables:
-                if language not in available_languages:
-                    available_languages.append(language)
-        return available_languages
+        # If not compiled, raise error
+        if not self.compiled:
+            raise XDLDurationBeforeCompilationError()
 
-    def log_human_readable(self) -> None:
-        """Log human-readable English description of XDL procedure."""
-        self.logger.info('Synthesis Description\n---------------------\n')
-        self.logger.info('{0}\n'.format(self.human_readable()))
+        # Calculate duration
+        duration = 0
+        for step in self.steps:
+            duration += step.duration(self.executor._graph)
 
-    def save_human_readable(self, save_file: str) -> None:
-        """Save human readable description of procedure to given path."""
-        with open(save_file, 'w') as fileobj:
-            fileobj.write(self.human_readable())
+        # Return formatted time string
+        if fmt:
+            timedelta = datetime.timedelta(seconds=int(duration))
+            return str(timedelta)
 
-    def as_string(self) -> str:
-        """Return XDL str of procedure."""
-        return xdl_to_xml_string(self)
+        # Return duration in seconds
+        return int(duration)
 
-    def as_json_string(self, pretty=True) -> Dict:
-        """Return JSON str of procedure."""
-        xdl_json = xdl_to_json(self)
-        if pretty:
-            return json.dumps(xdl_json, indent=2)
-        return json.dumps(xdl_json)
+    def reagent_volumes(self, fmt=False) -> Dict[str, float]:
+        """Compute volumes used of all liquid reagents in procedure and return
+        as dict.
 
-    def save(
-        self,
-        save_file: str,
-        full_properties: bool = False,
-        file_format: str = 'xml'
-    ) -> str:
-        """Save as XDL file.
-
-        Args:
-            save_file (str): File path to save XDL to.
-            full_properties (bool): If True, all properties will be included.
-                If False, only properties that differ from their default values
-                will be included.
-                Including full properties is recommended for making XDL files
-                that will stand the test of time, as defaults may change in new
-                versions of XDL.
+        Returns:
+            Dict[str, float]: Dict of { reagent_name: volume_used... }
         """
-        if file_format == 'xml':
-            xml_string = xdl_to_xml_string(
-                self, full_properties=full_properties)
-            with open(save_file, 'w') as fd:
-                fd.write(xml_string)
+        # Not compiled, raise error
+        if not self.compiled:
+            raise XDLReagentVolumesBeforeCompilationError()
 
-        elif file_format == 'json':
-            with open(save_file, 'w') as fd:
-                json.dump(
-                    xdl_to_json(self, full_properties=full_properties),
-                    fd, indent=2
-                )
+        # Calculate volume of liquid reagents consumed by procedure
+        reagents_consumed = {}
+        for step in self.steps:
+            step_reagents_consumed = step.reagents_consumed(
+                self.executor._graph)
+            for reagent, volume in step_reagents_consumed.items():
+                if reagent in reagents_consumed:
+                    reagents_consumed[reagent] += volume
+                else:
+                    reagents_consumed[reagent] = volume
 
-        else:
-            raise XDLError(f'{file_format} is an invalid file format for saving\
- XDL. Valid file formats: "xml", "json".')
+        # Return pretty printed table str
+        if fmt:
+            return reagent_volumes_table(reagents_consumed)
+
+        # Return Dict[str, float] of reagent volumes consumed by procedure.
+        return reagents_consumed
+
+    @property
+    def base_steps(self) -> List[AbstractBaseStep]:
+        """List of base steps of XDL procedure.
+
+        Returns:
+            List[AbstractBaseStep]: List of base steps of XDL procedure.
+        """
+        base_steps = []
+        for step in self.steps:
+            base_steps.extend(step.base_steps)
+        return base_steps
+
+    #########
+    # Tools #
+    #########
 
     def scale_procedure(self, scale: float) -> None:
         """Scale all volumes and masses in procedure.
@@ -453,9 +439,9 @@ class XDL(object):
             scale (float): Number to scale all volumes and masses by.
         """
         for step in self.steps:
-            self.apply_scaling(step, scale)
+            self._apply_scaling(step, scale)
 
-    def apply_scaling(self, step: Step, scale: float) -> None:
+    def _apply_scaling(self, step: Step, scale: float) -> None:
         """Apply scale to steps, recursively applying to any child steps if the
         step has the attribute 'children', e.g. Repeat steps.
 
@@ -466,141 +452,7 @@ class XDL(object):
         step.scale(scale)
         if hasattr(step, 'children') and step.children:
             for substep in step.children:
-                self.apply_scaling(substep, scale)
-
-    @property
-    def estimated_duration(self) -> float:
-        """Estimated duration of procedure. It is approximate but should give a
-        give a rough idea how long the procedure should take.
-
-        Returns:
-            float: Estimated runtime of procedure in seconds.
-        """
-        if not self.compiled:
-            self.logger.warning(
-                'prepare_for_execution must be called before estimated duration\
- can be calculated.')
-            return
-
-        duration = 0
-        for step in self.steps:
-            duration += step.duration(self.executor._graph)
-        return duration
-
-    def print_estimated_duration(self) -> None:
-        """Format estimated duration into hours, minutes and seconds and log it
-        like "Estimated duration: 19 hrs 30 mins".
-        """
-        s = ''
-        seconds = self.estimated_duration
-        if seconds < 60:
-            s = f'{ceil(seconds):.0f} seconds'
-        else:
-            seconds_remainder = seconds % 60
-            minutes = (seconds - seconds_remainder) / 60
-            if minutes < 60:
-                s = f'{minutes+1:.0f} mins'
-            else:
-                minutes_remainder = minutes % 60
-                hours = (minutes - minutes_remainder) / 60
-                minutes = minutes - (hours * 60)
-                s = f'{hours:.0f} hrs {minutes+1:.0f} mins'
-        self.logger.info(f'    Estimated duration: {s}')
-
-    @property
-    def reagent_volumes(self) -> Dict:
-        """Compute volumes used of all liquid reagents in procedure and return
-        as dict.
-
-        Returns:
-            Dict[str, float]: Dict of { reagent_name: volume_used... }
-        """
-
-        if not self.compiled:
-            raise XDLError(
-                'prepare_for_execution must be called before reagent volumes\
- can be calculated.')
-
-        reagents_consumed = {}
-        for step in self.steps:
-            step_reagents_consumed = step.reagents_consumed(
-                self.executor._graph)
-            for reagent, volume in step_reagents_consumed.items():
-                if reagent in reagents_consumed:
-                    reagents_consumed[reagent] += volume
-                else:
-                    reagents_consumed[reagent] = volume
-        return reagents_consumed
-
-    def print_reagent_volumes(self) -> None:
-        """Pretty print table of reagent volumes used in procedure.
-        """
-        reagent_volumes = self.reagent_volumes
-        reagent_volumes = [
-            (reagent, volume)
-            for reagent, volume in reagent_volumes.items()]
-        reagent_volumes = sorted(reagent_volumes, key=lambda x: 1 / x[1])
-        reagent_volumes = [
-            (reagent, f'{volume:.2f}'.rstrip('0').rstrip('0').rstrip('.'))
-            for reagent, volume in reagent_volumes]
-        if reagent_volumes:
-            max_reagent_name_length = max(
-                [len(reagent) for reagent, _ in reagent_volumes])
-            max_volume_length = max(
-                [len(volume) + 3 for _, volume in reagent_volumes])
-            max_name_vol_length = max_reagent_name_length + max_volume_length
-            self.logger.info(
-                f'    {"Reagent Volumes":^{max_name_vol_length + 3}}')
-            self.logger.info(f'    {"-" * (max_name_vol_length + 3)}')
-            for reagent, volume in reagent_volumes:
-                self.logger.info(
-                    f'    {reagent:^{max_reagent_name_length}} | {volume} mL')
-            self.logger.info('\n')
-
-    def print_hardware_requirements(self) -> None:
-        """Print new modules needed, and requirements of hardware in procedure.
-        """
-        vessel_requirements = {}
-        new_modules_needed = []
-        for step in self.steps:
-            if isinstance(step, UnimplementedStep):
-                new_modules_needed.extend(list(step.requirements))
-            else:
-                for vessel, requirements in step.requirements.items():
-                    if step.properties[vessel] in vessel_requirements:
-                        for req, val in requirements.items():
-                            if req == 'temp' and req in vessel_requirements[
-                                    step.properties[vessel]]:
-                                vessel_requirements[
-                                    step.properties[vessel]][req].extend(val)
-                            else:
-                                vessel_requirements[
-                                    step.properties[vessel]][req] = val
-
-                    else:
-                        vessel_requirements[
-                            step.properties[vessel]] = requirements
-
-        self.logger.info('')
-        if new_modules_needed:
-            self.logger.info(f'  New Modules Needed\n{22*"-"}')
-            for new_module in list(set(new_modules_needed)):
-                self.logger.info(f'  -- {new_module.capitalize()}')
-            self.logger.info('')
-
-        if vessel_requirements:
-            self.logger.info(f'  Hardware Requirements\n{25*"-"}')
-            for vessel, reqs in vessel_requirements.items():
-                self.logger.info(f'  -- {vessel}')
-                self.logger.info('')
-                for req, val in reqs.items():
-                    if req == 'temp':
-                        self.logger.info(f'    * Max temp: {max(val)} °C')
-                        self.logger.info(f'    * Min temp: {min(val)} °C')
-                    else:
-                        self.logger.info(f'    * {req.capitalize()}')
-                self.logger.info('')
-            self.logger.info('')
+                self._apply_scaling(substep, scale)
 
     def graph(
         self,
@@ -620,36 +472,11 @@ class XDL(object):
             **kwargs
         )
 
-    def graph_deprecated(
-        self,
-    ):
-        """
-        Here to maintain SynthReader compatibility. Eventually SynthReader
-        should use new graph generator.
-        """
-        from chemputerxdl import ChemputerPlatform
-        if type(self.platform) == ChemputerPlatform:
-            liquid_reagents = [reagent.id for reagent in self.reagents]
-            cartridge_reagents = []
-            for step in self.steps:
-                if step.name == 'Add' and step.mass:
-                    if step.reagent in liquid_reagents:
-                        liquid_reagents.remove(step.reagent)
-
-                elif step.name == 'FilterThrough' and step.through:
-                    cartridge_reagents.append(step.through)
-            return get_graph(liquid_reagents, list(set(cartridge_reagents)))
-
-        else:
-            self.logger.info(
-                'Graph generation only supported for Chemputer platform.')
-            return None
-
     def prepare_for_execution(
         self,
         graph_file: str = None,
         interactive: bool = True,
-        save_path: str = '',
+        save_path: str = None,
         sanity_check: bool = True,
         **kwargs
     ) -> None:
@@ -661,12 +488,15 @@ class XDL(object):
                 JSON file with graph in node link format, or dict containing
                 graph in same format as JSON file.
         """
+        # Not already compiled, try to compile procedure.
         if not self.compiled:
-            if not save_path:
-                save_path = None
+
+            # Get XDLEXE save path from name of _xdl_file used to instantiate
+            # XDL object.
             if self._xdl_file:
                 save_path = self._xdl_file.replace('.xdl', '.xdlexe')
 
+            # Compile procedure
             self.executor.prepare_for_execution(
                 graph_file,
                 interactive=interactive,
@@ -675,12 +505,17 @@ class XDL(object):
                 **kwargs
             )
 
+            # Switch self.compiled flag to True, and log reagent volumes
+            # consumed by procedure and estimated duration.
             if self.executor._prepared_for_execution:
                 self.compiled = True
-                self.logger.info('    Experiment Details\n')
-                self.print_reagent_volumes()
-                self.print_estimated_duration()
+                self.graph_sha256 = self.executor._graph_hash()
+                self.logger.info(
+                    f'Reagents Consumed\n{self.reagent_volumes(fmt=True)}\n')
+                self.logger.info(
+                    f'Estimated duration: {self.duration(fmt=True)}\n')
 
+        # XDL object already compiled, raise error
         else:
             raise XDLDoubleCompilationError()
 
@@ -719,18 +554,65 @@ class XDL(object):
         else:
             raise XDLExecutionBeforeCompilationError()
 
-    @property
-    def base_steps(self) -> List[AbstractBaseStep]:
-        """Return full list of procedure base steps."""
-        return [
-            step
-            for step in self._get_full_xdl_tree()
-            if isinstance(step, AbstractBaseStep)
-        ]
+    ##########
+    # Output #
+    ##########
+
+    def as_string(self) -> str:
+        """Return XDL str of procedure."""
+        return xdl_to_xml_string(self)
+
+    def as_json(self) -> Dict:
+        """Return JSON dict of procedure."""
+        return xdl_to_json(self)
+
+    def as_json_string(self, pretty=True) -> str:
+        """Return JSON str of procedure."""
+        xdl_json = xdl_to_json(self)
+        if pretty:
+            return json.dumps(xdl_json, indent=2)
+        return json.dumps(xdl_json)
+
+    def save(
+        self,
+        save_file: str,
+        file_format: str = 'xml'
+    ) -> str:
+        """Save as XDL file.
+
+        Args:
+            save_file (str): File path to save XDL to.
+            full_properties (bool): If True, all properties will be included.
+                If False, only properties that differ from their default values
+                will be included.
+                Including full properties is recommended for making XDL files
+                that will stand the test of time, as defaults may change in new
+                versions of XDL.
+        """
+        # Save XML
+        if file_format == 'xml':
+            xml_string = xdl_to_xml_string(self)
+            with open(save_file, 'w') as fd:
+                fd.write(xml_string)
+
+        # Save JSON
+        elif file_format == 'json':
+            with open(save_file, 'w') as fd:
+                json.dump(
+                    xdl_to_json(self),
+                    fd, indent=2
+                )
+
+        # Invalid file format given, raise error
+        else:
+            raise XDLInvalidSaveFormatError(file_format)
 
     #################
     # Magic Methods #
     #################
+
+    def __str__(self):
+        return self.as_string()
 
     def __add__(self, other: 'XDL') -> 'XDL':
         """Allow two XDL objects to be added together. Steps, reagents and
