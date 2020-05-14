@@ -238,10 +238,16 @@ def steps_are_equal(step, other_step):
     """Return True if given two Step objects are equal in terms of type,
     properties and children, otherwise return False.
     """
+    accepted_none_values = [None, '']
     if step.name != other_step.name:
         return False
     for prop, val in step.properties.items():
         if prop != 'children':
+            # Accept '' and None as being equal, otherwise JSON loading and
+            # XML loading differ as JSON converts empty strings to None.
+            if (val in accepted_none_values
+                    and step.properties[prop] in accepted_none_values):
+                continue
             if val != other_step.properties[prop]:
                 return False
     if 'children' in step.properties and step.children:
@@ -258,9 +264,15 @@ def xdl_elements_are_equal(xdl_element, other_xdl_element):
     """Return True if given Reagent or Component objects are equal in terms of
     type and properties, otherwise return False.
     """
+    accepted_none_values = [None, '']
     if xdl_element.name != other_xdl_element.name:
         return False
     for prop, val in xdl_element.properties.items():
+        # Accept '' and None as being equal, otherwise JSON loading and
+        # XML loading differ as JSON converts empty strings to None.
+        if (val in accepted_none_values
+                and xdl_element.properties[prop] in accepted_none_values):
+            continue
         if val != other_xdl_element.properties[prop]:
             return False
     return True

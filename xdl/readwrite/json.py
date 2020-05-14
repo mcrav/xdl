@@ -92,9 +92,12 @@ def xdl_step_from_json(step_json, platform):
     step_properties = step_json['properties']
 
     # Validate properties
-    for prop in step_properties:
+    for prop, val in step_properties.items():
         if prop not in step_type.PROP_TYPES:
             raise XDLInvalidPropError(step_name, prop)
+        # This is necessary for sanitisation to parse value correctly
+        if val == '':
+            step_properties[prop] = None
 
     # Add children
     step_properties['children'] = []
@@ -114,10 +117,12 @@ def xdl_step_from_json(step_json, platform):
 def xdl_element_from_json(xdl_element_json, xdl_element_type):
     # Validate properties
     xdl_element_properties = xdl_element_json['properties']
-    for prop in xdl_element_properties:
+    for prop, val in xdl_element_properties.items():
         if prop not in xdl_element_type.PROP_TYPES:
             raise XDLInvalidPropError(xdl_element_type.__name__, prop)
-
+        # This is necessary for sanitisation to parse value correctly
+        if val == '':
+            xdl_element_properties[prop] = None
     return xdl_element_type(**xdl_element_properties)
 
 def xdl_to_json(xdl_obj, full_properties: bool = False):
