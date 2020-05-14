@@ -11,6 +11,7 @@ from .errors import (
     XDLInvalidStepTypeError,
     XDLJSONMissingPropertiesError,
     XDLJSONMissingStepNameError,
+    XDLInvalidPropError,
 )
 from ..reagents import Reagent
 from ..hardware import Hardware, Component
@@ -89,18 +90,35 @@ def xdl_step_from_json(step_json, platform):
         raise XDLInvalidStepTypeError(step_name)
     step_type = platform.step_library[step_name]
     step_properties = step_json['properties']
+
+    # Validate properties
+    for prop in step_properties:
+        if prop not in step_type.PROP_TYPES:
+            raise XDLInvalidPropError(step_name, prop)
+
+    # Add children
     step_properties['children'] = []
     if 'children' in step_json:
         step_properties['children'] = [
             xdl_step_from_json(child, platform)
             for child in step_json['children']
         ]
+
+    # Instantiate step
     step = step_type(**step_properties)
+
+    # Override step uuid with uuid given in JSON
     step.uuid = step_json['uuid']
     return step
 
 def xdl_element_from_json(xdl_element_json, xdl_element_type):
-    return xdl_element_type(**xdl_element_json['properties'])
+    # Validate properties
+    xdl_element_properties = xdl_element_json['properties']
+    for prop in xdl_element_properties:
+        if prop not in xdl_element_type.PROP_TYPES:
+            raise XDLInvalidPropError(xdl_element_type.__name__, prop)
+
+    return xdl_element_type(**xdl_element_properties)
 
 def xdl_to_json(xdl_obj, full_properties: bool = False):
     """Convert XDL object to JSON format immediately useable by XDLApp."""

@@ -26,7 +26,7 @@ from .reagents import Reagent
 from .readwrite.utils import read_file
 from .readwrite.xml_interpreter import xdl_str_to_objs
 from .readwrite.xml_generator import xdl_to_xml_string
-from .readwrite.json import xdl_to_json, xdl_from_json_file
+from .readwrite.json import xdl_to_json, xdl_from_json_file, xdl_from_json
 from .steps import Step, AbstractBaseStep, UnimplementedStep
 from .utils import get_logger
 from .utils.misc import steps_are_equal, xdl_elements_are_equal
@@ -137,17 +137,22 @@ class XDL(object):
         """
         # Load from XDL file or string
         if xdl:
-            # Load from file
-            if os.path.exists(xdl):
-                self._load_xdl_from_file(xdl)
+            # Load from JSON dict
+            if type(xdl) == dict:
+                self._load_xdl_from_json_dict(xdl)
 
-            # Incorrect file path, raise error.
-            elif xdl.endswith(('.xdl', '.xdlexe', '.json')):
-                raise XDLFileNotFoundError(xdl)
+            elif type(xdl) == str:
+                # Load from file
+                if os.path.exists(xdl):
+                    self._load_xdl_from_file(xdl)
 
-            # Load XDL from string, check string is not mismatched file path.
-            elif '<Synthesis' in xdl and '<Procedure>' in xdl:
-                self._load_xdl_from_xml_string(xdl)
+                # Incorrect file path, raise error.
+                elif xdl.endswith(('.xdl', '.xdlexe', '.json')):
+                    raise XDLFileNotFoundError(xdl)
+
+                # Load XDL from string, check string is not mismatched file path
+                elif '<Synthesis' in xdl and '<Procedure>' in xdl:
+                    self._load_xdl_from_xml_string(xdl)
 
             # Invalid input, raise error
             else:
@@ -163,6 +168,17 @@ class XDL(object):
         # Invalid combination of arguments given, raise error
         else:
             raise XDLInvalidArgsError()
+
+    def _load_xdl_from_json_dict(self, xdl_json):
+        """Load XDL from JSON dict.
+
+        Args:
+            xdl_json (Dict): XDL JSON dict.
+        """
+        parsed_xdl = xdl_from_json(xdl_json, self.platform)
+        self.steps = parsed_xdl['steps']
+        self.hardware = parsed_xdl['hardware']
+        self.reagents = parsed_xdl['reagents']
 
     def _load_xdl_from_file(self, xdl_file):
         """Load XDL from .xdl, .xdlexe or .json file.
