@@ -3,6 +3,26 @@ from ..errors import XDLError
 class XDLReadError(XDLError):
     pass
 
+
+class XDLInvalidStepTypeError(XDLReadError):
+    def __init__(self, step_name):
+        self.step_name = step_name
+
+    def __str__(self):
+        return f'"{self.step_name}" is not a valid step type.'
+
+class XDLInvalidPropError(XDLReadError):
+    def __init__(self, step_name, prop):
+        self.step_name = step_name
+        self.prop = prop
+
+    def __str__(self):
+        return f'"{self.prop}" is an invalid prop for {self.step_name}.'
+
+########
+# JSON #
+########
+
 class XDLInvalidJSONError(XDLReadError):
     pass
 
@@ -37,13 +57,6 @@ class XDLJSONInvalidSectionError(XDLInvalidJSONError):
     def __str__(self):
         return f'{self.section_name} is an invalid section for XDL JSON.\
  Valid section keys: "steps", "reagents", "hardware".'
-
-class XDLInvalidStepTypeError(XDLReadError):
-    def __init__(self, step_name):
-        self.step_name = step_name
-
-    def __str__(self):
-        return f'"{self.step_name}" is not a valid step type.'
 
 class XDLJSONMissingStepNameError(XDLInvalidJSONError):
     def __str__(self):
