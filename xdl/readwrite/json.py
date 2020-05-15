@@ -100,12 +100,14 @@ def xdl_step_from_json(step_json, platform):
             step_properties[prop] = None
 
     # Add children
-    step_properties['children'] = []
+    step_children = []
     if 'children' in step_json:
-        step_properties['children'] = [
+        step_children = [
             xdl_step_from_json(child, platform)
             for child in step_json['children']
         ]
+    if step_children:
+        step_properties['children'] = step_children
 
     # Instantiate step
     step = step_type(**step_properties)
