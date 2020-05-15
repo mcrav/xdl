@@ -16,7 +16,9 @@ from ..utils.localisation import conditional_human_readable
 from ..utils.misc import format_property, SanityCheck
 from ..utils.graph import get_graph
 from ..utils.logging import get_logger
-from ..errors import XDLError
+from ..errors import (
+    XDLError,
+)
 
 class Step(XDLBase):
     """Base class for all step objects.

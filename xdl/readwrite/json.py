@@ -95,6 +95,7 @@ def xdl_step_from_json(step_json, platform):
     for prop, val in step_properties.items():
         if prop not in step_type.PROP_TYPES:
             raise XDLInvalidPropError(step_name, prop)
+
         # This is necessary for sanitisation to parse value correctly
         if val == '':
             step_properties[prop] = None
