@@ -259,6 +259,7 @@ class XDLStepTemplateNameError(XDLStepTemplateError):
     def __str__(self):
         return f'{self.mandatory_name} step must have class name\
  {self.mandatory_name}. Name found: {self.name}.'
+
 ##############
 # Prop Types #
 ##############
@@ -298,3 +299,12 @@ class XDLUndeclaredAlwaysWriteError(XDLError):
     def __str__(self):
         return f'{self.step_name} step class has {self.prop} in ALWAYS_WRITE\
  but not in PROP_TYPES.'
+
+class XDLMissingDefaultPropError(XDLError):
+    def __init__(self, xdl_element_name, prop):
+        self.xdl_element_name = xdl_element_name
+        self.prop = prop
+
+    def __str__(self):
+        return f'"default" given as value for {self.prop} property, but no\
+ default value found in {self.xdl_element_name} DEFAULT_PROPS.'

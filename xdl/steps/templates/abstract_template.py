@@ -33,19 +33,11 @@ class AbstractStepTemplate(AbstractStep):
     MANDATORY_PROP_LIMITS = {}
     MANDATORY_DEFAULT_PROPS = {}
 
-    # True if step class has been validated. Used to avoid validating again on
-    # every property update.
-    _validated_template = False
-
     def __init__(self, param_dict):
         """Validate that step implements all mandatory properties correctly and
         call super __init__.
         """
-        # Do this to avoid re-validating the step every time a property value is
-        # changed.
-        if not self._validated_template:
-            self.validate()
-            self._validated_template = True
+        self.validate()
         super().__init__(param_dict)
 
     def validate(self):

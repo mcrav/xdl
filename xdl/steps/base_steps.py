@@ -44,25 +44,14 @@ class Step(XDLBase):
     # provides all the Chemputer step localisation in this variable.
     localisation: Dict[str, str] = {}
 
-    # Used so that validation of prop types only occurs once. Changes to step
-    # properties calling __init__ shouldn't revalidate prop types.
-    _validated_prop_types = False
-
-    # Unique identifier
-    uuid = None
-
     def __init__(self, param_dict):
         super().__init__(param_dict)
 
-        # Only create on first __init__ call, don't recreate when step
-        # properties are updated.
-        if self.uuid is None:
-            self.uuid = str(uuid.uuid4())
+        self.uuid = str(uuid.uuid4())
 
-        # Validate prop types if it hasn't already been done
-        if not self._validated_prop_types:
-            self._validate_prop_types()
-            self._validated_prop_types = True
+        # Validate prop types
+        self._validate_prop_types()
+        self._validated_prop_types = True
 
     def _validate_prop_types(self):
         """Make sure that all props specified in DEFAULT_PROPS, INTERNAL_PROPS,
@@ -275,6 +264,10 @@ class AbstractStep(Step, ABC):
     """
     def __init__(self, param_dict):
         super().__init__(param_dict)
+        self.steps = self.get_steps()
+
+    def update(self, properties={}):
+        super().update(properties)
         self.steps = self.get_steps()
 
     @abstractmethod
