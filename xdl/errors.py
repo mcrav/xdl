@@ -171,3 +171,91 @@ class XDLLanguageUnavailableError(XDLError):
         if self.available_languages is not None:
             s += f'Available languages: {", ".join(self.available_languages)}'
         return s
+
+##################
+# Step Templates #
+##################
+
+class XDLStepTemplateError(XDLError):
+    pass
+
+class XDLStepTemplateMissingPropError(XDLStepTemplateError):
+    def __init__(self, name, prop, prop_type):
+        self.name = name
+        self.prop = prop
+        self.prop_type = prop_type
+
+    def __str__(self):
+        return f'"{self.name}" step template requires an "{self.prop}"\
+ ({self.prop_type}) property, but this has not been found in PROP_TYPES.'
+
+class XDLStepTemplatePropTypeError(XDLStepTemplateError):
+
+    def __init__(self, name, prop, prop_type, invalid_prop_type):
+        self.name = name
+        self.prop = prop
+        self.prop_type = prop_type
+        self.invalid_prop_type = invalid_prop_type
+
+    def __str__(self):
+        return f'"{self.name}" step template requires that "{self.prop}" has\
+ prop type {str(self.prop_type)}. Prop type found is\
+ {str(self.invalid_prop_type)}.'
+
+class XDLStepTemplateMissingDefaultPropError(XDLStepTemplateError):
+    def __init__(self, name, prop, default_prop):
+        self.name = name
+        self.prop = prop
+        self.default_prop = default_prop
+
+    def __str__(self):
+        return f'"{self.name}" step template requires that "{self.prop}"\
+ has a default value of {self.default_prop}, but this has not been found in\
+ DEFAULT_PROPS.'
+
+class XDLStepTemplateInvalidDefaultPropError(XDLStepTemplateError):
+
+    def __init__(self, name, prop, default_prop, invalid_default_prop):
+        self.name = name
+        self.prop = prop
+        self.default_prop = default_prop
+        self.invalid_default_prop = invalid_default_prop
+
+    def __str__(self):
+        return f'"{self.name}" step template requires that "{self.prop}" has\
+ has a default value of {str(self.default_prop)}. Default value found is\
+ {str(self.invalid_default_prop)}.'
+
+class XDLStepTemplateMissingPropLimitError(XDLStepTemplateError):
+    def __init__(self, name, prop, prop_limit):
+        self.name = name
+        self.prop = prop
+        self.prop_limit = prop_limit
+
+    def __str__(self):
+        return f'"{self.name}" step template requires that "{self.prop}"\
+ has prop_limit {self.prop_limit}, but this has not been found in\
+ PROP_LIMITS.'
+
+class XDLStepTemplateInvalidPropLimitError(XDLStepTemplateError):
+
+    def __init__(self, name, prop, prop_limit, invalid_prop_limit):
+        self.name = name
+        self.prop = prop
+        self.prop_limit = prop_limit
+        self.invalid_prop_limit = invalid_prop_limit
+
+    def __str__(self):
+        return f'"{self.name}" step template requires that "{self.prop}" has\
+ has a prop limit {str(self.prop_limit)}. Prop limit found is\
+ {str(self.invalid_prop_limit)}.'
+
+class XDLStepTemplateNameError(XDLStepTemplateError):
+
+    def __init__(self, mandatory_name, name):
+        self.mandatory_name = mandatory_name
+        self.name = name
+
+    def __str__(self):
+        return f'{self.mandatory_name} step must have class name\
+ {self.mandatory_name}. Name found: {self.name}.'
