@@ -18,6 +18,10 @@ from ..utils.graph import get_graph
 from ..utils.logging import get_logger
 from ..errors import (
     XDLError,
+    XDLUndeclaredDefaultPropError,
+    XDLUndeclaredAlwaysWriteError,
+    XDLUndeclaredInternalPropError,
+    XDLUndeclaredPropLimitError
 )
 
 class Step(XDLBase):
@@ -40,9 +44,59 @@ class Step(XDLBase):
     # provides all the Chemputer step localisation in this variable.
     localisation: Dict[str, str] = {}
 
+    # Used so that validation of prop types only occurs once. Changes to step
+    # properties calling __init__ shouldn't revalidate prop types.
+    _validated_prop_types = False
+
+    # Unique identifier
+    uuid = None
+
     def __init__(self, param_dict):
         super().__init__(param_dict)
-        self.uuid = str(uuid.uuid4())
+
+        # Only create on first __init__ call, don't recreate when step
+        # properties are updated.
+        if self.uuid is None:
+            self.uuid = str(uuid.uuid4())
+
+        # Validate prop types if it hasn't already been done
+        if not self._validated_prop_types:
+            self._validate_prop_types()
+            self._validated_prop_types = True
+
+    def _validate_prop_types(self):
+        """Make sure that all props specified in DEFAULT_PROPS, INTERNAL_PROPS,
+        ALWAYS_WRITE and PROP_LIMITS are specified in PROP_TYPES.
+
+        Raises:
+            XDLUndeclaredDefaultPropError: Prop used in DEFAULT_PROPS that is
+                not in PROP_TYPES
+            XDLUndeclaredInternalPropError: Prop used in INTERNAL_PROPS that is
+                not in PROP_TYPES
+            XDLUndeclaredPropLimitError: Prop used in PROP_LIMITS that is not
+                in PROP_TYPES
+            XDLUndeclaredAlwaysWriteError: Prop used in ALWAYS_WRITE that is not
+                used in PROP_TYPES
+        """
+        # Default Props
+        for default_prop in self.DEFAULT_PROPS:
+            if default_prop not in self.PROP_TYPES:
+                raise XDLUndeclaredDefaultPropError(self.name, default_prop)
+
+        # Internal Props
+        for internal_prop in self.INTERNAL_PROPS:
+            if internal_prop not in self.PROP_TYPES:
+                raise XDLUndeclaredInternalPropError(self.name, internal_prop)
+
+        # Prop Limits
+        for prop_limit in self.PROP_LIMITS:
+            if prop_limit not in self.PROP_TYPES:
+                raise XDLUndeclaredPropLimitError(self.name, prop_limit)
+
+        # Always Write
+        for always_write in self.ALWAYS_WRITE:
+            if always_write not in self.PROP_TYPES:
+                raise XDLUndeclaredAlwaysWriteError(self.name, always_write)
 
     def on_prepare_for_execution(self, graph: MultiDiGraph):
         """Abstract method to be overridden with logic to set internal
