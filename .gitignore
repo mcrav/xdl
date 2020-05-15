@@ -23,6 +23,7 @@ tests/unit/chempiler_output
 # other
 .vscode
 chempiler_output/
+test_output/
 *.xdlexe
 *.xsd
 .coverage

@@ -1,13 +1,17 @@
-from typing import Any, Union, Dict
+from typing import Any, Union, Dict, List
 import hashlib
 import appdirs
 import os
 from abc import ABC, abstractmethod
 from networkx.readwrite import node_link_data
+from networkx import MultiDiGraph
+
+from .utils import do_sanity_check
 from ..steps.special_steps import Async, Await
 from ..steps.base_steps import (
-    AbstractDynamicStep, AbstractAsyncStep, AbstractBaseStep)
-from ..readwrite.generator import XDLGenerator
+    Step, AbstractDynamicStep, AbstractAsyncStep, AbstractBaseStep)
+from ..steps import NON_RECURSIVE_ABSTRACT_STEPS
+from ..readwrite import xdl_to_xml_string
 from ..errors import XDLError
 from ..utils import get_logger
 if False:
@@ -16,6 +20,8 @@ if False:
 class AbstractXDLExecutor(ABC):
     _prepared_for_execution = False
     _xdl = None
+    _warnings = []  # TODO: Remove this, no longer needed
+    _graph = None
     logger = None
 
     def __init__(self, xdl: 'XDL' = None) -> None:
@@ -24,8 +30,6 @@ class AbstractXDLExecutor(ABC):
             self._xdl = xdl
         else:
             self.logger = get_logger()
-        self._warnings = []
-        self._raw_graph = None
         self._graph = None
         self._prepared_for_execution = False
 
@@ -45,20 +49,25 @@ class AbstractXDLExecutor(ABC):
             str(node_link_data(graph)).encode('utf-8')
         ).hexdigest()
 
+    def perform_sanity_checks(self, steps: List[Step] = None) -> None:
+        """Recursively perform sanity checks on every step in list."""
+        if steps is None:
+            steps = self._xdl.steps
+        for step in steps:
+            do_sanity_check(self._graph, step)
+
     def save_execution_script(self, save_path: str = '') -> None:
         """Generate and save execution script. Called at the end of
         prepare_for_execution.
         """
         # Generate execution script
 
-        exescript = XDLGenerator(
-            self._xdl.steps,
-            self._xdl.hardware,
-            self._xdl.reagents,
+        exescript = xdl_to_xml_string(
+            self._xdl,
             graph_hash=self._graph_hash(),
             full_properties=True,
             full_tree=True
-        ).as_string()
+        )
 
         # Generate file in user data dir using hash of execution script
         # as file name.
@@ -83,10 +92,33 @@ class AbstractXDLExecutor(ABC):
             self.logger.warning(
                 f'Unable to save execution script in {save_folder}.')
 
-    def call_on_prepare_for_execution(self, step):
-        step.on_prepare_for_execution(self._graph)
-        for substep in step.steps:
-            self.call_on_prepare_for_execution(substep)
+    def add_internal_properties(
+        self, graph: MultiDiGraph, steps: List[Step]
+    ) -> None:
+        """Recursively add internal properties to all steps and substeps in
+        given list of steps.
+
+        Args:
+            steps (List[Step]): List of steps to add internal properties to.
+        """
+
+        # Iterate through each step
+        for step in steps:
+
+            # Prepare the step for execution
+            step.on_prepare_for_execution(graph)
+
+            # Special case for Dynamic steps
+            if isinstance(step, AbstractDynamicStep):
+                step.prepare_for_execution(graph, self)
+
+            # If the step has children, add internal properties to all children
+            if 'children' in step.properties:
+                self.add_internal_properties(graph, step.children)
+
+            # Recursive steps, add internal proerties to all substeps
+            if not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
+                self.add_internal_properties(graph, step.steps)
 
     def prepare_dynamic_steps_for_execution(self, step, graph):
         if isinstance(step, AbstractDynamicStep):
@@ -132,8 +164,8 @@ class AbstractXDLExecutor(ABC):
             chempiler (chempiler.Chempiler): Chempiler object to execute XDL
                                              with.
         """
-        if (not self._prepared_for_execution
-                and hasattr(self._xdl, 'graph_sha256')):
+        # XDLEXE, check graph hashes match
+        if (not self._prepared_for_execution and self._xdl.compiled):
             # Currently, this check only performed for Chemputer
             if hasattr(platform_controller, 'graph'):
                 if self._xdl.graph_sha256 == self._graph_hash(
@@ -146,8 +178,8 @@ class AbstractXDLExecutor(ABC):
  was made with.')
 
         if self._prepared_for_execution:
-            self._xdl.print_full_xdl_tree()
-            self._xdl.log_human_readable()
+            self.logger.info(
+                f'Procedure\n---------\n\n{self._xdl.human_readable()}')
             self.logger.info('Execution\n---------\n')
             async_steps = []
 

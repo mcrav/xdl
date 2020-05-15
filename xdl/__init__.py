@@ -1,2 +1,2 @@
-from .xdl import XDL, xdl_copy
+from .xdl import XDL
 from .xdl_controller import XDLController

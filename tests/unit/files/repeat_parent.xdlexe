@@ -1,4 +1,4 @@
-<?xdl version="0.4.2" ?>
+<?xdl version="0.4.4" ?>
 
 <Synthesis
   graph_sha256="773155a5fbecd89c8e1bf4bfe1f9734f54a0e4e987c0941f9a85dd70db317b82"
@@ -465,11 +465,14 @@
       <CVentVacuum
         vessel="vacuum_reactor_flask" />
       <CStopChiller
-        vessel="filter" />
+        vessel="filter"
+        chiller="filter_chiller" />
       <CStopChiller
-        vessel="rotavap" />
+        vessel="rotavap"
+        chiller="rotavap_chiller" />
       <CStopChiller
-        vessel="flask_water" />
+        vessel="flask_water"
+        chiller="flask_chiller" />
     </Shutdown>
   </Procedure>
 

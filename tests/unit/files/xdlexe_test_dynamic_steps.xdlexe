@@ -81,7 +81,7 @@
           heater="None"
           chiller="filter_chiller"
         >
-          <CStopChiller vessel="filter"/>
+          <CStopChiller vessel="filter" chiller="filter_chiller" />
         </StopHeatChill>
       </Transfer>
       <Add
@@ -272,6 +272,7 @@
         upper_phase_port="0"
         dead_volume_port="0"
         lower_phase_through="None"
+        lower_phase_through_cartridge="None"
         upper_phase_through="None"
         dead_volume_through="None"
         failure_vessel="rotavap"
