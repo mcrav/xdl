@@ -19,5 +19,6 @@ setup(
         'networkx>=2',
         'appdirs>=1',
         'termcolor>=1',
+        'tabulate>=0.8.7'
     ]
 )
