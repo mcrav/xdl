@@ -35,7 +35,7 @@ class AbstractStepTemplate(AbstractStep):
 
     # True if step class has been validated. Used to avoid validating again on
     # every property update.
-    _validated = False
+    _validated_template = False
 
     def __init__(self, param_dict):
         """Validate that step implements all mandatory properties correctly and
@@ -43,9 +43,9 @@ class AbstractStepTemplate(AbstractStep):
         """
         # Do this to avoid re-validating the step every time a property value is
         # changed.
-        if not self._validated:
+        if not self._validated_template:
             self.validate()
-            self._validated = True
+            self._validated_template = True
         super().__init__(param_dict)
 
     def validate(self):
