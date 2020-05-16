@@ -33,12 +33,6 @@ class Step(XDLBase):
         uuid (str): Step unique universal identifier, generated automatically.
     """
 
-    # List of properties that should always be written, even if they are the
-    # same as default values. For example, you may have default 20 mL volume for
-    # WashSolid. This does not mean that you don't want to write it, otherwise
-    # the XDL is unclear over how much solvent is used when reading it.
-    ALWAYS_WRITE: List[str] = []
-
     # This property should be given by a second base class for steps. For
     # example Chemputer steps all inherit Step and ChemputerStep. ChemputerStep
     # provides all the Chemputer step localisation in this variable.
@@ -204,6 +198,79 @@ class Step(XDLBase):
         """
         return {}
 
+    def __eq__(self, other):
+        """Allow step == other_step comparisons."""
+
+        # Different type, not equal
+        if type(other) != type(self):
+            return False
+
+        # Different name, not equal
+        if other.name != self.name:
+            return False
+
+        # Different length of properties, not equal
+        if len(self.properties) != len(other.properties):
+            return False
+
+        # Compare properties
+        for k, v in other.properties.items():
+
+            # Compare children
+            if k == 'children':
+
+                # Different length of children, not equal
+                if len(v) != len(self.children):
+                    return False
+
+                # Compare individual children
+                for i, other_child in enumerate(v):
+
+                    # Children are different, not equal
+                    if other_child != self.children[i]:
+                        return False
+
+            # Property key is not in self.properties, not equal
+            elif k not in self.properties:
+                return False
+
+            # Different values for property, not equal
+            elif v != self.properties[k]:
+                return False
+
+        # Passed all equality tests, steps are equal
+        return True
+
+    def __ne__(self, other):
+        """Recommended to include this just to show that non equality has been
+        considered and it is simply `not __eq__(other)`.
+        """
+        return not self.__eq__(other)
+
+    def __deepcopy__(self, memo):
+        """Allow `copy.deepcopy(step)` to be called. Default deepcopy works, but
+        not on Python 3.6, so that is what this is for. When Python 3.6 is not
+        supported this can go.
+        """
+        # Copy children
+        children = []
+        if 'children' in self.properties and self.children:
+            for child in self.children:
+                children.append(child.__deepcopy__(memo))
+
+        # Copy properties
+        copy_props = {}
+        for k, v in self.properties.items():
+            if k != 'children':
+                copy_props[k] = v
+
+        if children:
+            copy_props['children'] = children
+
+        # Make new self
+        copied_self = type(self)(**copy_props)
+
+        return copied_self
 
 class AbstractBaseStep(Step, ABC):
     """Abstract base class for all steps that do not contain other steps and
@@ -262,13 +329,47 @@ class AbstractStep(Step, ABC):
         steps (list): List of Step objects.
         human_readable (str): Description of actions taken by step.
     """
+
+    _steps = []
+
     def __init__(self, param_dict):
         super().__init__(param_dict)
-        self.steps = self.get_steps()
 
-    def update(self, properties={}):
-        super().update(properties)
-        self.steps = self.get_steps()
+        # Initialise internal steps list and properties associated with this
+        # steps list.
+        self._steps = self.get_steps()
+        self._last_props = copy.deepcopy(self.properties)
+
+    @property
+    def steps(self):
+        """The internal steps list is calculated only when it is asked for, and
+        only when self.properties different to the last time steps was asked
+        for. This is for performance reasons since during prepare_for_execution
+        the amount of updates to self.properties is pretty large.
+
+        step = Step(**props)  # steps updated
+        step.volume = 15      # self.properties updated but steps not updated
+        print(step.steps)     # steps updated and returned
+        print(step.steps)     # steps not updated and returned, since properties
+                                haven't change since last steps update
+        """
+        # Only update self._steps if self.properties has changed.
+        #
+        # Optimization note: This may seem long winded compared to
+        # self.properties != self._last_props but in Python 3.7 at least this is
+        # faster.
+        should_update = False
+        for k, v in self.properties.items():
+            if self._last_props[k] != v:
+                should_update = True
+                break
+
+        # If self.properties has changed, update self._steps
+        if should_update:
+            self._steps = self.get_steps()
+            self._last_props = copy.deepcopy(self.properties)
+
+        return self._steps
 
     @abstractmethod
     def get_steps(self) -> List[Step]:
