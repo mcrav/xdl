@@ -153,6 +153,16 @@ BOOL_PROP_LIMIT = PropLimit(
     default='false',
 )
 
+WASH_SOLID_STIR_PROP_LIMIT = PropLimit(
+    r'(' + BOOL_PATTERN + r'|solvent)',
+    enum=['true', 'solvent', 'false'],
+    hint='Expecting one of "true", "false" or "solvent".',
+    default='True'
+)
+
+SEPARATION_PURPOSE_PROP_LIMIT = PropLimit(enum=['extract', 'wash'])
+SEPARATION_PRODUCT_PHASE_PROP_LIMIT = PropLimit(enum=['top', 'bottom'])
+
 _hundred_float = r'(100(?:[.][0]+)?)'
 _ten_to_ninety_nine_float = r'([0-9][0-9](?:[.][0-9]+)?)'
 _zero_to_ten_float = r'([0-9](?:[.][0-9]+)?)'
