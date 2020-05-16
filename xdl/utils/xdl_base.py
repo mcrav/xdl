@@ -1,7 +1,8 @@
+from typing import Dict, Any, List, Union
 from .sanitisation import clean_properties
 from .logging import get_logger
 from ..errors import XDLMissingDefaultPropError
-from typing import Dict, Any
+from ..utils.prop_limits import PropLimit
 
 class XDLBase(object):
     """Base object for Step, Component and Reagent objects. The functionality
@@ -27,36 +28,60 @@ class XDLBase(object):
 
     The override of __setattr__ means that when any value in the properties dict
     is set, as well as updating the properties dict, the update method is
-    called. In this class just updates the properties dict with the new value,
-    sanitizing values and adding defaults as necessary. But in AbstractStep,
-    update is overridden, so that any updates to the properties dict also update
-    the steps list in AbstractStep subclasses.
+    called. This sanitizes values and adds defaults as necessary.
 
-    So `step.volume = 15` updates the properties dict, and then updates the
-    steps list in AbstractStep. AbstractStep is the only XDLBase subclass that
-    overrides update. Even for other classes however, editing the properties
-    dict directly should be avoided as it means prop sanitization and validation
-    is skipped. If this is necessary, for example you wish to update a lot of
-    properties and then update for performance reasons, then you can update the
-    properties dict directly, but you must call update afterwards.
+    Editing the properties dict directly should be avoided as it means prop
+    sanitization and validation is skipped. If this is necessary, for example
+    you wish to update a lot of properties and then update for performance
+    reasons, then you can update the properties dict directly, but you must call
+    update afterwards.
 
     This system is quite weird when you're not used to it. It seems like
     witchcraft accessing member variables that don't seem to be initialized
     anywhere. But once you're used to it, it speeds up development massively as
-    you can very quickly access / change properties with minimal typing, and
-    without worrying about updating the underlying step list in AbstractStep
-    subclasses.
+    you can very quickly access / change properties with minimal typing.
     """
 
     # Prop specification variables
-    DEFAULT_PROPS = {}
-    INTERNAL_PROPS = []
-    PROP_TYPES = {}
-    ALWAYS_WRITE = []
-    PROP_LIMITS = {}
 
-    # properties dict
-    properties = {}
+    # List of properties that should always be written, even if they are the
+    # same as default values. For example, you may have default 20 mL volume for
+    # WashSolid. This does not mean that you don't want to write it, otherwise
+    # the XDL is unclear over how much solvent is used when reading it.
+    ALWAYS_WRITE: List[str] = []
+
+    # Dictionary of values to pass in for properties when their value is given
+    # as 'default'.
+    DEFAULT_PROPS: Dict[str, Any] = {}
+
+    # List of properties that should never be passed in as args, and are instead
+    # calculated automatically from the graph during on_prepare_for_execution.
+    INTERNAL_PROPS: List[str] = []
+
+    # PROP_TYPES gives the type of every prop
+    #
+    # Explicitly handled types:
+    #   str       Remains unchanged
+    #   int       Parsed as int
+    #   float     Either parsed as float, or units removed from string such as
+    #             '2 mL' and remainer of string parsed as float and converted to
+    #             standard units based on units in string
+    #   bool      Parsed as bool
+    #   List[str] Parsed as space separated list of strings
+    #   'vessel'  Vessel declared in Hardware section of XDL
+    #   'reagent' Reagent declared in Reagents section of XDL
+    #
+    # Any other type will just remain unchanged during sanitization.
+    PROP_TYPES: Dict[str, Union[type, str]] = {}
+
+    # Defines detailed validation criteria for all props in the form of
+    # PropLimit objects. If no prop limit is given for a prop, then a default
+    # prop limit will be used based on the prop type.
+    PROP_LIMITS: Dict[str, PropLimit] = {}
+
+    # properties dict. Holds all current values of the properties of the step,
+    # as described by the prop specification variables above.
+    properties: Dict[str, Any] = {}
 
     def __init__(self, param_dict: Dict[str, Any]) -> None:
         """Initialize properties dict and loggger."""
@@ -129,9 +154,8 @@ class XDLBase(object):
         for example `step.volume = 15` would cause this to be called. It can
         also be called explicitly if the properties dict is edited directly.
 
-        Here it is just a wrapper round load_properties, but the purpose of this
-        is that in AbstractStep it is overridden and triggers the step list to
-        be updated after the property dict has changed.
+        Means that whenever new props are supplied they are sanitized and
+        defaults added.
 
         Args:
             properties (Dict[str, Any]): New properties to load into
@@ -149,10 +173,8 @@ class XDLBase(object):
     def __setattr__(self, name: str, value: Any) -> None:
         """
         If name is in self.properties do self.properties[name] = value and call
-        self.update. The purpose of this is that AbstractStep overrides update,
-        and recreates its steps list whenever a property is changed. This means
-        you can do `step.volume = 15` and update the internal step list under
-        the hood.
+        self.update. The purpose of this is that so whenever a property is
+        changed, it is sanitized and default values are added.
 
         If attr is not in self.properties just set attribute as normal.
         """
