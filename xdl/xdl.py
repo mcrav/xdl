@@ -1,5 +1,6 @@
 from typing import List, Dict, Any, Union, Optional
 import os
+import copy
 import logging
 import json
 import re
@@ -664,3 +665,34 @@ class XDL(object):
                 return False
 
         return True
+
+    def __deepcopy__(self, memo) -> 'XDL':
+        """Allow `copy.deepcopy(xdl)` to be called. Default does not work on
+        Python 3.6 so that is why this method is here. Once 3.6 is no longer
+        supported this method can go.
+        """
+        copy_steps = []
+        copy_reagents = []
+        copy_hardware = []
+
+        # Copy steps
+        for step in self.steps:
+            copy_steps.append(copy.deepcopy(step, memo))
+
+        # Copy reagents
+        for reagent in self.reagents:
+            copy_props = copy.deepcopy(reagent.properties)
+            copy_reagents.append(type(reagent)(**copy_props))
+
+        # Copy hardware
+        for component in self.hardware:
+            copy_props = copy.deepcopy(component.properties)
+            copy_hardware.append(type(component)(**copy_props))
+
+        # Return new XDL object
+        return XDL(
+            steps=copy_steps,
+            reagents=copy_reagents,
+            hardware=Hardware(copy_hardware),
+            logging_level=self.logging_level
+        )
