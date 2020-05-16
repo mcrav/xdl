@@ -17,6 +17,8 @@ FOLDER = os.path.join(HERE, '..', 'files')
 
 class TestAsyncStep(AbstractAsyncStep):
 
+    __test__ = False
+
     PROP_TYPES = {
         'callback': Callable,
         'on_finish': Callable,
@@ -32,6 +34,9 @@ class TestAsyncStep(AbstractAsyncStep):
         self.on_finish()
 
 class TestAsyncStepManager(object):
+
+    __test__ = False
+
     def __init__(self):
         self.async_step = TestAsyncStep(
             self.test_async_step_callback, self.test_async_step_on_finish)
@@ -59,6 +64,9 @@ def test_async_step():
     assert mgr.vals == 'donedone'
 
 class TestAsyncWrapperManager(object):
+
+    __test__ = False
+
     def __init__(self, steps):
         self.async_steps = Async(steps, on_finish=self.on_finish)
         self.done = False

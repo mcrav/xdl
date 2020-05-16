@@ -1,18 +1,34 @@
-from typing import Optional, Union, List
+from typing import Union, Dict, Callable
 import re
-from ..errors import XDLValueError, XDLError
 from .prop_limits import (
     POSITIVE_FLOAT_PROP_LIMIT,
     POSITIVE_INT_PROP_LIMIT,
-    BOOL_PROP_LIMIT
+    BOOL_PROP_LIMIT,
+    PropLimit
 )
-from ..constants import REAGENT_PROP_TYPE, VESSEL_PROP_TYPE
 
-DEFAULT_PROP_LIMITS = {
+#############
+# Constants #
+#############
+
+#: Default prop limits to use for types if no prop limit is given.
+DEFAULT_PROP_LIMITS: [type, PropLimit] = {
     float: POSITIVE_FLOAT_PROP_LIMIT,
     int: POSITIVE_INT_PROP_LIMIT,
     bool: BOOL_PROP_LIMIT,
 }
+
+#: Regex pattern to match all of '1', '-1', '1.0', '-1.0' etc
+FLOAT_REGEX_PATTERN = r'([-]?[0-9]+(?:[.][0-9]+)?)'
+
+#: Regex pattern to match optional units in quantity strings
+#: e.g. match 'mL' in '5 mL'
+#: The 3 is there to match 'cm3'
+UNITS_REGEX_PATTERN = r'[a-zA-Zμ°]+[3]?'
+
+#########
+# Utils #
+#########
 
 def parse_bool(s: str) -> bool:
     """Parse bool from string.
@@ -35,6 +51,10 @@ def parse_bool(s: str) -> bool:
             return False
     else:
         return None
+
+########################
+# Unit Standardisation #
+########################
 
 def days_to_seconds(x):
     return x * 60 * 60 * 24
@@ -70,7 +90,9 @@ def microgram_to_grams(x):
     return x * 10**-6
 
 
-UNIT_CONVERTERS = {
+#: Dict of units in lower case and functions to convert them to standard units.
+#: Standard units:
+UNIT_CONVERTERS: Dict[str, Callable] = {
     'ml': no_conversion,
     'millilitre': no_conversion,
     'milliliter': no_conversion,
@@ -155,10 +177,9 @@ UNIT_CONVERTERS = {
     'nm': lambda x: x,
 }
 
-
-def convert_val_to_std_units(val: str) -> float:
+def convert_val_to_std_units(val: Union[str, float]) -> float:
     """Given str of value with/without units, convert it into standard unit and
-    return float value.
+    return float value. If given value is float, return unchanged.
 
     Standard units:
 
@@ -169,154 +190,33 @@ def convert_val_to_std_units(val: str) -> float:
     mass      g
 
     Arguments:
-        val (str): Value (and units) as str. If no units are specified it is
-            assumed value is already in default units.
+        val (Union[str, float]): Value (and units) as str, or float. If no units
+            are specified it is assumed value is already in default units. If
+            value if float it is returned unchanged.
 
     Returns:
         float: Value in default units.
     """
+    # Val is already float, just return it.
     if type(val) != str:
         return val
 
-    float_regex_pattern = r'([-]?[0-9]+(?:[.][0-9]+)?)'
-    unit_search = re.search(r'[a-zA-Zμ°]+[3]?', val)
-    val_search = re.search(float_regex_pattern, val)
-    if val_search:
-        val = float(val_search[0])
+    # Get number from string
+    number_search = re.search(FLOAT_REGEX_PATTERN, val)
+    if number_search:
+        number = float(number_search[0])
+
+        # Get unit from string
+        unit_search = re.search(UNITS_REGEX_PATTERN, val)
         if unit_search:
             unit = unit_search[0]
-            return UNIT_CONVERTERS[unit.lower()](val)
+
+            # Convert number to standard units
+            return UNIT_CONVERTERS[unit.lower()](number)
+
+        # No unit found, just return number
         else:
-            return val
+            return number
+
+    # Can't even find number in string, return val unchanged.
     return val
-
-def clean_properties(xdl_class, properties):
-    prop_types = xdl_class.PROP_TYPES
-    prop_limits = xdl_class.PROP_LIMITS
-
-    for prop, val in properties.items():
-
-        # Check for special cases
-        if val == 'default' or prop == 'kwargs':
-            continue
-
-        if val == 'None':
-            properties[prop] = None
-            continue
-
-        elif prop == 'repeat':
-            properties[prop] = int(val)
-            continue
-
-        elif prop == 'children':
-            properties[prop] = val
-            continue
-
-        # Get prop type
-        try:
-            prop_type = prop_types[prop]
-        except KeyError:
-            raise XDLError(
-                f'Missing prop type for "{prop}" in {xdl_class.__name__}')
-
-        # Remove any whitespace errors
-        if type(val) == str:
-            while '  ' in val:
-                val = val.replace('  ', ' ')
-            val = val.strip()
-
-        # Validate val with prop limit
-        try:
-            prop_limit = prop_limits[prop]
-        except KeyError:
-            prop_limit = None
-
-        test_prop_limit(prop_limit, prop_type, prop, val, xdl_class.__name__)
-
-        # Do type conversion, and conversion to std units
-        if prop_type in [str, REAGENT_PROP_TYPE, VESSEL_PROP_TYPE]:
-            if val:
-                properties[prop] = str(val)
-
-        elif prop_type == float:
-            if type(val) == str:
-                properties[prop] = convert_val_to_std_units(val)
-
-        elif prop_type == bool:
-            if type(val) == str:
-                properties[prop] = parse_bool(val)
-
-        # Used by 3 option stir property in WashSolid
-        elif prop_type == Optional[Union[bool, str]]:
-            if type(val) == str:
-                try:
-                    properties[prop] = parse_bool(val)
-                except ValueError:
-                    pass
-
-        elif prop_type == Union[str, List[str]]:
-            if type(val) == str:
-                properties[prop] = val.split(' ')
-            elif type(val) == list:
-                pass
-
-        elif prop_type == Union[float, List[float]]:
-            if type(val) == float:
-                properties[prop] = [val]
-            elif type(val) == list:
-                pass
-
-        elif prop_type == Union[bool, str]:
-            bool_val = parse_bool(val)
-            if bool_val is not None:
-                properties[prop] = bool_val
-
-        elif prop_type == int:
-            try:
-                properties[prop] = int(val)
-            except TypeError:
-                pass
-
-        elif prop_type == List[str]:
-            if type(val) == str:
-                split_list = val.split()
-                for i in range(len(split_list)):
-                    if (type(split_list[i]) == str
-                            and split_list[i].lower() == 'none'):
-                        split_list[i] = None
-                properties[prop] = split_list
-            elif type(val) == list:
-                pass
-
-        elif prop_type == Union[str, int]:
-            if type(val) == str:
-                if re.match(r'[0-9]+', val):
-                    properties[prop] = int(val)
-
-        if 'port' in prop:
-            try:
-                properties[prop] = int(properties[prop])
-            except (ValueError, TypeError):
-                pass
-
-    return properties
-
-def test_prop_limit(prop_limit, prop_type, prop, val, step_name):
-    """Assert that given val is compatible with prop limit."""
-    if val is None or val == '':
-        return
-
-    if prop_limit is None:
-        if prop_type in DEFAULT_PROP_LIMITS:
-            prop_limit = DEFAULT_PROP_LIMITS[prop_type]
-        else:
-            return
-
-    val = str(val)
-    try:
-        assert prop_limit.validate(val)
-    except AssertionError:
-        raise XDLValueError(
-            f'{step_name}: Value "{val}" does not match "{prop}" prop limit\
- {prop_limit}. {prop_limit.hint}'.strip()
-        )

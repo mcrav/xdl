@@ -114,7 +114,7 @@
           vessel_type="separator"
           vessel_has_stirrer="True">
           <CStopStir
-            vessel="separator" />
+            vessel="separator" stirrer="stirrer_separator" />
         </StopStir>
         <PrimePumpForAdd
           reagent="ether"
@@ -192,9 +192,10 @@
           vessel_type="separator"
           stir_speed="600 RPM">
           <CStir
-            vessel="separator" />
+            vessel="separator" stirrer="stirrer_separator" />
           <CSetStirRate
             vessel="separator"
+            stirrer="stirrer_separator"
             stir_speed="600 RPM" />
         </StartStir>
         <Wait
@@ -213,7 +214,7 @@
           vessel_type="separator"
           vessel_has_stirrer="True">
           <CStopStir
-            vessel="separator" />
+            vessel="separator" stirrer="stirrer_separator" />
         </StopStir>
       </Stir>
       <Stir
@@ -227,9 +228,10 @@
           vessel_type="separator"
           stir_speed="30 RPM">
           <CStir
-            vessel="separator" />
+            vessel="separator" stirrer="stirrer_separator" />
           <CSetStirRate
             vessel="separator"
+            stirrer="stirrer_separator"
             stir_speed="30 RPM" />
         </StartStir>
         <Wait
@@ -248,7 +250,7 @@
           vessel_type="separator"
           vessel_has_stirrer="True">
           <CStopStir
-            vessel="separator" />
+            vessel="separator" stirrer="stirrer_separator" />
         </StopStir>
       </Stir>
       <Wait

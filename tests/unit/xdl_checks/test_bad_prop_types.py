@@ -9,6 +9,9 @@ from xdl.steps import AbstractStep
 from xdl.utils.prop_limits import ROTATION_SPEED_PROP_LIMIT
 
 class TestUndeclaredDefaultProp(AbstractStep):
+
+    __test__ = False
+
     PROP_TYPES = {
         'volume': float
     }
@@ -25,6 +28,9 @@ class TestUndeclaredDefaultProp(AbstractStep):
         return []
 
 class TestUndeclaredInternalProp(AbstractStep):
+
+    __test__ = False
+
     PROP_TYPES = {
         'volume': float
     }
@@ -44,6 +50,9 @@ class TestUndeclaredInternalProp(AbstractStep):
         return []
 
 class TestUndeclaredAlwaysWrite(AbstractStep):
+
+    __test__ = False
+
     PROP_TYPES = {
         'volume': float
     }
@@ -63,6 +72,9 @@ class TestUndeclaredAlwaysWrite(AbstractStep):
         return []
 
 class TestUndeclaredPropLimit(AbstractStep):
+
+    __test__ = False
+
     PROP_TYPES = {
         'volume': float
     }
