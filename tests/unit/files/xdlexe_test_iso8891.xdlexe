@@ -15,6 +15,7 @@
   <Procedure>
     <CStirrerSetTemp
       vessel="reactor"
+      heater="heater"
       temp="65°C" />
   </Procedure>
 

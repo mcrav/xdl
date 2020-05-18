@@ -11,6 +11,8 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 class TestStep(AbstractStep):
 
+    __test__ = False
+
     PROP_TYPES = {
         'on_finish': Callable,
     }

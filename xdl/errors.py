@@ -308,3 +308,34 @@ class XDLMissingDefaultPropError(XDLError):
     def __str__(self):
         return f'"default" given as value for {self.prop} property, but no\
  default value found in {self.xdl_element_name} DEFAULT_PROPS.'
+
+class XDLMissingPropTypeError(XDLError):
+    def __init__(self, xdl_element_name, prop):
+        self.xdl_element_name = xdl_element_name
+        self.prop = prop
+
+    def __str__(self):
+        return f'Missing prop type for {self.prop} in {self.xdl_element_name}\
+ class.'
+
+class XDLFailedPropLimitError(XDLValueError):
+    def __init__(self, xdl_element_name, prop, value, prop_limit):
+        self.xdl_element_name = xdl_element_name
+        self.prop = prop
+        self.value = value
+        self.prop_limit = prop_limit
+
+    def __str__(self):
+        return f'{self.xdl_element_name}: Value "{self.value}" does not match\
+ "{self.prop}" prop limit. {self.prop_limit.hint}'
+
+class XDLTypeConversionError(XDLValueError):
+    def __init__(self, xdl_element_name, prop, prop_type, value):
+        self.xdl_element_name = xdl_element_name
+        self.prop = prop
+        self.value = value
+        self.prop_type = prop_type
+
+    def __str__(self):
+        return f'{self.xdl_element_name}: Unable to convert {self.prop} value\
+ {self.value} to {self.prop_type}.'

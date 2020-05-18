@@ -13,6 +13,8 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 class TestDynamicStep(AbstractDynamicStep):
 
+    __test__ = False
+
     PROP_TYPES = {}
 
     def __init__(self):
