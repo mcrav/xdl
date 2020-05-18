@@ -14,8 +14,8 @@ class AbstractFilterThroughStep(AbstractStepTemplate):
             through the solid chemical.
         through (reagent): Solid chemical to filter liquid through.
         eluting_solvent (reagent): Solvent to elute with.
-        eluting_solvent_volume (float): Volume of eluting_solvent to use.
-        n_elutions (int): Number of elutions to perform.
+        eluting_volume (float): Volume of eluting_solvent to use.
+        elutions (int): Number of elutions to perform.
     """
     MANDATORY_NAME = 'FilterThrough'
 
@@ -24,12 +24,12 @@ class AbstractFilterThroughStep(AbstractStepTemplate):
         'to_vessel': VESSEL_PROP_TYPE,
         'through': REAGENT_PROP_TYPE,
         'eluting_solvent': REAGENT_PROP_TYPE,
-        'eluting_solvent_volume': float,
-        'n_elutions': int,
+        'eluting_volume': float,
+        'elutions': int,
     }
 
     MANDATORY_DEFAULT_PROPS = {
         'eluting_solvent': None,
-        'eluting_solvent_volume': None,
-        'n_elutions': None,
+        'eluting_volume': None,
+        'elutions': None,
     }

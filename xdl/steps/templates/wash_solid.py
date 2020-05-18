@@ -27,7 +27,7 @@ class AbstractWashSolidStep(AbstractStepTemplate):
         stir_speed (float): Speed at which to stir at.
         wait_time (float): Time to wait for between adding solvent and removing
             solvent.
-        n_washes (int): Number of washes to perform.
+        repeats (int): Number of washes to perform.
     """
     MANDATORY_NAME = 'WashSolid'
 
@@ -40,7 +40,7 @@ class AbstractWashSolidStep(AbstractStepTemplate):
         'stir': Union[str, bool],
         'stir_speed': float,
         'wait_time': float,
-        'n_washes': int,
+        'repeats': int,
     }
 
     MANDATORY_DEFAULT_PROPS = {
@@ -49,7 +49,7 @@ class AbstractWashSolidStep(AbstractStepTemplate):
         'stir': True,
         'stir_speed': None,
         'wait_time': None,
-        'n_washes': 1,
+        'repeats': 1,
     }
 
     MANDATORY_PROP_LIMITS = {
