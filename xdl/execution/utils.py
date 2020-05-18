@@ -2,12 +2,12 @@ from networkx import MultiDiGraph
 
 from ..steps import Step, AbstractDynamicStep, NON_RECURSIVE_ABSTRACT_STEPS
 
-def do_sanity_check(graph: MultiDiGraph, step: Step):
+def do_sanity_check(graph: MultiDiGraph, step: Step) -> None:
     """Perform sanity checks on the given step
 
     Args:
-        step (Step): Step to perform sanity check on
-        level (int, optional): Logging level. Defaults to 0.
+        graph (MultiDiGraph): Graph to use when performing sanity checks.
+        step (Step): Step to perform sanity checks for.
     """
 
     # Perform step sanity check

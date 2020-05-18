@@ -47,6 +47,45 @@ class XDLBase(object):
     witchcraft accessing member variables that don't seem to be initialized
     anywhere. But once you're used to it, it speeds up development massively as
     you can very quickly access / change properties with minimal typing.
+
+    Attributes:
+        name (str): Returns the class name
+        properties (Dict[str, Any]): Dict of properties related to the XDL
+            element. Generally should never be used directly, and items
+            contained within the properties dict should be accessed/set as
+            if they are attributes, as described above.
+        PROP_TYPES (Dict[str, type]): PROP_TYPES gives the type of every prop
+            Explicitly handled types:
+                str       Remains unchanged
+                int       Parsed as int
+                float     Either parsed as float, or units removed from string
+                          such as '2 mL' and remainer of string parsed as float
+                          and converted to standard units based on units in
+                          string
+                bool      Parsed as bool
+                List[str] Parsed as space separated list of strings
+                'vessel'  Vessel declared in Hardware section of XDL
+                'reagent' Reagent declared in Reagents section of XDL
+
+            Any other type will just remain unchanged during sanitization.
+        DEFAULT_PROPS (Dict[str, Any]): Dictionary of values to pass in for
+            properties when their value is given as 'default'.
+        INTERNAL_PROPS (List[str]): List of properties that should never be
+            passed in as args, and are instead calculated automatically from the
+            graph during on_prepare_for_execution.
+        PROP_LIMITS  (Dict[str, PropLimit]): Defines detailed validation
+            criteria for all props in the form of PropLimit objects. If no prop
+            limit is given for a prop, then a default prop limit will be used
+            based on the prop type.
+        ALWAYS_WRITE (List[str]): List of properties that should always be
+            written, even if they are the same as default values. For example,
+            you may have default 20 mL volume for WashSolid. This does not mean
+            that you don't want to write it, otherwise the XDL is unclear over
+            how much solvent is used when reading it.
+
+    Methods:
+        update: Reloads properties dict. Should be called after the properties
+            dict is updated directly.
     """
 
     # Prop specification variables

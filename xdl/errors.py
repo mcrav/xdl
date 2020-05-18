@@ -140,6 +140,11 @@ class XDLReagentVolumesBeforeCompilationError(XDLExecutionError):
         return 'Trying to calculate reagent volumes for procedure that has not\
  been compiled. First call xdl_obj.prepare_for_execution(graph).'
 
+class XDLExecutionOnDifferentGraphError(XDLExecutionError):
+    def __str__(self):
+        return 'Trying to execute XDL on different graph than the one it was\
+ compiled with.'
+
 ########
 # Misc #
 ########

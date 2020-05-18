@@ -585,6 +585,10 @@ class AbstractDynamicStep(Step):
         self.state = {}
         self.async_steps = []
         self.steps = []
+
+        # None instead of empty list so that you can tell if its been
+        # intialized or not. Start block can just be [].
+        self.start_block = None
         self.started = False
 
     @abstractmethod
@@ -659,7 +663,7 @@ class AbstractDynamicStep(Step):
 
         self.started = True
 
-        if not hasattr(self, 'start_block'):
+        if self.start_block is None:
             raise XDLError('Dynamic step has not been prepared for execution.\
  if executing steps individually, please use\
  `xdl_obj.execute(platform_controller, step_index)` rather than\
