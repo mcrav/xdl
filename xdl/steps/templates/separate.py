@@ -28,7 +28,7 @@ class AbstractSeparateStep(AbstractStepTemplate):
         solvent_volume (float): Volume of solvent to add.
         through (reagent): Solid chemical to send product phase through on way
             to to_vessel, e.g. 'celite'.
-        n_separations (int): Number of separations to perform.
+        repeats (int): Number of separations to perform.
         stir_time (float): Time stir for after adding solvent, before
             separation of phases.
         stir_speed (float): Speed to stir at after adding solvent, before
@@ -48,7 +48,7 @@ class AbstractSeparateStep(AbstractStepTemplate):
         'solvent': REAGENT_PROP_TYPE,
         'solvent_volume': float,
         'through': 'reagent',
-        'n_separations': int,
+        'repeats': int,
         'stir_time': float,
         'stir_speed': float,
         'settling_time': float,
@@ -59,7 +59,7 @@ class AbstractSeparateStep(AbstractStepTemplate):
         'solvent': None,
         'solvent_volume': None,
         'through': None,
-        'n_separations': 1,
+        'repeats': 1,
         'stir_time': None,
         'stir_speed': None,
         'settling_time': None,
