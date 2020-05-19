@@ -107,9 +107,4 @@ class AbstractStopHeatChillStep(AbstractStepTemplate):
 
     MANDATORY_PROP_TYPES = {
         'vessel': VESSEL_PROP_TYPE,
-        'temp': float,
-    }
-
-    MANDATORY_PROP_LIMITS = {
-        'temp': TEMP_PROP_LIMIT,
     }
