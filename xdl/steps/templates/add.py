@@ -9,13 +9,11 @@ class AbstractAddStep(AbstractStepTemplate):
     Name: Add
 
     Mandatory props:
-        vessel (vessel): Vessel to add reagent to. vessel prop type used as must
-            declared in Hardware section of XDL.
-        reagent (reagent): Reagent to add. reagent prop type used as must be
-            declared in Reagents section of XDL.
+        vessel (vessel): Vessel to add reagent to.
+        reagent (reagent): Reagent to add.
         volume (float): Volume of reagent to add.
         time (float): Time to add reagent over.
-        stir (bool): Stir vessel while adding reagent.
+        stir (bool): If True, stir vessel while adding reagent.
         stir_speed (float): Speed in RPM at which to stir at if stir is True.
         viscous (bool): If True, adapt process to handle viscous reagent,
             e.g. use slower addition speeds.

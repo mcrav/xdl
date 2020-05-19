@@ -45,6 +45,8 @@ class AbstractPurgeStep(AbstractStepTemplate):
 class AbstractStartPurgeStep(AbstractStepTemplate):
     """Start purging liquid by bubbling inert gas through it.
 
+    Name: Start Purge
+
     Mandatory props:
         vessel (vessel): Vessel containing liquid to purge with inert gas.
     """
@@ -56,6 +58,8 @@ class AbstractStartPurgeStep(AbstractStepTemplate):
 
 class AbstractStopPurgeStep(AbstractStepTemplate):
     """Stop bubbling inert gas through vessel.
+
+    Name: Stop Purge
 
     Mandatory props:
         vessel (vessel): Vessel to stop bubbling inert gas through.

@@ -30,7 +30,7 @@ class AbstractStirStep(AbstractStepTemplate):
     }
 
 class AbstractStartStirStep(AbstractStepTemplate):
-    """Start heating/chilling vessel.
+    """Start stirring vessel.
 
     Name: StartStir
 
