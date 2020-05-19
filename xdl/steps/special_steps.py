@@ -170,6 +170,28 @@ class Loop(AbstractDynamicStep):
         """Nothing to be done."""
         return []
 
+class Wait(AbstractBaseStep):
+    """Wait for given time.
+
+    Args:
+        time (int): Time in seconds
+    """
+
+    PROP_TYPES = {
+        'time': float,
+    }
+
+    def __init__(self, time: float) -> None:
+        super().__init__(locals())
+
+    def execute(
+        self,
+        platform_controller: Any,
+        logger: logging.Logger = None,
+        level: int = 0
+    ) -> bool:
+        time.sleep(self.time)
+
 class Parallelizer(object):
     """Parallelize given blocks of steps and offer stream of steps to execute at
     given timesteps.
