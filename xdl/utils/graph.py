@@ -4,13 +4,45 @@ import json
 from networkx.readwrite import json_graph
 from networkx import MultiDiGraph, read_graphml, relabel_nodes
 
+from typing import List
 from ..errors import (
     XDLGraphFileNotFoundError,
     XDLGraphInvalidFileTypeError,
     XDLGraphTypeError,
 )
 
-FLASK = 'ChemputerFlask'
+FILTER: str = 'ChemputerFilter'
+REACTOR: str = 'ChemputerReactor'
+CARTRIDGE: str = 'ChemputerCartridge'
+WASTE: str = 'ChemputerWaste'
+FLASK: str = 'ChemputerFlask'
+VACUUM: str = 'ChemputerVacuum'
+SEPARATOR: str = 'ChemputerSeparator'
+VALVE: str = 'ChemputerValve'
+PUMP: str = 'ChemputerPump'
+
+JULABO_CF41: str = 'JULABOCF41'
+HUBER_PETITE_FLEUR: str = 'Huber'
+IKA_RCT_DIGITAL: str = 'IKARCTDigital'
+IKA_RET_CONTROL_VISC: str = 'IKARETControlVisc'
+IKA_RV_10 = "IKARV10"
+CVC3000 = "CVC3000"
+IKA_MICROSTAR_75 = "IKAmicrostar75"
+RZR_2052 = "RZR_2052"
+HEIDOLPH_TORQUE_100 = "HeiTORQUE_100"
+
+
+HEATER_CLASSES: List[str] = [IKA_RCT_DIGITAL, IKA_RET_CONTROL_VISC]
+CHILLER_CLASSES: List[str] = [
+    JULABO_CF41, HUBER_PETITE_FLEUR]
+
+ROTAVAP_CLASSES: List[str] = [IKA_RV_10]
+VACUUM_CLASSES: List[str] = [CVC3000]
+STIRRER_CLASSES: List[str] = [IKA_MICROSTAR_75, RZR_2052, HEIDOLPH_TORQUE_100]
+FILTER_CLASSES: List[str] = [FILTER]
+REACTOR_CLASSES: List[str] = [REACTOR]
+SEPARATOR_CLASSES: List[str] = [SEPARATOR]
+FLASK_CLASSES: List[str] = [FLASK]
 
 def undirected_neighbors(graph, node, data=False):
     """Return all neighbors whether they come from in edges or out edges.
@@ -117,3 +149,36 @@ def get_reagent_vessel(graph: MultiDiGraph, reagent: str) -> Optional[str]:
             if data['chemical'] == reagent:
                 return node
     return None
+
+def get_vessel_stirrer(graph: Dict, vessel: str) -> Optional[str]:
+    """Get any stirrer attached to given vessel
+    Heaters can be stirrers in the case of stirrer hot plates
+
+    Args:
+        graph (Dict): Graph to search
+        vessel (str): Vessel to check
+
+    Returns:
+        Optional[str]: Stirrer node, none if not found
+    """
+    stirrer_neighbors, heater_neighbors = [], []
+    stirrer = None
+    # Iterate through each neighbor node of the vessel
+    for neighbor, data in undirected_neighbors(graph, vessel, data=True):
+        # Found a stirrer
+        if data['class'] in STIRRER_CLASSES:
+            stirrer_neighbors.append(neighbor)
+
+        # Found a heater
+        elif data['class'] in HEATER_CLASSES:
+            heater_neighbors.append(neighbor)
+
+    # Return first stirrer found
+    if stirrer_neighbors:
+        stirrer = stirrer_neighbors[0]
+
+    # Return first heater/stirrer found
+    elif heater_neighbors:
+        stirrer = heater_neighbors[0]
+
+    return stirrer

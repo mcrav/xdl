@@ -2,12 +2,13 @@ from typing import List, Dict
 
 def get_available_languages(localisation: Dict) -> List[str]:
     """Get languages for which every step in human readable can output
-    human_readable text in that language.
+    human_readable text in that language. Always return 'en' just so that error
+    is not thrown if localisation not implemented on platform.
 
     Returns:
         List[str]: List of language codes, e.g. ['en', 'zh']
     """
-    available_languages = []
+    available_languages = ['en']
     for _, human_readables in localisation.items():
         for language in human_readables:
             if language not in available_languages:
