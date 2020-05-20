@@ -190,7 +190,13 @@ class Wait(AbstractBaseStep):
         logger: logging.Logger = None,
         level: int = 0
     ) -> bool:
+        # Don't wait if platform_controller is in simulation mode.
+        if (hasattr(platform_controller, 'simulation')
+                and platform_controller.simulation is True):
+            return True
+
         time.sleep(self.time)
+        return True
 
 class Parallelizer(object):
     """Parallelize given blocks of steps and offer stream of steps to execute at
