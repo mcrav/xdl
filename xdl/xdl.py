@@ -501,16 +501,26 @@ class XDL(object):
             self.executor.prepare_for_execution(
                 graph_file,
                 interactive=interactive,
-                save_path=save_path,
                 sanity_check=sanity_check,
                 **kwargs
             )
 
-            # Switch self.compiled flag to True, and log reagent volumes
-            # consumed by procedure and estimated duration.
+            # Save XDLEXE, switch self.compiled flag to True, and log reagent
+            # volumes consumed by procedure and estimated duration.
             if self.executor._prepared_for_execution:
-                self.compiled = True
+                # Save XDLEXE
                 self.graph_sha256 = self.executor._graph_hash()
+                xdlexe = xdl_to_xml_string(
+                    self,
+                    graph_hash=self.graph_sha256,
+                    full_properties=True,
+                    full_tree=True
+                )
+                with open(save_path, 'w') as fd:
+                    fd.write(xdlexe)
+
+                # Switch self.compiled flag to True and log procedure info
+                self.compiled = True
                 self.logger.info(
                     f'Reagents Consumed\n{self.reagent_volumes(fmt=True)}\n')
                 self.logger.info(
