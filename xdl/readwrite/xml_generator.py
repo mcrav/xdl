@@ -14,7 +14,7 @@ def xdl_to_xml_string(
     full_properties: bool = False,
     full_tree: bool = False,
     graph_hash: str = None
-):
+) -> str:
     """Convert given XDL object to XML string.
 
     Args:
@@ -31,6 +31,25 @@ def xdl_to_xml_string(
     """
     xml_tree = get_xdl_tree(xdl_obj, full_properties, full_tree, graph_hash)
     return _get_xdl_string(xml_tree)
+
+def step_to_xml_string(
+    step: Step,
+    full_properties: bool = False,
+    full_tree: bool = False,
+) -> str:
+    """Get pretty printed XML string of given step.
+
+    Args:
+        step (Step): Step to get XDLEXE string for.
+        full_properties (bool): If True, all properties will be written.
+            If False only mandatory, non default values and always write
+            properties will be written.
+        full_tree (bool): If True, full step tree will be written as is the case
+            in xdlexe files.
+    """
+    step_tree = _get_step_tree(step, full_properties, full_tree)
+    return _get_element_xdl_string(step_tree)
+
 
 #######################
 # XML Tree Generation #

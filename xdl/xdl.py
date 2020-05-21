@@ -510,14 +510,15 @@ class XDL(object):
             if self.executor._prepared_for_execution:
                 # Save XDLEXE
                 self.graph_sha256 = self.executor._graph_hash()
-                xdlexe = xdl_to_xml_string(
-                    self,
-                    graph_hash=self.graph_sha256,
-                    full_properties=True,
-                    full_tree=True
-                )
-                with open(save_path, 'w') as fd:
-                    fd.write(xdlexe)
+                if save_path:
+                    xdlexe = xdl_to_xml_string(
+                        self,
+                        graph_hash=self.graph_sha256,
+                        full_properties=True,
+                        full_tree=True
+                    )
+                    with open(save_path, 'w') as fd:
+                        fd.write(xdlexe)
 
                 # Switch self.compiled flag to True and log procedure info
                 self.compiled = True
