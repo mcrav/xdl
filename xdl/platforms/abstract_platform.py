@@ -5,6 +5,7 @@ from ..utils.schema import generate_schema
 from ..steps import Step, AbstractBaseStep
 from ..reagents import Reagent
 from ..hardware import Component
+from ..localisation import LOCALISATIONS
 
 class AbstractPlatform(object):
     """Container class to hold everything necessary for a platform to be used
@@ -38,7 +39,7 @@ class AbstractPlatform(object):
 
     @property
     def localisation(self):
-        return {}
+        return LOCALISATIONS
 
     @property
     def declaration(self):

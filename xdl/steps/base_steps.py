@@ -11,6 +11,7 @@ from networkx import MultiDiGraph
 
 # Relative
 from ..constants import DEFAULT_INSTANT_DURATION
+from ..localisation import LOCALISATIONS
 from ..utils import XDLBase
 from ..utils.localisation import conditional_human_readable
 from ..utils.misc import format_property, SanityCheck
@@ -33,10 +34,10 @@ class Step(XDLBase):
         uuid (str): Step unique universal identifier, generated automatically.
     """
 
-    # This property should be given by a second base class for steps. For
-    # example Chemputer steps all inherit Step and ChemputerStep. ChemputerStep
-    # provides all the Chemputer step localisation in this variable.
-    localisation: Dict[str, str] = {}
+    # This provides localisation for all steps specified by the XDL cross
+    # platform templates. Can be overridden if localisation needed for other
+    # steps or steps do not conform to cross platform standard.
+    localisation: Dict[str, str] = LOCALISATIONS
 
     def __init__(self, param_dict):
         super().__init__(param_dict)
