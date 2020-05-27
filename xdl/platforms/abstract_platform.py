@@ -58,13 +58,21 @@ class AbstractPlatform(object):
             List[Any]: 'List[Any]',
             Dict[str, Any]: 'Dict[str, Any]',
         }
+
+        def get_type_str(prop_type):
+            if prop_type in type_str_dict:
+                return type_str_dict[prop_type]
+            else:
+                return str(prop_type).replace('.typing', '')
+
         return {
             'steps': [
                 {
                     'name': step_name,
                     'is_base_step': issubclass(step, AbstractBaseStep),
                     'PROP_TYPES': {
-                        k: type_str_dict[v] for k, v in step.PROP_TYPES.items()
+                        prop: get_type_str(prop_type)
+                        for prop, prop_type in step.PROP_TYPES.items()
                     },
                     'DEFAULT_PROPS': step.DEFAULT_PROPS,
                     'INTERNAL_PROPS': step.INTERNAL_PROPS,
