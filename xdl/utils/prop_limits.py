@@ -92,6 +92,8 @@ def generate_quantity_units_pattern(
         default=default
     )
 
+# NOTE: It is important here that defaults use the standard unit for that
+# quantity type as XDL app uses this to add in default units.
 
 VOLUME_PROP_LIMIT = PropLimit(
     regex=r'^(all|(' + POSITIVE_FLOAT_PATTERN + r'[ ]?'\
@@ -118,7 +120,7 @@ TIME_PROP_LIMIT = generate_quantity_units_pattern(
     POSITIVE_FLOAT_PATTERN,
     TIME_UNITS_PATTERN,
     hint='Expecting number followed by standard time units, e.g. "15 mins", "3 hrs".',
-    default='0 mins'
+    default='0 secs'
 )
 
 PRESSURE_PROP_LIMIT = generate_quantity_units_pattern(
