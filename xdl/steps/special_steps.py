@@ -4,6 +4,7 @@ import time
 import math
 from functools import partial
 from ..utils.logging import get_logger
+from ..utils.prop_limits import TIME_PROP_LIMIT
 from .base_steps import (
     Step,
     AbstractAsyncStep,
@@ -181,7 +182,11 @@ class Wait(AbstractBaseStep):
         'time': float,
     }
 
-    def __init__(self, time: float) -> None:
+    PROP_LIMITS = {
+        'time': TIME_PROP_LIMIT,
+    }
+
+    def __init__(self, time: float, **kwargs) -> None:
         super().__init__(locals())
 
     def execute(
