@@ -68,7 +68,7 @@ class Reagent(XDLBase):
         'last_minute_addition': None,
         'last_minute_addition_volume': None,
         'preserve': False,
-        'incompatible_reagents': [],
+        'incompatible_reagents': None,
     }
 
     PROP_LIMITS = {
