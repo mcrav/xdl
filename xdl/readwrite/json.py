@@ -15,6 +15,7 @@ from .errors import (
 )
 from ..reagents import Reagent
 from ..hardware import Hardware, Component
+from ..utils.misc import format_property
 
 VALID_SECTIONS = ['steps', 'reagents', 'hardware']
 
@@ -147,7 +148,12 @@ def xdl_to_json(xdl_obj, full_properties: bool = False):
 def xdl_step_to_json(xdl_step, full_properties: bool = False):
     """Convert XDL Step to JSON format immediately useable by XDLApp."""
     xdl_step_properties = {
-        k: v
+        k: format_property(
+            k, v,
+            xdl_step.PROP_TYPES[k],
+            xdl_step.PROP_LIMITS.get(k, None),
+            human_readable=False
+        )
         for k, v in xdl_step.properties.items()
         if (k != 'children'
             and (full_properties or k not in xdl_step.INTERNAL_PROPS))

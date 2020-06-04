@@ -4,6 +4,7 @@ import time
 import math
 from functools import partial
 from ..utils.logging import get_logger
+from ..utils.prop_limits import TIME_PROP_LIMIT
 from .base_steps import (
     Step,
     AbstractAsyncStep,
@@ -169,6 +170,38 @@ class Loop(AbstractDynamicStep):
     def on_finish(self):
         """Nothing to be done."""
         return []
+
+class Wait(AbstractBaseStep):
+    """Wait for given time.
+
+    Args:
+        time (int): Time in seconds
+    """
+
+    PROP_TYPES = {
+        'time': float,
+    }
+
+    PROP_LIMITS = {
+        'time': TIME_PROP_LIMIT,
+    }
+
+    def __init__(self, time: float, **kwargs) -> None:
+        super().__init__(locals())
+
+    def execute(
+        self,
+        platform_controller: Any,
+        logger: logging.Logger = None,
+        level: int = 0
+    ) -> bool:
+        # Don't wait if platform_controller is in simulation mode.
+        if (hasattr(platform_controller, 'simulation')
+                and platform_controller.simulation is True):
+            return True
+
+        time.sleep(self.time)
+        return True
 
 class Parallelizer(object):
     """Parallelize given blocks of steps and offer stream of steps to execute at

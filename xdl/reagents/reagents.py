@@ -17,7 +17,7 @@ class Reagent(XDLBase):
         clean_type (str): 'organic' or 'aqueous'. Used by XDLExecutor to decide
             what solvent to use in CleanBackbone steps.
         cas (int, optional): Defaults to None. CAS number of reagent as int.
-        use_for_cleaning (str, optional): Defaults to False. Specifies whether
+        use_for_cleaning (bool, optional): Defaults to False. Specifies whether
             reagent can be used as a cleaning solvent. If the reagent is
             recognised as a common solvent setting this property to False will
             NOT stop it being used for cleaning.
@@ -45,7 +45,7 @@ class Reagent(XDLBase):
     PROP_TYPES = {
         'id': str,
         'cleaning_solvent': str,
-        'use_for_cleaning': str,
+        'use_for_cleaning': bool,
         'stir': bool,
         'cas': int,
         'temp': float,
@@ -68,7 +68,7 @@ class Reagent(XDLBase):
         'last_minute_addition': None,
         'last_minute_addition_volume': None,
         'preserve': False,
-        'incompatible_reagents': [],
+        'incompatible_reagents': None,
     }
 
     PROP_LIMITS = {

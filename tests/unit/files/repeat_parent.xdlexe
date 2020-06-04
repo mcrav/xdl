@@ -1,7 +1,7 @@
-<?xdl version="0.4.4" ?>
+<?xdl version="0.4.6" ?>
 
 <Synthesis
-  graph_sha256="773155a5fbecd89c8e1bf4bfe1f9734f54a0e4e987c0941f9a85dd70db317b82"
+  graph_sha256="975a6ebde52245d8395d8f4d501bad7f63b248fc0cf72c99b619c47c11d798ba"
 >
   <Hardware>
     <Component
@@ -20,25 +20,25 @@
       <Children>
         <Wait
           time="5 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
+          wait_recording_speed="2000.0"
+          after_recording_speed="14.0">
           <CSetRecordingSpeed
-            recording_speed="2000" />
+            recording_speed="2000.0" />
           <CWait
             time="5 secs" />
           <CSetRecordingSpeed
-            recording_speed="14" />
+            recording_speed="14.0" />
         </Wait>
         <Wait
           time="10 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
+          wait_recording_speed="2000.0"
+          after_recording_speed="14.0">
           <CSetRecordingSpeed
-            recording_speed="2000" />
+            recording_speed="2000.0" />
           <CWait
             time="10 secs" />
           <CSetRecordingSpeed
-            recording_speed="14" />
+            recording_speed="14.0" />
         </Wait>
         <Add
           reagent="ether"
@@ -47,9 +47,9 @@
           mass="None"
           port="top"
           through="None"
-          move_speed="40"
-          aspiration_speed="10"
-          dispense_speed="40"
+          move_speed="40.0"
+          aspiration_speed="10.0"
+          dispense_speed="40.0"
           viscous="False"
           time="None"
           stir="False"
@@ -70,7 +70,8 @@
             vessel_type="filter"
             vessel_has_stirrer="True">
             <CStopStir
-              vessel="filter" />
+              vessel="filter"
+              stirrer="stirrer" />
           </StopStir>
           <PrimePumpForAdd
             reagent="ether"
@@ -85,9 +86,9 @@
                   from_vessel="flask_ether"
                   to_vessel="waste_filter"
                   volume="3 mL"
-                  move_speed="40"
-                  aspiration_speed="10"
-                  dispense_speed="40"
+                  move_speed="40.0"
+                  aspiration_speed="10.0"
+                  dispense_speed="40.0"
                   from_port="0"
                   to_port="0"
                   through=""
@@ -99,9 +100,9 @@
                   from_vessel="flask_ether"
                   to_vessel="waste_filter"
                   volume="3 mL"
-                  move_speed="40"
-                  aspiration_speed="10"
-                  dispense_speed="40"
+                  move_speed="40.0"
+                  aspiration_speed="10.0"
+                  dispense_speed="40.0"
                   from_port="0"
                   to_port="0"
                   through=""
@@ -114,9 +115,9 @@
             from_vessel="flask_ether"
             to_vessel="filter"
             volume="20 mL"
-            move_speed="40"
-            aspiration_speed="10"
-            dispense_speed="40"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0"
             from_port="0"
             to_port="top"
             through="None"
@@ -124,29 +125,29 @@
             repeats="1" />
           <Wait
             time="10 secs"
-            wait_recording_speed="2000"
-            after_recording_speed="14">
+            wait_recording_speed="2000.0"
+            after_recording_speed="14.0">
             <CSetRecordingSpeed
-              recording_speed="2000" />
+              recording_speed="2000.0" />
             <CWait
               time="10 secs" />
             <CSetRecordingSpeed
-              recording_speed="14" />
+              recording_speed="14.0" />
           </Wait>
           <FlushTubing
             to_vessel="filter"
             to_port="top"
             volume="5 mL"
-            dispense_speed="40"
+            dispense_speed="40.0"
             through_cartridge="None"
             flush_tube_vessel="flask_nitrogen">
             <CMove
               from_vessel="flask_nitrogen"
               to_vessel="filter"
               volume="5 mL"
-              move_speed="40"
-              aspiration_speed="10"
-              dispense_speed="40"
+              move_speed="40.0"
+              aspiration_speed="10.0"
+              dispense_speed="40.0"
               from_port="0"
               to_port="top"
               through="None"
@@ -158,25 +159,25 @@
       <Steps>
         <Wait
           time="5 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
+          wait_recording_speed="2000.0"
+          after_recording_speed="14.0">
           <CSetRecordingSpeed
-            recording_speed="2000" />
+            recording_speed="2000.0" />
           <CWait
             time="5 secs" />
           <CSetRecordingSpeed
-            recording_speed="14" />
+            recording_speed="14.0" />
         </Wait>
         <Wait
           time="10 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
+          wait_recording_speed="2000.0"
+          after_recording_speed="14.0">
           <CSetRecordingSpeed
-            recording_speed="2000" />
+            recording_speed="2000.0" />
           <CWait
             time="10 secs" />
           <CSetRecordingSpeed
-            recording_speed="14" />
+            recording_speed="14.0" />
         </Wait>
         <Add
           reagent="ether"
@@ -185,9 +186,9 @@
           mass="None"
           port="top"
           through="None"
-          move_speed="40"
-          aspiration_speed="10"
-          dispense_speed="40"
+          move_speed="40.0"
+          aspiration_speed="10.0"
+          dispense_speed="40.0"
           viscous="False"
           time="None"
           stir="False"
@@ -208,7 +209,8 @@
             vessel_type="filter"
             vessel_has_stirrer="True">
             <CStopStir
-              vessel="filter" />
+              vessel="filter"
+              stirrer="stirrer" />
           </StopStir>
           <PrimePumpForAdd
             reagent="ether"
@@ -223,9 +225,9 @@
                   from_vessel="flask_ether"
                   to_vessel="waste_filter"
                   volume="3 mL"
-                  move_speed="40"
-                  aspiration_speed="10"
-                  dispense_speed="40"
+                  move_speed="40.0"
+                  aspiration_speed="10.0"
+                  dispense_speed="40.0"
                   from_port="0"
                   to_port="0"
                   through=""
@@ -237,9 +239,9 @@
                   from_vessel="flask_ether"
                   to_vessel="waste_filter"
                   volume="3 mL"
-                  move_speed="40"
-                  aspiration_speed="10"
-                  dispense_speed="40"
+                  move_speed="40.0"
+                  aspiration_speed="10.0"
+                  dispense_speed="40.0"
                   from_port="0"
                   to_port="0"
                   through=""
@@ -252,9 +254,9 @@
             from_vessel="flask_ether"
             to_vessel="filter"
             volume="20 mL"
-            move_speed="40"
-            aspiration_speed="10"
-            dispense_speed="40"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0"
             from_port="0"
             to_port="top"
             through="None"
@@ -262,29 +264,29 @@
             repeats="1" />
           <Wait
             time="10 secs"
-            wait_recording_speed="2000"
-            after_recording_speed="14">
+            wait_recording_speed="2000.0"
+            after_recording_speed="14.0">
             <CSetRecordingSpeed
-              recording_speed="2000" />
+              recording_speed="2000.0" />
             <CWait
               time="10 secs" />
             <CSetRecordingSpeed
-              recording_speed="14" />
+              recording_speed="14.0" />
           </Wait>
           <FlushTubing
             to_vessel="filter"
             to_port="top"
             volume="5 mL"
-            dispense_speed="40"
+            dispense_speed="40.0"
             through_cartridge="None"
             flush_tube_vessel="flask_nitrogen">
             <CMove
               from_vessel="flask_nitrogen"
               to_vessel="filter"
               volume="5 mL"
-              move_speed="40"
-              aspiration_speed="10"
-              dispense_speed="40"
+              move_speed="40.0"
+              aspiration_speed="10.0"
+              dispense_speed="40.0"
               from_port="0"
               to_port="top"
               through="None"
@@ -294,25 +296,25 @@
         </Add>
         <Wait
           time="5 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
+          wait_recording_speed="2000.0"
+          after_recording_speed="14.0">
           <CSetRecordingSpeed
-            recording_speed="2000" />
+            recording_speed="2000.0" />
           <CWait
             time="5 secs" />
           <CSetRecordingSpeed
-            recording_speed="14" />
+            recording_speed="14.0" />
         </Wait>
         <Wait
           time="10 secs"
-          wait_recording_speed="2000"
-          after_recording_speed="14">
+          wait_recording_speed="2000.0"
+          after_recording_speed="14.0">
           <CSetRecordingSpeed
-            recording_speed="2000" />
+            recording_speed="2000.0" />
           <CWait
             time="10 secs" />
           <CSetRecordingSpeed
-            recording_speed="14" />
+            recording_speed="14.0" />
         </Wait>
         <Add
           reagent="ether"
@@ -321,9 +323,9 @@
           mass="None"
           port="top"
           through="None"
-          move_speed="40"
-          aspiration_speed="10"
-          dispense_speed="40"
+          move_speed="40.0"
+          aspiration_speed="10.0"
+          dispense_speed="40.0"
           viscous="False"
           time="None"
           stir="False"
@@ -344,7 +346,8 @@
             vessel_type="filter"
             vessel_has_stirrer="True">
             <CStopStir
-              vessel="filter" />
+              vessel="filter"
+              stirrer="stirrer" />
           </StopStir>
           <PrimePumpForAdd
             reagent="ether"
@@ -359,9 +362,9 @@
                   from_vessel="flask_ether"
                   to_vessel="waste_filter"
                   volume="3 mL"
-                  move_speed="40"
-                  aspiration_speed="10"
-                  dispense_speed="40"
+                  move_speed="40.0"
+                  aspiration_speed="10.0"
+                  dispense_speed="40.0"
                   from_port="0"
                   to_port="0"
                   through=""
@@ -373,9 +376,9 @@
                   from_vessel="flask_ether"
                   to_vessel="waste_filter"
                   volume="3 mL"
-                  move_speed="40"
-                  aspiration_speed="10"
-                  dispense_speed="40"
+                  move_speed="40.0"
+                  aspiration_speed="10.0"
+                  dispense_speed="40.0"
                   from_port="0"
                   to_port="0"
                   through=""
@@ -388,9 +391,9 @@
             from_vessel="flask_ether"
             to_vessel="filter"
             volume="20 mL"
-            move_speed="40"
-            aspiration_speed="10"
-            dispense_speed="40"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0"
             from_port="0"
             to_port="top"
             through="None"
@@ -398,29 +401,29 @@
             repeats="1" />
           <Wait
             time="10 secs"
-            wait_recording_speed="2000"
-            after_recording_speed="14">
+            wait_recording_speed="2000.0"
+            after_recording_speed="14.0">
             <CSetRecordingSpeed
-              recording_speed="2000" />
+              recording_speed="2000.0" />
             <CWait
               time="10 secs" />
             <CSetRecordingSpeed
-              recording_speed="14" />
+              recording_speed="14.0" />
           </Wait>
           <FlushTubing
             to_vessel="filter"
             to_port="top"
             volume="5 mL"
-            dispense_speed="40"
+            dispense_speed="40.0"
             through_cartridge="None"
             flush_tube_vessel="flask_nitrogen">
             <CMove
               from_vessel="flask_nitrogen"
               to_vessel="filter"
               volume="5 mL"
-              move_speed="40"
-              aspiration_speed="10"
-              dispense_speed="40"
+              move_speed="40.0"
+              aspiration_speed="10.0"
+              dispense_speed="40.0"
               from_port="0"
               to_port="top"
               through="None"
@@ -443,15 +446,20 @@
       <CRotavapLiftUp
         rotavap_name="rotavap" />
       <CStopStir
-        vessel="reactor" />
+        vessel="reactor"
+        stirrer="stirrer_reactor" />
       <CStopStir
-        vessel="filter" />
+        vessel="filter"
+        stirrer="stirrer" />
       <CStopStir
-        vessel="separator" />
+        vessel="separator"
+        stirrer="stirrer_separator" />
       <CStopStir
-        vessel="flask_water" />
+        vessel="flask_water"
+        stirrer="flask_stirrer" />
       <CStopHeat
-        vessel="reactor" />
+        vessel="reactor"
+        heater="reactor_heater" />
       <CStopVacuum
         vessel="rotavap" />
       <CVentVacuum
