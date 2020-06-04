@@ -16,7 +16,7 @@ stages:
     # Install xdl requirements
     # Install Chempiler, SerialLabware and ChemputerAPI for simulations
 
-    - pip install git+https://$CHEMPILER_USER:$CHEMPILER_PW@gitlab.com/croningroup/chemputer/chempiler.git@develop
+    - pip install git+https://$CHEMPILER_USER:$CHEMPILER_PW@gitlab.com/croningroup/chemputer/chempiler.git@master
 
     - pip install git+https://$SERIALLABWARE_USER:$SERIALLABWARE_PW@gitlab.com/croningroup/chemputer/seriallabware.git@master
 
@@ -24,7 +24,7 @@ stages:
 
     - pip install git+https://github.com/croningp/commanduino.git@master
     - pip install git+https://$COMMANDUINOLABWARE_USER:$COMMANDUINOLABWARE_PW@gitlab.com/croningroup/chemputer/commanduinolabware.git@master
-    - pip install git+https://$CHEMPUTERXDL_USER:$CHEMPUTERXDL_PW@gitlab.com/croningroup/chemputer/chemputerxdl.git@develop
+    - pip install git+https://$CHEMPUTERXDL_USER:$CHEMPUTERXDL_PW@gitlab.com/croningroup/chemputer/chemputerxdl.git@master
     # - git clone https://$CHEMPUTERXDL_USER:$CHEMPUTERXDL_PW@gitlab.com/croningroup/chemputer/chemputerxdl.git && cd chemputerxdl && git checkout MC/muntz-executor-compat && pip install . && cd ..
 
     # Install xdl
