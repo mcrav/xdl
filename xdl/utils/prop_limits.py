@@ -127,7 +127,7 @@ PRESSURE_PROP_LIMIT = generate_quantity_units_pattern(
     POSITIVE_FLOAT_PATTERN,
     PRESSURE_UNITS_PATTERN,
     hint='Expecting number followed by standard pressure units, e.g. "50 mbar", "1 atm".',
-    default='1 atm'
+    default='1013.25 mbar'
 )
 
 ROTATION_SPEED_PROP_LIMIT = generate_quantity_units_pattern(
