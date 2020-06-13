@@ -39,6 +39,10 @@ setup(
         'networkx>=2',
         'appdirs>=1',
         'termcolor>=1',
-        'tabulate>=0.8.7'
+        'tabulate>=0.8.7',
+        # The reason these are == instead of >= is I am much more paranoid about
+        # socket.io stuff breaking than other stuff breaking.
+        'python-socketio==4.6.0',
+        'websocket-client==0.57.0'
     ]
 )
