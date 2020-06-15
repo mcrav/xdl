@@ -42,8 +42,8 @@ def make_xdl_controller(platform):
             # value of step_class when the method is called.
             def step_method(self, step_class=step_class, **kwargs):
                 block = [step_class(**kwargs)]
-                self.executor.prepare_block_for_execution(
-                    self.graph, block)
+                self.executor.add_internal_properties(
+                    self.graph, steps=block)
                 block[0].execute(self.platform_controller)
 
             # Add Method to attributes
