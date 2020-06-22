@@ -1,7 +1,11 @@
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
 from ...utils.prop_limits import (
-    VOLUME_PROP_LIMIT, ROTATION_SPEED_PROP_LIMIT, TIME_PROP_LIMIT)
+    VOLUME_PROP_LIMIT,
+    ROTATION_SPEED_PROP_LIMIT,
+    TIME_PROP_LIMIT,
+    ADD_PURPOSE_PROP_LIMIT
+)
 
 class AbstractAddStep(AbstractStepTemplate):
     """Add liquid reagent.
@@ -12,11 +16,16 @@ class AbstractAddStep(AbstractStepTemplate):
         vessel (vessel): Vessel to add reagent to.
         reagent (reagent): Reagent to add.
         volume (float): Volume of reagent to add.
+        dropwise (bool): If True, use dropwise addition speed.
         time (float): Time to add reagent over.
         stir (bool): If True, stir vessel while adding reagent.
         stir_speed (float): Speed in RPM at which to stir at if stir is True.
         viscous (bool): If True, adapt process to handle viscous reagent,
             e.g. use slower addition speeds.
+        purpose (str): Purpose of addition. If None assume that simply a reagent
+            is being added. Roles of reagents can be specified in <Reagent> tag.
+            Possible values: "precipitate", "neutralize", "basify", "acidify"
+            or "dissolve".
     """
     MANDATORY_NAME = 'Add'
 
@@ -24,21 +33,26 @@ class AbstractAddStep(AbstractStepTemplate):
         'vessel': VESSEL_PROP_TYPE,
         'reagent': REAGENT_PROP_TYPE,
         'volume': float,
+        'dropwise': bool,
         'time': float,
         'stir': bool,
         'stir_speed': float,
         'viscous': bool,
+        'purpose': str,
     }
 
     MANDATORY_DEFAULT_PROPS = {
         'stir': False,
+        'dropwise': False,
         'viscous': False,
         'time': None,
-        'stir_speed': None
+        'stir_speed': None,
+        'purpose': None,
     }
 
     MANDATORY_PROP_LIMITS = {
         'volume': VOLUME_PROP_LIMIT,
         'time': TIME_PROP_LIMIT,
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
+        'purpose': ADD_PURPOSE_PROP_LIMIT,
     }

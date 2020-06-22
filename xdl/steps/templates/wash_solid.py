@@ -25,7 +25,7 @@ class AbstractWashSolidStep(AbstractStepTemplate):
             stirring after solvent is added and stop stirring before solvent is
             removed. If False, do not stir at all.
         stir_speed (float): Speed at which to stir at.
-        wait_time (float): Time to wait for between adding solvent and removing
+        time (float): Time to wait for between adding solvent and removing
             solvent.
         repeats (int): Number of washes to perform.
     """
@@ -39,7 +39,7 @@ class AbstractWashSolidStep(AbstractStepTemplate):
         'temp': float,
         'stir': Union[str, bool],
         'stir_speed': float,
-        'wait_time': float,
+        'time': float,
         'repeats': int,
     }
 
@@ -48,7 +48,7 @@ class AbstractWashSolidStep(AbstractStepTemplate):
         'temp': None,
         'stir': True,
         'stir_speed': None,
-        'wait_time': None,
+        'time': None,
         'repeats': 1,
     }
 
@@ -56,5 +56,5 @@ class AbstractWashSolidStep(AbstractStepTemplate):
         'temp': TEMP_PROP_LIMIT,
         'stir': WASH_SOLID_STIR_PROP_LIMIT,
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
-        'wait_time': TIME_PROP_LIMIT,
+        'time': TIME_PROP_LIMIT,
     }

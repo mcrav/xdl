@@ -1,6 +1,7 @@
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE
-from ...utils.prop_limits import TIME_PROP_LIMIT, ROTATION_SPEED_PROP_LIMIT
+from ...utils.prop_limits import (
+    TIME_PROP_LIMIT, ROTATION_SPEED_PROP_LIMIT, STIR_PURPOSE_PROP_LIMIT)
 
 class AbstractStirStep(AbstractStepTemplate):
     """Stir vessel for given time.
@@ -11,6 +12,10 @@ class AbstractStirStep(AbstractStepTemplate):
         vessel (vessel): Vessel to stir.
         time (float): Time to stir vessel for.
         stir_speed (float): Speed in RPM at which to stir at.
+        continue_stirring (bool): If True, leave stirring on at end of step.
+            Otherwise stop stirring at end of step.
+        purpose (str): Purpose of stirring. Can be None or 'dissolve'. If None,
+            assumed stirring is just to mix reagents.
     """
     MANDATORY_NAME = 'Stir'
 
@@ -18,15 +23,20 @@ class AbstractStirStep(AbstractStepTemplate):
         'vessel': VESSEL_PROP_TYPE,
         'time': float,
         'stir_speed': float,
+        'purpose': str,
+        'continue_stirring': bool,
     }
 
     MANDATORY_DEFAULT_PROPS = {
         'stir_speed': None,
+        'purpose': None,
+        'continue_stirring': False,
     }
 
     MANDATORY_PROP_LIMITS = {
         'time': TIME_PROP_LIMIT,
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
+        'purpose': STIR_PURPOSE_PROP_LIMIT,
     }
 
 class AbstractStartStirStep(AbstractStepTemplate):
@@ -37,20 +47,25 @@ class AbstractStartStirStep(AbstractStepTemplate):
     Mandatory props:
         vessel (vessel): Vessel to start stirring.
         stir_speed (float): Speed in RPM at which to stir at.
+        purpose (str): Purpose of stirring. Can be None or 'dissolve'. If None,
+            assumed stirring is just to mix reagents.
     """
     MANDATORY_NAME = 'StartStir'
 
     MANDATORY_PROP_TYPES = {
         'vessel': VESSEL_PROP_TYPE,
         'stir_speed': float,
+        'purpose': str
     }
 
     MANDATORY_DEFAULT_PROPS = {
         'stir_speed': None,
+        'purpose': None,
     }
 
     MANDATORY_PROP_LIMITS = {
-        'stir_speed': ROTATION_SPEED_PROP_LIMIT
+        'stir_speed': ROTATION_SPEED_PROP_LIMIT,
+        'purpose': STIR_PURPOSE_PROP_LIMIT,
     }
 
 class AbstractStopStirStep(AbstractStepTemplate):

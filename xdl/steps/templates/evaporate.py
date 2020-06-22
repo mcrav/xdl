@@ -17,7 +17,8 @@ class AbstractEvaporateStep(AbstractStepTemplate):
         pressure (float): Vacuum pressure to use for evaporation.
         temp (float): Temperature to heat contents of vessel to for evaporation.
         time (float): Time to evaporate for.
-        rotation_speed (float): If using traditional rotavap, speed in RPM at
+        stir_speed (float): Speed at which to stir mixture during
+            evaporation. If using traditional rotavap, speed in RPM at
             which to rotate evaporation flask.
     """
     MANDATORY_NAME = 'Evaporate'
@@ -27,19 +28,19 @@ class AbstractEvaporateStep(AbstractStepTemplate):
         'pressure': float,
         'time': float,
         'temp': float,
-        'rotation_speed': float,
+        'stir_speed': float,
     }
 
     MANDATORY_DEFAULT_PROPS = {
         'time': None,
         'temp': None,
         'pressure': None,
-        'rotation_speed': None
+        'stir_speed': None
     }
 
     MANDATORY_PROP_LIMITS = {
         'time': TIME_PROP_LIMIT,
         'temp': TEMP_PROP_LIMIT,
-        'rotation_speed': ROTATION_SPEED_PROP_LIMIT,
+        'stir_speed': ROTATION_SPEED_PROP_LIMIT,
         'pressure': PRESSURE_PROP_LIMIT,
     }

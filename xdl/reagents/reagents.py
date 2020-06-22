@@ -44,12 +44,13 @@ class Reagent(XDLBase):
 
     PROP_TYPES = {
         'id': str,
+        'cas': int,
+        'inchi': str,
+        'role': str,
         'cleaning_solvent': str,
         'use_for_cleaning': bool,
         'stir': bool,
-        'cas': int,
         'temp': float,
-        'role': str,
         'last_minute_addition': str,
         'last_minute_addition_volume': float,
         'preserve': bool,
@@ -75,7 +76,15 @@ class Reagent(XDLBase):
         'temp': TEMP_PROP_LIMIT,
         'last_minute_addition_volume': VOLUME_PROP_LIMIT,
         'role': PropLimit(
-            enum=['reagent', 'solvent', 'substrate', 'catalyst']
+            enum=[
+                'reagent',
+                'solvent',
+                'substrate',
+                'catalyst',
+                'base',
+                'acid',
+                'activating-agent'
+            ]
         )
     }
 
@@ -92,6 +101,7 @@ class Reagent(XDLBase):
         last_minute_addition_volume: float = 'default',
         preserve: bool = 'default',
         incompatible_reagents: List[str] = 'default',
-        is_base: bool = 'default'
+        is_base: bool = 'default',
+        inchi: str = '',
     ) -> None:
         super().__init__(locals())

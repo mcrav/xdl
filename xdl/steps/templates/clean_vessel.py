@@ -12,6 +12,7 @@ class AbstractCleanVesselStep(AbstractStepTemplate):
         solvent (reagent): Solvent to clean vessel with.
         volume (float): Volume of solvent to clean vessel with.
         temp (float): Temperature to heat vessel to while cleaning.
+        repeats (int): Number of cleaning cycles to perform.
     """
     MANDATORY_NAME = 'CleanVessel'
 
@@ -20,11 +21,13 @@ class AbstractCleanVesselStep(AbstractStepTemplate):
         'solvent': REAGENT_PROP_TYPE,
         'volume': float,
         'temp': float,
+        'repeats': int,
     }
 
     MANDATORY_DEFAULT_PROPS = {
         'volume': None,
-        'temp': None
+        'temp': None,
+        'repeats': None,
     }
 
     MANDATORY_PROP_LIMITS = {

@@ -47,7 +47,7 @@ class AbstractSeparateStep(AbstractStepTemplate):
         'waste_phase_to_vessel': VESSEL_PROP_TYPE,
         'solvent': REAGENT_PROP_TYPE,
         'solvent_volume': float,
-        'through': 'reagent',
+        'through': str,
         'repeats': int,
         'stir_time': float,
         'stir_speed': float,

@@ -1,5 +1,6 @@
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
+from ...utils.prop_limits import VOLUME_PROP_LIMIT, TIME_PROP_LIMIT
 
 class AbstractFilterThroughStep(AbstractStepTemplate):
     """Filter liquid through solid, for example filtering reaction mixture
@@ -15,21 +16,30 @@ class AbstractFilterThroughStep(AbstractStepTemplate):
         through (reagent): Solid chemical to filter liquid through.
         eluting_solvent (reagent): Solvent to elute with.
         eluting_volume (float): Volume of eluting_solvent to use.
-        elutions (int): Number of elutions to perform.
+        eluting_repeats (int): Number of elutions to perform.
+        residence_time (float): Residence time of liquid in cartridge containing
+            solid. If not given, default move speed is used.
     """
     MANDATORY_NAME = 'FilterThrough'
 
     MANDATORY_PROP_TYPES = {
         'from_vessel': VESSEL_PROP_TYPE,
         'to_vessel': VESSEL_PROP_TYPE,
-        'through': REAGENT_PROP_TYPE,
+        'through': str,
         'eluting_solvent': REAGENT_PROP_TYPE,
         'eluting_volume': float,
-        'elutions': int,
+        'eluting_repeats': int,
+        'residence_time': float,
     }
 
     MANDATORY_DEFAULT_PROPS = {
         'eluting_solvent': None,
         'eluting_volume': None,
-        'elutions': None,
+        'eluting_repeats': None,
+        'residence_time': None,
+    }
+
+    MANDATORY_PROP_LIMITS = {
+        'eluting_volume': VOLUME_PROP_LIMIT,
+        'residence_time': TIME_PROP_LIMIT,
     }
