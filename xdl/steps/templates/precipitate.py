@@ -1,13 +1,15 @@
 from .abstract_template import AbstractStepTemplate
-from ...constants import VESSEL_PROP_TYPE
+from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
 from ...utils.prop_limits import (
     TEMP_PROP_LIMIT,
     TIME_PROP_LIMIT,
-    ROTATION_SPEED_PROP_LIMIT
+    ROTATION_SPEED_PROP_LIMIT,
+    VOLUME_PROP_LIMIT
 )
 
 class AbstractPrecipitateStep(AbstractStepTemplate):
-    """Cause precipitation by changing temperature and stirring.
+    """Cause precipitation by optionally adding a reagent, then changing
+    temperature and stirring.
 
     Name: Precipitate
 
@@ -16,6 +18,9 @@ class AbstractPrecipitateStep(AbstractStepTemplate):
         temp (float): Temperature to heat/chill vessel to.
         time (float): Time to stir vessel for at given temp.
         stir_speed (float): Speed in RPM at which to stir.
+        reagent (str): Optional reagent to add to trigger precipitation.
+        volume (float): Volume of reagent to add to trigger precipitation.
+        add_time (float): Time to add reagent over.
     """
     MANDATORY_NAME = 'Precipitate'
 
@@ -24,16 +29,24 @@ class AbstractPrecipitateStep(AbstractStepTemplate):
         'temp': float,
         'time': float,
         'stir_speed': float,
+        'reagent': REAGENT_PROP_TYPE,
+        'volume': float,
+        'add_time': float,
     }
 
-    DEFAULT_PROPS = {
+    MANDATORY_DEFAULT_PROPS = {
         'temp': None,
         'time': None,
         'stir_speed': None,
+        'reagent': None,
+        'volume': None,
+        'add_time': None
     }
 
     MANDATORY_PROP_LIMITS = {
         'temp': TEMP_PROP_LIMIT,
         'time': TIME_PROP_LIMIT,
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
+        'volume': VOLUME_PROP_LIMIT,
+        'add_time': TIME_PROP_LIMIT,
     }

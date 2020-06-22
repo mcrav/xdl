@@ -1,7 +1,10 @@
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE
 from ...utils.prop_limits import (
-    TEMP_PROP_LIMIT, TIME_PROP_LIMIT, ROTATION_SPEED_PROP_LIMIT
+    TEMP_PROP_LIMIT,
+    TIME_PROP_LIMIT,
+    ROTATION_SPEED_PROP_LIMIT,
+    HEATCHILL_PURPOSE_PROP_LIMIT,
 )
 
 class AbstractHeatChillStep(AbstractStepTemplate):
@@ -15,6 +18,8 @@ class AbstractHeatChillStep(AbstractStepTemplate):
         time (float): Time to heat or chill vessel for.
         stir (bool): If True, stir while heating or chilling.
         stir_speed (float): Speed in RPM at which to stir at if stir is True.
+        purpose (str): Purpose of heating/chilling. One of "reaction",
+            "control-exotherm", "unstable-reagent".
     """
     MANDATORY_NAME = 'HeatChill'
 
@@ -24,17 +29,20 @@ class AbstractHeatChillStep(AbstractStepTemplate):
         'temp': float,
         'stir': bool,
         'stir_speed': float,
+        'purpose': str,
     }
 
     MANDATORY_DEFAULT_PROPS = {
         'stir': True,
         'stir_speed': None,
+        'purpose': None,
     }
 
     MANDATORY_PROP_LIMITS = {
         'time': TIME_PROP_LIMIT,
         'temp': TEMP_PROP_LIMIT,
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
+        'purpose': HEATCHILL_PURPOSE_PROP_LIMIT,
     }
 
 class AbstractHeatChillToTempStep(AbstractStepTemplate):
@@ -51,6 +59,8 @@ class AbstractHeatChillToTempStep(AbstractStepTemplate):
             steps finishes. If False, stop heating/chilling at end of step.
         stir (bool): If True, stir while heating or chilling.
         stir_speed (float): Speed in RPM at which to stir at if stir is True.
+        purpose (str): Purpose of heating/chilling. One of "reaction",
+            "control-exotherm", "unstable-reagent".
     """
     MANDATORY_NAME = 'HeatChillToTemp'
 
@@ -61,6 +71,7 @@ class AbstractHeatChillToTempStep(AbstractStepTemplate):
         'continue_heatchill': bool,
         'stir': bool,
         'stir_speed': float,
+        'purpose': str,
     }
 
     MANDATORY_DEFAULT_PROPS = {
@@ -68,11 +79,13 @@ class AbstractHeatChillToTempStep(AbstractStepTemplate):
         'stir_speed': None,
         'active': True,
         'continue_heatchill': True,
+        'purpose': None,
     }
 
     MANDATORY_PROP_LIMITS = {
         'temp': TEMP_PROP_LIMIT,
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
+        'purpose': HEATCHILL_PURPOSE_PROP_LIMIT,
     }
 
 class AbstractStartHeatChillStep(AbstractStepTemplate):
@@ -83,16 +96,24 @@ class AbstractStartHeatChillStep(AbstractStepTemplate):
     Mandatory props:
         vessel (vessel): Vessel to start heating/chilling.
         temp (float): Temperature to heat or chill vessel to.
+        purpose (str): Purpose of heating/chilling. One of "reaction",
+            "control-exotherm", "unstable-reagent".
     """
     MANDATORY_NAME = 'StartHeatChill'
 
     MANDATORY_PROP_TYPES = {
         'vessel': VESSEL_PROP_TYPE,
         'temp': float,
+        'purpose': str,
+    }
+
+    MANDATORY_DEFAULT_PROPS = {
+        'purpose': None,
     }
 
     MANDATORY_PROP_LIMITS = {
         'temp': TEMP_PROP_LIMIT,
+        'purpose': HEATCHILL_PURPOSE_PROP_LIMIT,
     }
 
 class AbstractStopHeatChillStep(AbstractStepTemplate):

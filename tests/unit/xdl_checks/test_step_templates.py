@@ -27,13 +27,17 @@ def test_step_template_missing_prop_type():
             'stir': bool,
             'stir_speed': float,
             'viscous': bool,
+            'dropwise': bool,
+            'purpose': str,
         }
 
         DEFAULT_PROPS = {
             'stir': False,
             'viscous': False,
             'time': None,
-            'stir_speed': None
+            'stir_speed': None,
+            'dropwise': False,
+            'purpose': None,
         }
 
         PROP_LIMITS = {
@@ -51,6 +55,8 @@ def test_step_template_missing_prop_type():
             stir='default',
             stir_speed='default',
             viscous='default',
+            dropwise='default',
+            purpose='default',
             **kwargs
         ):
             super().__init__(locals())
@@ -72,13 +78,17 @@ def test_step_template_incorrect_prop_type():
             'stir': bool,
             'stir_speed': float,
             'viscous': bool,
+            'dropwise': bool,
+            'purpose': str,
         }
 
         DEFAULT_PROPS = {
             'stir': False,
             'viscous': False,
             'time': None,
-            'stir_speed': None
+            'stir_speed': None,
+            'dropwise': False,
+            'purpose': None,
         }
 
         PROP_LIMITS = {
@@ -96,6 +106,8 @@ def test_step_template_incorrect_prop_type():
             stir='default',
             stir_speed='default',
             viscous='default',
+            dropwise='default',
+            purpose='default',
             **kwargs
         ):
             super().__init__(locals())
@@ -117,13 +129,17 @@ def test_step_template_missing_default_prop():
             'stir': bool,
             'stir_speed': float,
             'viscous': bool,
+            'dropwise': bool,
+            'purpose': str,
         }
 
         DEFAULT_PROPS = {
             # Missing stir default prop
             'viscous': False,
             'time': None,
-            'stir_speed': None
+            'stir_speed': None,
+            'dropwise': False,
+            'purpose': None,
         }
 
         PROP_LIMITS = {
@@ -141,6 +157,8 @@ def test_step_template_missing_default_prop():
             stir='default',
             stir_speed='default',
             viscous='default',
+            dropwise='default',
+            purpose='default',
             **kwargs
         ):
             super().__init__(locals())
@@ -162,13 +180,17 @@ def test_step_template_invalid_default_prop():
             'stir': bool,
             'stir_speed': float,
             'viscous': bool,
+            'dropwise': bool,
+            'purpose': str,
         }
 
         DEFAULT_PROPS = {
             'stir': True,  # Should be False
             'viscous': False,
             'time': None,
-            'stir_speed': None
+            'stir_speed': None,
+            'dropwise': False,
+            'purpose': None,
         }
 
         PROP_LIMITS = {
@@ -186,6 +208,8 @@ def test_step_template_invalid_default_prop():
             stir='default',
             stir_speed='default',
             viscous='default',
+            dropwise='default',
+            purpose='default',
             **kwargs
         ):
             super().__init__(locals())
@@ -207,13 +231,17 @@ def test_step_template_missing_prop_limit():
             'stir': bool,
             'stir_speed': float,
             'viscous': bool,
+            'dropwise': bool,
+            'purpose': str,
         }
 
         DEFAULT_PROPS = {
             'stir': False,
             'viscous': False,
             'time': None,
-            'stir_speed': None
+            'stir_speed': None,
+            'dropwise': False,
+            'purpose': None,
         }
 
         PROP_LIMITS = {
@@ -231,6 +259,8 @@ def test_step_template_missing_prop_limit():
             stir='default',
             stir_speed='default',
             viscous='default',
+            dropwise='default',
+            purpose='default',
             **kwargs
         ):
             super().__init__(locals())
@@ -252,13 +282,17 @@ def test_step_template_incorrect_prop_limit():
             'stir': bool,
             'stir_speed': float,
             'viscous': bool,
+            'dropwise': bool,
+            'purpose': str,
         }
 
         DEFAULT_PROPS = {
             'stir': False,
             'viscous': False,
             'time': None,
-            'stir_speed': None
+            'stir_speed': None,
+            'dropwise': False,
+            'purpose': None,
         }
 
         PROP_LIMITS = {
@@ -276,6 +310,8 @@ def test_step_template_incorrect_prop_limit():
             stir='default',
             stir_speed='default',
             viscous='default',
+            dropwise='default',
+            purpose='default',
             **kwargs
         ):
             super().__init__(locals())
@@ -297,13 +333,17 @@ def test_step_template_incorrect_name():
             'stir': bool,
             'stir_speed': float,
             'viscous': bool,
+            'dropwise': bool,
+            'purpose': str,
         }
 
         DEFAULT_PROPS = {
             'stir': False,
             'viscous': False,
             'time': None,
-            'stir_speed': None
+            'stir_speed': None,
+            'dropwise': False,
+            'purpose': None,
         }
 
         PROP_LIMITS = {
@@ -321,6 +361,8 @@ def test_step_template_incorrect_name():
             stir='default',
             stir_speed='default',
             viscous='default',
+            dropwise='default',
+            purpose='default',
             **kwargs
         ):
             super().__init__(locals())

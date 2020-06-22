@@ -1,6 +1,10 @@
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE
-from ...utils.prop_limits import ROTATION_SPEED_PROP_LIMIT, TIME_PROP_LIMIT
+from ...utils.prop_limits import (
+    ROTATION_SPEED_PROP_LIMIT,
+    TEMP_PROP_LIMIT,
+    VOLUME_PROP_LIMIT
+)
 
 class AbstractFilterStep(AbstractStepTemplate):
     """Filter mixture.
@@ -13,8 +17,12 @@ class AbstractFilterStep(AbstractStepTemplate):
             filtrate is sent to waste.
         stir (bool): Stir vessel while adding reagent.
         stir_speed (float): Speed in RPM at which to stir at if stir is True.
-        vacuum_time (float): Time to apply vacuum for after filtrate has been
-            removed.
+        temp (float): Temperature to perform filtration at. Defaults to RT.
+        continue_heatchill (bool): Only applies if temp is given. If True
+            continue temperature control after step has finished. Otherwise
+            stop temperature control at end of step.
+        volume (float): Volume of liquid to withdraw. If not given, volume
+            should be calculated internally in the step.
     """
     MANDATORY_NAME = 'Filter'
 
@@ -23,17 +31,22 @@ class AbstractFilterStep(AbstractStepTemplate):
         'filtrate_vessel': VESSEL_PROP_TYPE,
         'stir': bool,
         'stir_speed': float,
-        'vacuum_time': float,
+        'temp': float,
+        'volume': float,
+        'continue_heatchill': bool,
     }
 
     MANDATORY_DEFAULT_PROPS = {
         'filtrate_vessel': None,
-        'stir': False,
+        'stir': True,
         'stir_speed': None,
-        'vacuum_time': None
+        'temp': None,
+        'volume': None,
+        'continue_heatchill': False,
     }
 
     MANDATORY_PROP_LIMITS = {
-        'vacuum_time': TIME_PROP_LIMIT,
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
+        'temp': TEMP_PROP_LIMIT,
+        'volume': VOLUME_PROP_LIMIT,
     }

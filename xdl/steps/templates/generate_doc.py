@@ -1,6 +1,60 @@
 import os
 import re
 
+UNIMPLEMENTED_STEPS = [
+    'Distill',
+    'FreezePumpThaw',
+    'Microwave',
+    'Electrolyse',
+    'ReactInFlow',
+    'RunColumn',
+    'AddUntilColorChange',
+    'HeatChillUntilColorChange',
+    'AddToPH',
+]
+
+CATEGORIES = {
+    'Liquid Handling': [
+        'Add',
+        'Transfer',
+        'FilterThrough',
+    ],
+    'Stirring': [
+        'StartStir',
+        'StopStir',
+        'Stir',
+    ],
+    'Temperature Control': [
+        'HeatChill',
+        'HeatChillToTemp',
+        'StartHeatChill',
+        'StopHeatChill',
+        'Precipitate',
+        'Crystallize',
+        'Dissolve',
+        'CleanVessel',
+    ],
+    'Inert Gas': [
+        'StartPurge',
+        'StopPurge',
+        'Purge',
+        'EvacuateAndRefill',
+    ],
+    'Filtration': [
+        'Filter',
+        'WashSolid',
+        'Dry',
+    ],
+    'Other': [
+        'Separate',
+        'Evaporate',
+        'AddSolid',
+        'Irradiate',
+    ]
+}
+
+BACKGROUND_COLOR = '#fcf3ff'
+
 template = '''
 <html>
   <head>
@@ -13,11 +67,83 @@ integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9If
   </head>
   <body class="p-4">
     <div class="container">
-    <h2 class="mb-5">XDL Cross-Platform Standard 1.0</h2>
-      <p><b>Steps overview:</b> {step_names}</p>
+    <h1 class="mb-5">XDL Cross-Platform Standard 1.0 (WIP)</h1>
+    <div class="p-5" style="background-color: {background_color};">
+    <h2>XDL file structure</h2>
+      XDL files will follow XML syntax and consist of two mandatory sections.
+      <code>Reagents</code>, where all reagents that are used in the procedure are
+      declared, and <code>Procedure</code>, where the synthetic actions involved in
+      the procedure are linearly declared. An optional, but recommended
+      <code>Metadata</code> section is also available for adding in extra information
+      about the procedure. All sections are wrapped in an enclosing
+      <code>Synthesis</code> tag.
+      <br /><br />
+      <h5>XDL file stub</h5>
+      <code><pre><xmp><Synthesis>
+
+    <Metadata>
+
+    </Metadata>
+
+    <Reagents>
+
+    </Reagents>
+
+    <Procedure>
+
+    </Procedure>
+
+</Synthesis></xmp></pre></code>
+</div>
+    <div style="background-color: {background_color}" class="my-5 p-5">
+      <h2>Metadata</h2>
+        This section should contain extra information about the procedure.
+        {metadata}
+    </div>
+
+    <div style="background-color: {background_color}" class="my-5 p-5">
+      <h2>Reagents</h2>
+        The <code>Reagents</code> section contains <code>Reagent</code> elements with the props below.
+        {reagent}
+    </div>
+
+    <div style="background-color: {background_color}" class="my-5 p-5">
+      <h2>Procedure</h2>
+      All steps included in this specification may be given within the Procedure
+      block of a XDL file. Additionally, the Procedure block may be, but does
+      not have to be, divided up into <code>Prep</code>, <code>Reaction</code>, <code>Workup</code> and <code>Purification</code> blocks,
+      each of which can contain any of the steps in the specification.
+      <br/><br/>
+      <h5>Example procedure stub using optional procedure subsections.</h5>
+      <code><pre><xmp>
+      <Procedure>
+
+        <Prep>
+          <!-- Preparation steps here, reagent additions etc. -->
+        </Prep>
+
+        <Reaction>
+          <!-- Reaction steps here, heating and stirring etc. -->
+        </Reaction>
+
+        <Workup>
+          <!-- Workup steps here, separation, evaporation etc. -->
+        </Workup>
+
+        <Purification>
+          <!-- Purification steps here, column, distillation etc. -->
+        </Purification>
+
+      </Procedure>
+      </xmp></pre></code>
+      Below is a detailed breakdown of all the steps available for creating XDL procedures.
+      </div>
+    <div style="background-color: {background_color}" class="my-5 p-5">
+      <p><h2>Steps overview</h2>{step_names}</p><br/>
+      <p><h4>Steps to be implemented in future versions</h4>{unimplemented_steps}</p>
+      </div>
+      <h2> Full step specification</h2>
       {steps}
-      <h3 class="mb-3 mt-5">Platform Compatibility (WIP)</h3>
-      {platform_compat_table}
     </div>
   </body>
 </html>
@@ -28,7 +154,7 @@ step_template = '''
     <div class="col">
     <h4>{name}</h4>
     <p><i>{description}</i></p>
-    <table class="table tabled-bordered">
+    <table class="table table-bordered">
       <thead>
         <tr>
         <th>Property</td>
@@ -42,7 +168,6 @@ step_template = '''
     </table>
     </div>
     </div>
-    <hr/>
 '''
 
 property_row_template = '''
@@ -64,7 +189,7 @@ def parse_templates():
         if not f.startswith(('abstract', 'generate', '_'))
     ]
 
-    steps = []
+    steps = {}
 
     for f in files:
         with open(os.path.join(HERE, f)) as fd:
@@ -81,11 +206,11 @@ def parse_templates():
 
             # Starting new class, append and reset
             if line.startswith('class Abstract') and name:
-                steps.append({
+                steps[name] = {
                     'name': name,
                     'description': description,
                     'properties': properties,
-                })
+                }
                 name = ''
                 description = ''
                 append_description = False
@@ -163,13 +288,13 @@ def parse_templates():
             if line.startswith('MANDATORY_DEFAULT_PROPS ='):
                 read_default_props = True
 
-        steps.append({
+        steps[name] = {
             'name': name,
             'description': description,
             'properties': properties,
-        })
+        }
 
-    return sorted(steps, key=lambda step: step['name'])
+    return steps
 
 def platform_compat_table():
     compat_matrix = [
@@ -233,29 +358,86 @@ def platform_compat_table():
     table += '</tbody></table>'
     return table
 
+def get_step_html(step):
+    """Get title and prop table for given step."""
+    step_html = ''
+    props_html = ''
+    for prop in step['properties']:
+        props_html += property_row_template.format(**{
+            'property': prop['name'],
+            'property_type': prop['type'],
+            'description': prop['description']
+        })
+    props_html += property_row_template.format(**{
+        'property': 'comment',
+        'property_type': 'str',
+        'description': 'Unrestricted comment field.'
+    })
+    step_html = step_template.format(**{
+        'name': step['name'],
+        'description': step['description'],
+        'property_rows': props_html,
+    })
+    return step_html
+
 def generate_doc(save=None):
     steps = parse_templates()
     steps_html = ''
-    for step in steps:
-        props_html = ''
-        for prop in step['properties']:
-            props_html += property_row_template.format(**{
-                'property': prop['name'],
-                'property_type': prop['type'],
-                'description': prop['description']
-            })
-        step_html = step_template.format(**{
-            'name': step['name'],
-            'description': step['description'],
-            'property_rows': props_html,
-        })
-        steps_html += step_html
+    done = []
+    for category, category_steps in CATEGORIES.items():
+        steps_html += f'<div style="background-color: {BACKGROUND_COLOR}" class="my-5 p-5">'
+        steps_html += f'<h2>{category}</h2>'
+        for i, category_step in enumerate(category_steps):
+            step = steps[category_step]
+            done.append(category_step)
+            step_html = get_step_html(step)
+            steps_html += step_html
+            if i < len(category_steps) - 1:
+                steps_html += '<hr/>'
+        steps_html += '</div>'
     html = template.format(**{
         'steps': steps_html,
-        'step_names': ', '.join([step['name'] for step in steps]),
-        'platform_compat_table': platform_compat_table()
+        'step_names': get_steps_overview(),
+        'unimplemented_steps': get_unimplemented_steps(),
+        'platform_compat_table': platform_compat_table(),
+        'reagent': get_step_html(steps['Reagent']),
+        'metadata': get_step_html(steps['Metadata']),
+        'background_color': BACKGROUND_COLOR,
     })
+
+    # Check no steps missed
+    for step in steps:
+        if step not in done  and step not in ['Reagent', 'Metadata']:
+            print(step, done)
+
     if save:
         with open(save, 'w') as fd:
             fd.write(html)
+    return html
+
+def get_steps_overview():
+    html = '''
+<table class="table table-bordered">
+  <thead>
+  <tr>
+   '''
+    for category in CATEGORIES:
+        html += f'<th>{category}</th>'
+    html += '</tr></thead><tbody>'
+    max_len = max([len(steps) for _, steps in CATEGORIES.items()])
+    for i in range(max_len):
+        html += '<tr>'
+        for category, steps in CATEGORIES.items():
+            if i < len(steps):
+                html += f'<td><code>{steps[i]}</code></td>'
+            else:
+                html += '<td />'
+        html += '</tr>'
+    html += '</tbody></table>'
+    return html
+
+def get_unimplemented_steps():
+    html = ''
+    for step in UNIMPLEMENTED_STEPS:
+        html += f'<code>{step}</code><br/>'
     return html

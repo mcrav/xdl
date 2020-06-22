@@ -79,6 +79,8 @@ PRESSURE_UNITS_PATTERN = r'(mbar|bar|torr|Torr|mmhg|mmHg|atm|Pa|pa)?'
 
 ROTATION_SPEED_UNITS_PATTERN = r'(rpm|RPM)?'
 
+DISTANCE_UNITS_PATTERN = r'(nm|µm|mm|cm|m|km)?'
+
 ###############
 # Prop limits #
 ###############
@@ -137,6 +139,13 @@ ROTATION_SPEED_PROP_LIMIT = generate_quantity_units_pattern(
     default='400 RPM',
 )
 
+WAVELENGTH_PROP_LIMIT = generate_quantity_units_pattern(
+    POSITIVE_FLOAT_PATTERN,
+    DISTANCE_UNITS_PATTERN,
+    hint='Expecting wavelength, e.g. "400 nm".',
+    default='400 nm'
+)
+
 POSITIVE_INT_PROP_LIMIT = PropLimit(
     r'[0-9]+',
     hint='Expecting positive integer value, e.g. "3"',
@@ -164,6 +173,44 @@ WASH_SOLID_STIR_PROP_LIMIT = PropLimit(
 
 SEPARATION_PURPOSE_PROP_LIMIT = PropLimit(enum=['extract', 'wash'])
 SEPARATION_PRODUCT_PHASE_PROP_LIMIT = PropLimit(enum=['top', 'bottom'])
+
+ADD_PURPOSE_PROP_LIMIT = PropLimit(
+    enum=[
+        'neutralize',
+        'precipitate',
+        'dissolve',
+        'basify',
+        'acidify',
+        'dilute',
+    ])
+
+HEATCHILL_PURPOSE_PROP_LIMIT = PropLimit(
+    enum=['control-exotherm', 'reaction', 'unstable-reagent']
+)
+
+STIR_PURPOSE_PROP_LIMIT = PropLimit(
+    enum=['dissolve']
+)
+
+HEATCHILL_PURPOSE_PROP_LIMIT = PropLimit(
+    enum=['reaction', 'control-exotherm', 'unstable-reagent']
+)
+
+REAGENT_ROLE_PROP_LIMIT = PropLimit(
+    enum=[
+        'solvent',
+        'reagent',
+        'catalyst',
+        'substrate',
+        'acid',
+        'base',
+        'activating-agent'
+    ]
+)
+
+COMPONENT_TYPE_PROP_LIMIT = PropLimit(
+    enum=['reactor', 'filter', 'separator', 'rotavap', 'flask']
+)
 
 _hundred_float = r'(100(?:[.][0]+)?)'
 _ten_to_ninety_nine_float = r'([0-9][0-9](?:[.][0-9]+)?)'
