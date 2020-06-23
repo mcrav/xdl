@@ -672,7 +672,8 @@ class AbstractDynamicStep(Step):
 
         # Execute steps from on_start
         for step in self.start_block:
-            step.execute(platform_controller, logger=logger, level=level)
+            self.executor.execute_step(
+                platform_controller, step, async_steps=self.async_steps)
             if isinstance(step, AbstractAsyncStep):
                 self.async_steps.append(step)
 
@@ -684,7 +685,8 @@ class AbstractDynamicStep(Step):
             for step in continue_block:
                 if isinstance(step, AbstractAsyncStep):
                     self.async_steps.append(step)
-                step.execute(platform_controller, logger=logger, level=level)
+                self.executor.execute_step(
+                    platform_controller, step, async_steps=self.async_steps)
 
             continue_block = self.on_continue()
             self.executor.prepare_block_for_execution(
@@ -695,7 +697,8 @@ class AbstractDynamicStep(Step):
         self.executor.prepare_block_for_execution(self.graph, finish_block)
 
         for step in finish_block:
-            step.execute(platform_controller, logger=logger, level=level)
+            self.executor.execute_step(
+                platform_controller, step, async_steps=self.async_steps)
             if isinstance(step, AbstractAsyncStep):
                 self.async_steps.append(step)
 
