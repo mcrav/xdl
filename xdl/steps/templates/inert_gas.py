@@ -23,6 +23,7 @@ class AbstractEvacuateAndRefillStep(AbstractStepTemplate):
 
     MANDATORY_DEFAULT_PROPS = {
         'gas': None,
+        'repeats': None,
     }
 
 class AbstractPurgeStep(AbstractStepTemplate):
