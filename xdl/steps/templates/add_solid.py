@@ -1,7 +1,11 @@
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
 from ...utils.prop_limits import (
-    MASS_PROP_LIMIT, ROTATION_SPEED_PROP_LIMIT, TIME_PROP_LIMIT)
+    MASS_PROP_LIMIT,
+    ROTATION_SPEED_PROP_LIMIT,
+    TIME_PROP_LIMIT,
+    MOL_PROP_LIMIT,
+)
 
 class AbstractAddSolidStep(AbstractStepTemplate):
     """Add solid reagent.
@@ -23,6 +27,7 @@ class AbstractAddSolidStep(AbstractStepTemplate):
         'vessel': VESSEL_PROP_TYPE,
         'reagent': REAGENT_PROP_TYPE,
         'mass': float,
+        'mol': float,
         'time': float,
         'portions': int,
         'stir': bool,
@@ -30,6 +35,7 @@ class AbstractAddSolidStep(AbstractStepTemplate):
     }
 
     MANDATORY_DEFAULT_PROPS = {
+        'mol': None,
         'stir': False,
         'time': None,
         'portions': 1,
@@ -37,6 +43,7 @@ class AbstractAddSolidStep(AbstractStepTemplate):
     }
 
     MANDATORY_PROP_LIMITS = {
+        'mol': MOL_PROP_LIMIT,
         'mass': MASS_PROP_LIMIT,
         'time': TIME_PROP_LIMIT,
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,

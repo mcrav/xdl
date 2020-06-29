@@ -81,6 +81,8 @@ ROTATION_SPEED_UNITS_PATTERN = r'(rpm|RPM)?'
 
 DISTANCE_UNITS_PATTERN = r'(nm|µm|mm|cm|m|km)?'
 
+MOL_UNITS_PATTERN = r'(mmol|mol)?'
+
 ###############
 # Prop limits #
 ###############
@@ -109,6 +111,13 @@ MASS_PROP_LIMIT = generate_quantity_units_pattern(
     MASS_UNITS_PATTERN,
     hint='Expecting number followed by standard mass units, e.g. "2.3 g"',
     default='0 g'
+)
+
+MOL_PROP_LIMIT = generate_quantity_units_pattern(
+    POSITIVE_FLOAT_PATTERN,
+    MOL_UNITS_PATTERN,
+    hint='Expecting number followed by mol or mmol, e.g. "2.3 mol".',
+    default='0 mol',
 )
 
 TEMP_PROP_LIMIT = generate_quantity_units_pattern(
