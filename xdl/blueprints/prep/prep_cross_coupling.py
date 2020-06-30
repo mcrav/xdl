@@ -1,26 +1,14 @@
-from .base_blueprint import ReactionBlueprint
-from ..steps.placeholders import (
-    AddSolid,
-    Dissolve,
-    HeatChill,
-    Evaporate,
-    Filter,
-    EvacuateAndRefill,
-)
-from ..reagents import Reagent
-from ..utils.prop_limits import (
-    MASS_PROP_LIMIT,
-    TIME_PROP_LIMIT,
-    TEMP_PROP_LIMIT,
-)
+from ...reagents import Reagent
 
-class CrossCouplingBlueprint(ReactionBlueprint):
-    """Generic cross coupling reaction blueprint. The wide variety of named
-    cross coupling reactions is generally accessed by using different substrates
-    """
+from ...steps.placeholders import AddSolid, Dissolve
+from ...utils.prop_limits import MASS_PROP_LIMIT
+
+from ..base_blueprint import BasePrepBlueprint
+
+
+class CrossCouplingPrep(BasePrepBlueprint):
 
     reaction_vessel = 'reactor'
-    evaporation_vessel = 'rotavap'
 
     base_equivs = 1.5
     halide_equivs = 1.5
@@ -34,30 +22,17 @@ class CrossCouplingBlueprint(ReactionBlueprint):
         'halide_molar_mass': float,
         'base': str,
         'base_molar_mass': float,
-
         'solvent': str,
-        'quencher': str,
-        'quencher_mass': float,
         'catalyst_mass': float,
-
-        'temp': float,
-        'time': float,
     }
 
     DEFAULT_PROPS = {
         'solvent': None,
         'catalyst_mass': '0.05 g',
-        'quencher_mass': '20 g',
-        'quencher': 'solid sodium carbonate',
-
-        'temp': 100,
-        'time': '1 hr',
     }
 
     PROP_LIMITS = {
         'catalyst_mass': MASS_PROP_LIMIT,
-        'temp': TEMP_PROP_LIMIT,
-        'time': TIME_PROP_LIMIT,
     }
 
     def __init__(
@@ -70,14 +45,8 @@ class CrossCouplingBlueprint(ReactionBlueprint):
         base_molar_mass: float,
         halide: str,
         halide_molar_mass: float,
-
         solvent: str = 'default',
-        quencher: str = 'default',
-        quencher_mass: float = 'default',
         catalyst_mass: float = 'default',
-
-        temp: float = 'default',
-        time: float = 'default',
     ):
         super().__init__(locals())
 
@@ -153,37 +122,4 @@ class CrossCouplingBlueprint(ReactionBlueprint):
                     mol=self.get_base_mol(),
                 )
             )
-        return steps, reagents
-
-    def build_reaction(self):
-        """React for at given temp for given time."""
-        reagents = []
-        steps = [
-            HeatChill(
-                vessel=self.reaction_vessel,
-                temp=self.temp,
-                time=self.time,
-            ),
-        ]
-        return steps, reagents
-
-    def build_workup(self):
-        """Quench reaction, filter off quenching reagent and evaporate solvent.
-        """
-        reagents = [Reagent(self.quencher)]
-        steps = [
-            EvacuateAndRefill(vessel=self.reaction_vessel),
-            AddSolid(
-                reagent=self.quencher,
-                vessel=self.reaction_vessel,
-                mass=self.quencher_mass,
-                stir=True,
-                stir_speed="600 RPM",
-            ),
-            Filter(
-                vessel=self.reaction_vessel,
-                filtrate_vessel=self.evaporation_vessel,
-            ),
-            Evaporate(vessel=self.evaporation_vessel)
-        ]
         return steps, reagents

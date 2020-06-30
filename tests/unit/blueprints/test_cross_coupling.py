@@ -36,7 +36,9 @@ def test_cross_coupling_blueprint():
         base=base,
         base_molar_mass=base_molar_mass,
     )
-    x = bp.build(save=os.path.join(HERE, 'test_output', 'cross-coupling.xdl'))
+    x = bp.build_xdl(
+        save=os.path.join(HERE, 'test_output', 'cross-coupling.xdl')
+    )
 
     # Verify xdl
     for step in x.steps:
