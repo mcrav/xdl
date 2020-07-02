@@ -1,3 +1,4 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE
 from ...utils.prop_limits import (
@@ -6,6 +7,7 @@ from ...utils.prop_limits import (
     ROTATION_SPEED_PROP_LIMIT,
     HEATCHILL_PURPOSE_PROP_LIMIT,
 )
+from ...utils.vessels import VesselSpec
 
 class AbstractHeatChillStep(AbstractStepTemplate):
     """Heat or chill vessel to given temp for given time.
@@ -44,6 +46,13 @@ class AbstractHeatChillStep(AbstractStepTemplate):
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
         'purpose': HEATCHILL_PURPOSE_PROP_LIMIT,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(
+                stir=self.stir, min_temp=self.temp, max_temp=self.temp),
+        }
 
 class AbstractHeatChillToTempStep(AbstractStepTemplate):
     """Heat or chill vessel to given temperature.
@@ -88,6 +97,13 @@ class AbstractHeatChillToTempStep(AbstractStepTemplate):
         'purpose': HEATCHILL_PURPOSE_PROP_LIMIT,
     }
 
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(
+                stir=self.stir, min_temp=self.temp, max_temp=self.temp),
+        }
+
 class AbstractStartHeatChillStep(AbstractStepTemplate):
     """Start heating/chilling vessel.
 
@@ -116,6 +132,12 @@ class AbstractStartHeatChillStep(AbstractStepTemplate):
         'purpose': HEATCHILL_PURPOSE_PROP_LIMIT,
     }
 
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(min_temp=self.temp, max_temp=self.temp),
+        }
+
 class AbstractStopHeatChillStep(AbstractStepTemplate):
     """Heat or chill vessel.
 
@@ -129,3 +151,9 @@ class AbstractStopHeatChillStep(AbstractStepTemplate):
     MANDATORY_PROP_TYPES = {
         'vessel': VESSEL_PROP_TYPE,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(),
+        }

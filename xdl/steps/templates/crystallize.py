@@ -1,9 +1,11 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE
 from ...utils.prop_limits import (
     TEMP_PROP_LIMIT,
     TIME_PROP_LIMIT,
 )
+from ...utils.vessels import VesselSpec
 
 class AbstractCrystallizeStep(AbstractStepTemplate):
     """Crystallize dissolved solid by ramping temperature to given temp
@@ -33,3 +35,10 @@ class AbstractCrystallizeStep(AbstractStepTemplate):
         'ramp_time': TIME_PROP_LIMIT,
         'ramp_temp': TEMP_PROP_LIMIT,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(
+                min_temp=self.ramp_temp, max_temp=self.ramp_temp)
+        }

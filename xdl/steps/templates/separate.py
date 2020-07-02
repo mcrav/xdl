@@ -1,3 +1,4 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
 from ...utils.prop_limits import (
@@ -5,6 +6,7 @@ from ...utils.prop_limits import (
     SEPARATION_PRODUCT_PHASE_PROP_LIMIT,
     SEPARATION_PURPOSE_PROP_LIMIT
 )
+from ...utils.vessels import VesselSpec
 
 class AbstractSeparateStep(AbstractStepTemplate):
     """Perform separation.
@@ -70,3 +72,12 @@ class AbstractSeparateStep(AbstractStepTemplate):
         'product_phase': SEPARATION_PRODUCT_PHASE_PROP_LIMIT,
         'solvent_volume': VOLUME_PROP_LIMIT,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'from_vessel': VesselSpec(),
+            'separation_vessel': VesselSpec(separate=True, stir=True),
+            'to_vessel': VesselSpec(),
+            'waste_phase_to_vessel': VesselSpec(),
+        }

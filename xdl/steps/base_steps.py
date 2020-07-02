@@ -1,5 +1,5 @@
 # Std
-from typing import List, Dict
+from typing import List, Dict, Any
 import logging
 import threading
 import copy
@@ -17,6 +17,7 @@ from ..utils.localisation import conditional_human_readable
 from ..utils.misc import format_property, SanityCheck
 from ..utils.graph import get_graph
 from ..utils.logging import get_logger
+from ..utils.vessels import VesselSpec
 from ..errors import (
     XDLError,
     XDLUndeclaredDefaultPropError,
@@ -38,6 +39,10 @@ class Step(XDLBase):
     # platform templates. Can be overridden if localisation needed for other
     # steps or steps do not conform to cross platform standard.
     localisation: Dict[str, str] = LOCALISATIONS
+
+    #: Deprecated. Included for backwards compatibility. When new XDL standard
+    #: released this can go. Replaced by vessel_specs.
+    requirements: Dict[str, Any] = {}
 
     def __init__(self, param_dict):
         super().__init__(param_dict)
@@ -193,9 +198,9 @@ class Step(XDLBase):
         return [], [], []
 
     @property
-    def requirements(self):
-        """Return dictionary of requirements of vessels used by the step.
-        Currently only used by SynthReader.
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        """Return dictionary of required specifications of vessels used by the
+        step. { prop_name: vessel_spec... }
         """
         return {}
 
@@ -323,7 +328,7 @@ class AbstractBaseStep(Step, ABC):
 class AbstractStep(Step, ABC):
     """Abstract base class for all steps that contain other steps.
     Subclasses must implement steps and human_readable, and can also override
-    requirements if necessary.
+    vessel_specs if necessary.
 
     Attributes:
         properties (dict): Dictionary of step properties.
@@ -732,7 +737,7 @@ class AbstractDynamicStep(Step):
 
 class UnimplementedStep(Step):
     """Abstract base class for steps that have no implementation but are
-    included either as stubs or for the purpose of showing requirements or
+    included either as stubs or for the purpose of showing vessel_specs or
     human_readable.
     """
     def __init__(self, param_dict):

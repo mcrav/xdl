@@ -1,5 +1,7 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
+from ...utils.vessels import VesselSpec
 from ...utils.prop_limits import (
     MASS_PROP_LIMIT,
     ROTATION_SPEED_PROP_LIMIT,
@@ -48,3 +50,9 @@ class AbstractAddSolidStep(AbstractStepTemplate):
         'time': TIME_PROP_LIMIT,
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(stir=self.stir)
+        }

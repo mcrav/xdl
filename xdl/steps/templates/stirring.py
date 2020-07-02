@@ -1,7 +1,9 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE
 from ...utils.prop_limits import (
     TIME_PROP_LIMIT, ROTATION_SPEED_PROP_LIMIT, STIR_PURPOSE_PROP_LIMIT)
+from ...utils.vessels import VesselSpec
 
 class AbstractStirStep(AbstractStepTemplate):
     """Stir vessel for given time.
@@ -39,6 +41,12 @@ class AbstractStirStep(AbstractStepTemplate):
         'purpose': STIR_PURPOSE_PROP_LIMIT,
     }
 
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(stir=True)
+        }
+
 class AbstractStartStirStep(AbstractStepTemplate):
     """Start stirring vessel.
 
@@ -68,6 +76,12 @@ class AbstractStartStirStep(AbstractStepTemplate):
         'purpose': STIR_PURPOSE_PROP_LIMIT,
     }
 
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(stir=True)
+        }
+
 class AbstractStopStirStep(AbstractStepTemplate):
     """Stop stirring given vessel.
 
@@ -81,3 +95,9 @@ class AbstractStopStirStep(AbstractStepTemplate):
     MANDATORY_PROP_TYPES = {
         'vessel': VESSEL_PROP_TYPE,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(stir=True)
+        }

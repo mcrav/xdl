@@ -1,3 +1,4 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
 from ...utils.prop_limits import (
@@ -6,6 +7,7 @@ from ...utils.prop_limits import (
     ROTATION_SPEED_PROP_LIMIT,
     VOLUME_PROP_LIMIT
 )
+from ...utils.vessels import VesselSpec
 
 class AbstractPrecipitateStep(AbstractStepTemplate):
     """Cause precipitation by optionally adding a reagent, then changing
@@ -50,3 +52,10 @@ class AbstractPrecipitateStep(AbstractStepTemplate):
         'volume': VOLUME_PROP_LIMIT,
         'add_time': TIME_PROP_LIMIT,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(
+                stir=True, min_temp=self.temp, max_temp=self.temp)
+        }

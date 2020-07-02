@@ -1,6 +1,8 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE
 from ...utils.prop_limits import TIME_PROP_LIMIT, PRESSURE_PROP_LIMIT
+from ...utils.vessels import VesselSpec
 
 class AbstractEvacuateAndRefillStep(AbstractStepTemplate):
     """Evacuate vessel and refill with inert gas.
@@ -25,6 +27,12 @@ class AbstractEvacuateAndRefillStep(AbstractStepTemplate):
         'gas': None,
         'repeats': None,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(inert_gas=self.gas is None, vacuum=True),
+        }
 
 class AbstractPurgeStep(AbstractStepTemplate):
     """Purge liquid by bubbling gas through it.
@@ -61,6 +69,12 @@ class AbstractPurgeStep(AbstractStepTemplate):
         'pressure': PRESSURE_PROP_LIMIT,
     }
 
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(inert_gas=self.gas is None),
+        }
+
 class AbstractStartPurgeStep(AbstractStepTemplate):
     """Start purging liquid by bubbling gas through it.
 
@@ -92,6 +106,11 @@ class AbstractStartPurgeStep(AbstractStepTemplate):
         'pressure': PRESSURE_PROP_LIMIT,
     }
 
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(inert_gas=self.gas is None),
+        }
 
 class AbstractStopPurgeStep(AbstractStepTemplate):
     """Stop bubbling gas through vessel.
@@ -106,3 +125,9 @@ class AbstractStopPurgeStep(AbstractStepTemplate):
     MANDATORY_PROP_TYPES = {
         'vessel': VESSEL_PROP_TYPE,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(),
+        }

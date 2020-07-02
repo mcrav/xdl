@@ -1,3 +1,4 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE
 from ...utils.prop_limits import (
@@ -5,6 +6,7 @@ from ...utils.prop_limits import (
     TEMP_PROP_LIMIT,
     VOLUME_PROP_LIMIT
 )
+from ...utils.vessels import VesselSpec
 
 class AbstractFilterStep(AbstractStepTemplate):
     """Filter mixture.
@@ -50,3 +52,13 @@ class AbstractFilterStep(AbstractStepTemplate):
         'temp': TEMP_PROP_LIMIT,
         'volume': VOLUME_PROP_LIMIT,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(
+                filter=True,
+                stir=self.stir,
+            ),
+            'filtrate_vessel': VesselSpec(),
+        }

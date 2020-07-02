@@ -32,6 +32,7 @@ from .readwrite.xml_generator import xdl_to_xml_string
 from .readwrite.json import xdl_to_json, xdl_from_json_file, xdl_from_json
 from .steps import Step, AbstractBaseStep
 from .utils import get_logger
+from .utils.vessels import VesselSpec
 from .utils.misc import (
     steps_are_equal,
     xdl_elements_are_equal,
@@ -428,6 +429,19 @@ class XDL(object):
         for step in self.steps:
             base_steps.extend(step.base_steps)
         return base_steps
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        """Get specification of every vessel in procedure."""
+        vessel_specs = {}
+        for step in self.steps:
+            for prop, spec in step.vessel_specs.items():
+                vessel = step.properties[prop]
+                if vessel in vessel_specs:
+                    vessel_specs[vessel] += spec
+                else:
+                    vessel_specs[vessel] = spec
+        return vessel_specs
 
     #########
     # Tools #
