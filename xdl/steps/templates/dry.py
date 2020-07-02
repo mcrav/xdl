@@ -1,8 +1,10 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE
 from ...utils.prop_limits import (
     TEMP_PROP_LIMIT, TIME_PROP_LIMIT, PRESSURE_PROP_LIMIT
 )
+from ...utils.vessels import VesselSpec
 
 class AbstractDryStep(AbstractStepTemplate):
     """Dry solid.
@@ -39,3 +41,13 @@ class AbstractDryStep(AbstractStepTemplate):
         'temp': TEMP_PROP_LIMIT,
         'pressure': PRESSURE_PROP_LIMIT,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(
+                min_temp=self.temp,
+                max_temp=self.temp,
+                vacuum=True,
+            ),
+        }

@@ -1,5 +1,7 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...utils.prop_limits import VOLUME_PROP_LIMIT, TEMP_PROP_LIMIT
+from ...utils.vessels import VesselSpec
 from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
 
 class AbstractCleanVesselStep(AbstractStepTemplate):
@@ -34,3 +36,13 @@ class AbstractCleanVesselStep(AbstractStepTemplate):
         'volume': VOLUME_PROP_LIMIT,
         'temp': TEMP_PROP_LIMIT,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(
+                stir=True,
+                min_temp=self.temp,
+                max_temp=self.temp,
+            )
+        }

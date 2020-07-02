@@ -1,3 +1,4 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE
 from ...utils.prop_limits import (
@@ -6,6 +7,7 @@ from ...utils.prop_limits import (
     ROTATION_SPEED_PROP_LIMIT,
     WAVELENGTH_PROP_LIMIT,
 )
+from ...utils.vessels import VesselSpec
 
 class AbstractIrradiateStep(AbstractStepTemplate):
     """Irradiate reaction mixture with light of given wavelength.
@@ -43,3 +45,14 @@ class AbstractIrradiateStep(AbstractStepTemplate):
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
         'wavelength': WAVELENGTH_PROP_LIMIT
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(
+                irradiate=True,
+                stir=self.stir,
+                min_temp=self.temp,
+                max_temp=self.temp,
+            ),
+        }

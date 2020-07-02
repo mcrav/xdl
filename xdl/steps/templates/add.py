@@ -1,3 +1,4 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
 from ...utils.prop_limits import (
@@ -6,6 +7,7 @@ from ...utils.prop_limits import (
     TIME_PROP_LIMIT,
     ADD_PURPOSE_PROP_LIMIT
 )
+from ...utils.vessels import VesselSpec
 
 class AbstractAddStep(AbstractStepTemplate):
     """Add liquid reagent.
@@ -34,6 +36,7 @@ class AbstractAddStep(AbstractStepTemplate):
         'reagent': REAGENT_PROP_TYPE,
         'volume': float,
         'dropwise': bool,
+        'speed': float,
         'time': float,
         'stir': bool,
         'stir_speed': float,
@@ -44,6 +47,7 @@ class AbstractAddStep(AbstractStepTemplate):
     MANDATORY_DEFAULT_PROPS = {
         'stir': False,
         'dropwise': False,
+        'speed': None,
         'viscous': False,
         'time': None,
         'stir_speed': None,
@@ -56,3 +60,9 @@ class AbstractAddStep(AbstractStepTemplate):
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
         'purpose': ADD_PURPOSE_PROP_LIMIT,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(stir=self.stir)
+        }

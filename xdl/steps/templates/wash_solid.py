@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
 from ...utils.prop_limits import (
@@ -7,6 +7,7 @@ from ...utils.prop_limits import (
     ROTATION_SPEED_PROP_LIMIT,
     WASH_SOLID_STIR_PROP_LIMIT
 )
+from ...utils.vessels import VesselSpec
 
 class AbstractWashSolidStep(AbstractStepTemplate):
     """Wash solid with by adding solvent and filtering.
@@ -58,3 +59,15 @@ class AbstractWashSolidStep(AbstractStepTemplate):
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
         'time': TIME_PROP_LIMIT,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(
+                filter=True,
+                stir=self.stir is not False,
+                min_temp=self.temp,
+                max_temp=self.temp,
+            ),
+            'filtrate_vessel': VesselSpec(),
+        }

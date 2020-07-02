@@ -1,3 +1,4 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
 from ...utils.prop_limits import (
@@ -6,6 +7,7 @@ from ...utils.prop_limits import (
     TIME_PROP_LIMIT,
     TEMP_PROP_LIMIT
 )
+from ...utils.vessels import VesselSpec
 
 class AbstractDissolveStep(AbstractStepTemplate):
     """Dissolve solid in solvent.
@@ -44,3 +46,10 @@ class AbstractDissolveStep(AbstractStepTemplate):
         'time': TIME_PROP_LIMIT,
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(
+                stir=True, min_temp=self.temp, max_temp=self.temp),
+        }

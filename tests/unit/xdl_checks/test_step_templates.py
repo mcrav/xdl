@@ -29,6 +29,7 @@ def test_step_template_missing_prop_type():
             'viscous': bool,
             'dropwise': bool,
             'purpose': str,
+            'speed': float,
         }
 
         DEFAULT_PROPS = {
@@ -38,6 +39,7 @@ def test_step_template_missing_prop_type():
             'stir_speed': None,
             'dropwise': False,
             'purpose': None,
+            'speed': 40,
         }
 
         PROP_LIMITS = {
@@ -80,6 +82,7 @@ def test_step_template_incorrect_prop_type():
             'viscous': bool,
             'dropwise': bool,
             'purpose': str,
+            'speed': float,
         }
 
         DEFAULT_PROPS = {
@@ -89,6 +92,7 @@ def test_step_template_incorrect_prop_type():
             'stir_speed': None,
             'dropwise': False,
             'purpose': None,
+            'speed': 40,
         }
 
         PROP_LIMITS = {
@@ -131,6 +135,7 @@ def test_step_template_missing_default_prop():
             'viscous': bool,
             'dropwise': bool,
             'purpose': str,
+            'speed': float,
         }
 
         DEFAULT_PROPS = {
@@ -140,6 +145,7 @@ def test_step_template_missing_default_prop():
             'stir_speed': None,
             'dropwise': False,
             'purpose': None,
+            'speed': 40,
         }
 
         PROP_LIMITS = {
@@ -182,6 +188,7 @@ def test_step_template_invalid_default_prop():
             'viscous': bool,
             'dropwise': bool,
             'purpose': str,
+            'speed': float,
         }
 
         DEFAULT_PROPS = {
@@ -191,6 +198,7 @@ def test_step_template_invalid_default_prop():
             'stir_speed': None,
             'dropwise': False,
             'purpose': None,
+            'speed': 40,
         }
 
         PROP_LIMITS = {
@@ -233,6 +241,7 @@ def test_step_template_missing_prop_limit():
             'viscous': bool,
             'dropwise': bool,
             'purpose': str,
+            'speed': float,
         }
 
         DEFAULT_PROPS = {
@@ -242,6 +251,7 @@ def test_step_template_missing_prop_limit():
             'stir_speed': None,
             'dropwise': False,
             'purpose': None,
+            'speed': 40,
         }
 
         PROP_LIMITS = {
@@ -284,6 +294,7 @@ def test_step_template_incorrect_prop_limit():
             'viscous': bool,
             'dropwise': bool,
             'purpose': str,
+            'speed': float,
         }
 
         DEFAULT_PROPS = {
@@ -293,6 +304,7 @@ def test_step_template_incorrect_prop_limit():
             'stir_speed': None,
             'dropwise': False,
             'purpose': None,
+            'speed': 40,
         }
 
         PROP_LIMITS = {
@@ -335,6 +347,7 @@ def test_step_template_incorrect_name():
             'viscous': bool,
             'dropwise': bool,
             'purpose': str,
+            'speed': float,
         }
 
         DEFAULT_PROPS = {
@@ -344,6 +357,7 @@ def test_step_template_incorrect_name():
             'stir_speed': None,
             'dropwise': False,
             'purpose': None,
+            'speed': 40,
         }
 
         PROP_LIMITS = {

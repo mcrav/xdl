@@ -1,6 +1,8 @@
+from typing import Dict
 from .abstract_template import AbstractStepTemplate
 from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
 from ...utils.prop_limits import VOLUME_PROP_LIMIT, TIME_PROP_LIMIT
+from ...utils.vessels import VesselSpec
 
 class AbstractFilterThroughStep(AbstractStepTemplate):
     """Filter liquid through solid, for example filtering reaction mixture
@@ -43,3 +45,10 @@ class AbstractFilterThroughStep(AbstractStepTemplate):
         'eluting_volume': VOLUME_PROP_LIMIT,
         'residence_time': TIME_PROP_LIMIT,
     }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'from_vessel': VesselSpec(),
+            'to_vessel': VesselSpec(),
+        }
