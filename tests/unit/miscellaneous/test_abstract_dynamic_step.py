@@ -23,17 +23,17 @@ class TestDynamicStep(AbstractDynamicStep):
         self.done = False
 
     def on_start(self):
-        return [Add(reagent='ether', vessel='filter', volume=5), Wait(1)]
+        return [Add(reagent='ether', vessel='filter', volume=5), Wait(0.5)]
 
     def on_continue(self):
         if self.state['i'] > 3:
             return []
         self.state['i'] += 1
-        return [Wait(2)]
+        return [Wait(0.5)]
 
     def on_finish(self):
         self.done = True
-        return [Wait(3)]
+        return [Wait(0.5)]
 
 
 chempiler = Chempiler(
@@ -50,6 +50,10 @@ def test_abstract_dynamic_step():
     step.prepare_for_execution(
         os.path.join(HERE, '..', 'files', 'bigrig.json'), executor)
     assert step.start_block[-2].reagent_vessel == 'flask_ether'
+
+    # Nasty hack to make this execute blocks rather than simulation steps.
+    chempiler.simulation = False
+
     step.execute(chempiler)
 
     time.sleep(2)

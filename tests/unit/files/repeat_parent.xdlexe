@@ -64,7 +64,8 @@
           waste_vessel="waste_filter"
           vessel_type="filter"
           anticlogging_solvent_vessel="None"
-          prime_n_times="1">
+          prime_n_times="1"
+          priming_volume="3 mL">
           <StopStir
             vessel="filter"
             vessel_type="filter"
@@ -78,7 +79,10 @@
             volume="3 mL"
             reagent_vessel="flask_ether"
             waste_vessel="waste_filter"
-            prime_n_times="1">
+            prime_n_times="1"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0">
             <Repeat
               repeats="1">
               <Children>
@@ -203,7 +207,8 @@
           waste_vessel="waste_filter"
           vessel_type="filter"
           anticlogging_solvent_vessel="None"
-          prime_n_times="1">
+          prime_n_times="1"
+          priming_volume="3 mL">
           <StopStir
             vessel="filter"
             vessel_type="filter"
@@ -217,7 +222,10 @@
             volume="3 mL"
             reagent_vessel="flask_ether"
             waste_vessel="waste_filter"
-            prime_n_times="1">
+            prime_n_times="1"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0">
             <Repeat
               repeats="1">
               <Children>
@@ -340,7 +348,8 @@
           waste_vessel="waste_filter"
           vessel_type="filter"
           anticlogging_solvent_vessel="None"
-          prime_n_times="1">
+          prime_n_times="1"
+          priming_volume="3 mL">
           <StopStir
             vessel="filter"
             vessel_type="filter"
@@ -354,7 +363,10 @@
             volume="3 mL"
             reagent_vessel="flask_ether"
             waste_vessel="waste_filter"
-            prime_n_times="1">
+            prime_n_times="1"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0">
             <Repeat
               repeats="1">
               <Children>
