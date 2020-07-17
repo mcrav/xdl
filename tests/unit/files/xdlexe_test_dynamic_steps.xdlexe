@@ -107,6 +107,7 @@
         anticlogging_solvent_vessel="None"
         reagent_vessel="flask_ether"
         waste_vessel="waste_separator"
+        priming_volume="3"
         vessel_type="separator"
         prime_n_times="1">
         <StopStir
@@ -121,6 +122,9 @@
           volume="3 mL"
           reagent_vessel="flask_ether"
           waste_vessel="waste_separator"
+          move_speed="40"
+          aspiration_speed="10"
+          dispense_speed="40"
           prime_n_times="1">
           <Repeat repeats="1">
             <CMove
@@ -278,6 +282,11 @@
         upper_phase_through="None"
         dead_volume_through="None"
         failure_vessel="rotavap"
+        can_retry="True"
+        separation_vessel_max_volume="100"
+        separation_vessel_pump="pump_separator"
+        pump_max_volume="100"
+        conductivity_sensor="conductivity_sensor"
         max_retries="2" />
     </Separate>
   </Procedure>

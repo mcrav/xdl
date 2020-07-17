@@ -630,6 +630,7 @@ class AbstractDynamicStep(Step):
 
     def reset(self):
         self.state = []
+        self.async_steps = []
 
     def resume(self, platform_controller, logger=None, level=0):
         self.started = False  # Hack to avoid reset.
@@ -664,6 +665,7 @@ class AbstractDynamicStep(Step):
         Returns:
             True: bool to indicate execution should continue after this step.
         """
+        # Not simulation, execute as normal
         if self.started:
             self.reset()
 
@@ -674,6 +676,11 @@ class AbstractDynamicStep(Step):
  if executing steps individually, please use\
  `xdl_obj.execute(platform_controller, step_index)` rather than\
  `xdl_obj.steps[step_index].execute(platform_controller)`.')
+
+        # If platform controller simulation flag is True, run simulation steps
+        if platform_controller.simulation is True:
+            self.simulate(platform_controller)
+            return
 
         # Execute steps from on_start
         for step in self.start_block:
@@ -711,6 +718,32 @@ class AbstractDynamicStep(Step):
         self._post_finish()
 
         return True
+
+    def simulate(self, platform_controller: Any) -> str:
+        """Run simulation steps to catch any errors that may occur during
+        execution.
+
+        Args:
+            platform_controller (Any): Platform controller to use to run
+                simulation steps. Should be in simulation mode.
+        """
+        simulation_steps = self.get_simulation_steps()
+        for step in simulation_steps:
+            step.execute(platform_controller)
+
+    @abstractmethod
+    def get_simulation_steps(self) -> List[Step]:
+        """Should return all steps that it is possible for the step to run when
+        it actually executes. The point of this is that due to the fact the
+        steps list is not known ahead of time in a dynamic step, normal
+        simulation cannot be done. So this is here to provide a means of
+        specifying steps that should pass simulation.
+
+        Returns:
+            List[Step]: List of all steps that it is possible for the dynamic
+            step to execute.
+        """
+        return []
 
     def reagents_consumed(self, graph):
         """Return dictionary of reagents and volumes consumed in mL like this:
