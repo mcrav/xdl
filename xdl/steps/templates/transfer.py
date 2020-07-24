@@ -15,12 +15,12 @@ class AbstractTransferStep(AbstractStepTemplate):
         volume (float): Volume of liquid to transfer from from_vessel to
             to_vessel.
         time (float): Time over which to transfer liquid.
-        viscous (bool): If True, adapt process to handle viscous liquid, e.g.
-            use slower move speed.
+        viscous (bool): If ``True``, adapt process to handle viscous liquid,
+            e.g. use slower move speed.
         rinsing_solvent (reagent): Solvent to rinse from_vessel with, and
-            transfer rinsings to to_vessel.
-        rinsing_volume (float): Volume of rinsing_solvent to rinse from_vessel
-            with.
+            transfer rinsings to ``to_vessel``.
+        rinsing_volume (float): Volume of ``rinsing_solvent`` to rinse
+            ``from_vessel`` with.
         rinsing_repeats (int): Number of rinses to perform.
     """
     MANDATORY_NAME = 'Transfer'

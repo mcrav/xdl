@@ -1,6 +1,6 @@
-==============
+====================
 Using XDL Controller
-==============
+====================
 
 As well as providing a way to capture procedures in static files, all functionality
 of XDL is also available within scripts using the XDL Controller. This is useful
@@ -28,7 +28,7 @@ Instantiate XDL Controller
 
 
 Use XDL Controller
-********************
+******************
 
 All XDL steps are available as methods of the controller, but with snake case
 instead of pascal case, for example :code:`CleanVessel` -> :code:`clean_vessel`.

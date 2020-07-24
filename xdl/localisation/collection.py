@@ -1,8 +1,5 @@
 """
-.. module:: localisation.human_readable_steps
-    :platforms: Unix, Windows
-    :synopsis: Designed to load localisations for different languages
-
+Load step description localisations for different languages for standard steps.
 """
 
 import os
@@ -51,4 +48,6 @@ def load_localisations() -> Dict[str, Any]:
     return localisations
 
 
-LOCALISATIONS = load_localisations()
+#: Localisations for all standard steps. Dict is in form
+#: ``{step_name: step_localisation...}``
+LOCALISATIONS: Dict[str, Any] = load_localisations()

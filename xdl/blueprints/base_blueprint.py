@@ -6,6 +6,21 @@ from ..xdl import XDL
 from ..utils.xdl_base import XDLBase
 
 class ReactionBlueprint(XDLBase):
+    """Base class for reaction blueprints. The idea of a blueprint is to be a
+    template for generating an entire XDL procedure. They use the XDL prop
+    system, but instead of generating an internal list of steps like a XDL step,
+    they generate a full XDL file that can be inspected and edited.
+
+    Example:
+    ::
+
+        class MyReactionBlueprint(ReactionBlueprint):
+            ...
+
+        bp = MyReactionBlueprint(reaction_time='5 hrs', substrate='X')
+        bp.build('procedure.xdl')
+
+    """
 
     def __init__(self, props):
         super().__init__(props)

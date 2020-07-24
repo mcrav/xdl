@@ -11,7 +11,8 @@ from .constants import (
 from ..utils.xdl_base import XDLBase
 
 class Component(XDLBase):
-    """Base component class. At moment does nothing more than XDLBase.
+    """This will be retired in future versions. Class for representing vessel in
+    which reaction mixture resides.
 
     Args:
         id (str): ID for the component.
@@ -38,7 +39,7 @@ class Component(XDLBase):
         super().__init__(locals())
 
 class Hardware(object):
-    """
+    """This will be retired in future versions.
     Object describing entire setup. The purpose is easily accessible lists
     of reactors, flasks, filters, wastes etc.
 

@@ -4,10 +4,10 @@ Usage
 .. toctree::
    :maxdepth: 4
 
-   generating_xdl
-   loading_xdl
-   inspecting_xdl
-   altering_xdl
+   generate_xdl
+   generate_graph
+   compile_xdl
+   execute_xdl
    the_graph
    reagents
    xdl_controller

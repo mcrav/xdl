@@ -107,8 +107,8 @@
         anticlogging_solvent_vessel="None"
         reagent_vessel="flask_ether"
         waste_vessel="waste_separator"
-        priming_volume="3"
         vessel_type="separator"
+        priming_volume="3"
         prime_n_times="1">
         <StopStir
           vessel="separator"

@@ -14,10 +14,10 @@ class AbstractStirStep(AbstractStepTemplate):
         vessel (vessel): Vessel to stir.
         time (float): Time to stir vessel for.
         stir_speed (float): Speed in RPM at which to stir at.
-        continue_stirring (bool): If True, leave stirring on at end of step.
+        continue_stirring (bool): If ``True``, leave stirring on at end of step.
             Otherwise stop stirring at end of step.
-        purpose (str): Purpose of stirring. Can be None or 'dissolve'. If None,
-            assumed stirring is just to mix reagents.
+        purpose (str): Purpose of stirring. Can be ``None`` or ``'dissolve'``.
+            If ``None``, assumed stirring is just to mix reagents.
     """
     MANDATORY_NAME = 'Stir'
 

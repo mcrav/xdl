@@ -1,3 +1,7 @@
+"""This module provides functions for parsing strings to appropriate units,
+and converting values to floats in standard units.
+"""
+
 from typing import Union, Dict, Callable
 import re
 from .prop_limits import (
@@ -18,13 +22,12 @@ DEFAULT_PROP_LIMITS: [type, PropLimit] = {
     bool: BOOL_PROP_LIMIT,
 }
 
-#: Regex pattern to match all of '1', '-1', '1.0', '-1.0' etc
-FLOAT_REGEX_PATTERN = r'([-]?[0-9]+(?:[.][0-9]+)?)'
+#: Regex pattern to match all of '1', '-1', '1.0', '-1.0' etc.
+FLOAT_REGEX_PATTERN: str = r'([-]?[0-9]+(?:[.][0-9]+)?)'
 
 #: Regex pattern to match optional units in quantity strings
-#: e.g. match 'mL' in '5 mL'
-#: The 3 is there to match 'cm3'
-UNITS_REGEX_PATTERN = r'[a-zA-Zμ°]+[3]?'
+#: e.g. match 'mL' in '5 mL'. The 3 is there to match 'cm3'.
+UNITS_REGEX_PATTERN: str = r'[a-zA-Zμ°]+[3]?'
 
 #########
 # Utils #
@@ -34,13 +37,11 @@ def parse_bool(s: str) -> bool:
     """Parse bool from string.
 
     Args:
-        s (str): str representing bool.
+        s (str): String representing bool.
 
     Returns:
-        bool: True is s lower case is 'true' or '1', otherwise False.
-
-    Raises:
-        ValueError: If s.lower() is not 'true' or 'false'.
+        bool: ``True`` if ``s`` lower case is ``'true'``, ``False`` if ``s``
+        lower case is ``'false'``, otherwise ``None``.
     """
     if type(s) == bool:
         return s
@@ -56,42 +57,124 @@ def parse_bool(s: str) -> bool:
 # Unit Standardisation #
 ########################
 
-def days_to_seconds(x):
-    return x * 60 * 60 * 24
-
-def minutes_to_seconds(x):
-    return x * 60
-
-def hours_to_seconds(x):
-    return x * 60 * 60
-
-def no_conversion(x):
+def no_conversion(x: float) -> float:
+    """Leave value unchanged."""
     return x
 
-def cl_to_ml(x):
+def days_to_seconds(x: float) -> float:
+    """Convert time in days to seconds.
+
+    Args:
+        x (float): Time in days.
+
+    Returns:
+        float: Time in seconds.
+    """
+    return x * 60 * 60 * 24
+
+def minutes_to_seconds(x: float) -> float:
+    """Convert time in minutes to seconds.
+
+    Args:
+        x (float): Time in minutes.
+
+    Returns:
+        float: Time in seconds.
+    """
+    return x * 60
+
+def hours_to_seconds(x: float) -> float:
+    """Convert time in hours to seconds.
+
+    Args:
+        x (float): Time in hours.
+
+    Returns:
+        float: Time in seconds.
+    """
+    return x * 60 * 60
+
+def cl_to_ml(x: float) -> float:
+    """Convert volume in cL to mL.
+
+    Args:
+        x (float): Volume in cL.
+
+    Returns:
+        float: Volume in mL
+    """
     return x * 10
 
-def dl_to_ml(x):
+def dl_to_ml(x: float) -> float:
+    """Convert volume in dL to mL.
+
+    Args:
+        x (float): Volume in dL.
+
+    Returns:
+        float: Volume in mL
+    """
     return x * 10**2
 
-def l_to_ml(x):
+def l_to_ml(x: float) -> float:
+    """Convert volume in L to mL.
+
+    Args:
+        x (float): Volume in L.
+
+    Returns:
+        float: Volume in mL
+    """
     return x * 10**3
 
-def ul_to_ml(x):
+def ul_to_ml(x: float) -> float:
+    """Convert volume in uL to mL.
+
+    Args:
+        x (float): Volume in uL.
+
+    Returns:
+        float: Volume in mL
+    """
     return x * 10**-3
 
-def kilogram_to_grams(x):
+def kilogram_to_grams(x: float) -> float:
+    """Convert mass in kg to g.
+
+    Args:
+        x (float): Mass in kg.
+
+    Returns:
+        float: Mass in g
+    """
     return x * 10**3
 
-def milligram_to_grams(x):
+def milligram_to_grams(x: float) -> float:
+    """Convert mass in mg to g.
+
+    Args:
+        x (float): Mass in mg.
+
+    Returns:
+        float: Mass in g
+    """
     return x * 10**-3
 
-def microgram_to_grams(x):
+def microgram_to_grams(x: float) -> float:
+    """Convert mass in ug to g.
+
+    Args:
+        x (float): Mass in ug.
+
+    Returns:
+        float: Mass in g
+    """
     return x * 10**-6
 
 
 #: Dict of units in lower case and functions to convert them to standard units.
-#: Standard units:
+#: Standard units are mL (volume), grams (mass), mbar (pressure),
+#: seconds (time), °C (temperature), RPM (rotation speed) and nm (length).
 UNIT_CONVERTERS: Dict[str, Callable] = {
     'ml': no_conversion,
     'millilitre': no_conversion,

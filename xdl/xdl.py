@@ -42,43 +42,42 @@ from .utils.localisation import get_available_languages
 
 class XDL(object):
     """
-    Interpets XDL (file or str) and provides an object for further use.
+    Object for inspecting and manipulating XDL procedure.
+
+    One of ``xdl`` or (``steps``, ``hardware`` and ``reagents``) must be given
+    to ``__init__``.
+
+    Args:
+        xdl(Union[str, Dict]): Path to XDL file  (.json, .xdl or .xdlexe), XDL
+            XML string, or XDL JSON dict.
+        steps (List[Step]): List of Step objects.
+        hardware (Hardware): Hardware object containing all
+            components in XDL.
+        reagents (List[Reagent]): List of Reagent objects containing reagents
+            used in ``steps``.
+        logging_level (int): Logging level to use when creating
+            :py:attr:`logger`. Defaults to ``logging.INFO``.
+        platform (AbstractPlatform): Optional. Target platform. If not given or
+            given as ``None``, ``chemputerxdl.ChemputerPlatform`` will be used.
+
+    Raises:
+        ValueError: If insufficient args provided to instantiate object.
 
     Attributes:
-        base_steps (List[AbstractBaseStep]): List of base steps used by
+        steps (List[Step]): List of Step subclass objects representing
             procedure.
-        compiled (bool): True if XDL procedure has been compiled and is ready to
-            execute, otherwise False.
+        reagents (List[Reagent]): List Reagent objects representing reagents
+            used in :py:attr:`steps`.
+        platform (AbstractPlatform): Target platform for XDL. Even if not
+            physically executing, platform is used to create step trees.
+            Defaults to ``chemputerxdl.ChemputerPlatform``.
+        _xdl_file (str): File name XDL was initialized from. ``None`` if object
+            not initialized from file.
+        compiled (bool): ``True`` if XDL procedure has been compiled and is
+            ready to execute, otherwise ``False``.
         graph_sha256 (str): Graph hash of the graph the procedure was compiled
-            with. If procedure has not been compiled, None.
-
-    Methods:
-        # Information
-        human_readable -> str: Returns entire procedure in human readable form.
-        duration(fmt=False) -> Union[int, str]: Returns time in seconds, or
-            formatted duration if fmt is True. Only callable after compilation.
-        reagent_volumes -> Dict[str, float]: Return Dict of reagents and the
-            total volumes of the reagents used in the procedure. Only callable
-            after compilation.
-
-        # Tools
-        scale_procedure(scale): Scale volumes in procedure by given scale factor
-        graph(graph_template, save) -> MultiDiGraph: Generate hardware graph to
-            use for compilation and execution. If graph template given, use this
-            to generate graph rather than default template. If save given,
-            save graph to this file.
-        prepare_for_execution(graph, **kwargs): Compile procedure for execution
-            on given graph.
-        execute(platform_controller, step): Execute compiled procedure using
-            given platform controller. If int is given for step, only execute
-            step at that index of self.steps.
-
-        # Output
-        as_string -> str: Return XML string of XDL
-        as_json -> Dict: Return XDL JSON format Dict
-        as_json_string -> str: Return XDL JSON format string
-        save(save_path, file_format): Save to given file in xml or json format.
-
+            with. If procedure has not been compiled, ``None``.
+        logger (logging.Logger): Logger object for all your logging needs.
     """
     # File name XDL was initialised from
     _xdl_file = None
@@ -92,29 +91,13 @@ class XDL(object):
 
     def __init__(
         self,
-        xdl: str = None,
+        xdl: Union[str, Dict] = None,
         steps: List[Step] = None,
         hardware: Hardware = None,
         reagents: List[Reagent] = None,
         logging_level: int = logging.INFO,
-        platform: Union[str, AbstractPlatform] = 'chemputer',
+        platform: AbstractPlatform = None,
     ) -> None:
-        """Init method for XDL object.
-        One of xdl or (steps, hardware and reagents) must be given.
-
-        Args:
-            xdl(str, optional): Path to XDL file or XDL str.
-            steps (List[Step], optional): List of Step objects.
-            hardware (Hardware, optional): Hardware object containing all
-                components in XDL.
-            reagents (List[Reagent], optional): List of Reagent objects.
-            logger (logging.Logger): Logger object to use. If not given will
-                be made.
-            platform (str): Platform to run XDL on. 'chemputer' or 'chemobot'.
-
-        Raises:
-            ValueError: If insufficient args provided to instantiate object.
-        """
 
         self._initialize_logging(logging_level)
         self._load_platform(platform)
@@ -135,19 +118,19 @@ class XDL(object):
         self.logger.setLevel(logging_level)
         self.logging_level = logging_level
 
-    def _load_platform(self, platform: Union[str, AbstractPlatform]) -> None:
-        """Initialise given platform. If 'chemputer' given initialise
-        ChemputerPlatform otherwise platform should be a subclass of
-        AbstractPlatform.
+    def _load_platform(self, platform: AbstractPlatform) -> None:
+        """Initialise given platform. If ``None`` given then initialise
+        ``ChemputerPlatform`` otherwise platform should be a subclass of
+        ``AbstractPlatform``.
 
         Args:
-            platform (Union[str, AbstractPlatform])
+            platform (AbstractPlatform)
 
         Raises:
-            XDLInvalidPlatformError: If platform is not 'chemputer' or a
-                subclass of AbstractPlatform.
+            XDLInvalidPlatformError: If platform is not ``None`` or a
+                subclass of ``AbstractPlatform``.
         """
-        if platform == 'chemputer':
+        if platform is None:
             from chemputerxdl import ChemputerPlatform
             self.platform = ChemputerPlatform()
         elif issubclass(platform, AbstractPlatform):
@@ -157,7 +140,7 @@ class XDL(object):
 
     def _load_xdl(
         self,
-        xdl: str,
+        xdl: Union[str, Dict],
         steps: List[Step],
         reagents: List[Reagent],
         hardware: Hardware
@@ -167,7 +150,8 @@ class XDL(object):
         .xdl, .xdlexe or .json file, or an XML string of the XDL.
 
         Args:
-            xdl (str): Path to .xdl, .xdlexe or .json XDL file, or XML string.
+            xdl (str): Path to .xdl, .xdlexe or .json XDL file, XML string, or
+                JSON dict.
             steps (List[Step]): List of Step objects to instantiate XDL with.
             reagents (List[Reagent]): List of Reagent objects to instantiate XDL
                 with.
@@ -260,7 +244,7 @@ class XDL(object):
             xdl_str (str): XML string of XDL.
         """
         parsed_xdl = xdl_str_to_objs(
-            xdl_str=xdl_str, logger=self.logger, platform=self.platform)
+            xdl_str=xdl_str, platform=self.platform)
 
         self._load_graph_hash(xdl_str)
 
@@ -269,15 +253,15 @@ class XDL(object):
         self.reagents = parsed_xdl['reagents']
 
     def _load_graph_hash(self, xdl_str: str) -> Optional[str]:
-        """Obtain graph hash from given xdl str. If xdl str is not xdlexe, there
-        will be no graph hash so return None.
+        """Obtain graph hash from given xdl string. If xdl string is not xdlexe,
+        there will be no graph hash so return ``None``.
         """
         graph_hash_search = re.search(r'graph_sha256="([a-z0-9]+)"', xdl_str)
         if graph_hash_search:
             self.graph_sha256 = graph_hash_search[1]
 
     def _validate_loaded_xdl(self):
-        """Validate loaded XDL at end of __init__"""
+        """Validate loaded XDL at end of ``__init__``"""
         # Validate all vessels and reagents used in procedure are declared in
         # corresponding sections of XDL. Don't do this if XDL object is compiled
         # (xdlexe) as there will be lots of undeclared vessels from the graph.
@@ -394,7 +378,7 @@ class XDL(object):
         as dict.
 
         Returns:
-            Dict[str, float]: Dict of { reagent_name: volume_used... }
+            Dict[str, float]: Dict of ``{ reagent_name: volume_used... }``
         """
         # Not compiled, raise error
         if not self.compiled:
@@ -458,7 +442,7 @@ class XDL(object):
 
     def _apply_scaling(self, step: Step, scale: float) -> None:
         """Apply scale to steps, recursively applying to any child steps if the
-        step has the attribute 'children', e.g. Repeat steps.
+        step has the attribute 'children', e.g. ``Repeat`` steps.
 
         Args:
             step (Step): Step to apply scaling to.

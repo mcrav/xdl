@@ -19,7 +19,7 @@ class AbstractIrradiateStep(AbstractStepTemplate):
         wavelength (float): Wavelength of light to irradiate vessel with.
         time (float): Time to stir vessel for at given temp.
         temp (float): Temperature to heat/chill vessel to.
-        stir (bool): If True then stir vessel.
+        stir (bool): If ``True`` then stir vessel.
         stir_speed (float): Speed in RPM at which to stir.
     """
     MANDATORY_NAME = 'Irradiate'

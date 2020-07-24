@@ -19,9 +19,10 @@ class AbstractHeatChillStep(AbstractStepTemplate):
         temp (float): Temperature to heat or chill vessel to.
         time (float): Time to heat or chill vessel for.
         stir (bool): If True, stir while heating or chilling.
-        stir_speed (float): Speed in RPM at which to stir at if stir is True.
-        purpose (str): Purpose of heating/chilling. One of "reaction",
-            "control-exotherm", "unstable-reagent".
+        stir_speed (float): Speed in RPM at which to stir at if stir is
+            ``True``.
+        purpose (str): Purpose of heating/chilling. One of ``"reaction"``,
+            ``"control-exotherm"``, ``"unstable-reagent"``.
     """
     MANDATORY_NAME = 'HeatChill'
 

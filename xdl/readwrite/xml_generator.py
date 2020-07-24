@@ -19,11 +19,11 @@ def xdl_to_xml_string(
 
     Args:
         xdl_obj (XDL): XDL object to convert to XML string.
-        full_properties (bool): If True, all properties will be written.
-            If False only mandatory, non default values and always write
+        full_properties (bool): If ``True``, all properties will be written.
+            If ``False`` only mandatory, non default values and always write
             properties will be written.
-        full_tree (bool): If True, full step tree will be written as is the case
-            in xdlexe files.
+        full_tree (bool): If ``True``, full step tree will be written as is the
+            case in xdlexe files.
         graph_hash (str): Hash of graph to include in xdlexe files.
 
     Returns:
@@ -41,11 +41,11 @@ def step_to_xml_string(
 
     Args:
         step (Step): Step to get XDLEXE string for.
-        full_properties (bool): If True, all properties will be written.
-            If False only mandatory, non default values and always write
+        full_properties (bool): If ``True``, all properties will be written.
+            If ``False`` only mandatory, non default values and always write
             properties will be written.
-        full_tree (bool): If True, full step tree will be written as is the case
-            in xdlexe files.
+        full_tree (bool): If ``True``, full step tree will be written as is the
+            case in xdlexe files.
     """
     step_tree = _get_step_tree(step, full_properties, full_tree)
     return _get_element_xdl_string(step_tree)
@@ -59,8 +59,23 @@ def get_xdl_tree(
     xdl_obj: 'XDL',
     full_properties: bool = False,
     full_tree: bool = False,
-    graph_hash: int = None
-):
+    graph_hash: str = None
+) -> etree.ElementTree:
+    """Get etree Element tree of XDL ready for saving as XML.
+
+    Args:
+        xdl_obj (XDL): XDL object to convert to XML tree.
+        full_properties (bool): If ``True`` include all properties regardless of
+            whether they are internal props or the same as the default props.
+            Defaults to ``False``.
+        full_tree (bool): If ``True`` include all substeps, i.e. for a xdlexe
+            file. Defaults to ``False``.
+        graph_hash (str): Hash of graph used to produce xdlexe for including in
+            ``<Synthesis>`` tag.
+
+    Returns:
+        etree.ElementTree: XML tree of ``xdl_obj`` ready to save to XML file.
+    """
     steps = xdl_obj.steps
     reagents = xdl_obj.reagents
     hardware = xdl_obj.hardware
@@ -84,7 +99,12 @@ def get_xdl_tree(
 
 def _append_hardware_tree(
         xdltree: etree.ElementTree, hardware: Hardware) -> None:
-    """Create and add Hardware section to XDL tree."""
+    """Create and add Hardware section to XDL tree.
+
+    Args:
+        xdltree (etree.ElementTree): Full XDL XML tree to add hardware to.
+        hardware (Hardware): Hardware to add to XML tree.
+    """
     hardware_tree = etree.Element('Hardware')
     for component in hardware:
         component_tree = etree.Element('Component')
@@ -100,7 +120,12 @@ def _append_hardware_tree(
 
 def _append_reagents_tree(
         xdltree: etree.ElementTree, reagents: List[Reagent]) -> None:
-    """Create and add Reagents section to XDL tree."""
+    """Create and add Reagents section to XDL tree.
+
+    Args:
+        xdltree (etree.ElementTree): Full XDL XML tree to add reagents to.
+        reagents (List[Reagent]): Reagents to add to XML tree.
+    """
     reagents_tree = etree.Element('Reagents')
     for reagent in reagents:
         reagent_tree = etree.Element('Reagent')
@@ -117,7 +142,17 @@ def _append_procedure_tree(
     full_properties: bool = False,
     full_tree: bool = False,
 ) -> None:
-    """Create and add Procedure section to XDL tree."""
+    """Create and add Procedure section to XDL tree.
+
+    Args:
+        xdltree (etree.ElementTree): Full XDL XML tree to add steps to.
+        steps (List[Step]): Steps to add to XML tree.
+        full_properties (bool): If ``True``, all properties will be written.
+            If ``False`` only mandatory, non default values and always write
+            properties will be written.
+        full_tree (bool): If ``True``, full step tree will be written as is the
+            case in xdlexe files.
+    """
     procedure_tree = etree.Element('Procedure')
     for step in steps:
         procedure_tree.append(_get_step_tree(
@@ -128,16 +163,16 @@ def _get_step_tree(
     step: Step,
     full_properties: bool = False,
     full_tree: bool = False,
-):
+) -> None:
     """Get XML tree associated with given step.
 
     Args:
         step (Step): Step to generate XML tree for.
-        full_properties (bool): If True, all properties will be written.
-            If False only mandatory, non default values and always write
+        full_properties (bool): If ``True``, all properties will be written.
+            If ``False`` only mandatory, non default values and always write
             properties will be written.
-        full_tree (bool): If True, full step tree will be written as is the case
-            in xdlexe files.
+        full_tree (bool): If ``True``, full step tree will be written as is the
+            case in xdlexe files.
     """
     step_tree = etree.Element(step.name)
     children = False
@@ -188,18 +223,18 @@ def _add_step_property(
     prop: str,
     full_properties: bool = False,
     full_tree: bool = False,
-):
+) -> None:
     """Add given property to step tree of given step.
 
     Args:
         step_tree (etree.Element): Step tree to add property to.
-        step (Step): Step corresponding to step_tree.
-        prop (str): Property to add to step_tree.
-        full_properties (bool): If True, all properties will be written.
-            If False only mandatory, non default values and always write
+        step (Step): Step corresponding to ``step_tree``.
+        prop (str): Property to add to ``step_tree``.
+        full_properties (bool): If ``True``, all properties will be written.
+            If ``False`` only mandatory, non default values and always write
             properties will be written.
-        full_tree (bool): If True, full step tree will be written as is the case
-            in xdlexe files. This applies to 'children' property.
+        full_tree (bool): If ``True``, full step tree will be written as is the
+            case in xdlexe files. This applies to ``'children'`` property.
     """
     val = step.properties[prop]
     if prop == 'children' and val:
@@ -262,8 +297,8 @@ def _get_element_xdl_string(
             convert to string.
         indent_level (int): Defaults to 0. Used by this function to handle
             indendation during recursive calls.
-        indent (str): Defaults to '  '. Indent to use for pretty printing XML
-            string.
+        indent (str): Defaults to ``'  '``. Indent to use for pretty printing
+            XML string.
 
     Returns:
         str: Pretty printed XML string of given XML tree.

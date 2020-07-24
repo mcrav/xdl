@@ -14,22 +14,23 @@ class AbstractSeparateStep(AbstractStepTemplate):
     Name: Separate
 
     Mandatory props:
-        purpose (str): 'wash' or 'extract'. 'wash' means that product phase will
-            not be the added solvent phase, 'extract' means product phase will
-            be the added solvent phase. If no solvent is added just use
-            'extract'.
-        product_phase (str): 'top' or 'bottom'. Phase that product will be in.
-        from_vessel (vessel): Contents of from_vessel are transferred to
-            separation_vessel and separation is performed.
+        purpose (str): ``'wash'`` or ``'extract'``. ``'wash'`` means that
+            product phase will not be the added solvent phase, ``'extract'``
+            means product phase will be the added solvent phase. If no solvent
+            is added just use ``'extract'``.
+        product_phase (str): ``'top'`` or ``'bottom'``. Phase that product will
+            be in.
+        from_vessel (vessel): Contents of ``from_vessel`` are transferred to
+            ``separation_vessel`` and separation is performed.
         separation_vessel (vessel): Vessel in which separation of phases will be
             carried out.
         to_vessel (vessel): Vessel to send product phase to.
         waste_phase_to_vessel (vessel): Vessel to send waste phase to.
         solvent (reagent): Solvent to add to separation vessel after contents
-            of from_vessel has been transferred to create two phases.
+            of ``from_vessel`` has been transferred to create two phases.
         solvent_volume (float): Volume of solvent to add.
         through (reagent): Solid chemical to send product phase through on way
-            to to_vessel, e.g. 'celite'.
+            to ``to_vessel``, e.g. ``'celite'``.
         repeats (int): Number of separations to perform.
         stir_time (float): Time stir for after adding solvent, before
             separation of phases.

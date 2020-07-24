@@ -12,13 +12,13 @@ class AbstractReagent(AbstractStepTemplate):
         name (str): Name of reagent
         inchi (str): INCHI string of reagent
         cas (str): CAS number of reagent
-        role (str): Role of reagent. One of 'reagent', 'substrate', 'catalyst',
-            'acid', 'base', 'solvent', 'ligand', 'quenching-agent' or
-            'activating-agent'.
-        preserve (bool): If True, reagent is expensive and should be used
+        role (str): Role of reagent. One of ``'reagent'``, ``'substrate'``,
+            ``'catalyst'``, ``'acid'``, ``'base'``, ``'solvent'``, ``'ligand'``,
+            ``'quenching-agent'`` or ``'activating-agent'``.
+        preserve (bool): If ``True``, reagent is expensive and should be used
             sparingly.
-        use_for_cleaning (bool): If True, the reagent is cheap and can be used
-            for cleaning.
+        use_for_cleaning (bool): If ``True``, the reagent is cheap and can be
+            used for cleaning.
         clean_with (reagent): Name of another reagent that should be used when
             cleaning vessels that have come into contact with this reagent.
         stir (bool): Stir reagent flask for the entire procedure.

@@ -10,36 +10,37 @@ VALID_REAGENT_ROLES = [
 ]
 
 class Reagent(XDLBase):
-    """Base reagent class.
+    """Class for representing a reagent used by a procedure.
 
     Args:
         id (str): Unique identifier containing only letters, numbers and _
-        clean_type (str): 'organic' or 'aqueous'. Used by XDLExecutor to decide
-            what solvent to use in CleanBackbone steps.
-        cas (int, optional): Defaults to None. CAS number of reagent as int.
-        use_for_cleaning (bool, optional): Defaults to False. Specifies whether
+        clean_type (str): ``'organic'`` or ``'aqueous'``. Used to decide what
+            type of solvent should be used to clean with after reagent has been
+            used.
+        cas (int): CAS number of reagent as ``int``.
+        use_for_cleaning (bool): Defaults to ``False``. Specifies whether
             reagent can be used as a cleaning solvent. If the reagent is
-            recognised as a common solvent setting this property to False will
-            NOT stop it being used for cleaning.
-        stir (bool, optional): Defaults to False. Specifies whether reagent
+            recognised as a common solvent setting this property to ``False``
+            will NOT stop it being used for cleaning.
+        stir (bool): Defaults to ``False``. Specifies whether reagent
             flask should be stirred continuously.
-        temp (float, optional): Defaults to None. Specifies temperature (in
+        temp (float): Defaults to ``None``. Specifies temperature (in
             °C) to keep reagent flask at.
-        role (str, optional): Defaults to None. Specifies reagent role. NOTE:
+        role (str): Defaults to ``None``. Specifies reagent role. NOTE:
             must be a valid reagent role if specified (catalyst, reagent,
             solvent, substrate).
-        last_minute_addition (str, optional): Defaults to None. Name of reagent
+        last_minute_addition (str): Defaults to ``None``. Name of reagent
             that must be added to reagent flask immediately prior to addition.
-        last_minute_addition_volume (float, optional): Defaults to None. Volume
+        last_minute_addition_volume (float): Defaults to ``None``. Volume
             of last minute addition.
-        preserve (bool, optional): Defaults to False. True if reagent is
-            expensive and should be preserved when possible; False if not.
-        incompatible_reagents (list, optional): Defaults to None. List of
+        preserve (bool): Defaults to ``False``. ``True`` if reagent is
+            expensive and should be preserved when possible; ``False`` if not.
+        incompatible_reagents (List[str]): Defaults to ``None``. List of
             reagents that are incompatible with this reagent and should never
             be mixed in the backbone.
-        is_base (bool, optional): Defaults to False. Specifies whether reagent
-            is a base. If True, more thorough backbone cleaning will be carried
-            out after addition of this reagent.
+        is_base (bool): Defaults to ``False``. Specifies whether reagent
+            is a base. If ``True``, more thorough backbone cleaning will be
+            carried out after addition of this reagent.
     """
 
     PROP_TYPES = {

@@ -1,10 +1,8 @@
-import logging
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Tuple
 from lxml import etree
 from .validation import check_attrs_are_valid
 from .utils import read_file
 from ..constants import SYNTHESIS_ATTRS
-from ..utils import parse_bool
 from ..errors import XDLError
 from ..steps import Step, AbstractBaseStep
 from ..reagents import Reagent
@@ -12,50 +10,48 @@ from ..hardware import Hardware, Component
 
 # For type annotations
 if False:
-    from ..execution.abstract_platform import AbstractPlatform
+    from ..platforms import AbstractPlatform
 
 def xdl_file_to_objs(
     xdl_file: str,
     platform: 'AbstractPlatform',
-    logger: logging.Logger,
 ) -> Dict[str, Any]:
     """Given XDL file return steps, hardware and reagents.
 
-    Arguments:
+    Args:
         xdl_file (str): Path to XDL file.
+        platform (AbstractPlatform): Platform to use when constructing step
+            objects from XDL file.
 
     Returns:
-        Dict: (steps, hardware, reagents)
-                steps: List of Step objects.
-                hardware: Hardware object.
-                reagents: List of Reagent objects.
+        Dict[str, Any]: All information necessary to initialise XDL object in
+        form ``{ 'steps': steps, 'hardware': hardware, 'reagents': reagents }``
     """
     xdlstr = read_file(xdl_file)
-    return xdl_str_to_objs(
-        xdl_str=xdlstr, logger=logger, platform=platform
-    )
+    return xdl_str_to_objs(xdl_str=xdlstr, platform=platform)
 
 def xdl_str_to_objs(
     xdl_str: str,
     platform: 'AbstractPlatform',
-    logger: logging.Logger,
 ) -> Dict[str, Any]:
     """Given XDL str return steps, hardware and reagents.
 
-    Arguments:
-        xdl_str (str): XDL str.
+    Args:
+        xdl_str (str): XDL XML string.
+        platform (AbstractPlatform): Platform to use when constructing step
+            objects from XDL file.
 
     Returns:
-        Tuple: (steps, hardware, reagents)
-                  steps: List of Step objects.
-                  hardware: Hardware object.
-                  reagents: List of Reagent objects.
+        Dict[str, Any]: All information necessary to initialise XDL object in
+        form ``{ 'steps': steps, 'hardware': hardware, 'reagents': reagents }``
     """
     if xdl_str:
         steps, step_record = steps_from_xdl(xdl_str, platform)
         hardware = hardware_from_xdl(xdl_str)
         reagents = reagents_from_xdl(xdl_str)
         synthesis_attrs = synthesis_attrs_from_xdl(xdl_str)
+
+        # Loading xdlexe if graph_sha256 in synthesis_attrs
         if 'graph_sha256' in synthesis_attrs:
             assert len(steps) == len(step_record)
             for i, step in enumerate(steps):
@@ -72,7 +68,7 @@ def xdl_str_to_objs(
         raise XDLError('Empty XDL given.')
     return None
 
-def apply_step_record(step, step_record_step):
+def apply_step_record(step: Step, step_record_step: Tuple[str, Dict]):
     assert step.name == step_record_step[0]
     for prop in step.properties:
         if prop != 'children' and prop != 'uuid':
@@ -93,33 +89,34 @@ def apply_step_record(step, step_record_step):
             apply_step_record(substep, step_record_step[2][j])
 
 def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
-    """Return attrs from <Synthesis> tag.
+    """Return attrs from ``<Synthesis>`` tag. This used to do more but now only
+    handles ``graph_sha256`` attr. If it looks like no other attrs will be used
+    in the future this function could be simplified.
 
     Arguments:
-        xdl_str (str): XDL string.
+        xdl_str (str): XDL XML string.
 
     Returns:
-        dict: attr dict from <Synthesis> tag.
+        Dict[str, Any]: Attr dict from ``<Synthesis>`` tag.
     """
     raw_attr = etree.fromstring(xdl_str).attrib
     processed_attr = {}
     for attr in SYNTHESIS_ATTRS:
         if attr['name'] in raw_attr:
             processed_attr[attr['name']] = raw_attr[attr['name']]
-            if attr['type'] == bool:
-                processed_attr[attr['name']] = parse_bool(
-                    raw_attr[attr['name']])
     return processed_attr
 
 def steps_from_xdl(xdl_str: str, platform: 'AbstractPlatform') -> List[Step]:
     """Given XDL str return list of Step objects.
 
     Arguments:
-        xdl_str (str): XDL str.
+        xdl_str (str): XDL XML string.
+        platform (AbstractPlatform): Platform to use when constructing step
+            objects from XDL file.
 
     Returns:
         List[Step]: List of Step objects corresponding to procedure described
-                      in xdl_str.
+        in ``xdl_str``.
     """
     steps = []
     xdl_tree = etree.fromstring(xdl_str)
@@ -130,7 +127,12 @@ def steps_from_xdl(xdl_str: str, platform: 'AbstractPlatform') -> List[Step]:
                 steps.append(xdl_to_step(step_xdl, platform.step_library))
     return steps, step_record
 
-def get_base_steps(step):
+def get_base_steps(step: etree._Element) -> List[AbstractBaseStep]:
+    """Return all base steps from step XML tree, recursively.
+
+    Args:
+        step (etree._Element): Step XML tree to get base steps from.
+    """
     base_steps = []
     children = step.findall('*')
     if children:
@@ -144,11 +146,11 @@ def hardware_from_xdl(xdl_str: str) -> Hardware:
     """Given XDL str return Hardware object.
 
     Arguments:
-        xdl_str (str): XDL str.
+        xdl_str (str): XDL XML string.
 
     Returns:
         Hardware: Hardware object containing all Component objects described
-                    by XDL.
+        by XDL.
     """
     return Hardware(components_from_xdl(xdl_str))
 
@@ -156,11 +158,11 @@ def components_from_xdl(xdl_str: str) -> List[Component]:
     """Given XDL str return list of Component objects.
 
     Arguments:
-        xdl_str (str): XDL str.
+        xdl_str (str): XDL XML string.
 
     Returns:
         List[Component]: List of Component objects corresponding to
-                           components described in xdl_str.
+        components described in ``xdl_str``.
     """
     components = []
     xdl_tree = etree.fromstring(xdl_str)
@@ -174,11 +176,11 @@ def reagents_from_xdl(xdl_str: str) -> List[Reagent]:
     """Given XDL str return list of Reagent objects.
 
     Arguments:
-        xdl_str (str): XDL str.
+        xdl_str (str): XDL XML string.
 
     Returns:
         List[Reagent]: List of Reagent objects corresponding to reagents
-                         described in xdl_str.
+        described in ``xdl_str``.
     """
     reagents = []
     xdl_tree = etree.fromstring(xdl_str)
@@ -195,10 +197,13 @@ def xdl_to_step(
     """Given XDL step element return corresponding Step object.
 
     Arguments:
-       xdl_step_element (lxml.etree._Element): XDL step lxml element.
+        xdl_step_element (etree._Element): XDL step lxml element.
+        step_type_dict: Dict[str, type]: Dict of step names to step classes,
+            e.g. ``{ 'Add': Add... }``
+
 
     Returns:
-        Step: Step object corresponding to step in xdl_step_element.
+        Step: Step object corresponding to step in ``xdl_step_element``.
     """
     # Check if step name is valid and get step class.
     if xdl_step_element.tag not in step_type_dict:
@@ -240,12 +245,11 @@ def xdl_to_component(xdl_component_element: etree._Element) -> Component:
     """Given XDL component element return corresponding Component object.
 
     Arguments:
-       xdl_component_element (lxml.etree._Element): XDL component lxml
-                                                      element.
+       xdl_component_element (etree._Element): XDL component lxml element.
 
     Returns:
         Component: Component object corresponding to component in
-                     xdl_component_element.
+        ``xdl_component_element``.
     """
     attrs = dict(xdl_component_element.attrib)
     # Check 'id' is in attrs..
@@ -270,11 +274,11 @@ def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
     """Given XDL reagent element return corresponding Reagent object.
 
     Arguments:
-        xdl_reagent_element (lxml.etree._Element): XDL reagent lxml element.
+        xdl_reagent_element (etree._Element): XDL reagent lxml element.
 
     Returns:
         Reagent: Reagent object corresponding to reagent in
-                   xdl_reagent_element.
+        ``xdl_reagent_element``.
     """
     # Check attrs are valid for Reagent
     attrs = dict(xdl_reagent_element.attrib)
@@ -291,13 +295,36 @@ def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
 # .xdlexe interpretation #
 ##########################
 
-def get_full_step_record(procedure_tree):
+def get_full_step_record(procedure_tree: etree._Element) -> List[Tuple]:
+    """Get the full step record for the procedure section of a xdlexe file.
+    The step record is a nested representation of all steps and properties.
+    It is needed so that top level steps can be initialised, and then properties
+    of lower level steps are applied afterwards directly to the lower level
+    steps. This allows editing of the xdlexe.
+
+    Args:
+        procedure_tree (etree._Element): XML tree of procedure section of XDL.
+
+    Returns:
+        List[Tuple]: Returns step record in format
+        ``[(step_name, step_properties, substeps)...]``
+    """
     step_record = []
     for step in procedure_tree.findall('*'):
         step_record.append(get_single_step_record(step))
     return step_record
 
-def get_single_step_record(step_element):
+def get_single_step_record(
+        step_element: etree._Element) -> Tuple[str, Dict, List]:
+    """Get step record for a single step.
+
+    Args:
+        step_element (etree._Element): XML tree for single step.
+
+    Returns:
+        Tuple[str, Dict, List]: Step record in the form
+        ``(step_name, step_properties, substeps)``
+    """
     children = []
     child_element_tags = [
         element.tag for element in step_element.findall('*')]

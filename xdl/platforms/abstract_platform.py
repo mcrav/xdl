@@ -1,48 +1,115 @@
-from typing import Optional, Callable, Union, List, Dict, Any
+from typing import Optional, Callable, Union, List, Dict, Any, Type
+from networkx import MultiDiGraph
 import json
 import abc
 from ..utils.schema import generate_schema
+from ..execution.abstract_executor import AbstractXDLExecutor
 from ..steps import Step, AbstractBaseStep
 from ..reagents import Reagent
 from ..hardware import Component
 from ..localisation import LOCALISATIONS
+if False:
+    from ..xdl import XDL
 
 class AbstractPlatform(object):
     """Container class to hold everything necessary for a platform to be used
     with the XDL framework.
+
+    The idea here is that if you want your platform to be able to execute XDL
+    files that you can fill in all the blanks defined in this abstract class and
+    then do ``xdl_obj = XDL('procedure.xdl', platform=MyPlatform)``.
     """
     def __init__(self):
         pass
 
     @property
     @abc.abstractmethod
-    def executor(self):
+    def executor(self) -> Type[AbstractXDLExecutor]:
+        """This should return the executor class for the platform. Details of
+        what specifically the executor class should do can be found in the
+        :py:class:`AbstractXDLExecutor` documentation.
+
+        Returns:
+            Type[AbstractXDLExecutor]: Executor class for the platform.
+        """
         return None
 
     @property
     @abc.abstractmethod
-    def step_library(self):
+    def step_library(self) -> Dict[str, Type[Step]]:
+        """Collection of steps associated with the platform. Should take the
+        form of a mapping between step class names and step classes, e.g.
+        ``{ 'Add': Add, 'Stir': Stir... }``
+
+        Returns:
+            Dict[str, Type[Step]]: Collections of steps associated with platform
+            in form ``{ step_name: step_type... }``
+            e.g. ``{ 'Add': Add... }``.
+        """
         return None
 
     @abc.abstractmethod
     def graph(
         self,
-        graph_template: Optional[str] = None,
+        xdl_obj: 'XDL',
+        template: Optional[str] = None,
         save: Optional[str] = None,
-        **kwargs
-    ):
-        return
+        auto_fix_issues: Optional[bool] = True,
+        ignore_errors: Optional[List[int]] = []
+    ) -> MultiDiGraph:
+        """Method to generate graph for given procedure.
+
+        Args:
+            xdl_obj (XDL): XDL object
+            template (Optional[str]): Optional template graph to use when
+                generating procedure graph.
+
+            save (Optional[str]): Optional path to save generated graph to.
+
+        Returns:
+            MultiDiGraph: Graph that can be used to compile ``xdl_obj``.
+        """
+        return None
 
     @property
-    def schema(self):
+    def schema(self) -> str:
+        """Generate platform specific XML schema for XDL files using platform
+        steps.
+
+        Returns:
+            str: XML schema for platform XDL files.
+        """
         return generate_schema(self.step_library)
 
     @property
-    def localisation(self):
+    def localisation(self) -> Dict[str, Dict[str, Union[str, Dict]]]:
+        """Return human readable sentence templates for step types. Should be in
+        the form ``{ step_name: { language_code: template... }... }``,
+        e.g. ``{ 'Add': {'en': '{reagent} was added'} }``.
+
+        This implementation provides localisations for all standard XDL steps.
+        It is recommended to provide localisations for non-standard platform
+        specific steps also. In this case this can be overridden, but the method
+        should begin with ``localisations = super().localisation()``.
+
+        Returns:
+            Dict[str, Dict[str, Union[str, Dict]]]: Dict of human readable
+            sentence templates for steps in different languages in format
+            described above.
+        """
         return LOCALISATIONS
 
     @property
-    def declaration(self):
+    def declaration(self) -> Dict[str, Any]:
+        """Return declaration of the XDL namespace provided by this platform.
+        This is fundamental to ChemIDE, as it provides a JSON detailing the prop
+        specification of every step / XDL element of a given platform. Should
+        not need to be overridden.
+
+        Returns:
+            Dict[str, Any]: Declaration of platform XDL namespace with full
+            details of all props.
+        """
         type_str_dict = {
             'reagent': 'reagent',
             'vessel': 'vessel',
@@ -59,7 +126,8 @@ class AbstractPlatform(object):
             Dict[str, Any]: 'Dict[str, Any]',
         }
 
-        def get_type_str(prop_type):
+        def get_type_str(prop_type: type) -> str:
+            """Return str corresponding to prop type, e.g. str -> 'str'."""
             if prop_type in type_str_dict:
                 return type_str_dict[prop_type]
             else:
@@ -131,6 +199,11 @@ class AbstractPlatform(object):
             }
         }
 
-    def save_declaration(self, save_path):
+    def save_declaration(self, save_path: str) -> None:
+        """Save platform declaration to given path.
+
+        Args:
+            save_path (str): Path to save platform declaration to.
+        """
         with open(save_path, 'w') as fd:
             json.dump(self.declaration, fd, indent=2)
