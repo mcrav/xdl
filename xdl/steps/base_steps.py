@@ -248,6 +248,7 @@ class Step(XDLBase):
         """
         return {}
 
+    @property
     def requirements(self) -> Dict:
         """Return dictionary of requirements of vessels used by the step.
         Currently only used bySynthReader. This will soon be deprecated and
