@@ -46,11 +46,12 @@ Inherit :code:`AbstractDynamicStep` and implement all abstract methods.
             """Add any extra properties needed before execution using graph."""
             return
 
-        def final_sanity_check(self, graph):
-            """Check that all properties are sane before execution begins.
+        def sanity_checks(self, graph):
+            """Return list of sanity checks to perform to make sure the step
+            properties make sense.
             This is called after on_prepare_for_execution.
             """
-            return
+            return []
 
         def on_start(self):
             """Called once at start of execution and returned list of steps executed."""
@@ -283,11 +284,12 @@ you ways in which you could improve this step and make sure it is robust.
             """Add any extra properties needed before execution using graph."""
             return
 
-        def final_sanity_check(self, graph):
-            """Check that all properties are sane before execution begins.
+        def sanity_checks(self, graph):
+            """Return list of sanity checks to perform to make sure the step
+            properties make sense.
             This is called after on_prepare_for_execution.
             """
-            return
+            return []
 
         def on_initial_ph_reading(self, reading):
             """Set self.current_pH and establish what direction the pH is being
@@ -368,53 +370,52 @@ you ways in which you could improve this step and make sure it is robust.
             """Don't need to do anything after continue loop so return empty list."""
             return []
 
-6. Implement final sanity check
-*******************************
+6. Implement sanity checks
+**************************
 
-It is a good idea to implement final sanity check. This method should check that all
+It is a good idea to implement sanity check. This method should check that all
 parameters passed to the step are sane before execution begins, and if bad parameters
 are passed, raise informative errors.
 
 .. code-block:: python
 
-    def final_sanity_check(self, graph):
-        """Check that all properties are sane before execution begins.
+    from xdl.utils.sanity_checks import SanityCheck
+
+    def sanity_checks(self, graph):
+        """Return list of sanity checks to perform to make sure the step
+        properties make sense.
         This is called after on_prepare_for_execution.
         """
-        try:
-            assert self.vessel
-        except AssertionError:
-            raise AssertionError('vessel parameter must be given.')
-
-        try:
-            assert self.vessel in list(graph.nodes())
-        except AssertionError:
-            raise AssertionError(f'"{self.vessel}" not found in graph')
-
-        try:
-            assert self.volume > 0
-        except AssertionError:
-            raise AssertionError('volume parameter must be > 0.')
-
-        try:
-            assert self.reagent in [
-                data['chemical']
-                for node, data in graph.nodes(data=True)
-                if data['class'] == 'ChemputerFlask'
-            ]
-        except AssertionError:
-            raise AssertionError(
-                f'Reagent "{self.reagent}" not found in graph.')
-
-        try:
-            assert self.add_increment_volume > 0
-        except AssertionError:
-            raise AssertionError('add_increment_volume parameter must be > 0.')
-
-        try:
-            assert self.stir_between_additions_time >= 0
-        except AssertionError:
-            raise AssertionError('stir_between_additions_time parameter must be >= 0.')
+        return [
+            SanityCheck(
+                condition=self.vessel,
+                error_msg='vessel parameter must be given.',
+            ),
+            SanityCheck(
+                condition=self.vessel in list(graph.nodes()),
+                error_msg=f'"{self.vessel}" not found in graph',
+            ),
+            SanityCheck(
+                condition=self.volume > 0,
+                error_msg='volume parameter must be > 0.',
+            ),
+            SanityCheck(
+                condition=self.reagent in [
+                    data['chemical']
+                    for node, data in graph.nodes(data=True)
+                    if data['class'] == 'ChemputerFlask'
+                ],
+                error_msg=f'Reagent "{self.reagent}" not found in graph.',
+            ),
+            SanityCheck(
+                condition=self.add_increment_volume  > 0,
+                error_msg='add_increment_volume parameter must be > 0.',
+            ),
+            SanityCheck(
+                condition=self.stir_between_additions_time >= 0,
+                error_msg='stir_between_additions_time parameter must be >= 0.',
+            )
+        ]
 
 7. Final step
 *************
@@ -426,6 +427,7 @@ and higher increment volumes when the target pH is far away.
 .. code-block:: python
 
     from xdl.step_utils import AbstractDynamicStep
+    from xdl.utils.sanity_checks import SanityCheck
 
     class AddToPH(AbstractDynamicStep):
         """Add given reagent until desired pH is reached.
@@ -463,44 +465,41 @@ and higher increment volumes when the target pH is far away.
             """Add any extra properties needed before execution using graph."""
             return
 
-        def final_sanity_check(self, graph):
-            """Check that all properties are sane before execution begins.
+        def sanity_checks(self, graph):
+            """Return list of sanity checks to perform to make sure the step
+            properties make sense.
             This is called after on_prepare_for_execution.
             """
-            try:
-                assert self.vessel
-            except AssertionError:
-                raise AssertionError('vessel parameter must be given.')
-
-            try:
-                assert self.vessel in list(graph.nodes())
-            except AssertionError:
-                raise AssertionError(f'"{self.vessel}" not found in graph')
-
-            try:
-                assert self.volume > 0
-            except AssertionError:
-                raise AssertionError('volume parameter must be > 0.')
-
-            try:
-                assert self.reagent in [
-                    data['chemical']
-                    for node, data in graph.nodes(data=True)
-                    if data['class'] == 'ChemputerFlask'
-                ]
-            except AssertionError:
-                raise AssertionError(
-                    f'Reagent "{self.reagent}" not found in graph.')
-
-            try:
-                assert self.add_increment_volume > 0
-            except AssertionError:
-                raise AssertionError('add_increment_volume parameter must be > 0.')
-
-            try:
-                assert self.stir_between_additions_time >= 0
-            except AssertionError:
-                raise AssertionError('stir_between_additions_time parameter must be >= 0.')
+            return [
+                SanityCheck(
+                    condition=self.vessel,
+                    error_msg='vessel parameter must be given.',
+                ),
+                SanityCheck(
+                    condition=self.vessel in list(graph.nodes()),
+                    error_msg=f'"{self.vessel}" not found in graph',
+                ),
+                SanityCheck(
+                    condition=self.volume > 0,
+                    error_msg='volume parameter must be > 0.',
+                ),
+                SanityCheck(
+                    condition=self.reagent in [
+                        data['chemical']
+                        for node, data in graph.nodes(data=True)
+                        if data['class'] == 'ChemputerFlask'
+                    ],
+                    error_msg=f'Reagent "{self.reagent}" not found in graph.',
+                ),
+                SanityCheck(
+                    condition=self.add_increment_volume  > 0,
+                    error_msg='add_increment_volume parameter must be > 0.',
+                ),
+                SanityCheck(
+                    condition=self.stir_between_additions_time >= 0,
+                    error_msg='stir_between_additions_time parameter must be >= 0.',
+                )
+            ]
 
         def on_initial_ph_reading(self, reading):
             """Set self.current_pH and establish what direction the pH is being

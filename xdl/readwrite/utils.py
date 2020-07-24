@@ -1,18 +1,7 @@
 from ..utils.logging import get_logger
 
-# Should match, '1', '11', '1.1', '1.01', '13.12' etc.
-float_regex: str = r'([0-9]+([.][0-9]+)?)'
-
-def parse_bool(s: str) -> bool:
-    """Parse string for bool."""
-    if s.strip().lower() in ['true', '1']:
-        return True
-    elif s.strip().lower() in ['false', '0']:
-        return False
-    return None
-
 def read_file(file_name: str) -> str:
-    """Read file, allowing for different encodings caused by Windows.
+    """Read file, allowing for different encodings caused by Windows grrr.
     Assumes existence of file etc has already been checked, just here to read.
 
     Args:

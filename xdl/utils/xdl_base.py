@@ -14,34 +14,35 @@ from ..constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
 class XDLBase(object):
     """Base object for Step, Component and Reagent objects. The functionality
     this class provides is all based around the properties dict. This class has
-    a variables self.properties. This is initialized with whatever is passed to
-    the constructor of the subclass, according to the prop specification of
-    the subclass (PROP_TYPES, DEFAULT_PROPS) etc.
+    a variables :py:attr:`properties`. This is initialized with whatever is
+    passed to the constructor of the subclass, according to the prop
+    specification of the subclass (``PROP_TYPES``, ``DEFAULT_PROPS``) etc.
 
-    This is where XDLBase subclasses become funky. After initialization,
+    This is where ``XDLBase`` subclasses become funky. After initialization,
     everything in the properties dict, so everything that was passed to the
-    constructor == everything in PROP_TYPES, can be accessed as a class
-    attribute, due to the __getattr__ and __setattr__ overrides here.
+    constructor (essentially everything in ``PROP_TYPES``), can be accessed as a
+    class attribute, due to the ``__getattr__`` and ``__setattr__`` overrides
+    here.
 
     So taking a step as an example:
 
-    `step.volume` is exactly the same value as `step.properties[volume]`
+    ``step.volume`` is exactly the same value as ``step.properties[volume]``.
 
     In the case of getting one of these variables, you could use either of those
     syntaxes and get exactly the same result. This is not the case however when
     setting the values of properties.
 
-    `step.volume = 15` is not the same as `step.properties[volume] = 15`
+    ``step.volume = 15`` is not the same as ``step.properties[volume] = 15``.
 
-    The override of __setattr__ means that when any value in the properties dict
-    is set, as well as updating the properties dict, the update method is
-    called. This sanitizes values and adds defaults as necessary.
+    The override of ``__setattr__`` means that when any value in the properties
+    dict is set, as well as updating the properties dict, the update method is
+    called. This sanitizes/validates values and adds defaults as necessary.
 
     Editing the properties dict directly should be avoided as it means prop
     sanitization and validation is skipped. If this is necessary, for example
-    you wish to update a lot of properties and then update for performance
-    reasons, then you can update the properties dict directly, but you must call
-    update afterwards.
+    you wish to change a lot of properties and then update for performance
+    reasons, then you can change the properties dict directly, but you must call
+    :py:meth:`update` afterwards.
 
     This system is quite weird when you're not used to it. It seems like
     witchcraft accessing member variables that don't seem to be initialized
@@ -49,43 +50,42 @@ class XDLBase(object):
     you can very quickly access / change properties with minimal typing.
 
     Attributes:
-        name (str): Returns the class name
         properties (Dict[str, Any]): Dict of properties related to the XDL
             element. Generally should never be used directly, and items
             contained within the properties dict should be accessed/set as
             if they are attributes, as described above.
-        PROP_TYPES (Dict[str, type]): PROP_TYPES gives the type of every prop
+        PROP_TYPES (Dict[str, type]): ``PROP_TYPES`` gives the type of every
+            prop.
             Explicitly handled types:
-                str       Remains unchanged
-                int       Parsed as int
-                float     Either parsed as float, or units removed from string
-                          such as '2 mL' and remainer of string parsed as float
-                          and converted to standard units based on units in
-                          string
-                bool      Parsed as bool
-                List[str] Parsed as space separated list of strings
-                'vessel'  Vessel declared in Hardware section of XDL
-                'reagent' Reagent declared in Reagents section of XDL
 
-            Any other type will just remain unchanged during sanitization.
+                | ``str``       Remains unchanged
+                | ``int``       Parsed as int
+                | ``float``     Either parsed as float, or units removed from
+                    string  such as '2 mL' and remainer of string
+                    parsed as float and converted to standard
+                    units based on units in string.
+                | ``bool``      Parsed as bool
+                | ``List[str]`` Parsed as space separated list of strings
+                | ``'vessel'``  Vessel declared in Hardware section of XDL
+                | ``'reagent'`` Reagent declared in Reagents section of XDL
+
+            Any other type will just remain unchanged/unvalidated during
+            sanitization.
+
         DEFAULT_PROPS (Dict[str, Any]): Dictionary of values to pass in for
-            properties when their value is given as 'default'.
+            properties when their value is given as ``'default'``.
         INTERNAL_PROPS (List[str]): List of properties that should never be
             passed in as args, and are instead calculated automatically from the
-            graph during on_prepare_for_execution.
+            graph during ``on_prepare_for_execution``.
         PROP_LIMITS  (Dict[str, PropLimit]): Defines detailed validation
-            criteria for all props in the form of PropLimit objects. If no prop
-            limit is given for a prop, then a default prop limit will be used
-            based on the prop type.
+            criteria for all props in the form of ``PropLimit`` objects. If no
+            prop limit is given for a prop, then a default prop limit will be
+            used based on the prop type.
         ALWAYS_WRITE (List[str]): List of properties that should always be
             written, even if they are the same as default values. For example,
-            you may have default 20 mL volume for WashSolid. This does not mean
-            that you don't want to write it, otherwise the XDL is unclear over
-            how much solvent is used when reading it.
-
-    Methods:
-        update: Reloads properties dict. Should be called after the properties
-            dict is updated directly.
+            you may have default 20 mL volume for ``WashSolid``. This does not
+            mean that you don't want to write it, otherwise the XDL is unclear
+            over how much solvent is used when reading it.
     """
 
     # Prop specification variables
@@ -167,9 +167,9 @@ class XDLBase(object):
     #####################
 
     def _load_properties(self, properties: Dict[str, Any]) -> None:
-        """Load dict of properties into self.properties.
-        Add default values from DEFAULT_PROPS where 'default' is given as value.
-        Sanitize properties according to PROP_LIMITS.
+        """Load dict of properties into :py:attr:`properties`.
+        Add default values from ``DEFAULT_PROPS`` where ``'default'`` is given
+        as value. Sanitize properties according to ``PROP_LIMITS``.
 
         Arguments:
             properties (Dict[str, Any]): dict of property names and values.
@@ -181,7 +181,7 @@ class XDLBase(object):
                     prop, properties[prop])
 
     def _load_property(self, prop: str, value: Any) -> Any:
-        """If value is default, return default value. Otherwise return
+        """If value is ``'default'``, return default value. Otherwise return
         sanitized value.
 
         Args:
@@ -189,7 +189,7 @@ class XDLBase(object):
             value (Any): Value to load.
 
         Returns:
-            Any: Default value if value is 'default', otherwise sanitized
+            Any: Default value if value is ``'default'``, otherwise sanitized
                 value.
         """
         if value == 'default':
@@ -207,7 +207,7 @@ class XDLBase(object):
 
         Raises:
             XDLMissingDefaultPropError: If no default value is found for prop in
-                self.DEFAULT_PROPS
+                :py:attr:`DEFAULT_PROPS`
         """
         # Default value found in DEFAULT_PROPS, update properties
         if prop in self.DEFAULT_PROPS:
@@ -226,12 +226,12 @@ class XDLBase(object):
             value (Any): Value to be cleaned.
 
         Returns:
-            Any: Value cleaned according to self.PROP_TYPES.
+            Any: Value cleaned according to :py:attr:`PROP_TYPES`.
 
         Raises:
             XDLFailedPropLimitError: If prop limit validation fails.
             XDLTypeConversionError: If unable to convert to type specified in
-                self.PROP_TYPES
+                :py:attr:`PROP_TYPES`
         """
 
         # Return children unchanged.
@@ -345,7 +345,7 @@ class XDLBase(object):
 
         Raises:
             XDLMissingPropTypeError: If prop type not found for prop in
-                self.PROP_TYPES
+                :py:attr:`PROP_TYPES`
         """
         try:
             return self.PROP_TYPES[prop]
@@ -353,9 +353,9 @@ class XDLBase(object):
             raise XDLMissingPropTypeError(self.name, prop)
 
     def _get_prop_limit(self, prop: str) -> PropLimit:
-        """Get prop limit.  If prop limit not found in PROP_LIMITS, look for
-        default prop limit based on type. If this can't be found return None
-        and don't do any prop limit validation.
+        """Get prop limit.  If prop limit not found in :py:attr:`PROP_LIMITS`,
+        look for default prop limit based on type. If this can't be found return
+        ``None`` and don't do any prop limit validation.
 
         Returns:
             PropLimit: Prop limit of given prop.
@@ -413,11 +413,12 @@ class XDLBase(object):
 
     def __setattr__(self, name: str, value: Any) -> None:
         """
-        If name is in self.properties do self.properties[name] = value and call
-        self.update. The purpose of this is that so whenever a property is
-        changed, it is sanitized and default values are added.
+        If name is in :py:attr:`properties` do ``self.properties[name] = value``
+        and call :py:meth:`update`. The purpose of this is that so whenever a
+        property is changed, it is sanitized/validated and default values are
+        added.
 
-        If attr is not in self.properties just set attribute as normal.
+        If attr is not in :py:attr:`properties` just set attribute as normal.
         """
         # attr in self.properties, add to properties dict and update
         if name in self.properties:
@@ -429,7 +430,7 @@ class XDLBase(object):
 
     def __getattr__(self, name: str) -> None:
         """
-        If name is in self.properties return self.properties[name].
+        If name is in :py:attr:`properties` return ``self.properties[name]``.
         Otherwise return attribute as normal.
         """
         # attr in self.properties, return value from self.properties

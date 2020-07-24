@@ -1,6 +1,7 @@
 from .add import AbstractAddStep
 from .add_solid import AbstractAddSolidStep
 from .clean_vessel import AbstractCleanVesselStep
+from .crystallize import AbstractCrystallizeStep
 from .dissolve import AbstractDissolveStep
 from .dry import AbstractDryStep
 from .evaporate import AbstractEvaporateStep
@@ -19,8 +20,9 @@ from .inert_gas import (
     AbstractStopPurgeStep
 )
 from .irradiate import AbstractIrradiateStep
+from .metadata import AbstractMetadata
 from .precipitate import AbstractPrecipitateStep
-from .crystallize import AbstractCrystallizeStep
+from .reagent import AbstractReagent
 from .separate import AbstractSeparateStep
 from .stirring import (
     AbstractStirStep,

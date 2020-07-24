@@ -20,8 +20,9 @@ class AbstractAddSolidStep(AbstractStepTemplate):
         mass (float): Mass of reagent to add.
         time (float): Time to add reagent over.
         portions (int): Number of portions to add reagent in.
-        stir (bool): If True, stir vessel while adding reagent.
-        stir_speed (float): Speed in RPM at which to stir at if stir is True.
+        stir (bool): If ``True``, stir vessel while adding reagent.
+        stir_speed (float): Speed in RPM at which to stir at if stir is
+            ``True``.
     """
     MANDATORY_NAME = 'AddSolid'
 

@@ -1,4 +1,8 @@
-from typing import Any, Optional
+"""Miscellaneous utilities. In future, it would be good to split this into
+separate modules with more meaningful names.
+"""
+
+from typing import Any, Optional, Dict
 from tabulate import tabulate
 
 from .prop_limits import (
@@ -10,9 +14,10 @@ from .prop_limits import (
     MASS_PROP_LIMIT,
     PRESSURE_PROP_LIMIT,
 )
-from ..errors import XDLError
+from ..errors import XDLSanityCheckError
 if False:
     from ..steps import Step
+    from .xdl_base import XDLBase
 
 def get_port_str(port: str) -> str:
     """Get str representing port for using in human_readable strings.
@@ -36,19 +41,19 @@ def format_property(
 ) -> str:
     """Given property key and value in standard units, convert value
     to sensitive units and return str ready for putting in XDL.
-    E.g. time: 3600 -> '1 hr', volume 2000 -> '2 l'.
-    If no modifications are required just return str of val.
+    E.g. time: ``3600`` -> ``'1 hr'``, volume ``2000`` -> ``'2 l'``.
+    If no modifications are required just return string of val.
 
     Args:
         prop (str): Property name.
         val (Any): Property value.
-        human_readable (Optional[bool]): If True, ports will be represented as
-            (port top) as they should be in human readable sentences, if False,
-            will be unaltered as it is for XDL file generation.
+        human_readable (Optional[bool]): If ``True``, ports will be represented
+            as (port top) as they should be in human readable sentences, if
+            ``False``, will be unaltered as it is for XDL file generation.
 
     Returns:
         str: Value converted to nice units if necessary and returned
-            as neat str ready for outputting.
+        as neat string ready for outputting.
     """
     if val is None:
         return None
@@ -87,6 +92,14 @@ def format_property(
     return str(val)
 
 def format_int(val) -> str:
+    """Convert int value to string.
+
+    Args:
+        val (int): Int to convert to string.
+
+    Returns:
+        str: String of val.
+    """
     if val is not None:
         return str(int(val))
 
@@ -212,31 +225,63 @@ def format_val(val: float) -> str:
 
     Returns:
         str: Number rounded to two decimal places with trailing '0' and '.'
-            removed.
+        removed.
     """
     return f'{val:.4f}'.rstrip('0').rstrip('.')
 
 class SanityCheck(object):
-    """Class for Step sanity checks."""
+    """Class for Step sanity checks. A ``SanityCheck`` holds a condition that
+    must be ``True``, and an error message to display in the case that the
+    condition is not ``True``. Basically a convenient way of expressing the
+    following.
+
+    .. code-block:: python
+
+        try:
+            assert(condition)
+        except AssertionError:
+            raise XDLSanityCheckError(error_msg)
+
+    Args:
+        condition (bool): Condition that should be ``True`` if there is no
+            error.
+        error_msg (str): Error message to display in the case that ``condition``
+            is not ``True``.
+    """
     def __init__(
-        self, condition: bool, error_msg: str = '', step: 'Step' = None
+        self, condition: bool, error_msg: str = ''
     ) -> None:
         self.condition = condition
         self.error_msg = error_msg
 
-    def run(self, step):
+    def run(self, step: 'Step'):
+        """
+        Run the sanity check and raise an error is the condition is not met.
+
+        Args:
+            step (Step): Step that the sanity check is for. Used when displaying
+                the error message to provide information about the step for
+                which the sanity check failed.
+        """
         try:
             assert self.condition
         except AssertionError:
-            raise XDLError(
+            raise XDLSanityCheckError(
                 f'{self.error_msg}\n\n\
  {str(step.name)}\n\n\
  {str(step.properties)}'
             )
 
-def steps_are_equal(step, other_step):
-    """Return True if given two Step objects are equal in terms of type,
-    properties and children, otherwise return False.
+def steps_are_equal(step: 'Step', other_step: 'Step') -> bool:
+    """Return ``True`` if given two Step objects are equal in terms of type,
+    properties and children, otherwise return ``False``.
+
+    Args:
+        step (Step): Step to compare equality with ``other_step``.
+        other_step (Step): Step to compare equality with ``step``.
+
+    Returns (bool): ``True`` if steps are equal in terms of type, properties
+        and children, otherwise ``False``.
     """
     accepted_none_values = [None, '']
     if step.name != other_step.name:
@@ -260,9 +305,19 @@ def steps_are_equal(step, other_step):
                 return False
     return True
 
-def xdl_elements_are_equal(xdl_element, other_xdl_element):
-    """Return True if given Reagent or Component objects are equal in terms of
-    type and properties, otherwise return False.
+def xdl_elements_are_equal(
+        xdl_element: 'XDLBase', other_xdl_element: 'XDLBase') -> bool:
+    """Return ``True`` if given Reagent or Component objects are equal in terms of
+    type and properties, otherwise return ``False``.
+
+    Args:
+        xdl_element (XDLBase): XDL element to compare equality with
+            ``other_xdl_element``.
+        other_xdl_element (XDLBase): XDL element to compare equality with
+            ``xdl_element``.
+
+    Returns (bool): ``True`` if xdl_elements are equal in terms of type and
+        properties, otherwise ``False``.
     """
     accepted_none_values = [None, '']
     if xdl_element.name != other_xdl_element.name:
@@ -277,8 +332,16 @@ def xdl_elements_are_equal(xdl_element, other_xdl_element):
             return False
     return True
 
-def reagent_volumes_table(reagent_volumes) -> str:
-    """Pretty print table of reagent volumes used in procedure."""
+def reagent_volumes_table(reagent_volumes: Dict[str, float]) -> str:
+    """Pretty print table of reagent volumes used in procedure.
+
+    Args:
+        reagent_volumes (Dict[str, float]): Dict of
+            ``{ reagent_name: volume_reagent_used... }``.
+
+    Returns:
+        str: Pretty printed table of reagent volumes.
+    """
 
     if not reagent_volumes:
         return ''

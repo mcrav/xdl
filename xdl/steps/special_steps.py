@@ -21,15 +21,15 @@ class Async(AbstractAsyncStep):
 
     Use like this:
 
-    async_stir_step = Async(Stir(vessel=filter, time=3600))
+    ``async_stir_step = Async(Stir(vessel=filter, time=3600))``
 
-    Can be stopped in between steps by calling async_stir_step.kill()
+    Can be stopped in between steps by calling ``async_stir_step.kill()``
 
     Args:
         children (Union[Step, List[Step]]): Step object or list of Step objects
             to execute asynchronously.
-        pid (str): Process ID. Optional, but must be given if using Await later
-            in procedure.
+        pid (str): Process ID. Optional, but must be given if using
+            :py:class:``Await`` later in procedure.
         on_finish (Callable): Callback function to call after execution of steps
             has finished.
     """
@@ -80,7 +80,7 @@ class Await(AbstractBaseStep):
     """Wait for Async step with given pid to finish executing.
 
     Args:
-        pid (str): pid of Async step to wait for.
+        pid (str): pid of :py:class:``Async`` step to wait for.
     """
 
     PROP_TYPES = {
@@ -107,7 +107,7 @@ class Await(AbstractBaseStep):
         return [], [], []
 
 class Repeat(AbstractStep):
-    """Repeat children of this step self.repeats times.
+    """Repeat children of this step ``self.repeats`` times.
 
     Args:
         repeats (int): Number of times to repeat children.
@@ -533,7 +533,11 @@ class Parallelizer(object):
             f"    n_timesteps = {len(s[0].strip().split(' '))-1}")
 
 class Callback(AbstractBaseStep):
+    """Call ``fn`` when this step is executed with given args.
 
+    Args:
+        AbstractBaseStep ([type]): [description]
+    """
     PROP_TYPES = {
         'fn': Callable,
         'args': List[Any],
@@ -545,7 +549,7 @@ class Callback(AbstractBaseStep):
         fn: Callable,
         args: List[Any] = [],
         keyword_args: Dict[str, Any] = {}
-    ):
+    ) -> None:
         super().__init__(locals())
 
     def execute(self, chempiler, logger, level=0):

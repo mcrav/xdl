@@ -3,11 +3,16 @@ from networkx import MultiDiGraph
 from ..steps import Step, AbstractDynamicStep, NON_RECURSIVE_ABSTRACT_STEPS
 
 def do_sanity_check(graph: MultiDiGraph, step: Step) -> None:
-    """Perform sanity checks on the given step
+    """Perform sanity checks defined in step ``sanity_checks`` methods
+    on given step, and recursively on all substeps and child steps in given
+    step.
 
     Args:
-        graph (MultiDiGraph): Graph to use when performing sanity checks.
+        graph (MultiDiGraph): Graph to pass to ``sanity_checks`` methods.
         step (Step): Step to perform sanity checks for.
+
+    Raises:
+        XDLSanityCheckError: Raised if any sanity check fails.
     """
 
     # Perform step sanity check

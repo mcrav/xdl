@@ -18,16 +18,17 @@ class AbstractAddStep(AbstractStepTemplate):
         vessel (vessel): Vessel to add reagent to.
         reagent (reagent): Reagent to add.
         volume (float): Volume of reagent to add.
-        dropwise (bool): If True, use dropwise addition speed.
+        dropwise (bool): If ``True``, use dropwise addition speed.
         time (float): Time to add reagent over.
-        stir (bool): If True, stir vessel while adding reagent.
-        stir_speed (float): Speed in RPM at which to stir at if stir is True.
-        viscous (bool): If True, adapt process to handle viscous reagent,
+        stir (bool): If ``True``, stir vessel while adding reagent.
+        stir_speed (float): Speed in RPM at which to stir at if stir is
+            ``True``.
+        viscous (bool): If ``True``, adapt process to handle viscous reagent,
             e.g. use slower addition speeds.
-        purpose (str): Purpose of addition. If None assume that simply a reagent
-            is being added. Roles of reagents can be specified in <Reagent> tag.
-            Possible values: "precipitate", "neutralize", "basify", "acidify"
-            or "dissolve".
+        purpose (str): Purpose of addition. If ``None`` assume that simply a
+            reagent is being added. Roles of reagents can be specified in
+            ``<Reagent>`` tag. Possible values: ``"precipitate"``,
+            ``"neutralize"``, ``"basify"``, ``"acidify"`` or ``"dissolve"``.
     """
     MANDATORY_NAME = 'Add'
 

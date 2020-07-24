@@ -1,3 +1,11 @@
+"""This module contains graph utilities used by more than one platform. Any
+graph utilities specific to one platform should be stored in that platform's
+repo.
+
+A lot of the class names here are Chemputer specific. In future it could be good
+to properly design the graph to be platform independent.
+"""
+
 from typing import Union, Dict, Optional
 import os
 import json
@@ -11,37 +19,86 @@ from ..errors import (
     XDLGraphTypeError,
 )
 
+#: Class name of filter
 FILTER: str = 'ChemputerFilter'
+
+#: Class name of reactor
 REACTOR: str = 'ChemputerReactor'
+
+#: Class name of cartridge.
 CARTRIDGE: str = 'ChemputerCartridge'
+
+#: Class name of waste.
 WASTE: str = 'ChemputerWaste'
+
+#: Class name of flask.
 FLASK: str = 'ChemputerFlask'
+
+#: Class name of vacuum.
 VACUUM: str = 'ChemputerVacuum'
+
+#: Class name of separator.
 SEPARATOR: str = 'ChemputerSeparator'
+
+#: Class name of valve.
 VALVE: str = 'ChemputerValve'
+
+#: Class name of pump.
 PUMP: str = 'ChemputerPump'
 
+#: Class name of JULABO CF41 Chiller.
 JULABO_CF41: str = 'JULABOCF41'
+
+#: Class name of Huber PetiteFleur chiller.
 HUBER_PETITE_FLEUR: str = 'Huber'
+
+#: Class name of IKARCTDigital hotplate.
 IKA_RCT_DIGITAL: str = 'IKARCTDigital'
+
+#: Class name of IKARETControlVisc hotplate.
 IKA_RET_CONTROL_VISC: str = 'IKARETControlVisc'
+
+#: Class name of IKA RV10 rotavap.
 IKA_RV_10 = "IKARV10"
+
+#: Class name of Vacuubrand CVC3000 vacuum pump
 CVC3000 = "CVC3000"
+
+#: Class name of IKA microstar75 overhead stirrer.
 IKA_MICROSTAR_75 = "IKAmicrostar75"
+
+#: Class name of Heidolph RZR2052 overhead stirrer.
 RZR_2052 = "RZR_2052"
+
+#: Class name of Heidolph Torque100 overhead stirrer.
 HEIDOLPH_TORQUE_100 = "HeiTORQUE_100"
 
-
+#: All class names of hotplates.
 HEATER_CLASSES: List[str] = [IKA_RCT_DIGITAL, IKA_RET_CONTROL_VISC]
+
+#: All class names of chillers.
 CHILLER_CLASSES: List[str] = [
     JULABO_CF41, HUBER_PETITE_FLEUR]
 
+#: All class names of rotavaps.
 ROTAVAP_CLASSES: List[str] = [IKA_RV_10]
+
+#: All class names of vacuum pumps.
 VACUUM_CLASSES: List[str] = [CVC3000]
+
+#: All class names of overhead stirrers.
 STIRRER_CLASSES: List[str] = [IKA_MICROSTAR_75, RZR_2052, HEIDOLPH_TORQUE_100]
+
+#: All class names of filter flasks.
 FILTER_CLASSES: List[str] = [FILTER]
+
+#: All class names of round bottomed flasks.
 REACTOR_CLASSES: List[str] = [REACTOR]
+
+#: All class names of separatory flasks.
 SEPARATOR_CLASSES: List[str] = [SEPARATOR]
+
+#: All class names of regular flasks.
 FLASK_CLASSES: List[str] = [FLASK]
 
 def undirected_neighbors(graph, node, data=False):
@@ -74,15 +131,16 @@ def undirected_neighbors(graph, node, data=False):
                 yield src
 
 def get_graph(graph_file: Union[str, Dict]) -> MultiDiGraph:
-    """Given one of the args available, return a networkx Graph object.
+    """Given a path to a graph file or a dict containing graph in same format as
+    JSON file, load and return networkx MultiDiGraph object.
 
     Args:
-        graph_file (str, optional): Path to graph file. May be GraphML file,
+        graph_file (Union[str, Dict]): Path to graph file. May be GraphML file,
             JSON file with graph in node link format, or dict containing graph
             in same format as JSON file.
 
     Returns:
-        networkx.classes.multidigraph: MultiDiGraph object.
+        MultiDiGraph: Loaded graph.
     """
     graph = None
 
@@ -138,10 +196,12 @@ def get_reagent_vessel(graph: MultiDiGraph, reagent: str) -> Optional[str]:
     """Get vessel containing given reagent.
 
     Args:
+        graph (MultiDiGraph): Graph to search
         reagent (str): Name of reagent to find vessel for.
 
     Returns:
-        str: node name of vessel containing given reagent.
+        Optional[str]: Node name of flask containing given reagent. None if no
+            flask found containing reagent.
     """
 
     for node, data in graph.nodes(data=True):
@@ -150,12 +210,12 @@ def get_reagent_vessel(graph: MultiDiGraph, reagent: str) -> Optional[str]:
                 return node
     return None
 
-def get_vessel_stirrer(graph: Dict, vessel: str) -> Optional[str]:
+def get_vessel_stirrer(graph: MultiDiGraph, vessel: str) -> Optional[str]:
     """Get any stirrer attached to given vessel
     Heaters can be stirrers in the case of stirrer hot plates
 
     Args:
-        graph (Dict): Graph to search
+        graph (MultiDiGraph): Graph to search
         vessel (str): Vessel to check
 
     Returns:

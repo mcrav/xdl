@@ -1,22 +1,48 @@
-==============
-Generating XDL file
-==============
+=================
+Generate XDL file
+=================
 
-XDL files can be written manually, but the easiest way to produce them is from
-written procedures using `SynthReader <http://chemify.us-east-2.elasticbeanstalk.com/synthreader>`_.
+XDL files can be written manually, but the easiest way to produce them is using
+`ChemIDE <https://croningroup.gitlab.io/chemputer/xdlapp>`_.
 
-If the XDL produced by `SynthReader <http://chemify.us-east-2.elasticbeanstalk.com/synthreader>`_
-is not correct, the written procedure can be altered to aid translation, for example,
-by converting present tense to past tense, and removing unnecessary detail.
+ChemIDE has two methods of adding steps to XDL procedures, manually, and using SynthReader.
+
+To add a step using SynthReader, type in the text area on the right, and click
+"Translate and Add" to append the steps produced by SynthReader to the procedure on the left,
+or "Translate" to replace the procedure on the left with the steps produced by SynthReader.
+
+.. image:: assets/synthreader-chemide.png
+   :width: 900
+
+To add a step manually go to the Edit menu and click New Step.
+
+.. image:: assets/add-step-manually.png
+   :width: 900
+
+This will bring up a list of all available step types that you can search by
+typing in the search bar.
+
+.. image:: assets/add-step-manually-search.png
+   :width: 900
+
+Click the step type you wish to add and you will be presented with a form
+where you can select the step properties either by editing the sentence at the
+top or by changing values in the properties table.
+
+.. image:: assets/add-step-manually-properties.png
+   :width: 900
+
+To add the step to the procedure click the "Submit" button.
 
 SynthReader Examples
-********
+********************
 
 Here are some working examples of ways that different synthetic sequences can be
-obtained in XDL using SynthReader.
+obtained in XDL using SynthReader. General advice for using SynthReader is
+to always use past tense, and keep sentences simple.
 
 Addition of multiple reagents
-^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 "*2,6-Dimethylaniline (3.0 mL, 2.9 g, 24.4 mmol) is added to 15 mL of glacial
 acetic acid followed by chloroacetyl chloride (2.0 mL, 2.85 g, 25.1 mmol) and
@@ -52,7 +78,7 @@ were added to 15 mL of glacial acetic acid.*"
       reagent="half-saturated aqueous sodium acetate" />
 
 Addition at temperature
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
 
 "*THF (50 mL) was added at -20°C*."
 
@@ -70,9 +96,9 @@ Addition at temperature
       vessel="reactor" />
 
 Addition over time
-^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^
 
-"*THF (50 mL) was added over 20 minutes."
+"*THF (50 mL) was added over 20 minutes.*"
 
 .. code-block:: xml
 
@@ -84,9 +110,9 @@ Addition over time
       reagent="THF" />
 
 Addition dropwise
-^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
-"*...THF (50 mL) was added dropwise."
+"*...THF (50 mL) was added dropwise.*"
 
 .. code-block:: xml
 

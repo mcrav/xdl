@@ -39,10 +39,10 @@ def get_init_method(template_cls: type) -> str:
 
     Args:
         template_cls (type): Abstract step template class to use when making
-            __init__ method for placeholder class.
+           ``__init__`` method for placeholder class.
 
     Returns:
-        str: Executable code string to define __init__ method of placeholder
+        str: Executable code string to define ``__init__`` method of placeholder
             class.
     """
     # Define method
@@ -76,8 +76,24 @@ def placeholder_step(template_cls: type) -> Callable:
     """Decorator to generate placeholder class based on given template class.
     Placeholder class should allow the step to be used the same way as an actual
     implementation, but get_steps will always return an empty list.
+
+    Args:
+        template_cls (type): Template class such as
+            :py:class:`AbstractAddStep`.
+
+    Returns:
+        Callable: Inner decorator that creates placeholder class from template
+            class.
     """
     def inner_decorator(cls: type) -> type:
+        """Decorator to make placeholder class using template class.
+
+        Args:
+            cls (type): Class to turn into a placeholder class.
+
+        Returns:
+            type: Placeholder class created using template class.
+        """
         # Define placeholder class
         class PlaceholderCls(template_cls):
 

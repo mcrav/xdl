@@ -18,13 +18,13 @@ class AbstractWashSolidStep(AbstractStepTemplate):
         vessel (vessel): Vessel containing solid to wash.
         solvent (reagent): Solvent to wash solid with.
         volume (float): Volume of solvent to use.
-        filtrate_vessel (vessel): Vessel to send filtrate to. If None, filtrate
-            is sent to waste.
+        filtrate_vessel (vessel): Vessel to send filtrate to. If ``None``,
+            filtrate is sent to waste.
         temp (float): Temperature to apply to vessel during washing.
-        stir (Union[bool, str]): If True, start stirring before solvent is added
-            and stop stirring after solvent is removed. If 'solvent', start
-            stirring after solvent is added and stop stirring before solvent is
-            removed. If False, do not stir at all.
+        stir (Union[bool, str]): If ``True``, start stirring before solvent is
+            added and stop stirring after solvent is removed. If ``'solvent'``,
+            start stirring after solvent is added and stop stirring before
+            solvent is removed. If ``False``, do not stir at all.
         stir_speed (float): Speed at which to stir at.
         time (float): Time to wait for between adding solvent and removing
             solvent.

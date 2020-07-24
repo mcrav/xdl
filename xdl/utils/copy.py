@@ -4,7 +4,11 @@ from ..hardware import Hardware
 from ..xdl import XDL
 
 def deep_copy_step(step: Step):
-    """Return a deep copy of a step. Written this way with children handled
+    """Deprecated. Step.__deepcopy__ now implemented so you can just do
+    ``copy.deepcopy(step)``. This remains here for backwards compatibility
+    but should eventually be removed.
+
+    Return a deep copy of a step. Written this way with children handled
     specially for compatibility with Python 3.6.
     """
     # Copy children
@@ -26,7 +30,11 @@ def deep_copy_step(step: Step):
     return copied_step
 
 def xdl_copy(xdl_obj: XDL) -> XDL:
-    """Returns a deepcopy of a XDL object. copy.deepcopy can be used with
+    """Deprecated. XDL.__deepcopy__ now implemented so you can just do
+    ``copy.deepcopy(xdl_obj)``. This remains here for backwards compatibility
+    but should eventually be removed.
+
+    Returns a deepcopy of a XDL object. copy.deepcopy can be used with
     Python 3.7, but for Python 3.6 you have to use this.
 
     Args:

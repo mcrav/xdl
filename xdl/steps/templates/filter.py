@@ -18,9 +18,10 @@ class AbstractFilterStep(AbstractStepTemplate):
         filtrate_vessel (vessel): Vessel to send filtrate to. If not given,
             filtrate is sent to waste.
         stir (bool): Stir vessel while adding reagent.
-        stir_speed (float): Speed in RPM at which to stir at if stir is True.
+        stir_speed (float): Speed in RPM at which to stir at if stir is
+            ``True``.
         temp (float): Temperature to perform filtration at. Defaults to RT.
-        continue_heatchill (bool): Only applies if temp is given. If True
+        continue_heatchill (bool): Only applies if temp is given. If ``True``
             continue temperature control after step has finished. Otherwise
             stop temperature control at end of step.
         volume (float): Volume of liquid to withdraw. If not given, volume

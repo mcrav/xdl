@@ -1,19 +1,19 @@
 from typing import List, Dict
 
-from .constants import REAGENT_PROPS
+from ..constants import REAGENT_PROP_TYPE
 from ..hardware import Component
 from ..reagents import Reagent
 from ..steps import AbstractBaseStep, AbstractStep, Step
 from ..errors import XDLError
 
 def get_valid_attrs(target_class: type) -> List[str]:
-    """Get valid attrs for passing to target_class __init__ methods.
+    """Get valid attrs for passing to ``target_class.__init__`` methods.
 
     Args:
-        target_class (type): Class to get valid attrs for __init__ method.
+        target_class (type): Class to get valid attrs for ``__init__`` method.
 
     Returns:
-        List[str]: List of arg names for target_class __init__ method.
+        List[str]: List of arg names for ``target_class.__init__`` method.
     """
     valid_attrs = [
         k
@@ -29,19 +29,18 @@ def get_valid_attrs(target_class: type) -> List[str]:
     return valid_attrs
 
 def check_attrs_are_valid(attrs: Dict[str, str], target_class: type) -> None:
-    """Check that attrs can be passed into target_class like
-    `target_class(**attrs)`.
+    """Check that attrs can be passed into ``target_class`` like
+    ``target_class(**attrs)``.
 
     Args:
         attrs (Dict[str, str]): Attribute dict to check all keys are args of
-            target_class __init__ method.
-        target_class (type): target_class to check attrs are args of
-            __init__ method.
+            ``target_class.__init__`` method.
+        target_class (type): ``target_class`` to check attrs are args of
+            ``__init__`` method.
 
     Raises:
-        XDLError: Error raised if any of attrs aren't args of target_class\
- __init__
-            method.
+        XDLError: Error raised if any of attrs aren't args of
+            ``target_class.__init__`` method.
     """
     valid_attrs = get_valid_attrs(target_class) + ['children', 'repeat']
     for attr, _ in attrs.items():
@@ -63,8 +62,8 @@ def check_reagents_are_all_declared(
     """
     reagent_ids = [reagent.id for reagent in reagents]
     for step in steps:
-        for prop in step.properties:
-            if prop in REAGENT_PROPS:
+        for prop, prop_type in step.PROP_TYPES.items():
+            if prop_type == REAGENT_PROP_TYPE:
                 step_reagent = step.properties[prop]
                 if step_reagent not in reagent_ids:
                     raise XDLError(

@@ -16,7 +16,7 @@ Usage
    install
    usage/index
    development/index
-   xdl_autodoc/modules
+   src/index
 
 
 

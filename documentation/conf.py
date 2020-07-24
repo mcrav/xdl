@@ -165,3 +165,5 @@ autodoc_default_options = {
 }
 
 html_static_path = []
+
+napoleon_custom_sections = [('Mandatory props', 'Parameters')]

@@ -5,18 +5,27 @@ import sys
 ###############
 
 class XDLError(Exception):
+    """Base XDL error."""
     pass
 
 class XDLGraphError(XDLError):
+    """Graph related error."""
     pass
 
 class XDLCompilationError(XDLError):
+    """Error occurring during compilation."""
     pass
 
 class XDLExecutionError(XDLError):
+    """Error occurring during execution."""
     pass
 
 class XDLValueError(XDLError):
+    """Invalid value supplied."""
+    pass
+
+class XDLSanityCheckError(XDLError):
+    """Step sanity check failed."""
     pass
 
 #######################
@@ -24,6 +33,8 @@ class XDLValueError(XDLError):
 #######################
 
 class XDLInvalidFileTypeError(XDLError):
+    """Tried to instantiate XDL with invalid file type."""
+
     def __init__(self, file_ext):
         self.file_ext = file_ext
 
@@ -32,6 +43,8 @@ class XDLInvalidFileTypeError(XDLError):
  file types: .xdl, .xdlexe, .json'
 
 class XDLInvalidSaveFormatError(XDLError):
+    """Tried to save XDL with invalid file format."""
+
     def  __init__(self, file_format):
         self.file_format = file_format
 
@@ -40,6 +53,8 @@ class XDLInvalidSaveFormatError(XDLError):
  XDL. Valid file formats: "xml", "json".'
 
 class XDLVesselNotDeclaredError(XDLError):
+    """Vessel used in procedure but not declared in Hardware section."""
+
     def __init__(self, vessel):
         self.vessel = vessel
 
@@ -48,6 +63,8 @@ class XDLVesselNotDeclaredError(XDLError):
  in <Hardware> section of XDL'
 
 class XDLReagentNotDeclaredError(XDLError):
+    """Reagent used in procedure but not declared in Reagents section."""
+
     def __init__(self, reagent):
         self.reagent = reagent
 
@@ -56,6 +73,8 @@ class XDLReagentNotDeclaredError(XDLError):
  in <Reagents> section of XDL'
 
 class XDLFileNotFoundError(XDLError):
+    """File given for loading xdl does not exist."""
+
     def __init__(self, file_name):
         self.file_name = file_name
 
@@ -63,6 +82,10 @@ class XDLFileNotFoundError(XDLError):
         return f'{self.file_name} does not exist.'
 
 class XDLInvalidInputError(XDLError):
+    """Object given to instantiate XDL is not a file path, XML XDL string or XDL
+    JSON dict.
+    """
+
     def __init__(self, input_str):
         self.input_str = input_str
 
@@ -71,6 +94,8 @@ class XDLInvalidInputError(XDLError):
      \n\n{self.input_str}'
 
 class XDLInvalidArgsError(XDLError):
+    """Invalid combination of args given to XDL __init__."""
+
     def __str__(self):
         return 'Unable to initialise XDL object, invalid argument combination\
  given. Either xdl arg must be given with the name of a valid XDL\
@@ -82,6 +107,8 @@ class XDLInvalidArgsError(XDLError):
 #########
 
 class XDLGraphInvalidFileTypeError(XDLGraphError):
+    """Invalid file type given for loading graph."""
+
     def __init__(self, graph_file):
         self.graph_file = graph_file
 
@@ -90,6 +117,8 @@ class XDLGraphInvalidFileTypeError(XDLGraphError):
  Valid file types: .json, .graphml'
 
 class XDLGraphFileNotFoundError(XDLGraphError):
+    """File path given for graph does not exist."""
+
     def __init__(self, graph_file):
         self.graph_file = graph_file
 
@@ -97,6 +126,8 @@ class XDLGraphFileNotFoundError(XDLGraphError):
         return f'Graph file "{self.graph_file}" does not exist.'
 
 class XDLGraphTypeError(XDLGraphError):
+    """Object with invalid type given to instantiate graph."""
+
     def __init__(self, graph_file):
         self.graph_file = graph_file
 
@@ -110,6 +141,8 @@ class XDLGraphTypeError(XDLGraphError):
 ###############
 
 class XDLDoubleCompilationError(XDLCompilationError):
+    """User tries to compile the same XDL object twice."""
+
     def __str__(self):
         return 'Cannot compile same XDL object twice.'
 
@@ -118,6 +151,8 @@ class XDLDoubleCompilationError(XDLCompilationError):
 #############
 
 class XDLInvalidPlatformControllerError(XDLExecutionError):
+    """Invalid platform controller supplied."""
+
     def __init__(self, platform_controller):
         self.platform_controller = platform_controller
 
@@ -126,21 +161,33 @@ class XDLInvalidPlatformControllerError(XDLExecutionError):
  {type(self.platform_controller)} Value: {self.platform_controller}'
 
 class XDLExecutionBeforeCompilationError(XDLExecutionError):
+    """User tries to execute xdl before compiling it."""
+
     def __str__(self):
         return 'Trying to execute procedure that has not been compiled. First\
  call xdl_obj.prepare_for_execution(graph).'
 
 class XDLDurationBeforeCompilationError(XDLExecutionError):
+    """User tries to calculate duration before compiling procedure."""
+
     def __str__(self):
         return 'Trying to calculate duration for procedure that has not been\
  compiled. First call xdl_obj.prepare_for_execution(graph).'
 
 class XDLReagentVolumesBeforeCompilationError(XDLExecutionError):
+    """User tries to calculate reagents volumes used before compiling
+    procedure.
+    """
+
     def __str__(self):
         return 'Trying to calculate reagent volumes for procedure that has not\
  been compiled. First call xdl_obj.prepare_for_execution(graph).'
 
 class XDLExecutionOnDifferentGraphError(XDLExecutionError):
+    """User tries to execute XDL using different graph than the one used to
+    compile it.
+    """
+
     def __str__(self):
         return 'Trying to execute XDL on different graph than the one it was\
  compiled with.'
@@ -150,6 +197,8 @@ class XDLExecutionOnDifferentGraphError(XDLExecutionError):
 ########
 
 class XDLStepIndexError(XDLError):
+    """User supplies a step index out of bounds of step list."""
+
     def __init__(self, step_index, len_steps):
         self.step_index = step_index
         self.len_steps = len_steps
@@ -159,6 +208,8 @@ class XDLStepIndexError(XDLError):
  {self.len_steps}'
 
 class XDLInvalidPlatformError(XDLError):
+    """User supplies an invalid platform."""
+
     def __init__(self, platform):
         self.platform = platform
 
@@ -167,6 +218,8 @@ class XDLInvalidPlatformError(XDLError):
  be "chemputer" or a subclass of AbstractPlatform.'
 
 class XDLLanguageUnavailableError(XDLError):
+    """User requests human readable in a language that is unavailable."""
+
     def __init__(self, language, available_languages=None):
         self.language = language
         self.available_languages = available_languages
@@ -182,9 +235,12 @@ class XDLLanguageUnavailableError(XDLError):
 ##################
 
 class XDLStepTemplateError(XDLError):
+    """Error related to abstract step templates."""
     pass
 
 class XDLStepTemplateMissingPropError(XDLStepTemplateError):
+    """Step implementation missing mandatory prop."""
+
     def __init__(self, name, prop, prop_type):
         self.name = name
         self.prop = prop
@@ -195,6 +251,7 @@ class XDLStepTemplateMissingPropError(XDLStepTemplateError):
  ({self.prop_type}) property, but this has not been found in PROP_TYPES.'
 
 class XDLStepTemplatePropTypeError(XDLStepTemplateError):
+    """Step implementation has an invalid prop type."""
 
     def __init__(self, name, prop, prop_type, invalid_prop_type):
         self.name = name
@@ -208,6 +265,8 @@ class XDLStepTemplatePropTypeError(XDLStepTemplateError):
  {str(self.invalid_prop_type)}.'
 
 class XDLStepTemplateMissingDefaultPropError(XDLStepTemplateError):
+    """Step implementation missing mandatory default prop."""
+
     def __init__(self, name, prop, default_prop):
         self.name = name
         self.prop = prop
@@ -219,6 +278,7 @@ class XDLStepTemplateMissingDefaultPropError(XDLStepTemplateError):
  DEFAULT_PROPS.'
 
 class XDLStepTemplateInvalidDefaultPropError(XDLStepTemplateError):
+    """Step implementation has invalid default prop."""
 
     def __init__(self, name, prop, default_prop, invalid_default_prop):
         self.name = name
@@ -232,6 +292,8 @@ class XDLStepTemplateInvalidDefaultPropError(XDLStepTemplateError):
  {str(self.invalid_default_prop)}.'
 
 class XDLStepTemplateMissingPropLimitError(XDLStepTemplateError):
+    """Step implementation missing mandatory prop limit."""
+
     def __init__(self, name, prop, prop_limit):
         self.name = name
         self.prop = prop
@@ -243,6 +305,7 @@ class XDLStepTemplateMissingPropLimitError(XDLStepTemplateError):
  PROP_LIMITS.'
 
 class XDLStepTemplateInvalidPropLimitError(XDLStepTemplateError):
+    """Step implementation has invalid prop limit."""
 
     def __init__(self, name, prop, prop_limit, invalid_prop_limit):
         self.name = name
@@ -256,6 +319,7 @@ class XDLStepTemplateInvalidPropLimitError(XDLStepTemplateError):
  {str(self.invalid_prop_limit)}.'
 
 class XDLStepTemplateNameError(XDLStepTemplateError):
+    """Step implementation has invalid name."""
 
     def __init__(self, mandatory_name, name):
         self.mandatory_name = mandatory_name
@@ -270,6 +334,8 @@ class XDLStepTemplateNameError(XDLStepTemplateError):
 ##############
 
 class XDLUndeclaredDefaultPropError(XDLError):
+    """Prop included in ``DEFAULT_PROPS`` but not in ``PROP_TYPES``."""
+
     def __init__(self, step_name, prop):
         self.step_name = step_name
         self.prop = prop
@@ -279,6 +345,8 @@ class XDLUndeclaredDefaultPropError(XDLError):
  but not in PROP_TYPES.'
 
 class XDLUndeclaredPropLimitError(XDLError):
+    """Prop included in ``PROP_LIMITS`` but not in ``PROP_TYPES``."""
+
     def __init__(self, step_name, prop):
         self.step_name = step_name
         self.prop = prop
@@ -288,6 +356,8 @@ class XDLUndeclaredPropLimitError(XDLError):
  but not in PROP_TYPES.'
 
 class XDLUndeclaredInternalPropError(XDLError):
+    """Prop included in ``INTERNAL_PROPS`` but not in ``PROP_TYPES``."""
+
     def __init__(self, step_name, prop):
         self.step_name = step_name
         self.prop = prop
@@ -297,6 +367,8 @@ class XDLUndeclaredInternalPropError(XDLError):
  but not in PROP_TYPES.'
 
 class XDLUndeclaredAlwaysWriteError(XDLError):
+    """Prop included in ``ALWAYS_WRITE`` but not in ``PROP_TYPES``."""
+
     def __init__(self, step_name, prop):
         self.step_name = step_name
         self.prop = prop
@@ -306,6 +378,9 @@ class XDLUndeclaredAlwaysWriteError(XDLError):
  but not in PROP_TYPES.'
 
 class XDLMissingDefaultPropError(XDLError):
+    """``'default'`` given as value for prop but prop not in ``DEFAULT_PROPS``.
+    """
+
     def __init__(self, xdl_element_name, prop):
         self.xdl_element_name = xdl_element_name
         self.prop = prop
@@ -315,6 +390,8 @@ class XDLMissingDefaultPropError(XDLError):
  default value found in {self.xdl_element_name} DEFAULT_PROPS.'
 
 class XDLMissingPropTypeError(XDLError):
+    """Value given for prop but prop not in ``PROP_TYPES``."""
+
     def __init__(self, xdl_element_name, prop):
         self.xdl_element_name = xdl_element_name
         self.prop = prop
@@ -324,6 +401,8 @@ class XDLMissingPropTypeError(XDLError):
  class.'
 
 class XDLFailedPropLimitError(XDLValueError):
+    """Value given for prop does not match prop limit."""
+
     def __init__(self, xdl_element_name, prop, value, prop_limit):
         self.xdl_element_name = xdl_element_name
         self.prop = prop
@@ -335,6 +414,8 @@ class XDLFailedPropLimitError(XDLValueError):
  "{self.prop}" prop limit. {self.prop_limit.hint}'
 
 class XDLTypeConversionError(XDLValueError):
+    """Error occurred converting value to prop type."""
+
     def __init__(self, xdl_element_name, prop, prop_type, value):
         self.xdl_element_name = xdl_element_name
         self.prop = prop
