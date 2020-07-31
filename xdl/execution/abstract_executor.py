@@ -6,7 +6,7 @@ from networkx.readwrite import node_link_data
 from networkx import MultiDiGraph
 
 from .utils import do_sanity_check
-from ..steps.special_steps import Async, Await
+from ..steps.special_steps import Async, Await, Repeat
 from ..steps.base_steps import Step, AbstractDynamicStep
 from ..steps import NON_RECURSIVE_ABSTRACT_STEPS
 from ..errors import (
@@ -238,10 +238,25 @@ class AbstractXDLExecutor(ABC):
             if type(step) == Await:
                 keep_going = step.execute(async_steps, self.logger)
 
+            # Execute Repeat like this so any nested Async steps get added to
+            # async_steps
+            elif type(step) is Repeat:
+                for substep in step.steps:
+                    keep_going = self.execute_step(
+                        platform_controller, substep, async_steps)
+
             # Normal step execution
             else:
                 keep_going = step.execute(
                     platform_controller, self.logger)
+
+                # Store all Async steps so that they can be awaited.
+                if type(step) == Async:
+
+                    # Need this check to stop Async inside Repeat adding the
+                    # same step multiple times.
+                    if step not in async_steps:
+                        async_steps.append(step)
 
         # Raise any errors during step execution with additional info about step
         # that failed.
