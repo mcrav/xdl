@@ -101,6 +101,9 @@ class Await(AbstractBaseStep):
             if async_step.pid == self.pid:
                 while not async_step.finished:
                     time.sleep(1)
+                # Reset async step so it can be used again, for example in
+                # Repeat step.
+                async_step.finished = False
         return True
 
     def locks(self, chempiler):
