@@ -17,8 +17,7 @@ def get_valid_attrs(target_class: type) -> List[str]:
     """
     valid_attrs = [
         k
-        for k in target_class.__init__.__annotations__
-        if k != 'return'
+        for k in target_class.PROP_TYPES
     ]
     if (AbstractStep in target_class.__bases__
             or AbstractBaseStep in target_class.__bases__):

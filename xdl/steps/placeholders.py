@@ -33,6 +33,7 @@ from .templates import (
     AbstractTransferStep,
     AbstractWashSolidStep
 )
+from ..errors import XDLUnimplementedStepError
 
 def get_init_method(template_cls: type) -> str:
     """Create executable code string to define __init__ method.
@@ -94,6 +95,8 @@ def placeholder_step(template_cls: type) -> Callable:
         Returns:
             type: Placeholder class created using template class.
         """
+        step_name = template_cls.MANDATORY_NAME
+
         # Define placeholder class
         class PlaceholderCls(template_cls):
 
@@ -109,8 +112,11 @@ def placeholder_step(template_cls: type) -> Callable:
             def get_steps(self):
                 return []
 
+            def on_prepare_for_execution(self, graph):
+                raise XDLUnimplementedStepError(step_name)
+
         # Rename class
-        PlaceholderCls.__name__ = template_cls.MANDATORY_NAME
+        PlaceholderCls.__name__ = step_name
 
         # Return placeholder class
         return PlaceholderCls
