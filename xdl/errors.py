@@ -230,6 +230,14 @@ class XDLLanguageUnavailableError(XDLError):
             s += f'Available languages: {", ".join(self.available_languages)}'
         return s
 
+class XDLUnimplementedStepError(XDLCompilationError):
+    def __init__(self, step_name: str) -> None:
+        self.step_name = step_name
+
+    def __str__(self):
+        return f'"{self.step_name}" is an unimplemented step.\
+ Unable to compile.'
+
 ##################
 # Step Templates #
 ##################
