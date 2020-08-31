@@ -1,42 +1,54 @@
-<Synthesis auto_clean="false">
+<Synthesis>
+
   <Hardware>
     <Component
       id="reactor"
-      type="reactor" />
+      type="reactor"
+    />
     <Component
       id="filter"
-      type="filter" />
+      type="filter"
+    />
   </Hardware>
 
   <Reagents>
     <Reagent
-      id="water" />
+      id="water"
+    />
     <Reagent
-      id="ether" />
+      id="ether"
+    />
   </Reagents>
 
   <Procedure>
-    <Async pid="test">
+    <Async
+      pid="test"
+    >
       <Add
         vessel="reactor"
         reagent="water"
-        volume="20"
+        volume="20 mL"
       />
-      <Repeat repeats="200">
-        <Wait time="1" />
+      <Repeat
+        repeats="200"
+      >
+        <Wait
+          time="1 secs"
+        />
       </Repeat>
     </Async>
-
     <HeatChillToTemp
       vessel="filter"
-      temp="60"
+      temp="60 °C"
+      stir="true"
     />
-
-    <Await pid="test" />
-
+    <Await
+      pid="test"
+    />
     <HeatChillToTemp
       vessel="reactor"
-      temp="100"
+      temp="100 °C"
+      stir="true"
     />
   </Procedure>
 

@@ -1,5 +1,5 @@
 import pytest
-from chemputerxdl.steps import Add, Dry
+from chemputerxdl.steps import Add, Dry, AddSolid
 
 EQUIVALENT_VOLUMES = (500, [
     '500 mL',
@@ -65,7 +65,7 @@ def test_volume_conversion():
 def test_mass_conversion():
     correct_mass = EQUIVALENT_MASSES[0]
     for mass in EQUIVALENT_MASSES[1]:
-        step = Add(
+        step = AddSolid(
             reagent='water', mass=mass, vessel='filter')
         assert step.mass == correct_mass
 
@@ -73,8 +73,8 @@ def test_mass_conversion():
 def test_pressure_conversion():
     correct_pressure = EQUIVALENT_PRESSURES[0]
     for pressure in EQUIVALENT_PRESSURES[1]:
-        step = Dry(vessel='filter', vacuum_pressure=pressure)
-        assert (f'{step.vacuum_pressure:.2f}' == f'{correct_pressure:.2f}')
+        step = Dry(vessel='filter', pressure=pressure)
+        assert (f'{step.pressure:.2f}' == f'{correct_pressure:.2f}')
 
 @pytest.mark.unit
 def test_temperature_conversion():

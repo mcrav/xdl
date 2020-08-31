@@ -1,65 +1,77 @@
-<?xdl version="0.1.10" ?>
-
 <Synthesis>
+
   <Hardware>
     <Component
       id="filter"
-      type="filter" />
+      type="filter"
+    />
     <Component
       id="flask_washings"
-      type="flask" />
+      type="flask"
+    />
   </Hardware>
 
   <Reagents>
     <Reagent
-      id="anhydrous Et2O" />
+      id="anhydrous Et2O"
+    />
     <Reagent
-      id="benzyl carbamate" />
+      id="benzyl carbamate"
+    />
     <Reagent
-      id="glyoxylic acid monohydrate" />
+      id="glyoxylic acid monohydrate"
+    />
     <Reagent
-      id="hexanes-Et2O" />
+      id="hexanes-Et2O"
+    />
   </Reagents>
 
   <Procedure>
-    <Add
+    <AddSolid
+      vessel="filter"
       reagent="benzyl carbamate"
-      vessel="filter"
       mass="30.23 g"
-      stir="False" />
-    <Add
+    />
+    <AddSolid
+      vessel="filter"
       reagent="glyoxylic acid monohydrate"
-      vessel="filter"
       mass="20.25 g"
-      stir="False" />
-    <Evacuate
-      vessel="filter" />
-    <Add
-      reagent="anhydrous Et2O"
+    />
+    <EvacuateAndRefill
       vessel="filter"
+    />
+    <Add
+      vessel="filter"
+      reagent="anhydrous Et2O"
       volume="200 mL"
-      stir="False" />
+    />
     <HeatChill
       vessel="filter"
       temp="34.5°C"
       time="12 hrs"
-      stir_speed="200.0" />
+      stir="true"
+      stir_speed="200.0 RPM"
+    />
     <HeatChillToTemp
       vessel="filter"
       temp="25°C"
-      active="True"
-      continue_heatchill="False" />
+      continue_heatchill="False"
+      stir="true"
+    />
     <Filter
-      filter_vessel="filter"
-      filtrate_vessel="flask_washings" />
+      vessel="filter"
+      filtrate_vessel="flask_washings"
+    />
     <WashSolid
       vessel="filter"
       solvent="hexanes-Et2O"
       volume="20 mL"
-      repeat="6"
-      filtrate_vessel="flask_washings" />
+      filtrate_vessel="flask_washings"
+      repeats="6"
+    />
     <Dry
-      vessel="filter" />
+      vessel="filter"
+    />
   </Procedure>
 
 </Synthesis>
