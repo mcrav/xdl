@@ -1,13 +1,20 @@
-<Synthesis auto_clean="false">
+<Synthesis>
+
   <Hardware>
   </Hardware>
 
-  <Reagents />
+  <Reagents>
+  </Reagents>
 
   <Procedure>
-    <Loop>
-      <Wait time="5" />
-      <Wait time="10" />
+    <Loop
+    >
+      <Wait
+        time="5 secs"
+      />
+      <Wait
+        time="10 secs"
+      />
     </Loop>
   </Procedure>
 

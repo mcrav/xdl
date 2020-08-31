@@ -1,88 +1,107 @@
-<?xdl version="0.1.10" ?>
-
 <Synthesis>
+
   <Hardware>
     <Component
       id="reactor"
-      type="reactor" />
+      type="reactor"
+    />
     <Component
       id="filter"
-      type="filter" />
+      type="filter"
+    />
   </Hardware>
 
   <Reagents>
     <Reagent
-      id="4-phenylbutyric acid" />
+      id="4-phenylbutyric acid"
+    />
     <Reagent
-      id="benzylamine" />
+      id="benzylamine"
+    />
     <Reagent
-      id="boric acid" />
+      id="boric acid"
+    />
     <Reagent
-      id="distilled water" />
+      id="distilled water"
+    />
     <Reagent
-      id="hexanes" />
+      id="hexanes"
+    />
     <Reagent
       id="toluene"
-      use_for_cleaning="True" />
+      use_for_cleaning="True"
+    />
   </Reagents>
 
   <Procedure>
-    <Add
+    <AddSolid
+      vessel="reactor"
       reagent="4-phenylbutyric acid"
-      vessel="reactor"
       mass="4.92 g"
-      stir="False" />
-    <Add
+    />
+    <AddSolid
+      vessel="reactor"
       reagent="boric acid"
-      vessel="reactor"
       mass="20 mg"
-      stir="False" />
+    />
     <Add
+      vessel="reactor"
       reagent="toluene"
-      vessel="reactor"
       volume="70 mL"
-      stir="False" />
+    />
     <Add
-      reagent="benzylamine"
       vessel="reactor"
+      reagent="benzylamine"
       volume="3.4 mL"
-      stir="True" />
+      stir="True"
+    />
     <HeatChill
       vessel="reactor"
       temp="140°C"
-      time="16 hrs" />
+      time="16 hrs"
+      stir="true"
+    />
     <HeatChillToTemp
       vessel="reactor"
       temp="25°C"
       active="False"
-      continue_heatchill="False" />
+      continue_heatchill="False"
+      stir="true"
+    />
     <Add
-      reagent="hexanes"
       vessel="filter"
+      reagent="hexanes"
       volume="500 mL"
-      stir="True" />
+      stir="True"
+    />
     <Transfer
       from_vessel="reactor"
       to_vessel="filter"
-      volume="all" />
+      volume="all"
+    />
     <Stir
       vessel="filter"
-      time="30 mins" />
+      time="30 mins"
+    />
     <Filter
-      filter_vessel="filter" />
+      vessel="filter"
+    />
     <WashSolid
       vessel="filter"
       solvent="hexanes"
       volume="60 mL"
-      repeat="2" />
+      repeats="2"
+    />
     <WashSolid
       vessel="filter"
       solvent="distilled water"
       volume="60 mL"
-      repeat="2" />
+      repeats="2"
+    />
     <Dry
       vessel="filter"
-      time="12 hrs"/>
+      time="12 hrs"
+    />
   </Procedure>
 
 </Synthesis>

@@ -4,6 +4,7 @@ from ..reagents import Reagent
 from ..hardware import Component
 from ..xdl import XDL
 from ..utils.xdl_base import XDLBase
+from ..platforms import PlaceholderPlatform
 
 class ReactionBlueprint(XDLBase):
     """Base class for reaction blueprints. The idea of a blueprint is to be a
@@ -84,7 +85,7 @@ class ReactionBlueprint(XDLBase):
         x = XDL(steps=steps, reagents=reagents, hardware=[
             Component(id="reactor", component_type="reactor"),
             Component(id="rotavap", component_type="rotavap")
-        ])
+        ], platform=PlaceholderPlatform)
 
         if save:
             x.save(save)
