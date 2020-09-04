@@ -1,4 +1,5 @@
 from typing import Dict, Any, List, Union
+import json
 from .sanitisation import (
     DEFAULT_PROP_LIMITS, convert_val_to_std_units, parse_bool)
 from .logging import get_logger
@@ -9,7 +10,7 @@ from ..errors import (
     XDLTypeConversionError,
 )
 from ..utils.prop_limits import PropLimit
-from ..constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
+from ..constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE, JSON_PROP_TYPE
 
 class XDLBase(object):
     """Base object for Step, Component and Reagent objects. The functionality
@@ -332,6 +333,12 @@ class XDLBase(object):
                 return value
             else:
                 return str(value)
+
+        # JSON string prop type
+        elif prop_type == JSON_PROP_TYPE:
+            if type(value) == str:
+                return json.loads(value)
+            return value
 
         # If prop type not matched by any of these conditions, just return
         # unchanged.

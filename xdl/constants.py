@@ -39,3 +39,6 @@ REAGENT_PROP_TYPE: str = 'reagent'
 
 #: Prop type if property is reaction mixture vessel.
 VESSEL_PROP_TYPE: str = 'vessel'
+
+#: JSON string prop type.
+JSON_PROP_TYPE: str = 'json'
