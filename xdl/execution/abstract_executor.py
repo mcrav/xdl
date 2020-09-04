@@ -298,6 +298,10 @@ class AbstractXDLExecutor(ABC):
                 else:
                     raise XDLExecutionOnDifferentGraphError()
 
+            # For platforms other than Chemputer just switch flag
+            else:
+                self._prepared_for_execution = True
+
         # Execute procedure
         if self._prepared_for_execution:
             self.logger.info(

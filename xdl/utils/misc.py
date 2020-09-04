@@ -3,6 +3,7 @@ separate modules with more meaningful names.
 """
 
 from typing import Any, Optional, Dict
+import json
 from tabulate import tabulate
 
 from .prop_limits import (
@@ -14,6 +15,7 @@ from .prop_limits import (
     MASS_PROP_LIMIT,
     PRESSURE_PROP_LIMIT,
 )
+from ..constants import JSON_PROP_TYPE
 from ..errors import XDLSanityCheckError
 if False:
     from ..steps import Step
@@ -85,6 +87,10 @@ def format_property(
 
     elif prop_type == int:
         return format_int(val)
+
+    elif prop_type == JSON_PROP_TYPE:
+        # Replacement to escape double quotes in XML attr
+        return json.dumps(val).replace('"', '&quot;')
 
     elif type(val) == list:
         return ' '.join([str(item) for item in val])
