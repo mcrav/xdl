@@ -90,7 +90,7 @@ def format_property(
 
     elif prop_type == JSON_PROP_TYPE:
         # Replacement to escape double quotes in XML attr
-        return json.dumps(val).replace('"', '&quot;')
+        return json.dumps(val).replace('"', "'")
 
     elif type(val) == list:
         return ' '.join([str(item) for item in val])

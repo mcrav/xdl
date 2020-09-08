@@ -1,0 +1,15 @@
+<?xdl version="0.4.6" ?>
+
+<Synthesis>
+  <Hardware>
+  </Hardware>
+
+  <Reagents>
+  </Reagents>
+
+  <Procedure>
+    <TestStep
+      test_prop="{'a': 'b', '1': 2}" />
+  </Procedure>
+
+</Synthesis>

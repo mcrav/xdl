@@ -337,7 +337,7 @@ class XDLBase(object):
         # JSON string prop type
         elif prop_type == JSON_PROP_TYPE:
             if type(value) == str:
-                return json.loads(value)
+                return json.loads(value.replace("'", '"'))
             return value
 
         # If prop type not matched by any of these conditions, just return
