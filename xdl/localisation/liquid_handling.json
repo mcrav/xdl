@@ -7,22 +7,10 @@
           "else": ""
         }
       },
-      "through_prefix": {
-        "through": {
-          "any": "through",
-          "else": "directly"
-        }
-      },
       "time_prefix": {
         "time": {
           "any": "over",
           "else": "at default speed"
-        }
-      },
-      "flush_tubing": {
-        "flush_tubing": {
-          "true": "flushing tubing after the transfer",
-          "false": "without flushing tubing after the transfer"
         }
       },
       "full": "Transfer {volume} from {from_vessel} to {to_vessel} {time_prefix} {time}"
