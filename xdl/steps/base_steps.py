@@ -423,7 +423,7 @@ class AbstractStep(Step, ABC):
         # Initialise internal steps list and properties associated with this
         # steps list.
         self._steps = self.get_steps()
-        self._last_props = copy.deepcopy(self.properties)
+        self._last_props = self._copy_props()
 
     @property
     def steps(self):
@@ -462,9 +462,29 @@ class AbstractStep(Step, ABC):
         # If self.properties has changed, update self._steps
         if should_update:
             self._steps = self.get_steps()
-            self._last_props = copy.deepcopy(self.properties)
+            self._last_props = self._copy_props()
 
         return self._steps
+
+    def _copy_props(self) -> Dict[str, Any]:
+        """Return deep copy of ``self.properties`` for use when deciding whether
+        to use cached :py:attr:`_steps` or not.
+
+        Returns:
+            Dict[str, Any]: Deep copy of ``self.properties`` for use when
+                deciding whether to use cached :py:attr:`_steps` or not.
+        """
+        copy_props = {}
+        for k, v in self.properties.items():
+            # Don't copy callable. For example, if this is a class method,
+            # copying will copy the entire object, meaning that any comparison
+            # with the previous method will show them to be unequal, even if
+            # the method hasn't actually changed.
+            if callable(v):
+                copy_props[k] = v
+            else:
+                copy_props[k] = copy.deepcopy(v)
+        return copy_props
 
     @abstractmethod
     def get_steps(self) -> List[Step]:
