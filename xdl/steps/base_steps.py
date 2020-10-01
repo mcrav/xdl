@@ -16,7 +16,7 @@ from ..utils import XDLBase
 from ..utils.localisation import conditional_human_readable
 from ..utils.misc import format_property, SanityCheck
 from ..utils.graph import get_graph
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger, log_duration
 from ..utils.vessels import VesselSpec
 from ..errors import (
     XDLError,
@@ -566,6 +566,9 @@ class AbstractStep(Step, ABC):
             bool: ``True`` if execution should continue, ``False`` if execution
             should stop.
         """
+        # Log step start timestamp
+        log_duration(self, 'start')
+
         # Bump recursion level
         level += 1
 
@@ -590,7 +593,23 @@ class AbstractStep(Step, ABC):
 
                 # Execute normal step
                 else:
-                    keep_going = step.execute(platform_controller, self.logger)
+                    step_is_base_step = isinstance(step, AbstractBaseStep)
+
+                    # Log base step start timestamp here, as it is easier than
+                    # adding to all base step `execute` methods. Only base step
+                    # logged here as normal step start / end timestamps logged
+                    # at start / end of this method.
+                    if step_is_base_step:
+                        log_duration(step, 'start')
+
+                    # Execute step
+                    keep_going = step.execute(
+                        platform_controller, self.logger, level=level + 1)
+
+                    # Log base step  end timestamp here, as it is easier than
+                    # adding to all base step `execute` methods.
+                    if step_is_base_step:
+                        log_duration(step, 'end')
 
             # It is disgusting to use except Exception, but the only reason
             # here is just to provide a bit of debug information if a step
@@ -605,6 +624,10 @@ class AbstractStep(Step, ABC):
             if not keep_going:
                 return False
 
+        # Log step end timestamp
+        log_duration(self, 'end')
+
+        # Return `keep_going` flag as `True`.
         return True
 
     @property
@@ -914,6 +937,9 @@ class AbstractDynamicStep(Step):
             self.simulate(platform_controller)
             return
 
+        # Log step start timestamp
+        log_duration(self, 'start')
+
         # Execute steps from on_start
         for step in self.start_block:
             self.executor.execute_step(
@@ -948,6 +974,9 @@ class AbstractDynamicStep(Step):
 
         # Kill all threads
         self._post_finish()
+
+        # Log step end timestamp
+        log_duration(self, 'end')
 
         return True
 
