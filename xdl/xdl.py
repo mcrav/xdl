@@ -31,7 +31,7 @@ from .readwrite.xml_interpreter import xdl_str_to_objs
 from .readwrite.xml_generator import xdl_to_xml_string
 from .readwrite.json import xdl_to_json, xdl_from_json_file, xdl_from_json
 from .steps import Step, AbstractBaseStep
-from .utils import get_logger
+from .utils.logging import get_logger, get_duration_file_handler
 from .utils.vessels import VesselSpec
 from .utils.misc import (
     steps_are_equal,
@@ -57,6 +57,8 @@ class XDL(object):
             used in ``steps``.
         logging_level (int): Logging level to use when creating
             :py:attr:`logger`. Defaults to ``logging.INFO``.
+        log_folder (str): Folder to save log files in. If ``None``, logs will
+            not be saved to a file.
         platform (AbstractPlatform): Optional. Target platform. If not given or
             given as ``None``, ``chemputerxdl.ChemputerPlatform`` will be used.
 
@@ -96,10 +98,11 @@ class XDL(object):
         hardware: Hardware = None,
         reagents: List[Reagent] = None,
         logging_level: int = logging.INFO,
+        log_folder: str = None,
         platform: AbstractPlatform = None,
     ) -> None:
 
-        self._initialize_logging(logging_level)
+        self._initialize_logging(log_folder, logging_level)
         self._load_platform(platform)
         self._load_xdl(xdl, steps=steps, hardware=hardware, reagents=reagents)
 
@@ -112,11 +115,14 @@ class XDL(object):
     # Initialization #
     ##################
 
-    def _initialize_logging(self, logging_level: int) -> None:
+    def _initialize_logging(self, log_folder: str, logging_level: int) -> None:
         """Initialize logger with given logging level."""
         self.logger = get_logger()
+        if log_folder is not None:
+            self.logger.addHandler(get_duration_file_handler(log_folder))
         self.logger.setLevel(logging_level)
         self.logging_level = logging_level
+        self.log_folder = log_folder
 
     def _load_platform(self, platform: AbstractPlatform) -> None:
         """Initialise given platform. If ``None`` given then initialise

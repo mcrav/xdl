@@ -7,13 +7,13 @@ from networkx import MultiDiGraph
 
 from .utils import do_sanity_check
 from ..steps.special_steps import Async, Await, Repeat
-from ..steps.base_steps import Step, AbstractDynamicStep
+from ..steps.base_steps import Step, AbstractDynamicStep, AbstractBaseStep
 from ..steps import NON_RECURSIVE_ABSTRACT_STEPS
 from ..errors import (
     XDLExecutionOnDifferentGraphError,
     XDLExecutionBeforeCompilationError
 )
-from ..utils import get_logger
+from ..utils.logging import get_logger, log_duration
 from ..utils.graph import get_graph
 if False:
     from ..xdl import XDL
@@ -247,8 +247,17 @@ class AbstractXDLExecutor(ABC):
 
             # Normal step execution
             else:
+                # Log step start timestamp
+                if isinstance(step, AbstractBaseStep):
+                    log_duration(step, 'start')
+
+                # Execute step
                 keep_going = step.execute(
                     platform_controller, self.logger)
+
+                # Log step end timestamp
+                if isinstance(step, AbstractBaseStep):
+                    log_duration(step, 'end')
 
                 # Store all Async steps so that they can be awaited.
                 if type(step) == Async:
