@@ -42,6 +42,7 @@ class PlaceholderPlatform(AbstractPlatform):
             'Irradiate': placeholders.Irradiate,
             'Precipitate': placeholders.Precipitate,
             'Purge': placeholders.Purge,
+            'RunColumn': placeholders.RunColumn,
             'Separate': placeholders.Separate,
             'StartHeatChill': placeholders.StartHeatChill,
             'StartPurge': placeholders.StartPurge,
