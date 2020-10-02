@@ -22,6 +22,7 @@ from .templates import (
     AbstractIrradiateStep,
     AbstractPrecipitateStep,
     AbstractPurgeStep,
+    AbstractRunColumnStep,
     AbstractSeparateStep,
     AbstractStartHeatChillStep,
     AbstractStartPurgeStep,
@@ -180,6 +181,10 @@ class Precipitate:
 
 @placeholder_step(AbstractPurgeStep)
 class Purge:
+    pass
+
+@placeholder_step(AbstractRunColumnStep)
+class RunColumn:
     pass
 
 @placeholder_step(AbstractSeparateStep)
