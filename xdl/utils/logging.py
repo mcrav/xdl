@@ -9,30 +9,69 @@ import time
 if False:
     from ..steps import Step
 
-def get_logger() -> logging.Logger:
+# The reason for having all handlers as global variables is to avoid adding
+# duplicate handlers when you do repeated calls of `logger.addHandler(handler)`.
+# `logging.addHandler(handler)` will not add the handler if the exact handler
+# object is already in `logger.handlers`.
+
+###################
+# Console Handler #
+###################
+
+def console_filter(record):
+    if record.funcName == 'log_duration':
+        return False
+    return True
+
+
+console_handler: logging.StreamHandler = logging.StreamHandler()
+formatter = logging.Formatter('XDL: %(message)s')
+console_handler.setFormatter(formatter)
+console_handler.setLevel(logging.DEBUG)
+console_handler.addFilter(console_filter)
+
+#########################
+# Duration File Handler #
+#########################
+
+duration_file_handler: logging.FileHandler = None
+
+def duration_filter(record):
+    if record.funcName != 'log_duration':
+        return False
+    return True
+
+
+def get_logger(log_folder=None) -> logging.Logger:
     """Get logger for logging xdl messages."""
     logger = logging.getLogger('xdl')
-    if not logger.hasHandlers():
-        logger.addHandler(get_handler())
+
+    # Initialize file handlers if log folder given and handlers have not been
+    # already added.
+    if not duration_file_handler and log_folder:
+        initialize_duration_file_handler(log_folder)
+
+    # Add console handler
+    logger.addHandler(console_handler)
+
+    # Add duration file handler if it has been initialized.
+    if duration_file_handler:
+        logger.addHandler(duration_file_handler)
+
     return logger
 
-def get_handler() -> logging.StreamHandler:
-    """Get handler for XDL logger."""
-    handler = logging.StreamHandler()
-    formatter = logging.Formatter('XDL: %(message)s')
-    handler.setFormatter(formatter)
-    handler.setLevel(logging.DEBUG)
-    handler.addFilter(console_filter)
-    return handler
 
-def get_duration_file_handler(log_folder) -> logging.FileHandler:
-    handler = logging.FileHandler(
+def initialize_duration_file_handler(log_folder: str) -> None:
+    """Initialize file handlers with given log folder."""
+    global duration_file_handler
+
+    # Initialize duration file handler
+    duration_file_handler = logging.FileHandler(
         os.path.join(log_folder, 'step-durations.tsv'))
     formatter = logging.Formatter('%(message)s')
-    handler.setFormatter(formatter)
-    handler.setLevel(logging.INFO)
-    handler.addFilter(duration_filter)
-    return handler
+    duration_file_handler.setFormatter(formatter)
+    duration_file_handler.setLevel(logging.INFO)
+    duration_file_handler.addFilter(duration_filter)
 
 def log_duration(step: 'Step', start_or_end: str):
     """Log start and end of step execution with timestamps for the purpose of
@@ -61,13 +100,3 @@ def log_duration(step: 'Step', start_or_end: str):
         f'{start_or_end}\t{step.uuid}\t{step.name}\t{json.dumps(props)}\
 \t{time.time()}'
     )
-
-def console_filter(record):
-    if record.funcName == 'log_duration':
-        return False
-    return True
-
-def duration_filter(record):
-    if record.funcName != 'log_duration':
-        return False
-    return True
