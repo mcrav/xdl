@@ -31,7 +31,7 @@ from .readwrite.xml_interpreter import xdl_str_to_objs
 from .readwrite.xml_generator import xdl_to_xml_string
 from .readwrite.json import xdl_to_json, xdl_from_json_file, xdl_from_json
 from .steps import Step, AbstractBaseStep
-from .utils.logging import get_logger, get_duration_file_handler
+from .utils.logging import get_logger
 from .utils.vessels import VesselSpec
 from .utils.misc import (
     steps_are_equal,
@@ -117,9 +117,9 @@ class XDL(object):
 
     def _initialize_logging(self, log_folder: str, logging_level: int) -> None:
         """Initialize logger with given logging level."""
-        self.logger = get_logger()
-        if log_folder is not None:
-            self.logger.addHandler(get_duration_file_handler(log_folder))
+        if log_folder:
+            os.makedirs(log_folder, exist_ok=True)
+        self.logger = get_logger(log_folder=log_folder)
         self.logger.setLevel(logging_level)
         self.logging_level = logging_level
         self.log_folder = log_folder
