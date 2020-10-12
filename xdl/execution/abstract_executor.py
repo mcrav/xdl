@@ -161,21 +161,34 @@ class AbstractXDLExecutor(ABC):
 
         # Iterate through each step
         for step in steps:
+            self.add_internal_properties_to_step(graph, step)
 
-            # Prepare the step for execution
-            step.on_prepare_for_execution(graph)
+    def add_internal_properties_to_step(
+            self, graph: MultiDiGraph, step: Step) -> None:
+        """Add internal properties to given step and all its substeps and
+        child steps.
 
-            # Special case for Dynamic steps
-            if isinstance(step, AbstractDynamicStep):
-                step.prepare_for_execution(graph, self)
+        Args:
+            graph (MultiDiGraph): Graph to pass to step
+                ``on_prepare_for_execution`` method.
+            step (Step): Step to add internal properties to.
+                The step is altered in place, hence no return
+                value.
+        """
+        # Prepare the step for execution
+        step.on_prepare_for_execution(graph)
 
-            # If the step has children, add internal properties to all children
-            if 'children' in step.properties:
-                self.add_internal_properties(graph, step.children)
+        # Special case for Dynamic steps
+        if isinstance(step, AbstractDynamicStep):
+            step.prepare_for_execution(graph, self)
 
-            # Recursive steps, add internal proerties to all substeps
-            if not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
-                self.add_internal_properties(graph, step.steps)
+        # If the step has children, add internal properties to all children
+        if 'children' in step.properties:
+            self.add_internal_properties(graph, step.children)
+
+        # Recursive steps, add internal proerties to all substeps
+        if not isinstance(step, NON_RECURSIVE_ABSTRACT_STEPS):
+            self.add_internal_properties(graph, step.steps)
 
     def prepare_dynamic_steps_for_execution(
         self,
