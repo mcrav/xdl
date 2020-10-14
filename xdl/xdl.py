@@ -98,11 +98,10 @@ class XDL(object):
         hardware: Hardware = None,
         reagents: List[Reagent] = None,
         logging_level: int = logging.INFO,
-        log_folder: str = None,
         platform: AbstractPlatform = None,
     ) -> None:
 
-        self._initialize_logging(log_folder, logging_level)
+        self._initialize_logging(logging_level)
         self._load_platform(platform)
         self._load_xdl(xdl, steps=steps, hardware=hardware, reagents=reagents)
 
@@ -115,14 +114,11 @@ class XDL(object):
     # Initialization #
     ##################
 
-    def _initialize_logging(self, log_folder: str, logging_level: int) -> None:
+    def _initialize_logging(self, logging_level: int) -> None:
         """Initialize logger with given logging level."""
-        if log_folder:
-            os.makedirs(log_folder, exist_ok=True)
-        self.logger = get_logger(log_folder=log_folder)
+        self.logger = get_logger()
         self.logger.setLevel(logging_level)
         self.logging_level = logging_level
-        self.log_folder = log_folder
 
     def _load_platform(self, platform: AbstractPlatform) -> None:
         """Initialise given platform. If ``None`` given then initialise
