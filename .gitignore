@@ -18,6 +18,7 @@ documentation/standard/xdl-file-structure.rst
 *.pyo
 __pycache__/
 build
+dist/
 xdl.egg-info
 
 logs
