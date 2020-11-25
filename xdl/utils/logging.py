@@ -1,7 +1,6 @@
 """The main purpose of this module is to provide the ``get_logger`` function
 that can be used from anywhere within the package to obtain the xdl logger.
 """
-from typing import Callable
 import logging
 import json
 import time
@@ -54,15 +53,21 @@ def log_duration(step: 'Step', start_or_end: str):
     # Get logger
     logger = logging.getLogger('xdl')
 
-    # Filter props not to include non JSON serializable props.
-    props = {
-        k: v
-        for k, v in step.properties.items()
-        if k != 'children' and step.PROP_TYPES[k] != Callable
-    }
+    # Filter out props that shouldn't be written to file
+    props_to_write = {}
+    for k, v in step.properties.items():
+        # Don't include children prop in json.dumps
+        if k != 'children':
+            # Just use `__repr__` for Callable, XDL, or any other non JSON
+            # serializable object.
+            try:
+                json.dumps(v)
+            except TypeError:
+                v = v.__repr__()
+            props_to_write[k] = v
 
     # Log line to duration tsv file
     logger.info(
         f'{start_or_end}\t{time.time():.2f}\t{step.uuid}\t{step.name}\t\
-{json.dumps(props)}'
+{json.dumps(props_to_write)}'
     )
