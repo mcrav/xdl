@@ -219,7 +219,8 @@ class AbstractXDLExecutor(ABC):
         self,
         platform_controller: Any,
         step: Step,
-        async_steps: List[Async] = []
+        async_steps: List[Async] = [],
+        step_indexes: List[int] = [],
     ) -> bool:
         """Execute single step.
 
@@ -244,8 +245,6 @@ class AbstractXDLExecutor(ABC):
             self.prepare_dynamic_steps_for_execution(
                 step, platform_controller.graph.graph)
 
-        self.logger.info(step.name)
-
         try:
             # Wait for async step to finish executing
             if type(step) == Await:
@@ -260,16 +259,27 @@ class AbstractXDLExecutor(ABC):
 
             # Normal step execution
             else:
+                is_base_step = isinstance(step, AbstractBaseStep)
+
                 # Log step start timestamp
-                if isinstance(step, AbstractBaseStep):
+                if is_base_step:
                     log_duration(step, 'start')
 
-                # Execute step
-                keep_going = step.execute(
-                    platform_controller, self.logger)
+                # Execute step, don't pass `step_indexes` to base steps as they
+                # don't use it and don't take it as an argument in the `execute`
+                # method.
+                if is_base_step:
+                    keep_going = step.execute(
+                        platform_controller, self.logger)
+                else:
+                    keep_going = step.execute(
+                        platform_controller,
+                        self.logger,
+                        step_indexes=step_indexes
+                    )
 
                 # Log step end timestamp
-                if isinstance(step, AbstractBaseStep):
+                if is_base_step:
                     log_duration(step, 'end')
 
                 # Store all Async steps so that they can be awaited.
@@ -334,7 +344,9 @@ class AbstractXDLExecutor(ABC):
             async_steps = []
 
             # Iterate through all steps and execute.
-            for step in self._xdl.steps:
+            for i, step in enumerate(self._xdl.steps):
+
+                step_indexes = [i]
 
                 # Store all Async steps so that they can be awaited.
                 if type(step) == Async:
@@ -342,7 +354,11 @@ class AbstractXDLExecutor(ABC):
 
                 # Execute step
                 keep_going = self.execute_step(
-                    platform_controller, step, async_steps=async_steps)
+                    platform_controller,
+                    step,
+                    async_steps=async_steps,
+                    step_indexes=step_indexes
+                )
 
                 # If return value of step execution requests execution break,
                 # then return.
