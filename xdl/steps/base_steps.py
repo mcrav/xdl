@@ -5,9 +5,11 @@ import threading
 import copy
 import uuid
 from abc import ABC, abstractmethod
+import tabulate
 
 # Other
 from networkx import MultiDiGraph
+import termcolor
 
 # Relative
 from ..constants import DEFAULT_INSTANT_DURATION
@@ -549,7 +551,8 @@ class AbstractStep(Step, ABC):
         platform_controller,
         logger: logging.Logger = None,
         level: int = 0,
-        async_steps: List[str] = []
+        async_steps: List[str] = [],
+        step_indexes: List[int] = None,
     ) -> bool:
         """
         Execute self with given platform controller object.
@@ -561,29 +564,48 @@ class AbstractStep(Step, ABC):
             level (int): Level of recursion in step execution.
             async_steps  (List[str]): List of currently executing async steps.
                 Used by any ``Await`` steps encountered.
+            step_indexes (List[int]): Indexes into steps list and substeps
+                lists.
 
         Returns:
             bool: ``True`` if execution should continue, ``False`` if execution
             should stop.
         """
+        if logger is None:
+            logger = get_logger()
+
         # Log step start timestamp
         log_duration(self, 'start')
+
+        # This is necessary if a step is being executed outside the context of
+        # a XDL object.
+        if not step_indexes:
+            step_indexes = [0]
+        self_step_indexes = copy.copy(step_indexes)
+
+        # If step is at recursion level 0 logging must be done here as it won't
+        # be done inside the for loop below.
+        if level == 0:
+            logger.info(
+                execution_log_str(
+                    self, level=level, step_indexes=step_indexes))
 
         # Bump recursion level
         level += 1
 
-        # Get logger
-        if not logger:
-            logger = get_logger()
+        # Add a placeholder for the next index so that it can be assigned to
+        # using `step_indexes[level]`
+        step_indexes.append(0)
 
-        for step in self.steps:
-            # Log step execution message
-            prop_str = ''
-            for k, v in step.properties.items():
-                # Log all properties except 'children'
-                if k != 'chilren':
-                    prop_str += f'{"  " * level}  {k}: {v}\n'
-            logger.info(f'Executing:\n{"  " * level}{step.name}\n{prop_str}')
+        for i, step in enumerate(self.steps):
+            # Update step indexes for current sub step
+            step_indexes[level] = i
+            step_indexes = step_indexes[:level + 1]
+
+            # Log step execution
+            logger.info(
+                execution_log_str(
+                    step, level=level, step_indexes=step_indexes))
 
             # Execute step
             try:
@@ -602,9 +624,25 @@ class AbstractStep(Step, ABC):
                     if step_is_base_step:
                         log_duration(step, 'start')
 
-                    # Execute step
-                    keep_going = step.execute(
-                        platform_controller, self.logger, level=level + 1)
+                    # Execute step, don't pass `step_indexes` to base step, and
+                    # log step completion here. Step completion isn't needed to
+                    # be logged for normal steps as it is done recursively at
+                    # the end of this function.
+                    if step_is_base_step:
+                        # Execute step
+                        keep_going = step.execute(
+                            platform_controller, self.logger, level=level)
+
+                        # Log step completion
+                        logger.info(
+                            finished_executing_step_msg(step, step_indexes))
+                    else:
+                        keep_going = step.execute(
+                            platform_controller,
+                            self.logger,
+                            level=level,
+                            step_indexes=step_indexes
+                        )
 
                     # Log base step  end timestamp here, as it is easier than
                     # adding to all base step `execute` methods.
@@ -615,7 +653,16 @@ class AbstractStep(Step, ABC):
             # here is just to provide a bit of debug information if a step
             # crashes. Might want to remove this in future.
             except Exception as e:
-                logger.info(f'Step failed {type(step)} {step.properties}')
+                step_failed_msg = termcolor.colored(
+                    'Step failed', color='red', attrs=['bold'])
+                step_name = termcolor.colored(
+                    step.name, color='cyan', attrs=['bold'])
+                props_table = termcolor.colored(
+                    pretty_props_table(step.properties), color='cyan')
+                logger.exception(
+                    f'{step_failed_msg} {step_name}\n\
+{step.human_readable()}\n{props_table}'
+                )
                 raise e
 
             # If keep_going is False break execution. This is used by the
@@ -626,6 +673,7 @@ class AbstractStep(Step, ABC):
 
         # Log step end timestamp
         log_duration(self, 'end')
+        logger.info(finished_executing_step_msg(self, self_step_indexes))
 
         # Return `keep_going` flag as `True`.
         return True
@@ -706,7 +754,8 @@ class AbstractAsyncStep(Step):
         platform_controller: Any,
         logger: logging.Logger = None,
         level: int = 0,
-        async_steps: List[str] = []
+        async_steps: List[str] = [],
+        step_indexes: List[int] = None,
     ) -> bool:
         """Execute step in new thread.
 
@@ -716,6 +765,8 @@ class AbstractAsyncStep(Step):
             level (int): Level of execution recursion.
             async_steps (List[str]): List of currently executing async step
                 pids.
+            step_indexes (List[int]): Indexes into steps list and substeps
+                lists.
 
         Returns:
             bool: ``True`` if execution should continue, ``False`` if execution
@@ -903,7 +954,8 @@ class AbstractDynamicStep(Step):
         self,
         platform_controller: Any,
         logger: logging.Logger = None,
-        level: int = 0
+        level: int = 0,
+        step_indexes: List[int] = None,
     ) -> None:
         """Execute step lifecycle. :py:meth:`on_start`, followed by
         :py:meth:`on_continue` repeatedly until an empty list is returned,
@@ -915,14 +967,27 @@ class AbstractDynamicStep(Step):
                 executing steps.
             logger (Logger): Logger object.
             level (int): Level of recursion in step execution.
+            step_indexes (List[int]): Indexes into steps list and substeps
+                lists.
 
         Returns:
             bool: ``True`` if execution should continue, ``False`` if execution
             should stop.
         """
+        if logger is None:
+            logger = get_logger()
+
         # Not simulation, execute as normal
         if self.started:
             self.reset()
+
+        # For case that step is executed outside of XDL context.
+        if not step_indexes:
+            step_indexes = [0]
+
+        # Take copy of step indexes for logging once step as finished as the
+        # list will be altered by substeps
+        self_step_indexes = copy.copy(step_indexes)
 
         self.started = True
 
@@ -934,8 +999,18 @@ class AbstractDynamicStep(Step):
 
         # If platform controller simulation flag is True, run simulation steps
         if platform_controller.simulation is True:
-            self.simulate(platform_controller)
-            return
+
+            # Run simulation steps
+            self.simulate(
+                platform_controller,
+                logger=logger,
+                step_indexes=step_indexes,
+                level=level + 1
+            )
+
+            # Log step completion and return
+            logger.info(finished_executing_step_msg(self, self_step_indexes))
+            return True
 
         # Log step start timestamp
         log_duration(self, 'start')
@@ -943,7 +1018,11 @@ class AbstractDynamicStep(Step):
         # Execute steps from on_start
         for step in self.start_block:
             self.executor.execute_step(
-                platform_controller, step, async_steps=self.async_steps)
+                platform_controller,
+                step,
+                async_steps=self.async_steps,
+                step_indexes=step_indexes
+            )
             if isinstance(step, AbstractAsyncStep):
                 self.async_steps.append(step)
 
@@ -956,7 +1035,11 @@ class AbstractDynamicStep(Step):
                 if isinstance(step, AbstractAsyncStep):
                     self.async_steps.append(step)
                 self.executor.execute_step(
-                    platform_controller, step, async_steps=self.async_steps)
+                    platform_controller,
+                    step,
+                    async_steps=self.async_steps,
+                    step_indexes=step_indexes
+                )
 
             continue_block = self.on_continue()
             self.executor.prepare_block_for_execution(
@@ -968,7 +1051,11 @@ class AbstractDynamicStep(Step):
 
         for step in finish_block:
             self.executor.execute_step(
-                platform_controller, step, async_steps=self.async_steps)
+                platform_controller,
+                step,
+                async_steps=self.async_steps,
+                step_indexes=step_indexes
+            )
             if isinstance(step, AbstractAsyncStep):
                 self.async_steps.append(step)
 
@@ -977,20 +1064,41 @@ class AbstractDynamicStep(Step):
 
         # Log step end timestamp
         log_duration(self, 'end')
+        logger.info(finished_executing_step_msg(self, self_step_indexes))
 
         return True
 
-    def simulate(self, platform_controller: Any) -> str:
+    def simulate(
+        self,
+        platform_controller: Any,
+        logger: logging.Logger = None,
+        level: int = 0,
+        step_indexes: List[int] = None
+    ) -> str:
         """Run simulation steps to catch any errors that may occur during
         execution.
 
         Args:
             platform_controller (Any): Platform controller to use to run
                 simulation steps. Should be in simulation mode.
+            logger (logging.Logger): XDL logger object.
+            level (int): Recursion level of step.
+            step_indexes (List[int]): Indexes into steps list and substeps
+                lists.
         """
         simulation_steps = self.get_simulation_steps()
-        for step in simulation_steps:
-            step.execute(platform_controller)
+        step_indexes.append(0)
+        for i, step in enumerate(simulation_steps):
+            step_indexes[level] = i
+            step_indexes = step_indexes[:level + 1]
+            logger.info(
+                execution_log_str(step, level=level, step_indexes=step_indexes))
+            step.execute(
+                platform_controller,
+                logger=logger,
+                level=level,
+                step_indexes=step_indexes
+            )
 
     @abstractmethod
     def get_simulation_steps(self) -> List[Step]:
@@ -1075,3 +1183,70 @@ def get_base_steps(step: Step) -> List[AbstractBaseStep]:
         else:
             base_steps.extend(get_base_steps(step))
     return base_steps
+
+def pretty_props_table(props: Dict[str, Any]) -> str:
+    """Make neat props table for printing to terminal. Has no table lines but
+    aligns items neatly.
+
+    Args:
+        props (Dict[str, Any]): Step properties dict
+
+    Returns:
+        str: Step properties table neatly formatted.
+    """
+    return tabulate.tabulate(
+        [
+            [k, str(v)]
+            for k, v in props.items()
+            if k != 'children'
+        ],
+        tablefmt='plain',
+    )
+
+def execution_log_str(
+        step: Step, level: int = 0, step_indexes: List[int] = []) -> str:
+    """Return strings to log when step begins executing.
+
+    Args:
+        step (Step): Step beginning execution.
+        level (int): Recursion level of step.
+        step_indexes (List[int]): Indexes into steps list and substeps lists.
+
+    Returns:
+        str: Log message for when the step begins executing.
+    """
+    # First line, e.g. "Executing step 2.3.1"
+    step_index_str = '.'.join([str(idx + 1) for idx in step_indexes])
+    first_line = termcolor.colored(
+        f'Executing step {step_index_str}:', color='green', attrs=['bold'])
+
+    # Step human readable description
+    human_readable = termcolor.colored(
+        f'{step.human_readable()}.', attrs=['bold'])
+
+    # Step name
+    step_name = termcolor.colored(step.name, color='cyan', attrs=['bold'])
+
+    # Step properties table
+    prop_table = termcolor.colored(
+        pretty_props_table(step.properties), color='cyan')
+
+    # Combine all message parts and return
+    return f'{first_line}\n{human_readable}\n{step_name}\n{prop_table}\n'
+
+def finished_executing_step_msg(step: Step, step_indexes: List[int]) -> str:
+    """Message to log when step finishes executing.
+
+    Args:
+        step (Step): Step that has finished executing.
+        step_indexes (List[int]): Indexes into steps list and substeps lists.
+
+    Returns:
+        str: Log message for when step finishes executing.
+    """
+    step_index_str = '.'.join([
+        str(idx + 1) for idx in step_indexes])
+    return termcolor.colored(
+        f'Finished executing step {step_index_str} ',
+        color='green', attrs=['bold'],
+    ) + termcolor.colored(step.name, color='cyan', attrs=['bold']) + '\n'
