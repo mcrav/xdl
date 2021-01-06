@@ -25,7 +25,7 @@ def get_localisation_files():
 
 setup(
     name='xdl',
-    version='0.4.6',
+    version='0.5.0',
     description='Package for working with XDL (chemical descriptive language).',
     author='Matthew Craven',
     author_email='matthew.craven@glasgow.ac.uk',

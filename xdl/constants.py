@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 
 #: XDL version number. Used in header at top of outputted XDL files.
-XDL_VERSION: str = '0.4.6'
+XDL_VERSION: str = '0.5.0'
 
 ########
 # MISC #
