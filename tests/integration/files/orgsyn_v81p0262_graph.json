@@ -163,10 +163,10 @@
       "y": 560,
       "internalId": 13,
       "label": "vacuum_pump",
-      "class": "CVC3000",
+      "class": "CVC3000VacuumPump",
       "name": "vacuum_pump",
       "address": "192.168.1.201",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "filter_stirrer",
@@ -175,10 +175,10 @@
       "y": 480,
       "internalId": 14,
       "label": "filter_stirrer",
-      "class": "HeiTORQUE_100",
+      "class": "HeiTorque100PrecisionStirrer",
       "name": "filter_stirrer",
       "address": "192.168.1.204",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "reactor",
@@ -239,10 +239,10 @@
       "y": 520,
       "internalId": 42,
       "label": "reactor_stirrer",
-      "class": "IKARCTDigital",
+      "class": "RCTDigitalHotplate",
       "name": "reactor_stirrer",
       "address": "192.168.1.203",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "flask_nitrogen",

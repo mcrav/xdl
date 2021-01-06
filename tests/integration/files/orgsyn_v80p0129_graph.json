@@ -139,10 +139,10 @@
       },
       "internalId": 10,
       "label": "vacuum_pump",
-      "class": "CVC3000",
+      "class": "CVC3000VacuumPump",
       "name": "vacuum_pump",
       "address": "192.168.1.201",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "valve_J",
@@ -170,12 +170,12 @@
       },
       "internalId": 12,
       "label": "chiller",
-      "class": "JULABOCF41",
+      "class": "CF41Chiller",
       "name": "chiller",
       "min_temp": -20,
       "max_temp": 200,
       "address": "192.168.1.205",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "stirrer",
@@ -192,10 +192,10 @@
       },
       "internalId": 13,
       "label": "stirrer",
-      "class": "HeiTORQUE_100",
+      "class": "HeiTorque100PrecisionStirrer",
       "name": "stirrer",
       "address": "192.168.1.204",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "vacuum",

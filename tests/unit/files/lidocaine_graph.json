@@ -184,10 +184,10 @@
       "y": 560,
       "internalId": 68,
       "label": "vacuum_filter",
-      "class": "ChemputerVacuum",
-      "name": "vacuum_filter",
       "current_volume": 0,
-      "max_volume": 100
+      "max_volume": 100,
+      "class": "ChemputerVacuum",
+      "name": "vacuum_filter"
     },
     {
       "id": "flask_argon",
@@ -209,7 +209,7 @@
       "y": 400,
       "internalId": 77,
       "label": "stirrer_filter",
-      "class": "IKAmicrostar75",
+      "class": "Microstar75Stirrer",
       "name": "stirrer_filter",
       "port": "COM12"
     },
@@ -220,7 +220,7 @@
       "y": 400,
       "internalId": 34,
       "label": "chiller_filter",
-      "class": "JULABOCF41",
+      "class": "CF41Chiller",
       "name": "chiller_filter",
       "min_temp": -20,
       "max_temp": 80,
@@ -309,6 +309,7 @@
       "y": 560,
       "internalId": 51,
       "label": "sensor_conductivity",
+      "connection_mode": "tcpip",
       "class": "ConductivitySensor",
       "name": "sensor_conductivity",
       "port": "COM8"
@@ -320,7 +321,7 @@
       "y": 560,
       "internalId": 56,
       "label": "stirrer_separator",
-      "class": "IKAmicrostar75",
+      "class": "Microstar75Stirrer",
       "name": "stirrer_separator",
       "port": "COM10"
     },
@@ -380,7 +381,6 @@
       "type": "custom",
       "x": 400,
       "y": 560,
-      "name": "manifold_argon",
       "internalId": 16,
       "label": "manifold_argon",
       "customProperties": {
@@ -391,6 +391,7 @@
           "type": "str"
         }
       },
+      "name": "manifold_argon",
       "class": "ChemputerManifold"
     },
     {
@@ -398,52 +399,52 @@
       "type": "flask",
       "x": 1080,
       "y": 320,
+      "internalId": 38,
+      "label": "flask_hcl",
       "class": "ChemputerFlask",
       "name": "flask_hcl",
       "chemical": "3 M hydrochloric acid",
       "current_volume": 100,
-      "max_volume": 100,
-      "internalId": 38,
-      "label": "flask_hcl"
+      "max_volume": 100
     },
     {
       "id": "flask_naoh",
       "type": "flask",
       "x": 1320,
       "y": 320,
+      "internalId": 65,
+      "label": "flask_naoh",
       "class": "ChemputerFlask",
       "name": "flask_naoh",
       "chemical": "3 M sodium hydroxide",
       "current_volume": 100,
-      "max_volume": 100,
-      "internalId": 65,
-      "label": "flask_naoh"
+      "max_volume": 100
     },
     {
       "id": "flask_sodium_acetate",
       "type": "flask",
       "x": 1400,
       "y": 320,
+      "internalId": 81,
+      "label": "flask_sodium_acetate",
       "class": "ChemputerFlask",
       "name": "flask_sodium_acetate",
       "chemical": "half-saturated aqueous sodium acetate",
       "current_volume": 100,
-      "max_volume": 100,
-      "internalId": 81,
-      "label": "flask_sodium_acetate"
+      "max_volume": 100
     },
     {
       "id": "flask_diethylamine",
       "type": "flask",
       "x": 960,
       "y": 320,
+      "internalId": 84,
+      "label": "flask_diethylamine",
       "class": "ChemputerFlask",
       "name": "flask_diethylamine",
       "chemical": "diethylamine",
       "current_volume": 20,
-      "max_volume": 25,
-      "internalId": 84,
-      "label": "flask_diethylamine"
+      "max_volume": 25
     }
   ],
   "links": [

@@ -140,12 +140,12 @@
       "y": 280,
       "internalId": 12,
       "label": "rotavap",
-      "mode": "ethernet",
-      "class": "IKARV10",
+      "class": "RV10Rotovap",
       "name": "rotavap",
       "address": "192.168.1.202",
       "current_volume": 0,
-      "max_volume": 250
+      "max_volume": 250,
+      "connection_mode": "tcpip"
     },
     {
       "id": "valve_Z",
@@ -401,10 +401,10 @@
       "y": 520,
       "internalId": 72,
       "label": "vacuum",
-      "mode": "ethernet",
       "class": "ChemputerVacuum",
       "name": "vacuum",
-      "address": ""
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "vacuum_pump",
@@ -413,10 +413,10 @@
       "y": 440,
       "internalId": 75,
       "label": "vacuum_pump",
-      "mode": "ethernet",
-      "class": "CVC3000",
+      "class": "CVC3000VacuumPump",
       "name": "vacuum_pump",
-      "address": "192.168.1.201"
+      "address": "192.168.1.201",
+      "connection_mode": "tcpip"
     },
     {
       "id": "stirrer_reactor",
@@ -425,10 +425,10 @@
       "y": 280,
       "internalId": 78,
       "label": "stirrer_reactor",
-      "mode": "ethernet",
-      "class": "IKARCTDigital",
+      "class": "RCTDigitalHotplate",
       "name": "stirrer_reactor",
-      "address": "192.168.1.203"
+      "address": "192.168.1.203",
+      "connection_mode": "tcpip"
     },
     {
       "id": "sensor_separator",
@@ -437,6 +437,7 @@
       "y": 320,
       "internalId": 80,
       "label": "sensor_separator",
+      "connection_mode": "tcpip",
       "class": "ConductivitySensor",
       "name": "sensor_separator",
       "port": "COM6"
@@ -448,10 +449,10 @@
       "y": 280,
       "internalId": 82,
       "label": "stirrer_separator",
-      "mode": "ethernet",
-      "class": "HeiTORQUE_100",
+      "class": "HeiTorque100PrecisionStirrer",
       "name": "stirrer_separator",
-      "address": "192.168.1.206"
+      "address": "192.168.1.206",
+      "connection_mode": "tcpip"
     },
     {
       "id": "filter",
@@ -473,12 +474,12 @@
       "y": 400,
       "internalId": 22,
       "label": "chiller_filter",
-      "class": "JULABOCF41",
+      "class": "CF41Chiller",
       "name": "chiller_filter",
       "min_temp": -20,
       "max_temp": 180,
       "address": "192.168.1.205",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "stirrer_filter",
@@ -487,10 +488,10 @@
       "y": 320,
       "internalId": 73,
       "label": "stirrer_filter",
-      "class": "HeiTORQUE_100",
+      "class": "HeiTorque100PrecisionStirrer",
       "name": "stirrer_filter",
       "address": "192.168.1.204",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "flask_SOCl2",

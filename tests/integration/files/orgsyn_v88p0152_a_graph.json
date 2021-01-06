@@ -106,7 +106,7 @@
       "class": "ChemputerVacuum",
       "name": "vacuum",
       "address": "",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "vacuum_pump",
@@ -115,10 +115,10 @@
       "y": 600,
       "internalId": 9,
       "label": "vacuum_pump",
-      "class": "CVC3000",
+      "class": "CVC3000VacuumPump",
       "name": "vacuum_pump",
       "address": "192.168.1.201",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "filter",
@@ -140,10 +140,10 @@
       "y": 400,
       "internalId": 11,
       "label": "stirrer_filter",
-      "class": "HeiTORQUE_100",
+      "class": "HeiTorque100PrecisionStirrer",
       "name": "stirrer_filter",
       "address": "192.168.1.204",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "flask_Et2O",
@@ -189,14 +189,14 @@
       "type": "chiller",
       "x": 360,
       "y": 480,
-      "class": "JULABOCF41",
+      "internalId": 12,
+      "label": "chiller_filter",
+      "class": "CF41Chiller",
       "name": "chiller_filter",
       "min_temp": -20,
       "max_temp": 180,
       "address": "192.168.1.205",
-      "mode": "ethernet",
-      "internalId": 12,
-      "label": "chiller_filter"
+      "connection_mode": "tcpip"
     }
   ],
   "links": [

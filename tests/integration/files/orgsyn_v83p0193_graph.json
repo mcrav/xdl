@@ -151,12 +151,12 @@
       "y": 280,
       "internalId": 12,
       "label": "rotavap",
-      "mode": "ethernet",
-      "class": "IKARV10",
+      "class": "RV10Rotovap",
       "name": "rotavap",
       "address": "192.168.1.202",
       "current_volume": 0,
-      "max_volume": 250
+      "max_volume": 250,
+      "connection_mode": "tcpip"
     },
     {
       "id": "valve_Z",
@@ -250,10 +250,10 @@
       "y": 280,
       "internalId": 20,
       "label": "cartridge_MgSO4",
+      "dead_volume": 25,
       "class": "ChemputerCartridge",
       "name": "cartridge_MgSO4",
-      "chemical": "MgSO4",
-      "dead_volume": 25
+      "chemical": "MgSO4"
     },
     {
       "id": "cartridge_silica-gel",
@@ -262,10 +262,10 @@
       "y": 200,
       "internalId": 21,
       "label": "cartridge_silica-gel",
+      "dead_volume": 150,
       "class": "ChemputerCartridge",
       "name": "cartridge_silica-gel",
-      "chemical": "silica-gel",
-      "dead_volume": 150
+      "chemical": "silica-gel"
     },
     {
       "id": "valve_J",
@@ -448,10 +448,10 @@
       "y": 440,
       "internalId": 72,
       "label": "vacuum",
-      "mode": "ethernet",
       "class": "ChemputerVacuum",
       "name": "vacuum",
-      "address": ""
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "vacuum_pump",
@@ -460,10 +460,10 @@
       "y": 440,
       "internalId": 75,
       "label": "vacuum_pump",
-      "mode": "ethernet",
-      "class": "CVC3000",
+      "class": "CVC3000VacuumPump",
       "name": "vacuum_pump",
-      "address": "192.168.1.201"
+      "address": "192.168.1.201",
+      "connection_mode": "tcpip"
     },
     {
       "id": "stirrer_reactor",
@@ -472,10 +472,10 @@
       "y": 280,
       "internalId": 78,
       "label": "stirrer_reactor",
-      "mode": "ethernet",
-      "class": "IKARCTDigital",
+      "class": "RCTDigitalHotplate",
       "name": "stirrer_reactor",
-      "address": "192.168.1.203"
+      "address": "192.168.1.203",
+      "connection_mode": "tcpip"
     },
     {
       "id": "sensor_separator",
@@ -484,6 +484,7 @@
       "y": 320,
       "internalId": 80,
       "label": "sensor_separator",
+      "connection_mode": "tcpip",
       "class": "ConductivitySensor",
       "name": "sensor_separator",
       "port": "COM6"
@@ -495,23 +496,23 @@
       "y": 320,
       "internalId": 82,
       "label": "stirrer_separator",
-      "mode": "ethernet",
-      "class": "HeiTORQUE_100",
+      "class": "HeiTorque100PrecisionStirrer",
       "name": "stirrer_separator",
-      "address": "192.168.1.206"
+      "address": "192.168.1.206",
+      "connection_mode": "tcpip"
     },
     {
       "id": "product",
       "type": "flask",
       "x": 1000,
       "y": 320,
+      "internalId": 57,
+      "label": "product",
       "class": "ChemputerFlask",
       "name": "product",
       "chemical": "",
       "current_volume": 0,
-      "max_volume": 2000,
-      "internalId": 57,
-      "label": "product"
+      "max_volume": 2000
     }
   ],
   "links": [

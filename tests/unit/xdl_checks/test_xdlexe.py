@@ -18,8 +18,9 @@ TESTS = [
     (os.path.join(INTEGRATION_FOLDER, 'DMP.xdl'),
      os.path.join(INTEGRATION_FOLDER, 'DMP_graph.json')),
 
-    (os.path.join(INTEGRATION_FOLDER, 'AlkylFluor.xdl'),
-     os.path.join(INTEGRATION_FOLDER, 'AlkylFluor_graph.graphml')),
+    # Removed as not easy to convert graphml to SL2.
+    # (os.path.join(INTEGRATION_FOLDER, 'AlkylFluor.xdl'),
+    #  os.path.join(INTEGRATION_FOLDER, 'AlkylFluor_graph.graphml')),
 ]
 
 @pytest.mark.unit
@@ -96,10 +97,11 @@ def test_xdlexe_missing_properties():
 
 @pytest.mark.unit
 def test_execute_dynamic_steps_inidividually():
-    x = XDL(os.path.join(FOLDER, 'xdlexe_test_dynamic_steps.xdlexe'))
-    graph = os.path.join(FOLDER, 'bigrig.json')
+    x = XDL(os.path.join(INTEGRATION_FOLDER, 'lidocaine.xdlexe'))
+    graph = os.path.join(INTEGRATION_FOLDER, 'lidocaine_graph.json')
     c = get_chempiler(graph)
     steps = [
+
         (i, step)
         for i, step in enumerate(x.steps)
         if step.name == 'Separate'

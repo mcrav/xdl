@@ -112,12 +112,12 @@
       "y": 280,
       "internalId": 12,
       "label": "rotavap",
-      "mode": "ethernet",
-      "class": "IKARV10",
+      "class": "RV10Rotovap",
       "name": "rotavap",
       "address": "192.168.1.202",
       "current_volume": 0,
-      "max_volume": 250
+      "max_volume": 250,
+      "connection_mode": "tcpip"
     },
     {
       "id": "valve_Z",
@@ -336,10 +336,10 @@
       "y": 400,
       "internalId": 75,
       "label": "vacuum_pump",
-      "mode": "ethernet",
-      "class": "CVC3000",
+      "class": "CVC3000VacuumPump",
       "name": "vacuum_pump",
-      "address": "192.168.1.201"
+      "address": "192.168.1.201",
+      "connection_mode": "tcpip"
     },
     {
       "id": "sensor_separator",
@@ -348,6 +348,7 @@
       "y": 360,
       "internalId": 80,
       "label": "sensor_separator",
+      "connection_mode": "tcpip",
       "class": "ConductivitySensor",
       "name": "sensor_separator",
       "port": "COM6"
@@ -359,10 +360,10 @@
       "y": 280,
       "internalId": 82,
       "label": "stirrer_separator",
-      "mode": "ethernet",
-      "class": "HeiTORQUE_100",
+      "class": "HeiTorque100PrecisionStirrer",
       "name": "stirrer_separator",
-      "address": "192.168.1.206"
+      "address": "192.168.1.206",
+      "connection_mode": "tcpip"
     },
     {
       "id": "chiller_reactor",
@@ -371,12 +372,12 @@
       "y": 360,
       "internalId": 22,
       "label": "chiller_reactor",
-      "class": "JULABOCF41",
+      "class": "CF41Chiller",
       "name": "chiller_reactor",
       "min_temp": -20,
       "max_temp": 180,
       "address": "192.168.1.205",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "stirrer_reactor",
@@ -385,10 +386,10 @@
       "y": 280,
       "internalId": 28,
       "label": "stirrer_reactor",
-      "class": "IKARCTDigital",
+      "class": "RCTDigitalHotplate",
       "name": "stirrer_reactor",
       "address": "192.168.1.203",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     }
   ],
   "links": [
