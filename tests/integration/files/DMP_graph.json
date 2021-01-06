@@ -196,7 +196,7 @@
       "y": 400,
       "internalId": 77,
       "label": "stirrer_filter",
-      "class": "IKAmicrostar75",
+      "class": "Microstar75Stirrer",
       "name": "stirrer_filter",
       "port": "COM12"
     },
@@ -207,10 +207,10 @@
       "y": 400,
       "internalId": 34,
       "label": "chiller_filter",
-      "class": "JULABOCF41",
+      "class": "CF41Chiller",
       "name": "chiller_filter",
       "min_temp": -20,
-      "max_temp": 80,
+      "max_temp": 120,
       "port": "COM4"
     },
     {
@@ -335,6 +335,7 @@
       "y": 560,
       "internalId": 51,
       "label": "sensor_conductivity",
+      "connection_mode": "tcpip",
       "class": "ConductivitySensor",
       "name": "sensor_conductivity",
       "port": "COM8"
@@ -358,7 +359,7 @@
       "y": 560,
       "internalId": 56,
       "label": "stirrer_separator",
-      "class": "IKAmicrostar75",
+      "class": "Microstar75Stirrer",
       "name": "stirrer_separator",
       "port": "COM10"
     },
@@ -376,13 +377,21 @@
       "necks": 1
     },
     {
-      "id": 63,
+      "id": "cartridge1",
       "type": "custom",
       "x": 1400,
       "y": 320,
-      "name": "cartridge_drying",
+      "name": "cartridge1",
       "internalId": 63,
-      "label": 63,
+      "label": "cartridge1",
+      "customProperties": {
+        "name": {
+          "name": "name",
+          "id": "name",
+          "units": "",
+          "type": "str"
+        }
+      },
       "class": "ChemputerCartridge"
     },
     {
@@ -417,22 +426,30 @@
       "y": 200,
       "internalId": 80,
       "label": "rotavap",
-      "class": "IKARV10",
+      "class": "RV10Rotovap",
       "name": "rotavap",
       "port": "COM15",
       "current_volume": 0,
       "max_volume": 250
     },
     {
-      "id": 83,
+      "id": "cartridge2",
       "type": "custom",
       "x": 1640,
       "y": 80,
       "port": "COM6",
-      "name": "vacuum_rotavap",
+      "name": "cartridge2",
       "internalId": 83,
-      "label": 83,
-      "class": "CVC3000"
+      "label": "cartridge2",
+      "customProperties": {
+        "name": {
+          "name": "name",
+          "id": "name",
+          "units": "",
+          "type": "str"
+        }
+      },
+      "class": "CVC3000VacuumPump"
     },
     {
       "id": "flask_argon",
@@ -452,14 +469,14 @@
       "type": "waste",
       "x": 1320,
       "y": 120,
+      "internalId": 87,
+      "label": "waste_rotavap",
       "class": "ChemputerWaste",
       "name": "waste_rotavap",
       "current_volume": 0,
       "max_volume": 100,
       "necks": 1,
-      "can_filter": false,
-      "internalId": 87,
-      "label": "waste_rotavap"
+      "can_filter": false
     }
   ],
   "links": [
@@ -788,14 +805,14 @@
       "sourceInternal": 53,
       "targetInternal": 63,
       "source": "valve_cartridge",
-      "target": 63,
+      "target": "cartridge1",
       "port": "(1,in)"
     },
     {
       "id": 67,
       "sourceInternal": 63,
       "targetInternal": 72,
-      "source": 63,
+      "source": "cartridge1",
       "target": "valve_rotavap",
       "port": "(out,1)"
     },
@@ -851,7 +868,7 @@
       "id": 84,
       "sourceInternal": 83,
       "targetInternal": 80,
-      "source": 83,
+      "source": "cartridge2",
       "target": "rotavap",
       "port": "(,)"
     },

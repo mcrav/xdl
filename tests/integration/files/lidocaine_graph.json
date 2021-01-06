@@ -184,10 +184,10 @@
       "y": 560,
       "internalId": 68,
       "label": "vacuum_filter",
-      "class": "ChemputerVacuum",
-      "name": "vacuum_filter",
       "current_volume": 0,
-      "max_volume": 100
+      "max_volume": 100,
+      "class": "ChemputerVacuum",
+      "name": "vacuum_filter"
     },
     {
       "id": "flask_argon",
@@ -209,7 +209,7 @@
       "y": 400,
       "internalId": 77,
       "label": "stirrer_filter",
-      "class": "IKAmicrostar75",
+      "class": "Microstar75Stirrer",
       "name": "stirrer_filter",
       "port": "COM12"
     },
@@ -220,10 +220,10 @@
       "y": 400,
       "internalId": 34,
       "label": "chiller_filter",
-      "class": "JULABOCF41",
+      "class": "CF41Chiller",
       "name": "chiller_filter",
       "min_temp": -20,
-      "max_temp": 80,
+      "max_temp": 120,
       "port": "COM4"
     },
     {
@@ -309,6 +309,7 @@
       "y": 560,
       "internalId": 51,
       "label": "sensor_conductivity",
+      "connection_mode": "tcpip",
       "class": "ConductivitySensor",
       "name": "sensor_conductivity",
       "port": "COM8"
@@ -320,7 +321,7 @@
       "y": 560,
       "internalId": 56,
       "label": "stirrer_separator",
-      "class": "IKAmicrostar75",
+      "class": "Microstar75Stirrer",
       "name": "stirrer_separator",
       "port": "COM10"
     },

@@ -1,4 +1,4 @@
-<?xdl version="0.4.6" ?>
+<?xdl version="0.5.0" ?>
 
 <Synthesis
   graph_sha256="975a6ebde52245d8395d8f4d501bad7f63b248fc0cf72c99b619c47c11d798ba"
@@ -69,11 +69,9 @@
           priming_volume="3 mL">
           <StopStir
             vessel="filter"
-            vessel_type="filter"
-            vessel_has_stirrer="True">
-            <CStopStir
-              vessel="filter"
-              stirrer="stirrer" />
+            stirring_controller="stirrer">
+            <CStirringControllerStop
+              stirring_controller="stirrer" />
           </StopStir>
           <PrimePumpForAdd
             reagent="ether"
@@ -213,11 +211,9 @@
           priming_volume="3 mL">
           <StopStir
             vessel="filter"
-            vessel_type="filter"
-            vessel_has_stirrer="True">
-            <CStopStir
-              vessel="filter"
-              stirrer="stirrer" />
+            stirring_controller="stirrer">
+            <CStirringControllerStop
+              stirring_controller="stirrer" />
           </StopStir>
           <PrimePumpForAdd
             reagent="ether"
@@ -355,11 +351,9 @@
           priming_volume="3 mL">
           <StopStir
             vessel="filter"
-            vessel_type="filter"
-            vessel_has_stirrer="True">
-            <CStopStir
-              vessel="filter"
-              stirrer="stirrer" />
+            stirring_controller="stirrer">
+            <CStirringControllerStop
+              stirring_controller="stirrer" />
           </StopStir>
           <PrimePumpForAdd
             reagent="ether"
@@ -449,53 +443,48 @@
       </Steps>
     </Repeat>
     <Shutdown
-      vacuums="rotavap vacuum_flask vacuum_reactor_flask"
-      heaters="reactor"
-      stirrers="reactor filter separator flask_water"
+      vacuums="vacuum_rotavap vacuum_device vacuum_reactor_device"
+      heaters="reactor_heater"
+      stirrers="stirrer_reactor stirrer stirrer_separator flask_stirrer"
       rotavaps="rotavap"
-      chillers="filter rotavap flask_water">
-      <CRotavapStopRotation
-        rotavap_name="rotavap" />
-      <CRotavapStopHeater
-        rotavap_name="rotavap" />
+      chillers="filter_chiller rotavap_chiller flask_chiller">
+      <CStirringControllerStop
+        stirring_controller="rotavap" />
+      <CTemperatureControllerStop
+        temperature_controller="rotavap" />
       <CRotavapLiftUp
         rotavap_name="rotavap" />
-      <CStopStir
-        vessel="reactor"
-        stirrer="stirrer_reactor" />
-      <CStopStir
-        vessel="filter"
-        stirrer="stirrer" />
-      <CStopStir
-        vessel="separator"
-        stirrer="stirrer_separator" />
-      <CStopStir
-        vessel="flask_water"
-        stirrer="flask_stirrer" />
-      <CStopHeat
-        vessel="reactor"
-        heater="reactor_heater" />
-      <CStopVacuum
-        vessel="rotavap" />
-      <CVentVacuum
-        vessel="rotavap" />
-      <CStopVacuum
-        vessel="vacuum_flask" />
-      <CVentVacuum
-        vessel="vacuum_flask" />
-      <CStopVacuum
-        vessel="vacuum_reactor_flask" />
-      <CVentVacuum
-        vessel="vacuum_reactor_flask" />
-      <CStopChiller
-        vessel="filter"
-        chiller="filter_chiller" />
-      <CStopChiller
-        vessel="rotavap"
-        chiller="rotavap_chiller" />
-      <CStopChiller
-        vessel="flask_water"
-        chiller="flask_chiller" />
+      <CStirringControllerStop
+        stirring_controller="stirrer_reactor" />
+      <CStirringControllerStop
+        stirring_controller="stirrer" />
+      <CStirringControllerStop
+        stirring_controller="stirrer_separator" />
+      <CStirringControllerStop
+        stirring_controller="flask_stirrer" />
+      <CTemperatureControllerStop
+        temperature_controller="reactor_heater" />
+      <CPressureControllerStop
+        pressure_controller="vacuum_rotavap" />
+      <VentVacuum
+        vessel="vacuum_rotavap"
+        pressure_controller="vacuum_rotavap" />
+      <CPressureControllerStop
+        pressure_controller="vacuum_device" />
+      <VentVacuum
+        vessel="vacuum_device"
+        pressure_controller="vacuum_device" />
+      <CPressureControllerStop
+        pressure_controller="vacuum_reactor_device" />
+      <VentVacuum
+        vessel="vacuum_reactor_device"
+        pressure_controller="vacuum_reactor_device" />
+      <CTemperatureControllerStop
+        temperature_controller="filter_chiller" />
+      <CTemperatureControllerStop
+        temperature_controller="rotavap_chiller" />
+      <CTemperatureControllerStop
+        temperature_controller="flask_chiller" />
     </Shutdown>
   </Procedure>
 

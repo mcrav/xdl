@@ -13,9 +13,8 @@
   </Reagents>
 
   <Procedure>
-    <CStirrerSetTemp
-      vessel="reactor"
-      heater="heater"
+    <CTemperatureControllerSetTemp
+      temperature_controller="heater"
       temp="65°C" />
   </Procedure>
 

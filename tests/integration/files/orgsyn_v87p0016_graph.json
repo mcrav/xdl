@@ -91,12 +91,12 @@
           "type": "str"
         }
       },
-      "class": "IKARV10",
+      "class": "RV10Rotovap",
       "name": "rotavap",
       "address": "192.168.1.202",
       "current_volume": 0,
       "max_volume": 250,
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "reactor",
@@ -164,6 +164,7 @@
       "y": 480,
       "internalId": 21,
       "label": "sensor_stirrer",
+      "connection_mode": "tcpip",
       "class": "ConductivitySensor",
       "name": "sensor_stirrer",
       "port": "COM6",
@@ -325,10 +326,10 @@
       },
       "internalId": 34,
       "label": "stirrer_reactor",
-      "class": "IKARCTDigital",
+      "class": "RCTDigitalHotplate",
       "name": "stirrer_reactor",
       "address": "192.168.1.203",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "stirrer_separator",
@@ -345,10 +346,10 @@
       },
       "internalId": 63,
       "label": "stirrer_separator",
-      "class": "HeiTORQUE_100",
+      "class": "HeiTorque100PrecisionStirrer",
       "name": "stirrer_separator",
       "address": "192.168.1.206",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "vacuum_pump_rotavap",
@@ -365,10 +366,10 @@
       },
       "internalId": 65,
       "label": "vacuum_pump_rotavap",
-      "class": "CVC3000",
+      "class": "CVC3000VacuumPump",
       "name": "vacuum_pump_rotavap",
       "address": "192.168.1.201",
-      "mode": "ethernet"
+      "connection_mode": "tcpip"
     },
     {
       "id": "valve_I",

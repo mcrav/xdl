@@ -19,8 +19,8 @@ def test_dmp_prepare_for_execution():
     x = XDL(xdl_f)
     x.prepare_for_execution(graph_f, interactive=False)
 
-@pytest.mark.integration
 def test_alkyl_fluor_prepare_for_execution():
+    """Removed as not easy to convert graphml graph to SL2."""
     xdl_f = os.path.join(FOLDER, 'AlkylFluor.xdl')
     graph_f = os.path.join(FOLDER, 'AlkylFluor_graph.graphml')
     x = XDL(xdl_f)

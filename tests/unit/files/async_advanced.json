@@ -618,10 +618,10 @@
       "y": 440,
       "internalId": 127,
       "label": "hotplate2",
-      "class": "IKARCTDigital",
+      "class": "RCTDigitalHotplate",
       "name": "hotplate2",
-      "mode": "ethernet",
-      "address": "192.168.1.54"
+      "address": "192.168.1.54",
+      "connection_mode": "tcpip"
     },
     {
       "id": "hotplate3",
@@ -630,10 +630,10 @@
       "y": 440,
       "internalId": 128,
       "label": "hotplate3",
-      "class": "IKARCTDigital",
+      "class": "RCTDigitalHotplate",
       "name": "hotplate3",
-      "mode": "ethernet",
-      "address": "192.168.1.55"
+      "address": "192.168.1.55",
+      "connection_mode": "tcpip"
     },
     {
       "id": "hotplate1",
@@ -642,10 +642,10 @@
       "y": 440,
       "internalId": 129,
       "label": "hotplate1",
-      "class": "IKARCTDigital",
+      "class": "RCTDigitalHotplate",
       "name": "hotplate1",
-      "mode": "ethernet",
-      "address": "192.168.1.53"
+      "address": "192.168.1.53",
+      "connection_mode": "tcpip"
     },
     {
       "id": "hotplate4",
@@ -654,10 +654,10 @@
       "y": 440,
       "internalId": 130,
       "label": "hotplate4",
-      "class": "IKARCTDigital",
+      "class": "RCTDigitalHotplate",
       "name": "hotplate4",
-      "mode": "ethernet",
-      "address": "192.168.1.56"
+      "address": "192.168.1.56",
+      "connection_mode": "tcpip"
     },
     {
       "id": "pump5",
