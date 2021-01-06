@@ -72,6 +72,8 @@ def add_steps(step_library):
             schema += "\n            </xs:element>"
 
     for nested_step in nested_steps:
+        if nested_step not in step_library:
+            continue
         schema += f"\n            <xs:element name=\"{nested_step}\" maxOccurs=\"unbounded\" minOccurs=\"0\">"
         schema += "\n              <xs:complexType mixed=\"true\">"
 

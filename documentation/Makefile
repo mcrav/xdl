@@ -17,6 +17,7 @@ help:
 
 clean:
 	rm -rf $(BUILDDIR)
+	python generate_standard_docs.py
 
 cleanall:
 	 @read -p "!!! That would remove all files under .\src !!! Are you sure? " -r; \
@@ -27,7 +28,6 @@ cleanall:
 
 apidoc:
 	@$(SPHINX_APIDOC) --separate --no-toc --output $(SOURCEDIR) ..\xdl
-
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).

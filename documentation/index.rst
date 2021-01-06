@@ -7,13 +7,12 @@
 XDL documentation
 =================
 
-Usage
-*****
 .. toctree::
    :maxdepth: 3
    :caption: Contents:
 
    install
+   standard/index
    usage/index
    development/index
    src/index
