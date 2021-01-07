@@ -62,7 +62,8 @@ STEPS_TEMPLATE_FOLDER = os.path.join(
 STEPS_OVERVIEW_RST_PATH = os.path.join(HERE, 'standard', 'steps-overview.rst')
 FULL_STEPS_SPECIFICATION_RST_PATH = os.path.join(
     HERE, 'standard', 'full-steps-specification.rst')
-SCHEMA_XSD_PATH = os.path.join(HERE, '_static', f'xdl-schema.xsd')
+STATIC_FOLDER = os.path.join(HERE, '_static')
+SCHEMA_XSD_PATH = os.path.join(STATIC_FOLDER, 'xdl-schema.xsd')
 XDL_FILE_STRUCTURE_RST_PATH = os.path.join(
     HERE, 'standard', 'xdl-file-structure.rst')
 
@@ -389,6 +390,9 @@ def parse_templates():
 def generate_schema_xsd():
     """Write schema to XSD file for docs."""
     schema = generate_schema(PlaceholderPlatform().step_library)
+    # Need to make static folder as empty folder is not committed to Git, so CI
+    # fails.
+    os.makedirs(STATIC_FOLDER, exist_ok=True)
     with open(SCHEMA_XSD_PATH, 'w') as fd:
         fd.write(schema)
 
