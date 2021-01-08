@@ -611,7 +611,12 @@ class AbstractStep(Step, ABC):
             try:
                 # Await async step finishing
                 if step.name == 'Await':
-                    keep_going = step.execute(async_steps, self.logger)
+                    keep_going = step.execute(
+                        async_steps,
+                        logger=self.logger,
+                        level=level,
+                        step_indexes=step_indexes
+                    )
 
                 # Execute normal step
                 else:
