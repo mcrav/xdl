@@ -104,5 +104,6 @@ class Reagent(XDLBase):
         incompatible_reagents: List[str] = 'default',
         is_base: bool = 'default',
         inchi: str = '',
+        **kwargs
     ) -> None:
         super().__init__(locals())

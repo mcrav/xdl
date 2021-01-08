@@ -71,12 +71,17 @@ def xdl_str_to_objs(
 def apply_step_record(step: Step, step_record_step: Tuple[str, Dict]):
     assert step.name == step_record_step[0]
     for prop in step.properties:
+        # Comments don't need to be applied to step record. No point adding
+        # comment to substep in xdlexe.
+        if prop == 'comment':
+            continue
+
         if prop != 'children' and prop != 'uuid':
             if prop not in step_record_step[1]:
                 raise XDLError(f"Property {prop} missing from\
- Step {step_record_step[0]}\nThis file was most likely generated from an\
- older version of XDL. Regenerate the XDLEXE file using the latest\
- version of XDL.")
+Step {step_record_step[0]}\nThis file was most likely generated from an\
+older version of XDL. Regenerate the XDLEXE file using the latest\
+version of XDL.")
             step.properties[prop] = step_record_step[1][prop]
     step.update()
     if not isinstance(step, AbstractBaseStep):

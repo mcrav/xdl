@@ -3,7 +3,7 @@ from typing import List, Dict
 from ..constants import REAGENT_PROP_TYPE
 from ..hardware import Component
 from ..reagents import Reagent
-from ..steps import AbstractBaseStep, AbstractStep, Step
+from ..steps import Step
 from ..errors import XDLError
 
 def get_valid_attrs(target_class: type) -> List[str]:
@@ -19,10 +19,10 @@ def get_valid_attrs(target_class: type) -> List[str]:
         k
         for k in target_class.PROP_TYPES
     ]
-    if (AbstractStep in target_class.__bases__
-            or AbstractBaseStep in target_class.__bases__):
-        valid_attrs.append('repeat')
-    elif target_class == Component:
+    # Add global comment property
+    valid_attrs.append('comment')
+
+    if target_class == Component:
         valid_attrs.remove('component_type')
         valid_attrs.append('type')
     return valid_attrs

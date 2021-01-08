@@ -31,10 +31,11 @@ class Component(XDLBase):
     }
 
     def __init__(
-            self,
-            id: str,
-            component_type: str,
-            chemical: str = 'default'
+        self,
+        id: str,
+        component_type: str,
+        chemical: str = 'default',
+        **kwargs
     ) -> None:
         super().__init__(locals())
 

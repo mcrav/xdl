@@ -47,6 +47,7 @@ class Async(AbstractAsyncStep):
         children: Union[Step, List[Step]],
         pid: str = None,
         on_finish: Callable = None,
+        **kwargs
     ):
         super().__init__(locals())
 
@@ -170,7 +171,7 @@ class Repeat(AbstractStep):
     }
 
     def __init__(
-        self, repeats: int, children: Union[Step, List[Step]]
+        self, repeats: int, children: Union[Step, List[Step]], **kwargs
     ) -> None:
         super().__init__(locals())
 
@@ -202,7 +203,7 @@ class Loop(AbstractDynamicStep):
     }
 
     def __init__(
-        self, children: Union[Step, List[Step]]
+        self, children: Union[Step, List[Step]], **kwargs
     ) -> None:
         super().__init__(locals())
 

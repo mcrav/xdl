@@ -6,6 +6,7 @@ cross-platform standard.
 """
 
 from typing import Callable
+import copy
 from .templates import (
     AbstractAddStep,
     AbstractAddSolidStep,
@@ -101,10 +102,12 @@ def placeholder_step(template_cls: type) -> Callable:
         # Define placeholder class
         class PlaceholderCls(template_cls):
 
-            # Define props specification
-            PROP_TYPES = template_cls.MANDATORY_PROP_TYPES
-            DEFAULT_PROPS = template_cls.MANDATORY_DEFAULT_PROPS
-            PROP_LIMITS = template_cls.MANDATORY_PROP_LIMITS
+            # Define props specification. Copies required so that globally
+            # defined properties like `comment` do not interfere with the
+            # `MANDATORY_PROP_TYPES` dict.
+            PROP_TYPES = copy.copy(template_cls.MANDATORY_PROP_TYPES)
+            DEFAULT_PROPS = copy.copy(template_cls.MANDATORY_DEFAULT_PROPS)
+            PROP_LIMITS = copy.copy(template_cls.MANDATORY_PROP_LIMITS)
 
             # Define __init__ method
             exec(get_init_method(template_cls))

@@ -133,6 +133,8 @@ class AbstractPlatform(object):
             else:
                 return str(prop_type).replace('.typing', '')
 
+        # Return platform declaration adding global comment property to every
+        # XDL element.
         return {
             'steps': [
                 {
@@ -141,8 +143,8 @@ class AbstractPlatform(object):
                     'PROP_TYPES': {
                         prop: get_type_str(prop_type)
                         for prop, prop_type in step.PROP_TYPES.items()
-                    },
-                    'DEFAULT_PROPS': step.DEFAULT_PROPS,
+                    } + {'comment': str},
+                    'DEFAULT_PROPS': step.DEFAULT_PROPS + {'comment': ''},
                     'INTERNAL_PROPS': step.INTERNAL_PROPS,
                     'ALWAYS_WRITE': step.ALWAYS_WRITE,
                     'PROP_LIMITS': {
@@ -165,8 +167,8 @@ class AbstractPlatform(object):
                 'name': 'Reagent',
                 'PROP_TYPES': {
                     k: type_str_dict[v] for k, v in Reagent.PROP_TYPES.items()
-                },
-                'DEFAULT_PROPS': Reagent.DEFAULT_PROPS,
+                } + {'comment': str},
+                'DEFAULT_PROPS': Reagent.DEFAULT_PROPS + {'comment': ''},
                 'INTERNAL_PROPS': Reagent.INTERNAL_PROPS,
                 'ALWAYS_WRITE': Reagent.ALWAYS_WRITE,
                 'PROP_LIMITS': {
@@ -183,8 +185,8 @@ class AbstractPlatform(object):
                 'name': 'Component',
                 'PROP_TYPES': {
                     k: type_str_dict[v] for k, v in Component.PROP_TYPES.items()
-                },
-                'DEFAULT_PROPS': Component.DEFAULT_PROPS,
+                } + {'comment': str},
+                'DEFAULT_PROPS': Component.DEFAULT_PROPS + {'comment': ''},
                 'INTERNAL_PROPS': Component.INTERNAL_PROPS,
                 'ALWAYS_WRITE': Component.ALWAYS_WRITE,
                 'PROP_LIMITS': {

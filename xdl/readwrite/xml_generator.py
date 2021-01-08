@@ -113,7 +113,8 @@ def _append_hardware_tree(
             if val is not None:
                 if prop == 'component_type':
                     component_tree.attrib['type'] = str(val)
-                else:
+                # Don't write empty comment field.
+                elif val:
                     component_tree.attrib[prop] = str(val)
         hardware_tree.append(component_tree)
     xdltree.append(hardware_tree)
