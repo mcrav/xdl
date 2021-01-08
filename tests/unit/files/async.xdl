@@ -30,7 +30,7 @@
         volume="20 mL"
       />
       <Repeat
-        repeats="200"
+        repeats="2"
       >
         <Wait
           time="1 secs"

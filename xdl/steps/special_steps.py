@@ -10,7 +10,9 @@ from .base_steps import (
     AbstractAsyncStep,
     AbstractStep,
     AbstractBaseStep,
-    AbstractDynamicStep
+    AbstractDynamicStep,
+    execution_log_str,
+    finished_executing_step_msg,
 )
 
 if False:
@@ -57,17 +59,52 @@ class Async(AbstractAsyncStep):
         self.finished = False
 
     def async_execute(
-        self, chempiler: 'Chempiler', logger: logging.Logger = None
+        self, chempiler: 'Chempiler',
+        logger: logging.Logger = None,
+        level: int = 0,
+        step_indexes: List[int] = None,
     ) -> None:
-        for step in self.children:
-            keep_going = step.execute(chempiler, logger)
+        # Get logger if not passed
+        if not logger:
+            logger = logging.getLogger('xdl')
+
+        # Get default step indexes if they are not passed
+        if step_indexes is None:
+            step_indexes = [0]
+
+        # Log step start if it is executed by itself (level == 0), as there will
+        # be no other context logging the step start.
+        if level == 0:
+            logger.info(execution_log_str(self, step_indexes))
+
+        # Get message for end before step_indexes are changed by substeps
+        finish_msg = finished_executing_step_msg(self, step_indexes)
+
+        # Execute async children steps
+        for i, step in enumerate(self.children):
+            # Update step indexes
+            step_indexes.append(0)
+            step_indexes[level + 1] = i
+            step_indexes = step_indexes[:level + 2]
+
+            # Log step start
+            logger.info(execution_log_str(step, step_indexes))
+
+            # Execute step
+            keep_going = step.execute(
+                chempiler, logger, level=level + 1, step_indexes=step_indexes)
+
+            # Break out of loop if either stop flag is ``True``
             if not keep_going or self._should_end:
                 self.finished = True
+                logger.info(finish_msg)
                 return
 
+        # Finish and log step finish
         self.finished = True
         if self.on_finish:
             self.on_finish()
+        logger.info(finish_msg)
         return True
 
     def human_readable(self, language='en'):
@@ -94,9 +131,16 @@ class Await(AbstractBaseStep):
     def execute(
         self,
         async_steps: List[Async],
-        logger: logging.Logger = None
+        logger: logging.Logger = None,
+        level: int = 0,
+        step_indexes: List[int] = None,
     ) -> None:
+        # Log step start if it is executed by itself (level == 0), as there will
+        # be no other context logging the step start.
+        if level == 0:
+            logger.info(execution_log_str(self, step_indexes))
 
+        # Await async step with self.pid
         for async_step in async_steps:
             if async_step.pid == self.pid:
                 while not async_step.finished:
@@ -104,6 +148,9 @@ class Await(AbstractBaseStep):
                 # Reset async step so it can be used again, for example in
                 # Repeat step.
                 async_step.finished = False
+
+        # Log step finish
+        logger.info(finished_executing_step_msg(self, step_indexes))
         return True
 
     def locks(self, chempiler):

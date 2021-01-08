@@ -588,7 +588,7 @@ class AbstractStep(Step, ABC):
         if level == 0:
             logger.info(
                 execution_log_str(
-                    self, level=level, step_indexes=step_indexes))
+                    self, step_indexes=step_indexes))
 
         # Bump recursion level
         level += 1
@@ -605,7 +605,7 @@ class AbstractStep(Step, ABC):
             # Log step execution
             logger.info(
                 execution_log_str(
-                    step, level=level, step_indexes=step_indexes))
+                    step, step_indexes=step_indexes))
 
             # Execute step
             try:
@@ -773,13 +773,17 @@ class AbstractAsyncStep(Step):
             should stop.
         """
         self.thread = threading.Thread(
-            target=self.async_execute, args=(platform_controller, logger))
+            target=self.async_execute, args=(
+                platform_controller, logger, level, step_indexes))
         self.thread.start()
         return True
 
     @abstractmethod
     def async_execute(
-        self, platform_controller: Any, logger: logging.Logger = None
+        self, platform_controller: Any,
+        logger: logging.Logger = None,
+        level: int = 0,
+        step_indexes: List[int] = None,
     ) -> bool:
         """Abstract method. Should contain the execution logic that will be
         executed in a separate thread. Equivalent to
@@ -1092,7 +1096,7 @@ class AbstractDynamicStep(Step):
             step_indexes[level] = i
             step_indexes = step_indexes[:level + 1]
             logger.info(
-                execution_log_str(step, level=level, step_indexes=step_indexes))
+                execution_log_str(step, step_indexes=step_indexes))
             step.execute(
                 platform_controller,
                 logger=logger,
@@ -1204,12 +1208,11 @@ def pretty_props_table(props: Dict[str, Any]) -> str:
     )
 
 def execution_log_str(
-        step: Step, level: int = 0, step_indexes: List[int] = []) -> str:
+        step: Step, step_indexes: List[int] = []) -> str:
     """Return strings to log when step begins executing.
 
     Args:
         step (Step): Step beginning execution.
-        level (int): Recursion level of step.
         step_indexes (List[int]): Indexes into steps list and substeps lists.
 
     Returns:

@@ -27,7 +27,7 @@ class TestAsyncStep(AbstractAsyncStep):
     def __init__(self, callback: Callable, on_finish: Callable):
         super().__init__(locals())
 
-    def async_execute(self, chempiler, logger=None, level=0):
+    def async_execute(self, chempiler, logger=None, level=0, step_indexes=None):
         for i in range(5):
             time.sleep(1)
             self.callback(i)
@@ -65,6 +65,7 @@ def test_async_step():
 
 class TestAsyncWrapperManager(object):
 
+    # Needed to stop pytest using this as a test
     __test__ = False
 
     def __init__(self, steps):
@@ -79,6 +80,7 @@ class TestAsyncWrapperManager(object):
 
 @pytest.mark.unit
 def test_async_wrapper():
+    """Test executing Async step as a standalone step."""
     chempiler = Chempiler(
         experiment_code='test',
         output_dir=os.path.join(HERE, 'chempiler_output'),
@@ -86,13 +88,17 @@ def test_async_wrapper():
         graph_file=os.path.join(HERE, '..', 'files', 'bigrig.json'),
         device_modules=[ChemputerAPI])
 
+    # Wait(5) will execute virtually instantaneously as this is a simulation.
     mgr = TestAsyncWrapperManager(Wait(5))
     mgr.execute(chempiler)
+    # Make sure simulation has finished executing
     time.sleep(2)
     assert mgr.done is True
 
+    # Wait(5) will execute virtually instantaneously as this is a simulation.
     mgr = TestAsyncWrapperManager([Wait(5)])
     mgr.execute(chempiler)
+    # Make sure simulation has finished executing
     time.sleep(2)
     assert mgr.done is True
 

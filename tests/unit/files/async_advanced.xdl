@@ -60,7 +60,7 @@
 
   <Procedure>
     <Repeat
-      repeats="60"
+      repeats="2"
     >
       <Add
         vessel="reactor1"
