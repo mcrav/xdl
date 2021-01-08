@@ -1,13 +1,17 @@
 from typing import Any, Union, List
 import hashlib
 import logging
+import copy
 from abc import ABC
 from networkx.readwrite import node_link_data
 from networkx import MultiDiGraph
 
 from .utils import do_sanity_check
 from ..steps.special_steps import Async, Await, Repeat
-from ..steps.base_steps import Step, AbstractDynamicStep, AbstractBaseStep
+from ..steps.base_steps import (
+    Step, AbstractDynamicStep, AbstractBaseStep,
+    finished_executing_step_msg, execution_log_str
+)
 from ..steps import NON_RECURSIVE_ABSTRACT_STEPS
 from ..errors import (
     XDLExecutionOnDifferentGraphError,
@@ -221,6 +225,7 @@ class AbstractXDLExecutor(ABC):
         step: Step,
         async_steps: List[Async] = [],
         step_indexes: List[int] = [],
+        level: int = 0,
     ) -> bool:
         """Execute single step.
 
@@ -248,14 +253,46 @@ class AbstractXDLExecutor(ABC):
         try:
             # Wait for async step to finish executing
             if type(step) == Await:
-                keep_going = step.execute(async_steps, self.logger)
+                keep_going = step.execute(
+                    async_steps,
+                    logger=self.logger,
+                    level=level,
+                    step_indexes=step_indexes
+                )
 
             # Execute Repeat like this so any nested Async steps get added to
             # async_steps
             elif type(step) is Repeat:
-                for substep in step.steps:
+                # Log Repeat step start
+                self.logger.info(execution_log_str(
+                    step, step_indexes=step_indexes))
+
+                # Get log message for finish before step_indexes are changed
+                finish_msg = finished_executing_step_msg(
+                    step, step_indexes)
+
+                # Execute repeat children steps
+                for i, substep in enumerate(step.steps):
+
+                    # Update step indexes
+                    step_indexes.append(0)
+                    step_indexes = step_indexes[:level + 2]
+                    step_indexes[-1] = i
+
+                    # Log step start
+                    self.logger.info(execution_log_str(
+                        substep, step_indexes=step_indexes))
+
+                    # Execute step
                     keep_going = self.execute_step(
-                        platform_controller, substep, async_steps)
+                        platform_controller,
+                        substep, async_steps,
+                        step_indexes=step_indexes,
+                        level=level + 1
+                    )
+
+                # Log Repeat step finish
+                self.logger.info(finish_msg)
 
             # Normal step execution
             else:
@@ -270,12 +307,15 @@ class AbstractXDLExecutor(ABC):
                 # method.
                 if is_base_step:
                     keep_going = step.execute(
-                        platform_controller, self.logger)
+                        platform_controller, self.logger, level=level)
                 else:
                     keep_going = step.execute(
                         platform_controller,
                         self.logger,
-                        step_indexes=step_indexes
+                        # Copy of step indexes in case any funky async stuff
+                        # going on
+                        step_indexes=copy.copy(step_indexes),
+                        level=level,
                     )
 
                 # Log step end timestamp
