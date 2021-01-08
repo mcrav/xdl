@@ -132,11 +132,22 @@ class XDLBase(object):
 
     def __init__(self, param_dict: Dict[str, Any]) -> None:
         """Initialize properties dict and loggger."""
+        # Add global optional comment prop
+        self.PROP_TYPES['comment'] = str
+        self.DEFAULT_PROPS['comment'] = ''
+
+        # comment property passed in kwargs so add this to main param_dict
+        if 'kwargs' in param_dict:
+            param_dict.update(param_dict['kwargs'])
+
         # Remove stuff like self that isn't a property as param dict comes from
         # `locals()`
         properties = {
             k: v for k, v in param_dict.items() if k in self.PROP_TYPES
         }
+        # If comment not given, add blank comment
+        if 'comment' not in properties:
+            properties['comment'] = ''
 
         # Initialize properties dict
         self.properties = {}
