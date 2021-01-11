@@ -171,11 +171,20 @@ class Step(XDLBase):
 
                 # Traditional human readable template strings
                 if type(language_human_readable) == str:
+
+                    # If step has a comment add comment to template.
+                    if self.comment:
+                        language_human_readable += '. {comment}'
+
                     return language_human_readable.format(
                         **self.formatted_properties())
 
                 # New conditional JSON object human readable format
                 else:
+                    # If step has a comment add comment to template.
+                    if self.comment:
+                        language_human_readable['full'] += '. {comment}'
+
                     return conditional_human_readable(
                         self, language_human_readable)
 
