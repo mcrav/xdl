@@ -73,6 +73,7 @@
       vessel="filter"
       temp="10°C"
       stir="true"
+      comment="This is a comment"
     />
     <Add
       vessel="filter"

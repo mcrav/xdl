@@ -1,5 +1,6 @@
 from typing import Dict, Any, List, Union
 import json
+import copy
 from .sanitisation import (
     DEFAULT_PROP_LIMITS, convert_val_to_std_units, parse_bool)
 from .logging import get_logger
@@ -132,6 +133,10 @@ class XDLBase(object):
 
     def __init__(self, param_dict: Dict[str, Any]) -> None:
         """Initialize properties dict and loggger."""
+        # Make copies so that class attributes remain unaffected.
+        self.PROP_TYPES = copy.copy(self.PROP_TYPES)
+        self.DEFAULT_PROPS = copy.copy(self.DEFAULT_PROPS)
+
         # Add global optional comment prop
         self.PROP_TYPES['comment'] = str
         self.DEFAULT_PROPS['comment'] = ''

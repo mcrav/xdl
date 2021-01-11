@@ -22,12 +22,13 @@ def test_schema():
 
     for f in os.listdir(FOLDER):
         print(f)
-        if f.endswith('.xdl'):
+        if f.endswith('.xdl') and not f.startswith('json-prop-type'):
             with open(os.path.join(FOLDER, f)) as fd:
                 etree.fromstring(fd.read(), parser)
             # assert xmlschema.validate(etree.parse(os.path.join(FOLDER, f)))
 
     for f in os.listdir(INTEGRATION_FOLDER):
+        print(f)
         if f.endswith('.xdl'):
             with open(os.path.join(INTEGRATION_FOLDER, f)) as fd:
                 etree.fromstring(fd.read(), parser)
