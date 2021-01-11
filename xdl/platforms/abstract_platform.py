@@ -145,7 +145,7 @@ class AbstractPlatform(object):
                             prop: get_type_str(prop_type)
                             for prop, prop_type in step.PROP_TYPES.items()
                         },
-                        **{'comment': str}
+                        **{'comment': 'str'}
                     ),
                     'DEFAULT_PROPS': dict(
                         step.DEFAULT_PROPS, **{'comment': ''}),
@@ -174,7 +174,7 @@ class AbstractPlatform(object):
                         k: type_str_dict[v]
                         for k, v in Reagent.PROP_TYPES.items()
                     },
-                    **{'comment': str},
+                    **{'comment': 'str'},
                 ),
                 'DEFAULT_PROPS': dict(
                     Reagent.DEFAULT_PROPS, **{'comment': ''}),
@@ -197,7 +197,7 @@ class AbstractPlatform(object):
                         k: type_str_dict[v]
                         for k, v in Component.PROP_TYPES.items()
                     },
-                    **{'comment': str}
+                    **{'comment': 'str'}
                 ),
                 'DEFAULT_PROPS': dict(
                     Component.DEFAULT_PROPS, **{'comment': ''}),
