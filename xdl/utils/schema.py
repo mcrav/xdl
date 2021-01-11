@@ -12,6 +12,7 @@ def add_hardware_namespace():
     schema += "\n                    <xs:attribute type=\"xs:string\" name=\"id\" use=\"optional\"/>"
     schema += "\n                    <xs:attribute type=\"xs:string\" name=\"type\" use=\"optional\"/>"
     schema += "\n                    <xs:attribute type=\"xs:string\" name=\"chemical\" use=\"optional\"/>"
+    schema += "\n                    <xs:attribute type=\"xs:string\" name=\"comment\" use=\"optional\"/>"
     schema += "\n                  </xs:extension>"
     schema += "\n                </xs:simpleContent>"
     schema += "\n              </xs:complexType>"
@@ -34,6 +35,7 @@ def add_reagents_namespace():
 
     for prop_name, prop_type in Reagent.PROP_TYPES.items():
         schema += f"\n                    <xs:attribute type=\"xs:string\" name=\"{prop_name}\" use=\"optional\"/>"
+    schema += "\n                    <xs:attribute type=\"xs:string\" name=\"comment\" use=\"optional\"/>"
 
     schema += "\n                  </xs:extension>"
     schema += "\n                </xs:simpleContent>"
@@ -65,6 +67,7 @@ def add_steps(step_library):
             add_repeat = True
             for prop_name, prop_type in step.PROP_TYPES.items():
                 schema += f"\n                    <xs:attribute type=\"xs:string\" name=\"{prop_name}\" use=\"optional\"/>"
+            schema += "\n                    <xs:attribute type=\"xs:string\" name=\"comment\" use=\"optional\"/>"
 
             schema += "\n                  </xs:extension>"
             schema += "\n                </xs:simpleContent>"
