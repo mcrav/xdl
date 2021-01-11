@@ -179,7 +179,7 @@ def xdl_step_from_json(
 
     # Validate properties
     for prop, val in step_properties.items():
-        if prop not in step_type.PROP_TYPES:
+        if prop not in step_type.PROP_TYPES and prop != 'comment':
             raise XDLInvalidPropError(step_name, prop)
 
         # This is necessary for sanitisation to parse value correctly
@@ -222,7 +222,7 @@ def xdl_element_from_json(
     # Validate properties
     xdl_element_properties = xdl_element_json['properties']
     for prop, val in xdl_element_properties.items():
-        if prop not in xdl_element_type.PROP_TYPES:
+        if prop not in xdl_element_type.PROP_TYPES and prop != 'comment':
             raise XDLInvalidPropError(xdl_element_type.__name__, prop)
         # This is necessary for sanitisation to parse value correctly
         if val == '':
