@@ -34,43 +34,6 @@
   </Reagents>
 
   <Procedure>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_base"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_base"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <AddFilterDeadVolume
       filter_vessel="filter1"
       solvent="glacial acetic acid"
@@ -370,30 +333,6 @@
           comment="" />
       </FlushTubing>
     </Add>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_dry"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <Add
       vessel="filter1"
       reagent="chloroacetyl chloride"
@@ -532,54 +471,6 @@
           comment="" />
       </FlushTubing>
     </Add>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_dry"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
-    <CleanBackbone
-      solvent="water"
-      near_waste="waste_filter"
-      far_waste="waste_base"
-      solvent_waste="waste_filter"
-      solvent_vessel="flask_water"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_water"
-        to_vessel="waste_base"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <Add
       vessel="filter1"
       reagent="half-saturated aqueous sodium acetate"
@@ -718,30 +609,6 @@
           comment="" />
       </FlushTubing>
     </Add>
-    <CleanBackbone
-      solvent="water"
-      near_waste="waste_filter"
-      far_waste="waste_base"
-      solvent_waste="waste_filter"
-      solvent_vessel="flask_water"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_water"
-        to_vessel="waste_base"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <HeatChillToTemp
       vessel="filter1"
       temp="10.0"
@@ -753,7 +620,7 @@
       wait_recording_speed="2000.0"
       after_recording_speed="14.0"
       temperature_controller="chiller_filter"
-      comment="">
+      comment="This is a comment">
       <StartStir
         vessel="filter1"
         stir_speed="250.0"
@@ -1013,67 +880,6 @@
         position="2"
         comment="" />
     </RemoveFilterDeadVolume>
-    <CleanBackbone
-      solvent="water"
-      near_waste="waste_filter"
-      far_waste="waste_filter"
-      solvent_waste="waste_filter"
-      solvent_vessel="flask_water"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_water"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_base"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_base"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <Filter
       vessel="filter1"
       wait_time="2 mins"
@@ -1243,30 +1049,6 @@
           comment="" />
       </ApplyVacuum>
     </Dry>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_filter"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <AddFilterDeadVolume
       filter_vessel="filter1"
       solvent="glacial acetic acid"
@@ -1428,43 +1210,6 @@
           comment="" />
       </FlushTubing>
     </Add>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_organic"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_organic"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <Add
       vessel="filter1"
       reagent="toluene"
@@ -1603,67 +1348,6 @@
           comment="" />
       </FlushTubing>
     </Add>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_organic"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_organic"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
-    <CleanBackbone
-      solvent="water"
-      near_waste="waste_filter"
-      far_waste="waste_base"
-      solvent_waste="waste_filter"
-      solvent_vessel="flask_water"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_water"
-        to_vessel="waste_base"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <HeatChill
       vessel="filter1"
       temp="110.6"
@@ -2934,450 +2618,6 @@
         high_conductivity_phase="bottom"
         comment="" />
     </Separate>
-    <CleanBackbone
-      solvent="water"
-      near_waste="waste_filter"
-      far_waste="waste_separator"
-      solvent_waste="waste_filter"
-      solvent_vessel="flask_water"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_water"
-        to_vessel="waste_separator"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_base"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_base"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
-    <CleanVessel
-      vessel="filter1"
-      solvent="glacial acetic acid"
-      stir_time="60 secs"
-      stir_speed="500.0"
-      temp="30.0"
-      dry="True"
-      volume="80 mL"
-      repeats="2"
-      solvent_vessel="flask_acetic_acid"
-      waste_vessel="waste_filter"
-      vacuum="vacuum_filter"
-      vessel_type="filter"
-      heater="None"
-      chiller="chiller_filter"
-      has_stirrer="True"
-      comment="">
-      <StartStir
-        vessel="filter1"
-        stir_speed="250.0"
-        purpose="None"
-        stirring_controller="stirrer_filter"
-        comment="">
-        <CStirringControllerSetSpeed
-          stirring_controller="stirrer_filter"
-          stir_speed="250.0"
-          comment="" />
-        <CStirringControllerStart
-          stirring_controller="stirrer_filter"
-          comment="" />
-      </StartStir>
-      <HeatChillToTemp
-        vessel="filter1"
-        temp="30.0"
-        active="True"
-        continue_heatchill="True"
-        stir="True"
-        stir_speed="250.0"
-        purpose="None"
-        wait_recording_speed="2000.0"
-        after_recording_speed="14.0"
-        temperature_controller="chiller_filter"
-        comment="">
-        <StartStir
-          vessel="filter1"
-          stir_speed="250.0"
-          purpose="None"
-          stirring_controller="stirrer_filter"
-          comment="">
-          <CStirringControllerSetSpeed
-            stirring_controller="stirrer_filter"
-            stir_speed="250.0"
-            comment="" />
-          <CStirringControllerStart
-            stirring_controller="stirrer_filter"
-            comment="" />
-        </StartStir>
-        <StartHeatChill
-          vessel="filter1"
-          temp="30.0"
-          purpose="None"
-          temperature_controller="chiller_filter"
-          comment="">
-          <CTemperatureControllerSetTemp
-            temperature_controller="chiller_filter"
-            temp="30.0"
-            comment="" />
-          <CTemperatureControllerStart
-            temperature_controller="chiller_filter"
-            comment="" />
-        </StartHeatChill>
-        <CSetRecordingSpeed
-          recording_speed="2000.0"
-          comment="" />
-        <WaitForTemp
-          vessel="chiller_filter"
-          temperature_controller="chiller_filter"
-          relaxed_rt_threshold="5.0"
-          relaxed_rt_threshold_timeout="600.0"
-          comment="" />
-        <CSetRecordingSpeed
-          recording_speed="14.0"
-          comment="" />
-      </HeatChillToTemp>
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="filter1"
-        volume="80 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="top"
-        through=""
-        use_backbone="True"
-        repeats="1"
-        comment="" />
-      <Wait
-        time="60 secs"
-        wait_recording_speed="2000.0"
-        after_recording_speed="14.0"
-        comment="">
-        <CSetRecordingSpeed
-          recording_speed="2000.0"
-          comment="" />
-        <CWait
-          time="60 secs"
-          comment="" />
-        <CSetRecordingSpeed
-          recording_speed="14.0"
-          comment="" />
-      </Wait>
-      <CMove
-        from_vessel="filter1"
-        to_vessel="waste_filter"
-        volume="80 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="bottom"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="1"
-        comment="" />
-      <StopStir
-        vessel="filter1"
-        stirring_controller="stirrer_filter"
-        comment="">
-        <CStirringControllerStop
-          stirring_controller="stirrer_filter"
-          comment="" />
-      </StopStir>
-      <StartStir
-        vessel="filter1"
-        stir_speed="250.0"
-        purpose="None"
-        stirring_controller="stirrer_filter"
-        comment="">
-        <CStirringControllerSetSpeed
-          stirring_controller="stirrer_filter"
-          stir_speed="250.0"
-          comment="" />
-        <CStirringControllerStart
-          stirring_controller="stirrer_filter"
-          comment="" />
-      </StartStir>
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="filter1"
-        volume="80 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="top"
-        through=""
-        use_backbone="True"
-        repeats="1"
-        comment="" />
-      <Wait
-        time="60 secs"
-        wait_recording_speed="2000.0"
-        after_recording_speed="14.0"
-        comment="">
-        <CSetRecordingSpeed
-          recording_speed="2000.0"
-          comment="" />
-        <CWait
-          time="60 secs"
-          comment="" />
-        <CSetRecordingSpeed
-          recording_speed="14.0"
-          comment="" />
-      </Wait>
-      <CMove
-        from_vessel="filter1"
-        to_vessel="waste_filter"
-        volume="80 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="bottom"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="1"
-        comment="" />
-      <StopStir
-        vessel="filter1"
-        stirring_controller="stirrer_filter"
-        comment="">
-        <CStirringControllerStop
-          stirring_controller="stirrer_filter"
-          comment="" />
-      </StopStir>
-      <Dry
-        vessel="filter1"
-        time="60 mins"
-        temp="None"
-        waste_vessel="waste_filter"
-        aspiration_speed="5.0"
-        continue_heatchill="False"
-        vacuum="vacuum_filter"
-        vacuum_device="False"
-        pressure="None"
-        inert_gas="None"
-        vacuum_valve="valve_vacuum"
-        valve_unused_port="2"
-        vessel_type="filter"
-        vessel_has_stirrer="True"
-        collection_flask_volume="None"
-        comment="">
-        <StopStir
-          vessel="filter1"
-          stirring_controller="stirrer_filter"
-          comment="">
-          <CStirringControllerStop
-            stirring_controller="stirrer_filter"
-            comment="" />
-        </StopStir>
-        <CMove
-          from_vessel="filter1"
-          to_vessel="waste_filter"
-          volume="5 mL"
-          move_speed="40.0"
-          aspiration_speed="5.0"
-          dispense_speed="40.0"
-          from_port="bottom"
-          to_port="0"
-          through=""
-          use_backbone="True"
-          repeats="1"
-          comment="" />
-        <ApplyVacuum
-          vessel="filter1"
-          time="60 mins"
-          pressure="400.0"
-          port="bottom"
-          vessel_type="filter"
-          vacuum_valve="valve_vacuum"
-          vacuum_source="vacuum_filter"
-          vacuum_device="None"
-          vacuum_valve_inert_gas="None"
-          vacuum_valve_unused_port="2"
-          pneumatic_controller="None"
-          comment="">
-          <CConnect
-            from_vessel="filter1"
-            to_vessel="vacuum_filter"
-            from_port="bottom"
-            to_port="None"
-            comment="" />
-          <Wait
-            time="60 mins"
-            wait_recording_speed="2000.0"
-            after_recording_speed="14.0"
-            comment="">
-            <CSetRecordingSpeed
-              recording_speed="2000.0"
-              comment="" />
-            <CWait
-              time="60 mins"
-              comment="" />
-            <CSetRecordingSpeed
-              recording_speed="14.0"
-              comment="" />
-          </Wait>
-          <CValveMoveToPosition
-            valve_name="valve_vacuum"
-            position="2"
-            comment="" />
-        </ApplyVacuum>
-      </Dry>
-      <HeatChillReturnToRT
-        vessel="filter1"
-        stir="False"
-        stir_speed="250.0"
-        wait_recording_speed="2000.0"
-        after_recording_speed="14.0"
-        comment="">
-        <HeatChillToTemp
-          vessel="filter1"
-          temp="25.0"
-          active="False"
-          continue_heatchill="False"
-          stir="False"
-          stir_speed="250.0"
-          purpose="None"
-          wait_recording_speed="2000.0"
-          after_recording_speed="14.0"
-          temperature_controller="chiller_filter"
-          comment="">
-          <StopStir
-            vessel="filter1"
-            stirring_controller="stirrer_filter"
-            comment="">
-            <CStirringControllerStop
-              stirring_controller="stirrer_filter"
-              comment="" />
-          </StopStir>
-          <HeatChillSetTemp
-            vessel="filter1"
-            temp="25.0"
-            temperature_controller="chiller_filter"
-            comment="">
-            <CTemperatureControllerSetTemp
-              temperature_controller="chiller_filter"
-              temp="25.0"
-              comment="" />
-          </HeatChillSetTemp>
-          <StopHeatChill
-            vessel="filter1"
-            heater="None"
-            chiller="chiller_filter"
-            comment="">
-            <CTemperatureControllerStop
-              temperature_controller="chiller_filter"
-              comment="" />
-          </StopHeatChill>
-          <CSetRecordingSpeed
-            recording_speed="2000.0"
-            comment="" />
-          <WaitForTemp
-            vessel="chiller_filter"
-            temperature_controller="chiller_filter"
-            relaxed_rt_threshold="5.0"
-            relaxed_rt_threshold_timeout="600.0"
-            comment="" />
-          <CSetRecordingSpeed
-            recording_speed="14.0"
-            comment="" />
-        </HeatChillToTemp>
-      </HeatChillReturnToRT>
-    </CleanVessel>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_dry"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
-    <CleanBackbone
-      solvent="water"
-      near_waste="waste_filter"
-      far_waste="waste_base"
-      solvent_waste="waste_filter"
-      solvent_vessel="flask_water"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_water"
-        to_vessel="waste_base"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <AddFilterDeadVolume
       filter_vessel="filter1"
       solvent="water"
@@ -3691,30 +2931,6 @@
         high_conductivity_phase="top"
         comment="" />
     </Separate>
-    <CleanBackbone
-      solvent="water"
-      near_waste="waste_filter"
-      far_waste="waste_separator"
-      solvent_waste="waste_filter"
-      solvent_vessel="flask_water"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_water"
-        to_vessel="waste_separator"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <Separate
       purpose="extract"
       from_vessel="flask_separator"
@@ -3999,30 +3215,6 @@
         high_conductivity_phase="top"
         comment="" />
     </Separate>
-    <CleanBackbone
-      solvent="water"
-      near_waste="waste_filter"
-      far_waste="waste_separator"
-      solvent_waste="waste_filter"
-      solvent_vessel="flask_water"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_water"
-        to_vessel="waste_separator"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <HeatChillToTemp
       vessel="filter1"
       temp="10.0"
@@ -4214,30 +3406,6 @@
           comment="" />
       </FlushTubing>
     </Add>
-    <CleanBackbone
-      solvent="water"
-      near_waste="waste_filter"
-      far_waste="waste_base"
-      solvent_waste="waste_filter"
-      solvent_vessel="flask_water"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_water"
-        to_vessel="waste_base"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <RemoveFilterDeadVolume
       filter_vessel="filter1"
       dead_volume="10 mL"
@@ -4264,67 +3432,6 @@
         position="2"
         comment="" />
     </RemoveFilterDeadVolume>
-    <CleanBackbone
-      solvent="water"
-      near_waste="waste_filter"
-      far_waste="waste_filter"
-      solvent_waste="waste_filter"
-      solvent_vessel="flask_water"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_water"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_base"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_base"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <Filter
       vessel="filter1"
       wait_time="2 mins"
@@ -4416,54 +3523,6 @@
           comment="" />
       </ApplyVacuum>
     </Filter>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_filter"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
-    <CleanBackbone
-      solvent="water"
-      near_waste="waste_filter"
-      far_waste="waste_base"
-      solvent_waste="waste_filter"
-      solvent_vessel="flask_water"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_water"
-        to_vessel="waste_base"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <WashSolid
       vessel="filter1"
       solvent="water"
@@ -4772,67 +3831,6 @@
           comment="" />
       </StopHeatChill>
     </WashSolid>
-    <CleanBackbone
-      solvent="water"
-      near_waste="waste_filter"
-      far_waste="waste_filter"
-      solvent_waste="waste_filter"
-      solvent_vessel="flask_water"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_water"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_base"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_base"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <Dry
       vessel="filter1"
       time="60 mins"
@@ -4911,30 +3909,6 @@
           comment="" />
       </ApplyVacuum>
     </Dry>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_filter"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="None"
-        to_port="None"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <Dry
       vessel="filter1"
       time="3 hrs"
@@ -5013,43 +3987,6 @@
           comment="" />
       </ApplyVacuum>
     </Dry>
-    <CleanBackbone
-      solvent="glacial acetic acid"
-      near_waste="waste_filter"
-      far_waste="waste_base"
-      solvent_waste="waste_dry"
-      solvent_vessel="flask_acetic_acid"
-      solvent_valve="None"
-      n_cleans="3"
-      volume="3 mL"
-      comment="">
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_base"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-      <CMove
-        from_vessel="flask_acetic_acid"
-        to_vessel="waste_filter"
-        volume="3 mL"
-        move_speed="40.0"
-        aspiration_speed="10.0"
-        dispense_speed="40.0"
-        from_port="0"
-        to_port="0"
-        through=""
-        use_backbone="True"
-        repeats="3"
-        comment="" />
-    </CleanBackbone>
     <Shutdown
       vacuums=""
       heaters=""
