@@ -2,10 +2,15 @@
 data/
 stuff/
 build/
+public/
+
+# Docs build files
 documentation/_build
 documentation/public
 documentation/xdl_autodoc
-public/
+documentation/standard/full-steps-specification.rst
+documentation/standard/steps-overview.rst
+documentation/standard/xdl-file-structure.rst
 
 # Python
 .ipynb_checkpoints
