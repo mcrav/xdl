@@ -44,7 +44,7 @@ def log_duration(step: 'Step', start_or_end: str):
 
     step (Step): Step being executed.
     start_or_end (str): One of 'start' or 'end',  depending on whether the step
-        is beginning or ending.
+    is beginning or ending.
     """
     # Don't log duration for these special wrapper steps.
     if step.name in ['Callback', 'Repeat', 'Loop']:

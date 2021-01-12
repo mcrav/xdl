@@ -1,5 +1,5 @@
-xdl.blueprints.ReactionBlueprint
-================================
+xdl.blueprints.base_blueprint
+=============================
 
-.. autoclass:: xdl.blueprints.ReactionBlueprint
+.. automodule:: xdl.blueprints.base_blueprint
     :members:
