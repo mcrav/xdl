@@ -49,8 +49,8 @@ platform controller instantiation is shown here.
 ChemIDE
 *******
 
-Currently ChemIDE does not support execution of procedures although this is in
-development. It does however support simulation of procedures.
+Simulation
+^^^^^^^^^^
 
 Simulation can be done by going to the Actions menu and clicking "Simulate".
 
@@ -63,3 +63,41 @@ shown with the option to download as a .txt file.
 
 .. image:: assets/chemide-simulation-modal.png
    :width: 600
+
+Execution
+^^^^^^^^^
+Execution of a procedure can be carried out in the execution mode of ChemIDE.
+
+.. image:: assets/execution-mode-button.png
+   :width: 600
+
+Before execution, you must have loaded a graph and xdlexe file. This can be done
+using the simulation tool described above, or by compiling a procedure in
+ChemIDE.
+
+To connect ChemIDE to your platform, you must run the
+execution client script on the computer that will be used to control your
+platform. In the case of the Chemputer, the command would be ``python chemputerxdl/scripts/execution-client.py``.
+This will print a unique key to the screen, which you then need to paste into
+ChemIDE execution mode and click "Connect".
+
+.. image:: assets/execution-mode-connect.jpg
+   :width: 600
+
+Now the execution client is connected to ChemIDE, you can send it the experiment
+you wish to run. To do this, click "Load Experiment". This should display a
+list of all the steps in the procedure as shown below. If it does not, you can
+look at the terminal running the execution client to see what the error is.
+
+.. image:: assets/execution-mode-experiment-loaded.jpg
+   :width: 600
+
+From here, the interface should be pretty intuitive. The top play/pause/stop
+controls will play the whole procedure, and the individual step play/pause/stop
+controls will play individual steps. Logs are shown next to individual steps, and can be collapsed and expanded using
+the arrow dropdown on the left of the step description.
+
+The pause/stop buttons wait for the current XDL base step to finish before
+stopping, so there will usually be a delay between pressing pause/stop and
+actually stopping. In the case that you want to stop execution immediately,
+with no possibility of resuming the execution, you can click the "Emergency Stop" button.
