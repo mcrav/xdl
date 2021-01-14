@@ -12,6 +12,7 @@ from .errors import (
     XDLInvalidFileTypeError,
     XDLInvalidPlatformControllerError,
     XDLStepIndexError,
+    XDLStepNotInStepsListError,
     XDLExecutionBeforeCompilationError,
     XDLInvalidPlatformError,
     XDLInvalidInputError,
@@ -552,15 +553,29 @@ class XDL(object):
 
             # Execute individual step.
             else:
-                # Check step index is valid.
-                try:
-                    self.steps[step]
-                except IndexError:
-                    raise XDLStepIndexError(step, len(self.steps))
+                # Step index given
+                if type(step) == int:
+                    step_index = step
+
+                    # Check step index is valid.
+                    try:
+                        step = self.steps[step_index]
+                    except IndexError:
+                        raise XDLStepIndexError(step_index, len(self.steps))
+
+                # Step object given.
+                elif isinstance(step, Step):
+                    try:
+                        step_index = self.steps.index(step)
+                    except ValueError:
+                        raise XDLStepNotInStepsListError(step)
 
                 # Execute step
                 self.executor.execute_step(
-                    platform_controller, self.steps[step])
+                    platform_controller,
+                    step,
+                    step_indexes=[step_index],
+                )
 
         # XDL object not compiled, raise error
         else:

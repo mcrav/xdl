@@ -9,6 +9,7 @@ from ...utils import get_chempiler
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 FOLDER = os.path.join(HERE, '..', 'files')
+INTEGRATION_FOLDER = os.path.join(HERE, '..', '..', 'integration', 'files')
 
 os.makedirs('chempiler_output', exist_ok=True)
 TEMP_LOG_FILE = 'chempiler_output/logging-test.txt'
@@ -30,17 +31,24 @@ class RemoveANSIFormatter(logging.Formatter):
         return re.sub(self.ansi_re, '', record.msg)
 
 
-test_handler = logging.FileHandler(TEMP_LOG_FILE)
-test_handler.setFormatter(RemoveANSIFormatter())
-test_handler.addFilter(console_filter)
-test_handler.setLevel(logging.INFO)
+test_handler: logging.FileHandler = None
 
 def add_logging_handler():
     """Add logging handler to xdl logger that will save logs to a temporary
     test file for verification.
     """
+    # Global test handler so the object can be used when removing it after the
+    # test. I don't know why this has to be in here and you can't create the
+    # handler globally, but it doesn't work when running more than one test and
+    # removing / re-adding the handler if you create the handler outside this
+    # function.
+    global test_handler
+    test_handler = logging.FileHandler(TEMP_LOG_FILE)
+    test_handler.setFormatter(RemoveANSIFormatter())
+    test_handler.addFilter(console_filter)
+    test_handler.setLevel(logging.INFO)
+
     logger = logging.getLogger('xdl')
-    # Make folder that will be git ignored
     logger.addHandler(test_handler)
 
 def remove_logging_handler():
@@ -56,11 +64,12 @@ def test_logging_step_indexes():
     # Add test handler to save logs to file
     add_logging_handler()
 
-    # Go through all tests
     for xdl_f, graph_f in TESTS:
+        xdl_full_f = os.path.join(FOLDER, xdl_f)
+        graph_full_f = os.path.join(FOLDER, graph_f)
+
         # Try to run the test and verify the logs
         try:
-            graph_full_f = os.path.join(FOLDER, graph_f)
 
             # Reset test log file
             if os.path.exists(TEMP_LOG_FILE):
@@ -69,7 +78,7 @@ def test_logging_step_indexes():
 
             # Execute test file execution
             c = get_chempiler(graph_full_f)
-            x = XDL(os.path.join(FOLDER, xdl_f))
+            x = XDL(xdl_full_f)
             x.prepare_for_execution(graph_full_f, testing=True)
             x.execute(c)
 
@@ -86,6 +95,49 @@ def test_logging_step_indexes():
             logger = logging.getLogger('xdl')
             logger.exception(f'Failed: {xdl_f} {graph_f}')
             raise e
+
+    # Cleanup. Remove the temporary log file and the test logging handler.
+    os.remove(TEMP_LOG_FILE)
+    remove_logging_handler()
+
+@pytest.mark.unit
+def test_logging_step_indexes_executing_steps_individually():
+    """Test that step indexes also work when executing steps individually."""
+    # Add test handler to save logs to file
+    add_logging_handler()
+    print(logging.getLogger('xdl').handlers, 'LOOK')
+
+    xdl_f = os.path.join(INTEGRATION_FOLDER, 'DMP.xdl')
+    graph_f = os.path.join(INTEGRATION_FOLDER, 'DMP_graph.json')
+
+    # Try to run the test and verify the logs
+    try:
+        # Reset test log file
+        if os.path.exists(TEMP_LOG_FILE):
+            with open(TEMP_LOG_FILE, 'w') as fd:
+                fd.write('')
+
+        # Execute test file execution
+        c = get_chempiler(graph_f)
+        x = XDL(xdl_f)
+        x.prepare_for_execution(graph_f, testing=True)
+        for i, step in enumerate(x.steps):
+            # Check passing step object works
+            if i % 2 == 0:
+                x.execute(c, step)
+            # Check passing step index works
+            else:
+                x.execute(c, i)
+
+        # Verify the logs
+        verify_logs()
+
+    # In the case an exception is thrown during the test, log the test files
+    # that failed before raising the exception.
+    except Exception as e:
+        logger = logging.getLogger('xdl')
+        logger.exception(f'Failed: {xdl_f} {graph_f}')
+        raise e
 
     # Cleanup. Remove the temporary log file and the test logging handler.
     os.remove(TEMP_LOG_FILE)
