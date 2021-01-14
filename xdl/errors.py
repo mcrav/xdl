@@ -207,6 +207,16 @@ class XDLStepIndexError(XDLError):
         return f'{self.step_index} is out of bounds for step list with length\
  {self.len_steps}'
 
+class XDLStepNotInStepsListError(XDLError):
+    """When user asks to execute a step object that isn't in ``xdl_obj.steps``.
+    """
+    def __init__(self, step):
+         self.step = step
+
+    def __str__(self):
+        return f'Given step not found in steps list.\n\n\
+{step.name}\n{step.properties}'
+
 class XDLInvalidPlatformError(XDLError):
     """User supplies an invalid platform."""
 
