@@ -223,7 +223,7 @@ class Step(XDLBase):
             graph (MultiDiGraph): Graph to use when calculating step duration.
 
         Returns:
-            int: Estimated duration of step in seconds.
+            int: Estimated duration of step in seconds
         """
         return DEFAULT_INSTANT_DURATION
 
@@ -1033,16 +1033,24 @@ class AbstractDynamicStep(Step):
         # Log step start timestamp
         log_duration(self, 'start')
 
+        substep_index = 0
+
         # Execute steps from on_start
         for step in self.start_block:
+            step_indexes.append(0)
+            step_indexes[level + 1] = substep_index
+            step_indexes = step_indexes[:level + 2]
+            logger.info(execution_log_str(step, step_indexes))
             self.executor.execute_step(
                 platform_controller,
                 step,
                 async_steps=self.async_steps,
-                step_indexes=step_indexes
+                step_indexes=step_indexes,
+                level=level + 1,
             )
             if isinstance(step, AbstractAsyncStep):
                 self.async_steps.append(step)
+            substep_index += 1
 
         # Repeatedly execute steps from on_continue until empty list returned
         continue_block = self.on_continue()
@@ -1050,14 +1058,20 @@ class AbstractDynamicStep(Step):
 
         while continue_block:
             for step in continue_block:
+                step_indexes.append(0)
+                step_indexes[level + 1] = substep_index
+                step_indexes = step_indexes[:level + 2]
+                logger.info(execution_log_str(step, step_indexes))
                 if isinstance(step, AbstractAsyncStep):
                     self.async_steps.append(step)
                 self.executor.execute_step(
                     platform_controller,
                     step,
                     async_steps=self.async_steps,
-                    step_indexes=step_indexes
+                    step_indexes=step_indexes,
+                    level=level + 1,
                 )
+                substep_index += 1
 
             continue_block = self.on_continue()
             self.executor.prepare_block_for_execution(
@@ -1068,6 +1082,10 @@ class AbstractDynamicStep(Step):
         self.executor.prepare_block_for_execution(self.graph, finish_block)
 
         for step in finish_block:
+            step_indexes.append(0)
+            step_indexes[level + 1] = substep_index
+            step_indexes = step_indexes[:level + 2]
+            logger.info(execution_log_str(step, step_indexes))
             self.executor.execute_step(
                 platform_controller,
                 step,
@@ -1076,6 +1094,7 @@ class AbstractDynamicStep(Step):
             )
             if isinstance(step, AbstractAsyncStep):
                 self.async_steps.append(step)
+            substep_index += 1
 
         # Kill all threads
         self._post_finish()
