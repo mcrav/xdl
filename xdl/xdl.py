@@ -5,6 +5,7 @@ import logging
 import json
 import re
 import datetime
+import tabulate
 
 from .errors import (
     XDLReagentNotDeclaredError,
@@ -32,6 +33,7 @@ from .readwrite.xml_interpreter import xdl_str_to_objs
 from .readwrite.xml_generator import xdl_to_xml_string
 from .readwrite.json import xdl_to_json, xdl_from_json_file, xdl_from_json
 from .steps import Step, AbstractBaseStep
+from .steps.utils import FTNDuration
 from .utils.logging import get_logger
 from .utils.vessels import VesselSpec
 from .utils.misc import (
@@ -364,17 +366,24 @@ class XDL(object):
             raise XDLDurationBeforeCompilationError()
 
         # Calculate duration
-        duration = 0
+        duration = FTNDuration(0, 0, 0)
         for step in self.steps:
             duration += step.duration(self.executor._graph)
 
         # Return formatted time string
         if fmt:
-            timedelta = datetime.timedelta(seconds=int(duration))
-            return str(timedelta)
+            min_duration = datetime.timedelta(seconds=duration.min)
+            most_likely_duration = datetime.timedelta(
+                seconds=duration.most_likely)
+            max_duration = datetime.timedelta(seconds=duration.max)
+            return tabulate.tabulate([
+                ['Min duration', min_duration],
+                ['Estimated duration', most_likely_duration],
+                ['Max duration', max_duration],
+            ], tablefmt='plain')
 
         # Return duration in seconds
-        return int(duration)
+        return duration
 
     def reagent_volumes(self, fmt=False) -> Dict[str, float]:
         """Compute volumes used of all liquid reagents in procedure and return
@@ -525,8 +534,7 @@ class XDL(object):
                 self.compiled = True
                 self.logger.info(
                     f'Reagents Consumed\n{self.reagent_volumes(fmt=True)}\n')
-                self.logger.info(
-                    f'Estimated duration: {self.duration(fmt=True)}\n')
+                self.logger.info(f'{self.duration(fmt=True)}\n')
 
         # XDL object already compiled, raise error
         else:

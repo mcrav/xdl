@@ -381,7 +381,6 @@
       "type": "custom",
       "x": 1400,
       "y": 320,
-      "name": "cartridge1",
       "internalId": 63,
       "label": "cartridge1",
       "customProperties": {
@@ -390,9 +389,17 @@
           "id": "name",
           "units": "",
           "type": "str"
+        },
+        "chemical": {
+          "name": "chemical",
+          "id": "chemical",
+          "units": "",
+          "type": "number"
         }
       },
-      "class": "ChemputerCartridge"
+      "name": "cartridge1",
+      "class": "ChemputerCartridge",
+      "chemical": null
     },
     {
       "id": "valve_rotavap",
@@ -433,14 +440,13 @@
       "max_volume": 250
     },
     {
-      "id": "cartridge2",
+      "id": "vacuum_pump_rotavap",
       "type": "custom",
       "x": 1640,
       "y": 80,
       "port": "COM6",
-      "name": "cartridge2",
       "internalId": 83,
-      "label": "cartridge2",
+      "label": "vacuum_pump_rotavap",
       "customProperties": {
         "name": {
           "name": "name",
@@ -449,6 +455,7 @@
           "type": "str"
         }
       },
+      "name": "vacuum_pump_rotavap",
       "class": "CVC3000VacuumPump"
     },
     {
@@ -868,7 +875,7 @@
       "id": 84,
       "sourceInternal": 83,
       "targetInternal": 80,
-      "source": "cartridge2",
+      "source": "vacuum_pump_rotavap",
       "target": "rotavap",
       "port": "(,)"
     },

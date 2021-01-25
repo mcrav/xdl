@@ -7,7 +7,7 @@ from typing import List
 REACTOR_TYPES: List[str] = ['reactor', 'ChemputerReactor']
 FILTER_TYPES: List[str] = ['filter', 'ChemputerFilter']
 SEPARATOR_TYPES: List[str] = ['separator', 'ChemputerSeparator']
-ROTAVAP_TYPES: List[str] = ['rotavap', 'IKARV10']
+ROTAVAP_TYPES: List[str] = ['rotavap', 'RV10Rotovap', 'R300Rotovap']
 FLASK_TYPES: List[str] = ['flask', 'ChemputerFlask']
 WASTE_TYPES: List[str] = ['waste', 'ChemputerWaste']
 CARTRIDGE_TYPES: List[str] = ['cartridge', 'ChemputerCartridge']
