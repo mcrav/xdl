@@ -12,7 +12,7 @@ from networkx import MultiDiGraph
 import termcolor
 
 # Relative
-from ..constants import DEFAULT_INSTANT_DURATION
+from .utils import FTNDuration
 from ..localisation import LOCALISATIONS
 from ..utils import XDLBase
 from ..utils.localisation import conditional_human_readable
@@ -223,9 +223,12 @@ class Step(XDLBase):
             graph (MultiDiGraph): Graph to use when calculating step duration.
 
         Returns:
-            int: Estimated duration of step in seconds
+            FTNDuration: Estimated duration of step in seconds as FTN.
         """
-        return DEFAULT_INSTANT_DURATION
+        # Default duration for steps that don't override this method. Duration
+        # used is an estimate of the duration of steps that are virtually
+        # instantaneous, such as starting stirring.
+        return FTNDuration(0.5, 1, 2)
 
     def locks(self, platform_controller: Any) -> Tuple[List]:
         """WIP: Abstract method used by parallelisation.
@@ -711,7 +714,7 @@ class AbstractStep(Step, ABC):
         """Return approximate duration in seconds of step calculated as sum of
         durations of all substeps. This method should be overridden where an
         exact or near exact duration is known. The fallback duration for base
-        steps is 1 sec.
+        steps is 1 second.
 
         Args:
             graph (MultiDiGraph): Graph to use when calculating step duration.
@@ -719,7 +722,7 @@ class AbstractStep(Step, ABC):
         Returns:
             int: Estimated duration of step in seconds.
         """
-        duration = 0
+        duration = FTNDuration(0, 0, 0)
         for step in self.steps:
             duration += step.duration(graph)
         return duration
@@ -860,7 +863,7 @@ class AbstractAsyncStep(Step):
         Returns:
             int: Estimated duration of step in seconds.
         """
-        duration = 0
+        duration = FTNDuration(0, 0, 0)
         for step in self.children:
             duration += step.duration(graph)
         return duration
@@ -1180,7 +1183,7 @@ class AbstractDynamicStep(Step):
         Returns:
             int: Estimated duration of step in seconds.
         """
-        duration = 0
+        duration = FTNDuration(0, 0, 0)
         for step in self.start_block:
             duration += step.duration(graph)
         return duration

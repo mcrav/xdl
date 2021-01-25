@@ -215,7 +215,7 @@ class XDLStepNotInStepsListError(XDLError):
 
     def __str__(self):
         return f'Given step not found in steps list.\n\n\
-{step.name}\n{step.properties}'
+{self.step.name}\n{self.step.properties}'
 
 class XDLInvalidPlatformError(XDLError):
     """User supplies an invalid platform."""
