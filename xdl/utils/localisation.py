@@ -148,6 +148,7 @@ def postprocess_human_readable(human_readable: str) -> str:
     while '  ' in human_readable:
         human_readable = human_readable.replace('  ', ' ')
     human_readable = human_readable.replace(' ,', ',')
+    human_readable = human_readable.replace(' .', '.')
     human_readable = human_readable.rstrip('. ')
     human_readable += '.'
     return human_readable

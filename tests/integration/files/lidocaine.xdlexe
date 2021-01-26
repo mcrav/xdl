@@ -71,7 +71,7 @@
       dropwise="False"
       time="None"
       stir="False"
-      stir_speed="250.0"
+      stir_speed="250 RPM"
       purpose="None"
       speed="40.0"
       port="top"
@@ -158,7 +158,7 @@
         repeats="1"
         comment="" />
       <Wait
-        time="10 secs"
+        time="10 s"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -166,7 +166,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="10 secs"
+          time="10 s"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -203,7 +203,7 @@
       dropwise="False"
       time="None"
       stir="True"
-      stir_speed="250.0"
+      stir_speed="250 RPM"
       purpose="None"
       speed="40.0"
       port="top"
@@ -225,13 +225,13 @@
       comment="">
       <StartStir
         vessel="filter1"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
@@ -296,7 +296,7 @@
         repeats="1"
         comment="" />
       <Wait
-        time="10 secs"
+        time="10 s"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -304,7 +304,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="10 secs"
+          time="10 s"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -341,7 +341,7 @@
       dropwise="False"
       time="None"
       stir="True"
-      stir_speed="250.0"
+      stir_speed="250 RPM"
       purpose="None"
       speed="40.0"
       port="top"
@@ -363,13 +363,13 @@
       comment="">
       <StartStir
         vessel="filter1"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
@@ -434,7 +434,7 @@
         repeats="1"
         comment="" />
       <Wait
-        time="10 secs"
+        time="10 s"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -442,7 +442,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="10 secs"
+          time="10 s"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -479,7 +479,7 @@
       dropwise="False"
       time="None"
       stir="True"
-      stir_speed="250.0"
+      stir_speed="250 RPM"
       purpose="None"
       speed="40.0"
       port="top"
@@ -501,13 +501,13 @@
       comment="">
       <StartStir
         vessel="filter1"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
@@ -572,7 +572,7 @@
         repeats="1"
         comment="" />
       <Wait
-        time="10 secs"
+        time="10 s"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -580,7 +580,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="10 secs"
+          time="10 s"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -611,11 +611,11 @@
     </Add>
     <HeatChillToTemp
       vessel="filter1"
-      temp="10.0"
+      temp="10°C"
       active="True"
       continue_heatchill="True"
       stir="True"
-      stir_speed="250.0"
+      stir_speed="250 RPM"
       purpose="None"
       wait_recording_speed="2000.0"
       after_recording_speed="14.0"
@@ -623,13 +623,13 @@
       comment="This is a comment">
       <StartStir
         vessel="filter1"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
@@ -637,13 +637,13 @@
       </StartStir>
       <StartHeatChill
         vessel="filter1"
-        temp="10.0"
+        temp="10°C"
         purpose="None"
         temperature_controller="chiller_filter"
         comment="">
         <CTemperatureControllerSetTemp
           temperature_controller="chiller_filter"
-          temp="10.0"
+          temp="10°C"
           comment="" />
         <CTemperatureControllerStart
           temperature_controller="chiller_filter"
@@ -670,7 +670,7 @@
       dropwise="False"
       time="None"
       stir="True"
-      stir_speed="250.0"
+      stir_speed="250 RPM"
       purpose="None"
       speed="40.0"
       port="top"
@@ -692,13 +692,13 @@
       comment="">
       <StartStir
         vessel="filter1"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
@@ -763,7 +763,7 @@
         repeats="1"
         comment="" />
       <Wait
-        time="10 secs"
+        time="10 s"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -771,7 +771,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="10 secs"
+          time="10 s"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -802,27 +802,27 @@
     </Add>
     <Stir
       vessel="filter1"
-      time="60 mins"
+      time="60 min"
       continue_stirring="False"
-      stir_speed="250.0"
+      stir_speed="250 RPM"
       purpose="None"
       comment="">
       <StartStir
         vessel="filter1"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
           comment="" />
       </StartStir>
       <Wait
-        time="60 mins"
+        time="60 min"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -830,7 +830,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="60 mins"
+          time="60 min"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -882,10 +882,10 @@
     </RemoveFilterDeadVolume>
     <Filter
       vessel="filter1"
-      wait_time="2 mins"
+      wait_time="2 min"
       aspiration_speed="5.0"
       stir="True"
-      stir_speed="500.0"
+      stir_speed="500 RPM"
       filtrate_vessel="None"
       anticlogging="False"
       waste_vessel="waste_filter"
@@ -898,13 +898,13 @@
       comment="">
       <StartStir
         vessel="filter1"
-        stir_speed="500.0"
+        stir_speed="500 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="500.0"
+          stir_speed="500 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
@@ -933,8 +933,8 @@
       </StopStir>
       <ApplyVacuum
         vessel="filter1"
-        time="2 mins"
-        pressure="400.0"
+        time="2 min"
+        pressure="400 mbar"
         port="bottom"
         vessel_type="filter"
         vacuum_valve="valve_vacuum"
@@ -951,7 +951,7 @@
           to_port="None"
           comment="" />
         <Wait
-          time="2 mins"
+          time="2 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -959,7 +959,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="2 mins"
+            time="2 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -973,7 +973,7 @@
     </Filter>
     <Dry
       vessel="filter1"
-      time="60 mins"
+      time="60 min"
       temp="None"
       waste_vessel="waste_filter"
       aspiration_speed="5.0"
@@ -1011,8 +1011,8 @@
         comment="" />
       <ApplyVacuum
         vessel="filter1"
-        time="60 mins"
-        pressure="400.0"
+        time="60 min"
+        pressure="400 mbar"
         port="bottom"
         vessel_type="filter"
         vacuum_valve="valve_vacuum"
@@ -1029,7 +1029,7 @@
           to_port="None"
           comment="" />
         <Wait
-          time="60 mins"
+          time="60 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -1037,7 +1037,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="60 mins"
+            time="60 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -1086,7 +1086,7 @@
       dropwise="False"
       time="None"
       stir="False"
-      stir_speed="250.0"
+      stir_speed="250 RPM"
       purpose="None"
       speed="40.0"
       port="top"
@@ -1173,7 +1173,7 @@
         repeats="1"
         comment="" />
       <Wait
-        time="10 secs"
+        time="10 s"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -1181,7 +1181,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="10 secs"
+          time="10 s"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -1218,7 +1218,7 @@
       dropwise="False"
       time="None"
       stir="True"
-      stir_speed="250.0"
+      stir_speed="250 RPM"
       purpose="None"
       speed="40.0"
       port="top"
@@ -1240,13 +1240,13 @@
       comment="">
       <StartStir
         vessel="filter1"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
@@ -1311,7 +1311,7 @@
         repeats="1"
         comment="" />
       <Wait
-        time="10 secs"
+        time="10 s"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -1319,7 +1319,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="10 secs"
+          time="10 s"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -1350,22 +1350,22 @@
     </Add>
     <HeatChill
       vessel="filter1"
-      temp="110.6"
-      time="60 mins"
+      temp="110.6°C"
+      time="60 min"
       stir="True"
-      stir_speed="250.0"
+      stir_speed="250 RPM"
       purpose="None"
       vessel_type="filter"
       comment="">
       <StartStir
         vessel="filter1"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
@@ -1373,11 +1373,11 @@
       </StartStir>
       <HeatChillToTemp
         vessel="filter1"
-        temp="110.6"
+        temp="110.6°C"
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
@@ -1385,13 +1385,13 @@
         comment="">
         <StartStir
           vessel="filter1"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           purpose="None"
           stirring_controller="stirrer_filter"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_filter"
-            stir_speed="250.0"
+            stir_speed="250 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_filter"
@@ -1399,13 +1399,13 @@
         </StartStir>
         <StartHeatChill
           vessel="filter1"
-          temp="110.6"
+          temp="110.6°C"
           purpose="None"
           temperature_controller="chiller_filter"
           comment="">
           <CTemperatureControllerSetTemp
             temperature_controller="chiller_filter"
-            temp="110.6"
+            temp="110.6°C"
             comment="" />
           <CTemperatureControllerStart
             temperature_controller="chiller_filter"
@@ -1425,7 +1425,7 @@
           comment="" />
       </HeatChillToTemp>
       <Wait
-        time="60 mins"
+        time="60 min"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -1433,7 +1433,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="60 mins"
+          time="60 min"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -1451,11 +1451,11 @@
     </HeatChill>
     <HeatChillToTemp
       vessel="filter1"
-      temp="25.0"
+      temp="25°C"
       active="True"
       continue_heatchill="True"
       stir="True"
-      stir_speed="250.0"
+      stir_speed="250 RPM"
       purpose="None"
       wait_recording_speed="2000.0"
       after_recording_speed="14.0"
@@ -1463,13 +1463,13 @@
       comment="">
       <StartStir
         vessel="filter1"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
@@ -1477,13 +1477,13 @@
       </StartStir>
       <StartHeatChill
         vessel="filter1"
-        temp="25.0"
+        temp="25°C"
         purpose="None"
         temperature_controller="chiller_filter"
         comment="">
         <CTemperatureControllerSetTemp
           temperature_controller="chiller_filter"
-          temp="25.0"
+          temp="25°C"
           comment="" />
         <CTemperatureControllerStart
           temperature_controller="chiller_filter"
@@ -1520,9 +1520,9 @@
       waste_vessel="waste_separator"
       buffer_flasks="None None"
       through_cartridge="None"
-      stir_speed="600.0"
-      stir_time="5 mins"
-      settling_time="5 mins"
+      stir_speed="600 RPM"
+      stir_time="5 min"
+      settling_time="5 min"
       waste_phase_to_vessel_to_use="waste_separator"
       high_conductivity_phase="bottom"
       comment="">
@@ -1589,7 +1589,7 @@
         dropwise="False"
         time="None"
         stir="False"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         speed="40.0"
         port="bottom"
@@ -1676,7 +1676,7 @@
           repeats="1"
           comment="" />
         <Wait
-          time="10 secs"
+          time="10 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -1684,7 +1684,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="10 secs"
+            time="10 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -1715,27 +1715,27 @@
       </Add>
       <Stir
         vessel="flask_separator"
-        time="5 mins"
+        time="5 min"
         continue_stirring="False"
-        stir_speed="600.0"
+        stir_speed="600 RPM"
         purpose="None"
         comment="">
         <StartStir
           vessel="flask_separator"
-          stir_speed="600.0"
+          stir_speed="600 RPM"
           purpose="None"
           stirring_controller="stirrer_separator"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_separator"
-            stir_speed="600.0"
+            stir_speed="600 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_separator"
             comment="" />
         </StartStir>
         <Wait
-          time="5 mins"
+          time="5 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -1743,7 +1743,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="5 mins"
+            time="5 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -1760,27 +1760,27 @@
       </Stir>
       <Stir
         vessel="flask_separator"
-        time="2 mins"
+        time="2 min"
         continue_stirring="False"
-        stir_speed="30.0"
+        stir_speed="30 RPM"
         purpose="None"
         comment="">
         <StartStir
           vessel="flask_separator"
-          stir_speed="30.0"
+          stir_speed="30 RPM"
           purpose="None"
           stirring_controller="stirrer_separator"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_separator"
-            stir_speed="30.0"
+            stir_speed="30 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_separator"
             comment="" />
         </StartStir>
         <Wait
-          time="2 mins"
+          time="2 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -1788,7 +1788,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="2 mins"
+            time="2 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -1804,7 +1804,7 @@
         </StopStir>
       </Stir>
       <Wait
-        time="5 mins"
+        time="5 min"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -1812,7 +1812,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="5 mins"
+          time="5 min"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -1848,7 +1848,7 @@
         dropwise="False"
         time="None"
         stir="False"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         speed="40.0"
         port="bottom"
@@ -1935,7 +1935,7 @@
           repeats="1"
           comment="" />
         <Wait
-          time="10 secs"
+          time="10 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -1943,7 +1943,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="10 secs"
+            time="10 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -1974,27 +1974,27 @@
       </Add>
       <Stir
         vessel="flask_separator"
-        time="5 mins"
+        time="5 min"
         continue_stirring="False"
-        stir_speed="600.0"
+        stir_speed="600 RPM"
         purpose="None"
         comment="">
         <StartStir
           vessel="flask_separator"
-          stir_speed="600.0"
+          stir_speed="600 RPM"
           purpose="None"
           stirring_controller="stirrer_separator"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_separator"
-            stir_speed="600.0"
+            stir_speed="600 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_separator"
             comment="" />
         </StartStir>
         <Wait
-          time="5 mins"
+          time="5 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -2002,7 +2002,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="5 mins"
+            time="5 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -2019,27 +2019,27 @@
       </Stir>
       <Stir
         vessel="flask_separator"
-        time="2 mins"
+        time="2 min"
         continue_stirring="False"
-        stir_speed="30.0"
+        stir_speed="30 RPM"
         purpose="None"
         comment="">
         <StartStir
           vessel="flask_separator"
-          stir_speed="30.0"
+          stir_speed="30 RPM"
           purpose="None"
           stirring_controller="stirrer_separator"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_separator"
-            stir_speed="30.0"
+            stir_speed="30 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_separator"
             comment="" />
         </StartStir>
         <Wait
-          time="2 mins"
+          time="2 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -2047,7 +2047,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="2 mins"
+            time="2 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -2063,7 +2063,7 @@
         </StopStir>
       </Stir>
       <Wait
-        time="5 mins"
+        time="5 min"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -2071,7 +2071,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="5 mins"
+          time="5 min"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -2107,7 +2107,7 @@
         dropwise="False"
         time="None"
         stir="False"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         speed="40.0"
         port="bottom"
@@ -2194,7 +2194,7 @@
           repeats="1"
           comment="" />
         <Wait
-          time="10 secs"
+          time="10 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -2202,7 +2202,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="10 secs"
+            time="10 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -2233,27 +2233,27 @@
       </Add>
       <Stir
         vessel="flask_separator"
-        time="5 mins"
+        time="5 min"
         continue_stirring="False"
-        stir_speed="600.0"
+        stir_speed="600 RPM"
         purpose="None"
         comment="">
         <StartStir
           vessel="flask_separator"
-          stir_speed="600.0"
+          stir_speed="600 RPM"
           purpose="None"
           stirring_controller="stirrer_separator"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_separator"
-            stir_speed="600.0"
+            stir_speed="600 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_separator"
             comment="" />
         </StartStir>
         <Wait
-          time="5 mins"
+          time="5 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -2261,7 +2261,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="5 mins"
+            time="5 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -2278,27 +2278,27 @@
       </Stir>
       <Stir
         vessel="flask_separator"
-        time="2 mins"
+        time="2 min"
         continue_stirring="False"
-        stir_speed="30.0"
+        stir_speed="30 RPM"
         purpose="None"
         comment="">
         <StartStir
           vessel="flask_separator"
-          stir_speed="30.0"
+          stir_speed="30 RPM"
           purpose="None"
           stirring_controller="stirrer_separator"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_separator"
-            stir_speed="30.0"
+            stir_speed="30 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_separator"
             comment="" />
         </StartStir>
         <Wait
-          time="2 mins"
+          time="2 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -2306,7 +2306,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="2 mins"
+            time="2 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -2322,7 +2322,7 @@
         </StopStir>
       </Stir>
       <Wait
-        time="5 mins"
+        time="5 min"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -2330,7 +2330,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="5 mins"
+          time="5 min"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -2366,7 +2366,7 @@
         dropwise="False"
         time="None"
         stir="False"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         speed="40.0"
         port="bottom"
@@ -2453,7 +2453,7 @@
           repeats="1"
           comment="" />
         <Wait
-          time="10 secs"
+          time="10 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -2461,7 +2461,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="10 secs"
+            time="10 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -2492,27 +2492,27 @@
       </Add>
       <Stir
         vessel="flask_separator"
-        time="5 mins"
+        time="5 min"
         continue_stirring="False"
-        stir_speed="600.0"
+        stir_speed="600 RPM"
         purpose="None"
         comment="">
         <StartStir
           vessel="flask_separator"
-          stir_speed="600.0"
+          stir_speed="600 RPM"
           purpose="None"
           stirring_controller="stirrer_separator"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_separator"
-            stir_speed="600.0"
+            stir_speed="600 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_separator"
             comment="" />
         </StartStir>
         <Wait
-          time="5 mins"
+          time="5 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -2520,7 +2520,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="5 mins"
+            time="5 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -2537,27 +2537,27 @@
       </Stir>
       <Stir
         vessel="flask_separator"
-        time="2 mins"
+        time="2 min"
         continue_stirring="False"
-        stir_speed="30.0"
+        stir_speed="30 RPM"
         purpose="None"
         comment="">
         <StartStir
           vessel="flask_separator"
-          stir_speed="30.0"
+          stir_speed="30 RPM"
           purpose="None"
           stirring_controller="stirrer_separator"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_separator"
-            stir_speed="30.0"
+            stir_speed="30 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_separator"
             comment="" />
         </StartStir>
         <Wait
-          time="2 mins"
+          time="2 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -2565,7 +2565,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="2 mins"
+            time="2 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -2581,7 +2581,7 @@
         </StopStir>
       </Stir>
       <Wait
-        time="5 mins"
+        time="5 min"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -2589,7 +2589,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="5 mins"
+          time="5 min"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -2665,9 +2665,9 @@
       waste_vessel="waste_separator"
       buffer_flasks="None None"
       through_cartridge="None"
-      stir_speed="600.0"
-      stir_time="5 mins"
-      settling_time="5 mins"
+      stir_speed="600 RPM"
+      stir_time="5 min"
+      settling_time="5 min"
       waste_phase_to_vessel_to_use="flask_separator"
       high_conductivity_phase="top"
       comment="">
@@ -2679,7 +2679,7 @@
         dropwise="False"
         time="None"
         stir="False"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         speed="40.0"
         port="bottom"
@@ -2766,7 +2766,7 @@
           repeats="1"
           comment="" />
         <Wait
-          time="10 secs"
+          time="10 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -2774,7 +2774,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="10 secs"
+            time="10 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -2805,27 +2805,27 @@
       </Add>
       <Stir
         vessel="flask_separator"
-        time="5 mins"
+        time="5 min"
         continue_stirring="False"
-        stir_speed="600.0"
+        stir_speed="600 RPM"
         purpose="None"
         comment="">
         <StartStir
           vessel="flask_separator"
-          stir_speed="600.0"
+          stir_speed="600 RPM"
           purpose="None"
           stirring_controller="stirrer_separator"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_separator"
-            stir_speed="600.0"
+            stir_speed="600 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_separator"
             comment="" />
         </StartStir>
         <Wait
-          time="5 mins"
+          time="5 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -2833,7 +2833,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="5 mins"
+            time="5 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -2850,27 +2850,27 @@
       </Stir>
       <Stir
         vessel="flask_separator"
-        time="2 mins"
+        time="2 min"
         continue_stirring="False"
-        stir_speed="30.0"
+        stir_speed="30 RPM"
         purpose="None"
         comment="">
         <StartStir
           vessel="flask_separator"
-          stir_speed="30.0"
+          stir_speed="30 RPM"
           purpose="None"
           stirring_controller="stirrer_separator"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_separator"
-            stir_speed="30.0"
+            stir_speed="30 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_separator"
             comment="" />
         </StartStir>
         <Wait
-          time="2 mins"
+          time="2 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -2878,7 +2878,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="2 mins"
+            time="2 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -2894,7 +2894,7 @@
         </StopStir>
       </Stir>
       <Wait
-        time="5 mins"
+        time="5 min"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -2902,7 +2902,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="5 mins"
+          time="5 min"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -2949,9 +2949,9 @@
       waste_vessel="waste_separator"
       buffer_flasks="None None"
       through_cartridge="None"
-      stir_speed="600.0"
-      stir_time="5 mins"
-      settling_time="5 mins"
+      stir_speed="600 RPM"
+      stir_time="5 min"
+      settling_time="5 min"
       waste_phase_to_vessel_to_use="waste_separator"
       high_conductivity_phase="top"
       comment="">
@@ -2963,7 +2963,7 @@
         dropwise="False"
         time="None"
         stir="False"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         speed="40.0"
         port="bottom"
@@ -3050,7 +3050,7 @@
           repeats="1"
           comment="" />
         <Wait
-          time="10 secs"
+          time="10 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -3058,7 +3058,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="10 secs"
+            time="10 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -3089,27 +3089,27 @@
       </Add>
       <Stir
         vessel="flask_separator"
-        time="5 mins"
+        time="5 min"
         continue_stirring="False"
-        stir_speed="600.0"
+        stir_speed="600 RPM"
         purpose="None"
         comment="">
         <StartStir
           vessel="flask_separator"
-          stir_speed="600.0"
+          stir_speed="600 RPM"
           purpose="None"
           stirring_controller="stirrer_separator"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_separator"
-            stir_speed="600.0"
+            stir_speed="600 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_separator"
             comment="" />
         </StartStir>
         <Wait
-          time="5 mins"
+          time="5 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -3117,7 +3117,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="5 mins"
+            time="5 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -3134,27 +3134,27 @@
       </Stir>
       <Stir
         vessel="flask_separator"
-        time="2 mins"
+        time="2 min"
         continue_stirring="False"
-        stir_speed="30.0"
+        stir_speed="30 RPM"
         purpose="None"
         comment="">
         <StartStir
           vessel="flask_separator"
-          stir_speed="30.0"
+          stir_speed="30 RPM"
           purpose="None"
           stirring_controller="stirrer_separator"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_separator"
-            stir_speed="30.0"
+            stir_speed="30 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_separator"
             comment="" />
         </StartStir>
         <Wait
-          time="2 mins"
+          time="2 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -3162,7 +3162,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="2 mins"
+            time="2 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -3178,7 +3178,7 @@
         </StopStir>
       </Stir>
       <Wait
-        time="5 mins"
+        time="5 min"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -3186,7 +3186,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="5 mins"
+          time="5 min"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -3217,11 +3217,11 @@
     </Separate>
     <HeatChillToTemp
       vessel="filter1"
-      temp="10.0"
+      temp="10°C"
       active="True"
       continue_heatchill="True"
       stir="True"
-      stir_speed="250.0"
+      stir_speed="250 RPM"
       purpose="None"
       wait_recording_speed="2000.0"
       after_recording_speed="14.0"
@@ -3229,13 +3229,13 @@
       comment="">
       <StartStir
         vessel="filter1"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
@@ -3243,13 +3243,13 @@
       </StartStir>
       <StartHeatChill
         vessel="filter1"
-        temp="10.0"
+        temp="10°C"
         purpose="None"
         temperature_controller="chiller_filter"
         comment="">
         <CTemperatureControllerSetTemp
           temperature_controller="chiller_filter"
-          temp="10.0"
+          temp="10°C"
           comment="" />
         <CTemperatureControllerStart
           temperature_controller="chiller_filter"
@@ -3276,7 +3276,7 @@
       dropwise="False"
       time="None"
       stir="True"
-      stir_speed="250.0"
+      stir_speed="250 RPM"
       purpose="None"
       speed="10.0"
       port="top"
@@ -3298,13 +3298,13 @@
       comment="">
       <StartStir
         vessel="filter1"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
@@ -3369,7 +3369,7 @@
         repeats="1"
         comment="" />
       <Wait
-        time="10 secs"
+        time="10 s"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -3377,7 +3377,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="10 secs"
+          time="10 s"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -3434,10 +3434,10 @@
     </RemoveFilterDeadVolume>
     <Filter
       vessel="filter1"
-      wait_time="2 mins"
+      wait_time="2 min"
       aspiration_speed="5.0"
       stir="True"
-      stir_speed="500.0"
+      stir_speed="500 RPM"
       filtrate_vessel="None"
       anticlogging="False"
       waste_vessel="waste_filter"
@@ -3450,13 +3450,13 @@
       comment="">
       <StartStir
         vessel="filter1"
-        stir_speed="500.0"
+        stir_speed="500 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="500.0"
+          stir_speed="500 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
@@ -3485,8 +3485,8 @@
       </StopStir>
       <ApplyVacuum
         vessel="filter1"
-        time="2 mins"
-        pressure="400.0"
+        time="2 min"
+        pressure="400 mbar"
         port="bottom"
         vessel_type="filter"
         vacuum_valve="valve_vacuum"
@@ -3503,7 +3503,7 @@
           to_port="None"
           comment="" />
         <Wait
-          time="2 mins"
+          time="2 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -3511,7 +3511,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="2 mins"
+            time="2 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -3527,11 +3527,11 @@
       vessel="filter1"
       solvent="water"
       volume="20 mL"
-      temp="10.0"
-      vacuum_time="10 secs"
+      temp="10°C"
+      vacuum_time="10 s"
       stir="True"
-      time="30 secs"
-      stir_speed="500.0"
+      time="30 s"
+      stir_speed="500 RPM"
       aspiration_speed="5.0"
       filtrate_vessel="None"
       anticlogging="False"
@@ -3543,11 +3543,11 @@
       comment="">
       <HeatChillToTemp
         vessel="filter1"
-        temp="10.0"
+        temp="10°C"
         active="True"
         continue_heatchill="True"
         stir="True"
-        stir_speed="250.0"
+        stir_speed="250 RPM"
         purpose="None"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
@@ -3555,13 +3555,13 @@
         comment="">
         <StartStir
           vessel="filter1"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           purpose="None"
           stirring_controller="stirrer_filter"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_filter"
-            stir_speed="250.0"
+            stir_speed="250 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_filter"
@@ -3569,13 +3569,13 @@
         </StartStir>
         <StartHeatChill
           vessel="filter1"
-          temp="10.0"
+          temp="10°C"
           purpose="None"
           temperature_controller="chiller_filter"
           comment="">
           <CTemperatureControllerSetTemp
             temperature_controller="chiller_filter"
-            temp="10.0"
+            temp="10°C"
             comment="" />
           <CTemperatureControllerStart
             temperature_controller="chiller_filter"
@@ -3596,13 +3596,13 @@
       </HeatChillToTemp>
       <StartStir
         vessel="filter1"
-        stir_speed="500.0"
+        stir_speed="500 RPM"
         purpose="None"
         stirring_controller="stirrer_filter"
         comment="">
         <CStirringControllerSetSpeed
           stirring_controller="stirrer_filter"
-          stir_speed="500.0"
+          stir_speed="500 RPM"
           comment="" />
         <CStirringControllerStart
           stirring_controller="stirrer_filter"
@@ -3616,7 +3616,7 @@
         dropwise="False"
         time="None"
         stir="True"
-        stir_speed="500.0"
+        stir_speed="500 RPM"
         purpose="None"
         speed="40.0"
         port="top"
@@ -3638,13 +3638,13 @@
         comment="">
         <StartStir
           vessel="filter1"
-          stir_speed="500.0"
+          stir_speed="500 RPM"
           purpose="None"
           stirring_controller="stirrer_filter"
           comment="">
           <CStirringControllerSetSpeed
             stirring_controller="stirrer_filter"
-            stir_speed="500.0"
+            stir_speed="500 RPM"
             comment="" />
           <CStirringControllerStart
             stirring_controller="stirrer_filter"
@@ -3709,7 +3709,7 @@
           repeats="1"
           comment="" />
         <Wait
-          time="10 secs"
+          time="10 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -3717,7 +3717,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="10 secs"
+            time="10 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -3747,7 +3747,7 @@
         </FlushTubing>
       </Add>
       <Wait
-        time="30 secs"
+        time="30 s"
         wait_recording_speed="2000.0"
         after_recording_speed="14.0"
         comment="">
@@ -3755,7 +3755,7 @@
           recording_speed="2000.0"
           comment="" />
         <CWait
-          time="30 secs"
+          time="30 s"
           comment="" />
         <CSetRecordingSpeed
           recording_speed="14.0"
@@ -3784,8 +3784,8 @@
       </StopStir>
       <ApplyVacuum
         vessel="filter1"
-        time="10 secs"
-        pressure="400.0"
+        time="10 s"
+        pressure="400 mbar"
         port="bottom"
         vessel_type="filter"
         vacuum_valve="valve_vacuum"
@@ -3802,7 +3802,7 @@
           to_port="None"
           comment="" />
         <Wait
-          time="10 secs"
+          time="10 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -3810,7 +3810,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="10 secs"
+            time="10 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -3833,7 +3833,7 @@
     </WashSolid>
     <Dry
       vessel="filter1"
-      time="60 mins"
+      time="60 min"
       temp="None"
       waste_vessel="waste_filter"
       aspiration_speed="5.0"
@@ -3871,8 +3871,8 @@
         comment="" />
       <ApplyVacuum
         vessel="filter1"
-        time="60 mins"
-        pressure="400.0"
+        time="60 min"
+        pressure="400 mbar"
         port="bottom"
         vessel_type="filter"
         vacuum_valve="valve_vacuum"
@@ -3889,7 +3889,7 @@
           to_port="None"
           comment="" />
         <Wait
-          time="60 mins"
+          time="60 min"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -3897,7 +3897,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="60 mins"
+            time="60 min"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -3911,7 +3911,7 @@
     </Dry>
     <Dry
       vessel="filter1"
-      time="3 hrs"
+      time="3 h"
       temp="None"
       waste_vessel="waste_filter"
       aspiration_speed="5.0"
@@ -3949,8 +3949,8 @@
         comment="" />
       <ApplyVacuum
         vessel="filter1"
-        time="3 hrs"
-        pressure="400.0"
+        time="3 h"
+        pressure="400 mbar"
         port="bottom"
         vessel_type="filter"
         vacuum_valve="valve_vacuum"
@@ -3967,7 +3967,7 @@
           to_port="None"
           comment="" />
         <Wait
-          time="3 hrs"
+          time="3 h"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -3975,7 +3975,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="3 hrs"
+            time="3 h"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"

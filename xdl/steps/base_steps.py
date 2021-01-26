@@ -146,7 +146,7 @@ class Step(XDLBase):
                 )
 
             # Convert None properties to empty string
-            if formatted_props[prop] == 'None':
+            if formatted_props[prop] in ['None', None]:
                 formatted_props[prop] = ''
 
         return formatted_props
@@ -177,7 +177,7 @@ class Step(XDLBase):
                         language_human_readable += '. {comment}'
 
                     return language_human_readable.format(
-                        **self.formatted_properties())
+                        **self.formatted_properties()) + '.'
 
                 # New conditional JSON object human readable format
                 else:
