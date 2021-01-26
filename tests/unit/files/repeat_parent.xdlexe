@@ -20,7 +20,7 @@
       comment="">
       <Children>
         <Wait
-          time="5 secs"
+          time="5 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -28,14 +28,14 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="5 secs"
+            time="5 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
             comment="" />
         </Wait>
         <Wait
-          time="10 secs"
+          time="10 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -43,7 +43,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="10 secs"
+            time="10 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -57,7 +57,7 @@
           dropwise="False"
           time="None"
           stir="False"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           purpose="None"
           speed="40.0"
           port="top"
@@ -144,7 +144,7 @@
             repeats="1"
             comment="" />
           <Wait
-            time="10 secs"
+            time="10 s"
             wait_recording_speed="2000.0"
             after_recording_speed="14.0"
             comment="">
@@ -152,7 +152,7 @@
               recording_speed="2000.0"
               comment="" />
             <CWait
-              time="10 secs"
+              time="10 s"
               comment="" />
             <CSetRecordingSpeed
               recording_speed="14.0"
@@ -184,7 +184,7 @@
       </Children>
       <Steps>
         <Wait
-          time="5 secs"
+          time="5 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -192,14 +192,14 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="5 secs"
+            time="5 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
             comment="" />
         </Wait>
         <Wait
-          time="10 secs"
+          time="10 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -207,7 +207,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="10 secs"
+            time="10 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -221,7 +221,7 @@
           dropwise="False"
           time="None"
           stir="False"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           purpose="None"
           speed="40.0"
           port="top"
@@ -308,7 +308,7 @@
             repeats="1"
             comment="" />
           <Wait
-            time="10 secs"
+            time="10 s"
             wait_recording_speed="2000.0"
             after_recording_speed="14.0"
             comment="">
@@ -316,7 +316,7 @@
               recording_speed="2000.0"
               comment="" />
             <CWait
-              time="10 secs"
+              time="10 s"
               comment="" />
             <CSetRecordingSpeed
               recording_speed="14.0"
@@ -346,7 +346,7 @@
           </FlushTubing>
         </Add>
         <Wait
-          time="5 secs"
+          time="5 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -354,14 +354,14 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="5 secs"
+            time="5 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
             comment="" />
         </Wait>
         <Wait
-          time="10 secs"
+          time="10 s"
           wait_recording_speed="2000.0"
           after_recording_speed="14.0"
           comment="">
@@ -369,7 +369,7 @@
             recording_speed="2000.0"
             comment="" />
           <CWait
-            time="10 secs"
+            time="10 s"
             comment="" />
           <CSetRecordingSpeed
             recording_speed="14.0"
@@ -383,7 +383,7 @@
           dropwise="False"
           time="None"
           stir="False"
-          stir_speed="250.0"
+          stir_speed="250 RPM"
           purpose="None"
           speed="40.0"
           port="top"
@@ -470,7 +470,7 @@
             repeats="1"
             comment="" />
           <Wait
-            time="10 secs"
+            time="10 s"
             wait_recording_speed="2000.0"
             after_recording_speed="14.0"
             comment="">
@@ -478,7 +478,7 @@
               recording_speed="2000.0"
               comment="" />
             <CWait
-              time="10 secs"
+              time="10 s"
               comment="" />
             <CSetRecordingSpeed
               recording_speed="14.0"

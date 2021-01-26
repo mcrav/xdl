@@ -73,16 +73,16 @@ def format_property(
     elif prop_limit is MASS_PROP_LIMIT:
         return format_mass(val)
 
-    elif prop is TEMP_PROP_LIMIT:
+    elif prop_limit is TEMP_PROP_LIMIT:
         return format_temp(val)
 
-    elif prop is PRESSURE_PROP_LIMIT:
+    elif prop_limit is PRESSURE_PROP_LIMIT:
         return format_pressure(val)
 
     elif 'port' in prop and human_readable:
         return get_port_str(val)
 
-    elif prop is ROTATION_SPEED_PROP_LIMIT:
+    elif prop_limit is ROTATION_SPEED_PROP_LIMIT:
         return format_stir_rpm(val)
 
     elif prop_type == int:
@@ -174,15 +174,15 @@ def format_time(val_seconds: float) -> str:
         # hours
         if minutes > 60:
             hours = minutes / 60
-            val_str = f'{format_val(hours)} hrs'
+            val_str = f'{format_val(hours)} h'
             val = hours
         # minutes
         else:
-            val_str = f'{format_val(minutes)} mins'
+            val_str = f'{format_val(minutes)} min'
             val = minutes
     # seconds
     else:
-        val_str = f'{format_val(val_seconds)} secs'
+        val_str = f'{format_val(val_seconds)} s'
     # Convert '1 hrs' to '1 hr'.
     if val == 1:
         val_str = val_str[:-1]
