@@ -49,7 +49,7 @@ def verify_temps_have_units(step, human_readable):
     """Verify all temperatures have units."""
     for prop, val in step.properties.items():
         if step.PROP_LIMITS.get(prop, None) is TEMP_PROP_LIMIT:
-            assert f'{format_number(val)}°C' in human_readable
+            assert f'{format_number(val)} °C' in human_readable
 
 def verify_pressures_have_units(step, human_readable):
     """Verify all temperatures have units."""
