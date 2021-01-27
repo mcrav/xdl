@@ -220,7 +220,7 @@ def format_temp(val_celsius: float) -> str:
     if type(val_celsius) == str:  # 'reflux' or 'None'
         return val_celsius
     else:
-        return f'{format_val(val_celsius)}°C'
+        return f'{format_val(val_celsius)} °C'
 
 def format_val(val: float) -> str:
     """Format float and return as str. Rules are round to two decimal places,
