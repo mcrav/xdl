@@ -37,14 +37,14 @@ can be easily inspected; a compiled ``.xdlexe`` file ready for execution; and a
 ``.json`` file that contains a detailed description of the schedule. These schedule
 JSON files can be visualized using this `schedule visualization app <https://croningroup.gitlab.io/chemputer/schedule-visualiser/>`_.
 
-If you wish to work with objects rather than file, there are two methods ``XDLSchedule.to_json``
+If you wish to work with objects rather than files, there are two methods ``XDLSchedule.to_json``
 and ``XDLSchedule.to_xdl`` for this. There is no ``to_xdlexe`` method as the ``XDL``
 object returned by ``XDLSchedule.to_xdl`` is already compiled.
 
 Solver methods
 **************
 
-There are currently three solver methods available, with a plan to add simulated
+There are currently three solver algorithms available, with a plan to add simulated
 annealing in the future.
 
 1. ``grid_search``: Search every possible schedule. Slow, but sure to find the best schedule.
