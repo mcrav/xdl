@@ -463,3 +463,19 @@ class XDLBase(object):
         # attr not in self.properties, return as normal
         else:
             return object.__getattribute__(self, name)
+
+    def __deepcopy__(self, memo):
+        """Allow ``copy.deepcopy(step)`` to be called. Default deepcopy works,
+        but not on Python 3.6, so that is what this is for. When Python 3.6 is
+        not supported this can go.
+        """
+        # Copy properties
+        copy_props = {}
+        for k, v in self.properties.items():
+            if k != 'children':
+                copy_props[k] = v
+
+        # Make new self
+        copied_self = type(self)(**copy_props)
+
+        return copied_self
