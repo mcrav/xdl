@@ -13,4 +13,5 @@ Usage
    reagents
    xdl_controller
    async_await
+   parallel_scheduling
    submitting_issues
