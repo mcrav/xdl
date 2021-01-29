@@ -215,7 +215,7 @@ class Step(XDLBase):
         """
         return {}
 
-    def duration(self, graph: MultiDiGraph) -> int:
+    def duration(self, graph: MultiDiGraph) -> FTNDuration:
         """Method to override to give approximate duration of step. Used to
         recursively determine duration of procedure.
 
@@ -710,7 +710,7 @@ class AbstractStep(Step, ABC):
                 base_steps.extend(get_base_steps(step))
         return base_steps
 
-    def duration(self, graph: MultiDiGraph) -> int:
+    def duration(self, graph: MultiDiGraph) -> FTNDuration:
         """Return approximate duration in seconds of step calculated as sum of
         durations of all substeps. This method should be overridden where an
         exact or near exact duration is known. The fallback duration for base
@@ -720,7 +720,7 @@ class AbstractStep(Step, ABC):
             graph (MultiDiGraph): Graph to use when calculating step duration.
 
         Returns:
-            int: Estimated duration of step in seconds.
+            FTNDuration: Estimated duration of step in seconds.
         """
         duration = FTNDuration(0, 0, 0)
         for step in self.steps:
@@ -854,14 +854,14 @@ class AbstractAsyncStep(Step):
                     reagents_consumed[reagent] = volume
         return reagents_consumed
 
-    def duration(self, graph: MultiDiGraph):
+    def duration(self, graph: MultiDiGraph) -> FTNDuration:
         """Return duration of child steps (Async step).
 
         Args:
             graph (MultiDiGraph): Graph to use when calculating step duration.
 
         Returns:
-            int: Estimated duration of step in seconds.
+            FTNDuration: Estimated duration of step in seconds.
         """
         duration = FTNDuration(0, 0, 0)
         for step in self.children:
@@ -1177,11 +1177,11 @@ class AbstractDynamicStep(Step):
                     reagents_consumed[reagent] = volume
         return reagents_consumed
 
-    def duration(self, graph: MultiDiGraph) -> int:
+    def duration(self, graph: MultiDiGraph) -> FTNDuration:
         """Return duration of start block, since duration after that is unknown.
 
         Returns:
-            int: Estimated duration of step in seconds.
+            FTNDuration: Estimated duration of step in seconds.
         """
         duration = FTNDuration(0, 0, 0)
         for step in self.start_block:
