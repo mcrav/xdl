@@ -1,7 +1,8 @@
 from typing import Union, List, Callable, Dict, Any
 import logging
 import time
-from ..utils.prop_limits import TIME_PROP_LIMIT
+from networkx import MultiDiGraph
+
 from .base_steps import (
     Step,
     AbstractAsyncStep,
@@ -12,6 +13,7 @@ from .base_steps import (
     finished_executing_step_msg,
 )
 from .utils import FTNDuration
+from ..utils.prop_limits import TIME_PROP_LIMIT
 
 if False:
     from chempiler import Chempiler
@@ -252,7 +254,7 @@ class Wait(AbstractBaseStep):
         time.sleep(self.time)
         return True
 
-    def duration(self):
+    def duration(self, graph: MultiDiGraph) -> FTNDuration:
         return FTNDuration(self.time, self.time, self.time)
 
 class Callback(AbstractBaseStep):
