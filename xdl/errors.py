@@ -240,6 +240,14 @@ class XDLLanguageUnavailableError(XDLError):
             s += f'Available languages: {", ".join(self.available_languages)}'
         return s
 
+class XDLInvalidStepsTypeError(XDLError):
+    def __init__(self, steps_type):
+        self.steps_type = steps_type
+
+    def __str__(self):
+        return (f'Invalid type for steps: {self.steps_type}\n'
+                 'Valid types: List or Dict with steps sections.')
+
 class XDLUnimplementedStepError(XDLCompilationError):
     def __init__(self, step_name: str) -> None:
         self.step_name = step_name

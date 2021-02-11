@@ -1201,7 +1201,8 @@ class UnimplementedStep(Step):
         super().__init__(param_dict)
         self.steps = []
 
-    def execute(self, platform_controller, logger=None, level=0):
+    def execute(
+            self, platform_controller, logger=None, level=0, step_indexes=None):
         raise NotImplementedError(
             f'{self.__class__.__name__} step is unimplemented.')
 

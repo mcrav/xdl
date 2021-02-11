@@ -57,6 +57,7 @@
         through=""
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <CValveMoveToPosition
         valve_name="valve_vacuum"
@@ -125,6 +126,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Children>
           <Steps>
@@ -140,6 +142,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Steps>
         </Repeat>
@@ -156,6 +159,7 @@
         through="None"
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <Wait
         time="10 s"
@@ -192,6 +196,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
       </FlushTubing>
     </Add>
@@ -263,6 +268,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Children>
           <Steps>
@@ -278,6 +284,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Steps>
         </Repeat>
@@ -294,6 +301,7 @@
         through="None"
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <Wait
         time="10 s"
@@ -330,6 +338,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
       </FlushTubing>
     </Add>
@@ -401,6 +410,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Children>
           <Steps>
@@ -416,6 +426,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Steps>
         </Repeat>
@@ -432,6 +443,7 @@
         through="None"
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <Wait
         time="10 s"
@@ -468,6 +480,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
       </FlushTubing>
     </Add>
@@ -539,6 +552,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Children>
           <Steps>
@@ -554,6 +568,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Steps>
         </Repeat>
@@ -570,6 +585,7 @@
         through="None"
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <Wait
         time="10 s"
@@ -606,12 +622,13 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
       </FlushTubing>
     </Add>
     <HeatChillToTemp
       vessel="filter1"
-      temp="10°C"
+      temp="10 °C"
       active="True"
       continue_heatchill="True"
       stir="True"
@@ -637,13 +654,13 @@
       </StartStir>
       <StartHeatChill
         vessel="filter1"
-        temp="10°C"
+        temp="10 °C"
         purpose="None"
         temperature_controller="chiller_filter"
         comment="">
         <CTemperatureControllerSetTemp
           temperature_controller="chiller_filter"
-          temp="10°C"
+          temp="10 °C"
           comment="" />
         <CTemperatureControllerStart
           temperature_controller="chiller_filter"
@@ -730,6 +747,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Children>
           <Steps>
@@ -745,6 +763,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Steps>
         </Repeat>
@@ -761,6 +780,7 @@
         through="None"
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <Wait
         time="10 s"
@@ -797,6 +817,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
       </FlushTubing>
     </Add>
@@ -874,6 +895,7 @@
         through=""
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <CValveMoveToPosition
         valve_name="valve_vacuum"
@@ -922,6 +944,7 @@
         through=""
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <StopStir
         vessel="filter1"
@@ -1008,6 +1031,7 @@
         through=""
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <ApplyVacuum
         vessel="filter1"
@@ -1072,6 +1096,7 @@
         through=""
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <CValveMoveToPosition
         valve_name="valve_vacuum"
@@ -1140,6 +1165,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Children>
           <Steps>
@@ -1155,6 +1181,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Steps>
         </Repeat>
@@ -1171,6 +1198,7 @@
         through="None"
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <Wait
         time="10 s"
@@ -1207,6 +1235,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
       </FlushTubing>
     </Add>
@@ -1278,6 +1307,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Children>
           <Steps>
@@ -1293,6 +1323,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Steps>
         </Repeat>
@@ -1309,6 +1340,7 @@
         through="None"
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <Wait
         time="10 s"
@@ -1345,12 +1377,13 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
       </FlushTubing>
     </Add>
     <HeatChill
       vessel="filter1"
-      temp="110.6°C"
+      temp="110.6 °C"
       time="60 min"
       stir="True"
       stir_speed="250 RPM"
@@ -1373,7 +1406,7 @@
       </StartStir>
       <HeatChillToTemp
         vessel="filter1"
-        temp="110.6°C"
+        temp="110.6 °C"
         active="True"
         continue_heatchill="True"
         stir="True"
@@ -1399,13 +1432,13 @@
         </StartStir>
         <StartHeatChill
           vessel="filter1"
-          temp="110.6°C"
+          temp="110.6 °C"
           purpose="None"
           temperature_controller="chiller_filter"
           comment="">
           <CTemperatureControllerSetTemp
             temperature_controller="chiller_filter"
-            temp="110.6°C"
+            temp="110.6 °C"
             comment="" />
           <CTemperatureControllerStart
             temperature_controller="chiller_filter"
@@ -1451,7 +1484,7 @@
     </HeatChill>
     <HeatChillToTemp
       vessel="filter1"
-      temp="25°C"
+      temp="25 °C"
       active="True"
       continue_heatchill="True"
       stir="True"
@@ -1477,13 +1510,13 @@
       </StartStir>
       <StartHeatChill
         vessel="filter1"
-        temp="25°C"
+        temp="25 °C"
         purpose="None"
         temperature_controller="chiller_filter"
         comment="">
         <CTemperatureControllerSetTemp
           temperature_controller="chiller_filter"
-          temp="25°C"
+          temp="25 °C"
           comment="" />
         <CTemperatureControllerStart
           temperature_controller="chiller_filter"
@@ -1529,7 +1562,7 @@
       <Transfer
         from_vessel="filter1"
         to_vessel="flask_separator"
-        volume="160 mL"
+        volume="all"
         from_port="bottom"
         to_port="bottom"
         through="None"
@@ -1561,7 +1594,7 @@
         <CMove
           from_vessel="filter1"
           to_vessel="flask_separator"
-          volume="160 mL"
+          volume="all"
           move_speed="40.0"
           aspiration_speed="10.0"
           dispense_speed="40.0"
@@ -1570,6 +1603,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="160 mL"
           comment="" />
         <StopHeatChill
           vessel="filter1"
@@ -1643,6 +1677,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Children>
             <Steps>
@@ -1658,6 +1693,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Steps>
           </Repeat>
@@ -1674,6 +1710,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
         <Wait
           time="10 s"
@@ -1710,6 +1747,7 @@
             through="None"
             use_backbone="True"
             repeats="1"
+            estimated_volume="None"
             comment="" />
         </FlushTubing>
       </Add>
@@ -1902,6 +1940,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Children>
             <Steps>
@@ -1917,6 +1956,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Steps>
           </Repeat>
@@ -1933,6 +1973,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
         <Wait
           time="10 s"
@@ -1969,6 +2010,7 @@
             through="None"
             use_backbone="True"
             repeats="1"
+            estimated_volume="None"
             comment="" />
         </FlushTubing>
       </Add>
@@ -2161,6 +2203,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Children>
             <Steps>
@@ -2176,6 +2219,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Steps>
           </Repeat>
@@ -2192,6 +2236,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
         <Wait
           time="10 s"
@@ -2228,6 +2273,7 @@
             through="None"
             use_backbone="True"
             repeats="1"
+            estimated_volume="None"
             comment="" />
         </FlushTubing>
       </Add>
@@ -2420,6 +2466,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Children>
             <Steps>
@@ -2435,6 +2482,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Steps>
           </Repeat>
@@ -2451,6 +2499,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
         <Wait
           time="10 s"
@@ -2487,6 +2536,7 @@
             through="None"
             use_backbone="True"
             repeats="1"
+            estimated_volume="None"
             comment="" />
         </FlushTubing>
       </Add>
@@ -2641,6 +2691,7 @@
         through=""
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <CValveMoveToPosition
         valve_name="valve_vacuum"
@@ -2733,6 +2784,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Children>
             <Steps>
@@ -2748,6 +2800,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Steps>
           </Repeat>
@@ -2764,6 +2817,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
         <Wait
           time="10 s"
@@ -2800,6 +2854,7 @@
             through="None"
             use_backbone="True"
             repeats="1"
+            estimated_volume="None"
             comment="" />
         </FlushTubing>
       </Add>
@@ -3017,6 +3072,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Children>
             <Steps>
@@ -3032,6 +3088,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Steps>
           </Repeat>
@@ -3048,6 +3105,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
         <Wait
           time="10 s"
@@ -3084,6 +3142,7 @@
             through="None"
             use_backbone="True"
             repeats="1"
+            estimated_volume="None"
             comment="" />
         </FlushTubing>
       </Add>
@@ -3217,7 +3276,7 @@
     </Separate>
     <HeatChillToTemp
       vessel="filter1"
-      temp="10°C"
+      temp="10 °C"
       active="True"
       continue_heatchill="True"
       stir="True"
@@ -3243,13 +3302,13 @@
       </StartStir>
       <StartHeatChill
         vessel="filter1"
-        temp="10°C"
+        temp="10 °C"
         purpose="None"
         temperature_controller="chiller_filter"
         comment="">
         <CTemperatureControllerSetTemp
           temperature_controller="chiller_filter"
-          temp="10°C"
+          temp="10 °C"
           comment="" />
         <CTemperatureControllerStart
           temperature_controller="chiller_filter"
@@ -3336,6 +3395,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Children>
           <Steps>
@@ -3351,6 +3411,7 @@
               through=""
               use_backbone="True"
               repeats="1"
+              estimated_volume="None"
               comment="" />
           </Steps>
         </Repeat>
@@ -3367,6 +3428,7 @@
         through="None"
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <Wait
         time="10 s"
@@ -3403,6 +3465,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
       </FlushTubing>
     </Add>
@@ -3426,6 +3489,7 @@
         through=""
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <CValveMoveToPosition
         valve_name="valve_vacuum"
@@ -3474,6 +3538,7 @@
         through=""
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <StopStir
         vessel="filter1"
@@ -3527,7 +3592,7 @@
       vessel="filter1"
       solvent="water"
       volume="20 mL"
-      temp="10°C"
+      temp="10 °C"
       vacuum_time="10 s"
       stir="True"
       time="30 s"
@@ -3543,7 +3608,7 @@
       comment="">
       <HeatChillToTemp
         vessel="filter1"
-        temp="10°C"
+        temp="10 °C"
         active="True"
         continue_heatchill="True"
         stir="True"
@@ -3569,13 +3634,13 @@
         </StartStir>
         <StartHeatChill
           vessel="filter1"
-          temp="10°C"
+          temp="10 °C"
           purpose="None"
           temperature_controller="chiller_filter"
           comment="">
           <CTemperatureControllerSetTemp
             temperature_controller="chiller_filter"
-            temp="10°C"
+            temp="10 °C"
             comment="" />
           <CTemperatureControllerStart
             temperature_controller="chiller_filter"
@@ -3676,6 +3741,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Children>
             <Steps>
@@ -3691,6 +3757,7 @@
                 through=""
                 use_backbone="True"
                 repeats="1"
+                estimated_volume="None"
                 comment="" />
             </Steps>
           </Repeat>
@@ -3707,6 +3774,7 @@
           through="None"
           use_backbone="True"
           repeats="1"
+          estimated_volume="None"
           comment="" />
         <Wait
           time="10 s"
@@ -3743,6 +3811,7 @@
             through="None"
             use_backbone="True"
             repeats="1"
+            estimated_volume="None"
             comment="" />
         </FlushTubing>
       </Add>
@@ -3773,6 +3842,7 @@
         through=""
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <StopStir
         vessel="filter1"
@@ -3868,6 +3938,7 @@
         through=""
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <ApplyVacuum
         vessel="filter1"
@@ -3946,6 +4017,7 @@
         through=""
         use_backbone="True"
         repeats="1"
+        estimated_volume="None"
         comment="" />
       <ApplyVacuum
         vessel="filter1"

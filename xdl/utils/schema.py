@@ -1,3 +1,7 @@
+"""There are definitely better and neater ways to generate this schema but it's
+not really high priority.
+"""
+
 from ..reagents import Reagent
 
 def add_hardware_namespace():
@@ -110,6 +114,15 @@ def add_procedure_namespace(step_library):
     schema += "\n          <xs:choice maxOccurs=\"unbounded\" minOccurs=\"0\">"
 
     schema += add_steps(step_library)
+
+    # Procedure sections
+    for section in ['Prep', 'Reaction', 'Workup', 'Purification']:
+        schema += f'<xs:element name=\"{section}\"><xs:complexType><xs:choice maxOccurs=\"unbounded\" minOccurs=\"0\">'
+        schema += add_steps(step_library)
+        schema += "\n          </xs:choice>"
+        schema += "\n        </xs:complexType>"
+        schema += "\n      </xs:element>"
+
 
     schema += "\n          </xs:choice>"
     schema += "\n        </xs:complexType>"
