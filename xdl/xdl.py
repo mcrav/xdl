@@ -24,6 +24,7 @@ from .errors import (
     XDLInvalidSaveFormatError,
     XDLDurationBeforeCompilationError,
     XDLReagentVolumesBeforeCompilationError,
+    XDLInvalidStepsTypeError,
 )
 from .hardware import Hardware
 from .platforms.abstract_platform import AbstractPlatform
@@ -103,7 +104,6 @@ class XDL(object):
         logging_level: int = logging.INFO,
         platform: AbstractPlatform = None,
     ) -> None:
-
         self._initialize_logging(logging_level)
         self._load_platform(platform)
         self._load_xdl(xdl, steps=steps, hardware=hardware, reagents=reagents)
@@ -196,7 +196,8 @@ class XDL(object):
         elif (steps is not None
               and reagents is not None
               and hardware is not None):
-            self.steps, self.hardware, self.reagents = steps, hardware, reagents
+            self.hardware, self.reagents = hardware, reagents
+            self._load_steps(steps)
             self.executor = self.platform.executor(self)
 
         # Invalid combination of arguments given, raise error
@@ -210,7 +211,7 @@ class XDL(object):
             xdl_json (Dict): XDL JSON dict.
         """
         parsed_xdl = xdl_from_json(xdl_json, self.platform)
-        self.steps = parsed_xdl['steps']
+        self._load_steps(parsed_xdl['steps'])
         self.hardware = parsed_xdl['hardware']
         self.reagents = parsed_xdl['reagents']
 
@@ -234,7 +235,7 @@ class XDL(object):
         # Load from .json file
         elif file_ext == '.json':
             parsed_xdl = xdl_from_json_file(xdl_file, self.platform)
-            self.steps = parsed_xdl['steps']
+            self._load_steps(parsed_xdl['steps'])
             self.hardware = parsed_xdl['hardware']
             self.reagents = parsed_xdl['reagents']
 
@@ -253,7 +254,7 @@ class XDL(object):
 
         self._load_graph_hash(xdl_str)
 
-        self.steps = parsed_xdl['steps']
+        self._load_steps(parsed_xdl['steps'])
         self.hardware = parsed_xdl['hardware']
         self.reagents = parsed_xdl['reagents']
 
@@ -322,6 +323,62 @@ class XDL(object):
                 self._validate_vessel_and_reagent_props_step(
                     substep, reagent_ids, vessel_ids
                 )
+
+    def _load_steps(
+            self, steps: Union[List[Step], Dict[str, List[Step]]]) -> None:
+        """Load steps. Called from constructor. If procedure sections are used
+        steps are flattened into :py:attr:`steps`, but UUIDs are linked to
+        sections so that steps can be saved into correct sections when
+        generating files.
+
+        Args:
+            steps (Union[List[Step], Dict[str, List[Step]]]): EIther a simple
+                list of steps if procedure sections are not being used.
+                Otherwise a dict with keys 'no_section', 'prep', 'reaction',
+                'workup', 'purification', and values of lists of steps.
+        """
+        self.steps = []
+        self.no_section_steps = []
+        self.prep_steps = []
+        self.reaction_steps = []
+        self.workup_steps = []
+        self.purification_steps = []
+
+        # Load simple list of steps with no sections
+        if type(steps) == list:
+            self.steps = steps
+            self.no_sections_steps = [step.uuid for step in steps]
+
+        # Load steps passed by sections
+        elif type(steps) == dict:
+            self.steps = []
+            # Loose steps with no section
+            for step in steps['no_section']:
+                self.steps.append(step)
+                self.no_section_steps.append(step.uuid)
+
+            # Prep steps
+            for step in steps['prep']:
+                self.steps.append(step)
+                self.prep_steps.append(step.uuid)
+
+            # Reaction steps
+            for step in steps['reaction']:
+                self.steps.append(step)
+                self.reaction_steps.append(step.uuid)
+
+            # Workup steps
+            for step in steps['workup']:
+                self.steps.append(step)
+                self.workup_steps.append(step.uuid)
+
+            # Purification stepss
+            for step in steps['purification']:
+                self.steps.append(step)
+                self.purification_steps.append(step.uuid)
+
+        else:
+            raise XDLInvalidStepsTypeError(type(steps))
 
     ###############
     # Information #

@@ -76,7 +76,6 @@ def get_xdl_tree(
     Returns:
         etree.ElementTree: XML tree of ``xdl_obj`` ready to save to XML file.
     """
-    steps = xdl_obj.steps
     reagents = xdl_obj.reagents
     hardware = xdl_obj.hardware
 
@@ -93,7 +92,7 @@ def get_xdl_tree(
 
     # Add <Procedure  /> section to tree
     _append_procedure_tree(
-        xdltree, steps, full_properties=full_properties, full_tree=full_tree)
+        xdltree, xdl_obj, full_properties=full_properties, full_tree=full_tree)
 
     return xdltree
 
@@ -139,7 +138,7 @@ def _append_reagents_tree(
 
 def _append_procedure_tree(
     xdltree: etree.ElementTree,
-    steps: List[Step],
+    xdl_obj: 'XDL',
     full_properties: bool = False,
     full_tree: bool = False,
 ) -> None:
@@ -155,9 +154,55 @@ def _append_procedure_tree(
             case in xdlexe files.
     """
     procedure_tree = etree.Element('Procedure')
-    for step in steps:
-        procedure_tree.append(_get_step_tree(
-            step, full_properties=full_properties, full_tree=full_tree))
+    prep_tree, reaction_tree, workup_tree, purification_tree =\
+        None, None, None, None
+    for step in xdl_obj.steps:
+        # XDLEXE, don't worry about procedure sections.
+        if full_tree:
+            procedure_tree.append(_get_step_tree(
+                step, full_properties=full_properties, full_tree=full_tree))
+        # Just XDL, generate with procedure sections
+        else:
+            # Prep steps
+            if step.uuid in xdl_obj.prep_steps:
+                if prep_tree is None:
+                    prep_tree = etree.Element('Prep')
+                prep_tree.append(_get_step_tree(
+                    step, full_properties=full_properties, full_tree=full_tree
+                ))
+
+            # Reaction steps
+            elif step.uuid in xdl_obj.reaction_steps:
+                if reaction_tree is None:
+                    reaction_tree = etree.Element('Reaction')
+                reaction_tree.append(_get_step_tree(
+                    step, full_properties=full_properties, full_tree=full_tree
+                ))
+
+            # Workup steps
+            elif step.uuid in xdl_obj.workup_steps:
+                if workup_tree is None:
+                    workup_tree = etree.Element('Workup')
+                workup_tree.append(_get_step_tree(
+                    step, full_properties=full_properties, full_tree=full_tree
+                ))
+
+            # Purification steps
+            elif step.uuid in xdl_obj.purification_steps:
+                if purification_tree is None:
+                    purification_tree = etree.Element('Purification')
+                purification_tree.append(_get_step_tree(
+                    step, full_properties=full_properties, full_tree=full_tree
+                ))
+
+            else:
+                procedure_tree.append(_get_step_tree(
+                    step, full_properties=full_properties, full_tree=full_tree
+                ))
+    subsections = [prep_tree, reaction_tree, workup_tree, purification_tree]
+    for subsection in subsections:
+        if subsection is not None:
+            procedure_tree.append(subsection)
     xdltree.append(procedure_tree)
 
 def _get_step_tree(

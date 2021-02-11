@@ -53,8 +53,8 @@ def xdl_str_to_objs(
 
         # Loading xdlexe if graph_sha256 in synthesis_attrs
         if 'graph_sha256' in synthesis_attrs:
-            assert len(steps) == len(step_record)
-            for i, step in enumerate(steps):
+            assert len(steps['no_section']) == len(step_record)
+            for i, step in enumerate(steps['no_section']):
                 apply_step_record(step, step_record[i])
 
         parsed_xdl = {
@@ -123,13 +123,41 @@ def steps_from_xdl(xdl_str: str, platform: 'AbstractPlatform') -> List[Step]:
         List[Step]: List of Step objects corresponding to procedure described
         in ``xdl_str``.
     """
-    steps = []
+    steps = {
+        'no_section': [],
+        'prep': [],
+        'reaction': [],
+        'workup': [],
+        'purification': [],
+    }
     xdl_tree = etree.fromstring(xdl_str)
     for element in xdl_tree.findall('*'):
         if element.tag == 'Procedure':
             step_record = get_full_step_record(element)
-            for step_xdl in element.findall('*'):
-                steps.append(xdl_to_step(step_xdl, platform.step_library))
+            for child in element.findall('*'):
+                if child.tag == 'Prep':
+                    for step in child.findall('*'):
+                        steps['prep'].append(
+                            xdl_to_step(step, platform.step_library))
+
+                elif child.tag == 'Reaction':
+                    for step in child.findall('*'):
+                        steps['reaction'].append(
+                            xdl_to_step(step, platform.step_library))
+
+                elif child.tag == 'Workup':
+                    for step in child.findall('*'):
+                        steps['workup'].append(
+                            xdl_to_step(step, platform.step_library))
+
+                elif child.tag == 'Purification':
+                    for step in child.findall('*'):
+                        steps['purification'].append(
+                            xdl_to_step(step, platform.step_library))
+
+                else:
+                    steps['no_section'].append(
+                        xdl_to_step(child, platform.step_library))
     return steps, step_record
 
 def get_base_steps(step: etree._Element) -> List[AbstractBaseStep]:
