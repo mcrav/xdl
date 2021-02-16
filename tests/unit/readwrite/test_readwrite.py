@@ -41,6 +41,7 @@ def test_readwrite_procedure_sections():
     assert len(x1.workup_steps) == len(x2.workup_steps) > 0
     assert len(x1.purification_steps) == len(x2.purification_steps) > 0
 
+@pytest.mark.unit
 def test_readwrite_procedure_sections_json():
     xdl_f = os.path.join(UNIT_FOLDER, 'procedure-sections.xdl')
     x1 = XDL(xdl_f)

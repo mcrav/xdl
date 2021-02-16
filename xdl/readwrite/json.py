@@ -135,10 +135,24 @@ def xdl_from_json(
         ``{ 'steps': steps, 'reagents': reagents, 'hardware': hardware }``
     """
     validate_xdl_json(xdl_json)
-    xdl_steps = [
-        xdl_step_from_json(step_json, platform)
-        for step_json in xdl_json['steps']
-    ]
+    xdl_steps = {
+        'prep': [],
+        'reaction': [],
+        'workup': [],
+        'purification': [],
+        'no_section': []
+    }
+    for step_json in xdl_json['steps']:
+        step = xdl_step_from_json(step_json, platform)
+        # Section explicitly given, add to appropriate section
+        if 'section' in step_json:
+            section = step_json['section']
+            xdl_steps[section].append(step)
+
+        # Section not given, add to no section list
+        else:
+            xdl_steps['no_section'].append(step)
+
     xdl_reagents = [
         xdl_element_from_json(reagent_json, Reagent)
         for reagent_json in xdl_json['reagents']
@@ -242,8 +256,24 @@ def xdl_to_json(
     Returns:
         Dict[str, Any]: XDL JSON dict produced from ``xdl_obj``.
     """
-    xdl_steps_json = [
-        xdl_step_to_json(step, full_properties) for step in xdl_obj.steps]
+    xdl_steps_json = []
+    for step in xdl_obj.steps:
+        # Assign step section
+        section = 'no_section'
+        if step.uuid in xdl_obj.prep_steps:
+            section = 'prep'
+        elif step.uuid in xdl_obj.reaction_steps:
+            section = 'reaction'
+        elif step.uuid in xdl_obj.workup_steps:
+            section = 'workup'
+        elif step.uuid in xdl_obj.purification_steps:
+            section = 'purification'
+
+        # Create step JSON object and apply section
+        xdl_step_json = xdl_step_to_json(step, full_properties)
+        xdl_step_json['section'] = section
+        xdl_steps_json.append(xdl_step_json)
+
     xdl_reagents_json = [
         xdl_element_to_json(reagent) for reagent in xdl_obj.reagents]
     xdl_hardware_json = [
@@ -285,7 +315,7 @@ def xdl_step_to_json(
         'name': xdl_step.name,
         'properties': xdl_step_properties,
         'children': [xdl_step_to_json(child) for child in children],
-        'uuid': xdl_step.uuid
+        'uuid': xdl_step.uuid,
     }
     return xdl_step_json
 
