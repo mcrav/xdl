@@ -6,6 +6,7 @@ Usage
 
    generate_xdl
    generate_graph
+   procedure_sections
    compile_xdl
    execute_xdl
    sensor_reading
