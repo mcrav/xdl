@@ -23,6 +23,7 @@ from .irradiate import AbstractIrradiateStep
 from .metadata import AbstractMetadata
 from .precipitate import AbstractPrecipitateStep
 from .reagent import AbstractReagent
+from .reset_handling import AbstractResetHandlingStep
 from .run_column import AbstractRunColumnStep
 from .separate import AbstractSeparateStep
 from .stirring import (
