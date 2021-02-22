@@ -1,10 +1,11 @@
-from .abstract_template import AbstractStepTemplate
+from .abstract_template import AbstractXDLElementTemplate
+from ..base_steps import AbstractStep
 from ...constants import REAGENT_PROP_TYPE
 from ...utils.prop_limits import (
     VOLUME_PROP_LIMIT,
 )
 
-class AbstractResetHandlingStep(AbstractStepTemplate):
+class AbstractResetHandlingStep(AbstractXDLElementTemplate, AbstractStep):
     """Reset all materials handling so that is fresh for the next chemical
     handling operation.
 

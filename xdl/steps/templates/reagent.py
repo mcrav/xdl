@@ -1,9 +1,9 @@
-from .abstract_template import AbstractStepTemplate
+from .abstract_template import AbstractXDLElementTemplate
 from ...utils.prop_limits import (
     REAGENT_ROLE_PROP_LIMIT, TEMP_PROP_LIMIT, PERCENT_RANGE_PROP_LIMIT)
 from ...constants import REAGENT_PROP_TYPE
 
-class AbstractReagent(AbstractStepTemplate):
+class AbstractReagent(AbstractXDLElementTemplate):
     """Reagent used by procedure.
 
     Name: Reagent

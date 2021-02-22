@@ -1,5 +1,6 @@
 from typing import Dict
-from .abstract_template import AbstractStepTemplate
+from .abstract_template import AbstractXDLElementTemplate
+from ..base_steps import AbstractStep
 from ...constants import VESSEL_PROP_TYPE
 from ...utils.prop_limits import (
     TEMP_PROP_LIMIT,
@@ -9,7 +10,7 @@ from ...utils.prop_limits import (
 )
 from ...utils.vessels import VesselSpec
 
-class AbstractHeatChillStep(AbstractStepTemplate):
+class AbstractHeatChillStep(AbstractXDLElementTemplate, AbstractStep):
     """Heat or chill vessel to given temp for given time.
 
     Name: HeatChill
@@ -55,7 +56,7 @@ class AbstractHeatChillStep(AbstractStepTemplate):
                 stir=self.stir, min_temp=self.temp, max_temp=self.temp),
         }
 
-class AbstractHeatChillToTempStep(AbstractStepTemplate):
+class AbstractHeatChillToTempStep(AbstractXDLElementTemplate, AbstractStep):
     """Heat or chill vessel to given temperature.
 
     Name: HeatChillToTemp
@@ -105,7 +106,7 @@ class AbstractHeatChillToTempStep(AbstractStepTemplate):
                 stir=self.stir, min_temp=self.temp, max_temp=self.temp),
         }
 
-class AbstractStartHeatChillStep(AbstractStepTemplate):
+class AbstractStartHeatChillStep(AbstractXDLElementTemplate, AbstractStep):
     """Start heating/chilling vessel.
 
     Name: StartHeatChill
@@ -139,7 +140,7 @@ class AbstractStartHeatChillStep(AbstractStepTemplate):
             'vessel': VesselSpec(min_temp=self.temp, max_temp=self.temp),
         }
 
-class AbstractStopHeatChillStep(AbstractStepTemplate):
+class AbstractStopHeatChillStep(AbstractXDLElementTemplate, AbstractStep):
     """Heat or chill vessel.
 
     Name: StopHeatChill
