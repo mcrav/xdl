@@ -1,5 +1,6 @@
 from typing import Dict
-from .abstract_template import AbstractStepTemplate
+from .abstract_template import AbstractXDLElementTemplate
+from ..base_steps import AbstractStep
 from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
 from ...utils.vessels import VesselSpec
 from ...utils.prop_limits import (
@@ -9,7 +10,7 @@ from ...utils.prop_limits import (
     MOL_PROP_LIMIT,
 )
 
-class AbstractAddSolidStep(AbstractStepTemplate):
+class AbstractAddSolidStep(AbstractXDLElementTemplate, AbstractStep):
     """Add solid reagent.
 
     Name: AddSolid

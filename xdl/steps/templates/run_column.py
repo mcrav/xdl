@@ -1,7 +1,8 @@
-from .abstract_template import AbstractStepTemplate
+from .abstract_template import AbstractXDLElementTemplate
+from ..base_steps import AbstractStep
 from ...constants import VESSEL_PROP_TYPE
 
-class AbstractRunColumnStep(AbstractStepTemplate):
+class AbstractRunColumnStep(AbstractXDLElementTemplate, AbstractStep):
     """Placeholder. Needs done properly in future.
     """
     MANDATORY_NAME = 'RunColumn'

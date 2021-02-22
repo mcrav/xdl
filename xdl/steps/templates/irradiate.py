@@ -1,5 +1,6 @@
 from typing import Dict
-from .abstract_template import AbstractStepTemplate
+from .abstract_template import AbstractXDLElementTemplate
+from ..base_steps import AbstractStep
 from ...constants import VESSEL_PROP_TYPE
 from ...utils.prop_limits import (
     TEMP_PROP_LIMIT,
@@ -9,7 +10,7 @@ from ...utils.prop_limits import (
 )
 from ...utils.vessels import VesselSpec
 
-class AbstractIrradiateStep(AbstractStepTemplate):
+class AbstractIrradiateStep(AbstractXDLElementTemplate, AbstractStep):
     """Irradiate reaction mixture with light of given wavelength.
 
     Name: Irradiate

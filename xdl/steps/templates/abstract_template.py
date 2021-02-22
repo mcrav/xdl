@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from ..base_steps import AbstractStep
+from xdl.utils.xdl_base import XDLBase
 from ...errors import (
     XDLStepTemplateNameError,
     XDLStepTemplateMissingPropError,
@@ -12,7 +12,7 @@ from ...errors import (
 from ...utils.prop_limits import PropLimit
 
 
-class AbstractStepTemplate(AbstractStep):
+class AbstractXDLElementTemplate(XDLBase):
     """Base class to create step templates such as ``AbstractAddStep``. Purpose
     of this class is to allow :py:attr:`MANDATORY_PROP_TYPES` to be defined for
     all generic step classes, e.g. ``Add``, ``Filter`` etc. Then platform

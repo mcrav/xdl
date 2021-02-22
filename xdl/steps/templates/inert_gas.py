@@ -1,10 +1,11 @@
 from typing import Dict
-from .abstract_template import AbstractStepTemplate
+from .abstract_template import AbstractXDLElementTemplate
+from ..base_steps import AbstractStep
 from ...constants import VESSEL_PROP_TYPE
 from ...utils.prop_limits import TIME_PROP_LIMIT, PRESSURE_PROP_LIMIT
 from ...utils.vessels import VesselSpec
 
-class AbstractEvacuateAndRefillStep(AbstractStepTemplate):
+class AbstractEvacuateAndRefillStep(AbstractXDLElementTemplate, AbstractStep):
     """Evacuate vessel and refill with inert gas.
 
     Name: Evacuate
@@ -34,7 +35,7 @@ class AbstractEvacuateAndRefillStep(AbstractStepTemplate):
             'vessel': VesselSpec(inert_gas=self.gas is None, vacuum=True),
         }
 
-class AbstractPurgeStep(AbstractStepTemplate):
+class AbstractPurgeStep(AbstractXDLElementTemplate, AbstractStep):
     """Purge liquid by bubbling gas through it.
 
     Name: Purge
@@ -75,7 +76,7 @@ class AbstractPurgeStep(AbstractStepTemplate):
             'vessel': VesselSpec(inert_gas=self.gas is None),
         }
 
-class AbstractStartPurgeStep(AbstractStepTemplate):
+class AbstractStartPurgeStep(AbstractXDLElementTemplate, AbstractStep):
     """Start purging liquid by bubbling gas through it.
 
     Name: Start Purge
@@ -112,7 +113,7 @@ class AbstractStartPurgeStep(AbstractStepTemplate):
             'vessel': VesselSpec(inert_gas=self.gas is None),
         }
 
-class AbstractStopPurgeStep(AbstractStepTemplate):
+class AbstractStopPurgeStep(AbstractXDLElementTemplate, AbstractStep):
     """Stop bubbling gas through vessel.
 
     Name: Stop Purge

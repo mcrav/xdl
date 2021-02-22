@@ -1,11 +1,12 @@
 from typing import Dict
-from .abstract_template import AbstractStepTemplate
+from .abstract_template import AbstractXDLElementTemplate
+from ..base_steps import AbstractStep
 from ...constants import VESSEL_PROP_TYPE
 from ...utils.prop_limits import (
     TIME_PROP_LIMIT, ROTATION_SPEED_PROP_LIMIT, STIR_PURPOSE_PROP_LIMIT)
 from ...utils.vessels import VesselSpec
 
-class AbstractStirStep(AbstractStepTemplate):
+class AbstractStirStep(AbstractXDLElementTemplate, AbstractStep):
     """Stir vessel for given time.
 
     Name: Stir
@@ -47,7 +48,7 @@ class AbstractStirStep(AbstractStepTemplate):
             'vessel': VesselSpec(stir=True)
         }
 
-class AbstractStartStirStep(AbstractStepTemplate):
+class AbstractStartStirStep(AbstractXDLElementTemplate, AbstractStep):
     """Start stirring vessel.
 
     Name: StartStir
@@ -82,7 +83,7 @@ class AbstractStartStirStep(AbstractStepTemplate):
             'vessel': VesselSpec(stir=True)
         }
 
-class AbstractStopStirStep(AbstractStepTemplate):
+class AbstractStopStirStep(AbstractXDLElementTemplate, AbstractStep):
     """Stop stirring given vessel.
 
     Name: StopStir

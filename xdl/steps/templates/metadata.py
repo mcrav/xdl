@@ -1,6 +1,6 @@
-from .abstract_template import AbstractStepTemplate
+from .abstract_template import AbstractXDLElementTemplate
 
-class AbstractMetadata(AbstractStepTemplate):
+class AbstractMetadata(AbstractXDLElementTemplate):
     """Metadata associated with procedure.
 
     Name: Metadata

@@ -1,10 +1,11 @@
 from typing import Dict
-from .abstract_template import AbstractStepTemplate
+from .abstract_template import AbstractXDLElementTemplate
+from ..base_steps import AbstractStep
 from ...utils.prop_limits import VOLUME_PROP_LIMIT, TEMP_PROP_LIMIT
 from ...utils.vessels import VesselSpec
 from ...constants import VESSEL_PROP_TYPE, REAGENT_PROP_TYPE
 
-class AbstractCleanVesselStep(AbstractStepTemplate):
+class AbstractCleanVesselStep(AbstractXDLElementTemplate, AbstractStep):
     """Clean vessel.
 
     Name: CleanVessel
