@@ -167,11 +167,6 @@ class XDLBase(object):
     # Public Methods #
     ##################
 
-    @property
-    def name(self) -> str:
-        """Get class name."""
-        return type(self).__name__
-
     def update(self) -> None:
         """This should be called explicitly if the properties dict is edited
         directly. Means that whenever new props are supplied they are sanitized
@@ -232,7 +227,7 @@ class XDLBase(object):
 
         # Default value not found in DEFAULT_PROPS, raise error
         else:
-            raise XDLMissingDefaultPropError(self.name, prop)
+            raise XDLMissingDefaultPropError(type(self).__name__, prop)
 
     def _clean_property(self, prop: str, value: Any) -> Any:
         """Clean individual property. Convert value to correct type and convert
@@ -291,7 +286,7 @@ class XDLBase(object):
                     return float(value)
                 except (TypeError, ValueError):
                     raise XDLTypeConversionError(
-                        self.name, prop, prop_type, value)
+                        type(self).__name__, prop, prop_type, value)
 
         # bool prop type
         elif prop_type == bool:
@@ -300,7 +295,8 @@ class XDLBase(object):
             elif type(value) == bool:
                 return value
             else:
-                raise XDLTypeConversionError(self.name, prop, prop_type, value)
+                raise XDLTypeConversionError(
+                    type(self).__name__, prop, prop_type, value)
 
         # Used by 3 option stir property in WashSolid (True, 'solvent' or False)
         elif prop_type == Union[bool, str]:
@@ -318,7 +314,8 @@ class XDLBase(object):
             try:
                 return int(value)
             except (TypeError, ValueError):
-                raise XDLTypeConversionError(self.name, prop, prop_type, value)
+                raise XDLTypeConversionError(
+                    type(self).__name__, prop, prop_type, value)
 
         # List[str] prop type, parse space separated list or return
         # list unchanged
@@ -373,7 +370,7 @@ class XDLBase(object):
         try:
             return self.PROP_TYPES[prop]
         except KeyError:
-            raise XDLMissingPropTypeError(self.name, prop)
+            raise XDLMissingPropTypeError(type(self).__name__, prop)
 
     def _get_prop_limit(self, prop: str) -> PropLimit:
         """Get prop limit.  If prop limit not found in :py:attr:`PROP_LIMITS`,
@@ -428,7 +425,8 @@ class XDLBase(object):
             assert prop_limit.validate(value)
         except AssertionError:
             # Value did not pass prop limit validation.
-            raise XDLFailedPropLimitError(self.name, prop, value, prop_limit)
+            raise XDLFailedPropLimitError(
+                type(self).__name__, prop, value, prop_limit)
 
     #################
     # Magic Methods #

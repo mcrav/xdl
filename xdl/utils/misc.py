@@ -326,7 +326,7 @@ def xdl_elements_are_equal(
         properties, otherwise ``False``.
     """
     accepted_none_values = [None, '']
-    if xdl_element.name != other_xdl_element.name:
+    if type(xdl_element).__name__ != type(other_xdl_element).__name__:
         return False
     for prop, val in xdl_element.properties.items():
         # Accept '' and None as being equal, otherwise JSON loading and

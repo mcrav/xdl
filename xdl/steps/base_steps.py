@@ -251,6 +251,11 @@ class Step(XDLBase):
         return [], [], []
 
     @property
+    def name(self) -> str:
+        """Get class name."""
+        return type(self).__name__
+
+    @property
     def vessel_specs(self) -> Dict[str, VesselSpec]:
         """Return dictionary of required specifications of vessels used by the
         step. ``{ prop_name: vessel_spec... }``
