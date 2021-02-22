@@ -15,6 +15,8 @@
   <Procedure>
     <CTemperatureControllerSetTemp
       temperature_controller="heater"
+      sensor="internal"
+      sensor_code="0"
       temp="65°C" />
   </Procedure>
 

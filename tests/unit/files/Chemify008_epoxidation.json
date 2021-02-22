@@ -11,7 +11,8 @@
       "name": "reactor",
       "current_volume": 0,
       "max_volume": 300,
-      "necks": 2
+      "necks": 2,
+      "can_filter": false
     },
     {
       "type": "separator",
@@ -25,7 +26,8 @@
       "current_volume": 0,
       "max_volume": 300,
       "necks": 1,
-      "dead_volume": 3
+      "dead_volume": 3,
+      "can_filter": false
     },
     {
       "type": "rotavap",
@@ -39,7 +41,9 @@
       "address": "192.168.1.50",
       "current_volume": 0,
       "max_volume": 500,
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": "",
+      "can_filter": false
     },
     {
       "type": "valve",
@@ -50,7 +54,8 @@
       "id": "valve_Z",
       "class": "ChemputerValve",
       "name": "valve_Z",
-      "address": "192.168.1.86"
+      "address": "192.168.1.86",
+      "current_volume": 0
     },
     {
       "type": "pump",
@@ -76,7 +81,8 @@
       "name": "waste_Z",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "type": "valve",
@@ -87,7 +93,8 @@
       "id": "valve_H",
       "class": "ChemputerValve",
       "name": "valve_H",
-      "address": "192.168.1.81"
+      "address": "192.168.1.81",
+      "current_volume": 0
     },
     {
       "type": "pump",
@@ -113,7 +120,8 @@
       "name": "waste_H",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "type": "valve",
@@ -124,7 +132,8 @@
       "id": "valve_G",
       "class": "ChemputerValve",
       "name": "valve_G",
-      "address": "192.168.1.82"
+      "address": "192.168.1.82",
+      "current_volume": 0
     },
     {
       "type": "valve",
@@ -135,7 +144,8 @@
       "id": "valve_Y",
       "class": "ChemputerValve",
       "name": "valve_Y",
-      "address": "192.168.1.83"
+      "address": "192.168.1.83",
+      "current_volume": 0
     },
     {
       "type": "valve",
@@ -146,7 +156,8 @@
       "id": "valve_K",
       "class": "ChemputerValve",
       "name": "valve_K",
-      "address": "192.168.1.84"
+      "address": "192.168.1.84",
+      "current_volume": 0
     },
     {
       "type": "pump",
@@ -198,7 +209,8 @@
       "name": "waste_G",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "type": "waste",
@@ -211,7 +223,8 @@
       "name": "waste_Y",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "type": "waste",
@@ -224,7 +237,8 @@
       "name": "waste_K",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "type": "valve",
@@ -235,7 +249,8 @@
       "id": "valve_X",
       "class": "ChemputerValve",
       "name": "valve_X",
-      "address": "192.168.1.85"
+      "address": "192.168.1.85",
+      "current_volume": 0
     },
     {
       "type": "pump",
@@ -261,7 +276,8 @@
       "name": "waste_X",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "type": "vacuum",
@@ -273,7 +289,8 @@
       "class": "CVC3000VacuumPump",
       "name": "vacuum_pump",
       "address": "192.168.1.57",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": ""
     },
     {
       "type": "conductivity_sensor",
@@ -330,7 +347,8 @@
       "max_temp": 120,
       "port": 5000,
       "address": "192.168.1.55",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "temp_sensor": "external"
     },
     {
       "id": "MgSO4",
@@ -480,7 +498,8 @@
       "name": "stirrer_reactor",
       "port": 5000,
       "address": "192.168.1.51",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "temp_sensor": "external"
     }
   ],
   "links": [

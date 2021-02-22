@@ -11,7 +11,8 @@
       "name": "flask_2-thiophenecarboxaldehyde",
       "chemical": "2-thiophenecarboxaldehyde",
       "current_volume": 50,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "flask_methanol",
@@ -24,7 +25,8 @@
       "name": "flask_methanol",
       "chemical": "methanol",
       "current_volume": 500,
-      "max_volume": 500
+      "max_volume": 500,
+      "can_filter": false
     },
     {
       "id": "flask_water",
@@ -37,7 +39,8 @@
       "name": "flask_water",
       "chemical": "water",
       "current_volume": 1000,
-      "max_volume": 1000
+      "max_volume": 1000,
+      "can_filter": false
     },
     {
       "id": "flask_MTBE",
@@ -50,7 +53,8 @@
       "name": "flask_MTBE",
       "chemical": "MTBE",
       "current_volume": 500,
-      "max_volume": 500
+      "max_volume": 500,
+      "can_filter": false
     },
     {
       "id": "flask_brine",
@@ -63,7 +67,8 @@
       "name": "flask_brine",
       "chemical": "saturated NaCl solution",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "cartridge_anhydrous MgSO4",
@@ -96,7 +101,9 @@
       "address": "192.168.1.202",
       "current_volume": 0,
       "max_volume": 250,
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": "",
+      "can_filter": false
     },
     {
       "id": "reactor",
@@ -109,7 +116,8 @@
       "name": "reactor",
       "current_volume": 0,
       "max_volume": 500,
-      "necks": 2
+      "necks": 2,
+      "can_filter": false
     },
     {
       "id": "separator",
@@ -122,7 +130,9 @@
       "name": "separator",
       "current_volume": 0,
       "max_volume": 250,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false,
+      "dead_volume": 2.5
     },
     {
       "id": "valve_H",
@@ -133,7 +143,8 @@
       "label": "valve_H",
       "class": "ChemputerValve",
       "name": "valve_H",
-      "address": "192.168.1.122"
+      "address": "192.168.1.122",
+      "current_volume": 0
     },
     {
       "id": "valve_G",
@@ -144,7 +155,8 @@
       "label": "valve_G",
       "class": "ChemputerValve",
       "name": "valve_G",
-      "address": "192.168.1.123"
+      "address": "192.168.1.123",
+      "current_volume": 0
     },
     {
       "id": "valve_Y",
@@ -155,7 +167,8 @@
       "label": "valve_Y",
       "class": "ChemputerValve",
       "name": "valve_Y",
-      "address": "192.168.1.121"
+      "address": "192.168.1.121",
+      "current_volume": 0
     },
     {
       "id": "sensor_stirrer",
@@ -179,7 +192,8 @@
       "label": "valve_K",
       "class": "ChemputerValve",
       "name": "valve_K",
-      "address": "192.168.1.125"
+      "address": "192.168.1.125",
+      "current_volume": 0
     },
     {
       "id": "pump_H",
@@ -244,7 +258,8 @@
       "name": "waste_K",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "waste_Y",
@@ -257,7 +272,8 @@
       "name": "waste_Y",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "waste_H",
@@ -270,7 +286,8 @@
       "name": "waste_H",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "waste_G",
@@ -283,7 +300,8 @@
       "name": "waste_G",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "phase_A",
@@ -296,7 +314,8 @@
       "name": "phase_A",
       "chemical": "",
       "current_volume": 0,
-      "max_volume": 200
+      "max_volume": 200,
+      "can_filter": false
     },
     {
       "id": "phase_B",
@@ -309,7 +328,8 @@
       "name": "phase_B",
       "chemical": "",
       "current_volume": 0,
-      "max_volume": 200
+      "max_volume": 200,
+      "can_filter": false
     },
     {
       "id": "stirrer_reactor",
@@ -329,7 +349,9 @@
       "class": "RCTDigitalHotplate",
       "name": "stirrer_reactor",
       "address": "192.168.1.203",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": "",
+      "temp_sensor": "external"
     },
     {
       "id": "stirrer_separator",
@@ -349,7 +371,8 @@
       "class": "HeiTorque100PrecisionStirrer",
       "name": "stirrer_separator",
       "address": "192.168.1.206",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": ""
     },
     {
       "id": "vacuum_pump_rotavap",
@@ -369,7 +392,8 @@
       "class": "CVC3000VacuumPump",
       "name": "vacuum_pump_rotavap",
       "address": "192.168.1.201",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": ""
     },
     {
       "id": "valve_I",
@@ -380,7 +404,8 @@
       "label": "valve_I",
       "class": "ChemputerValve",
       "name": "valve_I",
-      "address": "192.168.1.126"
+      "address": "192.168.1.126",
+      "current_volume": 0
     },
     {
       "id": "pump_I",
@@ -406,7 +431,8 @@
       "name": "waste_I",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "flask_nitrogen",
@@ -419,7 +445,8 @@
       "name": "flask_nitrogen",
       "chemical": "nitrogen",
       "current_volume": 2000,
-      "max_volume": 2000
+      "max_volume": 2000,
+      "can_filter": false
     }
   ],
   "links": [

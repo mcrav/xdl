@@ -10,7 +10,8 @@
       "label": "valve_dry",
       "class": "ChemputerValve",
       "name": "valve_dry",
-      "address": "192.168.1.81"
+      "address": "192.168.1.81",
+      "current_volume": 0
     },
     {
       "id": "valve_filter",
@@ -22,7 +23,8 @@
       "label": "valve_filter",
       "class": "ChemputerValve",
       "name": "valve_filter",
-      "address": "192.168.1.80"
+      "address": "192.168.1.80",
+      "current_volume": 0
     },
     {
       "id": "valve_vacuum",
@@ -34,7 +36,8 @@
       "label": "valve_vacuum",
       "class": "ChemputerValve",
       "name": "valve_vacuum",
-      "address": "192.168.1.88"
+      "address": "192.168.1.88",
+      "current_volume": 0
     },
     {
       "id": "pump_dry",
@@ -73,7 +76,8 @@
       "name": "flask_Oxone deionized water solution",
       "chemical": "Oxone deionized water solution",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "flask_water",
@@ -86,7 +90,8 @@
       "name": "flask_water",
       "chemical": "water",
       "current_volume": 1000,
-      "max_volume": 1000
+      "max_volume": 1000,
+      "can_filter": false
     },
     {
       "id": "waste_filter",
@@ -98,7 +103,9 @@
       "class": "ChemputerWaste",
       "name": "waste_filter",
       "current_volume": 0,
-      "max_volume": 250
+      "max_volume": 250,
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "waste_dry",
@@ -110,7 +117,9 @@
       "class": "ChemputerWaste",
       "name": "waste_dry",
       "current_volume": 0,
-      "max_volume": 250
+      "max_volume": 250,
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "filter1",
@@ -136,7 +145,8 @@
       "name": "flask_acetic anhydride",
       "chemical": "acetic anhydride",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "flask_anhydrous ether",
@@ -149,7 +159,8 @@
       "name": "flask_anhydrous ether",
       "chemical": "anhydrous ether",
       "current_volume": 1000,
-      "max_volume": 1000
+      "max_volume": 1000,
+      "can_filter": false
     },
     {
       "id": "flask_acetone",
@@ -162,7 +173,8 @@
       "name": "flask_acetone",
       "chemical": "acetone",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "flask_glacial acetic acid",
@@ -175,7 +187,8 @@
       "name": "flask_glacial acetic acid",
       "chemical": "glacial acetic acid",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "vacuum_filter",
@@ -187,7 +200,10 @@
       "current_volume": 0,
       "max_volume": 100,
       "class": "ChemputerVacuum",
-      "name": "vacuum_filter"
+      "name": "vacuum_filter",
+      "port": "",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "stirrer_filter",
@@ -198,7 +214,9 @@
       "label": "stirrer_filter",
       "class": "Microstar75Stirrer",
       "name": "stirrer_filter",
-      "port": "COM12"
+      "port": "COM12",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "chiller_filter",
@@ -211,7 +229,10 @@
       "name": "chiller_filter",
       "min_temp": -20,
       "max_temp": 120,
-      "port": "COM4"
+      "port": "COM4",
+      "address": "",
+      "connection_mode": "tcpip",
+      "temp_sensor": "external"
     },
     {
       "id": "valve_air",
@@ -223,7 +244,8 @@
       "label": "valve_air",
       "class": "ChemputerValve",
       "name": "valve_air",
-      "address": "192.168.1.82"
+      "address": "192.168.1.82",
+      "current_volume": 0
     },
     {
       "id": "flask_air",
@@ -236,7 +258,8 @@
       "name": "flask_air",
       "chemical": "air",
       "current_volume": 1000,
-      "max_volume": 1000
+      "max_volume": 1000,
+      "can_filter": false
     },
     {
       "id": "pump_air",
@@ -262,7 +285,8 @@
       "name": "waste_air",
       "current_volume": 0,
       "max_volume": 250,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "flask_menthol",
@@ -275,7 +299,8 @@
       "name": "flask_menthol",
       "chemical": "menthol_in_methylene_chloride",
       "current_volume": 60,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "flask_thiosulfate",
@@ -288,7 +313,8 @@
       "name": "flask_thiosulfate",
       "chemical": "aqueous_thiosulfate",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "valve_workup",
@@ -300,7 +326,8 @@
       "label": "valve_workup",
       "class": "ChemputerValve",
       "name": "valve_workup",
-      "address": "192.168.1.83"
+      "address": "192.168.1.83",
+      "current_volume": 0
     },
     {
       "id": "pump_workup",
@@ -326,7 +353,9 @@
       "name": "flask_separator",
       "current_volume": 0,
       "max_volume": 250,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false,
+      "dead_volume": 2.5
     },
     {
       "id": "sensor_conductivity",
@@ -338,7 +367,8 @@
       "connection_mode": "tcpip",
       "class": "ConductivitySensor",
       "name": "sensor_conductivity",
-      "port": "COM8"
+      "port": "COM8",
+      "address": ""
     },
     {
       "id": "valve_cartridge",
@@ -350,7 +380,8 @@
       "label": "valve_cartridge",
       "class": "ChemputerValve",
       "name": "valve_cartridge",
-      "address": "192.168.1.84"
+      "address": "192.168.1.84",
+      "current_volume": 0
     },
     {
       "id": "stirrer_separator",
@@ -361,7 +392,9 @@
       "label": "stirrer_separator",
       "class": "Microstar75Stirrer",
       "name": "stirrer_separator",
-      "port": "COM10"
+      "port": "COM10",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "waste_workup",
@@ -374,7 +407,8 @@
       "name": "waste_workup",
       "current_volume": 0,
       "max_volume": 250,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "cartridge1",
@@ -411,7 +445,8 @@
       "label": "valve_rotavap",
       "class": "ChemputerValve",
       "name": "valve_rotavap",
-      "address": "192.168.1.87"
+      "address": "192.168.1.87",
+      "current_volume": 0
     },
     {
       "id": "pump_rotavap",
@@ -437,7 +472,10 @@
       "name": "rotavap",
       "port": "COM15",
       "current_volume": 0,
-      "max_volume": 250
+      "max_volume": 250,
+      "address": "",
+      "connection_mode": "tcpip",
+      "can_filter": false
     },
     {
       "id": "vacuum_pump_rotavap",
@@ -469,7 +507,8 @@
       "name": "flask_argon",
       "chemical": "argon",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "waste_rotavap",
