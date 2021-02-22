@@ -10,7 +10,8 @@
       "class": "ChemputerPump",
       "name": "pump_H",
       "address": "192.168.1.102",
-      "max_volume": 25
+      "max_volume": 25,
+      "current_volume": 0
     },
     {
       "id": "pump_G",
@@ -22,7 +23,8 @@
       "class": "ChemputerPump",
       "name": "pump_G",
       "address": "192.168.1.103",
-      "max_volume": 25
+      "max_volume": 25,
+      "current_volume": 0
     },
     {
       "id": "valve_H",
@@ -33,7 +35,8 @@
       "label": "valve_H",
       "class": "ChemputerValve",
       "name": "valve_H",
-      "address": "192.168.1.122"
+      "address": "192.168.1.122",
+      "current_volume": 0
     },
     {
       "id": "valve_G",
@@ -44,7 +47,8 @@
       "label": "valve_G",
       "class": "ChemputerValve",
       "name": "valve_G",
-      "address": "192.168.1.123"
+      "address": "192.168.1.123",
+      "current_volume": 0
     },
     {
       "id": "waste_H",
@@ -57,7 +61,8 @@
       "name": "waste_H",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "waste_G",
@@ -70,7 +75,8 @@
       "name": "waste_G",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "flask_HI",
@@ -83,7 +89,8 @@
       "name": "flask_HI",
       "chemical": "hydriodic acid",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "flask_H2O",
@@ -96,7 +103,8 @@
       "name": "flask_H2O",
       "chemical": "distilled water",
       "current_volume": 500,
-      "max_volume": 1000
+      "max_volume": 1000,
+      "can_filter": false
     },
     {
       "id": "flask_propiolic_acid",
@@ -109,7 +117,8 @@
       "name": "flask_propiolic_acid",
       "chemical": "propiolic acid",
       "current_volume": 25,
-      "max_volume": 50
+      "max_volume": 50,
+      "can_filter": false
     },
     {
       "id": "filter",
@@ -142,7 +151,8 @@
       "class": "CVC3000VacuumPump",
       "name": "vacuum_pump",
       "address": "192.168.1.201",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": ""
     },
     {
       "id": "valve_J",
@@ -153,7 +163,8 @@
       "label": "valve_J",
       "class": "ChemputerValve",
       "name": "valve_J",
-      "address": "192.168.1.127"
+      "address": "192.168.1.127",
+      "current_volume": 0
     },
     {
       "id": "chiller",
@@ -175,7 +186,9 @@
       "min_temp": -20,
       "max_temp": 200,
       "address": "192.168.1.205",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": "",
+      "temp_sensor": "external"
     },
     {
       "id": "stirrer",
@@ -195,7 +208,8 @@
       "class": "HeiTorque100PrecisionStirrer",
       "name": "stirrer",
       "address": "192.168.1.204",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": ""
     },
     {
       "id": "vacuum",
@@ -207,7 +221,8 @@
       "class": "ChemputerVacuum",
       "name": "vacuum",
       "port": "",
-      "address": ""
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "flask_nitrogen",
@@ -220,7 +235,8 @@
       "name": "flask_nitrogen",
       "chemical": "nitrogen",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     }
   ],
   "links": [

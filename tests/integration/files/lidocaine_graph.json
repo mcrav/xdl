@@ -10,7 +10,8 @@
       "label": "valve_dry",
       "class": "ChemputerValve",
       "name": "valve_dry",
-      "address": "192.168.1.81"
+      "address": "192.168.1.81",
+      "current_volume": 0
     },
     {
       "id": "valve_filter",
@@ -22,7 +23,8 @@
       "label": "valve_filter",
       "class": "ChemputerValve",
       "name": "valve_filter",
-      "address": "192.168.1.80"
+      "address": "192.168.1.80",
+      "current_volume": 0
     },
     {
       "id": "valve_vacuum",
@@ -34,7 +36,8 @@
       "label": "valve_vacuum",
       "class": "ChemputerValve",
       "name": "valve_vacuum",
-      "address": "192.168.1.88"
+      "address": "192.168.1.88",
+      "current_volume": 0
     },
     {
       "id": "pump_dry",
@@ -73,7 +76,8 @@
       "name": "flask_dimethylaniline",
       "chemical": "2,6-Dimethylaniline",
       "current_volume": 25,
-      "max_volume": 50
+      "max_volume": 50,
+      "can_filter": false
     },
     {
       "id": "flask_water",
@@ -86,7 +90,8 @@
       "name": "flask_water",
       "chemical": "water",
       "current_volume": 1000,
-      "max_volume": 1000
+      "max_volume": 1000,
+      "can_filter": false
     },
     {
       "id": "waste_filter",
@@ -98,7 +103,9 @@
       "class": "ChemputerWaste",
       "name": "waste_filter",
       "current_volume": 0,
-      "max_volume": 1000
+      "max_volume": 1000,
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "waste_dry",
@@ -110,7 +117,9 @@
       "class": "ChemputerWaste",
       "name": "waste_dry",
       "current_volume": 0,
-      "max_volume": 1000
+      "max_volume": 1000,
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "filter1",
@@ -136,7 +145,8 @@
       "name": "flask_acetic_acid",
       "chemical": "glacial acetic acid",
       "current_volume": 200,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "flask_chloroacetyl_chloride",
@@ -149,7 +159,8 @@
       "name": "flask_chloroacetyl_chloride",
       "chemical": "chloroacetyl chloride",
       "current_volume": 25,
-      "max_volume": 50
+      "max_volume": 50,
+      "can_filter": false
     },
     {
       "id": "flask_thf",
@@ -162,7 +173,8 @@
       "name": "flask_thf",
       "chemical": "tetrahydrofuran",
       "current_volume": 1000,
-      "max_volume": 1000
+      "max_volume": 1000,
+      "can_filter": false
     },
     {
       "id": "flask_toluene",
@@ -175,7 +187,8 @@
       "name": "flask_toluene",
       "chemical": "toluene",
       "current_volume": 200,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "vacuum_filter",
@@ -187,7 +200,10 @@
       "current_volume": 0,
       "max_volume": 100,
       "class": "ChemputerVacuum",
-      "name": "vacuum_filter"
+      "name": "vacuum_filter",
+      "port": "",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "flask_argon",
@@ -200,7 +216,8 @@
       "name": "flask_argon",
       "chemical": "argon",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "stirrer_filter",
@@ -211,7 +228,9 @@
       "label": "stirrer_filter",
       "class": "Microstar75Stirrer",
       "name": "stirrer_filter",
-      "port": "COM12"
+      "port": "COM12",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "chiller_filter",
@@ -224,7 +243,10 @@
       "name": "chiller_filter",
       "min_temp": -20,
       "max_temp": 120,
-      "port": "COM4"
+      "port": "COM4",
+      "address": "",
+      "connection_mode": "tcpip",
+      "temp_sensor": "external"
     },
     {
       "id": "valve_organic",
@@ -236,7 +258,8 @@
       "label": "valve_organic",
       "class": "ChemputerValve",
       "name": "valve_organic",
-      "address": "192.168.1.82"
+      "address": "192.168.1.82",
+      "current_volume": 0
     },
     {
       "id": "pump_organic",
@@ -262,7 +285,8 @@
       "name": "waste_organic",
       "current_volume": 0,
       "max_volume": 1000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "valve_separator",
@@ -274,7 +298,8 @@
       "label": "valve_separator",
       "class": "ChemputerValve",
       "name": "valve_separator",
-      "address": "192.168.1.83"
+      "address": "192.168.1.83",
+      "current_volume": 0
     },
     {
       "id": "pump_separator",
@@ -300,7 +325,9 @@
       "name": "flask_separator",
       "current_volume": 0,
       "max_volume": 250,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false,
+      "dead_volume": 2.5
     },
     {
       "id": "sensor_conductivity",
@@ -312,7 +339,8 @@
       "connection_mode": "tcpip",
       "class": "ConductivitySensor",
       "name": "sensor_conductivity",
-      "port": "COM8"
+      "port": "COM8",
+      "address": ""
     },
     {
       "id": "stirrer_separator",
@@ -323,7 +351,9 @@
       "label": "stirrer_separator",
       "class": "Microstar75Stirrer",
       "name": "stirrer_separator",
-      "port": "COM10"
+      "port": "COM10",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "waste_separator",
@@ -336,7 +366,8 @@
       "name": "waste_separator",
       "current_volume": 0,
       "max_volume": 1000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "valve_base",
@@ -348,7 +379,8 @@
       "label": "valve_base",
       "class": "ChemputerValve",
       "name": "valve_base",
-      "address": "192.168.1.84"
+      "address": "192.168.1.84",
+      "current_volume": 0
     },
     {
       "id": "pump_base",
@@ -374,7 +406,8 @@
       "name": "waste_base",
       "current_volume": 0,
       "max_volume": 1000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "manifold_argon",
@@ -405,7 +438,8 @@
       "name": "flask_hcl",
       "chemical": "3 M hydrochloric acid",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "flask_naoh",
@@ -418,7 +452,8 @@
       "name": "flask_naoh",
       "chemical": "3 M sodium hydroxide",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "flask_sodium_acetate",
@@ -431,7 +466,8 @@
       "name": "flask_sodium_acetate",
       "chemical": "half-saturated aqueous sodium acetate",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "flask_diethylamine",
@@ -444,7 +480,8 @@
       "name": "flask_diethylamine",
       "chemical": "diethylamine",
       "current_volume": 20,
-      "max_volume": 25
+      "max_volume": 25,
+      "can_filter": false
     }
   ],
   "links": [

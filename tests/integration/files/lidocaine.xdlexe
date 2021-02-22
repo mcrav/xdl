@@ -1,7 +1,7 @@
 <?xdl version="0.5.0" ?>
 
 <Synthesis
-  graph_sha256="581b6d931df67ae8f47bc4e91ef2b41673a9dd53931fbc63602bd46d5255146d"
+  graph_sha256="6dda9ed19c8410d9dd34deb6bb5a77e8cf84bcb9dfd22d63f0bdff59bc021132"
 >
   <Hardware>
     <Component
@@ -661,6 +661,8 @@
         <CTemperatureControllerSetTemp
           temperature_controller="chiller_filter"
           temp="10 °C"
+          sensor="external"
+          sensor_code="1"
           comment="" />
         <CTemperatureControllerStart
           temperature_controller="chiller_filter"
@@ -1439,6 +1441,8 @@
           <CTemperatureControllerSetTemp
             temperature_controller="chiller_filter"
             temp="110.6 °C"
+            sensor="external"
+            sensor_code="1"
             comment="" />
           <CTemperatureControllerStart
             temperature_controller="chiller_filter"
@@ -1517,6 +1521,8 @@
         <CTemperatureControllerSetTemp
           temperature_controller="chiller_filter"
           temp="25 °C"
+          sensor="external"
+          sensor_code="1"
           comment="" />
         <CTemperatureControllerStart
           temperature_controller="chiller_filter"
@@ -3309,6 +3315,8 @@
         <CTemperatureControllerSetTemp
           temperature_controller="chiller_filter"
           temp="10 °C"
+          sensor="external"
+          sensor_code="1"
           comment="" />
         <CTemperatureControllerStart
           temperature_controller="chiller_filter"
@@ -3641,6 +3649,8 @@
           <CTemperatureControllerSetTemp
             temperature_controller="chiller_filter"
             temp="10 °C"
+            sensor="external"
+            sensor_code="1"
             comment="" />
           <CTemperatureControllerStart
             temperature_controller="chiller_filter"

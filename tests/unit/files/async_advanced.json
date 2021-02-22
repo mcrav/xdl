@@ -10,7 +10,8 @@
       "class": "ChemputerPump",
       "name": "pump1",
       "address": "192.168.1.7",
-      "max_volume": 10
+      "max_volume": 10,
+      "current_volume": 0
     },
     {
       "id": "valve1",
@@ -21,7 +22,8 @@
       "label": "valve1",
       "class": "ChemputerValve",
       "name": "valve1",
-      "address": "192.168.1.30"
+      "address": "192.168.1.30",
+      "current_volume": 0
     },
     {
       "id": "input2",
@@ -34,7 +36,8 @@
       "name": "input2",
       "chemical": "water2",
       "current_volume": 250,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "valve2",
@@ -45,7 +48,8 @@
       "label": "valve2",
       "class": "ChemputerValve",
       "name": "valve2",
-      "address": "192.168.1.31"
+      "address": "192.168.1.31",
+      "current_volume": 0
     },
     {
       "id": "valve3",
@@ -56,7 +60,8 @@
       "label": "valve3",
       "class": "ChemputerValve",
       "name": "valve3",
-      "address": "192.168.1.32"
+      "address": "192.168.1.32",
+      "current_volume": 0
     },
     {
       "id": "valve4",
@@ -67,7 +72,8 @@
       "label": "valve4",
       "class": "ChemputerValve",
       "name": "valve4",
-      "address": "192.168.1.33"
+      "address": "192.168.1.33",
+      "current_volume": 0
     },
     {
       "id": "input4",
@@ -80,7 +86,8 @@
       "name": "input4",
       "chemical": "water4",
       "current_volume": 250,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input3",
@@ -93,7 +100,8 @@
       "name": "input3",
       "chemical": "water3",
       "current_volume": 250,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "waste1",
@@ -106,7 +114,8 @@
       "name": "waste1",
       "current_volume": 0,
       "max_volume": 500,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "input1",
@@ -119,7 +128,8 @@
       "name": "input1",
       "chemical": "water1",
       "current_volume": 250,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input5",
@@ -132,7 +142,8 @@
       "name": "input5",
       "chemical": "water5",
       "current_volume": 250,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input6",
@@ -145,7 +156,8 @@
       "name": "input6",
       "chemical": "water6",
       "current_volume": 250,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input7",
@@ -158,7 +170,8 @@
       "name": "input7",
       "chemical": "water7",
       "current_volume": 250,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input8",
@@ -171,7 +184,8 @@
       "name": "input8",
       "chemical": "water8",
       "current_volume": 250,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "pump2",
@@ -183,7 +197,8 @@
       "class": "ChemputerPump",
       "name": "pump2",
       "address": "192.168.1.8",
-      "max_volume": 10
+      "max_volume": 10,
+      "current_volume": 0
     },
     {
       "id": "pump3",
@@ -195,7 +210,8 @@
       "class": "ChemputerPump",
       "name": "pump3",
       "address": "192.168.1.9",
-      "max_volume": 10
+      "max_volume": 10,
+      "current_volume": 0
     },
     {
       "id": "input9",
@@ -208,7 +224,8 @@
       "name": "input9",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input10",
@@ -221,7 +238,8 @@
       "name": "input10",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input11",
@@ -234,7 +252,8 @@
       "name": "input11",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input12",
@@ -247,7 +266,8 @@
       "name": "input12",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input13",
@@ -260,7 +280,8 @@
       "name": "input13",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input14",
@@ -273,7 +294,8 @@
       "name": "input14",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input15",
@@ -286,7 +308,8 @@
       "name": "input15",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input16",
@@ -299,7 +322,8 @@
       "name": "input16",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "pump4",
@@ -311,7 +335,8 @@
       "class": "ChemputerPump",
       "name": "pump4",
       "address": "192.168.1.10",
-      "max_volume": 10
+      "max_volume": 10,
+      "current_volume": 0
     },
     {
       "id": "pumpsep",
@@ -323,7 +348,8 @@
       "class": "ChemputerPump",
       "name": "pumpsep",
       "address": "192.168.1.12",
-      "max_volume": 10
+      "max_volume": 10,
+      "current_volume": 0
     },
     {
       "id": "pumpreact",
@@ -335,7 +361,8 @@
       "class": "ChemputerPump",
       "name": "pumpreact",
       "address": "192.168.1.13",
-      "max_volume": 10
+      "max_volume": 10,
+      "current_volume": 0
     },
     {
       "id": "pumpsample",
@@ -347,7 +374,8 @@
       "class": "ChemputerPump",
       "name": "pumpsample",
       "address": "192.168.1.14",
-      "max_volume": 10
+      "max_volume": 10,
+      "current_volume": 0
     },
     {
       "id": "valve5",
@@ -358,7 +386,8 @@
       "label": "valve5",
       "class": "ChemputerValve",
       "name": "valve5",
-      "address": "192.168.1.34"
+      "address": "192.168.1.34",
+      "current_volume": 0
     },
     {
       "id": "valvesep",
@@ -369,7 +398,8 @@
       "label": "valvesep",
       "class": "ChemputerValve",
       "name": "valvesep",
-      "address": "192.168.1.35"
+      "address": "192.168.1.35",
+      "current_volume": 0
     },
     {
       "id": "valvereact",
@@ -380,7 +410,8 @@
       "label": "valvereact",
       "class": "ChemputerValve",
       "name": "valvereact",
-      "address": "192.168.1.36"
+      "address": "192.168.1.36",
+      "current_volume": 0
     },
     {
       "id": "vavlesample",
@@ -391,7 +422,8 @@
       "label": "vavlesample",
       "class": "ChemputerValve",
       "name": "vavlesample",
-      "address": "192.168.1.37"
+      "address": "192.168.1.37",
+      "current_volume": 0
     },
     {
       "id": "input17",
@@ -404,7 +436,8 @@
       "name": "input17",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input18",
@@ -417,7 +450,8 @@
       "name": "input18",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input19",
@@ -430,7 +464,8 @@
       "name": "input19",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "input20",
@@ -443,7 +478,8 @@
       "name": "input20",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "separator",
@@ -456,7 +492,9 @@
       "name": "separator",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false,
+      "dead_volume": 2.5
     },
     {
       "id": "reactor1",
@@ -469,7 +507,8 @@
       "name": "reactor1",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "reactor2",
@@ -482,7 +521,8 @@
       "name": "reactor2",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "reactor3",
@@ -495,7 +535,8 @@
       "name": "reactor3",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "reactor4",
@@ -508,7 +549,8 @@
       "name": "reactor4",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "valveanalysis",
@@ -519,7 +561,8 @@
       "label": "valveanalysis",
       "class": "ChemputerValve",
       "name": "valveanalysis",
-      "address": "192.168.1.38"
+      "address": "192.168.1.38",
+      "current_volume": 0
     },
     {
       "id": "pumpanalysis",
@@ -531,7 +574,8 @@
       "class": "ChemputerPump",
       "name": "pumpanalysis",
       "address": "192.168.1.15",
-      "max_volume": 10
+      "max_volume": 10,
+      "current_volume": 0
     },
     {
       "id": "solvent1",
@@ -544,7 +588,8 @@
       "name": "solvent1",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "solvent2",
@@ -557,7 +602,8 @@
       "name": "solvent2",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "solvent3",
@@ -570,7 +616,8 @@
       "name": "solvent3",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "sepstore",
@@ -583,7 +630,8 @@
       "name": "sepstore",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "hplcsolv",
@@ -596,7 +644,8 @@
       "name": "hplcsolv",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "waste2",
@@ -609,7 +658,8 @@
       "name": "waste2",
       "current_volume": 0,
       "max_volume": 500,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "hotplate2",
@@ -621,7 +671,9 @@
       "class": "RCTDigitalHotplate",
       "name": "hotplate2",
       "address": "192.168.1.54",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": "",
+      "temp_sensor": "external"
     },
     {
       "id": "hotplate3",
@@ -633,7 +685,9 @@
       "class": "RCTDigitalHotplate",
       "name": "hotplate3",
       "address": "192.168.1.55",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": "",
+      "temp_sensor": "external"
     },
     {
       "id": "hotplate1",
@@ -645,7 +699,9 @@
       "class": "RCTDigitalHotplate",
       "name": "hotplate1",
       "address": "192.168.1.53",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": "",
+      "temp_sensor": "external"
     },
     {
       "id": "hotplate4",
@@ -657,7 +713,9 @@
       "class": "RCTDigitalHotplate",
       "name": "hotplate4",
       "address": "192.168.1.56",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": "",
+      "temp_sensor": "external"
     },
     {
       "id": "pump5",
@@ -669,7 +727,8 @@
       "class": "ChemputerPump",
       "name": "pump5",
       "address": "192.168.1.11",
-      "max_volume": 10
+      "max_volume": 10,
+      "current_volume": 0
     },
     {
       "id": "waste3",
@@ -682,7 +741,8 @@
       "name": "waste3",
       "current_volume": 0,
       "max_volume": 500,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "sample_wheel",
@@ -695,7 +755,8 @@
       "name": "sample_wheel",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "analytics",
@@ -708,7 +769,8 @@
       "name": "analytics",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "filter1",

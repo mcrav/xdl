@@ -22,7 +22,8 @@
       "label": "valve_rotavap",
       "class": "ChemputerValve",
       "name": "valve_rotavap",
-      "address": ""
+      "address": "",
+      "current_volume": 0
     },
     {
       "id": "flask_water",
@@ -35,7 +36,8 @@
       "name": "flask_water",
       "chemical": "water",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "rotavap",
@@ -64,7 +66,9 @@
       "current_volume": 0,
       "max_volume": 100,
       "collection_flask_volume": 50,
-      "can_filter": true
+      "can_filter": true,
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "waste_rotavap",
@@ -77,7 +81,8 @@
       "name": "waste_rotavap",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "vacuum_rotavap",
@@ -90,7 +95,10 @@
       "max_volume": 100,
       "necks": 1,
       "class": "CVC3000VacuumPump",
-      "name": "vacuum_rotavap"
+      "name": "vacuum_rotavap",
+      "port": "",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "valve_reactor",
@@ -101,7 +109,8 @@
       "label": "valve_reactor",
       "class": "ChemputerValve",
       "name": "valve_reactor",
-      "address": ""
+      "address": "",
+      "current_volume": 0
     },
     {
       "id": "pump_reactor",
@@ -127,7 +136,8 @@
       "name": "waste_reactor",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "flask_ether",
@@ -140,7 +150,8 @@
       "name": "flask_ether",
       "chemical": "ether",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "reactor",
@@ -173,7 +184,9 @@
       "label": "stirrer_reactor",
       "class": "Microstar75Stirrer",
       "name": "stirrer_reactor",
-      "port": ""
+      "port": "",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "flask_nitrogen",
@@ -186,7 +199,8 @@
       "name": "flask_nitrogen",
       "chemical": "nitrogen",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "valve_filter",
@@ -197,7 +211,8 @@
       "label": "valve_filter",
       "class": "ChemputerValve",
       "name": "valve_filter",
-      "address": ""
+      "address": "",
+      "current_volume": 0
     },
     {
       "id": "pump_filter",
@@ -236,7 +251,10 @@
       "max_volume": 100,
       "necks": 1,
       "class": "ChemputerVacuum",
-      "name": "vacuum_flask"
+      "name": "vacuum_flask",
+      "port": "",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "vacuum_device",
@@ -249,7 +267,10 @@
       "max_volume": 100,
       "necks": 1,
       "class": "CVC3000VacuumPump",
-      "name": "vacuum_device"
+      "name": "vacuum_device",
+      "port": "",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "waste_filter",
@@ -262,7 +283,8 @@
       "name": "waste_filter",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "stirrer",
@@ -273,7 +295,9 @@
       "label": "stirrer",
       "class": "Microstar75Stirrer",
       "name": "stirrer",
-      "port": ""
+      "port": "",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "valve_vacuum",
@@ -284,7 +308,8 @@
       "label": "valve_vacuum",
       "class": "ChemputerValve",
       "name": "valve_vacuum",
-      "address": ""
+      "address": "",
+      "current_volume": 0
     },
     {
       "id": "vacuum_reactor_device",
@@ -297,7 +322,10 @@
       "max_volume": 100,
       "necks": 1,
       "class": "CVC3000VacuumPump",
-      "name": "vacuum_reactor_device"
+      "name": "vacuum_reactor_device",
+      "port": "",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "vacuum_reactor_flask",
@@ -310,7 +338,10 @@
       "max_volume": 100,
       "necks": 1,
       "class": "ChemputerVacuum",
-      "name": "vacuum_reactor_flask"
+      "name": "vacuum_reactor_flask",
+      "port": "",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "valve_reactor_vacuum",
@@ -321,7 +352,8 @@
       "label": "valve_reactor_vacuum",
       "class": "ChemputerValve",
       "name": "valve_reactor_vacuum",
-      "address": ""
+      "address": "",
+      "current_volume": 0
     },
     {
       "id": "valve_separator",
@@ -332,7 +364,8 @@
       "label": "valve_separator",
       "class": "ChemputerValve",
       "name": "valve_separator",
-      "address": ""
+      "address": "",
+      "current_volume": 0
     },
     {
       "id": "pump_separator",
@@ -358,7 +391,8 @@
       "name": "waste_separator",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "separator",
@@ -371,7 +405,9 @@
       "name": "separator",
       "current_volume": 0,
       "max_volume": 100,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false,
+      "dead_volume": 2.5
     },
     {
       "id": "stirrer_separator",
@@ -382,7 +418,9 @@
       "label": "stirrer_separator",
       "class": "Microstar75Stirrer",
       "name": "stirrer_separator",
-      "port": ""
+      "port": "",
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "filter_chiller",
@@ -395,7 +433,10 @@
       "name": "filter_chiller",
       "min_temp": -40,
       "max_temp": 90,
-      "port": ""
+      "port": "",
+      "address": "",
+      "connection_mode": "tcpip",
+      "temp_sensor": "external"
     },
     {
       "id": "reactor_heater",
@@ -406,7 +447,10 @@
       "label": "reactor_heater",
       "class": "RCTDigitalHotplate",
       "name": "reactor_heater",
-      "port": ""
+      "port": "",
+      "address": "",
+      "connection_mode": "tcpip",
+      "temp_sensor": "external"
     },
     {
       "id": "conductivity_sensor",
@@ -418,7 +462,8 @@
       "connection_mode": "tcpip",
       "class": "ConductivitySensor",
       "name": "conductivity_sensor",
-      "port": ""
+      "port": "",
+      "address": ""
     },
     {
       "id": "flask_chloroacetyl_chloride",
@@ -431,7 +476,8 @@
       "name": "flask_chloroacetyl_chloride",
       "chemical": "chloroacetyl chloride",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "buffer_flask2",
@@ -444,7 +490,8 @@
       "name": "buffer_flask2",
       "chemical": "",
       "current_volume": 0,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "cartridge_celite",
@@ -478,7 +525,8 @@
       "class": "Microstar75Stirrer",
       "name": "flask_stirrer",
       "port": "",
-      "address": ""
+      "address": "",
+      "connection_mode": "tcpip"
     },
     {
       "id": "buffer_flask",
@@ -491,7 +539,8 @@
       "name": "buffer_flask",
       "chemical": "",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "rotavap_chiller",
@@ -506,7 +555,8 @@
       "max_temp": 20,
       "port": null,
       "address": "",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "temp_sensor": "external"
     },
     {
       "id": "flask_chiller",
@@ -521,7 +571,8 @@
       "max_temp": null,
       "port": null,
       "address": "",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "temp_sensor": "external"
     },
     {
       "id": "product",

@@ -11,7 +11,8 @@
       "name": "flask_water",
       "chemical": "water",
       "current_volume": 2000,
-      "max_volume": 2000
+      "max_volume": 2000,
+      "can_filter": false
     },
     {
       "id": "flask_EtOAc",
@@ -26,7 +27,8 @@
       "name": "flask_EtOAc",
       "chemical": "ethyl acetate",
       "current_volume": 300,
-      "max_volume": 500
+      "max_volume": 500,
+      "can_filter": false
     },
     {
       "id": "flask_DME",
@@ -39,7 +41,8 @@
       "name": "flask_DME",
       "chemical": "anhydrous DME",
       "current_volume": 200,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "flask_methanol",
@@ -52,7 +55,8 @@
       "name": "flask_methanol",
       "chemical": "methanol",
       "current_volume": 200,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "flask_brine",
@@ -65,7 +69,8 @@
       "name": "flask_brine",
       "chemical": "brine",
       "current_volume": 200,
-      "max_volume": 250
+      "max_volume": 250,
+      "can_filter": false
     },
     {
       "id": "flask_NaOH_solution",
@@ -78,7 +83,8 @@
       "name": "flask_NaOH_solution",
       "chemical": "sodium hydroxide",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "phase_A",
@@ -91,7 +97,8 @@
       "name": "phase_A",
       "chemical": "",
       "current_volume": 0,
-      "max_volume": 500
+      "max_volume": 500,
+      "can_filter": false
     },
     {
       "id": "phase_B",
@@ -104,7 +111,8 @@
       "name": "phase_B",
       "chemical": "",
       "current_volume": 0,
-      "max_volume": 500
+      "max_volume": 500,
+      "can_filter": false
     },
     {
       "id": "reactor",
@@ -117,7 +125,8 @@
       "name": "reactor",
       "current_volume": 0,
       "max_volume": 300,
-      "necks": 2
+      "necks": 2,
+      "can_filter": false
     },
     {
       "id": "separator",
@@ -131,7 +140,8 @@
       "current_volume": 0,
       "max_volume": 300,
       "necks": 1,
-      "dead_volume": 3
+      "dead_volume": 3,
+      "can_filter": false
     },
     {
       "id": "rotavap",
@@ -145,7 +155,9 @@
       "address": "192.168.1.202",
       "current_volume": 0,
       "max_volume": 250,
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": "",
+      "can_filter": false
     },
     {
       "id": "valve_Z",
@@ -156,7 +168,8 @@
       "label": "valve_Z",
       "class": "ChemputerValve",
       "name": "valve_Z",
-      "address": "192.168.1.121"
+      "address": "192.168.1.121",
+      "current_volume": 0
     },
     {
       "id": "pump_Z",
@@ -182,7 +195,8 @@
       "name": "waste_Z",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "valve_H",
@@ -193,7 +207,8 @@
       "label": "valve_H",
       "class": "ChemputerValve",
       "name": "valve_H",
-      "address": "192.168.1.122"
+      "address": "192.168.1.122",
+      "current_volume": 0
     },
     {
       "id": "pump_H",
@@ -219,7 +234,8 @@
       "name": "waste_H",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "valve_G",
@@ -230,7 +246,8 @@
       "label": "valve_G",
       "class": "ChemputerValve",
       "name": "valve_G",
-      "address": "192.168.1.123"
+      "address": "192.168.1.123",
+      "current_volume": 0
     },
     {
       "id": "cartridge_Na2SO4",
@@ -253,7 +270,8 @@
       "label": "valve_Y",
       "class": "ChemputerValve",
       "name": "valve_Y",
-      "address": "192.168.1.124"
+      "address": "192.168.1.124",
+      "current_volume": 0
     },
     {
       "id": "valve_K",
@@ -264,7 +282,8 @@
       "label": "valve_K",
       "class": "ChemputerValve",
       "name": "valve_K",
-      "address": "192.168.1.125"
+      "address": "192.168.1.125",
+      "current_volume": 0
     },
     {
       "id": "pump_G",
@@ -316,7 +335,8 @@
       "name": "waste_G",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "waste_Y",
@@ -329,7 +349,8 @@
       "name": "waste_Y",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "waste_K",
@@ -342,7 +363,8 @@
       "name": "waste_K",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "valve_X",
@@ -353,7 +375,8 @@
       "label": "valve_X",
       "class": "ChemputerValve",
       "name": "valve_X",
-      "address": "192.168.1.126"
+      "address": "192.168.1.126",
+      "current_volume": 0
     },
     {
       "id": "pump_X",
@@ -379,7 +402,8 @@
       "name": "waste_X",
       "current_volume": 0,
       "max_volume": 2000,
-      "necks": 1
+      "necks": 1,
+      "can_filter": false
     },
     {
       "id": "flask_nitrogen",
@@ -392,7 +416,8 @@
       "name": "flask_nitrogen",
       "chemical": "nitrogen",
       "current_volume": 2000,
-      "max_volume": 2000
+      "max_volume": 2000,
+      "can_filter": false
     },
     {
       "id": "vacuum",
@@ -404,7 +429,8 @@
       "class": "ChemputerVacuum",
       "name": "vacuum",
       "address": "",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": ""
     },
     {
       "id": "vacuum_pump",
@@ -416,7 +442,8 @@
       "class": "CVC3000VacuumPump",
       "name": "vacuum_pump",
       "address": "192.168.1.201",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": ""
     },
     {
       "id": "stirrer_reactor",
@@ -428,7 +455,9 @@
       "class": "RCTDigitalHotplate",
       "name": "stirrer_reactor",
       "address": "192.168.1.203",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": "",
+      "temp_sensor": "external"
     },
     {
       "id": "sensor_separator",
@@ -440,7 +469,8 @@
       "connection_mode": "tcpip",
       "class": "ConductivitySensor",
       "name": "sensor_separator",
-      "port": "COM6"
+      "port": "COM6",
+      "address": ""
     },
     {
       "id": "stirrer_separator",
@@ -452,7 +482,8 @@
       "class": "HeiTorque100PrecisionStirrer",
       "name": "stirrer_separator",
       "address": "192.168.1.206",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": ""
     },
     {
       "id": "filter",
@@ -479,7 +510,9 @@
       "min_temp": -20,
       "max_temp": 180,
       "address": "192.168.1.205",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": "",
+      "temp_sensor": "external"
     },
     {
       "id": "stirrer_filter",
@@ -491,7 +524,8 @@
       "class": "HeiTorque100PrecisionStirrer",
       "name": "stirrer_filter",
       "address": "192.168.1.204",
-      "connection_mode": "tcpip"
+      "connection_mode": "tcpip",
+      "port": ""
     },
     {
       "id": "flask_SOCl2",
@@ -504,7 +538,8 @@
       "name": "flask_SOCl2",
       "chemical": "SOCl2",
       "current_volume": 50,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "flask_APEA_solution",
@@ -517,7 +552,8 @@
       "name": "flask_APEA_solution",
       "chemical": "2-aminophenethyl alcohol DME solution",
       "current_volume": 50,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     },
     {
       "id": "valve_J",
@@ -542,7 +578,8 @@
       "name": "flask_MTBE",
       "chemical": "MTBE",
       "current_volume": 500,
-      "max_volume": 500
+      "max_volume": 500,
+      "can_filter": false
     },
     {
       "id": "valve_A",
@@ -567,7 +604,8 @@
       "name": "flask_MeOH_EtOAc",
       "chemical": "10 % methanol ethyl acetate solution",
       "current_volume": 100,
-      "max_volume": 100
+      "max_volume": 100,
+      "can_filter": false
     }
   ],
   "links": [
