@@ -9,28 +9,28 @@
 
   <Reagents>
     <Reagent
-      id="glacial acetic acid"
+      name="glacial acetic acid"
     />
     <Reagent
-      id="the moist solid iodinane oxide"
+      name="the moist solid iodinane oxide"
     />
     <Reagent
-      id="acetone"
+      name="acetone"
     />
     <Reagent
-      id="Oxone deionized water solution"
+      name="Oxone deionized water solution"
     />
     <Reagent
-      id="2-Iodobenzoic acid"
+      name="2-Iodobenzoic acid"
     />
     <Reagent
-      id="anhydrous ether"
+      name="anhydrous ether"
     />
     <Reagent
-      id="acetic anhydride"
+      name="acetic anhydride"
     />
     <Reagent
-      id="water"
+      name="water"
     />
   </Reagents>
 

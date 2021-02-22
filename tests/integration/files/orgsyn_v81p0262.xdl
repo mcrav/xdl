@@ -13,23 +13,22 @@
 
   <Reagents>
     <Reagent
-      id="4-phenylbutyric acid"
+      name="4-phenylbutyric acid"
     />
     <Reagent
-      id="benzylamine"
+      name="benzylamine"
     />
     <Reagent
-      id="boric acid"
+      name="boric acid"
     />
     <Reagent
-      id="distilled water"
+      name="distilled water"
     />
     <Reagent
-      id="hexanes"
+      name="hexanes"
     />
     <Reagent
-      id="toluene"
-      use_for_cleaning="True"
+      name="toluene"
     />
   </Reagents>
 

@@ -1,15 +1,13 @@
-from typing import List
-from ..utils.xdl_base import XDLBase
-from ..utils.prop_limits import TEMP_PROP_LIMIT, VOLUME_PROP_LIMIT, PropLimit
+from typing import Optional
+from ..utils.prop_limits import (
+    TEMP_PROP_LIMIT,
+    REAGENT_ROLE_PROP_LIMIT,
+    PERCENT_RANGE_PROP_LIMIT,
+)
+from ..steps.templates import AbstractReagent
+from ..constants import REAGENT_PROP_TYPE
 
-VALID_REAGENT_ROLES = [
-    'catalyst',
-    'reagent',
-    'solvent',
-    'substrate',
-]
-
-class Reagent(XDLBase):
+class Reagent(AbstractReagent):
     """Class for representing a reagent used by a procedure.
 
     Args:
@@ -44,66 +42,52 @@ class Reagent(XDLBase):
     """
 
     PROP_TYPES = {
-        'id': str,
-        'cas': int,
+        'name': str,
         'inchi': str,
+        'cas': int,
         'role': str,
-        'cleaning_solvent': str,
+        'preserve': bool,
         'use_for_cleaning': bool,
+        'clean_with': REAGENT_PROP_TYPE,
         'stir': bool,
         'temp': float,
-        'last_minute_addition': str,
-        'last_minute_addition_volume': float,
-        'preserve': bool,
-        'incompatible_reagents': List[str],
-        'is_base': bool
+        'atmosphere': str,
+        'purity': float,
     }
 
     DEFAULT_PROPS = {
-        'is_base': False,
-        'cleaning_solvent': None,
-        'use_for_cleaning': False,
-        'stir': False,
+        'inchi': None,
         'cas': None,
-        'temp': None,
-        'role': None,
-        'last_minute_addition': None,
-        'last_minute_addition_volume': None,
+        'role': 'reagent',
         'preserve': False,
-        'incompatible_reagents': None,
+        'use_for_cleaning': False,
+        'clean_with': None,
+        'stir': False,
+        'temp': None,
+        'atmosphere': None,
+        'purity': None,
     }
 
     PROP_LIMITS = {
+        'role': REAGENT_ROLE_PROP_LIMIT,
         'temp': TEMP_PROP_LIMIT,
-        'last_minute_addition_volume': VOLUME_PROP_LIMIT,
-        'role': PropLimit(
-            enum=[
-                'reagent',
-                'solvent',
-                'substrate',
-                'catalyst',
-                'base',
-                'acid',
-                'activating-agent'
-            ]
-        )
+        'purity': PERCENT_RANGE_PROP_LIMIT,
     }
 
     def __init__(
         self,
-        id: str,
-        cleaning_solvent: str = 'default',
-        use_for_cleaning: str = 'default',
-        stir: bool = 'default',
-        cas: int = 'default',
-        temp: float = 'default',
-        role: str = 'default',
-        last_minute_addition: str = 'default',
-        last_minute_addition_volume: float = 'default',
-        preserve: bool = 'default',
-        incompatible_reagents: List[str] = 'default',
-        is_base: bool = 'default',
-        inchi: str = '',
+        name: str,
+        inchi: Optional[str] = 'default',
+        cas: Optional[int] = 'default',
+        role: Optional[str] = 'default',
+        preserve: Optional[bool] = 'default',
+        use_for_cleaning: Optional[bool] = 'default',
+        clean_with: Optional[bool] = 'default',
+        stir: Optional[bool] = 'default',
+        temp: Optional[float] = 'default',
+        atmosphere: Optional[str] = 'default',
+        purity: Optional[float] = 'default',
         **kwargs
     ) -> None:
+
         super().__init__(locals())

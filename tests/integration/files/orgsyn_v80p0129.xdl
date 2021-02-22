@@ -9,16 +9,16 @@
 
   <Reagents>
     <Reagent
-      id="copper(I)iodide"
+      name="copper(I)iodide"
     />
     <Reagent
-      id="distilled water"
+      name="distilled water"
     />
     <Reagent
-      id="hydriodic acid"
+      name="hydriodic acid"
     />
     <Reagent
-      id="propiolic acid"
+      name="propiolic acid"
     />
   </Reagents>
 

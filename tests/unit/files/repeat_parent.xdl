@@ -9,7 +9,7 @@
 
   <Reagents>
     <Reagent
-      id="ether"
+      name="ether"
     />
   </Reagents>
 

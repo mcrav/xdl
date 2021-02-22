@@ -33,28 +33,28 @@
 
   <Reagents>
     <Reagent
-      id="water1"
+      name="water1"
     />
     <Reagent
-      id="water2"
+      name="water2"
     />
     <Reagent
-      id="water3"
+      name="water3"
     />
     <Reagent
-      id="water4"
+      name="water4"
     />
     <Reagent
-      id="water5"
+      name="water5"
     />
     <Reagent
-      id="water6"
+      name="water6"
     />
     <Reagent
-      id="water7"
+      name="water7"
     />
     <Reagent
-      id="water8"
+      name="water8"
     />
   </Reagents>
 

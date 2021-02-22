@@ -315,10 +315,7 @@ def xdl_to_reagent(xdl_reagent_element: etree._Element) -> Reagent:
     """
     # Check attrs are valid for Reagent
     attrs = dict(xdl_reagent_element.attrib)
-    if 'id' not in attrs:
-        raise XDLError(
-            "'id' attribute not specified for reagent.")
-    check_attrs_are_valid(attrs, Reagent)
+
     # Try to instantiate Reagent object and return it.
     reagent = Reagent(**attrs)
     return reagent

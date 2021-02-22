@@ -282,7 +282,7 @@ class XDL(object):
             XDLReagentNotDeclaredError: If reagent used in step but not declared
             XDLVesselNotDeclaredError: If vessel used in step but not declared
         """
-        reagent_ids = [reagent.id for reagent in self.reagents]
+        reagent_ids = [reagent.name for reagent in self.reagents]
         vessel_ids = [vessel.id for vessel in self.hardware]
         for step in self.steps:
             self._validate_vessel_and_reagent_props_step(

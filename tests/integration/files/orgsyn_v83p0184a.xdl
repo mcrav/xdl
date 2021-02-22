@@ -22,25 +22,25 @@
 
   <Reagents>
     <Reagent
-      id="6 M hydrochloric acid"
+      name="6 M hydrochloric acid"
     />
     <Reagent
-      id="benzyltriethylammonium chloride(TEBA)"
+      name="benzyltriethylammonium chloride(TEBA)"
     />
     <Reagent
-      id="chloroform"
+      name="chloroform"
     />
     <Reagent
-      id="dichloromethane"
+      name="dichloromethane"
     />
     <Reagent
-      id="ethyl vinyl ether"
+      name="ethyl vinyl ether"
     />
     <Reagent
-      id="sodium hydroxide(NaOH) (12.0 g , 0.30 mol in 12 mL of H2O) water solution"
+      name="sodium hydroxide(NaOH) (12.0 g , 0.30 mol in 12 mL of H2O) water solution"
     />
     <Reagent
-      id="water"
+      name="water"
     />
   </Reagents>
 
