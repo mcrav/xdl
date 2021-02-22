@@ -69,8 +69,9 @@ class AbstractXDLElementTemplate(XDLBase):
             XDLStepTemplateNameError: If implemented step name is not the same
                 as :py:attr:`MANDATORY_NAME`.
         """
-        if self.name != self.MANDATORY_NAME:
-            raise XDLStepTemplateNameError(self.MANDATORY_NAME, self.name)
+        if type(self).__name__ != self.MANDATORY_NAME:
+            raise XDLStepTemplateNameError(
+                self.MANDATORY_NAME, type(self).__name__)
 
     def validate_prop_types(self) -> None:
         """Validate that all mandatory props are present in prop types, and that

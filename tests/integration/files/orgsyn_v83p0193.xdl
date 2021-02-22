@@ -31,25 +31,25 @@
 
   <Reagents>
     <Reagent
-      id="2 methylcyclohexanone"
+      name="2 methylcyclohexanone"
     />
     <Reagent
-      id="brine"
+      name="brine"
     />
     <Reagent
-      id="hexane"
+      name="hexane"
     />
     <Reagent
-      id="saturated sodium bicarbonate solution"
+      name="saturated sodium bicarbonate solution"
     />
     <Reagent
-      id="sodium iodide acetonitrile solution"
+      name="sodium iodide acetonitrile solution"
     />
     <Reagent
-      id="t-butyldimethylsilyl chloride(TBDMSCl)"
+      name="t-butyldimethylsilyl chloride(TBDMSCl)"
     />
     <Reagent
-      id="triethylamine"
+      name="triethylamine"
     />
   </Reagents>
 

@@ -17,61 +17,61 @@
 
   <Reagents>
     <Reagent
-      id="2_6_diisopropylaniline"
+      name="2_6_diisopropylaniline"
     />
     <Reagent
-      id="HOAc"
+      name="HOAc"
     />
     <Reagent
-      id="MeOH"
+      name="MeOH"
     />
     <Reagent
-      id="glyoxal_solution"
+      name="glyoxal_solution"
     />
     <Reagent
-      id="paraformaldehyde"
+      name="paraformaldehyde"
     />
     <Reagent
-      id="substrate"
+      name="substrate"
     />
     <Reagent
-      id="TMSCl_solution"
+      name="TMSCl_solution"
     />
     <Reagent
-      id="EtOAc"
+      name="EtOAc"
     />
     <Reagent
-      id="KOtBu_solution"
+      name="KOtBu_solution"
     />
     <Reagent
-      id="HCE_solution"
+      name="HCE_solution"
     />
     <Reagent
-      id="THF"
+      name="THF"
     />
     <Reagent
-      id="toluene"
+      name="toluene"
     />
     <Reagent
-      id="DCM"
+      name="DCM"
     />
     <Reagent
-      id="substrateS3"
+      name="substrateS3"
     />
     <Reagent
-      id="KF"
+      name="KF"
     />
     <Reagent
-      id="KBF4"
+      name="KBF4"
     />
     <Reagent
-      id="acetonitrile"
+      name="acetonitrile"
     />
     <Reagent
-      id="ether"
+      name="ether"
     />
     <Reagent
-      id="DCM"
+      name="DCM"
     />
   </Reagents>
 
@@ -271,7 +271,6 @@
     <FilterThrough
       from_vessel="jacketed_filter"
       to_vessel="rotavap"
-      through_cartridge="cartridge_celite_A"
       eluting_solvent="DCM"
       eluting_volume="50ml"
       eluting_repeats="3"
@@ -331,7 +330,6 @@
     <FilterThrough
       from_vessel="jacketed_filter"
       to_vessel="rotavap"
-      through_cartridge="cartridge_celite_B"
       eluting_solvent="DCM"
       eluting_volume="25ml"
       eluting_repeats="3"
@@ -352,7 +350,6 @@
     <FilterThrough
       from_vessel="rotavap"
       to_vessel="buffer_flask"
-      through_cartridge="cartridge_celite_C"
       eluting_solvent="DCM"
       eluting_volume="25ml"
       eluting_repeats="3"

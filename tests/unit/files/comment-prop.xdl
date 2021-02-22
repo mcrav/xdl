@@ -5,15 +5,12 @@
       id="reactor"
       type="reactor"
     />
-
   </Hardware>
 
   <Reagents>
-
   </Reagents>
 
   <Procedure>
-
     <HeatChillToTemp
       vessel="reactor"
       temp="100 °C"

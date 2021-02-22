@@ -13,10 +13,10 @@
 
   <Reagents>
     <Reagent
-      id="water"
+      name="water"
     />
     <Reagent
-      id="ether"
+      name="ether"
     />
   </Reagents>
 

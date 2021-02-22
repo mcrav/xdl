@@ -22,25 +22,25 @@
 
   <Reagents>
     <Reagent
-      id="2-thiophenecarboxaldehyde"
+      name="2-thiophenecarboxaldehyde"
     />
     <Reagent
-      id="K2CO3"
+      name="K2CO3"
     />
     <Reagent
-      id="MTBE"
+      name="MTBE"
     />
     <Reagent
-      id="methanol"
+      name="methanol"
     />
     <Reagent
-      id="saturated NaCl solution"
+      name="saturated NaCl solution"
     />
     <Reagent
-      id="tosylmethylisocyanide"
+      name="tosylmethylisocyanide"
     />
     <Reagent
-      id="water"
+      name="water"
     />
   </Reagents>
 

@@ -34,37 +34,37 @@
 
   <Reagents>
     <Reagent
-      id="2-aminophenethyl alcohol DME solution"
+      name="2-aminophenethyl alcohol DME solution"
     />
     <Reagent
-      id="MTBE"
+      name="MTBE"
     />
     <Reagent
-      id="SOCl2"
+      name="SOCl2"
     />
     <Reagent
-      id="anhydrous DME"
+      name="anhydrous DME"
     />
     <Reagent
-      id="brine"
+      name="brine"
     />
     <Reagent
-      id="ethyl acetate"
+      name="ethyl acetate"
     />
     <Reagent
-      id="sodium hydroxide"
+      name="sodium hydroxide"
     />
     <Reagent
-      id="water"
+      name="water"
     />
     <Reagent
-      id="methanol"
+      name="methanol"
     />
     <Reagent
-      id="oxalic acid dihydrate"
+      name="oxalic acid dihydrate"
     />
     <Reagent
-      id="10 % methanol ethyl acetate solution"
+      name="10 % methanol ethyl acetate solution"
     />
   </Reagents>
 

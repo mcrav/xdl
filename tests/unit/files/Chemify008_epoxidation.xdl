@@ -22,25 +22,25 @@
 
   <Reagents>
     <Reagent
-      id="28 % hydrogen peroxide"
+      name="28 % hydrogen peroxide"
     />
     <Reagent
-      id="DCM"
+      name="DCM"
     />
     <Reagent
-      id="acetonitrile"
+      name="acetonitrile"
     />
     <Reagent
-      id="brine"
+      name="brine"
     />
     <Reagent
-      id="cis-cyclooctene"
+      name="cis-cyclooctene"
     />
     <Reagent
-      id="methanol"
+      name="methanol"
     />
     <Reagent
-      id="sodium metabisulphite water solution"
+      name="sodium metabisulphite water solution"
     />
   </Reagents>
 

@@ -335,8 +335,12 @@ def xdl_element_to_json(xdl_step: Union[Reagent, Component]) -> Dict[str, Any]:
     xdl_step_properties = {
         k: v for k, v in xdl_step.properties.items()
     }
+    if type(xdl_step) == Reagent:
+        name = xdl_step.name
+    elif type(xdl_step) == Component:
+        name = xdl_step.id
     xdl_step_json = {
-        'name': xdl_step.id,
+        'name': name,
         'properties': xdl_step_properties,
     }
     return xdl_step_json

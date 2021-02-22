@@ -11,7 +11,8 @@
 
   <Reagents>
     <Reagent
-      id="ether" />
+      name="ether"
+      role="reagent" />
   </Reagents>
 
   <Procedure>

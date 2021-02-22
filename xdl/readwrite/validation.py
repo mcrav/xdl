@@ -59,7 +59,7 @@ def check_reagents_are_all_declared(
         XDLError: Error raised if reagent used in step but not declared in
             Reagents section.
     """
-    reagent_ids = [reagent.id for reagent in reagents]
+    reagent_ids = [reagent.name for reagent in reagents]
     for step in steps:
         for prop, prop_type in step.PROP_TYPES.items():
             if prop_type == REAGENT_PROP_TYPE:

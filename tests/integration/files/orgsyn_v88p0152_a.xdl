@@ -13,16 +13,16 @@
 
   <Reagents>
     <Reagent
-      id="anhydrous Et2O"
+      name="anhydrous Et2O"
     />
     <Reagent
-      id="benzyl carbamate"
+      name="benzyl carbamate"
     />
     <Reagent
-      id="glyoxylic acid monohydrate"
+      name="glyoxylic acid monohydrate"
     />
     <Reagent
-      id="hexanes-Et2O"
+      name="hexanes-Et2O"
     />
   </Reagents>
 

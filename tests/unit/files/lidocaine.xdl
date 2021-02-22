@@ -13,31 +13,31 @@
 
   <Reagents>
     <Reagent
-      id="glacial acetic acid"
+      name="glacial acetic acid"
     />
     <Reagent
-      id="2,6-Dimethylaniline"
+      name="2,6-Dimethylaniline"
     />
     <Reagent
-      id="chloroacetyl chloride"
+      name="chloroacetyl chloride"
     />
     <Reagent
-      id="half-saturated aqueous sodium acetate"
+      name="half-saturated aqueous sodium acetate"
     />
     <Reagent
-      id="diethylamine"
+      name="diethylamine"
     />
     <Reagent
-      id="toluene"
+      name="toluene"
     />
     <Reagent
-      id="water"
+      name="water"
     />
     <Reagent
-      id="3 M hydrochloric acid"
+      name="3 M hydrochloric acid"
     />
     <Reagent
-      id="3 M sodium hydroxide"
+      name="3 M sodium hydroxide"
     />
   </Reagents>
 

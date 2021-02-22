@@ -52,7 +52,7 @@ class AbstractReagent(AbstractXDLElementTemplate):
         'clean_with': None,
         'stir': False,
         'temp': None,
-        'atmosphere': str,
+        'atmosphere': None,
         'purity': None,
     }
 
