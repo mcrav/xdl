@@ -3,6 +3,25 @@ not really high priority.
 """
 
 from ..reagents import Reagent
+def add_metadata_namespace():
+    schema = ""
+    schema += "\n      <xs:element name=\"Metadata\" minOccurs=\"0\" maxOccurs=\"1\">"
+    schema += "\n        <xs:complexType>"
+    schema += "\n                <xs:simpleContent>"
+    schema += "\n                  <xs:extension base=\"xs:string\">"
+    schema += "\n                    <xs:attribute type=\"xs:string\" name=\"description\" use=\"optional\"/>"
+    schema += "\n                    <xs:attribute type=\"xs:string\" name=\"product_inchi\" use=\"optional\"/>"
+    schema += "\n                    <xs:attribute type=\"xs:string\" name=\"product_vessel\" use=\"optional\"/>"
+    schema += "\n                    <xs:attribute type=\"xs:string\" name=\"product\" use=\"optional\"/>"
+    schema += "\n                    <xs:attribute type=\"xs:string\" name=\"product_cas\" use=\"optional\"/>"
+    schema += "\n                    <xs:attribute type=\"xs:string\" name=\"smarts\" use=\"optional\"/>"
+    schema += "\n                    <xs:attribute type=\"xs:string\" name=\"publication\" use=\"optional\"/>"
+    schema += "\n                    <xs:attribute type=\"xs:string\" name=\"reaction_class\" use=\"optional\"/>"
+    schema += "\n                  </xs:extension>"
+    schema += "\n                </xs:simpleContent>"
+    schema += "\n              </xs:complexType>"
+    schema += "\n      </xs:element>"
+    return schema
 
 def add_hardware_namespace():
     schema = ""
@@ -138,7 +157,7 @@ def generate_schema(step_library):
     schema += "\n  <xs:element name=\"Synthesis\">"
     schema += "\n    <xs:complexType>"
     schema += "\n      <xs:sequence>"
-
+    schema += add_metadata_namespace()
     schema += add_hardware_namespace()
     schema += add_reagents_namespace()
     schema += add_procedure_namespace(step_library)

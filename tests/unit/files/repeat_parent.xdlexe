@@ -3,6 +3,7 @@
 <Synthesis
   graph_sha256="ae01e3c6461abb6a975a4fcdd35c8cdf9a3acfc3a04d917e2a3f798921bb6727"
 >
+
   <Hardware>
     <Component
       id="filter"

@@ -1,5 +1,6 @@
 import json
 from typing import List, Dict, Any, Union
+from xdl.metadata import Metadata
 
 from .errors import (
     XDLJSONMissingHardwareError,
@@ -24,7 +25,7 @@ if False:
     from ..xdl import XDL
 
 #: Valid sections for XDL JSON.
-VALID_SECTIONS: List[str] = ['steps', 'reagents', 'hardware']
+VALID_SECTIONS: List[str] = ['steps', 'reagents', 'hardware', 'metadata']
 
 def xdl_from_json_file(
         xdl_json_file: str, platform: AbstractPlatform) -> Dict[str, Any]:
@@ -161,10 +162,15 @@ def xdl_from_json(
         xdl_element_from_json(reagent_json, Component)
         for reagent_json in xdl_json['hardware']
     ])
+    if 'metadata' in xdl_json:
+        xdl_metadata = Metadata(**xdl_json['metadata'])
+    else:
+        xdl_metadata = Metadata()
     return {
         'steps': xdl_steps,
         'reagents': xdl_reagents,
         'hardware': xdl_hardware,
+        'metadata': xdl_metadata,
         'procedure_attrs': {},
     }
 
@@ -278,8 +284,11 @@ def xdl_to_json(
         xdl_element_to_json(reagent) for reagent in xdl_obj.reagents]
     xdl_hardware_json = [
         xdl_element_to_json(component) for component in xdl_obj.hardware]
+    xdl_metadata_json = {
+        k: v for k, v in xdl_obj.metadata.properties.items() if v}
 
     xdl_json = {
+        'metadata': xdl_metadata_json,
         'steps': xdl_steps_json,
         'reagents': xdl_reagents_json,
         'hardware': xdl_hardware_json

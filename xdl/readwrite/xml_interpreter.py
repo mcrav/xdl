@@ -7,6 +7,7 @@ from ..errors import XDLError
 from ..steps import Step, AbstractBaseStep
 from ..reagents import Reagent
 from ..hardware import Hardware, Component
+from ..metadata import Metadata
 
 # For type annotations
 if False:
@@ -49,6 +50,7 @@ def xdl_str_to_objs(
         steps, step_record = steps_from_xdl(xdl_str, platform)
         hardware = hardware_from_xdl(xdl_str)
         reagents = reagents_from_xdl(xdl_str)
+        metadata = metadata_from_xdl(xdl_str)
         synthesis_attrs = synthesis_attrs_from_xdl(xdl_str)
 
         # Loading xdlexe if graph_sha256 in synthesis_attrs
@@ -61,6 +63,7 @@ def xdl_str_to_objs(
             'steps': steps,
             'hardware': hardware,
             'reagents': reagents,
+            'metadata': metadata,
         }
         parsed_xdl['procedure_attrs'] = synthesis_attrs
         return parsed_xdl
@@ -110,6 +113,21 @@ def synthesis_attrs_from_xdl(xdl_str: str) -> Dict[str, Any]:
         if attr['name'] in raw_attr:
             processed_attr[attr['name']] = raw_attr[attr['name']]
     return processed_attr
+
+def metadata_from_xdl(xdl_str: str) -> Metadata:
+    """Given XDL str return Metadata object.
+
+    Arguments:
+        xdl_str (str): XDL XML string.
+
+    Returns:
+        Hardware: Metadata object with any parameters included in XDL loaded
+    """
+    xdl_tree = etree.fromstring(xdl_str)
+    for element in xdl_tree.findall('*'):
+        if element.tag == 'Metadata':
+            return Metadata(**element.attrib)
+    return Metadata()
 
 def steps_from_xdl(xdl_str: str, platform: 'AbstractPlatform') -> List[Step]:
     """Given XDL str return list of Step objects.

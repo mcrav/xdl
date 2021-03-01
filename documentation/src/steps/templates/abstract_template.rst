@@ -1,5 +1,5 @@
-xdl.steps.templates.abstract_template.AbstractStepTemplate
-==========================================================
+xdl.steps.templates.abstract_template.AbstractXDLElementTemplate
+================================================================
 
-.. autoclass:: xdl.steps.templates.abstract_template.AbstractStepTemplate
+.. autoclass:: xdl.steps.templates.abstract_template.AbstractXDLElementTemplate
     :members:

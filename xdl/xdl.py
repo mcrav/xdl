@@ -27,6 +27,7 @@ from .errors import (
     XDLInvalidStepsTypeError,
 )
 from .hardware import Hardware
+from .metadata import Metadata
 from .platforms.abstract_platform import AbstractPlatform
 from .reagents import Reagent
 from .readwrite.utils import read_file
@@ -169,6 +170,9 @@ class XDL(object):
                 Valid argument combinations are just xdl, or all of steps,
                 reagents and hardware.
         """
+        # Fallback metadata if not loaded from file
+        self.metadata = Metadata()
+
         # Load from XDL file or string
         if xdl:
             # Load from JSON dict
@@ -214,6 +218,7 @@ class XDL(object):
         self._load_steps(parsed_xdl['steps'])
         self.hardware = parsed_xdl['hardware']
         self.reagents = parsed_xdl['reagents']
+        self.metadata = parsed_xdl['metadata']
 
     def _load_xdl_from_file(self, xdl_file):
         """Load XDL from .xdl, .xdlexe or .json file.
@@ -238,6 +243,7 @@ class XDL(object):
             self._load_steps(parsed_xdl['steps'])
             self.hardware = parsed_xdl['hardware']
             self.reagents = parsed_xdl['reagents']
+            self.metadata = parsed_xdl['metadata']
 
         # Invalid file type, raise error
         else:
@@ -257,6 +263,7 @@ class XDL(object):
         self._load_steps(parsed_xdl['steps'])
         self.hardware = parsed_xdl['hardware']
         self.reagents = parsed_xdl['reagents']
+        self.metadata = parsed_xdl['metadata']
 
     def _load_graph_hash(self, xdl_str: str) -> Optional[str]:
         """Obtain graph hash from given xdl string. If xdl string is not xdlexe,

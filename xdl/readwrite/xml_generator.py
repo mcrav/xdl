@@ -2,6 +2,7 @@ from typing import List
 from lxml import etree
 from ..reagents import Reagent
 from ..hardware import Hardware
+from ..metadata import Metadata
 from ..steps import Step
 from ..constants import XDL_VERSION
 from ..utils.misc import format_property
@@ -84,6 +85,8 @@ def get_xdl_tree(
     if graph_hash:
         xdltree.attrib['graph_sha256'] = graph_hash
 
+    _append_metadata(xdltree, xdl_obj.metadata)
+
     # Add <Hardware /> section to tree
     _append_hardware_tree(xdltree, hardware)
 
@@ -95,6 +98,23 @@ def get_xdl_tree(
         xdltree, xdl_obj, full_properties=full_properties, full_tree=full_tree)
 
     return xdltree
+
+def _append_metadata(xdltree: etree.ElementTree, metadata: Metadata) -> None:
+    """Create and add Metadata section to XDL tree. Only add if Metadata has
+    been used.
+
+    Args:
+        xdltree (etree.ElementTree): Full XDL XML tree to add hardware to.
+        metadata (Metadata): Metadawta to add to XML tree.
+    """
+    props = metadata.properties
+    # Metadata used
+    if any(props.values()):
+        metadata_tree = etree.Element('Metadata')
+        for k, v in props.items():
+            if v:
+                metadata_tree.attrib[k] = v
+        xdltree.append(metadata_tree)
 
 def _append_hardware_tree(
         xdltree: etree.ElementTree, hardware: Hardware) -> None:
@@ -386,17 +406,30 @@ def _get_xdl_string(xdltree: etree._ElementTree) -> str:
         s += '\n'
         for prop in xdltree.attrib:
             s += f'{indent}{prop}="{xdltree.attrib[prop]}"\n'
-    s += '>\n'
+    s += '>\n\n'
     indent_level = 1
     # Hardware, Reagents and Procedure tags
     for element in xdltree.findall('*'):
-        s += f'{indent * indent_level}<{element.tag}>\n'
+
+        # Metadata section
+        if element.tag == 'Metadata':
+            s += _get_element_xdl_string(
+                element, indent=indent, indent_level=indent_level)
+            s += '\n'
+
+        # Procedure, Reagents or Hardware section start
+        else:
+            s += f'{indent * indent_level}<{element.tag}>\n'
+
         indent_level += 1
         # Component, Reagent and Step tags
         for element2 in element.findall('*'):
             s += _get_element_xdl_string(
                 element2, indent=indent, indent_level=indent_level)
         indent_level -= 1
-        s += f'{indent * indent_level}</{element.tag}>\n\n'
+
+        # Procedure, Reagents or Hardware section end
+        if element.tag != 'Metadata':
+            s += f'{indent * indent_level}</{element.tag}>\n\n'
     s += '</Synthesis>\n'
     return s
