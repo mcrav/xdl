@@ -1,11 +1,10 @@
-from .abstract_template import AbstractXDLElementTemplate
+from typing import Optional
+from ..steps.templates.metadata import AbstractMetadata
 
-class AbstractMetadata(AbstractXDLElementTemplate):
+class Metadata(AbstractMetadata):
     """Metadata associated with procedure.
 
-    Name: Metadata
-
-    Mandatory props:
+    Args:
         description (str): Brief description of the synthesis.
         publication (str): Publication synthesis was taken from.
         smarts (str): SMARTS string of the transformation.
@@ -17,9 +16,8 @@ class AbstractMetadata(AbstractXDLElementTemplate):
             not limiting this to specific options, as reaction classification
             can be ambiguous.
     """
-    MANDATORY_NAME = 'Metadata'
 
-    MANDATORY_PROP_TYPES = {
+    PROP_TYPES = {
         'description': str,
         'product_inchi': str,
         'product_vessel': str,
@@ -30,7 +28,7 @@ class AbstractMetadata(AbstractXDLElementTemplate):
         'reaction_class': str,
     }
 
-    MANDATORY_DEFAULT_PROPS = {
+    DEFAULT_PROPS = {
         'description': None,
         'product_inchi': None,
         'product_vessel': None,
@@ -41,5 +39,16 @@ class AbstractMetadata(AbstractXDLElementTemplate):
         'reaction_class': None,
     }
 
-    MANDATORY_PROP_LIMITS = {
-    }
+    def __init__(
+        self,
+        description: Optional[str] = None,
+        product_inchi: Optional[str] = None,
+        product_vessel: Optional[str] = None,
+        product: Optional[str] = None,
+        product_cas: Optional[int] = None,
+        smarts: Optional[str] = None,
+        publication: Optional[str] = None,
+        reaction_class: Optional[str] = None,
+        **kwargs
+    ):
+        super().__init__(locals())

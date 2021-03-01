@@ -53,3 +53,23 @@ def test_readwrite_procedure_sections_json():
     assert len(x1.reaction_steps) == len(x2.reaction_steps) > 0
     assert len(x1.workup_steps) == len(x2.workup_steps) > 0
     assert len(x1.purification_steps) == len(x2.purification_steps) > 0
+
+@pytest.mark.unit
+def test_readwrite_metadata():
+    """Test ``<Metadata />`` section can be loaded and saved correctly."""
+    # Test load
+    xdl_f = os.path.join(UNIT_FOLDER, 'metadata.xdl')
+    x1 = XDL(xdl_f)
+    assert x1.metadata.product == 'lidocaine'
+
+    # Test XML save and reload
+    output_file = os.path.join(HERE, 'test_output', 'metadata.xdl')
+    x1.save(output_file)
+    x2 = XDL(output_file)
+    assert x2.metadata.product == 'lidocaine'
+
+    # Test JSON save and reload
+    output_file = os.path.join(HERE, 'test_output', 'metadata.json')
+    x2.save(output_file, file_format='json')
+    x3 = XDL(output_file)
+    assert x3.metadata.product == 'lidocaine'

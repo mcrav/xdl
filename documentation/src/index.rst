@@ -8,6 +8,7 @@ API Reference
    execution/index
    hardware/index
    localisation/index
+   metadata/index
    platforms/index
    readwrite/index
    reagents/index
