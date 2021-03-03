@@ -24,7 +24,7 @@ class AbstractResetHandlingStep(AbstractXDLElementTemplate, AbstractStep):
 
     MANDATORY_PROP_TYPES = {
         'solvent': REAGENT_PROP_TYPE,
-        'volume': VOLUME_PROP_LIMIT,
+        'volume': float,
         'repeats': int,
     }
 
