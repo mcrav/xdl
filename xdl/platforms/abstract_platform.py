@@ -7,6 +7,7 @@ from ..execution.abstract_executor import AbstractXDLExecutor
 from ..steps import Step, AbstractBaseStep
 from ..reagents import Reagent
 from ..hardware import Component
+from ..metadata import Metadata
 from ..localisation import LOCALISATIONS
 if False:
     from ..xdl import XDL
@@ -211,6 +212,29 @@ class AbstractPlatform(object):
                         'default': prop_limit.default,
                     }
                     for prop, prop_limit in Component.PROP_LIMITS.items()
+                }
+            },
+            'Metadata': {
+                'name': 'Metadata',
+                'PROP_TYPES': dict(
+                    {
+                        k: type_str_dict[v]
+                        for k, v in Metadata.PROP_TYPES.items()
+                    },
+                    **{'comment': 'str'}
+                ),
+                'DEFAULT_PROPS': dict(
+                    Metadata.DEFAULT_PROPS, **{'comment': ''}),
+                'INTERNAL_PROPS': Metadata.INTERNAL_PROPS,
+                'ALWAYS_WRITE': Metadata.ALWAYS_WRITE,
+                'PROP_LIMITS': {
+                    prop: {
+                        'regex': prop_limit.regex,
+                        'enum': prop_limit.enum,
+                        'hint': prop_limit.hint,
+                        'default': prop_limit.default,
+                    }
+                    for prop, prop_limit in Metadata.PROP_LIMITS.items()
                 }
             }
         }

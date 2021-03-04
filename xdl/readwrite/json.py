@@ -163,7 +163,10 @@ def xdl_from_json(
         for reagent_json in xdl_json['hardware']
     ])
     if 'metadata' in xdl_json:
-        xdl_metadata = Metadata(**xdl_json['metadata'])
+        xdl_metadata = xdl_element_from_json({
+            'name': 'Metadata', 'properties': xdl_json['metadata']},
+            Metadata
+        )
     else:
         xdl_metadata = Metadata()
     return {
