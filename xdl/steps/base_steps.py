@@ -1134,15 +1134,17 @@ class AbstractDynamicStep(Step):
         simulation_steps = self.get_simulation_steps()
         step_indexes.append(0)
         for i, step in enumerate(simulation_steps):
+            # Don't increment level as this is done in execute method
             step_indexes[level] = i
             step_indexes = step_indexes[:level + 1]
             logger.info(
                 execution_log_str(step, step_indexes=step_indexes))
-            step.execute(
+            self.executor.execute_step(
                 platform_controller,
-                logger=logger,
+                step,
+                async_steps=self.async_steps,
+                step_indexes=step_indexes,
                 level=level,
-                step_indexes=step_indexes
             )
 
     @abstractmethod
