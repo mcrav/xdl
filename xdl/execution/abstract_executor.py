@@ -126,7 +126,8 @@ class AbstractXDLExecutor(ABC):
     # Non Abstract Methods #
     ########################
 
-    def perform_sanity_checks(self, steps: List[Step] = None) -> None:
+    def perform_sanity_checks(
+            self, steps: List[Step] = None, graph: MultiDiGraph = None) -> None:
         """Recursively perform sanity checks on every step in steps list. If
         steps list not given defaults to ``self._xdl.steps``.
 
@@ -134,7 +135,11 @@ class AbstractXDLExecutor(ABC):
             steps (List[Step]): List of steps to perform sanity checks
                 recursively for every step / substep.
                 Defaults to ``self._xdl.steps``
+            graph (MultiDiGraph): Graph to use when running sanity checks. If
+                not given will use :py:attr:`_graph`.
         """
+        if graph is None:
+            graph = self._graph
         if steps is None:
             steps = self._xdl.steps
         for step in steps:

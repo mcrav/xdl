@@ -1,4 +1,5 @@
 from typing import Tuple, Any, Dict, List
+from xdl.platforms.abstract_platform import AbstractPlatform
 from networkx import MultiDiGraph
 import abc
 import time
@@ -178,6 +179,9 @@ class XDLExecutionClient(object):
     #: Logger to send XDL logs to self.log_file
     _xdl_logger: logging.Logger = None
 
+    #: Platform object for platform being targeted by execution client
+    _platform: AbstractPlatform = None
+
     def __init__(self, address: str, simulation: bool = False) -> None:
         # Generate unique execution key for instance to connect to ChemifyAPI
         self.execution_key = secrets.token_urlsafe()
@@ -197,6 +201,13 @@ class XDLExecutionClient(object):
         # Intialise execution logging (sent to ChemifyAPI)
         self._log_file = self._get_log_file()
         self._xdl_logger = get_xdl_logger(self.execution_key, self._log_file)
+
+        # Initialize platform
+        self._platform = self._get_platform()
+
+        register_execution_client(self)
+
+        sio.connect(self._address)
 
     ####################
     # Abstract Methods #
@@ -223,6 +234,10 @@ class XDLExecutionClient(object):
         return None, ''
 
     @abc.abstractmethod
+    def _get_platform(self) -> AbstractPlatform:
+        return None
+
+    @abc.abstractmethod
     def emergency_stop(self) -> None:
         """Stop platform controller as fast as possible. Called when user
         presses "Emergency Stop" button in ChemIDE.
@@ -238,9 +253,76 @@ class XDLExecutionClient(object):
     # Public Methods #
     ##################
 
-    def run(self):
+    def bind_platform_controller(self, platform_controller: Any) -> None:
+        """Bind platform controller to the execution client. The reason for this
+        functionality is to allow the execution client to be used in 2 ways.
+
+        1. Controlled: The execution client creates its own platform
+           controller objects, uses them internally, and keeps them hidden from
+           the user. This allows the execution client to be simply launched by
+           running a script.
+        2. Uncontrolled: The execution client is launched by the user inside a
+           script or iPython / Jupyter Notebook environment. They then
+           instantiate their own platform controller object, and bind this to
+           the execution client. The execution client will then use this, and
+           not make any platform controller objects itself. This is necessary
+           if both platform controller and xdl execution clients need to be used
+           and is useful in the case the user wants full control of the platform
+           controller.
+
+        Args:
+            platform_controller (Any): Platform controller to bind to execution
+                client. It is up to the user to make sure that this object has
+                the correct graph and setup for the experiment being performed.
+        """
+        self._platform_controller = platform_controller
+        self._bound_platform_controller = True
+
+    def unbind_platform_controller(self) -> None:
+        """Unbind bound platform controller so that execution client can revert
+        to controlled mode and make its own platform controller objects.
+        """
+        self._platform_controller = None
+        self._bound_platform_controller = False
+
+    def execute_step_device(self, graph, step_name, properties) -> None:
+        """Execute command given by live control step device.
+
+        Args:
+            graph (str): JSON string graph
+            step_name (str): Name of step to be executed.
+            properties (Dict[str, Any]): Properties to instantiate step with.
+        """
+        self._logger.info(
+            f'Executing step: {step_name} {properties}\n')
+
+        graph = get_graph(json.loads(graph))
+
+        # If client not bound to platform controller, create temporary instance
+        # just for executing this step.
+        if not self._platform_controller:
+            platform_controller, error = self._get_platform_controller(
+                graph, self._simulation)
+            if error != '':
+                raise XDLError(error)
+        else:
+            platform_controller = self._platform_controller
+
+        # Instantiate step
+        step_class = self._platform.step_library[step_name]
+        step = step_class(**properties)
+
+        # Compile step
+        executor = self._platform.executor()
+        executor._graph = graph
+        executor.add_internal_properties(graph=graph, steps=[step])
+        executor.perform_sanity_checks(steps=[step], graph=graph)
+
+        # Execute step
+        executor.execute_step(platform_controller, step)
+
+    def run(self) -> None:
         """Connect to ChemifyAPI and wait for messages."""
-        sio.connect(self._address)
         sio.wait()
 
     def load_experiment(self, graph: str, xdlexe: str) -> None:
@@ -273,7 +355,7 @@ class XDLExecutionClient(object):
 
         # Instantiate platform controller. self._simulation flag used to allow
         # simulation mode to be used from the command line when testing.
-        if not error:
+        if not error and not self._bound_platform_controller:
             self._platform_controller, error = self._get_platform_controller(
                 self._graph, simulation=self._simulation)
 
@@ -425,8 +507,11 @@ class XDLExecutionClient(object):
             str: Empty string if simulation successful or error message if an
                 error occurs.
         """
-        simulation_platform_controller, error =\
-            self._get_platform_controller(self._graph, simulation=True)
+        if not self._bound_platform_controller:
+            simulation_platform_controller, error =\
+                self._get_platform_controller(self._graph, simulation=True)
+        else:
+            simulation_platform_controller = self._platform_controller
         if not error:
             try:
                 confirm_step_uuids = [
@@ -703,6 +788,14 @@ def connect():
 def on_load_experiment(data):
     """Load platform controller and xdlexe."""
     client.load_experiment(graph=data['graph'], xdlexe=data['xdlexe'])
+
+@sio.on('app-execute-step-device')
+def on_execute_step_device(data):
+    client.execute_step_device(
+        graph=data['graph'],
+        step_name=data['step_name'],
+        properties=data['properties']
+    )
 
 @sio.on('app-start-step')
 def on_execute(data):
