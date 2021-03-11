@@ -7,6 +7,9 @@ XDL_VERSION: str = '0.5.0'
 # MISC #
 ########
 
+#: Chemify API URL
+CHEMIFY_API_URL: str = 'https://api.chemification.com'
+
 #: Chemicals that will be recognised as inert gas.
 INERT_GAS_SYNONYMS: List[str] = ['nitrogen', 'n2', 'ar', 'argon']
 
