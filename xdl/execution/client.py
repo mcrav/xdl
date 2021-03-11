@@ -10,6 +10,7 @@ import logging
 import json
 import secrets
 from threading import Thread
+from ..constants import CHEMIFY_API_URL
 from ..xdl import XDL
 from ..utils.graph import get_graph
 from ..steps import NON_RECURSIVE_ABSTRACT_STEPS, Step
@@ -182,7 +183,9 @@ class XDLExecutionClient(object):
     #: Platform object for platform being targeted by execution client
     _platform: AbstractPlatform = None
 
-    def __init__(self, address: str, simulation: bool = False) -> None:
+    def __init__(
+        self, address: str = CHEMIFY_API_URL, simulation: bool = False
+    ) -> None:
         # Generate unique execution key for instance to connect to ChemifyAPI
         self.execution_key = secrets.token_urlsafe()
 

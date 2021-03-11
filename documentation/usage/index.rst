@@ -9,6 +9,7 @@ Usage
    procedure_sections
    compile_xdl
    execute_xdl
+   execution_clients
    sensor_reading
    the_graph
    reagents
