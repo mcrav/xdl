@@ -96,7 +96,7 @@ def test_xdlexe_missing_properties():
         XDL(test_path)
 
 @pytest.mark.unit
-def test_execute_dynamic_steps_inidividually():
+def test_execute_dynamic_steps_individually():
     x = XDL(os.path.join(INTEGRATION_FOLDER, 'lidocaine.xdlexe'))
     graph = os.path.join(INTEGRATION_FOLDER, 'lidocaine_graph.json')
     c = get_chempiler(graph)
