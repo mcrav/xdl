@@ -1,5 +1,5 @@
 # Std
-from typing import List, Dict, Any, Tuple
+from typing import Iterator, List, Dict, Any, Tuple
 import logging
 import threading
 import copy
@@ -754,6 +754,16 @@ class AbstractStep(Step, ABC):
                 else:
                     reagents_consumed[reagent] = volume
         return reagents_consumed
+
+    @property
+    def step_tree(self) -> Iterator[Step]:
+        """Iterator yielding all substeps in step tree in depth first fashion.
+        """
+        for substep in self.steps:
+            yield substep
+            if isinstance(substep, AbstractStep):
+                for subsubstep in substep.step_tree:
+                    yield subsubstep
 
 class AbstractAsyncStep(Step):
     """For executing code asynchronously. Can only be used programmatically,
