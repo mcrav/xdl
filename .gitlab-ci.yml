@@ -12,6 +12,9 @@ stages:
     - pip install wheel
     - pip install pytest
     - pip install coverage
+      # Needed for opencv to work
+    - apt-get update
+    - apt-get install ffmpeg libsm6 libxext6  -y
 
     # Install xdl requirements
     # Install Chempiler, SerialLabware and ChemputerAPI for simulations
@@ -35,11 +38,6 @@ stages:
     - coverage run --source=xdl -m pytest tests -m "unit or integration" -x -rf
     - coverage report -m
 
-test-python:3.6:
-  extends: '.test'
-  stage: 'test'
-  image: 'python:3.6'
-
 test-python:3.7:
   extends: '.test'
   stage: 'test'
@@ -49,6 +47,11 @@ test-python:3.8:
   extends: '.test'
   stage: 'test'
   image: 'python:3.8'
+
+test-python:3.9:
+  extends: '.test'
+  stage: 'test'
+  image: 'python:3.9'
 
 lint:
   stage: 'lint'
