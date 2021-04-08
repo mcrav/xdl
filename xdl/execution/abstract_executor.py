@@ -10,8 +10,9 @@ from .utils import do_sanity_check
 from ..steps.special_steps import Async, Await, Repeat
 from ..steps.base_steps import (
     Step, AbstractDynamicStep, AbstractBaseStep,
-    finished_executing_step_msg, execution_log_str
 )
+from ..steps.logging import (
+    start_executing_step_msg, finished_executing_step_msg)
 from ..steps import NON_RECURSIVE_ABSTRACT_STEPS
 from ..errors import (
     XDLExecutionOnDifferentGraphError,
@@ -269,7 +270,7 @@ class AbstractXDLExecutor(ABC):
             # async_steps
             elif type(step) is Repeat:
                 # Log Repeat step start
-                self.logger.info(execution_log_str(
+                self.logger.info(start_executing_step_msg(
                     step, step_indexes=step_indexes))
 
                 # Get log message for finish before step_indexes are changed
@@ -285,7 +286,7 @@ class AbstractXDLExecutor(ABC):
                     step_indexes[-1] = i
 
                     # Log step start
-                    self.logger.info(execution_log_str(
+                    self.logger.info(start_executing_step_msg(
                         substep, step_indexes=step_indexes))
 
                     # Execute step

@@ -551,6 +551,9 @@
       <CStirringControllerStop
         stirring_controller="flask_stirrer"
         comment="" />
+      <CStirringControllerStop
+        stirring_controller="reactor_heater"
+        comment="" />
       <CTemperatureControllerStop
         temperature_controller="reactor_heater"
         comment="" />

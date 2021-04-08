@@ -1,6 +1,13 @@
-from typing import Union
+# Std
+from typing import Dict, Any, Union
+
+# Other
+import tabulate
+
+# Relative
 from ..utils.sanitisation import convert_val_to_std_units
 from ..utils.prop_limits import TIME_PROP_LIMIT
+
 
 class FTNDuration:
     """Fuzzy triangular number class. Simple convenience class to store FTNs.
@@ -57,3 +64,22 @@ class FTNDuration:
 
     def __repr__(self):
         return f'FTN({self.min:2.2f}s {self.most_likely:.2f}s {self.max:.2f}s'
+
+def pretty_props_table(props: Dict[str, Any]) -> str:
+    """Make neat props table for printing to terminal. Has no table lines but
+    aligns items neatly.
+
+    Args:
+        props (Dict[str, Any]): Step properties dict
+
+    Returns:
+        str: Step properties table neatly formatted.
+    """
+    return tabulate.tabulate(
+        [
+            [k, str(v)]
+            for k, v in props.items()
+            if k != 'children'
+        ],
+        tablefmt='plain',
+    )
