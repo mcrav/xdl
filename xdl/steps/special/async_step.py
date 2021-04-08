@@ -5,7 +5,7 @@ from ..core import (
     Step,
     AbstractAsyncStep,
 )
-from ..logging import execution_log_str, finished_executing_step_msg
+from ..logging import start_executing_step_msg, finished_executing_step_msg
 
 if False:
     from chempiler import Chempiler
@@ -69,7 +69,7 @@ class Async(AbstractAsyncStep):
         # Log step start if it is executed by itself (level == 0), as there will
         # be no other context logging the step start.
         if level == 0:
-            logger.info(execution_log_str(self, step_indexes))
+            logger.info(start_executing_step_msg(self, step_indexes))
 
         # Get message for end before step_indexes are changed by substeps
         finish_msg = finished_executing_step_msg(self, step_indexes)
@@ -82,7 +82,7 @@ class Async(AbstractAsyncStep):
             step_indexes = step_indexes[:level + 2]
 
             # Log step start
-            logger.info(execution_log_str(step, step_indexes))
+            logger.info(start_executing_step_msg(step, step_indexes))
 
             # Execute step
             keep_going = step.execute(

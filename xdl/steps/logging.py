@@ -9,7 +9,7 @@ from .core.step import Step
 from .utils import pretty_props_table
 
 
-def execution_log_str(
+def start_executing_step_msg(
         step: Step, step_indexes: List[int] = []) -> str:
     """Return strings to log when step begins executing.
 

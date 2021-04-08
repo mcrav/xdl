@@ -10,7 +10,7 @@ from networkx import MultiDiGraph
 # Relative
 from .step import Step
 from .abstract_async_step import AbstractAsyncStep
-from ..logging import execution_log_str, finished_executing_step_msg
+from ..logging import start_executing_step_msg, finished_executing_step_msg
 from ..utils import FTNDuration
 from ...utils.graph import get_graph
 from ...utils.logging import get_logger, log_duration
@@ -196,7 +196,7 @@ class AbstractDynamicStep(Step):
             step_indexes.append(0)
             step_indexes[level + 1] = substep_index
             step_indexes = step_indexes[:level + 2]
-            logger.info(execution_log_str(step, step_indexes))
+            logger.info(start_executing_step_msg(step, step_indexes))
             self.executor.execute_step(
                 platform_controller,
                 step,
@@ -217,7 +217,7 @@ class AbstractDynamicStep(Step):
                 step_indexes.append(0)
                 step_indexes[level + 1] = substep_index
                 step_indexes = step_indexes[:level + 2]
-                logger.info(execution_log_str(step, step_indexes))
+                logger.info(start_executing_step_msg(step, step_indexes))
                 if isinstance(step, AbstractAsyncStep):
                     self.async_steps.append(step)
                 self.executor.execute_step(
@@ -241,7 +241,7 @@ class AbstractDynamicStep(Step):
             step_indexes.append(0)
             step_indexes[level + 1] = substep_index
             step_indexes = step_indexes[:level + 2]
-            logger.info(execution_log_str(step, step_indexes))
+            logger.info(start_executing_step_msg(step, step_indexes))
             self.executor.execute_step(
                 platform_controller,
                 step,
@@ -286,7 +286,7 @@ class AbstractDynamicStep(Step):
             step_indexes[level] = i
             step_indexes = step_indexes[:level + 1]
             logger.info(
-                execution_log_str(step, step_indexes=step_indexes))
+                start_executing_step_msg(step, step_indexes=step_indexes))
             self.executor.execute_step(
                 platform_controller,
                 step,

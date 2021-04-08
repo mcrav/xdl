@@ -6,7 +6,7 @@ from .async_step import Async
 from ..core import (
     AbstractBaseStep
 )
-from ..logging import execution_log_str, finished_executing_step_msg
+from ..logging import start_executing_step_msg, finished_executing_step_msg
 
 
 class Await(AbstractBaseStep):
@@ -34,7 +34,7 @@ class Await(AbstractBaseStep):
         # Log step start if it is executed by itself (level == 0), as there will
         # be no other context logging the step start.
         if level == 0:
-            logger.info(execution_log_str(self, step_indexes))
+            logger.info(start_executing_step_msg(self, step_indexes))
 
         # Await async step with self.pid
         for async_step in async_steps:

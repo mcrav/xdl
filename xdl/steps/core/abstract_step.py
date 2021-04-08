@@ -11,7 +11,7 @@ import termcolor
 # Relative
 from .step import Step
 from .abstract_base_step import AbstractBaseStep
-from ..logging import execution_log_str, finished_executing_step_msg
+from ..logging import start_executing_step_msg, finished_executing_step_msg
 from ..utils import pretty_props_table, FTNDuration
 from ...utils.logging import get_logger, log_duration
 
@@ -219,7 +219,7 @@ class AbstractStep(Step, ABC):
         # be done inside the for loop below.
         if level == 0:
             logger.info(
-                execution_log_str(
+                start_executing_step_msg(
                     self, step_indexes=step_indexes))
 
         # Bump recursion level
@@ -236,7 +236,7 @@ class AbstractStep(Step, ABC):
 
             # Log step execution
             logger.info(
-                execution_log_str(
+                start_executing_step_msg(
                     step, step_indexes=step_indexes))
 
             # Execute step
