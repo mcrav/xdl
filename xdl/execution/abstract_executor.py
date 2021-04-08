@@ -10,8 +10,8 @@ from .utils import do_sanity_check
 from ..steps.special_steps import Async, Await, Repeat
 from ..steps.base_steps import (
     Step, AbstractDynamicStep, AbstractBaseStep,
-    finished_executing_step_msg, execution_log_str
 )
+from ..steps.logging import execution_log_str, finished_executing_step_msg
 from ..steps import NON_RECURSIVE_ABSTRACT_STEPS
 from ..errors import (
     XDLExecutionOnDifferentGraphError,
