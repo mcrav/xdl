@@ -144,7 +144,7 @@ class AbstractXDLExecutor(ABC):
         if steps is None:
             steps = self._xdl.steps
         for step in steps:
-            do_sanity_check(self._graph, step)
+            do_sanity_check(graph, step)
 
     def add_internal_properties(
         self,
