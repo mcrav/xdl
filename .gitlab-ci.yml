@@ -21,7 +21,7 @@ stages:
 
     - pip install git+https://$CHEMPILER_USER:$CHEMPILER_PW@gitlab.com/croningroup/chemputer/chempiler.git@master
 
-    - pip install git+https://$SERIALLABWARE_USER:$SERIALLABWARE_PW@gitlab.com/croningroup/chemputer/seriallabware.git@SL2/sl2-develop
+    - pip install git+https://$SERIALLABWARE_USER:$SERIALLABWARE_PW@gitlab.com/croningroup/chemputer/seriallabware.git@SerialLabware2
 
     - pip install git+https://$CHEMPUTERAPI_USER:$CHEMPUTERAPI_PW@gitlab.com/croningroup/chemputer/chemputerapi.git@master
 
