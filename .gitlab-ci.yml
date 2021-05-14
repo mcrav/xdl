@@ -73,7 +73,7 @@ pages:
   image: 'python:3.8'
   script:
     - pip install -r requirements.txt
-    - pip install -U sphinx
+    - pip install sphinx==3.5.4
     - pip install sphinx_rtd_theme
     - pip install .
     - cd documentation
