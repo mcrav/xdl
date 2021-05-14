@@ -1,5 +1,5 @@
 from .add import AbstractAddStep
-from .add_solid import AbstractAddSolidStep
+from .add_solid import AbstractAddSolidStep, AbstractAddSolidFromDispenser
 from .clean_vessel import AbstractCleanVesselStep
 from .crystallize import AbstractCrystallizeStep
 from .dissolve import AbstractDissolveStep

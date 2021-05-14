@@ -8,6 +8,7 @@ from ...utils.prop_limits import (
     ROTATION_SPEED_PROP_LIMIT,
     TIME_PROP_LIMIT,
     MOL_PROP_LIMIT,
+    PropLimit
 )
 
 class AbstractAddSolidStep(AbstractXDLElementTemplate, AbstractStep):
@@ -51,6 +52,53 @@ class AbstractAddSolidStep(AbstractXDLElementTemplate, AbstractStep):
         'mass': MASS_PROP_LIMIT,
         'time': TIME_PROP_LIMIT,
         'stir_speed': ROTATION_SPEED_PROP_LIMIT,
+    }
+
+    @property
+    def vessel_specs(self) -> Dict[str, VesselSpec]:
+        return {
+            'vessel': VesselSpec(stir=self.stir)
+        }
+
+class AbstractAddSolidFromDispenser(AbstractXDLElementTemplate, AbstractStep):
+    """Add solid reagent from a Solid Dispenser
+
+    Mandatory Props:
+        vessel (vessel): Vessel to add reagent to
+        stir (bool): Stir the vessel on addition
+        stir_speed (float): Stir speed in RPM for the stirring
+        turns (int): Number of turns for the Solid Dispenser to move
+        speed (int): Speed of the solid dispenser movement in RPM
+        driver (int): Driver used to turn the motor dependent on board used.
+    """
+
+    MANDATORY_NAME = 'AddSolidFromDispenser'
+
+    MANDATORY_PROP_TYPES = {
+        'vessel': VESSEL_PROP_TYPE,
+        'stir': bool,
+        'stir_speed': float,
+        'turns': int,
+        'speed': int,
+        'driver': int
+    }
+
+    MANDATORY_DEFAULT_PROPS = {
+        'speed': 100,
+        'driver': 1,
+        'stir_speed': None,
+        'stir': False
+    }
+
+    MANDATORY_PROP_LIMITS = {
+        'driver': PropLimit(
+            enum=['1', '2'],
+            default='1'
+        ),
+        'speed': PropLimit(
+            enum=[str(i) for i in range(1, 601)]
+        ),
+        'stir_speed': ROTATION_SPEED_PROP_LIMIT
     }
 
     @property

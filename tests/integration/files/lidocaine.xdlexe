@@ -96,7 +96,7 @@
       anticlogging_reagent_volume="10 mL"
       through_cartridge="None"
       reagent_vessel="flask_acetic_acid"
-      waste_vessel="waste_filter"
+      waste_vessel="waste_dry"
       vessel_type="filter"
       anticlogging_solvent_vessel="None"
       prime_n_times="1"
@@ -114,7 +114,7 @@
         reagent="glacial acetic acid"
         volume="3 mL"
         reagent_vessel="flask_acetic_acid"
-        waste_vessel="waste_filter"
+        waste_vessel="waste_dry"
         prime_n_times="1"
         move_speed="40.0"
         aspiration_speed="10.0"
@@ -126,7 +126,7 @@
           <Children>
             <CMove
               from_vessel="flask_acetic_acid"
-              to_vessel="waste_filter"
+              to_vessel="waste_dry"
               volume="3 mL"
               move_speed="40.0"
               aspiration_speed="10.0"
@@ -142,7 +142,7 @@
           <Steps>
             <CMove
               from_vessel="flask_acetic_acid"
-              to_vessel="waste_filter"
+              to_vessel="waste_dry"
               volume="3 mL"
               move_speed="40.0"
               aspiration_speed="10.0"
@@ -156,6 +156,29 @@
               comment="" />
           </Steps>
         </Repeat>
+        <FlushTubing
+          to_vessel="waste_dry"
+          to_port="0"
+          volume="5 mL"
+          dispense_speed="40.0"
+          through_cartridge="None"
+          flush_tube_vessel="flask_argon"
+          comment="">
+          <CMove
+            from_vessel="flask_argon"
+            to_vessel="waste_dry"
+            volume="5 mL"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0"
+            from_port="0"
+            to_port="0"
+            through="None"
+            use_backbone="True"
+            repeats="1"
+            estimated_volume="None"
+            comment="" />
+        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_acetic_acid"
@@ -298,6 +321,29 @@
               comment="" />
           </Steps>
         </Repeat>
+        <FlushTubing
+          to_vessel="waste_filter"
+          to_port="0"
+          volume="5 mL"
+          dispense_speed="40.0"
+          through_cartridge="None"
+          flush_tube_vessel="flask_argon"
+          comment="">
+          <CMove
+            from_vessel="flask_argon"
+            to_vessel="waste_filter"
+            volume="5 mL"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0"
+            from_port="0"
+            to_port="0"
+            through="None"
+            use_backbone="True"
+            repeats="1"
+            estimated_volume="None"
+            comment="" />
+        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_dimethylaniline"
@@ -374,7 +420,7 @@
       anticlogging_reagent_volume="10 mL"
       through_cartridge="None"
       reagent_vessel="flask_chloroacetyl_chloride"
-      waste_vessel="waste_filter"
+      waste_vessel="waste_dry"
       vessel_type="filter"
       anticlogging_solvent_vessel="None"
       prime_n_times="1"
@@ -398,7 +444,7 @@
         reagent="chloroacetyl chloride"
         volume="3 mL"
         reagent_vessel="flask_chloroacetyl_chloride"
-        waste_vessel="waste_filter"
+        waste_vessel="waste_dry"
         prime_n_times="1"
         move_speed="40.0"
         aspiration_speed="10.0"
@@ -410,7 +456,7 @@
           <Children>
             <CMove
               from_vessel="flask_chloroacetyl_chloride"
-              to_vessel="waste_filter"
+              to_vessel="waste_dry"
               volume="3 mL"
               move_speed="40.0"
               aspiration_speed="10.0"
@@ -426,7 +472,7 @@
           <Steps>
             <CMove
               from_vessel="flask_chloroacetyl_chloride"
-              to_vessel="waste_filter"
+              to_vessel="waste_dry"
               volume="3 mL"
               move_speed="40.0"
               aspiration_speed="10.0"
@@ -440,6 +486,29 @@
               comment="" />
           </Steps>
         </Repeat>
+        <FlushTubing
+          to_vessel="waste_dry"
+          to_port="0"
+          volume="5 mL"
+          dispense_speed="40.0"
+          through_cartridge="None"
+          flush_tube_vessel="flask_argon"
+          comment="">
+          <CMove
+            from_vessel="flask_argon"
+            to_vessel="waste_dry"
+            volume="5 mL"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0"
+            from_port="0"
+            to_port="0"
+            through="None"
+            use_backbone="True"
+            repeats="1"
+            estimated_volume="None"
+            comment="" />
+        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_chloroacetyl_chloride"
@@ -516,7 +585,7 @@
       anticlogging_reagent_volume="10 mL"
       through_cartridge="None"
       reagent_vessel="flask_sodium_acetate"
-      waste_vessel="waste_filter"
+      waste_vessel="waste_base"
       vessel_type="filter"
       anticlogging_solvent_vessel="None"
       prime_n_times="1"
@@ -540,7 +609,7 @@
         reagent="half-saturated aqueous sodium acetate"
         volume="3 mL"
         reagent_vessel="flask_sodium_acetate"
-        waste_vessel="waste_filter"
+        waste_vessel="waste_base"
         prime_n_times="1"
         move_speed="40.0"
         aspiration_speed="10.0"
@@ -552,7 +621,7 @@
           <Children>
             <CMove
               from_vessel="flask_sodium_acetate"
-              to_vessel="waste_filter"
+              to_vessel="waste_base"
               volume="3 mL"
               move_speed="40.0"
               aspiration_speed="10.0"
@@ -568,7 +637,7 @@
           <Steps>
             <CMove
               from_vessel="flask_sodium_acetate"
-              to_vessel="waste_filter"
+              to_vessel="waste_base"
               volume="3 mL"
               move_speed="40.0"
               aspiration_speed="10.0"
@@ -582,6 +651,29 @@
               comment="" />
           </Steps>
         </Repeat>
+        <FlushTubing
+          to_vessel="waste_base"
+          to_port="0"
+          volume="5 mL"
+          dispense_speed="40.0"
+          through_cartridge="None"
+          flush_tube_vessel="flask_argon"
+          comment="">
+          <CMove
+            from_vessel="flask_argon"
+            to_vessel="waste_base"
+            volume="5 mL"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0"
+            from_port="0"
+            to_port="0"
+            through="None"
+            use_backbone="True"
+            repeats="1"
+            estimated_volume="None"
+            comment="" />
+        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_sodium_acetate"
@@ -779,6 +871,29 @@
               comment="" />
           </Steps>
         </Repeat>
+        <FlushTubing
+          to_vessel="waste_filter"
+          to_port="0"
+          volume="5 mL"
+          dispense_speed="40.0"
+          through_cartridge="None"
+          flush_tube_vessel="flask_argon"
+          comment="">
+          <CMove
+            from_vessel="flask_argon"
+            to_vessel="waste_filter"
+            volume="5 mL"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0"
+            from_port="0"
+            to_port="0"
+            through="None"
+            use_backbone="True"
+            repeats="1"
+            estimated_volume="None"
+            comment="" />
+        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_water"
@@ -1137,7 +1252,7 @@
       anticlogging_reagent_volume="10 mL"
       through_cartridge="None"
       reagent_vessel="flask_diethylamine"
-      waste_vessel="waste_filter"
+      waste_vessel="waste_organic"
       vessel_type="filter"
       anticlogging_solvent_vessel="None"
       prime_n_times="1"
@@ -1155,7 +1270,7 @@
         reagent="diethylamine"
         volume="3 mL"
         reagent_vessel="flask_diethylamine"
-        waste_vessel="waste_filter"
+        waste_vessel="waste_organic"
         prime_n_times="1"
         move_speed="40.0"
         aspiration_speed="10.0"
@@ -1167,7 +1282,7 @@
           <Children>
             <CMove
               from_vessel="flask_diethylamine"
-              to_vessel="waste_filter"
+              to_vessel="waste_organic"
               volume="3 mL"
               move_speed="40.0"
               aspiration_speed="10.0"
@@ -1183,7 +1298,7 @@
           <Steps>
             <CMove
               from_vessel="flask_diethylamine"
-              to_vessel="waste_filter"
+              to_vessel="waste_organic"
               volume="3 mL"
               move_speed="40.0"
               aspiration_speed="10.0"
@@ -1197,6 +1312,29 @@
               comment="" />
           </Steps>
         </Repeat>
+        <FlushTubing
+          to_vessel="waste_organic"
+          to_port="0"
+          volume="5 mL"
+          dispense_speed="40.0"
+          through_cartridge="None"
+          flush_tube_vessel="flask_argon"
+          comment="">
+          <CMove
+            from_vessel="flask_argon"
+            to_vessel="waste_organic"
+            volume="5 mL"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0"
+            from_port="0"
+            to_port="0"
+            through="None"
+            use_backbone="True"
+            repeats="1"
+            estimated_volume="None"
+            comment="" />
+        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_diethylamine"
@@ -1273,7 +1411,7 @@
       anticlogging_reagent_volume="10 mL"
       through_cartridge="None"
       reagent_vessel="flask_toluene"
-      waste_vessel="waste_filter"
+      waste_vessel="waste_organic"
       vessel_type="filter"
       anticlogging_solvent_vessel="None"
       prime_n_times="1"
@@ -1297,7 +1435,7 @@
         reagent="toluene"
         volume="3 mL"
         reagent_vessel="flask_toluene"
-        waste_vessel="waste_filter"
+        waste_vessel="waste_organic"
         prime_n_times="1"
         move_speed="40.0"
         aspiration_speed="10.0"
@@ -1309,7 +1447,7 @@
           <Children>
             <CMove
               from_vessel="flask_toluene"
-              to_vessel="waste_filter"
+              to_vessel="waste_organic"
               volume="3 mL"
               move_speed="40.0"
               aspiration_speed="10.0"
@@ -1325,7 +1463,7 @@
           <Steps>
             <CMove
               from_vessel="flask_toluene"
-              to_vessel="waste_filter"
+              to_vessel="waste_organic"
               volume="3 mL"
               move_speed="40.0"
               aspiration_speed="10.0"
@@ -1339,6 +1477,29 @@
               comment="" />
           </Steps>
         </Repeat>
+        <FlushTubing
+          to_vessel="waste_organic"
+          to_port="0"
+          volume="5 mL"
+          dispense_speed="40.0"
+          through_cartridge="None"
+          flush_tube_vessel="flask_argon"
+          comment="">
+          <CMove
+            from_vessel="flask_argon"
+            to_vessel="waste_organic"
+            volume="5 mL"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0"
+            from_port="0"
+            to_port="0"
+            through="None"
+            use_backbone="True"
+            repeats="1"
+            estimated_volume="None"
+            comment="" />
+        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_toluene"
@@ -1653,7 +1814,7 @@
         anticlogging_reagent_volume="10 mL"
         through_cartridge="None"
         reagent_vessel="flask_water"
-        waste_vessel="waste_separator"
+        waste_vessel="waste_filter"
         vessel_type="separator"
         anticlogging_solvent_vessel="None"
         prime_n_times="1"
@@ -1671,7 +1832,7 @@
           reagent="water"
           volume="3 mL"
           reagent_vessel="flask_water"
-          waste_vessel="waste_separator"
+          waste_vessel="waste_filter"
           prime_n_times="1"
           move_speed="40.0"
           aspiration_speed="10.0"
@@ -1683,7 +1844,7 @@
             <Children>
               <CMove
                 from_vessel="flask_water"
-                to_vessel="waste_separator"
+                to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
                 aspiration_speed="10.0"
@@ -1699,7 +1860,7 @@
             <Steps>
               <CMove
                 from_vessel="flask_water"
-                to_vessel="waste_separator"
+                to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
                 aspiration_speed="10.0"
@@ -1713,6 +1874,29 @@
                 comment="" />
             </Steps>
           </Repeat>
+          <FlushTubing
+            to_vessel="waste_filter"
+            to_port="0"
+            volume="5 mL"
+            dispense_speed="40.0"
+            through_cartridge="None"
+            flush_tube_vessel="flask_argon"
+            comment="">
+            <CMove
+              from_vessel="flask_argon"
+              to_vessel="waste_filter"
+              volume="5 mL"
+              move_speed="40.0"
+              aspiration_speed="10.0"
+              dispense_speed="40.0"
+              from_port="0"
+              to_port="0"
+              through="None"
+              use_backbone="True"
+              repeats="1"
+              estimated_volume="None"
+              comment="" />
+          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_water"
@@ -1916,7 +2100,7 @@
         anticlogging_reagent_volume="10 mL"
         through_cartridge="None"
         reagent_vessel="flask_water"
-        waste_vessel="waste_separator"
+        waste_vessel="waste_filter"
         vessel_type="separator"
         anticlogging_solvent_vessel="None"
         prime_n_times="1"
@@ -1934,7 +2118,7 @@
           reagent="water"
           volume="3 mL"
           reagent_vessel="flask_water"
-          waste_vessel="waste_separator"
+          waste_vessel="waste_filter"
           prime_n_times="1"
           move_speed="40.0"
           aspiration_speed="10.0"
@@ -1946,7 +2130,7 @@
             <Children>
               <CMove
                 from_vessel="flask_water"
-                to_vessel="waste_separator"
+                to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
                 aspiration_speed="10.0"
@@ -1962,7 +2146,7 @@
             <Steps>
               <CMove
                 from_vessel="flask_water"
-                to_vessel="waste_separator"
+                to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
                 aspiration_speed="10.0"
@@ -1976,6 +2160,29 @@
                 comment="" />
             </Steps>
           </Repeat>
+          <FlushTubing
+            to_vessel="waste_filter"
+            to_port="0"
+            volume="5 mL"
+            dispense_speed="40.0"
+            through_cartridge="None"
+            flush_tube_vessel="flask_argon"
+            comment="">
+            <CMove
+              from_vessel="flask_argon"
+              to_vessel="waste_filter"
+              volume="5 mL"
+              move_speed="40.0"
+              aspiration_speed="10.0"
+              dispense_speed="40.0"
+              from_port="0"
+              to_port="0"
+              through="None"
+              use_backbone="True"
+              repeats="1"
+              estimated_volume="None"
+              comment="" />
+          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_water"
@@ -2179,7 +2386,7 @@
         anticlogging_reagent_volume="10 mL"
         through_cartridge="None"
         reagent_vessel="flask_water"
-        waste_vessel="waste_separator"
+        waste_vessel="waste_filter"
         vessel_type="separator"
         anticlogging_solvent_vessel="None"
         prime_n_times="1"
@@ -2197,7 +2404,7 @@
           reagent="water"
           volume="3 mL"
           reagent_vessel="flask_water"
-          waste_vessel="waste_separator"
+          waste_vessel="waste_filter"
           prime_n_times="1"
           move_speed="40.0"
           aspiration_speed="10.0"
@@ -2209,7 +2416,7 @@
             <Children>
               <CMove
                 from_vessel="flask_water"
-                to_vessel="waste_separator"
+                to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
                 aspiration_speed="10.0"
@@ -2225,7 +2432,7 @@
             <Steps>
               <CMove
                 from_vessel="flask_water"
-                to_vessel="waste_separator"
+                to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
                 aspiration_speed="10.0"
@@ -2239,6 +2446,29 @@
                 comment="" />
             </Steps>
           </Repeat>
+          <FlushTubing
+            to_vessel="waste_filter"
+            to_port="0"
+            volume="5 mL"
+            dispense_speed="40.0"
+            through_cartridge="None"
+            flush_tube_vessel="flask_argon"
+            comment="">
+            <CMove
+              from_vessel="flask_argon"
+              to_vessel="waste_filter"
+              volume="5 mL"
+              move_speed="40.0"
+              aspiration_speed="10.0"
+              dispense_speed="40.0"
+              from_port="0"
+              to_port="0"
+              through="None"
+              use_backbone="True"
+              repeats="1"
+              estimated_volume="None"
+              comment="" />
+          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_water"
@@ -2442,7 +2672,7 @@
         anticlogging_reagent_volume="10 mL"
         through_cartridge="None"
         reagent_vessel="flask_water"
-        waste_vessel="waste_separator"
+        waste_vessel="waste_filter"
         vessel_type="separator"
         anticlogging_solvent_vessel="None"
         prime_n_times="1"
@@ -2460,7 +2690,7 @@
           reagent="water"
           volume="3 mL"
           reagent_vessel="flask_water"
-          waste_vessel="waste_separator"
+          waste_vessel="waste_filter"
           prime_n_times="1"
           move_speed="40.0"
           aspiration_speed="10.0"
@@ -2472,7 +2702,7 @@
             <Children>
               <CMove
                 from_vessel="flask_water"
-                to_vessel="waste_separator"
+                to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
                 aspiration_speed="10.0"
@@ -2488,7 +2718,7 @@
             <Steps>
               <CMove
                 from_vessel="flask_water"
-                to_vessel="waste_separator"
+                to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
                 aspiration_speed="10.0"
@@ -2502,6 +2732,29 @@
                 comment="" />
             </Steps>
           </Repeat>
+          <FlushTubing
+            to_vessel="waste_filter"
+            to_port="0"
+            volume="5 mL"
+            dispense_speed="40.0"
+            through_cartridge="None"
+            flush_tube_vessel="flask_argon"
+            comment="">
+            <CMove
+              from_vessel="flask_argon"
+              to_vessel="waste_filter"
+              volume="5 mL"
+              move_speed="40.0"
+              aspiration_speed="10.0"
+              dispense_speed="40.0"
+              from_port="0"
+              to_port="0"
+              through="None"
+              use_backbone="True"
+              repeats="1"
+              estimated_volume="None"
+              comment="" />
+          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_water"
@@ -2820,6 +3073,29 @@
                 comment="" />
             </Steps>
           </Repeat>
+          <FlushTubing
+            to_vessel="waste_separator"
+            to_port="0"
+            volume="5 mL"
+            dispense_speed="40.0"
+            through_cartridge="None"
+            flush_tube_vessel="flask_argon"
+            comment="">
+            <CMove
+              from_vessel="flask_argon"
+              to_vessel="waste_separator"
+              volume="5 mL"
+              move_speed="40.0"
+              aspiration_speed="10.0"
+              dispense_speed="40.0"
+              from_port="0"
+              to_port="0"
+              through="None"
+              use_backbone="True"
+              repeats="1"
+              estimated_volume="None"
+              comment="" />
+          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_hcl"
@@ -3048,7 +3324,7 @@
         anticlogging_reagent_volume="10 mL"
         through_cartridge="None"
         reagent_vessel="flask_water"
-        waste_vessel="waste_separator"
+        waste_vessel="waste_filter"
         vessel_type="separator"
         anticlogging_solvent_vessel="None"
         prime_n_times="1"
@@ -3066,7 +3342,7 @@
           reagent="water"
           volume="3 mL"
           reagent_vessel="flask_water"
-          waste_vessel="waste_separator"
+          waste_vessel="waste_filter"
           prime_n_times="1"
           move_speed="40.0"
           aspiration_speed="10.0"
@@ -3078,7 +3354,7 @@
             <Children>
               <CMove
                 from_vessel="flask_water"
-                to_vessel="waste_separator"
+                to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
                 aspiration_speed="10.0"
@@ -3094,7 +3370,7 @@
             <Steps>
               <CMove
                 from_vessel="flask_water"
-                to_vessel="waste_separator"
+                to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
                 aspiration_speed="10.0"
@@ -3108,6 +3384,29 @@
                 comment="" />
             </Steps>
           </Repeat>
+          <FlushTubing
+            to_vessel="waste_filter"
+            to_port="0"
+            volume="5 mL"
+            dispense_speed="40.0"
+            through_cartridge="None"
+            flush_tube_vessel="flask_argon"
+            comment="">
+            <CMove
+              from_vessel="flask_argon"
+              to_vessel="waste_filter"
+              volume="5 mL"
+              move_speed="40.0"
+              aspiration_speed="10.0"
+              dispense_speed="40.0"
+              from_port="0"
+              to_port="0"
+              through="None"
+              use_backbone="True"
+              repeats="1"
+              estimated_volume="None"
+              comment="" />
+          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_water"
@@ -3367,7 +3666,7 @@
       anticlogging_reagent_volume="10 mL"
       through_cartridge="None"
       reagent_vessel="flask_naoh"
-      waste_vessel="waste_filter"
+      waste_vessel="waste_base"
       vessel_type="filter"
       anticlogging_solvent_vessel="None"
       prime_n_times="1"
@@ -3391,7 +3690,7 @@
         reagent="3 M sodium hydroxide"
         volume="3 mL"
         reagent_vessel="flask_naoh"
-        waste_vessel="waste_filter"
+        waste_vessel="waste_base"
         prime_n_times="1"
         move_speed="40.0"
         aspiration_speed="10.0"
@@ -3403,7 +3702,7 @@
           <Children>
             <CMove
               from_vessel="flask_naoh"
-              to_vessel="waste_filter"
+              to_vessel="waste_base"
               volume="3 mL"
               move_speed="40.0"
               aspiration_speed="10.0"
@@ -3419,7 +3718,7 @@
           <Steps>
             <CMove
               from_vessel="flask_naoh"
-              to_vessel="waste_filter"
+              to_vessel="waste_base"
               volume="3 mL"
               move_speed="40.0"
               aspiration_speed="10.0"
@@ -3433,6 +3732,29 @@
               comment="" />
           </Steps>
         </Repeat>
+        <FlushTubing
+          to_vessel="waste_base"
+          to_port="0"
+          volume="5 mL"
+          dispense_speed="40.0"
+          through_cartridge="None"
+          flush_tube_vessel="flask_argon"
+          comment="">
+          <CMove
+            from_vessel="flask_argon"
+            to_vessel="waste_base"
+            volume="5 mL"
+            move_speed="40.0"
+            aspiration_speed="10.0"
+            dispense_speed="40.0"
+            from_port="0"
+            to_port="0"
+            through="None"
+            use_backbone="True"
+            repeats="1"
+            estimated_volume="None"
+            comment="" />
+        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_naoh"
@@ -3781,6 +4103,29 @@
                 comment="" />
             </Steps>
           </Repeat>
+          <FlushTubing
+            to_vessel="waste_filter"
+            to_port="0"
+            volume="5 mL"
+            dispense_speed="40.0"
+            through_cartridge="None"
+            flush_tube_vessel="flask_argon"
+            comment="">
+            <CMove
+              from_vessel="flask_argon"
+              to_vessel="waste_filter"
+              volume="5 mL"
+              move_speed="40.0"
+              aspiration_speed="10.0"
+              dispense_speed="40.0"
+              from_port="0"
+              to_port="0"
+              through="None"
+              use_backbone="True"
+              repeats="1"
+              estimated_volume="None"
+              comment="" />
+          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_water"
