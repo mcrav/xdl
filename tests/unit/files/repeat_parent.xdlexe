@@ -73,7 +73,7 @@
           anticlogging_reagent_volume="10 mL"
           through_cartridge="None"
           reagent_vessel="flask_ether"
-          waste_vessel="waste_filter"
+          waste_vessel="waste_reactor"
           vessel_type="filter"
           anticlogging_solvent_vessel="None"
           prime_n_times="1"
@@ -91,7 +91,7 @@
             reagent="ether"
             volume="3 mL"
             reagent_vessel="flask_ether"
-            waste_vessel="waste_filter"
+            waste_vessel="waste_reactor"
             prime_n_times="1"
             move_speed="40.0"
             aspiration_speed="10.0"
@@ -103,7 +103,7 @@
               <Children>
                 <CMove
                   from_vessel="flask_ether"
-                  to_vessel="waste_filter"
+                  to_vessel="waste_reactor"
                   volume="3 mL"
                   move_speed="40.0"
                   aspiration_speed="10.0"
@@ -119,7 +119,7 @@
               <Steps>
                 <CMove
                   from_vessel="flask_ether"
-                  to_vessel="waste_filter"
+                  to_vessel="waste_reactor"
                   volume="3 mL"
                   move_speed="40.0"
                   aspiration_speed="10.0"
@@ -133,6 +133,29 @@
                   comment="" />
               </Steps>
             </Repeat>
+            <FlushTubing
+              to_vessel="waste_reactor"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_nitrogen"
+              comment="">
+              <CMove
+                from_vessel="flask_nitrogen"
+                to_vessel="waste_reactor"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="10.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </PrimePumpForAdd>
           <CMove
             from_vessel="flask_ether"
@@ -241,7 +264,7 @@
           anticlogging_reagent_volume="10 mL"
           through_cartridge="None"
           reagent_vessel="flask_ether"
-          waste_vessel="waste_filter"
+          waste_vessel="waste_reactor"
           vessel_type="filter"
           anticlogging_solvent_vessel="None"
           prime_n_times="1"
@@ -259,7 +282,7 @@
             reagent="ether"
             volume="3 mL"
             reagent_vessel="flask_ether"
-            waste_vessel="waste_filter"
+            waste_vessel="waste_reactor"
             prime_n_times="1"
             move_speed="40.0"
             aspiration_speed="10.0"
@@ -271,7 +294,7 @@
               <Children>
                 <CMove
                   from_vessel="flask_ether"
-                  to_vessel="waste_filter"
+                  to_vessel="waste_reactor"
                   volume="3 mL"
                   move_speed="40.0"
                   aspiration_speed="10.0"
@@ -287,7 +310,7 @@
               <Steps>
                 <CMove
                   from_vessel="flask_ether"
-                  to_vessel="waste_filter"
+                  to_vessel="waste_reactor"
                   volume="3 mL"
                   move_speed="40.0"
                   aspiration_speed="10.0"
@@ -301,6 +324,29 @@
                   comment="" />
               </Steps>
             </Repeat>
+            <FlushTubing
+              to_vessel="waste_reactor"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_nitrogen"
+              comment="">
+              <CMove
+                from_vessel="flask_nitrogen"
+                to_vessel="waste_reactor"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="10.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </PrimePumpForAdd>
           <CMove
             from_vessel="flask_ether"
@@ -407,7 +453,7 @@
           anticlogging_reagent_volume="10 mL"
           through_cartridge="None"
           reagent_vessel="flask_ether"
-          waste_vessel="waste_filter"
+          waste_vessel="waste_reactor"
           vessel_type="filter"
           anticlogging_solvent_vessel="None"
           prime_n_times="1"
@@ -425,7 +471,7 @@
             reagent="ether"
             volume="3 mL"
             reagent_vessel="flask_ether"
-            waste_vessel="waste_filter"
+            waste_vessel="waste_reactor"
             prime_n_times="1"
             move_speed="40.0"
             aspiration_speed="10.0"
@@ -437,7 +483,7 @@
               <Children>
                 <CMove
                   from_vessel="flask_ether"
-                  to_vessel="waste_filter"
+                  to_vessel="waste_reactor"
                   volume="3 mL"
                   move_speed="40.0"
                   aspiration_speed="10.0"
@@ -453,7 +499,7 @@
               <Steps>
                 <CMove
                   from_vessel="flask_ether"
-                  to_vessel="waste_filter"
+                  to_vessel="waste_reactor"
                   volume="3 mL"
                   move_speed="40.0"
                   aspiration_speed="10.0"
@@ -467,6 +513,29 @@
                   comment="" />
               </Steps>
             </Repeat>
+            <FlushTubing
+              to_vessel="waste_reactor"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_nitrogen"
+              comment="">
+              <CMove
+                from_vessel="flask_nitrogen"
+                to_vessel="waste_reactor"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="10.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </PrimePumpForAdd>
           <CMove
             from_vessel="flask_ether"

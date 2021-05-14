@@ -96,7 +96,7 @@ class AbstractAddSolidFromDispenser(AbstractXDLElementTemplate, AbstractStep):
             default='1'
         ),
         'speed': PropLimit(
-            enum=list(range(1, 601))
+            enum=[str(i) for i in range(1, 601)]
         ),
         'stir_speed': ROTATION_SPEED_PROP_LIMIT
     }
