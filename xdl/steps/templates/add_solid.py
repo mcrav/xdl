@@ -78,6 +78,7 @@ class AbstractAddSolidFromDispenser(AbstractXDLElementTemplate, AbstractStep):
         'vessel': VESSEL_PROP_TYPE,
         'stir': bool,
         'stir_speed': float,
+        'dispenser': str,
         'turns': int,
         'speed': int,
         'driver': int
@@ -86,6 +87,7 @@ class AbstractAddSolidFromDispenser(AbstractXDLElementTemplate, AbstractStep):
     MANDATORY_DEFAULT_PROPS = {
         'speed': 100,
         'driver': 1,
+        'dispenser': None,
         'stir_speed': None,
         'stir': False
     }
