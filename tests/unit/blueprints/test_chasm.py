@@ -1,4 +1,5 @@
 import os
+import pytest
 import json
 from xdl.blueprints.chasm2 import Chasm2
 
@@ -7,6 +8,7 @@ FILES = os.path.join(HERE, 'files')
 TEST_OUTPUT = os.path.join(HERE, 'test_output')
 os.makedirs(TEST_OUTPUT, exist_ok=True)
 
+@pytest.mark.unit
 def test_chasm2():
     with open(os.path.join(FILES, 'chasm2.json')) as fd:
         chasm2_procedure = json.load(fd)
