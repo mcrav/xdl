@@ -1,0 +1,438 @@
+{
+  "reaction": {
+    "reaction1": {
+      "addition1": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition2": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition3": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition4": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition5": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition6": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition7": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition8": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition9": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition10": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "reaction": {
+        "time": null,
+        "temp": null
+      }
+    },
+    "reaction2": {
+      "addition1": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition2": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition3": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition4": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition5": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition6": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition7": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition8": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition9": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition10": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "reaction": {
+        "time": null,
+        "temp": null
+      }
+    },
+    "reaction3": {
+      "addition1": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition2": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition3": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition4": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition5": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition6": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition7": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition8": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition9": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition10": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "reaction": {
+        "time": null,
+        "temp": null
+      }
+    },
+    "reaction4": {
+      "addition1": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition2": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition3": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition4": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition5": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition6": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition7": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition8": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition9": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition10": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "reaction": {
+        "time": null,
+        "temp": null
+      }
+    },
+    "reaction5": {
+      "addition1": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition2": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition3": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition4": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition5": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition6": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition7": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition8": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition9": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "addition10": {
+        "reagent": null,
+        "reagent_type": "liquid",
+        "amount": null,
+        "temp": null,
+        "speed": null
+      },
+      "reaction": {
+        "time": null,
+        "temp": null
+      }
+    }
+  },
+  "quench": {
+    "reagent": null,
+    "volume": null,
+    "temp": null
+  },
+  "workup": {
+    "separation1": {
+      "purpose": "extract",
+      "solvent": "ether",
+      "solvent_volume": "40 mL",
+      "waste_phase_dest": "waste",
+      "product_phase_dest": "buffer_flask",
+      "product_phase": "top"
+    },
+    "separation2": {
+      "purpose": "extract",
+      "solvent": "mether",
+      "solvent_volume": "30 mL",
+      "waste_phase_dest": "waste",
+      "product_phase_dest": "product",
+      "product_phase": "top"
+    },
+    "separation3": {
+      "purpose": "extract",
+      "solvent": null,
+      "solvent_volume": null,
+      "waste_phase_dest": "waste",
+      "product_phase_dest": "product",
+      "product_phase": "top"
+    },
+    "separation4": {
+      "purpose": "extract",
+      "solvent": null,
+      "solvent_volume": null,
+      "waste_phase_dest": "waste",
+      "product_phase_dest": "product",
+      "product_phase": "top"
+    },
+    "separation5": {
+      "purpose": "extract",
+      "solvent": null,
+      "solvent_volume": null,
+      "waste_phase_dest": "waste",
+      "product_phase_dest": "product",
+      "product_phase": "top"
+    }
+  },
+  "evaporation": {
+    "pressure": "150 mbar",
+    "temp": "50",
+    "time": "30 min",
+    "dry": true
+  },
+  "purification": {}
+}
