@@ -279,6 +279,10 @@ class XDLExecutionClient(object):
                 the correct graph and setup for the experiment being performed.
         """
         self._platform_controller = platform_controller
+        self._platform_controller.run_execution_client(
+            execution_key=self.execution_key,
+            api_url=self._address,
+        )
         self._bound_platform_controller = True
 
     def unbind_platform_controller(self) -> None:
@@ -783,9 +787,14 @@ def connect():
     """Handle initial connection to server.
     Emit registration signal with execution key.
     """
-    client._logger.info('Connected to server.\n')
-    client._logger.info(f'Execution key\n{client.execution_key}')
-    sio.emit('execlient-register', {'execution_key': client.execution_key})
+    print(f'Connecting to server at {client._address} '  # noqa: T001
+          'with execution key {client.execution_key}')
+    sio.emit('xdl-platform-execlient-register',
+             {'execution_key': client.execution_key})
+
+@sio.on('execlient-registered')
+def on_execlient_registered(data):
+    print('XDL platform execution client connected to server.\n')  # noqa: T001
 
 @sio.on('app-load-experiment')
 def on_load_experiment(data):
