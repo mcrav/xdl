@@ -2,46 +2,46 @@
   "reaction": {
     "reaction1": {
       "addition1": {
-        "reagent": null,
+        "reagent": "water",
         "reagent_type": "liquid",
-        "amount": null,
+        "amount": "50 mL",
         "temp": null,
         "speed": null
       },
       "addition2": {
-        "reagent": null,
+        "reagent": "ether",
         "reagent_type": "liquid",
-        "amount": null,
-        "temp": null,
+        "amount": "20 mL",
+        "temp": "50",
         "speed": null
       },
       "addition3": {
-        "reagent": null,
+        "reagent": "acetonitrile",
         "reagent_type": "liquid",
-        "amount": null,
+        "amount": "30 mL",
         "temp": null,
         "speed": null
       },
       "addition4": {
-        "reagent": null,
+        "reagent": "ethanol",
         "reagent_type": "liquid",
-        "amount": null,
-        "temp": null,
+        "amount": "30 ml",
+        "temp": "10",
         "speed": null
       },
       "addition5": {
-        "reagent": null,
-        "reagent_type": "liquid",
-        "amount": null,
-        "temp": null,
+        "reagent": "NaCl",
+        "reagent_type": "solid",
+        "amount": "2 g",
+        "temp": "30",
         "speed": null
       },
-      "addition6": {
-        "reagent": null,
-        "reagent_type": "liquid",
-        "amount": null,
+      "addition5": {
+        "reagent": "NaCl",
+        "reagent_type": "solid",
+        "amount": "2 g",
         "temp": null,
-        "speed": null
+        "speed": "5"
       },
       "addition7": {
         "reagent": null,

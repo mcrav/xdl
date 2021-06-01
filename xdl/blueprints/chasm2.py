@@ -18,9 +18,20 @@ class Chasm2(BaseProcedureBlueprint):
 
     def build_reaction(self):
         steps, reagents = [], []
+        current_temp = None
         for reaction_id, reaction_chasm2 in self.chasm2['reaction'].items():
             for i, item in enumerate(sorted(reaction_chasm2)):
                 item_chasm2 = reaction_chasm2[item]
+                if 'temp' in item_chasm2 and item_chasm2['temp'] is not None:
+                    heating_step = placeholders.HeatChillToTemp(
+                        temp=item_chasm2['temp'],
+                        vessel=DEFAULT_VESSEL,
+                        continue_heatchill=True,
+                        active=True
+                    )
+                    if heating_step.temp != current_temp:
+                        current_temp = item_chasm2['temp']
+                        steps.append(heating_step)
                 item_steps, item_reagents = converters[item](
                     item_chasm2, position=i)
                 steps.extend(item_steps)
@@ -89,16 +100,15 @@ def chasm2_addition(chasm2, position):
     steps, reagents = [], [Reagent(chasm2['reagent'])]
     stir = True if position > 0 else False
     if chasm2['reagent_type'] == 'solid':
-        steps = [
-            placeholders.AddSolid(
-                vessel=DEFAULT_VESSEL,
-                reagent=chasm2['reagent'],
-                mass=chasm2['amount'],
-                speed=chasm2['speed'],
-                temp=chasm2['temp'],
-                stir=stir
-            )
-        ]
+        step = placeholders.AddSolid(
+            vessel=DEFAULT_VESSEL,
+            reagent=chasm2['reagent'],
+            mass=chasm2['amount'],
+            stir=stir
+        )
+        if chasm2['speed']:
+            step.time = f'{step.mass / float(chasm2["speed"])} min'
+        steps = [step]
     else:
         steps = [
             placeholders.Add(
@@ -106,7 +116,6 @@ def chasm2_addition(chasm2, position):
                 reagent=chasm2['reagent'],
                 volume=chasm2['amount'],
                 speed=chasm2['speed'],
-                temp=chasm2['temp'],
                 stir=stir
             )
         ]
