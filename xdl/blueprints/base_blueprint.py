@@ -73,7 +73,13 @@ class BaseProcedureBlueprint(BaseBlueprint):
         reaction_steps, reaction_reagents = self.build_reaction()
         workup_steps, workup_reagents = self.build_workup()
         purification_steps, purification_reagents = self.build_purification()
-        steps = prep_steps + reaction_steps + workup_steps + purification_steps
+        steps = {
+            'prep': prep_steps,
+            'reaction': reaction_steps,
+            'workup': workup_steps,
+            'purification': purification_steps,
+            'no_section': [],
+        }
         reagents = (
             prep_reagents
             + reaction_reagents
@@ -95,7 +101,10 @@ class BaseProcedureBlueprint(BaseBlueprint):
 
         x = XDL(steps=steps, reagents=reagents, hardware=[
             Component(id="reactor", component_type="reactor"),
-            Component(id="rotavap", component_type="rotavap")
+            Component(id="rotavap", component_type="rotavap"),
+            Component(id="separator", component_type="separator"),
+            Component(id="product", component_type="flask"),
+            Component(id="buffer_flask", component_type="flask"),
         ], platform=PlaceholderPlatform)
 
         if save:
