@@ -14,13 +14,14 @@
 #
 import os
 import sys
+import time
 sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
 
 project = 'xdl'
-copyright = '2021, Cronin Group, University of Glasgow'
+copyright = f'{time.strftime("%Y")}, Cronin Group, University of Glasgow'
 author = 'Cronin Group'
 
 # The short X.Y version

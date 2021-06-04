@@ -15,3 +15,13 @@ The following steps are proposed for the future:
 * ReactInFlow
 * RunColumn
 * DoUntil
+
+Additional Features
+*******************
+
+The following features are proposed for future releases:
+
+* Concurrency
+* Parallelisation
+* Real-time feedback
+* Platform bindings are coming
