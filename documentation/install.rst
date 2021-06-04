@@ -2,9 +2,11 @@
 Installation
 ============
 
-This package is automatically tested with Python 3.6, 3.7 and 3.8 on
-Ubuntu 18.04. It is also used extensively on Windows 10 so has been manually
-tested to a degree on Windows.
+This package is automatically tested with Python 3.7, 3.8 and 3.9 on Ubuntu 20.04. It is also used extensively on Windows 10 so has been manually tested to a degree on Windows.
+
+Install from PyPI::
+
+   pip install xdl
 
 Install from source::
 

@@ -60,7 +60,7 @@
         to_vessel="filter1"
         volume="10 mL"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         from_port="0"
         to_port="bottom"
@@ -88,7 +88,7 @@
       port="top"
       through="None"
       move_speed="40.0"
-      aspiration_speed="10.0"
+      aspiration_speed="40.0"
       dispense_speed="40.0"
       anticlogging="False"
       anticlogging_solvent="None"
@@ -117,7 +117,7 @@
         waste_vessel="waste_dry"
         prime_n_times="1"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         comment="">
         <Repeat
@@ -129,7 +129,7 @@
               to_vessel="waste_dry"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -138,6 +138,29 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_dry"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_dry"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Children>
           <Steps>
             <CMove
@@ -145,7 +168,7 @@
               to_vessel="waste_dry"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -154,38 +177,38 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_dry"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_dry"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Steps>
         </Repeat>
-        <FlushTubing
-          to_vessel="waste_dry"
-          to_port="0"
-          volume="5 mL"
-          dispense_speed="40.0"
-          through_cartridge="None"
-          flush_tube_vessel="flask_argon"
-          comment="">
-          <CMove
-            from_vessel="flask_argon"
-            to_vessel="waste_dry"
-            volume="5 mL"
-            move_speed="40.0"
-            aspiration_speed="10.0"
-            dispense_speed="40.0"
-            from_port="0"
-            to_port="0"
-            through="None"
-            use_backbone="True"
-            repeats="1"
-            estimated_volume="None"
-            comment="" />
-        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_acetic_acid"
         to_vessel="filter1"
         volume="15 mL"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         from_port="0"
         to_port="top"
@@ -222,7 +245,7 @@
           to_vessel="filter1"
           volume="5 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="top"
@@ -247,7 +270,7 @@
       port="top"
       through="None"
       move_speed="40.0"
-      aspiration_speed="10.0"
+      aspiration_speed="40.0"
       dispense_speed="40.0"
       anticlogging="False"
       anticlogging_solvent="None"
@@ -282,7 +305,7 @@
         waste_vessel="waste_filter"
         prime_n_times="1"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         comment="">
         <Repeat
@@ -294,7 +317,7 @@
               to_vessel="waste_filter"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -303,6 +326,29 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_filter"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_filter"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Children>
           <Steps>
             <CMove
@@ -310,7 +356,7 @@
               to_vessel="waste_filter"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -319,38 +365,38 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_filter"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_filter"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Steps>
         </Repeat>
-        <FlushTubing
-          to_vessel="waste_filter"
-          to_port="0"
-          volume="5 mL"
-          dispense_speed="40.0"
-          through_cartridge="None"
-          flush_tube_vessel="flask_argon"
-          comment="">
-          <CMove
-            from_vessel="flask_argon"
-            to_vessel="waste_filter"
-            volume="5 mL"
-            move_speed="40.0"
-            aspiration_speed="10.0"
-            dispense_speed="40.0"
-            from_port="0"
-            to_port="0"
-            through="None"
-            use_backbone="True"
-            repeats="1"
-            estimated_volume="None"
-            comment="" />
-        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_dimethylaniline"
         to_vessel="filter1"
         volume="3 mL"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         from_port="0"
         to_port="top"
@@ -387,7 +433,7 @@
           to_vessel="filter1"
           volume="5 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="top"
@@ -412,7 +458,7 @@
       port="top"
       through="None"
       move_speed="40.0"
-      aspiration_speed="10.0"
+      aspiration_speed="40.0"
       dispense_speed="40.0"
       anticlogging="False"
       anticlogging_solvent="None"
@@ -447,7 +493,7 @@
         waste_vessel="waste_dry"
         prime_n_times="1"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         comment="">
         <Repeat
@@ -459,7 +505,7 @@
               to_vessel="waste_dry"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -468,6 +514,29 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_dry"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_dry"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Children>
           <Steps>
             <CMove
@@ -475,7 +544,7 @@
               to_vessel="waste_dry"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -484,38 +553,38 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_dry"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_dry"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Steps>
         </Repeat>
-        <FlushTubing
-          to_vessel="waste_dry"
-          to_port="0"
-          volume="5 mL"
-          dispense_speed="40.0"
-          through_cartridge="None"
-          flush_tube_vessel="flask_argon"
-          comment="">
-          <CMove
-            from_vessel="flask_argon"
-            to_vessel="waste_dry"
-            volume="5 mL"
-            move_speed="40.0"
-            aspiration_speed="10.0"
-            dispense_speed="40.0"
-            from_port="0"
-            to_port="0"
-            through="None"
-            use_backbone="True"
-            repeats="1"
-            estimated_volume="None"
-            comment="" />
-        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_chloroacetyl_chloride"
         to_vessel="filter1"
         volume="2 mL"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         from_port="0"
         to_port="top"
@@ -552,7 +621,7 @@
           to_vessel="filter1"
           volume="5 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="top"
@@ -577,7 +646,7 @@
       port="top"
       through="None"
       move_speed="40.0"
-      aspiration_speed="10.0"
+      aspiration_speed="40.0"
       dispense_speed="40.0"
       anticlogging="False"
       anticlogging_solvent="None"
@@ -612,7 +681,7 @@
         waste_vessel="waste_base"
         prime_n_times="1"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         comment="">
         <Repeat
@@ -624,7 +693,7 @@
               to_vessel="waste_base"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -633,6 +702,29 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_base"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_base"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Children>
           <Steps>
             <CMove
@@ -640,7 +732,7 @@
               to_vessel="waste_base"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -649,38 +741,38 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_base"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_base"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Steps>
         </Repeat>
-        <FlushTubing
-          to_vessel="waste_base"
-          to_port="0"
-          volume="5 mL"
-          dispense_speed="40.0"
-          through_cartridge="None"
-          flush_tube_vessel="flask_argon"
-          comment="">
-          <CMove
-            from_vessel="flask_argon"
-            to_vessel="waste_base"
-            volume="5 mL"
-            move_speed="40.0"
-            aspiration_speed="10.0"
-            dispense_speed="40.0"
-            from_port="0"
-            to_port="0"
-            through="None"
-            use_backbone="True"
-            repeats="1"
-            estimated_volume="None"
-            comment="" />
-        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_sodium_acetate"
         to_vessel="filter1"
         volume="25 mL"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         from_port="0"
         to_port="top"
@@ -717,7 +809,7 @@
           to_vessel="filter1"
           volume="5 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="top"
@@ -797,7 +889,7 @@
       port="top"
       through="None"
       move_speed="40.0"
-      aspiration_speed="10.0"
+      aspiration_speed="40.0"
       dispense_speed="40.0"
       anticlogging="False"
       anticlogging_solvent="None"
@@ -832,7 +924,7 @@
         waste_vessel="waste_filter"
         prime_n_times="1"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         comment="">
         <Repeat
@@ -844,7 +936,7 @@
               to_vessel="waste_filter"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -853,6 +945,29 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_filter"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_filter"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Children>
           <Steps>
             <CMove
@@ -860,7 +975,7 @@
               to_vessel="waste_filter"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -869,38 +984,38 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_filter"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_filter"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Steps>
         </Repeat>
-        <FlushTubing
-          to_vessel="waste_filter"
-          to_port="0"
-          volume="5 mL"
-          dispense_speed="40.0"
-          through_cartridge="None"
-          flush_tube_vessel="flask_argon"
-          comment="">
-          <CMove
-            from_vessel="flask_argon"
-            to_vessel="waste_filter"
-            volume="5 mL"
-            move_speed="40.0"
-            aspiration_speed="10.0"
-            dispense_speed="40.0"
-            from_port="0"
-            to_port="0"
-            through="None"
-            use_backbone="True"
-            repeats="1"
-            estimated_volume="None"
-            comment="" />
-        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_water"
         to_vessel="filter1"
         volume="60 mL"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         from_port="0"
         to_port="top"
@@ -937,7 +1052,7 @@
           to_vessel="filter1"
           volume="5 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="top"
@@ -1015,7 +1130,7 @@
         to_vessel="waste_filter"
         volume="10 mL"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         from_port="bottom"
         to_port="0"
@@ -1137,6 +1252,7 @@
       vessel_type="filter"
       vessel_has_stirrer="True"
       collection_flask_volume="None"
+      is_r300="False"
       comment="">
       <StopStir
         vessel="filter1"
@@ -1216,7 +1332,7 @@
         to_vessel="filter1"
         volume="10 mL"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         from_port="0"
         to_port="bottom"
@@ -1244,7 +1360,7 @@
       port="top"
       through="None"
       move_speed="40.0"
-      aspiration_speed="10.0"
+      aspiration_speed="40.0"
       dispense_speed="40.0"
       anticlogging="False"
       anticlogging_solvent="None"
@@ -1273,7 +1389,7 @@
         waste_vessel="waste_organic"
         prime_n_times="1"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         comment="">
         <Repeat
@@ -1285,7 +1401,7 @@
               to_vessel="waste_organic"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -1294,6 +1410,29 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_organic"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_organic"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Children>
           <Steps>
             <CMove
@@ -1301,7 +1440,7 @@
               to_vessel="waste_organic"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -1310,38 +1449,38 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_organic"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_organic"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Steps>
         </Repeat>
-        <FlushTubing
-          to_vessel="waste_organic"
-          to_port="0"
-          volume="5 mL"
-          dispense_speed="40.0"
-          through_cartridge="None"
-          flush_tube_vessel="flask_argon"
-          comment="">
-          <CMove
-            from_vessel="flask_argon"
-            to_vessel="waste_organic"
-            volume="5 mL"
-            move_speed="40.0"
-            aspiration_speed="10.0"
-            dispense_speed="40.0"
-            from_port="0"
-            to_port="0"
-            through="None"
-            use_backbone="True"
-            repeats="1"
-            estimated_volume="None"
-            comment="" />
-        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_diethylamine"
         to_vessel="filter1"
         volume="7.5 mL"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         from_port="0"
         to_port="top"
@@ -1378,7 +1517,7 @@
           to_vessel="filter1"
           volume="5 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="top"
@@ -1403,7 +1542,7 @@
       port="top"
       through="None"
       move_speed="40.0"
-      aspiration_speed="10.0"
+      aspiration_speed="40.0"
       dispense_speed="40.0"
       anticlogging="False"
       anticlogging_solvent="None"
@@ -1438,7 +1577,7 @@
         waste_vessel="waste_organic"
         prime_n_times="1"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         comment="">
         <Repeat
@@ -1450,7 +1589,7 @@
               to_vessel="waste_organic"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -1459,6 +1598,29 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_organic"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_organic"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Children>
           <Steps>
             <CMove
@@ -1466,7 +1628,7 @@
               to_vessel="waste_organic"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -1475,38 +1637,38 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_organic"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_organic"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Steps>
         </Repeat>
-        <FlushTubing
-          to_vessel="waste_organic"
-          to_port="0"
-          volume="5 mL"
-          dispense_speed="40.0"
-          through_cartridge="None"
-          flush_tube_vessel="flask_argon"
-          comment="">
-          <CMove
-            from_vessel="flask_argon"
-            to_vessel="waste_organic"
-            volume="5 mL"
-            move_speed="40.0"
-            aspiration_speed="10.0"
-            dispense_speed="40.0"
-            from_port="0"
-            to_port="0"
-            through="None"
-            use_backbone="True"
-            repeats="1"
-            estimated_volume="None"
-            comment="" />
-        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_toluene"
         to_vessel="filter1"
         volume="25 mL"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         from_port="0"
         to_port="top"
@@ -1543,7 +1705,7 @@
           to_vessel="filter1"
           volume="5 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="top"
@@ -1744,7 +1906,7 @@
         to_port="bottom"
         through="None"
         time="None"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         move_speed="40.0"
         dispense_speed="40.0"
         viscous="False"
@@ -1773,7 +1935,7 @@
           to_vessel="flask_separator"
           volume="all"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="bottom"
           to_port="bottom"
@@ -1806,7 +1968,7 @@
         port="bottom"
         through="None"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         anticlogging="False"
         anticlogging_solvent="None"
@@ -1835,7 +1997,7 @@
           waste_vessel="waste_filter"
           prime_n_times="1"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           comment="">
           <Repeat
@@ -1847,7 +2009,7 @@
                 to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -1856,6 +2018,29 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_filter"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_filter"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Children>
             <Steps>
               <CMove
@@ -1863,7 +2048,7 @@
                 to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -1872,38 +2057,38 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_filter"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_filter"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Steps>
           </Repeat>
-          <FlushTubing
-            to_vessel="waste_filter"
-            to_port="0"
-            volume="5 mL"
-            dispense_speed="40.0"
-            through_cartridge="None"
-            flush_tube_vessel="flask_argon"
-            comment="">
-            <CMove
-              from_vessel="flask_argon"
-              to_vessel="waste_filter"
-              volume="5 mL"
-              move_speed="40.0"
-              aspiration_speed="10.0"
-              dispense_speed="40.0"
-              from_port="0"
-              to_port="0"
-              through="None"
-              use_backbone="True"
-              repeats="1"
-              estimated_volume="None"
-              comment="" />
-          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_water"
           to_vessel="flask_separator"
           volume="50 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="bottom"
@@ -1940,7 +2125,7 @@
             to_vessel="flask_separator"
             volume="5 mL"
             move_speed="40.0"
-            aspiration_speed="10.0"
+            aspiration_speed="40.0"
             dispense_speed="40.0"
             from_port="0"
             to_port="bottom"
@@ -2092,7 +2277,7 @@
         port="bottom"
         through="None"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         anticlogging="False"
         anticlogging_solvent="None"
@@ -2121,7 +2306,7 @@
           waste_vessel="waste_filter"
           prime_n_times="1"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           comment="">
           <Repeat
@@ -2133,7 +2318,7 @@
                 to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -2142,6 +2327,29 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_filter"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_filter"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Children>
             <Steps>
               <CMove
@@ -2149,7 +2357,7 @@
                 to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -2158,38 +2366,38 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_filter"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_filter"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Steps>
           </Repeat>
-          <FlushTubing
-            to_vessel="waste_filter"
-            to_port="0"
-            volume="5 mL"
-            dispense_speed="40.0"
-            through_cartridge="None"
-            flush_tube_vessel="flask_argon"
-            comment="">
-            <CMove
-              from_vessel="flask_argon"
-              to_vessel="waste_filter"
-              volume="5 mL"
-              move_speed="40.0"
-              aspiration_speed="10.0"
-              dispense_speed="40.0"
-              from_port="0"
-              to_port="0"
-              through="None"
-              use_backbone="True"
-              repeats="1"
-              estimated_volume="None"
-              comment="" />
-          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_water"
           to_vessel="flask_separator"
           volume="50 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="bottom"
@@ -2226,7 +2434,7 @@
             to_vessel="flask_separator"
             volume="5 mL"
             move_speed="40.0"
-            aspiration_speed="10.0"
+            aspiration_speed="40.0"
             dispense_speed="40.0"
             from_port="0"
             to_port="bottom"
@@ -2378,7 +2586,7 @@
         port="bottom"
         through="None"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         anticlogging="False"
         anticlogging_solvent="None"
@@ -2407,7 +2615,7 @@
           waste_vessel="waste_filter"
           prime_n_times="1"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           comment="">
           <Repeat
@@ -2419,7 +2627,7 @@
                 to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -2428,6 +2636,29 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_filter"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_filter"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Children>
             <Steps>
               <CMove
@@ -2435,7 +2666,7 @@
                 to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -2444,38 +2675,38 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_filter"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_filter"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Steps>
           </Repeat>
-          <FlushTubing
-            to_vessel="waste_filter"
-            to_port="0"
-            volume="5 mL"
-            dispense_speed="40.0"
-            through_cartridge="None"
-            flush_tube_vessel="flask_argon"
-            comment="">
-            <CMove
-              from_vessel="flask_argon"
-              to_vessel="waste_filter"
-              volume="5 mL"
-              move_speed="40.0"
-              aspiration_speed="10.0"
-              dispense_speed="40.0"
-              from_port="0"
-              to_port="0"
-              through="None"
-              use_backbone="True"
-              repeats="1"
-              estimated_volume="None"
-              comment="" />
-          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_water"
           to_vessel="flask_separator"
           volume="50 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="bottom"
@@ -2512,7 +2743,7 @@
             to_vessel="flask_separator"
             volume="5 mL"
             move_speed="40.0"
-            aspiration_speed="10.0"
+            aspiration_speed="40.0"
             dispense_speed="40.0"
             from_port="0"
             to_port="bottom"
@@ -2664,7 +2895,7 @@
         port="bottom"
         through="None"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         anticlogging="False"
         anticlogging_solvent="None"
@@ -2693,7 +2924,7 @@
           waste_vessel="waste_filter"
           prime_n_times="1"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           comment="">
           <Repeat
@@ -2705,7 +2936,7 @@
                 to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -2714,6 +2945,29 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_filter"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_filter"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Children>
             <Steps>
               <CMove
@@ -2721,7 +2975,7 @@
                 to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -2730,38 +2984,38 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_filter"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_filter"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Steps>
           </Repeat>
-          <FlushTubing
-            to_vessel="waste_filter"
-            to_port="0"
-            volume="5 mL"
-            dispense_speed="40.0"
-            through_cartridge="None"
-            flush_tube_vessel="flask_argon"
-            comment="">
-            <CMove
-              from_vessel="flask_argon"
-              to_vessel="waste_filter"
-              volume="5 mL"
-              move_speed="40.0"
-              aspiration_speed="10.0"
-              dispense_speed="40.0"
-              from_port="0"
-              to_port="0"
-              through="None"
-              use_backbone="True"
-              repeats="1"
-              estimated_volume="None"
-              comment="" />
-          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_water"
           to_vessel="flask_separator"
           volume="50 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="bottom"
@@ -2798,7 +3052,7 @@
             to_vessel="flask_separator"
             volume="5 mL"
             move_speed="40.0"
-            aspiration_speed="10.0"
+            aspiration_speed="40.0"
             dispense_speed="40.0"
             from_port="0"
             to_port="bottom"
@@ -2953,7 +3207,7 @@
         to_vessel="filter1"
         volume="10 mL"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         from_port="0"
         to_port="bottom"
@@ -3005,7 +3259,7 @@
         port="bottom"
         through="None"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         anticlogging="False"
         anticlogging_solvent="None"
@@ -3034,7 +3288,7 @@
           waste_vessel="waste_separator"
           prime_n_times="1"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           comment="">
           <Repeat
@@ -3046,7 +3300,7 @@
                 to_vessel="waste_separator"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -3055,6 +3309,29 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_separator"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_separator"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Children>
             <Steps>
               <CMove
@@ -3062,7 +3339,7 @@
                 to_vessel="waste_separator"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -3071,38 +3348,38 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_separator"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_separator"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Steps>
           </Repeat>
-          <FlushTubing
-            to_vessel="waste_separator"
-            to_port="0"
-            volume="5 mL"
-            dispense_speed="40.0"
-            through_cartridge="None"
-            flush_tube_vessel="flask_argon"
-            comment="">
-            <CMove
-              from_vessel="flask_argon"
-              to_vessel="waste_separator"
-              volume="5 mL"
-              move_speed="40.0"
-              aspiration_speed="10.0"
-              dispense_speed="40.0"
-              from_port="0"
-              to_port="0"
-              through="None"
-              use_backbone="True"
-              repeats="1"
-              estimated_volume="None"
-              comment="" />
-          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_hcl"
           to_vessel="flask_separator"
           volume="20 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="bottom"
@@ -3139,7 +3416,7 @@
             to_vessel="flask_separator"
             volume="5 mL"
             move_speed="40.0"
-            aspiration_speed="10.0"
+            aspiration_speed="40.0"
             dispense_speed="40.0"
             from_port="0"
             to_port="bottom"
@@ -3316,7 +3593,7 @@
         port="bottom"
         through="None"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         anticlogging="False"
         anticlogging_solvent="None"
@@ -3345,7 +3622,7 @@
           waste_vessel="waste_filter"
           prime_n_times="1"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           comment="">
           <Repeat
@@ -3357,7 +3634,7 @@
                 to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -3366,6 +3643,29 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_filter"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_filter"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Children>
             <Steps>
               <CMove
@@ -3373,7 +3673,7 @@
                 to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -3382,38 +3682,38 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_filter"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_filter"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Steps>
           </Repeat>
-          <FlushTubing
-            to_vessel="waste_filter"
-            to_port="0"
-            volume="5 mL"
-            dispense_speed="40.0"
-            through_cartridge="None"
-            flush_tube_vessel="flask_argon"
-            comment="">
-            <CMove
-              from_vessel="flask_argon"
-              to_vessel="waste_filter"
-              volume="5 mL"
-              move_speed="40.0"
-              aspiration_speed="10.0"
-              dispense_speed="40.0"
-              from_port="0"
-              to_port="0"
-              through="None"
-              use_backbone="True"
-              repeats="1"
-              estimated_volume="None"
-              comment="" />
-          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_water"
           to_vessel="flask_separator"
           volume="20 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="bottom"
@@ -3450,7 +3750,7 @@
             to_vessel="flask_separator"
             volume="5 mL"
             move_speed="40.0"
-            aspiration_speed="10.0"
+            aspiration_speed="40.0"
             dispense_speed="40.0"
             from_port="0"
             to_port="bottom"
@@ -3658,7 +3958,7 @@
       port="top"
       through="None"
       move_speed="40.0"
-      aspiration_speed="10.0"
+      aspiration_speed="40.0"
       dispense_speed="40.0"
       anticlogging="False"
       anticlogging_solvent="None"
@@ -3693,7 +3993,7 @@
         waste_vessel="waste_base"
         prime_n_times="1"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         comment="">
         <Repeat
@@ -3705,7 +4005,7 @@
               to_vessel="waste_base"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -3714,6 +4014,29 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_base"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_base"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Children>
           <Steps>
             <CMove
@@ -3721,7 +4044,7 @@
               to_vessel="waste_base"
               volume="3 mL"
               move_speed="40.0"
-              aspiration_speed="10.0"
+              aspiration_speed="40.0"
               dispense_speed="40.0"
               from_port="0"
               to_port="0"
@@ -3730,38 +4053,38 @@
               repeats="1"
               estimated_volume="None"
               comment="" />
+            <FlushTubing
+              to_vessel="waste_base"
+              to_port="0"
+              volume="5 mL"
+              dispense_speed="40.0"
+              through_cartridge="None"
+              flush_tube_vessel="flask_argon"
+              comment="">
+              <CMove
+                from_vessel="flask_argon"
+                to_vessel="waste_base"
+                volume="5 mL"
+                move_speed="40.0"
+                aspiration_speed="40.0"
+                dispense_speed="40.0"
+                from_port="0"
+                to_port="0"
+                through="None"
+                use_backbone="True"
+                repeats="1"
+                estimated_volume="None"
+                comment="" />
+            </FlushTubing>
           </Steps>
         </Repeat>
-        <FlushTubing
-          to_vessel="waste_base"
-          to_port="0"
-          volume="5 mL"
-          dispense_speed="40.0"
-          through_cartridge="None"
-          flush_tube_vessel="flask_argon"
-          comment="">
-          <CMove
-            from_vessel="flask_argon"
-            to_vessel="waste_base"
-            volume="5 mL"
-            move_speed="40.0"
-            aspiration_speed="10.0"
-            dispense_speed="40.0"
-            from_port="0"
-            to_port="0"
-            through="None"
-            use_backbone="True"
-            repeats="1"
-            estimated_volume="None"
-            comment="" />
-        </FlushTubing>
       </PrimePumpForAdd>
       <CMove
         from_vessel="flask_naoh"
         to_vessel="filter1"
         volume="20 mL"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         from_port="0"
         to_port="top"
@@ -3798,7 +4121,7 @@
           to_vessel="filter1"
           volume="5 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="top"
@@ -3822,7 +4145,7 @@
         to_vessel="waste_filter"
         volume="10 mL"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         from_port="bottom"
         to_port="0"
@@ -4029,7 +4352,7 @@
         port="top"
         through="None"
         move_speed="40.0"
-        aspiration_speed="10.0"
+        aspiration_speed="40.0"
         dispense_speed="40.0"
         anticlogging="False"
         anticlogging_solvent="None"
@@ -4064,7 +4387,7 @@
           waste_vessel="waste_filter"
           prime_n_times="1"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           comment="">
           <Repeat
@@ -4076,7 +4399,7 @@
                 to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -4085,6 +4408,29 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_filter"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_filter"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Children>
             <Steps>
               <CMove
@@ -4092,7 +4438,7 @@
                 to_vessel="waste_filter"
                 volume="3 mL"
                 move_speed="40.0"
-                aspiration_speed="10.0"
+                aspiration_speed="40.0"
                 dispense_speed="40.0"
                 from_port="0"
                 to_port="0"
@@ -4101,38 +4447,38 @@
                 repeats="1"
                 estimated_volume="None"
                 comment="" />
+              <FlushTubing
+                to_vessel="waste_filter"
+                to_port="0"
+                volume="5 mL"
+                dispense_speed="40.0"
+                through_cartridge="None"
+                flush_tube_vessel="flask_argon"
+                comment="">
+                <CMove
+                  from_vessel="flask_argon"
+                  to_vessel="waste_filter"
+                  volume="5 mL"
+                  move_speed="40.0"
+                  aspiration_speed="40.0"
+                  dispense_speed="40.0"
+                  from_port="0"
+                  to_port="0"
+                  through="None"
+                  use_backbone="True"
+                  repeats="1"
+                  estimated_volume="None"
+                  comment="" />
+              </FlushTubing>
             </Steps>
           </Repeat>
-          <FlushTubing
-            to_vessel="waste_filter"
-            to_port="0"
-            volume="5 mL"
-            dispense_speed="40.0"
-            through_cartridge="None"
-            flush_tube_vessel="flask_argon"
-            comment="">
-            <CMove
-              from_vessel="flask_argon"
-              to_vessel="waste_filter"
-              volume="5 mL"
-              move_speed="40.0"
-              aspiration_speed="10.0"
-              dispense_speed="40.0"
-              from_port="0"
-              to_port="0"
-              through="None"
-              use_backbone="True"
-              repeats="1"
-              estimated_volume="None"
-              comment="" />
-          </FlushTubing>
         </PrimePumpForAdd>
         <CMove
           from_vessel="flask_water"
           to_vessel="filter1"
           volume="20 mL"
           move_speed="40.0"
-          aspiration_speed="10.0"
+          aspiration_speed="40.0"
           dispense_speed="40.0"
           from_port="0"
           to_port="top"
@@ -4169,7 +4515,7 @@
             to_vessel="filter1"
             volume="5 mL"
             move_speed="40.0"
-            aspiration_speed="10.0"
+            aspiration_speed="40.0"
             dispense_speed="40.0"
             from_port="0"
             to_port="top"
@@ -4282,6 +4628,7 @@
       vessel_type="filter"
       vessel_has_stirrer="True"
       collection_flask_volume="None"
+      is_r300="False"
       comment="">
       <StopStir
         vessel="filter1"
@@ -4361,6 +4708,7 @@
       vessel_type="filter"
       vessel_has_stirrer="True"
       collection_flask_volume="None"
+      is_r300="False"
       comment="">
       <StopStir
         vessel="filter1"
