@@ -5,7 +5,8 @@ XDL is a chemical description language for representing chemical procedures in a
 ## Installation
 
 ```
-pip install xdl
+git clone https://gitlab.com/croningroup/chemputer/xdl.git
+pip install -e xdl
 ```
 
 ## Usage
