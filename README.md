@@ -1,3 +1,7 @@
+# Note
+
+This forked repository is for presentation purposes only. The actively maintained repository can be found [here](https://gitlab.com/croningroup/chemputer/xdl).
+
 # XDL
 
 XDL is a chemical description language for representing chemical procedures in a machine and human-readable way. This package provides an abstract framework for linking this representation to execution on automated synthesis platforms.
