@@ -1,6 +1,10 @@
 # Note
 
-This forked repository is for presentation purposes only. The actively maintained repository can be found [here](https://gitlab.com/croningroup/chemputer/xdl).
+This was a large part of my PhD work. It is a framework for programming chemistry in an XML-based markup language. The purpose is so that chemical procedures can be compiled to run on different platforms, similar to computer code being written once and compiled to different processor architectures. The hierarchical component-based architecture is similar in some ways to frontend frameworks such as React.
+
+This project played a major role in spawning the startup [Chemify](https://www.chemify.io/), and led to a paper published in the journal Science: [A universal system for digitization and automatic execution of the chemical synthesis literature](https://doi.org/10.1126/science.abc2986).
+
+Forked from this repository to snapshot the state of the code when I stopped working on it: https://gitlab.com/croningroup/chemputer/xdl
 
 # XDL
 
